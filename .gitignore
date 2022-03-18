@@ -7,3 +7,4 @@
 !javadoc/
 .idea/
 project.iml 
+target/
