@@ -4,50 +4,14 @@ import java.util.LinkedList;
 
 public class Game {
     private int expertMode = 0;
-    private State state = State.START;
+    private State state;
     private int numOfPlayer;
     private Player[] players;
     private int[] orderPlayers;
-    private int firstPlayerPlanPhase; //renamed
+    private int firstPlayerPlanPhase;
     private int currentPlayer;
     private LinkedList<IslandTile> islands;
     private LinkedList<CloudTile> clouds;
-    private int distanceMotherNature;
-
-    public void gameManager(){
-        if(state==State.START){
-            initializeGame();
-        }
-        else if(state==State.PLANNINGPHASE){
-            while(currentPlayer<=numOfPlayer) {
-                //Bag.drawStudents(); //and place them on a cloud
-
-
-
-                //notify/listener pattern o comunque uno sleep appropriato{
-                    //waiting that player playAssistanCard
-                    // playAssistantCard();
-                //}
-
-                /*if(assistantCardPlayed)*/ currentPlayer++;
-            }
-            state=State.ACTIONPHASE; //planning phase finished
-        }
-        else if(state==State.ACTIONPHASE){
-            //moveStudents()
-            moveMotherNature(distanceMotherNature);
-            //takeStudentsFromCloud();
-            checkUnificationIslands();
-            //checkAndPlaceProfessor();
-            //checkAndPlaceTower();
-        }
-        else if(state==State.ENDTURN){
-            checkGameOver();
-        }
-        else if(state==State.END){
-            checkWinner();
-        }
-    }
 
     public void initializeGame(){
         expertMode = 0;
@@ -57,7 +21,46 @@ public class Game {
         }
         currentPlayer = 0;
 
+        //pickCharacter()
+        // inizializzare LinkedList<IslandTile> islands;
+        // inizializzare LinkedList<CloudTile> clouds;
+
+        state=State.PLANNINGPHASE;
+        updateState();
+
     }
+
+    public void updateState(){
+        if(state==State.PLANNINGPHASE){
+            if(currentPlayer<numOfPlayer){
+                //Bag.drawStudents(); //and place them on a cloud
+            }
+            else{
+                firstPlayerPlanPhase = orderPlayers[0]; //first of the next planning phase
+                state=State.ACTIONPHASE; //planning phase finished, notify il player orderPlayers[0] che é la sua action phase
+            }
+        }
+        else if(state==State.ACTIONPHASE){
+            //moveStudents()
+            //takeStudentsFromCloud();
+            //checkUnificationIslands();
+            //checkAndPlaceProfessor();
+            //checkAndPlaceTower();
+            //if(orderPlayers queue has length 0) state==State.ENDTURN
+        }
+        else if(state==State.ENDTURN){
+            if(checkGameOver()){
+                state=State.END;
+            }
+            else{
+                state=State.PLANNINGPHASE;
+            }
+        }
+        else if(state==State.END){
+            checkWinner();
+        }
+    }
+
 
     public void nextRound(){
 
@@ -69,16 +72,21 @@ public class Game {
 
     //}
 
-    public void checkGameOver(){
-
+    public boolean checkGameOver(){
+        return true;
     }
 
     public void playAssistantCard(){
         //it has to update the priority queue of orderPlayer[]
+        currentPlayer++; // next turn into Planning Phase (clockwise)
+        updateState();
     }
 
     public void moveMotherNature(int distance){
-
+        //if(state==State.ACTIONPHASE) //MotherNature.moveTile(distance)
+            // else {
+                //exception
+        //}
     }
 
     public void checkUnificationIslands(){
@@ -105,7 +113,4 @@ public class Game {
 
     }
 
-    public void nextPhase(){ //added
-
-    }
 }
