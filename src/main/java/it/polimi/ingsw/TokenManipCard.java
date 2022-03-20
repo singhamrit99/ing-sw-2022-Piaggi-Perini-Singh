@@ -21,12 +21,15 @@ public class TokenManipCard extends CharacterCard {
                 SwitchOwnStudents();
                 break;
             case 11:
-                DiscardOpponentStudents();
+                //TODO: Add way for user to input valid color
+                Colors color= Colors.GREEN;
+                System.out.println("Choose the color of student to discard!");
+                DiscardOpponentStudents(color);
                 break;
         }
     }
 
-    public void DiscardOpponentStudents() {
+    public void DiscardOpponentStudents(Colors color) {
     }
 
     public void SwitchOwnStudents() {

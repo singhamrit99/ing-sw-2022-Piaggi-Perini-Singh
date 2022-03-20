@@ -34,8 +34,6 @@ public class InfluenceCard extends CharacterCard{
                 CallOnIsland();
 
                 break;
-            case 9 :
-                break;
         }
 
 
