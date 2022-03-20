@@ -5,4 +5,12 @@ package it.polimi.ingsw;
  */
 public class StudentDisc {
     private Colors discColor;
+
+    public StudentDisc(Colors color) {
+        this.discColor = color;
+    }
+
+    public Colors getStudentDiscColor() {
+        return this.discColor;
+    }
 }
