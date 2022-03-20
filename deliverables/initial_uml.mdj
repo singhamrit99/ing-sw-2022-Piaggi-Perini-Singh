@@ -976,6 +976,23 @@
 										},
 										{
 											"_type": "UMLOperationView",
+											"_id": "AAAAAAF/nIKfDrFw4qQ=",
+											"_parent": {
+												"$ref": "AAAAAAF/iHfm/DnVroI="
+											},
+											"model": {
+												"$ref": "AAAAAAF/nIKe9bFtDc4="
+											},
+											"font": "Arial;13;0",
+											"left": 1109,
+											"top": 732,
+											"width": 575,
+											"height": 13,
+											"text": "+updateState(): void",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
 											"_id": "AAAAAAF/jPWSNL10Jzw=",
 											"_parent": {
 												"$ref": "AAAAAAF/iHfm/DnVroI="
@@ -985,27 +1002,10 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1109,
-											"top": 732,
-											"width": 575,
-											"height": 13,
-											"text": "+playAssistantCard(index: int): void",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLOperationView",
-											"_id": "AAAAAAF/icR+DtYQ8jU=",
-											"_parent": {
-												"$ref": "AAAAAAF/iHfm/DnVroI="
-											},
-											"model": {
-												"$ref": "AAAAAAF/icR949YN7ac="
-											},
-											"font": "Arial;13;0",
-											"left": 1109,
 											"top": 747,
 											"width": 575,
 											"height": 13,
-											"text": "+moveStudents(destination: ArrayList<Integer>, students:  HashMap<StudentDisc, Integer>): void",
+											"text": "+playAssistantCard(index: int): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1027,19 +1027,19 @@
 										},
 										{
 											"_type": "UMLOperationView",
-											"_id": "AAAAAAF/nIKfDrFw4qQ=",
+											"_id": "AAAAAAF/icR+DtYQ8jU=",
 											"_parent": {
 												"$ref": "AAAAAAF/iHfm/DnVroI="
 											},
 											"model": {
-												"$ref": "AAAAAAF/nIKe9bFtDc4="
+												"$ref": "AAAAAAF/icR949YN7ac="
 											},
 											"font": "Arial;13;0",
 											"left": 1109,
 											"top": 777,
 											"width": 575,
 											"height": 13,
-											"text": "+updateState(): void",
+											"text": "+moveStudents(destination: ArrayList<Integer>, students:  HashMap<StudentDisc, Integer>): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -10389,6 +10389,25 @@
 						},
 						{
 							"_type": "UMLOperation",
+							"_id": "AAAAAAF/nIKe9bFtDc4=",
+							"_parent": {
+								"$ref": "AAAAAAF/iHfm/DnMdTQ="
+							},
+							"name": "updateState",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF/nILJJ7IZc8o=",
+									"_parent": {
+										"$ref": "AAAAAAF/nIKe9bFtDc4="
+									},
+									"type": "void",
+									"direction": "return"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
 							"_id": "AAAAAAF/jPWSKL1xdxw=",
 							"_parent": {
 								"$ref": "AAAAAAF/iHfm/DnMdTQ="
@@ -10412,6 +10431,25 @@
 									},
 									"name": "index",
 									"type": "int"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAF/jPMC7nTvL0g=",
+							"_parent": {
+								"$ref": "AAAAAAF/iHfm/DnMdTQ="
+							},
+							"name": "drawFromBag",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF/jPMoU3WqkHk=",
+									"_parent": {
+										"$ref": "AAAAAAF/jPMC7nTvL0g="
+									},
+									"type": "void",
+									"direction": "return"
 								}
 							]
 						},
@@ -10450,44 +10488,6 @@
 									},
 									"name": "students",
 									"type": " HashMap<StudentDisc, Integer>"
-								}
-							]
-						},
-						{
-							"_type": "UMLOperation",
-							"_id": "AAAAAAF/jPMC7nTvL0g=",
-							"_parent": {
-								"$ref": "AAAAAAF/iHfm/DnMdTQ="
-							},
-							"name": "drawFromBag",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAF/jPMoU3WqkHk=",
-									"_parent": {
-										"$ref": "AAAAAAF/jPMC7nTvL0g="
-									},
-									"type": "void",
-									"direction": "return"
-								}
-							]
-						},
-						{
-							"_type": "UMLOperation",
-							"_id": "AAAAAAF/nIKe9bFtDc4=",
-							"_parent": {
-								"$ref": "AAAAAAF/iHfm/DnMdTQ="
-							},
-							"name": "updateState",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAF/nILJJ7IZc8o=",
-									"_parent": {
-										"$ref": "AAAAAAF/nIKe9bFtDc4="
-									},
-									"type": "void",
-									"direction": "return"
 								}
 							]
 						},

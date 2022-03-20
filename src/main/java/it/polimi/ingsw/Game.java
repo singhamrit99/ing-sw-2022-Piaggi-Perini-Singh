@@ -13,7 +13,7 @@ public class Game {
     private LinkedList<IslandTile> islands;
     private CloudTile[] clouds;
     private Bag bag;
-    private MotherNaturePawn mom;
+    private MotherNaturePawn motherNature;
 
     public void initializeGame() {
         expertMode = 0;
@@ -41,7 +41,6 @@ public class Game {
             clouds[i] = cloud;
         }
 
-
         state = State.PLANNINGPHASE;
         updateState();
     }
@@ -55,6 +54,7 @@ public class Game {
                 } else {
                     firstPlayerPlanPhase = orderPlayers[0]; //first of the next planning phase
                     state = State.ACTIONPHASE;
+                    updateState();
                 }
                 break;
 
@@ -80,13 +80,12 @@ public class Game {
                 checkWinner();
                 break;
 
+            //default:
+            //exception
         }
-    }
-
-
-    public void nextRound() {
 
     }
+
 
     public void drawFromBag() {
         for (int c = 0; c < clouds.length; c++) {
@@ -111,10 +110,7 @@ public class Game {
     }
 
     public void moveMotherNature(int distance) {
-        //if(state==State.ACTIONPHASE) //MotherNature.moveTile(distance)
-        // else {
-        //exception
-        //}
+        motherNature.moveTile(distance);
     }
 
     public void checkUnificationIslands() {
@@ -141,8 +137,8 @@ public class Game {
 
     }
 
-    public void pickCharacter(Player player) { // change parameter
-
+    public void pickCharacter(Player player) {
+        // this function needs to modify Player Nickname that is private attribute.
     }
 
 }
