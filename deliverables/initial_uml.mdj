@@ -169,7 +169,7 @@
 											"top": 1108,
 											"width": 644.9345703125,
 											"height": 13,
-											"text": "-playedCard: it.polimi.ingsw.AssistantCard",
+											"text": "-playedCard: AssistantCard",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2129,7 +2129,7 @@
 											"top": 1071,
 											"width": 123.02392578125,
 											"height": 13,
-											"text": "it.polimi.ingsw.Card"
+											"text": "Card"
 										},
 										{
 											"_type": "LabelView",
@@ -2324,7 +2324,7 @@
 											"top": 1271,
 											"width": 181.54296875,
 											"height": 13,
-											"text": "it.polimi.ingsw.AssistantCard"
+											"text": "AssistantCard"
 										},
 										{
 											"_type": "LabelView",
@@ -2570,7 +2570,7 @@
 											"top": 1463,
 											"width": 339.22509765625,
 											"height": 13,
-											"text": "it.polimi.ingsw.AssistantCardDeck"
+											"text": "AssistantCardDeck"
 										},
 										{
 											"_type": "LabelView",
@@ -2642,7 +2642,7 @@
 											"top": 1486,
 											"width": 339.22509765625,
 											"height": 13,
-											"text": "-assistantCard: ArrayList<it.polimi.ingsw.AssistantCard>",
+											"text": "-assistantCard: ArrayList<AssistantCard>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2693,7 +2693,7 @@
 											"top": 1524,
 											"width": 339.22509765625,
 											"height": 13,
-											"text": "+getAssistantCard(index: int): it.polimi.ingsw.AssistantCard",
+											"text": "+getAssistantCard(index: int): AssistantCard",
 											"horizontalAlignment": 0
 										},
 										{
@@ -9239,7 +9239,7 @@
 											"top": 1816,
 											"width": 446.1328125,
 											"height": 24,
-											"text": "+getCardFromDeck(): it.polimi.ingsw.Card",
+											"text": "+getCardFromDeck(): Card",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11093,7 +11093,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "it.polimi.ingsw.Card",
+					"name": "Card",
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
@@ -11113,7 +11113,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "it.polimi.ingsw.AssistantCard",
+					"name": "AssistantCard",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -11234,7 +11234,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "it.polimi.ingsw.AssistantCardDeck",
+					"name": "AssistantCardDeck",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -11356,7 +11356,7 @@
 							},
 							"name": "assistantCard",
 							"visibility": "private",
-							"type": "ArrayList<it.polimi.ingsw.AssistantCard>"
+							"type": "ArrayList<AssistantCard>"
 						},
 						{
 							"_type": "UMLAttribute",
