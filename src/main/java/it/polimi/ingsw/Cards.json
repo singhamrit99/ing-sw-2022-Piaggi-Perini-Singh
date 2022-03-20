@@ -1,0 +1,91 @@
+[
+  {
+    "name": "0",
+    "value": "0",
+    "move" : "0",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+
+  },
+  {
+    "name": "1",
+    "value": "1",
+    "move" : "1",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+  },
+  {
+    "name": "2",
+    "value": "2",
+    "move" : "1",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+  },
+  {
+    "name": "3",
+    "value": "2",
+    "move" : "1",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+  },
+  {
+    "name": "4",
+    "value": "4",
+    "move" : "2",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+  },
+  {
+    "name": "5",
+    "value": "5",
+    "move" : "3",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+  },
+  {
+    "name": "6",
+    "value": "6",
+    "move" : "3",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+  },
+  {
+    "name": "7",
+    "value": "7",
+    "move" : "4",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+  },
+  {
+    "name": "8",
+    "value": "8",
+    "move" : "4",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+  },
+  {
+    "name": "9",
+    "value": "9",
+    "move" : "5",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+  },
+  {
+    "name": "10",
+    "value": "10",
+    "move" : "5",
+    "characterID": "0",
+    "startingPrice": "0",
+    "powertype": "null"
+  }
+]
