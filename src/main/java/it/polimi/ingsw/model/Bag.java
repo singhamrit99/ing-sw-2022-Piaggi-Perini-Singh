@@ -1,4 +1,7 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
+
+import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.HashMap;
 import java.util.Map;

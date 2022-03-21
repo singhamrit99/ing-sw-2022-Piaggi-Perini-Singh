@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model.exceptions;
 
 public class IncorrectArgumentException extends Exception {
     public IncorrectArgumentException(){

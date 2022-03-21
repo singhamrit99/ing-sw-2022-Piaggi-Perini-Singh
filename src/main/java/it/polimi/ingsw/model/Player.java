@@ -1,4 +1,8 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
+
+import it.polimi.ingsw.AssistantCard;
+import it.polimi.ingsw.AssistantCardDeck;
+import it.polimi.ingsw.model.enumerations.Colors;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +12,8 @@ import java.util.HashMap;
  */
 public class Player {
     private String nickname;
-    //private ArrayList<AssistantCardDeck> assistantCardDeck;
-    //private AssistantCard playedCard;
+    private ArrayList<AssistantCardDeck> assistantCardDeck;
+    private AssistantCard playedCard;
     private Colors towerColors;
     private int characterCard;
 
