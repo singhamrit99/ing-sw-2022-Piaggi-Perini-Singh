@@ -35,8 +35,8 @@ public class Bag {
         this.setStudents(studentsDiscs);
     }
 
-    public HashMap<StudentDisc, Integer> drawStudents() throws IncorrectArgumentException {
-        int n = 3;
+    public HashMap<StudentDisc, Integer> drawStudents(int n) throws IncorrectArgumentException {
+        //int n = 3; modify by Tino
         int type, quantity;
         HashMap<StudentDisc, Integer> studentsDrawn = new HashMap<>();
 
