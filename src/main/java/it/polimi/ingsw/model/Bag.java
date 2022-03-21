@@ -36,7 +36,7 @@ public class Bag {
     }
 
     public HashMap<StudentDisc, Integer> drawStudents(int n) throws IncorrectArgumentException {
-        //int n = 3; modify by Tino
+        //int n = 3; //modify by Tino
         int type, quantity;
         HashMap<StudentDisc, Integer> studentsDrawn = new HashMap<>();
 
