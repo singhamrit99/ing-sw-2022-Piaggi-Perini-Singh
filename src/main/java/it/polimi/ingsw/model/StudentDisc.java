@@ -1,4 +1,6 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model;
+
+import it.polimi.ingsw.model.enumerations.Colors;
 
 /**
  * @author Amrit
