@@ -3,30 +3,41 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
+import it.polimi.ingsw.model.tiles.CloudTile;
+import it.polimi.ingsw.model.tiles.IslandTile;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 public class Game {
     private int expertMode = 0;
     private State state;
     private int numOfPlayer;
     private Player[] players;
-    private int[] orderPlayers;
-    private int firstPlayerPlanPhase;
-    private int currentPlayer;
+    private PriorityQueue<Player> orderPlayers;
+    private Player currentPlayer;
+    private Player firstPlayerPlanPhase;
     private LinkedList<IslandTile> islands;
     private CloudTile[] clouds;
     private Bag bag;
-    private int motherNaturePosition = 0;
+    private int motherNaturePosition;
+    private int numRounds;
+    private int numDrawnStudents;
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
         expertMode = 0;
+        motherNaturePosition = 0;
+        numRounds = 0;
+
+        if (numOfPlayer == 3) numDrawnStudents = 4;
+        else numDrawnStudents = 3;
+
         players = new Player[numOfPlayer];
-        for (int i = 0; i < numOfPlayer; i++) {
-            orderPlayers[i] = i;
-        }
-        currentPlayer = 0;
+        //for (int i = 0; i < numOfPlayer; i++) {  //doubt iterator
+        //    orderPlayers.add(players[i]);
+        //}
+        //currentPlayer = 0;
 
         for (Player p : players) {
             pickCharacter(p);
@@ -54,24 +65,25 @@ public class Game {
         boolean playing = true;
         while (playing) {
             switch (state) {
-
                 case PLANNINGPHASE:
+                    int counter = 0;
                     while (state == State.PLANNINGPHASE) {
-                        if (currentPlayer < numOfPlayer) {
+                        if (counter < numOfPlayer) {  //clockwise
+                            counter++;
                             drawFromBag();
-                            playAssistantCard(currentPlayer);
+                            //playAssistantCard(player);
                         } else {
-                            firstPlayerPlanPhase = orderPlayers[0]; //first of the next planning phase
                             state = State.ACTIONPHASE;
+                            firstPlayerPlanPhase = orderPlayers.peek(); //first of the next planning phase
                         }
                     }
                     break;
 
                 case ACTIONPHASE:
                     while (state == State.ACTIONPHASE) {
-                        if (orderPlayers.length > 0) {
-                            currentPlayer = orderPlayers[0];
-                            //orderPlayers.remove
+                        if (islands.size() <= 3) state = State.END; //the game finishes with 3 islands
+                        else if (!orderPlayers.isEmpty()) { //3 islands immediately terminate the game
+                            currentPlayer = orderPlayers.poll();
                             //moveStudents()
                             //takeStudentsFromCloud();
                             //checkAndPlaceProfessor();
@@ -84,7 +96,8 @@ public class Game {
                     break;
 
                 case ENDTURN:
-                    if (checkGameOver()) {
+                    numRounds++;
+                    if (isGameOver()) {
                         state = State.END;
                     } else {
                         state = State.PLANNINGPHASE;
@@ -105,43 +118,33 @@ public class Game {
 
     public void drawFromBag() throws IncorrectArgumentException {
         for (CloudTile cloud : clouds) {
-            int studentsDraw = -1;
-            if (numOfPlayer == 3) studentsDraw = 4;
-            else studentsDraw = 3;
-
-            cloud.addStudents(bag.drawStudents(studentsDraw));
+            cloud.addStudents(bag.drawStudents(numDrawnStudents));
         }
     }
 
-    public boolean checkGameOver() {
-        return true;
-    }
 
-    public void playAssistantCard(int currentPlayer) throws IncorrectArgumentException, IncorrectStateException {
+    public void playAssistantCard(Player player) throws IncorrectArgumentException, IncorrectStateException {
         //players[currentplayer].playAssistantCard();
         //it has to update the priority(current of orderPlayer[]) //amrit should implement Comparable interface to Player
-        currentPlayer++; //next turn into Planning Phase (clockwise)
         updateState();
     }
 
-    public void moveMotherNature(int distanceChoosen) { // UML to change
-        int destinationMotherNature = motherNaturePosition+distanceChoosen;
-        if(islands.get(motherNaturePosition).hasMotherNature()){
-            if(players[currentPlayer].moveMotherNature(distanceChoosen)){
+    public void moveMotherNature(int distanceChoosen) {
+        int destinationMotherNature = motherNaturePosition + distanceChoosen;
+        if (islands.get(motherNaturePosition).hasMotherNature()) {
+            if (currentPlayer.moveMotherNature(distanceChoosen)) {
                 islands.get(motherNaturePosition).removeMotherNature();
                 islands.get(destinationMotherNature).moveMotherNature();
-            }
-            else{
+            } else {
                 //return exception to view
             }
 
-        }
-        else{
+        } else {
             //eccezione ho perso madre natura
         }
     }
 
-    public void checkUnificationIslands() {
+    public void checkUnificationIslands() throws IncorrectArgumentException {
         boolean listChanged = false;
         Iterator<IslandTile> it = islands.iterator();
         IslandTile current = islands.getFirst();
@@ -169,11 +172,17 @@ public class Game {
 
     }
 
+    public boolean isGameOver() throws IncorrectArgumentException {
+        if (!bag.hasEnoughStudents(numDrawnStudents)) return true;
+        else if (numRounds >= 9) return true;
+        else return false;
+    }
+
     public void checkAndPlaceProfessor() {
 
     }
 
-    public void checkAndPlaceTower() {
+    public void checkAndPlaceTower() throws IncorrectArgumentException {
         //ok
         checkUnificationIslands();
     }
