@@ -14,7 +14,7 @@ public class ProfessorPawn {
         this.professorColor = professorColor;
     }
 
-    public void changeStatus(){
+    public void changeStatus() {
         isActive = !isActive;
     }
 }

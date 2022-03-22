@@ -24,7 +24,6 @@ public class Player implements Comparable {
         this.nickname = nickname;
         this.schoolBoard = new SchoolBoard(numberOfPlayers);
         this.towerColors = towerColors;
-
     }
 
     public void playAssistantCard(int index) {
@@ -57,5 +56,17 @@ public class Player implements Comparable {
     @Override
     public int compareTo(Object o) {
         return 0;
+    }
+
+    public SchoolBoard getSchoolBoard() {
+        return schoolBoard;
+    }
+
+    public Colors getTowerColors() {
+        return towerColors;
+    }
+
+    public AssistantCard getPlayedCard() {
+        return playedCard;
     }
 }

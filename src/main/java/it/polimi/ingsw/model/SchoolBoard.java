@@ -12,13 +12,13 @@ import java.util.Map;
 public class SchoolBoard {
     private HashMap<StudentDisc, Integer> entrance;
     private HashMap<StudentDisc, Integer> dining;
-    private ArrayList<ProfessorPawn> professorTable;
+    private ArrayList<ProfessorPawn> professorsTable;
     private int numberOfTowers;
 
     public SchoolBoard(int numberOfPlayers) {
         this.entrance = new HashMap<>();
         this.dining = new HashMap<>();
-        this.professorTable = new ArrayList<>();
+        this.professorsTable = new ArrayList<>();
 
         if (numberOfPlayers == 3) {
             numberOfTowers = 6;
@@ -45,18 +45,10 @@ public class SchoolBoard {
         this.setEntrance(studentsDiscs);
     }
 
-    private void setEntrance(HashMap<StudentDisc, Integer> studentsDiscs) {
-        this.entrance = studentsDiscs;
-    }
-
-    private HashMap<StudentDisc, Integer> getEntrance() {
-        return this.entrance;
-    }
-
-    public void removeStudents(HashMap<StudentDisc, Integer> studentsToRemove) throws IncorrectArgumentException {
+    public void removeStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
         HashMap<StudentDisc, Integer> studentsDiscs = this.getEntrance();
 
-        for (Map.Entry<StudentDisc, Integer> set : studentsToRemove.entrySet()) {
+        for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
                 if (studentsDiscs.containsKey(set.getKey())) {
                     studentsDiscs.put(set.getKey(), studentsDiscs.get(set.getKey()) - set.getValue());
@@ -89,17 +81,9 @@ public class SchoolBoard {
         this.setDining(studentsDiscs);
     }
 
-    private void setDining(HashMap<StudentDisc, Integer> studentsDiscs) {
-        this.dining = studentsDiscs;
-    }
-
-    private HashMap<StudentDisc, Integer> getDining() {
-        return this.dining;
-    }
-
     public void moveProfessors(ArrayList<ProfessorPawn> professors) {
         for (ProfessorPawn professor : professors) {
-            if (this.professorTable.contains(professor)) {
+            if (this.professorsTable.contains(professor)) {
                 professor.changeStatus();
             }
         }
@@ -126,5 +110,25 @@ public class SchoolBoard {
 
     public void moveTowers(int towers) {
         this.numberOfTowers += towers;
+    }
+
+    private void setEntrance(HashMap<StudentDisc, Integer> studentsDiscs) {
+        this.entrance = studentsDiscs;
+    }
+
+    private HashMap<StudentDisc, Integer> getEntrance() {
+        return this.entrance;
+    }
+
+    private void setDining(HashMap<StudentDisc, Integer> studentsDiscs) {
+        this.dining = studentsDiscs;
+    }
+
+    private HashMap<StudentDisc, Integer> getDining() {
+        return this.dining;
+    }
+
+    public ArrayList<ProfessorPawn> getProfessorsTable() {
+        return professorsTable;
     }
 }

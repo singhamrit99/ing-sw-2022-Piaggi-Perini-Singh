@@ -37,21 +37,6 @@ public class Bag {
         this.setStudents(studentsDiscs);
     }
 
-    public HashMap<StudentDisc, Integer> drawStudents(int n) throws IncorrectArgumentException {
-        int type, quantity;
-        HashMap<StudentDisc, Integer> studentsDrawn = new HashMap<>();
-
-        for (int i = 0; i < n; ) {
-            type = (int) Math.floor(Math.random() * (studentType + 1));
-            quantity = (int) Math.floor(Math.random() * (n - i) + 1);
-            studentsDrawn.put(new StudentDisc(Colors.getColor(type)), quantity);
-            i += quantity;
-        }
-
-        this.removeStudents(studentsDrawn);
-        return studentsDrawn;
-    }
-
     private void removeStudents(HashMap<StudentDisc, Integer> studentsToRemove) throws IncorrectArgumentException {
         HashMap<StudentDisc, Integer> studentsDiscs = this.getStudents();
 
@@ -67,6 +52,21 @@ public class Bag {
             }
         }
         this.setStudents(studentsDiscs);
+    }
+
+    public HashMap<StudentDisc, Integer> drawStudents(int numberOfStudents) throws IncorrectArgumentException {
+        int type, quantity;
+        HashMap<StudentDisc, Integer> studentsDrawn = new HashMap<>();
+
+        for (int i = 0; i < numberOfStudents; ) {
+            type = (int) Math.floor(Math.random() * (studentType + 1));
+            quantity = (int) Math.floor(Math.random() * (numberOfStudents - i) + 1);
+            studentsDrawn.put(new StudentDisc(Colors.getColor(type)), quantity);
+            i += quantity;
+        }
+
+        this.removeStudents(studentsDrawn);
+        return studentsDrawn;
     }
 
     public boolean hasEnoughStudents(int numberOfStudents) throws IncorrectArgumentException {
@@ -86,11 +86,11 @@ public class Bag {
         return true;
     }
 
-    public HashMap<StudentDisc, Integer> getStudents() {
-        return students;
-    }
-
     public void setStudents(HashMap<StudentDisc, Integer> students) {
         this.students = students;
+    }
+
+    public HashMap<StudentDisc, Integer> getStudents() {
+        return students;
     }
 }
