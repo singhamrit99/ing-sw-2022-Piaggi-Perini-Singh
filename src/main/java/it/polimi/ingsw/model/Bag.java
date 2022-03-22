@@ -17,6 +17,8 @@ public class Bag {
         this.students = students;
     }
 
+    //TODO aggiungere metodo per controllare n di pedine e ritorno sia se ne ho poche o nulle
+
     public void addStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
         HashMap<StudentDisc, Integer> studentsDiscs = this.getStudents();
 
@@ -65,6 +67,23 @@ public class Bag {
             }
         }
         this.setStudents(studentsDiscs);
+    }
+
+    public boolean hasEnoughStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
+        for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+            if (set.getValue() >= 0) {
+                if (getStudents().containsKey(set.getKey())) {
+                    if (getStudents().get(set.getKey()) < set.getValue()) {
+                        return false;
+                    }
+                } else {
+                    throw new IncorrectArgumentException("HashMap is not correct");
+                }
+            } else {
+                throw new IncorrectArgumentException("HashMap is not correct");
+            }
+        }
+        return true;
     }
 
     public HashMap<StudentDisc, Integer> getStudents() {

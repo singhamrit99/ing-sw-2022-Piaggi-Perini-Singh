@@ -20,7 +20,7 @@ public class SchoolBoard {
         this.dining = new HashMap<>();
         this.professorTable = new ArrayList<>();
 
-        if (numberOfPlayers == 3){
+        if (numberOfPlayers == 3) {
             numberOfTowers = 6;
         } else {
             numberOfTowers = 8;
@@ -28,7 +28,7 @@ public class SchoolBoard {
     }
 
     public void addStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
-        HashMap<StudentDisc, Integer> studentsDiscs = this.getEntrance();
+        HashMap<StudentDisc, Integer> studentsDiscs = getEntrance();
 
         for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
@@ -85,6 +85,7 @@ public class SchoolBoard {
             }
 
         }
+        this.removeStudents(studentsDiscs);
         this.setDining(studentsDiscs);
     }
 
@@ -104,8 +105,26 @@ public class SchoolBoard {
         }
     }
 
+    public boolean hasEnoughStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
+        HashMap<StudentDisc, Integer> studentsDiscs = this.getEntrance();
+
+        for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+            if (set.getValue() >= 0) {
+                if (studentsDiscs.containsKey(set.getKey())) {
+                    if (studentsDiscs.get(set.getKey()) < set.getValue()) {
+                        return false;
+                    }
+                } else {
+                    throw new IncorrectArgumentException("HashMap is not correct");
+                }
+            } else {
+                throw new IncorrectArgumentException("HashMap is not correct");
+            }
+        }
+        return true;
+    }
+
     public void moveTowers(int towers) {
         this.numberOfTowers += towers;
     }
-
 }
