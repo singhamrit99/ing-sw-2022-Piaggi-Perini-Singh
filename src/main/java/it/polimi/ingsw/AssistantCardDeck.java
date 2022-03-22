@@ -1,9 +1,7 @@
 package it.polimi.ingsw;
 
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,26 +34,6 @@ public class AssistantCardDeck {
 
     }
 
-    public void fillDeck(){
-
-
-
-
-        assistantCards= new ArrayList<AssistantCard>();
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
 
 
 }
