@@ -3,18 +3,20 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
+import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.PriorityQueue;
 
 public class Game {
     private int expertMode = 0;
     private State state;
     private int numOfPlayer;
-    private Player[] players;
+    private LinkedList<Player> players;
     private PriorityQueue<Player> orderPlayers;
     private Player currentPlayer;
     private Player firstPlayerPlanPhase;
@@ -24,24 +26,22 @@ public class Game {
     private int motherNaturePosition;
     private int numRounds;
     private int numDrawnStudents;
+    private int counter;
+    private int playerDrawnOut;
+    private ListIterator<Player> playerIterator;
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
         expertMode = 0;
         motherNaturePosition = 0;
         numRounds = 0;
-
+        counter = numOfPlayer;
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
 
-        players = new Player[numOfPlayer];
-        //for (int i = 0; i < numOfPlayer; i++) {  //doubt iterator
-        //    orderPlayers.add(players[i]);
+        //for (int i=0;i<numOfPlayer;i++) {
+        //players.add(new Player());
+        //pickCharacter(p);
         //}
-        //currentPlayer = 0;
-
-        for (Player p : players) {
-            pickCharacter(p);
-        }
 
         // initialization LinkedList<IslandTile> islands;
         islands = new LinkedList<>(islands);
@@ -58,123 +58,72 @@ public class Game {
         }
 
         state = State.PLANNINGPHASE;
-        updateState();
+
     }
 
-    public void updateState() throws IncorrectArgumentException, IncorrectStateException {
-        boolean playing = true;
-        while (playing) {
-            switch (state) {
-                case PLANNINGPHASE:
-                    int counter = 0;
-                    while (state == State.PLANNINGPHASE) {
-                        if (counter < numOfPlayer) {  //clockwise
-                            counter++;
-                            drawFromBag();
-                            //playAssistantCard(player);
-                        } else {
-                            state = State.ACTIONPHASE;
-                            firstPlayerPlanPhase = orderPlayers.peek(); //first of the next planning phase
-                        }
-                    }
-                    break;
-
-                case ACTIONPHASE:
-                    while (state == State.ACTIONPHASE) {
-                        if (islands.size() <= 3) state = State.END; //the game finishes with 3 islands
-                        else if (!orderPlayers.isEmpty()) { //3 islands immediately terminate the game
-                            currentPlayer = orderPlayers.poll();
-                            //moveStudents()
-                            //takeStudentsFromCloud();
-                            //checkAndPlaceProfessor();
-                            //checkAndPlaceTower();
-                        } else {
-                            state = State.ENDTURN;
-                        }
-                    }
-
-                    break;
-
-                case ENDTURN:
-                    numRounds++;
-                    if (isGameOver()) {
-                        state = State.END;
-                    } else {
-                        state = State.PLANNINGPHASE;
-                        currentPlayer = firstPlayerPlanPhase;
-                    }
-                    break;
-
-                case END:
-                    checkWinner();
-                    break;
-
-                default:
-                    throw new IncorrectStateException();
+    public void nextPlayer(Player callerPlayer) {
+        if (state == State.PLANNINGPHASE) { //TODO Player equals method
+            if (counter > 0) {
+                counter--;
+                //TODO
+            } else {
+                state = State.ACTIONPHASE;
+                counter = numOfPlayer;
+                firstPlayerPlanPhase = orderPlayers.peek();
             }
         }
     }
 
-
     public void drawFromBag() throws IncorrectArgumentException {
-        for (CloudTile cloud : clouds) {
-            cloud.addStudents(bag.drawStudents(numDrawnStudents));
-        }
+        if (state == State.PLANNINGPHASE)
+            for (CloudTile cloud : clouds) {
+                cloud.addStudents(bag.drawStudents(numDrawnStudents));
+            }
+
     }
 
 
     public void playAssistantCard(Player player) throws IncorrectArgumentException, IncorrectStateException {
         //players[currentplayer].playAssistantCard();
         //it has to update the priority(current of orderPlayer[]) //amrit should implement Comparable interface to Player
-        updateState();
+
     }
 
-    public void moveMotherNature(int distanceChoosen) {
+    public void moveMotherNature(int distanceChoosen) throws IncorrectArgumentException, MotherNatureLostException {
         int destinationMotherNature = motherNaturePosition + distanceChoosen;
         if (islands.get(motherNaturePosition).hasMotherNature()) {
             if (currentPlayer.moveMotherNature(distanceChoosen)) {
                 islands.get(motherNaturePosition).removeMotherNature();
                 islands.get(destinationMotherNature).moveMotherNature();
             } else {
-                //return exception to view
+                throw new IncorrectArgumentException();
             }
-
         } else {
-            //eccezione ho perso madre natura
+            throw new MotherNatureLostException();
         }
     }
 
     public void checkUnificationIslands() throws IncorrectArgumentException {
         boolean listChanged = false;
-        Iterator<IslandTile> it = islands.iterator();
-        IslandTile current = islands.getFirst();
+        ListIterator<IslandTile> it = islands.listIterator();
+        IslandTile currentTile;
+        IslandTile nextTile;
         while (it.hasNext()) {
-            if (it.next().getOwner().equals(current.getOwner())) {
-                current.sumStudentsUnification(it.next().getStudents());
-                current.sumTowersUnification(it.next().getTowers());
-                islands.remove(it.next());
-                current = it.next();
+            currentTile = it.next();
+            if (it.hasNext()) nextTile = it.next();
+            else nextTile = islands.getFirst();
+            if (nextTile.getOwner().equals(currentTile.getOwner())) {
+                currentTile.sumStudentsUnification(nextTile.getStudents());
+                currentTile.sumTowersUnification(nextTile.getTowers());
+                islands.remove(nextTile);
                 listChanged = true;
             }
         }
-
-        if (islands.getLast().equals(current)) {
-            IslandTile head = islands.getFirst();
-            if (head.getOwner().equals(current.getOwner())) {
-                current.sumStudentsUnification(head.getStudents());
-                current.sumTowersUnification(head.getTowers());
-                islands.remove(head);
-                listChanged = true;
-            }
-        }
-
         if (listChanged) checkUnificationIslands();
-
     }
 
     public boolean isGameOver() throws IncorrectArgumentException {
-        if (!bag.hasEnoughStudents(numDrawnStudents)) return true;
-        else if (numRounds >= 9) return true;
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
         else return false;
     }
 
