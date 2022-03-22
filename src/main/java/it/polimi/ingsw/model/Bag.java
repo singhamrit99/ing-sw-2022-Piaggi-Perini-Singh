@@ -69,7 +69,7 @@ public class Bag {
         this.setStudents(studentsDiscs);
     }
 
-    public boolean hasEnoughStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
+    public boolean hasEnoughStudents(int numberOfStudents) throws IncorrectArgumentException {
         for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
                 if (getStudents().containsKey(set.getKey())) {
