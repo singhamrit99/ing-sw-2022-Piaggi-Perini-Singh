@@ -10,19 +10,28 @@ import java.util.HashMap;
 /**
  * @author Amrit
  */
-public class Player {
+public class Player implements Comparable{
     private String nickname;
-    private ArrayList<AssistantCardDeck> assistantCardDeck;
-    private AssistantCard playedCard;
+    private SchoolBoard schoolBoard;
     private Colors towerColors;
+    private AssistantCardDeck assistantCardDeck;
+    private AssistantCard playedCard;
     private int characterCard;
 
-    public void playAssistantCard(int index){
+    public Player(String nickname, Colors towerColors, int numberOfPlayers){
+        this.nickname = nickname;
+        this.schoolBoard = new SchoolBoard(numberOfPlayers);
+        this.towerColors = towerColors;
 
     }
 
-    public void moveMotherNature(int distance){
+    public void playAssistantCard(int index){
+        assistantCardDeck.getAssistantCard(index).setHasPlayed(true);
 
+    }
+
+    public boolean moveMotherNature(int distance){
+        return true;
     }
 
     public void moveStudents(HashMap<StudentDisc, Integer> students, ArrayList<Integer> destination){
@@ -31,5 +40,10 @@ public class Player {
 
     public void insertStudentsFromCloud(HashMap<StudentDisc, Integer> students){
 
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }
