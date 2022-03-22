@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.enumerations.Colors;
  * @author Amrit
  */
 public class StudentDisc {
-    private Colors discColor;
+    private final Colors discColor;
 
     public StudentDisc(Colors color) {
         this.discColor = color;
