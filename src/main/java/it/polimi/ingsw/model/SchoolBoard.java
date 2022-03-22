@@ -15,15 +15,20 @@ public class SchoolBoard {
     private ArrayList<ProfessorPawn> professorTable;
     private int numberOfTowers;
 
-    public SchoolBoard() {
+    public SchoolBoard(int numberOfPlayers) {
         this.entrance = new HashMap<>();
         this.dining = new HashMap<>();
         this.professorTable = new ArrayList<>();
-        numberOfTowers = 0;
+
+        if (numberOfPlayers == 3) {
+            numberOfTowers = 6;
+        } else {
+            numberOfTowers = 8;
+        }
     }
 
     public void addStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
-        HashMap<StudentDisc, Integer> studentsDiscs = this.getEntrance();
+        HashMap<StudentDisc, Integer> studentsDiscs = getEntrance();
 
         for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
@@ -80,6 +85,7 @@ public class SchoolBoard {
             }
 
         }
+        this.removeStudents(studentsDiscs);
         this.setDining(studentsDiscs);
     }
 
@@ -99,8 +105,26 @@ public class SchoolBoard {
         }
     }
 
+    public boolean hasEnoughStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
+        HashMap<StudentDisc, Integer> studentsDiscs = this.getEntrance();
+
+        for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+            if (set.getValue() >= 0) {
+                if (studentsDiscs.containsKey(set.getKey())) {
+                    if (studentsDiscs.get(set.getKey()) < set.getValue()) {
+                        return false;
+                    }
+                } else {
+                    throw new IncorrectArgumentException("HashMap is not correct");
+                }
+            } else {
+                throw new IncorrectArgumentException("HashMap is not correct");
+            }
+        }
+        return true;
+    }
+
     public void moveTowers(int towers) {
         this.numberOfTowers += towers;
     }
-
 }
