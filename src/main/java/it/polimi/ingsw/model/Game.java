@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.IncorrectStateException;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -17,9 +18,9 @@ public class Game {
     private LinkedList<IslandTile> islands;
     private CloudTile[] clouds;
     private Bag bag;
-    private MotherNaturePawn motherNature;
+    private int motherNaturePosition = 0;
 
-    public void initializeGame() {
+    public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
         expertMode = 0;
         players = new Player[numOfPlayer];
         for (int i = 0; i < numOfPlayer; i++) {
@@ -49,28 +50,37 @@ public class Game {
         updateState();
     }
 
-    public void updateState() {
+    public void updateState() throws IncorrectArgumentException, IncorrectStateException {
         boolean playing = true;
         while (playing) {
             switch (state) {
 
                 case PLANNINGPHASE:
-                    if (currentPlayer < numOfPlayer) {
-                        drawFromBag();
-                        playAssistantCard(currentPlayer);
-                    } else {
-                        firstPlayerPlanPhase = orderPlayers[0]; //first of the next planning phase
-                        state = State.ACTIONPHASE;
-                        updateState();
+                    while (state == State.PLANNINGPHASE) {
+                        if (currentPlayer < numOfPlayer) {
+                            drawFromBag();
+                            playAssistantCard(currentPlayer);
+                        } else {
+                            firstPlayerPlanPhase = orderPlayers[0]; //first of the next planning phase
+                            state = State.ACTIONPHASE;
+                        }
                     }
                     break;
 
                 case ACTIONPHASE:
-                    //moveStudents()
-                    //takeStudentsFromCloud();
-                    //checkAndPlaceProfessor();
-                    //checkAndPlaceTower();
-                    //if(orderPlayers(has length 0) state==State.ENDTURN
+                    while (state == State.ACTIONPHASE) {
+                        if (orderPlayers.length > 0) {
+                            currentPlayer = orderPlayers[0];
+                            //orderPlayers.remove
+                            //moveStudents()
+                            //takeStudentsFromCloud();
+                            //checkAndPlaceProfessor();
+                            //checkAndPlaceTower();
+                        } else {
+                            state = State.ENDTURN;
+                        }
+                    }
+
                     break;
 
                 case ENDTURN:
@@ -86,23 +96,20 @@ public class Game {
                     checkWinner();
                     break;
 
-                //default:
-                //exception
+                default:
+                    throw new IncorrectStateException();
             }
         }
     }
 
 
-    public void drawFromBag() {
-        for (int c = 0; c < clouds.length; c++) {
+    public void drawFromBag() throws IncorrectArgumentException {
+        for (CloudTile cloud : clouds) {
             int studentsDraw = -1;
             if (numOfPlayer == 3) studentsDraw = 4;
             else studentsDraw = 3;
-            try {
-                clouds[c].addStudents(bag.drawStudents(studentsDraw));
-            } catch (IncorrectArgumentException e) {
-                System.out.println("Incorrect Argument Exception");
-            }
+
+            cloud.addStudents(bag.drawStudents(studentsDraw));
         }
     }
 
@@ -110,22 +117,35 @@ public class Game {
         return true;
     }
 
-    public void playAssistantCard(int currentPlayer) {
+    public void playAssistantCard(int currentPlayer) throws IncorrectArgumentException, IncorrectStateException {
         //players[currentplayer].playAssistantCard();
-        //it has to update the priority(current of orderPlayer[]) //AMRIT should implement Comparable interface to Player
-        currentPlayer++; // next turn into Planning Phase (clockwise)
+        //it has to update the priority(current of orderPlayer[]) //amrit should implement Comparable interface to Player
+        currentPlayer++; //next turn into Planning Phase (clockwise)
         updateState();
     }
 
-    public void moveMotherNature(int distance) {
-        motherNature.moveTile(distance);
+    public void moveMotherNature(int distanceChoosen) { // UML to change
+        int destinationMotherNature = motherNaturePosition+distanceChoosen;
+        if(islands.get(motherNaturePosition).hasMotherNature()){
+            if(players[currentPlayer].moveMotherNature(distanceChoosen)){
+                islands.get(motherNaturePosition).removeMotherNature();
+                islands.get(destinationMotherNature).moveMotherNature();
+            }
+            else{
+                //return exception to view
+            }
+
+        }
+        else{
+            //eccezione ho perso madre natura
+        }
     }
 
-    public void checkUnificationIslands(){
+    public void checkUnificationIslands() {
         boolean listChanged = false;
         Iterator<IslandTile> it = islands.iterator();
         IslandTile current = islands.getFirst();
-        while (it.hasNext()){
+        while (it.hasNext()) {
             if (it.next().getOwner().equals(current.getOwner())) {
                 current.sumStudentsUnification(it.next().getStudents());
                 current.sumTowersUnification(it.next().getTowers());
@@ -135,17 +155,17 @@ public class Game {
             }
         }
 
-        if(islands.getLast().equals(current)){
+        if (islands.getLast().equals(current)) {
             IslandTile head = islands.getFirst();
-            if (head.getOwner().equals(current.getOwner())){
+            if (head.getOwner().equals(current.getOwner())) {
                 current.sumStudentsUnification(head.getStudents());
                 current.sumTowersUnification(head.getTowers());
                 islands.remove(head);
-                listChanged= true;
+                listChanged = true;
             }
         }
 
-        if(listChanged)checkUnificationIslands();
+        if (listChanged) checkUnificationIslands();
 
     }
 

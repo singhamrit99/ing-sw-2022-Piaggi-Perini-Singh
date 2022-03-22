@@ -38,5 +38,18 @@ public class IslandTile implements Tile{
         return numberOfTowers;
     }
 
+    public boolean hasMotherNature(){
+        return hasMotherNature;
+    }
+
+    public void moveMotherNature(){
+        hasMotherNature = true;
+    }
+
+    public void removeMotherNature(){
+        hasMotherNature = false;
+    }
+
+
     public void addStudents(HashMap<StudentDisc,Integer> students){}
 }
