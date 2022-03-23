@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
 import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
@@ -27,21 +28,16 @@ public class Game {
     private int numRounds;
     private int numDrawnStudents;
     private int counter;
-    private int playerDrawnOut;
+    private boolean playerDrawnOut;
     private ListIterator<Player> playerIterator;
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
         expertMode = 0;
         motherNaturePosition = 0;
         numRounds = 0;
-        counter = numOfPlayer;
+        counter = numOfPlayer - 1;
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
-
-        //for (int i=0;i<numOfPlayer;i++) {
-        //players.add(new Player());
-        //pickCharacter(p);
-        //}
 
         // initialization LinkedList<IslandTile> islands;
         islands = new LinkedList<>(islands);
@@ -57,36 +53,70 @@ public class Game {
             clouds[i] = cloud;
         }
 
+        //initialization LinkedList<Player>
+        playerIterator = players.listIterator();
+        firstPlayerPlanPhase = players.get((int) Math.random() * numOfPlayer); //random init player
+        playerIterator.set(firstPlayerPlanPhase);
+        playerDrawnOut = false;
         state = State.PLANNINGPHASE;
 
     }
 
-    public void nextPlayer(Player callerPlayer) {
-        if (state == State.PLANNINGPHASE) { //TODO Player equals method
-            if (counter > 0) {
-                counter--;
-                //TODO
-            } else {
-                state = State.ACTIONPHASE;
-                counter = numOfPlayer;
-                firstPlayerPlanPhase = orderPlayers.peek();
-            }
-        }
+    public void nextPlayer(Player callerPlayer) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
+        if (callerPlayer.equals(currentPlayer)) {
+            if (state == State.PLANNINGPHASE) { //TODO Player equals method
+                if (counter > 0) {
+                    counter--;
+                    if (playerIterator.hasNext()) currentPlayer = playerIterator.next();
+                    else playerIterator.set(players.getFirst());
+                    playerDrawnOut = false;
+                } else {
+                    state = State.ACTIONPHASE;
+                    counter = numOfPlayer;
+                    firstPlayerPlanPhase = orderPlayers.peek();
+                }
+            } else if (state == State.ACTIONPHASE) {
+                if (!orderPlayers.isEmpty()) currentPlayer = orderPlayers.poll();
+                else {
+                    state = State.ENDTURN;
+                    nextRound();
+                }
+            } else throw new IncorrectStateException();
+        }else throw new IncorrectPlayerException();
     }
 
-    public void drawFromBag() throws IncorrectArgumentException {
-        if (state == State.PLANNINGPHASE)
+    public void nextRound() throws IncorrectArgumentException, IncorrectStateException {
+        if (state == State.ENDTURN) {
+            if (isGameOver()){
+                state = State.END;
+                checkWinner();
+            }
+            else{
+                state = State.PLANNINGPHASE;
+                currentPlayer = firstPlayerPlanPhase;
+                counter = numOfPlayer;
+            }
+        } else throw new IncorrectStateException();
+    }
+
+    public void drawFromBag(Player playerCaller) throws IncorrectArgumentException {
+        if (state == State.PLANNINGPHASE && playerCaller.equals(currentPlayer) && !playerDrawnOut) {
             for (CloudTile cloud : clouds) {
                 cloud.addStudents(bag.drawStudents(numDrawnStudents));
             }
-
+            playerDrawnOut = true;
+        }
+        else throw new IncorrectArgumentException();
     }
 
-
-    public void playAssistantCard(Player player) throws IncorrectArgumentException, IncorrectStateException {
-        //players[currentplayer].playAssistantCard();
-        //it has to update the priority(current of orderPlayer[]) //amrit should implement Comparable interface to Player
-
+    public void playAssistantCard(Player player, int indexCard) throws IncorrectArgumentException, IncorrectStateException {
+        if (state == State.PLANNINGPHASE) {
+            if (player.equals(currentPlayer) && playerDrawnOut) {
+                currentPlayer.playAssistantCard(indexCard);
+                nextPlayer();
+            }
+            else throw new IncorrectArgumentException();
+        }else throw new IncorrectStateException();
     }
 
     public void moveMotherNature(int distanceChoosen) throws IncorrectArgumentException, MotherNatureLostException {
