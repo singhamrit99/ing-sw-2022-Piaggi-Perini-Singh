@@ -145,7 +145,7 @@ public class Game {
 
 
     public void moveStudents() {
-        currentPlayer.moveStudents();
+        //currentPlayer.moveStudents();
     }
 
 
@@ -155,6 +155,8 @@ public class Game {
             if (currentPlayer.moveMotherNature(distanceChoosen)) {
                 islands.get(motherNaturePosition).removeMotherNature();
                 islands.get(destinationMotherNature).moveMotherNature();
+                //islands.get(destinationMotherNature).getStudents(); islands.getTowers() and islands.getOwner()
+                //check which player has that color professor and eventually place the tower in that islands using checkAndPlaceTower
             } else {
                 throw new IncorrectArgumentException();
             }
@@ -164,15 +166,17 @@ public class Game {
     }
 
     public void checkAndPlaceProfessor() {
-
+        //ask to each player how many students has
+        // and based on that placing professor using Player Method
     }
 
-    public void checkAndPlaceTower() throws IncorrectArgumentException {
-        //ok
+    private void checkAndPlaceTower() throws IncorrectArgumentException { // UML this method became private
+        // I need to decrement towers
+        //I need to know towers number from player, if 0 -> wins
         checkUnificationIslands();
     }
 
-    public void checkUnificationIslands() throws IncorrectArgumentException {
+    private void checkUnificationIslands() throws IncorrectArgumentException { // UML this method became private
         boolean listChanged = false;
         ListIterator<IslandTile> it = islands.listIterator();
         IslandTile currentTile;
@@ -193,6 +197,6 @@ public class Game {
 
 
     public void checkWinner() {
-
+        //I need to know towers number from player, if 0 -> wins
     }
 }

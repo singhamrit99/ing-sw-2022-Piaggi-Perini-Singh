@@ -67,7 +67,6 @@ public class IslandTile implements Tile {
         hasMotherNature = false;
     }
 
-
     public void addStudents(HashMap<StudentDisc, Integer> students) {
     }
 }
