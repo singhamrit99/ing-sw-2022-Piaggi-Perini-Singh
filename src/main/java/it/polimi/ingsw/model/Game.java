@@ -31,6 +31,10 @@ public class Game {
     private boolean playerDrawnOut;
     private ListIterator<Player> playerIterator;
 
+    public void pickCharacter(Player player) {
+
+    }
+
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
         expertMode = 0;
         motherNaturePosition = 0;
@@ -62,9 +66,31 @@ public class Game {
 
     }
 
-    public void nextPlayer(Player callerPlayer) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
-        if (callerPlayer.equals(currentPlayer)) {
-            if (state == State.PLANNINGPHASE) { //TODO Player equals method
+    public void drawFromBag(Player playerCaller) throws IncorrectArgumentException {
+        if (state == State.PLANNINGPHASE && playerCaller.equals(currentPlayer) && !playerDrawnOut) {
+            for (CloudTile cloud : clouds) {
+                cloud.addStudents(bag.drawStudents(numDrawnStudents));
+            }
+            playerDrawnOut = true;
+        } else throw new IncorrectArgumentException();
+    }
+
+    public void playAssistantCard(Player player, int indexCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException {
+        if (state == State.PLANNINGPHASE) {
+            if (player.equals(currentPlayer) && playerDrawnOut) {  //playerDrawnOut = player has drawn from bag
+                currentPlayer.playAssistantCard(indexCard);
+                nextPlayer(currentPlayer);
+            } else {
+                throw new IncorrectPlayerException();
+            }
+        } else {
+            throw new IncorrectStateException();
+        }
+    }
+
+    private void nextPlayer(Player callerPlayer) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
+        if (callerPlayer.equals(currentPlayer)) { //TODO Player equals method
+            if (state == State.PLANNINGPHASE) {
                 if (counter > 0) {
                     counter--;
                     if (playerIterator.hasNext()) currentPlayer = playerIterator.next();
@@ -72,7 +98,6 @@ public class Game {
                     playerDrawnOut = false;
                 } else {
                     state = State.ACTIONPHASE;
-                    counter = numOfPlayer;
                     firstPlayerPlanPhase = orderPlayers.peek();
                 }
             } else if (state == State.ACTIONPHASE) {
@@ -81,43 +106,48 @@ public class Game {
                     state = State.ENDTURN;
                     nextRound();
                 }
-            } else throw new IncorrectStateException();
-        }else throw new IncorrectPlayerException();
+            } else {
+                throw new IncorrectStateException();
+            }
+        } else {
+            throw new IncorrectPlayerException();
+        }
     }
 
     public void nextRound() throws IncorrectArgumentException, IncorrectStateException {
         if (state == State.ENDTURN) {
-            if (isGameOver()){
+            if (isGameOver()) {
                 state = State.END;
                 checkWinner();
-            }
-            else{
+            } else {
                 state = State.PLANNINGPHASE;
                 currentPlayer = firstPlayerPlanPhase;
-                counter = numOfPlayer;
+                counter = numOfPlayer - 1;
             }
         } else throw new IncorrectStateException();
     }
 
-    public void drawFromBag(Player playerCaller) throws IncorrectArgumentException {
-        if (state == State.PLANNINGPHASE && playerCaller.equals(currentPlayer) && !playerDrawnOut) {
-            for (CloudTile cloud : clouds) {
-                cloud.addStudents(bag.drawStudents(numDrawnStudents));
-            }
-            playerDrawnOut = true;
-        }
-        else throw new IncorrectArgumentException();
+    public boolean isGameOver() throws IncorrectArgumentException {
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
+        else return false;
     }
 
-    public void playAssistantCard(Player player, int indexCard) throws IncorrectArgumentException, IncorrectStateException {
-        if (state == State.PLANNINGPHASE) {
-            if (player.equals(currentPlayer) && playerDrawnOut) {
-                currentPlayer.playAssistantCard(indexCard);
-                nextPlayer();
-            }
-            else throw new IncorrectArgumentException();
-        }else throw new IncorrectStateException();
+
+    public void takeStudentsFromCloud(Player playerCaller, int index) throws IncorrectStateException, IncorrectPlayerException {
+        if (state == State.ACTIONPHASE) {
+            if (playerCaller.equals(currentPlayer)) {
+                //currentPlayer.moveStudents(clouds[index].removeStudents() waiting Amrit
+            } else throw new IncorrectPlayerException();
+        } else {
+            throw new IncorrectStateException();
+        }
     }
+
+
+    public void moveStudents() {
+        currentPlayer.moveStudents();
+    }
+
 
     public void moveMotherNature(int distanceChoosen) throws IncorrectArgumentException, MotherNatureLostException {
         int destinationMotherNature = motherNaturePosition + distanceChoosen;
@@ -131,6 +161,15 @@ public class Game {
         } else {
             throw new MotherNatureLostException();
         }
+    }
+
+    public void checkAndPlaceProfessor() {
+
+    }
+
+    public void checkAndPlaceTower() throws IncorrectArgumentException {
+        //ok
+        checkUnificationIslands();
     }
 
     public void checkUnificationIslands() throws IncorrectArgumentException {
@@ -152,30 +191,8 @@ public class Game {
         if (listChanged) checkUnificationIslands();
     }
 
-    public boolean isGameOver() throws IncorrectArgumentException {
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
-        else return false;
-    }
-
-    public void checkAndPlaceProfessor() {
-
-    }
-
-    public void checkAndPlaceTower() throws IncorrectArgumentException {
-        //ok
-        checkUnificationIslands();
-    }
-
-    public void takeStudentsFromCloud(int index) {
-
-    }
 
     public void checkWinner() {
 
     }
-
-    public void pickCharacter(Player player) {
-        // this function needs to modify Player Nickname that is private attribute.
-    }
-
 }
