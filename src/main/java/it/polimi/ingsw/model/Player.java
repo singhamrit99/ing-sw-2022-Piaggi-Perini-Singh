@@ -35,6 +35,10 @@ public class Player implements Comparable {
         return true;
     }
 
+    public void addStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
+        schoolBoard.addStudents(students);
+    }
+
     public void moveStudents(HashMap<StudentDisc, Integer> students, ArrayList<Integer> destinations) throws IncorrectArgumentException {
         if (schoolBoard.hasEnoughStudents(students)) {
             if (students.size() == destinations.size()) {
@@ -53,6 +57,10 @@ public class Player implements Comparable {
         }
     }
 
+    public void moveProfessor(ArrayList<ProfessorPawn> professorPawns) {
+        schoolBoard.moveProfessors(professorPawns);
+    }
+
     @Override
     public int compareTo(Object o) {
         return 0;
@@ -68,5 +76,17 @@ public class Player implements Comparable {
 
     public AssistantCard getPlayedCard() {
         return playedCard;
+    }
+
+    public int getPlayerTowers() {
+        return schoolBoard.getTowers();
+    }
+
+    public int getStudentsByColor(Colors color) throws IncorrectArgumentException {
+        return schoolBoard.getStudentsByColor(color);
+    }
+
+    public void moveTowers(int steps){
+        schoolBoard.moveTowers(steps);
     }
 }
