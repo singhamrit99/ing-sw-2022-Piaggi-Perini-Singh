@@ -1,10 +1,8 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.model.cards;
 
 
 import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.model.FilePaths;
 import it.polimi.ingsw.model.exceptions.GetPaths;
-import netscape.javascript.JSObject;
 
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
