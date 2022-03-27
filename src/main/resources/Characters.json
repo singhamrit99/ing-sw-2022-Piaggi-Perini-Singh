@@ -4,107 +4,107 @@
 
   {
     "id": 1,
-    "intialcost": 1,
-    "class": "setup",
-    "power": "Move students on the character card to any isle you wish!"
+    "initialcost": 1,
+    "power": "setup",
+    "description": "Move students on the character card to any isle you wish!"
 
 
 
   },
   {
     "id": 2,
-    "intialcost": 2,
-    "class": "setup",
-    "power": "Place a No Entry card on an isle and block Mother Nature's power once!"
+    "initialcost": 2,
+    "": "setup",
+    "description": "Place a No Entry card on an isle and block Mother Nature's power once!"
 
 
 
   },
   {
     "id": 3,
-    "intialcost": 1,
-    "class": "setup",
-    "power": "Swap 3 of the students on this card with 3 from your Entrance!"
+    "initialcost": 1,
+    "power": "setup",
+    "description": "Swap 3 of the students on this card with 3 from your Entrance!"
 
 
 
   },
   {
     "id": 4,
-    "intialcost": 2,
-    "class": "setup",
-    "power": "Take one student from this card and put them in the dining room, then draw another from the bag and replace them!"
+    "initialcost": 2,
+    "power": "setup",
+    "description": "Take one student from this card and put them in the dining room, then draw another from the bag and replace them!"
 
 
 
   }, {
   "id": 5,
-  "intialcost": 3,
-  "class": "influence",
-  "power": "If somebody tries to Conquer an island, ignore the towers for this turn!"
+  "initialcost": 3,
+  "power": "influence",
+  "description": "If somebody tries to Conquer an island, ignore the towers for this turn!"
 
 
 
 },
   {
     "id": 6,
-    "intialcost": 2,
-    "class": "influence",
-    "power": "Add 2 to your Influence this turn!"
+    "initialcost": 2,
+    "power": "influence",
+    "description": "Add 2 to your Influence this turn!"
 
 
 
   },
   {
     "id": 7,
-    "intialcost": 3,
-    "class": "influence",
-    "power": "Choose a student color to ignore when calculating Influence this turn!"
+    "initialcost": 3,
+    "power": "influence",
+    "description": "Choose a student color to ignore when calculating Influence this turn!"
 
 
 
   },
   {
     "id": 8,
-    "intialcost": 3,
-    "class": "influence",
-    "power": "Calculate the influence on any Island and reap the rewards!"
+    "initialcost": 3,
+    "power": "influence",
+    "description": "Calculate the influence on any Island and reap the rewards!"
 
 
 
   },
   {
     "id": 9,
-    "intialcost": 2,
-    "class": "manipulation",
-    "power": "Snag an opponent's professor if you have the same number of their students!"
+    "initialcost": 2,
+    "power": "manipulation",
+    "description": "Snag an opponent's professor if you have the same number of their students!"
 
 
 
   },
   {
     "id": 10,
-    "intialcost": 1,
-    "class": "manipulation",
-    "power": "Switch up to two students between your Entrance and your Dining Room!"
+    "initialcost": 1,
+    "power": "manipulation",
+    "description": "Switch up to two students between your Entrance and your Dining Room!"
 
 
 
   },
   {
     "id": 11,
-    "intialcost": 3,
-    "class": "manipulation",
-    "power": "Choose a color: EVERYONE must return 3 students of that color to the bag!"
+    "initialcost": 3,
+    "power": "manipulation",
+    "description": "Choose a color: EVERYONE must return 3 students of that color to the bag!"
 
 
 
   },
   {
     "id": 12,
-    "intialcost": 1,
-    "class": "MNmanipulation",
-    "power": "You may move Mother Nature up to 2 additional spaces!"
+    "initialcost": 1,
+    "power": "MNmanipulation",
+    "description": "You may move Mother Nature up to 2 additional spaces!"
 
 
 

@@ -1,9 +1,24 @@
 package it.polimi.ingsw.model;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import it.polimi.ingsw.FillDeck;
 import it.polimi.ingsw.model.enumerations.State;
+import it.polimi.ingsw.model.exceptions.GetPaths;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
+import it.polimi.ingsw.model.tiles.CloudTile;
+import it.polimi.ingsw.model.tiles.IslandTile;
 
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -19,6 +34,7 @@ public class Game {
     private CloudTile[] clouds;
     private Bag bag;
     private int motherNaturePosition = 0;
+    private ArrayList<IslandTile> jislands;
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
         expertMode = 0;
@@ -33,6 +49,19 @@ public class Game {
         }
 
         // initialization LinkedList<IslandTile> islands;
+        //Import islands from json
+        Gson gson= new Gson();
+        try{
+        InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION), StandardCharsets.UTF_8);
+        JsonReader jsonReader = new JsonReader(streamReader);
+        String fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
+        jislands= gson.fromJson(jsonReader, IslandTile.class);
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         islands = new LinkedList<>(islands);
         for (int i = 0; i < 12; i++) {
             IslandTile island = new IslandTile("Island name from Json");
