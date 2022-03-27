@@ -1,18 +1,17 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.AssistantCard;
-import it.polimi.ingsw.AssistantCardDeck;
+import it.polimi.ingsw.model.cards.AssistantCard;
+import it.polimi.ingsw.model.cards.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Amrit
  */
-public class Player implements Comparable {
+public class Player implements Comparable<Player> {
     private String nickname;
     private SchoolBoard schoolBoard;
     private Colors towerColors;
@@ -62,8 +61,16 @@ public class Player implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        return 0;
+    public int compareTo(Player otherPlayer) {
+        if (otherPlayer.getPlayedCard().getValue() < playedCard.getValue()) {
+            return 0;
+        }
+
+        if (otherPlayer.getPlayedCard().getValue() > playedCard.getValue()) {
+            return 2;
+        }
+
+        return 1;
     }
 
     public SchoolBoard getSchoolBoard() {
@@ -86,7 +93,7 @@ public class Player implements Comparable {
         return schoolBoard.getStudentsByColor(color);
     }
 
-    public void moveTowers(int steps){
+    public void moveTowers(int steps) {
         schoolBoard.moveTowers(steps);
     }
 }
