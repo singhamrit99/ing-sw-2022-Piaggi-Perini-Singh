@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.ArrayList;
@@ -83,7 +84,7 @@ public class SchoolBoard {
 
     public void moveProfessors(ArrayList<ProfessorPawn> professors) {
         for (ProfessorPawn professor : professors) {
-            if (this.professorsTable.contains(professor)) {
+            if (professorsTable.contains(professor)) {
                 professor.changeStatus();
             }
         }
@@ -117,7 +118,7 @@ public class SchoolBoard {
     }
 
     private HashMap<StudentDisc, Integer> getEntrance() {
-        return this.entrance;
+        return entrance;
     }
 
     private void setDining(HashMap<StudentDisc, Integer> studentsDiscs) {
@@ -130,5 +131,19 @@ public class SchoolBoard {
 
     public ArrayList<ProfessorPawn> getProfessorsTable() {
         return professorsTable;
+    }
+
+    public int getTowers() {
+        return numberOfTowers;
+    }
+
+    public int getStudentsByColor(Colors color) throws IncorrectArgumentException {
+        StudentDisc studentDisc = new StudentDisc(color);
+
+        if (dining.containsKey(studentDisc)) {
+            return dining.get(studentDisc);
+        } else {
+            throw new IncorrectArgumentException();
+        }
     }
 }
