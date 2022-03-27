@@ -24,7 +24,6 @@ public class Player implements Comparable {
         this.nickname = nickname;
         this.schoolBoard = new SchoolBoard(numberOfPlayers);
         this.towerColors = towerColors;
-
     }
 
     public void playAssistantCard(int index) {
@@ -34,6 +33,10 @@ public class Player implements Comparable {
 
     public boolean moveMotherNature(int distance) {
         return true;
+    }
+
+    public void addStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
+        schoolBoard.addStudents(students);
     }
 
     public void moveStudents(HashMap<StudentDisc, Integer> students, ArrayList<Integer> destinations) throws IncorrectArgumentException {
@@ -54,8 +57,36 @@ public class Player implements Comparable {
         }
     }
 
+    public void moveProfessor(ArrayList<ProfessorPawn> professorPawns) {
+        schoolBoard.moveProfessors(professorPawns);
+    }
+
     @Override
     public int compareTo(Object o) {
         return 0;
+    }
+
+    public SchoolBoard getSchoolBoard() {
+        return schoolBoard;
+    }
+
+    public Colors getTowerColors() {
+        return towerColors;
+    }
+
+    public AssistantCard getPlayedCard() {
+        return playedCard;
+    }
+
+    public int getPlayerTowers() {
+        return schoolBoard.getTowers();
+    }
+
+    public int getStudentsByColor(Colors color) throws IncorrectArgumentException {
+        return schoolBoard.getStudentsByColor(color);
+    }
+
+    public void moveTowers(int steps){
+        schoolBoard.moveTowers(steps);
     }
 }

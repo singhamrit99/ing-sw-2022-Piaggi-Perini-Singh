@@ -1,67 +1,49 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.FillDeck;
 import it.polimi.ingsw.model.enumerations.State;
-import it.polimi.ingsw.model.exceptions.GetPaths;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
+import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
-import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.PriorityQueue;
 
 public class Game {
     private int expertMode = 0;
     private State state;
     private int numOfPlayer;
-    private Player[] players;
-    private int[] orderPlayers;
-    private int firstPlayerPlanPhase;
-    private int currentPlayer;
+    private LinkedList<Player> players;
+    private PriorityQueue<Player> orderPlayers;
+    private Player currentPlayer;
+    private Player firstPlayerPlanPhase;
     private LinkedList<IslandTile> islands;
     private CloudTile[] clouds;
     private Bag bag;
-    private int motherNaturePosition = 0;
-    private ArrayList<IslandTile> jislands;
+    private int motherNaturePosition;
+    private int numRounds;
+    private int numDrawnStudents;
+    private int counter;
+    private boolean playerDrawnOut;
+    private ListIterator<Player> playerIterator;
+
+    public void pickCharacter(Player player) {
+
+    }
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
         expertMode = 0;
-        players = new Player[numOfPlayer];
-        for (int i = 0; i < numOfPlayer; i++) {
-            orderPlayers[i] = i;
-        }
-        currentPlayer = 0;
-
-        for (Player p : players) {
-            pickCharacter(p);
-        }
+        motherNaturePosition = 0;
+        numRounds = 0;
+        counter = numOfPlayer - 1;
+        if (numOfPlayer == 3) numDrawnStudents = 4;
+        else numDrawnStudents = 3;
 
         // initialization LinkedList<IslandTile> islands;
-        //Import islands from json
-        Gson gson= new Gson();
-        try{
-        InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION), StandardCharsets.UTF_8);
-        JsonReader jsonReader = new JsonReader(streamReader);
-        String fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
-        jislands= gson.fromJson(jsonReader, IslandTile.class);
-
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
         islands = new LinkedList<>(islands);
         for (int i = 0; i < 12; i++) {
             IslandTile island = new IslandTile("Island name from Json");
@@ -75,148 +57,146 @@ public class Game {
             clouds[i] = cloud;
         }
 
+        //initialization LinkedList<Player>
+        playerIterator = players.listIterator();
+        firstPlayerPlanPhase = players.get((int) Math.random() * numOfPlayer); //random init player
+        playerIterator.set(firstPlayerPlanPhase);
+        playerDrawnOut = false;
         state = State.PLANNINGPHASE;
-        updateState();
+
     }
 
-    public void updateState() throws IncorrectArgumentException, IncorrectStateException {
-        boolean playing = true;
-        while (playing) {
-            switch (state) {
-
-                case PLANNINGPHASE:
-                    while (state == State.PLANNINGPHASE) {
-                        if (currentPlayer < numOfPlayer) {
-                            drawFromBag();
-                            playAssistantCard(currentPlayer);
-                        } else {
-                            firstPlayerPlanPhase = orderPlayers[0]; //first of the next planning phase
-                            state = State.ACTIONPHASE;
-                        }
-                    }
-                    break;
-
-                case ACTIONPHASE:
-                    while (state == State.ACTIONPHASE) {
-                        if (orderPlayers.length > 0) {
-                            currentPlayer = orderPlayers[0];
-                            //orderPlayers.remove
-                            //moveStudents()
-                            //takeStudentsFromCloud();
-                            //checkAndPlaceProfessor();
-                            //checkAndPlaceTower();
-                        } else {
-                            state = State.ENDTURN;
-                        }
-                    }
-
-                    break;
-
-                case ENDTURN:
-                    if (checkGameOver()) {
-                        state = State.END;
-                    } else {
-                        state = State.PLANNINGPHASE;
-                        currentPlayer = firstPlayerPlanPhase;
-                    }
-                    break;
-
-                case END:
-                    checkWinner();
-                    break;
-
-                default:
-                    throw new IncorrectStateException();
+    public void drawFromBag(Player playerCaller) throws IncorrectArgumentException {
+        if (state == State.PLANNINGPHASE && playerCaller.equals(currentPlayer) && !playerDrawnOut) {
+            for (CloudTile cloud : clouds) {
+                cloud.addStudents(bag.drawStudents(numDrawnStudents));
             }
+            playerDrawnOut = true;
+        } else throw new IncorrectArgumentException();
+    }
+
+    public void playAssistantCard(Player player, int indexCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException {
+        if (state == State.PLANNINGPHASE) {
+            if (player.equals(currentPlayer) && playerDrawnOut) {  //playerDrawnOut = player has drawn from bag
+                currentPlayer.playAssistantCard(indexCard);
+                nextPlayer(currentPlayer);
+            } else {
+                throw new IncorrectPlayerException();
+            }
+        } else {
+            throw new IncorrectStateException();
+        }
+    }
+
+    private void nextPlayer(Player callerPlayer) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
+        if (callerPlayer.equals(currentPlayer)) { //TODO Player equals method
+            if (state == State.PLANNINGPHASE) {
+                if (counter > 0) {
+                    counter--;
+                    if (playerIterator.hasNext()) currentPlayer = playerIterator.next();
+                    else playerIterator.set(players.getFirst());
+                    playerDrawnOut = false;
+                } else {
+                    state = State.ACTIONPHASE;
+                    firstPlayerPlanPhase = orderPlayers.peek();
+                }
+            } else if (state == State.ACTIONPHASE) {
+                if (!orderPlayers.isEmpty()) currentPlayer = orderPlayers.poll();
+                else {
+                    state = State.ENDTURN;
+                    nextRound();
+                }
+            } else {
+                throw new IncorrectStateException();
+            }
+        } else {
+            throw new IncorrectPlayerException();
+        }
+    }
+
+    public void nextRound() throws IncorrectArgumentException, IncorrectStateException {
+        if (state == State.ENDTURN) {
+            if (isGameOver()) {
+                state = State.END;
+                checkWinner();
+            } else {
+                state = State.PLANNINGPHASE;
+                currentPlayer = firstPlayerPlanPhase;
+                counter = numOfPlayer - 1;
+            }
+        } else throw new IncorrectStateException();
+    }
+
+    public boolean isGameOver() throws IncorrectArgumentException {
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
+        else return false;
+    }
+
+
+    public void takeStudentsFromCloud(Player playerCaller, int index) throws IncorrectStateException, IncorrectPlayerException {
+        if (state == State.ACTIONPHASE) {
+            if (playerCaller.equals(currentPlayer)) {
+                //currentPlayer.moveStudents(clouds[index].removeStudents() waiting Amrit
+            } else throw new IncorrectPlayerException();
+        } else {
+            throw new IncorrectStateException();
         }
     }
 
 
-    public void drawFromBag() throws IncorrectArgumentException {
-        for (CloudTile cloud : clouds) {
-            int studentsDraw = -1;
-            if (numOfPlayer == 3) studentsDraw = 4;
-            else studentsDraw = 3;
-
-            cloud.addStudents(bag.drawStudents(studentsDraw));
-        }
+    public void moveStudents() {
+        //currentPlayer.moveStudents();
     }
 
-    public boolean checkGameOver() {
-        return true;
-    }
 
-    public void playAssistantCard(int currentPlayer) throws IncorrectArgumentException, IncorrectStateException {
-        //players[currentplayer].playAssistantCard();
-        //it has to update the priority(current of orderPlayer[]) //amrit should implement Comparable interface to Player
-        currentPlayer++; //next turn into Planning Phase (clockwise)
-        updateState();
-    }
-
-    public void moveMotherNature(int distanceChoosen) { // UML to change
-        int destinationMotherNature = motherNaturePosition+distanceChoosen;
-        if(islands.get(motherNaturePosition).hasMotherNature()){
-            if(players[currentPlayer].moveMotherNature(distanceChoosen)){
+    public void moveMotherNature(int distanceChoosen) throws IncorrectArgumentException, MotherNatureLostException {
+        int destinationMotherNature = motherNaturePosition + distanceChoosen;
+        if (islands.get(motherNaturePosition).hasMotherNature()) {
+            if (currentPlayer.moveMotherNature(distanceChoosen)) {
                 islands.get(motherNaturePosition).removeMotherNature();
                 islands.get(destinationMotherNature).moveMotherNature();
+                //islands.get(destinationMotherNature).getStudents(); islands.getTowers() and islands.getOwner()
+                //check which player has that color professor and eventually place the tower in that islands using checkAndPlaceTower
+            } else {
+                throw new IncorrectArgumentException();
             }
-            else{
-                //return exception to view
-            }
-
+        } else {
+            throw new MotherNatureLostException();
         }
-        else{
-            //eccezione ho perso madre natura
-        }
-    }
-
-    public void checkUnificationIslands() {
-        boolean listChanged = false;
-        Iterator<IslandTile> it = islands.iterator();
-        IslandTile current = islands.getFirst();
-        while (it.hasNext()) {
-            if (it.next().getOwner().equals(current.getOwner())) {
-                current.sumStudentsUnification(it.next().getStudents());
-                current.sumTowersUnification(it.next().getTowers());
-                islands.remove(it.next());
-                current = it.next();
-                listChanged = true;
-            }
-        }
-
-        if (islands.getLast().equals(current)) {
-            IslandTile head = islands.getFirst();
-            if (head.getOwner().equals(current.getOwner())) {
-                current.sumStudentsUnification(head.getStudents());
-                current.sumTowersUnification(head.getTowers());
-                islands.remove(head);
-                listChanged = true;
-            }
-        }
-
-        if (listChanged) checkUnificationIslands();
-
     }
 
     public void checkAndPlaceProfessor() {
-
+        //ask to each player how many students has
+        // and based on that placing professor using Player Method
     }
 
-    public void checkAndPlaceTower() {
-        //ok
+    private void checkAndPlaceTower() throws IncorrectArgumentException { // UML this method became private
+        // I need to decrement towers
+        //I need to know towers number from player, if 0 -> wins
         checkUnificationIslands();
     }
 
-    public void takeStudentsFromCloud(int index) {
-
+    private void checkUnificationIslands() throws IncorrectArgumentException { // UML this method became private
+        boolean listChanged = false;
+        ListIterator<IslandTile> it = islands.listIterator();
+        IslandTile currentTile;
+        IslandTile nextTile;
+        while (it.hasNext()) {
+            currentTile = it.next();
+            if (it.hasNext()) nextTile = it.next();
+            else nextTile = islands.getFirst();
+            if (nextTile.getOwner().equals(currentTile.getOwner())) {
+                currentTile.sumStudentsUnification(nextTile.getStudents());
+                currentTile.sumTowersUnification(nextTile.getTowers());
+                islands.remove(nextTile);
+                listChanged = true;
+            }
+        }
+        if (listChanged) checkUnificationIslands();
     }
+
 
     public void checkWinner() {
-
+        //I need to know towers number from player, if 0 -> wins
     }
-
-    public void pickCharacter(Player player) {
-        // this function needs to modify Player Nickname that is private attribute.
-    }
-
 }

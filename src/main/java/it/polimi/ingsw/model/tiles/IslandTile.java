@@ -1,8 +1,10 @@
 package it.polimi.ingsw.model.tiles;
 
 import it.polimi.ingsw.model.StudentDisc;
+import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class IslandTile implements Tile {
     public String name;
@@ -25,8 +27,20 @@ public class IslandTile implements Tile {
         return towerOwner;
     }
 
-    public void sumStudentsUnification(HashMap<StudentDisc, Integer> s) {
-        // SUM OF HASHMAP ?? students += s;
+    public void sumStudentsUnification(HashMap<StudentDisc, Integer> summedStudents) throws  IncorrectArgumentException{
+        HashMap<StudentDisc, Integer> tmp = getStudents();
+        for (Map.Entry<StudentDisc, Integer> studentsNewHashMap : summedStudents.entrySet()){
+            if (studentsNewHashMap.getValue() >= 0) {
+                if (tmp.containsKey(studentsNewHashMap.getKey())) {
+                    tmp.put(studentsNewHashMap.getKey(), studentsNewHashMap.getValue() + tmp.get(studentsNewHashMap.getKey()));
+                } else {
+                    tmp.put(studentsNewHashMap.getKey(), studentsNewHashMap.getValue());
+                }
+            } else {
+                throw new IncorrectArgumentException("HashMap is not correct");
+            }
+        }
+        students = tmp;
     }
 
     public HashMap<StudentDisc, Integer> getStudents() {
