@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Amrit
@@ -39,13 +40,22 @@ public class Player implements Comparable<Player> {
     }
 
     public void moveStudents(HashMap<StudentDisc, Integer> students, ArrayList<Integer> destinations) throws IncorrectArgumentException {
+        int i = 0;
+        HashMap<StudentDisc, Integer> studentsToMove = new HashMap<>();
+        HashMap<StudentDisc, Integer> studentsToRemove = new HashMap<>();
+
         if (schoolBoard.hasEnoughStudents(students)) {
             if (students.size() == destinations.size()) {
-                for (Integer destination : destinations) {
-                    if (destination == 0) {
-                        schoolBoard.moveStudents(students);
+                for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+                    if (destinations.get(i) != 1 && destinations.get(i) != 0) {
+                        throw new IncorrectArgumentException();
                     } else {
-                        schoolBoard.removeStudents(students);
+                        if (destinations.get(i) == 0) {
+                            studentsToMove.put(set.getKey(), set.getValue());
+                        } else {
+                            studentsToRemove.put(set.getKey(), set.getValue());
+                        }
+                        i++;
                     }
                 }
             } else {
@@ -54,10 +64,12 @@ public class Player implements Comparable<Player> {
         } else {
             throw new IncorrectArgumentException();
         }
+        if (studentsToMove.size() != 0) schoolBoard.moveStudents(studentsToMove);
+        if (studentsToRemove.size() != 0) schoolBoard.removeStudents(studentsToRemove);
     }
 
-    public void moveProfessor(ArrayList<ProfessorPawn> professorPawns) {
-        schoolBoard.moveProfessors(professorPawns);
+    public void moveProfessor(Colors color) throws IncorrectArgumentException {
+        schoolBoard.moveProfessors(color);
     }
 
     @Override
