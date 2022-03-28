@@ -25,7 +25,20 @@ public class CloudTile implements Tile {
         return returnedStudents;
     }
 
-    public void addStudents(HashMap<StudentDisc, Integer> students) {
+    public void addStudents(HashMap<StudentDisc, Integer> summedStudents) throws  IncorrectArgumentException{
+        HashMap<StudentDisc, Integer> tmp = students;
+        for (Map.Entry<StudentDisc, Integer> studentsNewHashMap : summedStudents.entrySet()){
+            if (studentsNewHashMap.getValue() >= 0) {
+                if (tmp.containsKey(studentsNewHashMap.getKey())) {
+                    tmp.put(studentsNewHashMap.getKey(), studentsNewHashMap.getValue() + tmp.get(studentsNewHashMap.getKey()));
+                } else {
+                    tmp.put(studentsNewHashMap.getKey(), studentsNewHashMap.getValue());
+                }
+            } else {
+                throw new IncorrectArgumentException("HashMap is not correct");
+            }
+        }
+        students = tmp;
     }
 
 }

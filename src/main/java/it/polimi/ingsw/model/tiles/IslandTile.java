@@ -22,12 +22,15 @@ public class IslandTile implements Tile {
         hasNoEntryTile = false;
     }
 
+    public String getName(){
+        return name;
+    }
     //I need to add these to the UML
     public String getOwner() {
         return towerOwner;
     }
 
-    public void sumStudentsUnification(HashMap<StudentDisc, Integer> summedStudents) throws  IncorrectArgumentException{
+    public void addStudents(HashMap<StudentDisc, Integer> summedStudents) throws  IncorrectArgumentException{
         HashMap<StudentDisc, Integer> tmp = getStudents();
         for (Map.Entry<StudentDisc, Integer> studentsNewHashMap : summedStudents.entrySet()){
             if (studentsNewHashMap.getValue() >= 0) {
@@ -67,6 +70,4 @@ public class IslandTile implements Tile {
         hasMotherNature = false;
     }
 
-    public void addStudents(HashMap<StudentDisc, Integer> students) {
-    }
 }
