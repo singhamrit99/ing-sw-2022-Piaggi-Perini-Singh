@@ -82,12 +82,13 @@ public class SchoolBoard {
         this.setDining(studentsDiscs);
     }
 
-    public void moveProfessors(ArrayList<ProfessorPawn> professors) {
-        for (ProfessorPawn professor : professors) {
-            if (professorsTable.contains(professor)) {
-                professor.changeStatus();
-            }
+    public void moveProfessors(Colors color) throws IncorrectArgumentException {
+        int index = professorsTable.indexOf(new ProfessorPawn(color));
+        if (index != -1){
+            professorsTable.get(index).changeStatus();
         }
+
+        throw new IncorrectArgumentException();
     }
 
     public boolean hasEnoughStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
