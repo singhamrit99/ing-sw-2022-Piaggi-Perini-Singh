@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards;
 
 
 import com.google.gson.stream.JsonReader;
+import com.sun.tools.classfile.CharacterRangeTable_attribute;
 import it.polimi.ingsw.model.GetPaths;
 
 import java.io.InputStreamReader;
@@ -11,20 +12,18 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import com.google.gson.*;
 
-public class FillDeck {
+public class FillCharacterDeck {
 
-private ArrayList<AssistantCard> deck;
-
-
-   public void newDeck(String pathToJSON, ArrayList<AssistantCard> deck){
+    private ArrayList<CharacterCard> deck;
 
 
-        this.deck= new ArrayList<AssistantCard>();
-        loadFromJSON();
+    public void newDeck(ArrayList<CharacterCard> deck){
+
+        loadFromJSON(deck);
 
     }
 
-    private void loadFromJSON() {
+    private void loadFromJSON(ArrayList<CharacterCard> deck) {
 
         Gson gson = new Gson();
 
@@ -32,7 +31,7 @@ private ArrayList<AssistantCard> deck;
         try {
             InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.ASSISTANT_CARDS_LOCATION), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(streamReader);
-            String fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ASSISTANT_CARDS_LOCATION)));
+            String fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.CHARACTER_CARDS_LOCATION)));
             deck = gson.fromJson(jsonReader, AssistantCard.class);
 
         } catch (Exception e) {
@@ -42,7 +41,7 @@ private ArrayList<AssistantCard> deck;
 
 
     }
-    public ArrayList<AssistantCard> getDeck(){
+    public ArrayList<CharacterCard> getDeck(){
         return deck;
     }
 

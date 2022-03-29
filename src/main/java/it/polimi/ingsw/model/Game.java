@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.CharacterCard;
+import it.polimi.ingsw.model.cards.FillCharacterDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
@@ -8,6 +10,7 @@ import it.polimi.ingsw.model.exceptions.IncorrectStateException;
 import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
+
 
 import java.awt.*;
 import java.util.*;
@@ -30,8 +33,23 @@ public class Game {
     private boolean playerDrawnOut;
     private ListIterator<Player> playerIterator;
     private Player winner;
+    private ArrayList<CharacterCard> listOfCharacters;
+    private FillCharacterDeck characterDeckBuilder;
 
-    public void pickCharacter(Player player) {
+    public void loadCharacters(){
+
+        characterDeckBuilder.newDeck(listOfCharacters);
+
+    }
+    public int pickCharacter(Player player) {
+
+        System.out.println("Choose your character!");
+
+        for(CharacterCard c: listOfCharacters)
+        {
+            System.out.println(c.);
+
+        }
 
     }
 

@@ -15,6 +15,11 @@ public class CharacterCard extends Card{
 
     private int price;
 
+    private String powerDescription;
+
+    public CharacterCard() {
+    }
+
     public int getCharacterID() {
         return characterID;
     }
