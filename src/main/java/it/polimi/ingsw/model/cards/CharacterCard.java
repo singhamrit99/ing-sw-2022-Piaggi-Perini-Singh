@@ -48,4 +48,11 @@ public class CharacterCard extends Card{
     public void callPower() {}
 
 
+    public String getPowerDescription() {
+        return powerDescription;
+    }
+
+    public void setPowerDescription(String powerDescription) {
+        this.powerDescription = powerDescription;
+    }
 }

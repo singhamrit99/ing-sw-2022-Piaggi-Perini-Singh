@@ -35,23 +35,27 @@ public class Game {
     private Player winner;
     private ArrayList<CharacterCard> listOfCharacters;
     private FillCharacterDeck characterDeckBuilder;
-
+    private Scanner reader = new Scanner(System.in);
     public void loadCharacters(){
 
         characterDeckBuilder.newDeck(listOfCharacters);
 
     }
-    public int pickCharacter(Player player) {
-
+    public void pickCharacter(Player player) {
+        int answer;
+        boolean getnewinput= true;
         System.out.println("Choose your character!");
 
         for(CharacterCard c: listOfCharacters)
         {
-            System.out.println(c.);
+                System.out.println("Power number" + c.getCharacterID() + ":" + c.getPowerDescription() + "\n");
+            }
+        System.out.println("Choose a power 1-12!\n");
+        answer= reader.nextInt();
 
         }
 
-    }
+
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
         expertMode = 0;
