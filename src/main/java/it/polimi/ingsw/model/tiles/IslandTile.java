@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IslandTile implements Tile {
-    public String name;
-    private boolean hasMotherNature;
+    private String name;
     private HashMap<StudentDisc, Integer> students;
     private String towerOwner;
     private int numberOfTowers;
+    private boolean hasMotherNature;
     private boolean hasNoEntryTile;
 
     public IslandTile(String islandname) {
@@ -25,9 +25,17 @@ public class IslandTile implements Tile {
     public String getName(){
         return name;
     }
-    //I need to add these to the UML
+
     public String getOwner() {
         return towerOwner;
+    }
+
+    public HashMap<StudentDisc, Integer> getStudents() {
+        return students;
+    }
+
+    public int getTowers() {
+        return numberOfTowers;
     }
 
     public void addStudents(HashMap<StudentDisc, Integer> summedStudents) throws  IncorrectArgumentException{
@@ -46,16 +54,8 @@ public class IslandTile implements Tile {
         students = tmp;
     }
 
-    public HashMap<StudentDisc, Integer> getStudents() {
-        return students;
-    }
-
     public void sumTowersUnification(int towers) {
         numberOfTowers += towers;
-    }
-
-    public int getTowers() {
-        return numberOfTowers;
     }
 
     public boolean hasMotherNature() {
