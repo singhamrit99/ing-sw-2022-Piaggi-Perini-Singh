@@ -9,11 +9,10 @@ import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
-import java.awt.*;
 import java.util.*;
 
 public class Game {
-    private int expertMode = 0;
+    private boolean expertMode;
     private State state;
     private int numOfPlayer;
     private LinkedList<Player> players;
@@ -26,7 +25,7 @@ public class Game {
     private int motherNaturePosition;
     private int numRounds;
     private int numDrawnStudents;
-    private int counter;
+    private int counterPlanPhase;
     private boolean playerDrawnOut;
     private ListIterator<Player> playerIterator;
     private Player winner;
@@ -36,10 +35,10 @@ public class Game {
     }
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
-        expertMode = 0;
+        expertMode = false;
         motherNaturePosition = 0;
         numRounds = 0;
-        counter = numOfPlayer - 1;
+        counterPlanPhase = numOfPlayer - 1;
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
 
@@ -95,8 +94,8 @@ public class Game {
     private void nextPlayer(Player callerPlayer) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
         if (callerPlayer.equals(currentPlayer)) { //TODO Player equals method
             if (state == State.PLANNINGPHASE) {
-                if (counter > 0) {
-                    counter--;
+                if (counterPlanPhase > 0) {
+                    counterPlanPhase--;
                     if (playerIterator.hasNext()) currentPlayer = playerIterator.next();
                     else playerIterator.set(players.getFirst());
                     playerDrawnOut = false;
@@ -126,16 +125,10 @@ public class Game {
             } else {
                 state = State.PLANNINGPHASE;
                 currentPlayer = firstPlayerPlanPhase;
-                counter = numOfPlayer - 1;
+                counterPlanPhase = numOfPlayer - 1;
             }
         } else throw new IncorrectStateException();
     }
-
-    public boolean isGameOver() throws IncorrectArgumentException {
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
-        else return false;
-    }
-
 
     public void takeStudentsFromCloud(Player playerCaller, int index) throws IncorrectStateException, IncorrectPlayerException {
         if (state == State.ACTIONPHASE) {
@@ -183,7 +176,6 @@ public class Game {
         */
 
     }
-
 
     public void moveMotherNature(int distanceChoosen) throws IncorrectArgumentException, MotherNatureLostException {
         int destinationMotherNature = motherNaturePosition + distanceChoosen;
@@ -240,6 +232,10 @@ public class Game {
         if (listChanged) checkUnificationIslands();
     }
 
+    public boolean isGameOver() throws IncorrectArgumentException {
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
+        else return false;
+    }
 
     public void checkWinner() {
         for(Player p: players){
