@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.tiles.IslandTile;
 
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Game {
@@ -59,7 +60,6 @@ public class Game {
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
         expertMode = 0;
-        motherNaturePosition = 0;
         numRounds = 0;
         counter = numOfPlayer - 1;
         if (numOfPlayer == 3) numDrawnStudents = 4;
@@ -71,6 +71,38 @@ public class Game {
             IslandTile island = new IslandTile("Island name from Json");
             islands.add(island);
         }
+
+        // place MotherNature on a random island
+        motherNaturePosition = (int) Math.random() * numOfPlayer;
+        islands.get(motherNaturePosition).moveMotherNature();
+
+        // create Bag and students
+        HashMap<StudentDisc,Integer> students = new HashMap<StudentDisc,Integer>();
+        for(int i = 0; i < Colors.values().length -3 ; i++ ){  //3 are the colors of the towers
+            StudentDisc student = new StudentDisc(Colors.getColor(i));
+            students.put(student,2); //for the 'placing Islands phase'
+        }
+        bag = new Bag(students);
+
+        //calculate opposite MotherNature's Island
+        int oppositeMotherNaturePos = 0;
+        if(motherNaturePosition>=islands.size()/2)oppositeMotherNaturePos=motherNaturePosition+islands.size()-1;
+        else oppositeMotherNaturePos=motherNaturePosition-islands.size()+1;
+        // placing students except MotherNature's Island and the opposite one
+        IslandTile islandOppositeMN = islands.get(oppositeMotherNaturePos);
+        for(IslandTile island : islands){
+            if(!island.hasMotherNature() && !(island.getName().equals(islandOppositeMN.getName()))){
+                island.addStudents(bag.drawStudents(1));
+            }
+        }
+
+        //populate the Bag after 'placing Islands and Students phase'
+        students = new HashMap<StudentDisc,Integer>();
+        for(int i = 0; i < Colors.values().length -3 ; i++ ){  //3 are the colors of the towers
+            StudentDisc student = new StudentDisc(Colors.getColor(i));
+            students.put(student,24); //total students are 26 - 2 (that are on the islands) for each color
+        }
+        bag = new Bag(students);
 
         // initialization clouds[];
         clouds = new CloudTile[numOfPlayer];
@@ -88,6 +120,8 @@ public class Game {
 
         //initialization PriorityQueue<Player>
         orderPlayers = new PriorityQueue<>(numOfPlayer);
+
+
     }
 
     public void drawFromBag(Player playerCaller) throws IncorrectArgumentException {
@@ -216,8 +250,8 @@ public class Game {
             if (currentPlayer.moveMotherNature(distanceChoosen)) {
                 islands.get(motherNaturePosition).removeMotherNature();
                 islands.get(destinationMotherNature).moveMotherNature();
-                //islands.get(destinationMotherNature).getStudents(); islands.getTowers() and islands.getOwner()
-                //check which player has that color professor and eventually place the tower in that islands using checkAndPlaceTower
+                checkAndPlaceTower(islands.get(destinationMotherNature));
+                checkUnificationIslands();
             } else {
                 throw new IncorrectArgumentException();
             }
@@ -237,16 +271,24 @@ public class Game {
             }
             maxPlayer.moveProfessor(Colors.getColor(i)); //Maybe Amrit will change the methods like this
         }
-        //Based on AMrit changes I will probably have to tell to each player if is not the max one to remove the professor with that color
+        //Based on AMrit changes I will have to tell to each player if is not the max one to remove the professor with that color
     }
 
-    private void checkAndPlaceTower() throws IncorrectArgumentException {
-        //
+    private void checkAndPlaceTower(IslandTile island) throws IncorrectArgumentException {
+        //ask to the island the students that it stores
+        HashMap<StudentDisc,Integer> students = island.getStudents();
+        // initialize the array that counts the students influence
+        ArrayList<Integer> playersInfluence = new ArrayList<Integer>(numOfPlayer);
+        // check the towerowner and the number of towers , increase the array
+        //players.indexOf()
+        //ask to the player the array the contains all the colors of the professor that it controls
+        // find the influence of each player counting the students
+
+        //if there isn't a tie! you have found the player with the most influence
+        // if the player MAX == towerOwner do nothing else replace the towers, change the towerOwner
 
 
 
-
-        //checkUnificationIslands();
     }
 
     private void checkUnificationIslands() throws IncorrectArgumentException { // UML this method became private
