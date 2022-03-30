@@ -142,38 +142,41 @@ public class Game {
 
     //0 dining room , 1 to island tile
     public void moveStudents(HashMap<StudentDisc, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
-        int i = 0;
+        int DestCounter = 0;
         HashMap<StudentDisc, Integer> studentsToMoveToIsland = new HashMap<>();
         if (students.size() == destinations.size()) {
             for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
-                if (destinations.get(i) == 1) {
+                if (destinations.get(DestCounter) == 1) {
                     studentsToMoveToIsland.put(set.getKey(), set.getValue());
-
-                } else {
-                    throw new IncorrectArgumentException();
-
                 }
-                i++;
+                DestCounter++;
             }
         } else {
             throw new IncorrectArgumentException();
         }
-
+        //The game sends to the player also the students that go to the islands because the player has to remove them from the entrance
         currentPlayer.moveStudents(students,destinations);
-        /*
-        if (studentsToMoveToIsland.size() != 0 && studentsToMoveToIsland.size() == islandDestinations.size()){
-            boolean found = false;
+
+        //If there are students directed to the islands I check that that the islands string arraylist has the right size
+        if (studentsToMoveToIsland.size() != 0 && studentsToMoveToIsland.size() == islandDestinations.size() ){
+            boolean islandNameFound = true;
             for (String dest : islandDestinations){
-                for(IslandTile island : islands ){
-                    if(island.getName().equals){
-                        found = true;
-                        //island.addStudents(studentsToMoveToIsland;
-                        break;
+                if(islandNameFound) { //I check that the Island that I was searching in the last iteration it's found
+                    islandNameFound = false;
+                    for (IslandTile island : islands) {
+                        if (island.getName().equals(dest)) {
+                            islandNameFound = true;
+                            island.addStudents(studentsToMoveToIsland);
+                            break;
+                        }
                     }
+                }
+                else{
+                    throw new IncorrectArgumentException("The island is not found");
                 }
             }
         }
-        */
+
 
     }
 
@@ -207,10 +210,13 @@ public class Game {
         //Based on AMrit changes I will probably have to tell to each player if is not the max one to remove the professor with that color
     }
 
-    private void checkAndPlaceTower() throws IncorrectArgumentException { // UML this method became private
-        // I need to decrement towers
-        //I need to know towers number from player, if 0 -> wins
-        checkUnificationIslands();
+    private void checkAndPlaceTower() throws IncorrectArgumentException {
+        //
+
+
+
+
+        //checkUnificationIslands();
     }
 
     private void checkUnificationIslands() throws IncorrectArgumentException { // UML this method became private
