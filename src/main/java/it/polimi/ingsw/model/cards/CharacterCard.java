@@ -15,6 +15,11 @@ public class CharacterCard extends Card{
 
     private int price;
 
+    private String powerDescription;
+
+    public CharacterCard() {
+    }
+
     public int getCharacterID() {
         return characterID;
     }
@@ -43,4 +48,11 @@ public class CharacterCard extends Card{
     public void callPower() {}
 
 
+    public String getPowerDescription() {
+        return powerDescription;
+    }
+
+    public void setPowerDescription(String powerDescription) {
+        this.powerDescription = powerDescription;
+    }
 }

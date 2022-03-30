@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.cards.CharacterCard;
+import it.polimi.ingsw.model.cards.FillCharacterDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
@@ -9,10 +11,12 @@ import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
+
+import java.awt.*;
 import java.util.*;
 
 public class Game {
-    private boolean expertMode;
+    private int expertMode = 0;
     private State state;
     private int numOfPlayer;
     private LinkedList<Player> players;
@@ -25,20 +29,39 @@ public class Game {
     private int motherNaturePosition;
     private int numRounds;
     private int numDrawnStudents;
-    private int counterPlanPhase;
+    private int counter;
     private boolean playerDrawnOut;
     private ListIterator<Player> playerIterator;
     private Player winner;
+    private ArrayList<CharacterCard> listOfCharacters;
+    private FillCharacterDeck characterDeckBuilder;
+    private Scanner reader = new Scanner(System.in);
+    public void loadCharacters(){
 
-    public void pickCharacter(Player player) {
+        characterDeckBuilder.newDeck(listOfCharacters);
 
     }
+    public void pickCharacter(Player player) {
+        int answer;
+        boolean getnewinput= true;
+        System.out.println("Choose your character!");
+
+        for(CharacterCard c: listOfCharacters)
+        {
+                System.out.println("Power number" + c.getCharacterID() + ":" + c.getPowerDescription() + "\n");
+            }
+        System.out.println("Choose a power 1-12!\n");
+        answer= reader.nextInt();
+
+        }
+
+
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
-        expertMode = false;
+        expertMode = 0;
         motherNaturePosition = 0;
         numRounds = 0;
-        counterPlanPhase = numOfPlayer - 1;
+        counter = numOfPlayer - 1;
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
 
@@ -94,8 +117,8 @@ public class Game {
     private void nextPlayer(Player callerPlayer) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
         if (callerPlayer.equals(currentPlayer)) { //TODO Player equals method
             if (state == State.PLANNINGPHASE) {
-                if (counterPlanPhase > 0) {
-                    counterPlanPhase--;
+                if (counter > 0) {
+                    counter--;
                     if (playerIterator.hasNext()) currentPlayer = playerIterator.next();
                     else playerIterator.set(players.getFirst());
                     playerDrawnOut = false;
@@ -125,10 +148,16 @@ public class Game {
             } else {
                 state = State.PLANNINGPHASE;
                 currentPlayer = firstPlayerPlanPhase;
-                counterPlanPhase = numOfPlayer - 1;
+                counter = numOfPlayer - 1;
             }
         } else throw new IncorrectStateException();
     }
+
+    public boolean isGameOver() throws IncorrectArgumentException {
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
+        else return false;
+    }
+
 
     public void takeStudentsFromCloud(Player playerCaller, int index) throws IncorrectStateException, IncorrectPlayerException {
         if (state == State.ACTIONPHASE) {
@@ -179,6 +208,7 @@ public class Game {
 
 
     }
+
 
     public void moveMotherNature(int distanceChoosen) throws IncorrectArgumentException, MotherNatureLostException {
         int destinationMotherNature = motherNaturePosition + distanceChoosen;
@@ -238,10 +268,6 @@ public class Game {
         if (listChanged) checkUnificationIslands();
     }
 
-    public boolean isGameOver() throws IncorrectArgumentException {
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
-        else return false;
-    }
 
     public void checkWinner() {
         for(Player p: players){
