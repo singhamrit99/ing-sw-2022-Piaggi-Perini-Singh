@@ -29,6 +29,9 @@ public class IslandTile implements Tile {
     public String getOwner() {
         return towerOwner;
     }
+    public void setOwner(String nicknamePlayer) {
+        towerOwner = nicknamePlayer;
+    }
 
     public HashMap<StudentDisc, Integer> getStudents() {
         return students;
