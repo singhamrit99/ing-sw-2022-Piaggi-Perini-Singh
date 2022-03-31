@@ -13,7 +13,7 @@ import java.util.Map;
 public class SchoolBoard {
     private HashMap<StudentDisc, Integer> entrance;
     private HashMap<StudentDisc, Integer> dining;
-    private ArrayList<ProfessorPawn> professorsTable;
+    private ArrayList<Colors> professorsTable;
     private int numberOfTowers;
 
     public SchoolBoard(int numberOfPlayers) {
@@ -82,10 +82,21 @@ public class SchoolBoard {
         this.setDining(studentsDiscs);
     }
 
-    public void moveProfessors(Colors color) throws IncorrectArgumentException {
-        int index = professorsTable.indexOf(new ProfessorPawn(color));
-        if (index != -1){
-            professorsTable.get(index).changeStatus();
+    public void addProfessor(Colors color) throws IncorrectArgumentException {
+
+        int index = professorsTable.indexOf(color);
+        if (index != -1) {
+            professorsTable.add(color);
+        }
+
+        throw new IncorrectArgumentException();
+    }
+
+    public void removeProfessor(Colors color) throws IncorrectArgumentException {
+
+        int index = professorsTable.indexOf(color);
+        if (index != -1) {
+            professorsTable.remove(index);
         }
 
         throw new IncorrectArgumentException();
@@ -130,7 +141,7 @@ public class SchoolBoard {
         return this.dining;
     }
 
-    public ArrayList<ProfessorPawn> getProfessorsTable() {
+    public ArrayList<Colors> getProfessorsTable() {
         return professorsTable;
     }
 
@@ -143,8 +154,11 @@ public class SchoolBoard {
 
         if (dining.containsKey(studentDisc)) {
             return dining.get(studentDisc);
-        } else {
-            throw new IncorrectArgumentException();
         }
+        throw new IncorrectArgumentException();
+    }
+
+    public boolean hasProfessorOfColor(Colors color) throws IncorrectArgumentException {
+        return professorsTable.contains(color);
     }
 }

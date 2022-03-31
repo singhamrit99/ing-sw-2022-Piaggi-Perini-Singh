@@ -100,12 +100,4 @@ public class Player implements Comparable<Player> {
     public void moveTowers(int steps) {
         schoolBoard.moveTowers(steps);
     }
-
-    public void setCharacterCard(int characterCard) {
-        this.characterCard = characterCard;
-    }
-
-    public int getCharacterCard() {
-        return characterCard;
-    }
 }

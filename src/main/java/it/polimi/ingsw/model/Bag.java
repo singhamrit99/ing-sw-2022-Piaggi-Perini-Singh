@@ -17,6 +17,10 @@ public class Bag {
         this.students = students;
     }
 
+    public Bag() {
+        students = new HashMap<>();
+    }
+
     //TODO aggiungere metodo per controllare n di pedine e ritorno sia se ne ho poche o nulle
 
     public void addStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
