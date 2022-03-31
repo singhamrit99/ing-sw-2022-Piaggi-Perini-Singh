@@ -4,11 +4,13 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
 //This class of cards has a resource counter on it, thus needing to be initialized at the beginning of the game. CharacterIDs range from 1 to 4
-public class SetupCard extends CharacterCard{
+public class SetupCard extends CharacterCard {
 
     //This is the only setup card that has no students on it, therefore an integer is sufficent for resource-tracking purposes.
+    //Every power call starts with a brief description of the power itself, the same the player saw when choosing it
     private int resourceOnCard;
-    int id= this.getCharacterID();
+    int id = this.getCharacterID();
+
     @Override
     public void callPower(Player playercaller, int id) {
 
@@ -16,7 +18,7 @@ public class SetupCard extends CharacterCard{
         newprice++;
         this.setPrice(newprice);
 
-        System.out.println("Choose an island to block off!\n");
+        System.out.println((this.getPowerDescription()));
         //Player inputs a valid number
 
     }

@@ -69,6 +69,7 @@ public class Player implements Comparable<Player> {
     }
 
     public void moveProfessor(Colors color) throws IncorrectArgumentException {
+        //TODO: MoveProfessors method is now split! Should update this one as well
         schoolBoard.moveProfessors(color);
     }
 
@@ -99,5 +100,13 @@ public class Player implements Comparable<Player> {
 
     public void moveTowers(int steps) {
         schoolBoard.moveTowers(steps);
+    }
+
+    public void setCharacterCard(int characterCard) {
+        this.characterCard = characterCard;
+    }
+
+    public int getCharacterCard() {
+        return characterCard;
     }
 }
