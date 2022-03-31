@@ -32,7 +32,7 @@ public class Player implements Comparable<Player> {
     }
 
     public boolean moveMotherNature(int distance) {
-        return true;
+        return distance <= playedCard.getValue();
     }
 
     public void addStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
@@ -68,9 +68,12 @@ public class Player implements Comparable<Player> {
         if (studentsToRemove.size() != 0) schoolBoard.removeStudents(studentsToRemove);
     }
 
-    public void moveProfessor(Colors color) throws IncorrectArgumentException {
-        //TODO: MoveProfessors method is now split! Should update this one as well
-        schoolBoard.moveProfessors(color);
+    public void addProfessor(Colors color) throws IncorrectArgumentException {
+        schoolBoard.addProfessor(color);
+    }
+
+    public void removeProfessor(Colors color) throws IncorrectArgumentException {
+        schoolBoard.removeProfessor(color);
     }
 
     @Override
