@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.Player;
+
 /*This is the most general character card possible, and acts as foundation for all the others.
 I think it makes sense to divide the cards in numerically ascending order based on their powers.
 Setup Cards: 1 through 4
@@ -45,7 +47,7 @@ public class CharacterCard extends Card{
     }
 
     //Puppet method that gets overridden in each specific card class.
-    public void callPower() {}
+    public void callPower(Player playercaller, int id) {}
 
 
     public String getPowerDescription() {

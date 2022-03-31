@@ -1,7 +1,11 @@
 package it.polimi.ingsw.model;
 
+import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.cards.CharacterCard;
 import it.polimi.ingsw.model.cards.FillCharacterDeck;
+import it.polimi.ingsw.model.cards.FillDeck;
+import it.polimi.ingsw.model.cards.SetupCard;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
@@ -13,6 +17,10 @@ import it.polimi.ingsw.model.tiles.IslandTile;
 
 
 import java.awt.*;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Game {
@@ -36,24 +44,40 @@ public class Game {
     private ArrayList<CharacterCard> listOfCharacters;
     private FillCharacterDeck characterDeckBuilder;
     private Scanner reader = new Scanner(System.in);
-    public void loadCharacters(){
+    private String fileContent;
+
+
+
+    public void loadCharacters() {
 
         characterDeckBuilder.newDeck(listOfCharacters);
 
     }
+
     public void pickCharacter(Player player) {
-        int answer;
-        boolean getnewinput= true;
+        int answer=0;
+        char response=0;
+        boolean getnewinput = true;
         System.out.println("Choose your character!");
 
-        for(CharacterCard c: listOfCharacters)
-        {
-                System.out.println("Power number" + c.getCharacterID() + ":" + c.getPowerDescription() + "\n");
-            }
-        System.out.println("Choose a power 1-12!\n");
-        answer= reader.nextInt();
-
+        for (CharacterCard c : listOfCharacters) {
+            System.out.println("Power number" + c.getCharacterID() + ":" + c.getPowerDescription() + "\n");
         }
+        while (getnewinput) {
+            System.out.println("Choose a power 1-12!\n");
+            answer = reader.nextInt();
+            if (answer > 12 || answer < 1) {
+                System.out.println("Invalid character number! Try again\n");
+            } else {
+                System.out.println("You chose character number "+ answer + ". Are you sure? Y/N \n");
+                response= reader.next().charAt(0);
+                if (response=='y'||response=='Y')
+                getnewinput = false;
+            }
+        }
+        System.out.println("You chose character number "+ answer + ".");
+        player.setCharacterCard(answer);
+    }
 
 
 
@@ -65,17 +89,42 @@ public class Game {
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
 
+
+        Gson gson =new Gson();
+        //Loading IslandTiles Json file
+        try {
+            InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION), StandardCharsets.UTF_8);
+            JsonReader jsonReader = new JsonReader(streamReader);
+             fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
+        }
+        catch(Exception FileNotFound)
+        {
+            FileNotFound.printStackTrace();
+        }
+
+        IslandTile[] importingIslands = gson.fromJson(fileContent, IslandTile[].class);
         // initialization LinkedList<IslandTile> islands;
         islands = new LinkedList<>(islands);
         for (int i = 0; i < 12; i++) {
-            IslandTile island = new IslandTile("Island name from Json");
+            IslandTile island = new IslandTile(importingIslands[i].getName());
             islands.add(island);
         }
+        //Loading CloudTiles JSON file
+        try {
+            InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.CLOUD_TILES_LOCATION), StandardCharsets.UTF_8);
+            JsonReader jsonReader = new JsonReader(streamReader);
+            fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
+        }
+        catch(Exception FileNotFound)
+        {
+            FileNotFound.printStackTrace();
+        }
 
+        CloudTile[] importingClouds = gson.fromJson(fileContent, CloudTile[].class);
         // initialization clouds[];
         clouds = new CloudTile[numOfPlayer];
         for (int i = 0; i < numOfPlayer; i++) {
-            CloudTile cloud = new CloudTile("Cloud name from Json");
+            CloudTile cloud = new CloudTile(importingClouds[i].name);
             clouds[i] = cloud;
         }
 
@@ -98,6 +147,17 @@ public class Game {
             playerDrawnOut = true;
         } else throw new IncorrectArgumentException();
     }
+
+    /*public void drawFromBag(Player playerCaller, SetupCard setup) throws IncorrectArgumentException
+    {
+        if (state== State.ACTIONPHASE && playerCaller.equals(currentPlayer)) {
+
+
+
+        }
+
+
+    }*/
 
     public void playAssistantCard(Player player, int indexCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException {
         if (state == State.PLANNINGPHASE) {

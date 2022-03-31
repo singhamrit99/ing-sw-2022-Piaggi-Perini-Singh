@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.Colors;
 
 //This class of cards' power tampers in some way with the Influence calculations. CharacterIDs range from 5 to 8
@@ -7,7 +8,7 @@ public class InfluenceCard extends CharacterCard{
 
     int id= this.getCharacterID();
     @Override
-    public void callPower(){
+    public void callPower(Player playercaller, int id){
 
         int newprice= this.getPrice();
         newprice++;
