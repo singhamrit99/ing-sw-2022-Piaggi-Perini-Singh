@@ -68,8 +68,12 @@ public class Player implements Comparable<Player> {
         if (studentsToRemove.size() != 0) schoolBoard.removeStudents(studentsToRemove);
     }
 
-    public void moveProfessor(Colors color) throws IncorrectArgumentException {
-        schoolBoard.moveProfessors(color);
+    public void addProfessor(Colors color) throws IncorrectArgumentException {
+        schoolBoard.addProfessor(color);
+    }
+
+    public void removeProfessor(Colors color) throws IncorrectArgumentException {
+        schoolBoard.removeProfessor(color);
     }
 
     @Override
@@ -99,5 +103,13 @@ public class Player implements Comparable<Player> {
 
     public void moveTowers(int steps) {
         schoolBoard.moveTowers(steps);
+    }
+
+    public boolean hasProfessorOfColor(Colors color) throws IncorrectArgumentException {
+        return schoolBoard.hasProfessorOfColor(color);
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 }
