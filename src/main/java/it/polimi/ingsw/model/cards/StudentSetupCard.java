@@ -2,12 +2,13 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.StudentDisc;
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-//This class of cards has a resource counter on it, thus needing to be initialized at the beginning of the game. CharacterIDs range from 1 to 4
+//This class of cards has a resource counter on it, thus needing to be initialized at the beginning of the game. CharacterIDs range from 1 to 3
 public class StudentSetupCard extends CharacterCard {
 
     private HashMap<StudentDisc, Integer> studentsonCard = new HashMap<>();
@@ -21,17 +22,19 @@ public class StudentSetupCard extends CharacterCard {
         this.setPrice(newprice);
         //Updating the price of the ability, which always happens.
 
-        switch (id) {
+        if (id == 1) {
+            Colors color = Colors.GREEN;
+            System.out.println("Choose the color to ignore in the calculation");
+            ExchangeStudents( playercaller);        }
+        else if (id == 2) {
+            CardStudentToDining(playercaller);
+        } else if (id == 3) {
 
-            case 1:
-                CardStudentToIsle(playercaller);
-                break;
-            case 2:
-                ExchangeStudents(playercaller);
-                break;
-            case 3:
-                CardStudentToDining(playercaller);
-                break;
+            CardStudentToIsle(playercaller);
+        }
+        else
+        {
+            throw new java.lang.Error("Card Mismatch");
         }
 
 

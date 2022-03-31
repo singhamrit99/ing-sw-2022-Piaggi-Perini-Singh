@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.exceptions.CardMismatchException;
 
 //This class of cards' power tampers in some way with the Influence calculations. CharacterIDs range from 5 to 8
 public class InfluenceCard extends CharacterCard {
@@ -16,27 +17,20 @@ public class InfluenceCard extends CharacterCard {
         this.setPrice(newprice);
         //Updating the price of the ability, which always happens.
 
-        switch (id) {
-
-            case 5:
-                IgnoreTowers(playercaller);
-                break;
-
-            case 6:
-                AddTwo(playercaller);
-                break;
-            case 7:
-                //TODO: Add way for user to input valid color
-                Colors color = Colors.GREEN;
-                System.out.println("Choose the color to ignore in the calculation");
-
-                IgnoreStudent(playercaller, color);
-                break;
-            case 8:
-                CallOnIsland(playercaller);
-
-                break;
-        }
+    if (id == 5) {
+        IgnoreTowers(playercaller);
+    } else if (id == 6) {
+        AddTwo(playercaller);
+    } else if (id == 7) {
+        //TODO: Add way for user to input valid color
+        Colors color = Colors.GREEN;
+        System.out.println("Choose the color to ignore in the calculation");
+        IgnoreStudent(playercaller,color );
+    }
+    else
+    {
+        throw new java.lang.Error("Card Mismatch");
+    }
 
 
     }

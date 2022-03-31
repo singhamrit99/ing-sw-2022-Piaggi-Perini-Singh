@@ -17,31 +17,34 @@ public class TokenManipCard extends CharacterCard {
         this.setPrice(newprice);
         //Updating the price of the ability, which always happens.
 
-        switch (id) {
-            case 9:
-                TieBreaker();
-                break;
-            case 10:
-                SwitchOwnStudents();
-                break;
-            case 11:
-                //TODO: Add way for user to input valid color
-                Colors color = Colors.GREEN;
-                System.out.println("Choose the color of student to discard!");
-                DiscardOpponentStudents(color);
-                break;
+        if (id == 9) {
+            Colors color = Colors.GREEN;
+            System.out.println("Choose the color to ignore in the calculation");
+            DiscardOpponentStudents(color, playercaller);
+        } else if (id == 10) {
+            SwitchOwnStudents(playercaller);
+        } else if (id == 11) {
+
+            TieBreaker(playercaller);
         }
+        else
+        {
+            throw new java.lang.Error("Card Mismatch");
+        }
+
+
     }
 
-    public void DiscardOpponentStudents(Colors color) {
+
+    public void DiscardOpponentStudents(Colors color, Player playercaller) {
         System.out.println((this.getPowerDescription()));
     }
 
-    public void SwitchOwnStudents() {
+    public void SwitchOwnStudents(Player playercaller) {
         System.out.println((this.getPowerDescription()));
     }
 
-    public void TieBreaker() {
+    public void TieBreaker(Player playercaller) {
         System.out.println((this.getPowerDescription()));
     }
 }
