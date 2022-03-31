@@ -36,25 +36,33 @@ public class Game {
     private ArrayList<CharacterCard> listOfCharacters;
     private FillCharacterDeck characterDeckBuilder;
     private Scanner reader = new Scanner(System.in);
-    public void loadCharacters(){
+
+    public void loadCharacters() {
 
         characterDeckBuilder.newDeck(listOfCharacters);
 
     }
+
     public void pickCharacter(Player player) {
         int answer;
-        boolean getnewinput= true;
+        boolean getnewinput = true;
         System.out.println("Choose your character!");
 
-        for(CharacterCard c: listOfCharacters)
-        {
-                System.out.println("Power number" + c.getCharacterID() + ":" + c.getPowerDescription() + "\n");
+        for (CharacterCard c : listOfCharacters) {
+            System.out.println("Power number" + c.getCharacterID() + ":" + c.getPowerDescription() + "\n");
+        }
+        while (getnewinput) {
+            System.out.println("Choose a power 1-12!\n");
+            answer = reader.nextInt();
+            if (answer > 12 || answer < 1) {
+                System.out.println("Invalid character number! Try again\n");
             }
-        System.out.println("Choose a power 1-12!\n");
-        answer= reader.nextInt();
+            else {
+                getnewinput = false;
+            }
 
         }
-
+    }
 
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
@@ -188,7 +196,7 @@ public class Game {
             throw new IncorrectArgumentException();
         }
 
-        currentPlayer.moveStudents(students,destinations);
+        currentPlayer.moveStudents(students, destinations);
         /*
         if (studentsToMoveToIsland.size() != 0 && studentsToMoveToIsland.size() == islandDestinations.size()){
             boolean found = false;
@@ -223,12 +231,12 @@ public class Game {
         }
     }
 
-    public void checkAndPlaceProfessor() throws IncorrectArgumentException{
+    public void checkAndPlaceProfessor() throws IncorrectArgumentException {
         int max = 0;
         Player maxPlayer = players.getFirst();
-        for(int i=0; i< Colors.values().length; i++){
-            for(Player p : players){
-                if(p.getStudentsByColor(Colors.getColor(i))>max){
+        for (int i = 0; i < Colors.values().length; i++) {
+            for (Player p : players) {
+                if (p.getStudentsByColor(Colors.getColor(i)) > max) {
                     maxPlayer = p;
                 }
             }
@@ -264,8 +272,8 @@ public class Game {
 
 
     public void checkWinner() {
-        for(Player p: players){
-            if(p.getPlayerTowers()==0)winner=p;
+        for (Player p : players) {
+            if (p.getPlayerTowers() == 0) winner = p;
         }
 
     }
