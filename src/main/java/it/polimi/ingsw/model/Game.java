@@ -17,7 +17,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 public class Game {
-    private int expertMode = 0;
+    private boolean expertMode;
     private State state;
     private int numOfPlayer;
     private LinkedList<Player> players;
@@ -56,10 +56,12 @@ public class Game {
 
         }
 
-
+    public Game(boolean expertMode, int numOfPlayer){
+        this.expertMode = expertMode;
+        this.numOfPlayer = numOfPlayer;
+    }
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
-        expertMode = 0;
         numRounds = 0;
         counter = numOfPlayer - 1;
         if (numOfPlayer == 3) numDrawnStudents = 4;
@@ -70,6 +72,13 @@ public class Game {
         for (int i = 0; i < 12; i++) {
             IslandTile island = new IslandTile("Island name from Json");
             islands.add(island);
+        }
+
+        // initialization clouds[];
+        clouds = new CloudTile[numOfPlayer];
+        for (int i = 0; i < numOfPlayer; i++) {
+            CloudTile cloud = new CloudTile("Cloud name from Json");
+            clouds[i] = cloud;
         }
 
         // place MotherNature on a random island
@@ -103,13 +112,6 @@ public class Game {
             students.put(student,24); //total students are 26 - 2 (that are on the islands) for each color
         }
         bag = new Bag(students);
-
-        // initialization clouds[];
-        clouds = new CloudTile[numOfPlayer];
-        for (int i = 0; i < numOfPlayer; i++) {
-            CloudTile cloud = new CloudTile("Cloud name from Json");
-            clouds[i] = cloud;
-        }
 
         //initialization LinkedList<Player>
         playerIterator = players.listIterator();
@@ -191,7 +193,6 @@ public class Game {
         if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
         else return false;
     }
-
 
     public void takeStudentsFromCloud(Player playerCaller, int index) throws IncorrectStateException, IncorrectPlayerException {
         if (state == State.ACTIONPHASE) {
@@ -309,7 +310,6 @@ public class Game {
         }
         if (listChanged) checkUnificationIslands();
     }
-
 
     public void checkWinner() {
         for(Player p: players){
