@@ -5,8 +5,7 @@ import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.cards.CharacterCard;
 import it.polimi.ingsw.model.cards.FillCharacterDeck;
 import it.polimi.ingsw.model.cards.FillDeck;
-import it.polimi.ingsw.model.cards.SetupCard;
-import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.Students;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
@@ -16,7 +15,6 @@ import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
 
-import java.awt.*;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -47,7 +45,6 @@ public class Game {
     private String fileContent;
 
 
-
     public void loadCharacters() {
 
         characterDeckBuilder.newDeck(listOfCharacters);
@@ -55,8 +52,8 @@ public class Game {
     }
 
     public void pickCharacter(Player player) {
-        int answer=0;
-        char response=0;
+        int answer = 0;
+        char response = 0;
         boolean getnewinput = true;
         System.out.println("Choose your character!");
 
@@ -69,16 +66,15 @@ public class Game {
             if (answer > 12 || answer < 1) {
                 System.out.println("Invalid character number! Try again\n");
             } else {
-                System.out.println("You chose character number "+ answer + ". Are you sure? Y/N \n");
-                response= reader.next().charAt(0);
-                if (response=='y'||response=='Y')
-                getnewinput = false;
+                System.out.println("You chose character number " + answer + ". Are you sure? Y/N \n");
+                response = reader.next().charAt(0);
+                if (response == 'y' || response == 'Y')
+                    getnewinput = false;
             }
         }
-        System.out.println("You chose character number "+ answer + ".");
+        System.out.println("You chose character number " + answer + ".");
         player.setCharacterCard(answer);
     }
-
 
 
     public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
@@ -90,15 +86,13 @@ public class Game {
         else numDrawnStudents = 3;
 
 
-        Gson gson =new Gson();
+        Gson gson = new Gson();
         //Loading IslandTiles Json file
         try {
             InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(streamReader);
-             fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
-        }
-        catch(Exception FileNotFound)
-        {
+            fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
+        } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
 
@@ -114,9 +108,7 @@ public class Game {
             InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.CLOUD_TILES_LOCATION), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(streamReader);
             fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
-        }
-        catch(Exception FileNotFound)
-        {
+        } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
 
@@ -230,11 +222,11 @@ public class Game {
     }
 
     //0 dining room , 1 to island tile
-    public void moveStudents(HashMap<StudentDisc, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
+    public void moveStudents(EnumMap<Students, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
         int i = 0;
-        HashMap<StudentDisc, Integer> studentsToMoveToIsland = new HashMap<>();
+        EnumMap<Students, Integer> studentsToMoveToIsland = new EnumMap(Students.class);
         if (students.size() == destinations.size()) {
-            for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+            for (Map.Entry<Students, Integer> set : students.entrySet()) {
                 if (destinations.get(i) == 1) {
                     studentsToMoveToIsland.put(set.getKey(), set.getValue());
 
@@ -248,7 +240,7 @@ public class Game {
             throw new IncorrectArgumentException();
         }
 
-        currentPlayer.moveStudents(students,destinations);
+        currentPlayer.moveStudents(students, destinations);
         /*
         if (studentsToMoveToIsland.size() != 0 && studentsToMoveToIsland.size() == islandDestinations.size()){
             boolean found = false;
@@ -283,16 +275,16 @@ public class Game {
         }
     }
 
-    public void checkAndPlaceProfessor() throws IncorrectArgumentException{
+    public void checkAndPlaceProfessor() throws IncorrectArgumentException {
         int max = 0;
         Player maxPlayer = players.getFirst();
-        for(int i=0; i< Colors.values().length; i++){
-            for(Player p : players){
-                if(p.getStudentsByColor(Colors.getColor(i))>max){
+        for (int i = 0; i < Students.values().length; i++) {
+            for (Player p : players) {
+                if (p.getStudentsByStudent(Students.getStudent(i)) > max) {
                     maxPlayer = p;
                 }
             }
-            maxPlayer.moveProfessor(Colors.getColor(i)); //Maybe Amrit will change the methods like this
+            maxPlayer.moveProfessor(Students.getStudent(i)); //Maybe Amrit will change the methods like this
         }
         //Based on AMrit changes I will probably have to tell to each player if is not the max one to remove the professor with that color
     }
@@ -324,8 +316,8 @@ public class Game {
 
 
     public void checkWinner() {
-        for(Player p: players){
-            if(p.getPlayerTowers()==0)winner=p;
+        for (Player p : players) {
+            if (p.getPlayerTowers() == 0) winner = p;
         }
 
     }

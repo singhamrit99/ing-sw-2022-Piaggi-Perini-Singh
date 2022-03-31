@@ -1,17 +1,16 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.StudentDisc;
-import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.Students;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 //This class of cards has a resource counter on it, thus needing to be initialized at the beginning of the game. CharacterIDs range from 1 to 3
 public class StudentSetupCard extends CharacterCard {
 
-    private HashMap<StudentDisc, Integer> studentsonCard = new HashMap<>();
+    private EnumMap<Students, Integer> studentsonCard = new EnumMap(Students.class);
     int id = this.getCharacterID();
 
     @Override
@@ -23,7 +22,7 @@ public class StudentSetupCard extends CharacterCard {
         //Updating the price of the ability, which always happens.
 
         if (id == 1) {
-            Colors color = Colors.GREEN;
+            Students student = Students.GREEN;
             System.out.println("Choose the color to ignore in the calculation");
             ExchangeStudents( playercaller);        }
         else if (id == 2) {
@@ -60,9 +59,9 @@ public class StudentSetupCard extends CharacterCard {
 
     }
 
-    public void addStudentstoCard(HashMap<StudentDisc, Integer> summedStudents) throws IncorrectArgumentException {
-        HashMap<StudentDisc, Integer> tmp = studentsonCard;
-        for (Map.Entry<StudentDisc, Integer> studentsNewHashMap : summedStudents.entrySet()) {
+    public void addStudentstoCard(EnumMap<Students, Integer> summedStudents) throws IncorrectArgumentException {
+        EnumMap<Students, Integer> tmp = studentsonCard;
+        for (Map.Entry<Students, Integer> studentsNewHashMap : summedStudents.entrySet()) {
             if (studentsNewHashMap.getValue() >= 0) {
                 if (tmp.containsKey(studentsNewHashMap.getKey())) {
                     tmp.put(studentsNewHashMap.getKey(), studentsNewHashMap.getValue() + tmp.get(studentsNewHashMap.getKey()));

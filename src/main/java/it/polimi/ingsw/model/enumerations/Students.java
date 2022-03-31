@@ -7,19 +7,17 @@ import java.io.Serializable;
 /**
  * @author Amrit
  */
-public enum Colors implements Serializable {
+public enum Students implements Serializable {
     YELLOW(0),
     BLUE(1),
     GREEN(2),
     RED(3),
-    PINK(4),
-    BLACK(5),
-    GREY(6),
-    WHITE(7);
+    PINK(4);
+
 
     private final int index;
 
-    Colors(int index){
+    Students(int index) {
         this.index = index;
     }
 
@@ -27,9 +25,9 @@ public enum Colors implements Serializable {
         return index;
     }
 
-    public static Colors getColor(int index) throws IncorrectArgumentException {
-        for(Colors color: values()){
-            if(color.getIndex() == index) return color;
+    public static Students getStudent(int index) throws IncorrectArgumentException {
+        for (Students student : values()) {
+            if (student.getIndex() == index) return student;
         }
         throw new IncorrectArgumentException("Index not associated with any color");
     }

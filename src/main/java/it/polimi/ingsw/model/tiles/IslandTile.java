@@ -1,14 +1,14 @@
 package it.polimi.ingsw.model.tiles;
 
-import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.Students;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class IslandTile implements Tile {
     private String name;
-    private HashMap<Colors, Integer> students;
+    private EnumMap<Students, Integer> students;
     private String towerOwner;
     private int numberOfTowers;
     private boolean hasMotherNature;
@@ -33,7 +33,7 @@ public class IslandTile implements Tile {
         towerOwner = nicknamePlayer;
     }
 
-    public HashMap<Colors, Integer> getStudents() {
+    public EnumMap<Students, Integer> getStudents() {
         return students;
     }
 
@@ -41,17 +41,17 @@ public class IslandTile implements Tile {
         return numberOfTowers;
     }
 
-    public void addStudents(HashMap<Colors, Integer> summedStudents) throws  IncorrectArgumentException{
-        HashMap<Colors, Integer> tmp = getStudents();
-        for (Map.Entry<Colors, Integer> studentsNewHashMap : summedStudents.entrySet()){
-            if (studentsNewHashMap.getValue() >= 0) {
-                if (tmp.containsKey(studentsNewHashMap.getKey())) {
-                    tmp.put(studentsNewHashMap.getKey(), studentsNewHashMap.getValue() + tmp.get(studentsNewHashMap.getKey()));
+    public void addStudents(EnumMap<Students, Integer> summedStudents) throws  IncorrectArgumentException{
+        EnumMap<Students, Integer> tmp = getStudents();
+        for (Map.Entry<Students, Integer> studentsNewEnumMap : summedStudents.entrySet()){
+            if (studentsNewEnumMap.getValue() >= 0) {
+                if (tmp.containsKey(studentsNewEnumMap.getKey())) {
+                    tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue() + tmp.get(studentsNewEnumMap.getKey()));
                 } else {
-                    tmp.put(studentsNewHashMap.getKey(), studentsNewHashMap.getValue());
+                    tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue());
                 }
             } else {
-                throw new IncorrectArgumentException("HashMap is not correct");
+                throw new IncorrectArgumentException("EnumMap is not correct");
             }
         }
         students = tmp;

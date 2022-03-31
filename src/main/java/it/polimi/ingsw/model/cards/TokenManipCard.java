@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.Students;
 
 //This class of cards' power manipulates student tokens and professor behaviour connected to them. CharacterIDs range from 9 to 11
 public class TokenManipCard extends CharacterCard {
@@ -18,25 +18,19 @@ public class TokenManipCard extends CharacterCard {
         //Updating the price of the ability, which always happens.
 
         if (id == 9) {
-            Colors color = Colors.GREEN;
+            Students student = Students.GREEN;
             System.out.println("Choose the color to ignore in the calculation");
-            DiscardOpponentStudents(color, playercaller);
+            DiscardOpponentStudents(student, playercaller);
         } else if (id == 10) {
             SwitchOwnStudents(playercaller);
         } else if (id == 11) {
-
             TieBreaker(playercaller);
-        }
-        else
-        {
+        } else {
             throw new java.lang.Error("Card Mismatch");
         }
-
-
     }
 
-
-    public void DiscardOpponentStudents(Colors color, Player playercaller) {
+    public void DiscardOpponentStudents(Students student, Player playercaller) {
         System.out.println((this.getPowerDescription()));
     }
 

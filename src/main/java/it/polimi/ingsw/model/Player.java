@@ -2,11 +2,11 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.cards.AssistantCard;
 import it.polimi.ingsw.model.cards.AssistantCardDeck;
-import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.Students;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -15,12 +15,12 @@ import java.util.Map;
 public class Player implements Comparable<Player> {
     private String nickname;
     private SchoolBoard schoolBoard;
-    private Colors towerColors;
+    private Students towerColors;
     private AssistantCardDeck assistantCardDeck;
     private AssistantCard playedCard;
     private int characterCard;
 
-    public Player(String nickname, Colors towerColors, int numberOfPlayers) {
+    public Player(String nickname, Students towerColors, int numberOfPlayers) {
         this.nickname = nickname;
         this.schoolBoard = new SchoolBoard(numberOfPlayers);
         this.towerColors = towerColors;
@@ -35,18 +35,18 @@ public class Player implements Comparable<Player> {
         return distance <= playedCard.getValue();
     }
 
-    public void addStudents(HashMap<Colors, Integer> students) throws IncorrectArgumentException {
+    public void addStudents(EnumMap<Students, Integer> students) throws IncorrectArgumentException {
         schoolBoard.addStudents(students);
     }
 
-    public void moveStudents(HashMap<Colors, Integer> students, ArrayList<Integer> destinations) throws IncorrectArgumentException {
+    public void moveStudents(EnumMap<Students, Integer> students, ArrayList<Integer> destinations) throws IncorrectArgumentException {
         int i = 0;
-        HashMap<Colors, Integer> studentsToMove = new HashMap<>();
-        HashMap<Colors, Integer> studentsToRemove = new HashMap<>();
+        EnumMap<Students, Integer> studentsToMove = new EnumMap(Students.class);
+        EnumMap<Students, Integer> studentsToRemove = new EnumMap(Students.class);
 
         if (schoolBoard.hasEnoughStudents(students)) {
             if (students.size() == destinations.size()) {
-                for (Map.Entry<Colors, Integer> set : students.entrySet()) {
+                for (Map.Entry<Students, Integer> set : students.entrySet()) {
                     if (destinations.get(i) != 1 && destinations.get(i) != 0) {
                         throw new IncorrectArgumentException();
                     } else {
@@ -68,12 +68,12 @@ public class Player implements Comparable<Player> {
         if (studentsToRemove.size() != 0) schoolBoard.removeStudents(studentsToRemove);
     }
 
-    public void addProfessor(Colors color) throws IncorrectArgumentException {
-        schoolBoard.addProfessor(color);
+    public void addProfessor(Students student) throws IncorrectArgumentException {
+        schoolBoard.addProfessor(student);
     }
 
-    public void removeProfessor(Colors color) throws IncorrectArgumentException {
-        schoolBoard.removeProfessor(color);
+    public void removeProfessor(Students student) throws IncorrectArgumentException {
+        schoolBoard.removeProfessor(student);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class Player implements Comparable<Player> {
         return schoolBoard;
     }
 
-    public Colors getTowerColors() {
+    public Students getTowerColors() {
         return towerColors;
     }
 
@@ -97,8 +97,8 @@ public class Player implements Comparable<Player> {
         return schoolBoard.getTowers();
     }
 
-    public int getStudentsByColor(Colors color) throws IncorrectArgumentException {
-        return schoolBoard.getStudentsByColor(color);
+    public int getStudentsByStudent(Students student) throws IncorrectArgumentException {
+        return schoolBoard.getStudentsByStudent(student);
     }
 
     public void moveTowers(int steps) {
