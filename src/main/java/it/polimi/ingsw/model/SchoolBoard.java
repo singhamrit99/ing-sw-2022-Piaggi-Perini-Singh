@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +12,8 @@ import java.util.Map;
  * @author Amrit
  */
 public class SchoolBoard {
-    private HashMap<StudentDisc, Integer> entrance;
-    private HashMap<StudentDisc, Integer> dining;
+    private HashMap<Colors, Integer> entrance;
+    private HashMap<Colors, Integer> dining;
     private ArrayList<Colors> professorsTable;
     private int numberOfTowers;
 
@@ -28,10 +29,10 @@ public class SchoolBoard {
         }
     }
 
-    public void addStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
-        HashMap<StudentDisc, Integer> studentsDiscs = getEntrance();
+    public void addStudents(HashMap<Colors, Integer> students) throws IncorrectArgumentException {
+        HashMap<Colors, Integer> studentsDiscs = getEntrance();
 
-        for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
                 if (studentsDiscs.containsKey(set.getKey())) {
                     studentsDiscs.put(set.getKey(), set.getValue() + studentsDiscs.get(set.getKey()));
@@ -43,13 +44,13 @@ public class SchoolBoard {
             }
 
         }
-        this.setEntrance(studentsDiscs);
+        setEntrance(studentsDiscs);
     }
 
-    public void removeStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
-        HashMap<StudentDisc, Integer> studentsDiscs = this.getEntrance();
+    public void removeStudents(HashMap<Colors, Integer> students) throws IncorrectArgumentException {
+        HashMap<Colors, Integer> studentsDiscs = getEntrance();
 
-        for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
                 if (studentsDiscs.containsKey(set.getKey())) {
                     studentsDiscs.put(set.getKey(), studentsDiscs.get(set.getKey()) - set.getValue());
@@ -60,13 +61,13 @@ public class SchoolBoard {
                 throw new IncorrectArgumentException("HashMap is not correct");
             }
         }
-        this.setEntrance(studentsDiscs);
+        setEntrance(studentsDiscs);
     }
 
-    public void moveStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
-        HashMap<StudentDisc, Integer> studentsDiscs = this.getDining();
+    public void moveStudents(HashMap<Colors, Integer> students) throws IncorrectArgumentException {
+        HashMap<Colors, Integer> studentsDiscs = getDining();
 
-        for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
                 if (studentsDiscs.containsKey(set.getKey())) {
                     studentsDiscs.put(set.getKey(), set.getValue() + studentsDiscs.get(set.getKey()));
@@ -78,18 +79,12 @@ public class SchoolBoard {
             }
 
         }
-        this.removeStudents(studentsDiscs);
-        this.setDining(studentsDiscs);
+        removeStudents(studentsDiscs);
+        setDining(studentsDiscs);
     }
 
     public void addProfessor(Colors color) throws IncorrectArgumentException {
-
-        int index = professorsTable.indexOf(color);
-        if (index != -1) {
-            professorsTable.add(color);
-        }
-
-        throw new IncorrectArgumentException();
+        professorsTable.add(color);
     }
 
     public void removeProfessor(Colors color) throws IncorrectArgumentException {
@@ -102,10 +97,10 @@ public class SchoolBoard {
         throw new IncorrectArgumentException();
     }
 
-    public boolean hasEnoughStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
-        HashMap<StudentDisc, Integer> studentsDiscs = this.getEntrance();
+    public boolean hasEnoughStudents(HashMap<Colors, Integer> students) throws IncorrectArgumentException {
+        HashMap<Colors, Integer> studentsDiscs = this.getEntrance();
 
-        for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
                 if (studentsDiscs.containsKey(set.getKey())) {
                     if (studentsDiscs.get(set.getKey()) < set.getValue()) {
@@ -125,19 +120,19 @@ public class SchoolBoard {
         this.numberOfTowers += towers;
     }
 
-    private void setEntrance(HashMap<StudentDisc, Integer> studentsDiscs) {
+    private void setEntrance(HashMap<Colors, Integer> studentsDiscs) {
         this.entrance = studentsDiscs;
     }
 
-    private HashMap<StudentDisc, Integer> getEntrance() {
+    private HashMap<Colors, Integer> getEntrance() {
         return entrance;
     }
 
-    private void setDining(HashMap<StudentDisc, Integer> studentsDiscs) {
+    private void setDining(HashMap<Colors, Integer> studentsDiscs) {
         this.dining = studentsDiscs;
     }
 
-    private HashMap<StudentDisc, Integer> getDining() {
+    private HashMap<Colors, Integer> getDining() {
         return this.dining;
     }
 
@@ -150,10 +145,8 @@ public class SchoolBoard {
     }
 
     public int getStudentsByColor(Colors color) throws IncorrectArgumentException {
-        StudentDisc studentDisc = new StudentDisc(color);
-
-        if (dining.containsKey(studentDisc)) {
-            return dining.get(studentDisc);
+        if (dining.containsKey(color)) {
+            return dining.get(color);
         }
         throw new IncorrectArgumentException();
     }

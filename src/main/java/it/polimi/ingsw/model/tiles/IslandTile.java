@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.tiles;
 
-import it.polimi.ingsw.model.StudentDisc;
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class IslandTile implements Tile {
     private String name;
-    private HashMap<StudentDisc, Integer> students;
+    private HashMap<Colors, Integer> students;
     private String towerOwner;
     private int numberOfTowers;
     private boolean hasMotherNature;
@@ -33,7 +33,7 @@ public class IslandTile implements Tile {
         towerOwner = nicknamePlayer;
     }
 
-    public HashMap<StudentDisc, Integer> getStudents() {
+    public HashMap<Colors, Integer> getStudents() {
         return students;
     }
 
@@ -41,9 +41,9 @@ public class IslandTile implements Tile {
         return numberOfTowers;
     }
 
-    public void addStudents(HashMap<StudentDisc, Integer> summedStudents) throws  IncorrectArgumentException{
-        HashMap<StudentDisc, Integer> tmp = getStudents();
-        for (Map.Entry<StudentDisc, Integer> studentsNewHashMap : summedStudents.entrySet()){
+    public void addStudents(HashMap<Colors, Integer> summedStudents) throws  IncorrectArgumentException{
+        HashMap<Colors, Integer> tmp = getStudents();
+        for (Map.Entry<Colors, Integer> studentsNewHashMap : summedStudents.entrySet()){
             if (studentsNewHashMap.getValue() >= 0) {
                 if (tmp.containsKey(studentsNewHashMap.getKey())) {
                     tmp.put(studentsNewHashMap.getKey(), studentsNewHashMap.getValue() + tmp.get(studentsNewHashMap.getKey()));

@@ -35,18 +35,18 @@ public class Player implements Comparable<Player> {
         return distance <= playedCard.getValue();
     }
 
-    public void addStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
+    public void addStudents(HashMap<Colors, Integer> students) throws IncorrectArgumentException {
         schoolBoard.addStudents(students);
     }
 
-    public void moveStudents(HashMap<StudentDisc, Integer> students, ArrayList<Integer> destinations) throws IncorrectArgumentException {
+    public void moveStudents(HashMap<Colors, Integer> students, ArrayList<Integer> destinations) throws IncorrectArgumentException {
         int i = 0;
-        HashMap<StudentDisc, Integer> studentsToMove = new HashMap<>();
-        HashMap<StudentDisc, Integer> studentsToRemove = new HashMap<>();
+        HashMap<Colors, Integer> studentsToMove = new HashMap<>();
+        HashMap<Colors, Integer> studentsToRemove = new HashMap<>();
 
         if (schoolBoard.hasEnoughStudents(students)) {
             if (students.size() == destinations.size()) {
-                for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+                for (Map.Entry<Colors, Integer> set : students.entrySet()) {
                     if (destinations.get(i) != 1 && destinations.get(i) != 0) {
                         throw new IncorrectArgumentException();
                     } else {

@@ -10,10 +10,10 @@ import java.util.Map;
  * @author Amrit
  */
 public class Bag {
-    private HashMap<StudentDisc, Integer> students;
+    private HashMap<Colors, Integer> students;
     private final int studentType = 5;
 
-    public Bag(HashMap<StudentDisc, Integer> students) {
+    public Bag(HashMap<Colors, Integer> students) {
         this.students = students;
     }
 
@@ -23,10 +23,10 @@ public class Bag {
 
     //TODO aggiungere metodo per controllare n di pedine e ritorno sia se ne ho poche o nulle
 
-    public void addStudents(HashMap<StudentDisc, Integer> students) throws IncorrectArgumentException {
-        HashMap<StudentDisc, Integer> studentsDiscs = this.getStudents();
+    public void addStudents(HashMap<Colors, Integer> students) throws IncorrectArgumentException {
+        HashMap<Colors, Integer> studentsDiscs = getStudents();
 
-        for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
                 if (studentsDiscs.containsKey(set.getKey())) {
                     studentsDiscs.put(set.getKey(), set.getValue() + studentsDiscs.get(set.getKey()));
@@ -38,13 +38,13 @@ public class Bag {
             }
 
         }
-        this.setStudents(studentsDiscs);
+        setStudents(studentsDiscs);
     }
 
-    private void removeStudents(HashMap<StudentDisc, Integer> studentsToRemove) throws IncorrectArgumentException {
-        HashMap<StudentDisc, Integer> studentsDiscs = this.getStudents();
+    private void removeStudents(HashMap<Colors, Integer> studentsToRemove) throws IncorrectArgumentException {
+        HashMap<Colors, Integer> studentsDiscs = getStudents();
 
-        for (Map.Entry<StudentDisc, Integer> set : studentsToRemove.entrySet()) {
+        for (Map.Entry<Colors, Integer> set : studentsToRemove.entrySet()) {
             if (set.getValue() >= 0) {
                 if (studentsDiscs.containsKey(set.getKey())) {
                     studentsDiscs.put(set.getKey(), studentsDiscs.get(set.getKey()) - set.getValue());
@@ -55,26 +55,26 @@ public class Bag {
                 throw new IncorrectArgumentException("HashMap is not correct");
             }
         }
-        this.setStudents(studentsDiscs);
+        setStudents(studentsDiscs);
     }
 
-    public HashMap<StudentDisc, Integer> drawStudents(int numberOfStudents) throws IncorrectArgumentException {
+    public HashMap<Colors, Integer> drawStudents(int numberOfStudents) throws IncorrectArgumentException {
         int type, quantity;
-        HashMap<StudentDisc, Integer> studentsDrawn = new HashMap<>();
+        HashMap<Colors, Integer> studentsDrawn = new HashMap<>();
 
         for (int i = 0; i < numberOfStudents; ) {
             type = (int) Math.floor(Math.random() * (studentType + 1));
             quantity = (int) Math.floor(Math.random() * (numberOfStudents - i) + 1);
-            studentsDrawn.put(new StudentDisc(Colors.getColor(type)), quantity);
+            studentsDrawn.put(Colors.getColor(type), quantity);
             i += quantity;
         }
 
-        this.removeStudents(studentsDrawn);
+        removeStudents(studentsDrawn);
         return studentsDrawn;
     }
 
     public boolean hasEnoughStudents(int numberOfStudents) throws IncorrectArgumentException {
-        for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
                 if (getStudents().containsKey(set.getKey())) {
                     if (getStudents().get(set.getKey()) < set.getValue()) {
@@ -90,11 +90,11 @@ public class Bag {
         return true;
     }
 
-    public void setStudents(HashMap<StudentDisc, Integer> students) {
+    public void setStudents(HashMap<Colors, Integer> students) {
         this.students = students;
     }
 
-    public HashMap<StudentDisc, Integer> getStudents() {
+    public HashMap<Colors, Integer> getStudents() {
         return students;
     }
 }
