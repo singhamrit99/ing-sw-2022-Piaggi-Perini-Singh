@@ -319,57 +319,59 @@ public class Game {
     }
 
     private void checkAndPlaceTower(IslandTile island) throws IncorrectArgumentException {
-        int indexPlayer = 0;
-        ArrayList<Integer> influenceScores = new ArrayList<>(numOfPlayer);
-        for (int score : influenceScores) score = 0;
+        HashMap<Player, Integer> influenceScores = new HashMap<>();
+        for (Player p : players) {
+            influenceScores.put(p, 0);
+        }
+
         EnumMap<Students, Integer> students = island.getStudents();
 
         for (Students studentColor : Students.values()) {
             if (students.get(studentColor) != 0) {
                 //find the player with that professor
-                indexPlayer = 0;
                 for (Player p : players) {
-                    indexPlayer++;
                     if (p.hasProfessorOfColor(studentColor)) {
-                        influenceScores.add(indexPlayer, students.get(studentColor));
-                        if (p.getNickname().equals(island.getOwner())) {
-                            //If it's the island owner I also add the towers number
-                            influenceScores.add(indexPlayer, island.getNumOfTowers());
+                        influenceScores.replace(p, influenceScores.get(p) + students.get(studentColor));
+                        //If it's the island owner I also add the towers number
+                        if (p.getNickname().equals(island.getOwner().getNickname())) {
+                            influenceScores.replace(p, influenceScores.get(p) + island.getNumOfTowers());
                         }
-
-
                     }
                 }
             }
 
-        Player newOwner = null;
-        indexPlayer = 0;
-        Player maxScorePlayer = null;
-        int maxScore = 0;
-        for (Player p : players) {
-            if (influenceScores.get(indexPlayer) > maxScore) {
-                maxScorePlayer = p;
-                maxScore = influenceScores.get(indexPlayer);
-            } else if (influenceScores.get(indexPlayer) == maxScore) {
-                maxScorePlayer = null;
+            Player maxScorePlayer = null; //new owner
+            int maxScore = 0;
+            for (Player p : players) {
+                if (influenceScores.get(p) > maxScore) {
+                    maxScorePlayer = p;
+                    maxScore = influenceScores.get(p);
+                } else if (influenceScores.get(p) == maxScore) {
+                    maxScorePlayer = null; // there is a TIE!
+                }
             }
-            indexPlayer++;
-        }
 
-        if (maxScorePlayer != null) {
-            // if the maximum player his different from the owner I tell the owner to remove his towers
-            if(!maxScorePlayer.getNickname().equals(island.getOwner())){
-                island.setOwner(maxScorePlayer.getNickname());
-                // i change the owner and I remove
-                // I need to decrement towers
-                //island.getNumOfTowers()
-                checkUnificationIslands();
+            if (maxScorePlayer != null) { //there is a max player
+                if (island.getOwner() == null) {
+                    island.setOwner(maxScorePlayer);
+                    maxScorePlayer.moveTowers(-1);
+                    island.sumTowers(1);
+                    checkUnificationIslands();
+                } else if ((!maxScorePlayer.getNickname().equals(island.getOwner().getNickname()))) { //the player with max influence is not the owner
+                    //I tell the owner to remove his towers
+                    int towersRemoved = island.getNumOfTowers();
+                    island.getOwner().moveTowers(towersRemoved);
+                    // Taking the same amount of towers from the new owner
+                    maxScorePlayer.moveTowers(towersRemoved);
+                    // Finally declaring the new owner
+                    island.setOwner(maxScorePlayer);
+                    checkUnificationIslands();
+                }
             }
         }
     }
 
     // I make an array[numOfPlayer] in that array for each player I check all the students in that island
-
 
 
     //I need to know towers number from player, if 0 -> wins
@@ -394,8 +396,12 @@ public class Game {
         if (listChanged) checkUnificationIslands();
     }
 
-    public boolean isGameOver() throws IncorrectArgumentException { // I have to check if someone has finished all his towers
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
+    public boolean isGameOver() throws IncorrectArgumentException {
+        //for(Player p: players) {
+           // if p.tower
+        //}
+
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9 ) return true;
         else return false;
     }
 

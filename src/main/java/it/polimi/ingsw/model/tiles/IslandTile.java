@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.tiles;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.Students;
+import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.EnumMap;
@@ -12,13 +13,14 @@ public class IslandTile implements Tile {
     private EnumMap<Students, Integer> students;
     private Player towerOwner;
     private int numberOfTowers;
+    private Towers towersColor;
     private boolean hasMotherNature;
     private boolean hasNoEntryTile;
 
     public IslandTile(String islandname) {
         name = islandname;
         hasMotherNature = false;
-        towerOwner = "nobody";
+        towerOwner = null;
         numberOfTowers = 0;
         hasNoEntryTile = false;
     }
@@ -33,8 +35,6 @@ public class IslandTile implements Tile {
     public void setOwner(Player player) {
         towerOwner = player;
     }
-
-
 
     public EnumMap<Students, Integer> getStudents() {
         return students;
@@ -60,8 +60,9 @@ public class IslandTile implements Tile {
         students = tmp;
     }
 
-    public void sumTowersUnification(int towers) {
+    public void sumTowers(int towers) throws IncorrectArgumentException{
         numberOfTowers += towers;
+        if(numberOfTowers<0)throw new IncorrectArgumentException();
     }
 
     public boolean hasMotherNature() {
