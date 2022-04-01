@@ -49,7 +49,7 @@ public class Game {
 
     public void loadCharacters() {
 
-        characterDeckBuilder.newDeck(listOfCharacters);
+        characterDeckBuilder.newDeck();
 
     }
 

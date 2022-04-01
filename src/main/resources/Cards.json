@@ -2,46 +2,66 @@
   {
     "name": "Assistente(1)",
     "value": 1,
-    "move" : 1
+    "move" : 1,
+    "wizard": "none",
+    "hasplayed": false
 
   },
   {
     "name": "Assistente(2)",
-    "value": 1,
-    "move" : 1
+    "value": 2,
+    "move" : 1,
+    "wizard": "none",
+    "hasplayed": false
   },
   {
   "name": "Assistente(3)",
   "value": 3,
-  "move" : 2
+  "move" : 2,
+    "wizard": "none",
+    "hasplayed": false
 }, {
   "name": "Assistente(4)",
   "value": 4,
-  "move" : 2
+  "move" : 2,
+  "wizard": "none",
+  "hasplayed": false
 }, {
   "name": "Assistente(5)",
   "value": 5,
-  "move" : 3
+  "move" : 3,
+  "wizard": "none",
+  "hasplayed": false
 }, {
   "name": "Assistente(6)",
   "value": 6,
-  "move" : 3
+  "move" : 3,
+  "wizard": "none",
+  "hasplayed": false
 }, {
   "name": "Assistente(7)",
   "value": 7,
-  "move" : 4
+  "move" : 4,
+  "wizard": "none",
+  "hasplayed": false
 }, {
   "name": "Assistente(8)",
   "value": 8,
-  "move" : 4
+  "move" : 4,
+  "wizard": "none",
+  "hasplayed": false
 }, {
   "name": "Assistente(9)",
   "value": 9,
-  "move" : 5
+  "move" : 5,
+  "wizard": "none",
+  "hasplayed": false
 }, {
   "name": "Assistente(10)",
   "value": 10,
-  "move" : 5
+  "move" : 5,
+  "wizard": "none",
+  "hasplayed": false
 }
 
 ]

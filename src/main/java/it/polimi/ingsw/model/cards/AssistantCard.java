@@ -4,7 +4,6 @@ package it.polimi.ingsw.model.cards;
  * number of tiles Mother Nature can move, dependant on the card. There are 4 copies of each card, the only difference being the wizard
  * depicted on the back.*/
 public class AssistantCard extends Card {
-
     private int value;
     private int move;
     private String wizard;
