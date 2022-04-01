@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.cards.FillCharacterDeck;
 import it.polimi.ingsw.model.cards.FillDeck;
 import it.polimi.ingsw.model.enumerations.Students;
 import it.polimi.ingsw.model.enumerations.State;
+import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
@@ -108,11 +109,31 @@ public class Game {
         importingClouds = gson.fromJson(fileContent, CloudTile[].class);
     }
 
-    public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
+    public void initializeGame(ArrayList<String> nicknames) throws IncorrectArgumentException, IncorrectStateException {
         numRounds = 0;
-        counter = numOfPlayer - 1;
+        counter = numOfPlayer - 1; //used to 'count' during the Planning Phase
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
+
+        //Initialization Players
+        players = new LinkedList<Player>();
+        int indexColorTeam = 1;
+        for (String nickname : nicknames) {
+            int colorTeam;
+            if (numOfPlayer == 3) {
+                colorTeam = indexColorTeam;
+            } else {
+                if (indexColorTeam % 2 == 1) {
+                    colorTeam = 1; //black tower
+                } else {
+                    colorTeam = 3; //white tower
+                }
+            }
+            Player newPlayer = new Player(nickname, Towers.values()[colorTeam], numOfPlayer);
+            players.add(newPlayer);
+            indexColorTeam++;
+        }
+
 
         importingIslandsFromJson();
 
@@ -178,7 +199,6 @@ public class Game {
             playerDrawnOut = true;
         } else throw new IncorrectArgumentException();
     }
-
 
     public void playAssistantCard(Player player, int indexCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException {
         if (state == State.PLANNINGPHASE) {
@@ -369,13 +389,11 @@ public class Game {
                 }
             }
         }
+        // I make an array[numOfPlayer] in that array for each player I check all the students in that island
+
+
+        //I need to know towers number from player, if 0 -> wins
     }
-
-    // I make an array[numOfPlayer] in that array for each player I check all the students in that island
-
-
-    //I need to know towers number from player, if 0 -> wins
-}
 
     private void checkUnificationIslands() throws IncorrectArgumentException {
         boolean listChanged = false;
@@ -388,7 +406,7 @@ public class Game {
             else nextTile = islands.getFirst();
             if (nextTile.getOwner().equals(currentTile.getOwner())) {
                 currentTile.addStudents(nextTile.getStudents());
-                currentTile.sumTowersUnification(nextTile.getTowers());
+                currentTile.sumTowers(nextTile.getNumOfTowers());
                 islands.remove(nextTile);
                 listChanged = true;
             }
@@ -398,10 +416,10 @@ public class Game {
 
     public boolean isGameOver() throws IncorrectArgumentException {
         //for(Player p: players) {
-           // if p.tower
+        // if p.tower
         //}
 
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9 ) return true;
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
         else return false;
     }
 
