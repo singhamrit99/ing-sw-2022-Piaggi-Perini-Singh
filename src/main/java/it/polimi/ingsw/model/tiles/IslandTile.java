@@ -33,6 +33,8 @@ public class IslandTile implements Tile {
         towerOwner = nicknamePlayer;
     }
 
+
+
     public EnumMap<Students, Integer> getStudents() {
         return students;
     }
