@@ -16,7 +16,7 @@ import java.util.Map;
 public class Player implements Comparable<Player> {
     private final String nickname;
     private SchoolBoard schoolBoard;
-    private final Towers towerColors;
+    private final Towers towerColor;
     private AssistantCardDeck assistantCardDeck;
     private AssistantCard playedCard;
     private int characterCard;
@@ -24,7 +24,9 @@ public class Player implements Comparable<Player> {
     public Player(String nickname, Towers towerColors, int numberOfPlayers) {
         this.nickname = nickname;
         this.schoolBoard = new SchoolBoard(numberOfPlayers);
-        this.towerColors = towerColors;
+        this.towerColor = towerColors;
+
+        assistantCardDeck = new AssistantCardDeck();
     }
 
     public void playAssistantCard(int index) {
@@ -86,8 +88,8 @@ public class Player implements Comparable<Player> {
         return schoolBoard;
     }
 
-    public Towers getTowerColors() {
-        return towerColors;
+    public Towers getTowerColor() {
+        return towerColor;
     }
 
     public AssistantCard getPlayedCard() {
@@ -98,12 +100,12 @@ public class Player implements Comparable<Player> {
         return schoolBoard.getTowers();
     }
 
-    public int getStudentsByStudent(Students student) throws IncorrectArgumentException {
-        return schoolBoard.getStudentsByStudent(student);
+    public int getNumOfStudent(Students student) throws IncorrectArgumentException {
+        return schoolBoard.getStudentsByColor(student);
     }
 
-    public void moveTowers(int steps) {
-        schoolBoard.moveTowers(steps);
+    public void moveTowers(int num) {
+        schoolBoard.moveTowers(num);
     }
 
     public void setCharacterCard(int characterCard) {
@@ -114,8 +116,8 @@ public class Player implements Comparable<Player> {
         return characterCard;
     }
 
-    public boolean hasProfessorOfStudent(Students student) throws IncorrectArgumentException {
-        return schoolBoard.hasProfessorOfStudent(student);
+    public boolean hasProfessorOfColor(Students student) throws IncorrectArgumentException {
+        return schoolBoard.hasProfessorOfColor(student);
     }
 
     public String getNickname() {
