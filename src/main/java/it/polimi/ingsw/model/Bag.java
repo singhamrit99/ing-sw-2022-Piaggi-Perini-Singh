@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.enumerations.Students;
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.EnumMap;
@@ -10,23 +10,23 @@ import java.util.Map;
  * @author Amrit
  */
 public class Bag {
-    private EnumMap<Students, Integer> students;
+    private EnumMap<Colors, Integer> students;
     private final int studentType = 5;
 
-    public Bag(EnumMap<Students, Integer> students) {
+    public Bag(EnumMap<Colors, Integer> students) {
         this.students = students;
     }
 
     public Bag() {
-        students = new EnumMap(Students.class);
+        students = new EnumMap(Colors.class);
     }
 
     //TODO aggiungere metodo per controllare n di pedine e ritorno sia se ne ho poche o nulle
 
-    public void addStudents(EnumMap<Students, Integer> students) throws IncorrectArgumentException {
-        EnumMap<Students, Integer> studentsDiscs = getStudents();
+    public void addStudents(EnumMap<Colors, Integer> students) throws IncorrectArgumentException {
+        EnumMap<Colors, Integer> studentsDiscs = getStudents();
 
-        for (Map.Entry<Students, Integer> set : students.entrySet()) {
+        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
                 if (studentsDiscs.containsKey(set.getKey())) {
                     studentsDiscs.put(set.getKey(), set.getValue() + studentsDiscs.get(set.getKey()));
@@ -41,10 +41,10 @@ public class Bag {
         setStudents(studentsDiscs);
     }
 
-    private void removeStudents(EnumMap<Students, Integer> studentsToRemove) throws IncorrectArgumentException {
-        EnumMap<Students, Integer> studentsDiscs = getStudents();
+    private void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws IncorrectArgumentException {
+        EnumMap<Colors, Integer> studentsDiscs = getStudents();
 
-        for (Map.Entry<Students, Integer> set : studentsToRemove.entrySet()) {
+        for (Map.Entry<Colors, Integer> set : studentsToRemove.entrySet()) {
             if (set.getValue() >= 0) {
                 if (studentsDiscs.containsKey(set.getKey())) {
                     studentsDiscs.put(set.getKey(), studentsDiscs.get(set.getKey()) - set.getValue());
@@ -58,14 +58,14 @@ public class Bag {
         setStudents(studentsDiscs);
     }
 
-    public EnumMap<Students, Integer> drawStudents(int numberOfStudents) throws IncorrectArgumentException {
+    public EnumMap<Colors, Integer> drawStudents(int numberOfStudents) throws IncorrectArgumentException {
         int type, quantity;
-        EnumMap<Students, Integer> studentsDrawn = new EnumMap(Students.class);
+        EnumMap<Colors, Integer> studentsDrawn = new EnumMap(Colors.class);
 
         for (int i = 0; i < numberOfStudents; ) {
             type = (int) Math.floor(Math.random() * (studentType + 1));
             quantity = (int) Math.floor(Math.random() * (numberOfStudents - i) + 1);
-            studentsDrawn.put(Students.getStudent(type), quantity);
+            studentsDrawn.put(Colors.getStudent(type), quantity);
             i += quantity;
         }
 
@@ -74,7 +74,7 @@ public class Bag {
     }
 
     public boolean hasEnoughStudents(int numberOfStudents) throws IncorrectArgumentException {
-        for (Map.Entry<Students, Integer> set : students.entrySet()) {
+        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
             if (set.getValue() >= 0) {
                 if (getStudents().containsKey(set.getKey())) {
                     if (getStudents().get(set.getKey()) < set.getValue()) {
@@ -90,11 +90,11 @@ public class Bag {
         return true;
     }
 
-    public void setStudents(EnumMap<Students, Integer> students) {
+    public void setStudents(EnumMap<Colors, Integer> students) {
         this.students = students;
     }
 
-    public EnumMap<Students, Integer> getStudents() {
+    public EnumMap<Colors, Integer> getStudents() {
         return students;
     }
 }

@@ -2,19 +2,18 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import com.sun.org.apache.xerces.internal.parsers.IntegratedParserConfiguration;
 import it.polimi.ingsw.model.cards.CharacterCard;
 import it.polimi.ingsw.model.cards.FillCharacterDeck;
 import it.polimi.ingsw.model.cards.FillDeck;
-import it.polimi.ingsw.model.enumerations.Students;
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
+import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
 import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
-import jdk.internal.org.jline.utils.Colors;
 
 
 import java.io.InputStreamReader;
@@ -108,11 +107,31 @@ public class Game {
         importingClouds = gson.fromJson(fileContent, CloudTile[].class);
     }
 
-    public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
+    public void initializeGame(ArrayList<String> nicknames) throws IncorrectArgumentException, IncorrectStateException {
         numRounds = 0;
-        counter = numOfPlayer - 1;
+        counter = numOfPlayer - 1; //used to 'count' during the Planning Phase
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
+
+        //Initialization Players
+        players = new LinkedList<Player>();
+        int indexColorTeam = 1;
+        for (String nickname : nicknames) {
+            int colorTeam;
+            if (numOfPlayer == 3) {
+                colorTeam = indexColorTeam;
+            } else {
+                if (indexColorTeam % 2 == 1) {
+                    colorTeam = 1; //black tower
+                } else {
+                    colorTeam = 3; //white tower
+                }
+            }
+            Player newPlayer = new Player(nickname, Towers.values()[colorTeam], numOfPlayer);
+            players.add(newPlayer);
+            indexColorTeam++;
+        }
+
 
         importingIslandsFromJson();
 
@@ -135,8 +154,8 @@ public class Game {
         islands.get(motherNaturePosition).moveMotherNature();
 
         // create Bag and students
-        EnumMap<Students, Integer> students = new EnumMap(Students.class);
-        for (Students studentColor : Students.values()) {
+        EnumMap<Colors, Integer> students = new EnumMap(Colors.class);
+        for (Colors studentColor : Colors.values()) {
             students.put(studentColor, 2);
         }
         bag = new Bag(students);
@@ -155,8 +174,8 @@ public class Game {
         }
 
         //Re-populate the Bag after 'placing Islands and Students phase'
-        students = new EnumMap(Students.class);
-        for (Students studentColor : Students.values()) {
+        students = new EnumMap(Colors.class);
+        for (Colors studentColor : Colors.values()) {
             students.put(studentColor, 24); //26  (total discStudents) -2 (used before) for each color
         }
         bag = new Bag(students);
@@ -178,7 +197,6 @@ public class Game {
             playerDrawnOut = true;
         } else throw new IncorrectArgumentException();
     }
-
 
     public void playAssistantCard(Player player, int indexCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException {
         if (state == State.PLANNINGPHASE) {
@@ -245,11 +263,11 @@ public class Game {
     }
 
     //0 dining room , 1 to island tile
-    public void moveStudents(EnumMap<Students, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
+    public void moveStudents(EnumMap<Colors, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
         int DestCounter = 0;
-        EnumMap<Students, Integer> studentsToMoveToIsland = new EnumMap<>(Students.class);
+        EnumMap<Colors, Integer> studentsToMoveToIsland = new EnumMap<>(Colors.class);
         if (students.size() == destinations.size()) {
-            for (Map.Entry<Students, Integer> set : students.entrySet()) {
+            for (Map.Entry<Colors, Integer> set : students.entrySet()) {
                 if (destinations.get(DestCounter) == 1) {
                     studentsToMoveToIsland.put(set.getKey(), set.getValue());
                 }
@@ -300,7 +318,7 @@ public class Game {
     public void checkAndPlaceProfessor() throws IncorrectArgumentException {
         int max = 0;
         Player maxPlayer = null;
-        for (Students studentColor : Students.values()) {
+        for (Colors studentColor : Colors.values()) {
             for (Player player : players) {
                 if (player.getNumOfStudent(studentColor) > max) {
                     maxPlayer = player;
@@ -319,61 +337,61 @@ public class Game {
     }
 
     private void checkAndPlaceTower(IslandTile island) throws IncorrectArgumentException {
-        int indexPlayer = 0;
-        ArrayList<Integer> influenceScores = new ArrayList<>(numOfPlayer);
-        for (int score : influenceScores) score = 0;
-        EnumMap<Students, Integer> students = island.getStudents();
+        HashMap<Player, Integer> influenceScores = new HashMap<>();
+        for (Player p : players) {
+            influenceScores.put(p, 0);
+        }
 
-        for (Students studentColor : Students.values()) {
+        EnumMap<Colors, Integer> students = island.getStudents();
+
+        for (Colors studentColor : Colors.values()) {
             if (students.get(studentColor) != 0) {
                 //find the player with that professor
-                indexPlayer = 0;
                 for (Player p : players) {
-                    indexPlayer++;
                     if (p.hasProfessorOfColor(studentColor)) {
-                        influenceScores.add(indexPlayer, students.get(studentColor));
-                        if (p.getNickname().equals(island.getOwner())) {
-                            //If it's the island owner I also add the towers number
-                            influenceScores.add(indexPlayer, island.getNumOfTowers());
+                        influenceScores.replace(p, influenceScores.get(p) + students.get(studentColor));
+                        //If it's the island owner I also add the towers number
+                        if (p.getNickname().equals(island.getOwner().getNickname())) {
+                            influenceScores.replace(p, influenceScores.get(p) + island.getNumOfTowers());
                         }
-
-
                     }
                 }
             }
 
-        Player newOwner = null;
-        indexPlayer = 0;
-        Player maxScorePlayer = null;
-        int maxScore = 0;
-        for (Player p : players) {
-            if (influenceScores.get(indexPlayer) > maxScore) {
-                maxScorePlayer = p;
-                maxScore = influenceScores.get(indexPlayer);
-            } else if (influenceScores.get(indexPlayer) == maxScore) {
-                maxScorePlayer = null;
+            Player maxScorePlayer = null; //new owner
+            int maxScore = 0;
+            for (Player p : players) {
+                if (influenceScores.get(p) > maxScore) {
+                    maxScorePlayer = p;
+                    maxScore = influenceScores.get(p);
+                } else if (influenceScores.get(p) == maxScore) {
+                    maxScorePlayer = null; // there is a TIE!
+                }
             }
-            indexPlayer++;
-        }
 
-        if (maxScorePlayer != null) {
-            // if the maximum player his different from the owner I tell the owner to remove his towers
-            if(!maxScorePlayer.getNickname().equals(island.getOwner())){
-                island.setOwner(maxScorePlayer.getNickname());
-                // i change the owner and I remove
-                // I need to decrement towers
-                //island.getNumOfTowers()
-                checkUnificationIslands();
+            if (maxScorePlayer != null) { //there is a max player
+                if (island.getOwner() == null) {
+                    island.setOwner(maxScorePlayer);
+                    maxScorePlayer.moveTowers(-1);
+                    island.sumTowers(1);
+                    checkUnificationIslands();
+                } else if ((!maxScorePlayer.getNickname().equals(island.getOwner().getNickname()))) { //the player with max influence is not the owner
+                    //I tell the owner to remove his towers
+                    int towersRemoved = island.getNumOfTowers();
+                    island.getOwner().moveTowers(towersRemoved);
+                    // Taking the same amount of towers from the new owner
+                    maxScorePlayer.moveTowers(towersRemoved);
+                    // Finally declaring the new owner
+                    island.setOwner(maxScorePlayer);
+                    checkUnificationIslands();
+                }
             }
         }
+        // I make an array[numOfPlayer] in that array for each player I check all the students in that island
+
+
+        //I need to know towers number from player, if 0 -> wins
     }
-
-    // I make an array[numOfPlayer] in that array for each player I check all the students in that island
-
-
-
-    //I need to know towers number from player, if 0 -> wins
-}
 
     private void checkUnificationIslands() throws IncorrectArgumentException {
         boolean listChanged = false;
@@ -386,7 +404,7 @@ public class Game {
             else nextTile = islands.getFirst();
             if (nextTile.getOwner().equals(currentTile.getOwner())) {
                 currentTile.addStudents(nextTile.getStudents());
-                currentTile.sumTowersUnification(nextTile.getTowers());
+                currentTile.sumTowers(nextTile.getNumOfTowers());
                 islands.remove(nextTile);
                 listChanged = true;
             }
@@ -394,8 +412,11 @@ public class Game {
         if (listChanged) checkUnificationIslands();
     }
 
-    public boolean isGameOver() throws IncorrectArgumentException { // I have to check if someone has finished all his towers
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
+    public boolean isGameOver() throws IncorrectArgumentException {
+        for(Player p: players) {
+         if(p.getPlayerTowers()<=0)return true;
+        }
+        if(!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
         else return false;
     }
 

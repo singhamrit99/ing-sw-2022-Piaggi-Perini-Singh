@@ -1430,7 +1430,7 @@
 											"top": 565,
 											"width": 575,
 											"height": 13,
-											"text": "+checkGameOver(): boolean",
+											"text": "+isGameOver(): boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2295,7 +2295,7 @@
 											"top": 188,
 											"width": 480.8857421875,
 											"height": 13,
-											"text": "-towerOwner: String",
+											"text": "-towerOwner: Player",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2380,7 +2380,7 @@
 											"top": 256,
 											"width": 480.8857421875,
 											"height": 13,
-											"text": "+sumTowersUnification(towers: int): void",
+											"text": "+sumTowers(towers: int): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8425,8 +8425,8 @@
 							"left": 96,
 							"top": 168,
 							"width": 185,
-							"height": 51,
-							"text": "For readability purposes we didn't show get/set methods ."
+							"height": 64,
+							"text": "For readability purposes we didn't show constructor/getter/setter methods ."
 						},
 						{
 							"_type": "UMLEnumerationView",
@@ -10065,7 +10065,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF/iHfm/DnMdTQ="
 							},
-							"name": "checkGameOver",
+							"name": "isGameOver",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -10609,7 +10609,9 @@
 							},
 							"name": "towerOwner",
 							"visibility": "private",
-							"type": "String"
+							"type": {
+								"$ref": "AAAAAAF/iHdxYDlz9F8="
+							}
 						},
 						{
 							"_type": "UMLAttribute",
@@ -10649,7 +10651,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF/iHl9dDp82l0="
 							},
-							"name": "sumTowersUnification",
+							"name": "sumTowers",
 							"parameters": [
 								{
 									"_type": "UMLParameter",

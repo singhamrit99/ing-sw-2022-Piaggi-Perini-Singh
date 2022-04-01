@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * @author Amrit
  */
-public enum Students implements Serializable {
+public enum Colors implements Serializable {
     YELLOW(0),
     BLUE(1),
     GREEN(2),
@@ -17,7 +17,7 @@ public enum Students implements Serializable {
 
     private final int index;
 
-    Students(int index) {
+    Colors(int index) {
         this.index = index;
     }
 
@@ -25,8 +25,8 @@ public enum Students implements Serializable {
         return index;
     }
 
-    public static Students getStudent(int index) throws IncorrectArgumentException {
-        for (Students student : values()) {
+    public static Colors getStudent(int index) throws IncorrectArgumentException {
+        for (Colors student : values()) {
             if (student.getIndex() == index) return student;
         }
         throw new IncorrectArgumentException("Index not associated with any color");
