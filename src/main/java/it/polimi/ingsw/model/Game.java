@@ -413,11 +413,10 @@ public class Game {
     }
 
     public boolean isGameOver() throws IncorrectArgumentException {
-        //for(Player p: players) {
-        // if p.tower
-        //}
-
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
+        for(Player p: players) {
+         if(p.getPlayerTowers()<=0)return true;
+        }
+        if(!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
         else return false;
     }
 
