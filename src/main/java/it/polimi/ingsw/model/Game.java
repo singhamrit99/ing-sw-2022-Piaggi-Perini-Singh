@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.exceptions.IncorrectStateException;
 import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
+import jdk.internal.org.jline.utils.Colors;
 
 
 import java.io.InputStreamReader;
@@ -22,28 +23,29 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class Game {
-    private int expertMode = 0;
+    private boolean expertMode;
     private State state;
+    private Bag bag;
     private int numOfPlayer;
-    private LinkedList<Player> players;
-    private PriorityQueue<Player> orderPlayers;
     private Player currentPlayer;
     private Player firstPlayerPlanPhase;
+    private LinkedList<Player> players;
+    private ListIterator<Player> playerIterator;
+    private PriorityQueue<Player> orderPlayers;
     private LinkedList<IslandTile> islands;
     private CloudTile[] clouds;
-    private Bag bag;
     private int motherNaturePosition;
     private int numRounds;
     private int numDrawnStudents;
     private int counter;
     private boolean playerDrawnOut;
-    private ListIterator<Player> playerIterator;
     private Player winner;
     private ArrayList<CharacterCard> listOfCharacters;
     private FillCharacterDeck characterDeckBuilder;
     private Scanner reader = new Scanner(System.in);
     private String fileContent;
-
+    private IslandTile[] importingIslands;
+    private CloudTile[] importingClouds;
 
     public void loadCharacters() {
 
@@ -76,18 +78,14 @@ public class Game {
         player.setCharacterCard(answer);
     }
 
+    public Game(boolean expertMode, int numOfPlayer){
+        this.expertMode = expertMode;
+        this.numOfPlayer = numOfPlayer;
+    }
 
-    public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
-        expertMode = 0;
-        motherNaturePosition = 0;
-        numRounds = 0;
-        counter = numOfPlayer - 1;
-        if (numOfPlayer == 3) numDrawnStudents = 4;
-        else numDrawnStudents = 3;
-
-
-        Gson gson = new Gson();
+    private void importingIslandsFromJson(){
         //Loading IslandTiles Json file
+        Gson gson = new Gson();
         try {
             InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(streamReader);
@@ -95,30 +93,73 @@ public class Game {
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
+        importingIslands = gson.fromJson(fileContent, IslandTile[].class);
 
-        IslandTile[] importingIslands = gson.fromJson(fileContent, IslandTile[].class);
-        // initialization LinkedList<IslandTile> islands;
-        islands = new LinkedList<>(islands);
-        for (int i = 0; i < 12; i++) {
-            IslandTile island = new IslandTile(importingIslands[i].getName());
-            islands.add(island);
-        }
-        //Loading CloudTiles JSON file
-        try {
+
+        // initialization clouds;
+        try { //Loading CloudTiles JSON file
             InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.CLOUD_TILES_LOCATION), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(streamReader);
             fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
+        importingClouds = gson.fromJson(fileContent, CloudTile[].class);
+    }
 
-        CloudTile[] importingClouds = gson.fromJson(fileContent, CloudTile[].class);
-        // initialization clouds[];
+    public void initializeGame() throws IncorrectArgumentException, IncorrectStateException {
+        numRounds = 0;
+        counter = numOfPlayer - 1;
+        if (numOfPlayer == 3) numDrawnStudents = 4;
+        else numDrawnStudents = 3;
+
+        importingIslandsFromJson();
+
+        //Initialization clouds
         clouds = new CloudTile[numOfPlayer];
         for (int i = 0; i < numOfPlayer; i++) {
             CloudTile cloud = new CloudTile(importingClouds[i].name);
             clouds[i] = cloud;
         }
+
+        // initialization islands;
+        islands = new LinkedList<>(islands);
+        for (int i = 0; i < 12; i++) {
+            IslandTile island = new IslandTile(importingIslands[i].getName());
+            islands.add(island);
+        }
+
+        // place MotherNature on a random island
+        motherNaturePosition = (int) Math.random() * numOfPlayer;
+        islands.get(motherNaturePosition).moveMotherNature();
+
+        // create Bag and students
+        EnumMap<Students,Integer> students = new EnumMap(Students.class);
+        for(int i = 0; i < Students.values().length; i++ ){
+            // StudentDisc student = new StudentDisc(Colors.getColor(i)); TO FIX
+            // students.put(student,2); //for the 'placing Islands phase' TO FIX
+        }
+        bag = new Bag(students);
+
+        //calculate opposite MotherNature's Island
+        int oppositeMotherNaturePos = 0;
+        if(motherNaturePosition>=islands.size()/2)oppositeMotherNaturePos=motherNaturePosition+islands.size()-1;
+        else oppositeMotherNaturePos=motherNaturePosition-islands.size()+1;
+        // placing students except MotherNature's Island and the opposite one
+        IslandTile islandOppositeMN = islands.get(oppositeMotherNaturePos);
+        for(IslandTile island : islands){
+            if(!island.hasMotherNature() && !(island.getName().equals(islandOppositeMN.getName()))){
+                island.addStudents(bag.drawStudents(1));
+            }
+        }
+
+        //Re-populate the Bag after 'placing Islands and Students phase'
+        students = new EnumMap(Students.class);
+        for(int i = 0; i < Students.values().length -3 ; i++ ){  //3 are the colors of the towers
+            //StudentDisc student = new StudentDisc(Colors.getColor(i)); TO FIX
+            //students.put(student,24); //total students are 26 - 2 (that are on the islands) for each color TO FIX
+        }
+        bag = new Bag(students);
 
         //initialization LinkedList<Player>
         playerIterator = players.listIterator();
@@ -126,13 +167,11 @@ public class Game {
         playerIterator.set(firstPlayerPlanPhase);
         playerDrawnOut = false;
         state = State.PLANNINGPHASE;
-
-        //initialization PriorityQueue<Player>
         orderPlayers = new PriorityQueue<>(numOfPlayer);
     }
 
     public void drawFromBag(Player playerCaller) throws IncorrectArgumentException {
-        if (state == State.PLANNINGPHASE && playerCaller.equals(currentPlayer) && !playerDrawnOut) {
+        if (state == State.PLANNINGPHASE && playerCaller.getNickname().equals(currentPlayer.getNickname()) && !playerDrawnOut) {
             for (CloudTile cloud : clouds) {
                 cloud.addStudents(bag.drawStudents(numDrawnStudents));
             }
@@ -140,16 +179,6 @@ public class Game {
         } else throw new IncorrectArgumentException();
     }
 
-    /*public void drawFromBag(Player playerCaller, SetupCard setup) throws IncorrectArgumentException
-    {
-        if (state== State.ACTIONPHASE && playerCaller.equals(currentPlayer)) {
-
-
-
-        }
-
-
-    }*/
 
     public void playAssistantCard(Player player, int indexCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException {
         if (state == State.PLANNINGPHASE) {
@@ -205,15 +234,10 @@ public class Game {
         } else throw new IncorrectStateException();
     }
 
-    public boolean isGameOver() throws IncorrectArgumentException {
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
-        else return false;
-    }
-
 
     public void takeStudentsFromCloud(Player playerCaller, int index) throws IncorrectStateException, IncorrectPlayerException {
         if (state == State.ACTIONPHASE) {
-            if (playerCaller.equals(currentPlayer)) {
+            if (playerCaller.getNickname().equals(currentPlayer.getNickname())) {
                 //currentPlayer.moveStudents(clouds[index].removeStudents() waiting Amrit
             } else throw new IncorrectPlayerException();
         } else {
@@ -222,40 +246,39 @@ public class Game {
     }
 
     //0 dining room , 1 to island tile
-    public void moveStudents(EnumMap<Students, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
-        int i = 0;
-        EnumMap<Students, Integer> studentsToMoveToIsland = new EnumMap(Students.class);
+    public void moveStudents(HashMap<StudentDisc, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
+        int DestCounter = 0;
+        HashMap<StudentDisc, Integer> studentsToMoveToIsland = new HashMap<>();
         if (students.size() == destinations.size()) {
-            for (Map.Entry<Students, Integer> set : students.entrySet()) {
-                if (destinations.get(i) == 1) {
+            for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+                if (destinations.get(DestCounter) == 1) {
                     studentsToMoveToIsland.put(set.getKey(), set.getValue());
-
-                } else {
-                    throw new IncorrectArgumentException();
-
                 }
-                i++;
+                DestCounter++;
             }
         } else {
             throw new IncorrectArgumentException();
         }
-
+        //The game sends to the player also the students that go to the islands because the player has to remove them from the entrance
         currentPlayer.moveStudents(students, destinations);
-        /*
-        if (studentsToMoveToIsland.size() != 0 && studentsToMoveToIsland.size() == islandDestinations.size()){
-            boolean found = false;
-            for (String dest : islandDestinations){
-                for(IslandTile island : islands ){
-                    if(island.getName().equals){
-                        found = true;
-                        //island.addStudents(studentsToMoveToIsland;
-                        break;
+        //If there are students directed to the islands I check that that the islands string arraylist has the right size
+        if (studentsToMoveToIsland.size() != 0 && studentsToMoveToIsland.size() == islandDestinations.size()) {
+            boolean islandNameFound = true;
+            for (String dest : islandDestinations) {
+                if (islandNameFound) { //I check that the Island that I was searching in the last iteration it's found
+                    islandNameFound = false;
+                    for (IslandTile island : islands) {
+                        if (island.getName().equals(dest)) {
+                            islandNameFound = true;
+                            island.addStudents(studentsToMoveToIsland);
+                            break;
+                        }
                     }
+                } else {
+                    throw new IncorrectArgumentException("The island is not found");
                 }
             }
         }
-        */
-
     }
 
 
@@ -265,8 +288,9 @@ public class Game {
             if (currentPlayer.moveMotherNature(distanceChoosen)) {
                 islands.get(motherNaturePosition).removeMotherNature();
                 islands.get(destinationMotherNature).moveMotherNature();
-                //islands.get(destinationMotherNature).getStudents(); islands.getTowers() and islands.getOwner()
-                //check which player has that color professor and eventually place the tower in that islands using checkAndPlaceTower
+                checkAndPlaceTower(islands.get(destinationMotherNature));
+                checkUnificationIslands();
+
             } else {
                 throw new IncorrectArgumentException();
             }
@@ -289,13 +313,13 @@ public class Game {
         //Based on AMrit changes I will probably have to tell to each player if is not the max one to remove the professor with that color
     }
 
-    private void checkAndPlaceTower() throws IncorrectArgumentException { // UML this method became private
+    private void checkAndPlaceTower(IslandTile island) throws IncorrectArgumentException {
         // I need to decrement towers
         //I need to know towers number from player, if 0 -> wins
         checkUnificationIslands();
     }
 
-    private void checkUnificationIslands() throws IncorrectArgumentException { // UML this method became private
+    private void checkUnificationIslands() throws IncorrectArgumentException {
         boolean listChanged = false;
         ListIterator<IslandTile> it = islands.listIterator();
         IslandTile currentTile;
@@ -314,6 +338,10 @@ public class Game {
         if (listChanged) checkUnificationIslands();
     }
 
+    public boolean isGameOver() throws IncorrectArgumentException {
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
+        else return false;
+    }
 
     public void checkWinner() {
         for (Player p : players) {

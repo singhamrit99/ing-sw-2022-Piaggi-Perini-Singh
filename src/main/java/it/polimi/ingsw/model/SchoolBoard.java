@@ -143,14 +143,14 @@ public class SchoolBoard {
         return numberOfTowers;
     }
 
-    public int getStudentsByStudent(Students student) throws IncorrectArgumentException {
+    public int getStudentsByColor(Students student) throws IncorrectArgumentException {
         if (dining.containsKey(student)) {
             return dining.get(student);
         }
         throw new IncorrectArgumentException();
     }
 
-    public boolean hasProfessorOfStudent(Students student) throws IncorrectArgumentException {
+    public boolean hasProfessorOfColor(Students student) throws IncorrectArgumentException {
         return professorsTable.contains(student);
     }
 }
