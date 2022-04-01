@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.cards.AssistantCard;
 import it.polimi.ingsw.model.cards.AssistantCardDeck;
-import it.polimi.ingsw.model.enumerations.Students;
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
@@ -38,18 +38,18 @@ public class Player implements Comparable<Player> {
         return distance <= playedCard.getValue();
     }
 
-    public void addStudents(EnumMap<Students, Integer> students) throws IncorrectArgumentException {
+    public void addStudents(EnumMap<Colors, Integer> students) throws IncorrectArgumentException {
         schoolBoard.addStudents(students);
     }
 
-    public void moveStudents(EnumMap<Students, Integer> students, ArrayList<Integer> destinations) throws IncorrectArgumentException {
+    public void moveStudents(EnumMap<Colors, Integer> students, ArrayList<Integer> destinations) throws IncorrectArgumentException {
         int i = 0;
-        EnumMap<Students, Integer> studentsToMove = new EnumMap(Students.class);
-        EnumMap<Students, Integer> studentsToRemove = new EnumMap(Students.class);
+        EnumMap<Colors, Integer> studentsToMove = new EnumMap(Colors.class);
+        EnumMap<Colors, Integer> studentsToRemove = new EnumMap(Colors.class);
 
         if (schoolBoard.hasEnoughStudents(students)) {
             if (students.size() == destinations.size()) {
-                for (Map.Entry<Students, Integer> set : students.entrySet()) {
+                for (Map.Entry<Colors, Integer> set : students.entrySet()) {
                     if (destinations.get(i) != 1 && destinations.get(i) != 0) {
                         throw new IncorrectArgumentException();
                     } else {
@@ -71,11 +71,11 @@ public class Player implements Comparable<Player> {
         if (studentsToRemove.size() != 0) schoolBoard.removeStudents(studentsToRemove);
     }
 
-    public void addProfessor(Students student) throws IncorrectArgumentException {
+    public void addProfessor(Colors student) throws IncorrectArgumentException {
         schoolBoard.addProfessor(student);
     }
 
-    public void removeProfessor(Students student) throws IncorrectArgumentException {
+    public void removeProfessor(Colors student) throws IncorrectArgumentException {
         schoolBoard.removeProfessor(student);
     }
 
@@ -100,7 +100,7 @@ public class Player implements Comparable<Player> {
         return schoolBoard.getTowers();
     }
 
-    public int getNumOfStudent(Students student) throws IncorrectArgumentException {
+    public int getNumOfStudent(Colors student) throws IncorrectArgumentException {
         return schoolBoard.getStudentsByColor(student);
     }
 
@@ -116,7 +116,7 @@ public class Player implements Comparable<Player> {
         return characterCard;
     }
 
-    public boolean hasProfessorOfColor(Students student) throws IncorrectArgumentException {
+    public boolean hasProfessorOfColor(Colors student) throws IncorrectArgumentException {
         return schoolBoard.hasProfessorOfColor(student);
     }
 

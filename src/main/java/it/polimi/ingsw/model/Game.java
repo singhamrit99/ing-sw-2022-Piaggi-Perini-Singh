@@ -2,11 +2,10 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import com.sun.org.apache.xerces.internal.parsers.IntegratedParserConfiguration;
 import it.polimi.ingsw.model.cards.CharacterCard;
 import it.polimi.ingsw.model.cards.FillCharacterDeck;
 import it.polimi.ingsw.model.cards.FillDeck;
-import it.polimi.ingsw.model.enumerations.Students;
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
@@ -15,7 +14,6 @@ import it.polimi.ingsw.model.exceptions.IncorrectStateException;
 import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
-import jdk.internal.org.jline.utils.Colors;
 
 
 import java.io.InputStreamReader;
@@ -156,8 +154,8 @@ public class Game {
         islands.get(motherNaturePosition).moveMotherNature();
 
         // create Bag and students
-        EnumMap<Students, Integer> students = new EnumMap(Students.class);
-        for (Students studentColor : Students.values()) {
+        EnumMap<Colors, Integer> students = new EnumMap(Colors.class);
+        for (Colors studentColor : Colors.values()) {
             students.put(studentColor, 2);
         }
         bag = new Bag(students);
@@ -176,8 +174,8 @@ public class Game {
         }
 
         //Re-populate the Bag after 'placing Islands and Students phase'
-        students = new EnumMap(Students.class);
-        for (Students studentColor : Students.values()) {
+        students = new EnumMap(Colors.class);
+        for (Colors studentColor : Colors.values()) {
             students.put(studentColor, 24); //26  (total discStudents) -2 (used before) for each color
         }
         bag = new Bag(students);
@@ -265,11 +263,11 @@ public class Game {
     }
 
     //0 dining room , 1 to island tile
-    public void moveStudents(EnumMap<Students, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
+    public void moveStudents(EnumMap<Colors, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
         int DestCounter = 0;
-        EnumMap<Students, Integer> studentsToMoveToIsland = new EnumMap<>(Students.class);
+        EnumMap<Colors, Integer> studentsToMoveToIsland = new EnumMap<>(Colors.class);
         if (students.size() == destinations.size()) {
-            for (Map.Entry<Students, Integer> set : students.entrySet()) {
+            for (Map.Entry<Colors, Integer> set : students.entrySet()) {
                 if (destinations.get(DestCounter) == 1) {
                     studentsToMoveToIsland.put(set.getKey(), set.getValue());
                 }
@@ -320,7 +318,7 @@ public class Game {
     public void checkAndPlaceProfessor() throws IncorrectArgumentException {
         int max = 0;
         Player maxPlayer = null;
-        for (Students studentColor : Students.values()) {
+        for (Colors studentColor : Colors.values()) {
             for (Player player : players) {
                 if (player.getNumOfStudent(studentColor) > max) {
                     maxPlayer = player;
@@ -344,9 +342,9 @@ public class Game {
             influenceScores.put(p, 0);
         }
 
-        EnumMap<Students, Integer> students = island.getStudents();
+        EnumMap<Colors, Integer> students = island.getStudents();
 
-        for (Students studentColor : Students.values()) {
+        for (Colors studentColor : Colors.values()) {
             if (students.get(studentColor) != 0) {
                 //find the player with that professor
                 for (Player p : players) {

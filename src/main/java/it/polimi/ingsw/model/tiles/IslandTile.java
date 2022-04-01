@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.tiles;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.enumerations.Students;
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class IslandTile implements Tile {
     private String name;
-    private EnumMap<Students, Integer> students;
+    private EnumMap<Colors, Integer> students;
     private Player towerOwner;
     private int numberOfTowers;
     private Towers towersColor;
@@ -36,7 +36,7 @@ public class IslandTile implements Tile {
         towerOwner = player;
     }
 
-    public EnumMap<Students, Integer> getStudents() {
+    public EnumMap<Colors, Integer> getStudents() {
         return students;
     }
 
@@ -44,9 +44,9 @@ public class IslandTile implements Tile {
         return numberOfTowers;
     }
 
-    public void addStudents(EnumMap<Students, Integer> summedStudents) throws  IncorrectArgumentException{
-        EnumMap<Students, Integer> tmp = getStudents();
-        for (Map.Entry<Students, Integer> studentsNewEnumMap : summedStudents.entrySet()){
+    public void addStudents(EnumMap<Colors, Integer> summedStudents) throws  IncorrectArgumentException{
+        EnumMap<Colors, Integer> tmp = getStudents();
+        for (Map.Entry<Colors, Integer> studentsNewEnumMap : summedStudents.entrySet()){
             if (studentsNewEnumMap.getValue() >= 0) {
                 if (tmp.containsKey(studentsNewEnumMap.getKey())) {
                     tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue() + tmp.get(studentsNewEnumMap.getKey()));
