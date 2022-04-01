@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.cards.AssistantCard;
 import it.polimi.ingsw.model.cards.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Students;
+import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.ArrayList;
@@ -13,14 +14,14 @@ import java.util.Map;
  * @author Amrit
  */
 public class Player implements Comparable<Player> {
-    private String nickname;
+    private final String nickname;
     private SchoolBoard schoolBoard;
-    private Students towerColors;
+    private final Towers towerColors;
     private AssistantCardDeck assistantCardDeck;
     private AssistantCard playedCard;
     private int characterCard;
 
-    public Player(String nickname, Students towerColors, int numberOfPlayers) {
+    public Player(String nickname, Towers towerColors, int numberOfPlayers) {
         this.nickname = nickname;
         this.schoolBoard = new SchoolBoard(numberOfPlayers);
         this.towerColors = towerColors;
@@ -85,7 +86,7 @@ public class Player implements Comparable<Player> {
         return schoolBoard;
     }
 
-    public Students getTowerColors() {
+    public Towers getTowerColors() {
         return towerColors;
     }
 
@@ -111,5 +112,13 @@ public class Player implements Comparable<Player> {
 
     public int getCharacterCard() {
         return characterCard;
+    }
+
+    public boolean hasProfessorOfStudent(Students student) throws IncorrectArgumentException {
+        return schoolBoard.hasProfessorOfStudent(student);
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 }
