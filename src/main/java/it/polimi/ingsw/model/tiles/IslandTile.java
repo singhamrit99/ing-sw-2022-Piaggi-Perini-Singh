@@ -39,7 +39,7 @@ public class IslandTile implements Tile {
         return students;
     }
 
-    public int getTowers() {
+    public int getNumOfTowers() {
         return numberOfTowers;
     }
 
