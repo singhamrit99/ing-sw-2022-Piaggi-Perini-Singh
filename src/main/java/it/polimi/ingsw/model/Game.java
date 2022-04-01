@@ -2,8 +2,6 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.model.cards.CharacterCard;
-import it.polimi.ingsw.model.cards.FillCharacterDeck;
 import it.polimi.ingsw.model.cards.FillDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
@@ -40,43 +38,10 @@ public class Game {
     private int counter;
     private boolean playerDrawnOut;
     private Player winner;
-    private ArrayList<CharacterCard> listOfCharacters;
-    private FillCharacterDeck characterDeckBuilder;
     private Scanner reader = new Scanner(System.in);
     private String fileContent;
     private IslandTile[] importingIslands;
     private CloudTile[] importingClouds;
-
-    public void loadCharacters() {
-
-        characterDeckBuilder.newDeck();
-
-    }
-
-    public void pickCharacter(Player player) {
-        int answer = 0;
-        char response = 0;
-        boolean getnewinput = true;
-        System.out.println("Choose your character!");
-
-        for (CharacterCard c : listOfCharacters) {
-            System.out.println("Power number" + c.getCharacterID() + ":" + c.getPowerDescription() + "\n");
-        }
-        while (getnewinput) {
-            System.out.println("Choose a power 1-12!\n");
-            answer = reader.nextInt();
-            if (answer > 12 || answer < 1) {
-                System.out.println("Invalid character number! Try again\n");
-            } else {
-                System.out.println("You chose character number " + answer + ". Are you sure? Y/N \n");
-                response = reader.next().charAt(0);
-                if (response == 'y' || response == 'Y')
-                    getnewinput = false;
-            }
-        }
-        System.out.println("You chose character number " + answer + ".");
-        player.setCharacterCard(answer);
-    }
 
     public Game(boolean expertMode, int numOfPlayer) {
         this.expertMode = expertMode;
@@ -87,7 +52,7 @@ public class Game {
         //Loading IslandTiles Json file
         Gson gson = new Gson();
         try {
-            InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(streamReader);
             fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
         } catch (Exception FileNotFound) {
@@ -98,7 +63,7 @@ public class Game {
 
         // initialization clouds;
         try { //Loading CloudTiles JSON file
-            InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.CLOUD_TILES_LOCATION), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(FillDeck.class.getResourceAsStream(GetPaths.CLOUD_TILES_LOCATION)), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(streamReader);
             fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
         } catch (Exception FileNotFound) {

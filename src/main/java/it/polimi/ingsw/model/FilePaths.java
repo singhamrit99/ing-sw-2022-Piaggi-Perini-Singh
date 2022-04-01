@@ -5,7 +5,6 @@ package it.polimi.ingsw.model;
 public interface FilePaths {
 
     String ASSISTANT_CARDS_LOCATION = "/Cards.json";
-    String CHARACTER_CARDS_LOCATION = "/Characters.json";
     String ISLAND_TILES_LOCATION = "/IslandTiles.json";
     String CLOUD_TILES_LOCATION= "/Clouds.json";
 

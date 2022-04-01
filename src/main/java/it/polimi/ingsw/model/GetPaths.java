@@ -8,15 +8,5 @@ public class GetPaths implements FilePaths {
         return ASSISTANT_CARDS_LOCATION;
     }
 
-    public String getCharactersLocation() {
-
-        return CHARACTER_CARDS_LOCATION;
-    }
-
-    public String getTilesLocation() {
-
-        return CHARACTER_CARDS_LOCATION;
-    }
-
 
 }

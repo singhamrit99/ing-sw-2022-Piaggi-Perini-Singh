@@ -34,7 +34,6 @@ public void shouldPassFilepathsasStrings()
     Assertions.assertEquals(GetPaths.ASSISTANT_CARDS_LOCATION, "InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(pathToJSON), StandardCharsets.UTF_8);\n" +
             "            JsonReader jsonReader = new JsonReader(streamReader);\n" +
             "             fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ASSISTANT_CARDS_LOCATION)));");
-    Assertions.assertEquals(GetPaths.CHARACTER_CARDS_LOCATION, "src/main/resources/Characters.json");
     Assertions.assertEquals(GetPaths.ISLAND_TILES_LOCATION, "src/main/resources/IslandTiles.json");
     Assertions.assertEquals(GetPaths.CLOUD_TILES_LOCATION, "src/main/resources/Clouds.json");
 
