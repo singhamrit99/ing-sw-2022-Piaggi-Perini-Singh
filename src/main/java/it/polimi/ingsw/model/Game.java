@@ -135,9 +135,8 @@ public class Game {
 
         // create Bag and students
         EnumMap<Students,Integer> students = new EnumMap(Students.class);
-        for(int i = 0; i < Students.values().length; i++ ){
-            // StudentDisc student = new StudentDisc(Colors.getColor(i)); TO FIX
-            // students.put(student,2); //for the 'placing Islands phase' TO FIX
+        for(Students studentColor : Students.values()){
+            students.put(studentColor,2);
         }
         bag = new Bag(students);
 
@@ -155,9 +154,8 @@ public class Game {
 
         //Re-populate the Bag after 'placing Islands and Students phase'
         students = new EnumMap(Students.class);
-        for(int i = 0; i < Students.values().length -3 ; i++ ){  //3 are the colors of the towers
-            //StudentDisc student = new StudentDisc(Colors.getColor(i)); TO FIX
-            //students.put(student,24); //total students are 26 - 2 (that are on the islands) for each color TO FIX
+        for(Students studentColor : Students.values()){
+            students.put(studentColor,24); //26  (total discStudents) -2 (used before) for each color
         }
         bag = new Bag(students);
 
