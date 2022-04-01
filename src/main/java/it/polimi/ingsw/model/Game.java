@@ -24,20 +24,20 @@ import java.util.*;
 public class Game {
     private int expertMode = 0;
     private State state;
+    private Bag bag;
     private int numOfPlayer;
-    private LinkedList<Player> players;
-    private PriorityQueue<Player> orderPlayers;
     private Player currentPlayer;
     private Player firstPlayerPlanPhase;
+    private LinkedList<Player> players;
+    private ListIterator<Player> playerIterator;
+    private PriorityQueue<Player> orderPlayers;
     private LinkedList<IslandTile> islands;
     private CloudTile[] clouds;
-    private Bag bag;
     private int motherNaturePosition;
     private int numRounds;
     private int numDrawnStudents;
     private int counter;
     private boolean playerDrawnOut;
-    private ListIterator<Player> playerIterator;
     private Player winner;
     private ArrayList<CharacterCard> listOfCharacters;
     private FillCharacterDeck characterDeckBuilder;
@@ -85,9 +85,8 @@ public class Game {
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
 
-
-        Gson gson = new Gson();
-        //Loading IslandTiles Json file
+        // initialization islands;
+        Gson gson = new Gson(); //Loading IslandTiles Json file
         try {
             InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(streamReader);
@@ -95,25 +94,22 @@ public class Game {
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
-
         IslandTile[] importingIslands = gson.fromJson(fileContent, IslandTile[].class);
-        // initialization LinkedList<IslandTile> islands;
         islands = new LinkedList<>(islands);
         for (int i = 0; i < 12; i++) {
             IslandTile island = new IslandTile(importingIslands[i].getName());
             islands.add(island);
         }
-        //Loading CloudTiles JSON file
-        try {
+
+        // initialization clouds;
+        try { //Loading CloudTiles JSON file
             InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.CLOUD_TILES_LOCATION), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(streamReader);
             fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
-
         CloudTile[] importingClouds = gson.fromJson(fileContent, CloudTile[].class);
-        // initialization clouds[];
         clouds = new CloudTile[numOfPlayer];
         for (int i = 0; i < numOfPlayer; i++) {
             CloudTile cloud = new CloudTile(importingClouds[i].name);
@@ -126,8 +122,6 @@ public class Game {
         playerIterator.set(firstPlayerPlanPhase);
         playerDrawnOut = false;
         state = State.PLANNINGPHASE;
-
-        //initialization PriorityQueue<Player>
         orderPlayers = new PriorityQueue<>(numOfPlayer);
     }
 
@@ -205,11 +199,6 @@ public class Game {
         } else throw new IncorrectStateException();
     }
 
-    public boolean isGameOver() throws IncorrectArgumentException {
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
-        else return false;
-    }
-
 
     public void takeStudentsFromCloud(Player playerCaller, int index) throws IncorrectStateException, IncorrectPlayerException {
         if (state == State.ACTIONPHASE) {
@@ -222,40 +211,39 @@ public class Game {
     }
 
     //0 dining room , 1 to island tile
-    public void moveStudents(EnumMap<Students, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
-        int i = 0;
-        EnumMap<Students, Integer> studentsToMoveToIsland = new EnumMap(Students.class);
+    public void moveStudents(HashMap<StudentDisc, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
+        int DestCounter = 0;
+        HashMap<StudentDisc, Integer> studentsToMoveToIsland = new HashMap<>();
         if (students.size() == destinations.size()) {
-            for (Map.Entry<Students, Integer> set : students.entrySet()) {
-                if (destinations.get(i) == 1) {
+            for (Map.Entry<StudentDisc, Integer> set : students.entrySet()) {
+                if (destinations.get(DestCounter) == 1) {
                     studentsToMoveToIsland.put(set.getKey(), set.getValue());
-
-                } else {
-                    throw new IncorrectArgumentException();
-
                 }
-                i++;
+                DestCounter++;
             }
         } else {
             throw new IncorrectArgumentException();
         }
-
+        //The game sends to the player also the students that go to the islands because the player has to remove them from the entrance
         currentPlayer.moveStudents(students, destinations);
-        /*
-        if (studentsToMoveToIsland.size() != 0 && studentsToMoveToIsland.size() == islandDestinations.size()){
-            boolean found = false;
-            for (String dest : islandDestinations){
-                for(IslandTile island : islands ){
-                    if(island.getName().equals){
-                        found = true;
-                        //island.addStudents(studentsToMoveToIsland;
-                        break;
+        //If there are students directed to the islands I check that that the islands string arraylist has the right size
+        if (studentsToMoveToIsland.size() != 0 && studentsToMoveToIsland.size() == islandDestinations.size()) {
+            boolean islandNameFound = true;
+            for (String dest : islandDestinations) {
+                if (islandNameFound) { //I check that the Island that I was searching in the last iteration it's found
+                    islandNameFound = false;
+                    for (IslandTile island : islands) {
+                        if (island.getName().equals(dest)) {
+                            islandNameFound = true;
+                            island.addStudents(studentsToMoveToIsland);
+                            break;
+                        }
                     }
+                } else {
+                    throw new IncorrectArgumentException("The island is not found");
                 }
             }
         }
-        */
-
     }
 
 
@@ -265,8 +253,8 @@ public class Game {
             if (currentPlayer.moveMotherNature(distanceChoosen)) {
                 islands.get(motherNaturePosition).removeMotherNature();
                 islands.get(destinationMotherNature).moveMotherNature();
-                //islands.get(destinationMotherNature).getStudents(); islands.getTowers() and islands.getOwner()
-                //check which player has that color professor and eventually place the tower in that islands using checkAndPlaceTower
+                //check which player has that color professor
+
             } else {
                 throw new IncorrectArgumentException();
             }
@@ -289,13 +277,13 @@ public class Game {
         //Based on AMrit changes I will probably have to tell to each player if is not the max one to remove the professor with that color
     }
 
-    private void checkAndPlaceTower() throws IncorrectArgumentException { // UML this method became private
+    private void checkAndPlaceTower() throws IncorrectArgumentException {
         // I need to decrement towers
         //I need to know towers number from player, if 0 -> wins
         checkUnificationIslands();
     }
 
-    private void checkUnificationIslands() throws IncorrectArgumentException { // UML this method became private
+    private void checkUnificationIslands() throws IncorrectArgumentException {
         boolean listChanged = false;
         ListIterator<IslandTile> it = islands.listIterator();
         IslandTile currentTile;
@@ -314,6 +302,10 @@ public class Game {
         if (listChanged) checkUnificationIslands();
     }
 
+    public boolean isGameOver() throws IncorrectArgumentException {
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
+        else return false;
+    }
 
     public void checkWinner() {
         for (Player p : players) {
