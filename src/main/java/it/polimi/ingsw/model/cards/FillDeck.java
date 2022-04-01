@@ -16,9 +16,10 @@ public class FillDeck {
 
     private ArrayList<AssistantCard> deck;
 
-    public void newDeck(String pathToJSON, ArrayList<AssistantCard> deck) {
-        this.deck = new ArrayList<AssistantCard>();
+    public ArrayList<AssistantCard> newDeck(String pathToJSON, ArrayList<AssistantCard> deck) {
+        this.deck = new ArrayList<>();
         loadFromJSON();
+        return deck;
     }
 
     private void loadFromJSON() {
