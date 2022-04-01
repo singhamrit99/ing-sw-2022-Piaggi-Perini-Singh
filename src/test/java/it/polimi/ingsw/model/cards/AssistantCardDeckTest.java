@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.GetPaths;
 import org.junit.Before;
@@ -109,20 +110,9 @@ public void shouldPassFilepathsasStrings()
 
     }
 
-   /* @Test
-    @DisplayName("Can I find the files?")
-    public void shouldFindFiles()
-    {
-        URL url = String.class.getResource("src/main/resources/Cards.json");
-        URL expected= new URL("src/main/resources/Cards.json");
-
-        Assertions.assertEquals(expected, url);
-
-
-
-    }*/
-   /* void shouldFillDeck(){
-        String jsoncontent= new String;
+    @Test
+    public void shouldFillDeck(){
+        String jsoncontent;
          jsoncontent= "[\n" +
                  "  {\n" +
                  "    \"name\": \"Assistente(1)\",\n" +
@@ -171,9 +161,27 @@ public void shouldPassFilepathsasStrings()
                  "\n" +
                  "]";
         Gson gson = new Gson();
-        ArrayList<AssistantCard> TestArray = gson.fromJson(jsoncontent, AssistantCard.class);
+        try {
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream("/Cards.json")), StandardCharsets.UTF_8);
+            //JsonReader jsonReader = new JsonReader(streamReader);
+            Scanner s= new Scanner(streamReader).useDelimiter("\\A");
+             jsoncontent = s.hasNext() ? s.next(): "";
 
-    }*/
+
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        ArrayList<AssistantCard> TestArray = gson.fromJson(jsoncontent, new TypeToken<List<AssistantCard>>(){}.getType());
+
+        Assertions.assertEquals(1, TestArray.get(0).getValue());
+        Assertions.assertEquals("Assistente(1)", TestArray.get(0).getName());
+        Assertions.assertEquals("Assistente(10)",TestArray.get(9).getName());
+
+
+    }
 
 
 
