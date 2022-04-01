@@ -19,7 +19,19 @@ public class CharacterCard extends Card{
 
     private String powerDescription;
 
+    public CharacterCard(int characterID, int startingPrice, int price, String powerDescription) {
+        this.characterID = characterID;
+        this.startingPrice = startingPrice;
+        this.price = price;
+        this.powerDescription = powerDescription;
+    }
+
     public CharacterCard() {
+        if(this.characterID==1)
+        {
+
+        }
+
     }
 
     public int getCharacterID() {
@@ -47,7 +59,32 @@ public class CharacterCard extends Card{
     }
 
     //Puppet method that gets overridden in each specific card class.
-    public void callPower(Player playercaller, int id) {}
+    public void callPower(Player playercaller, int id) {
+        if (id==1)
+        {
+            //Call setup card
+        }
+        else if(id>=2&&id<=4)
+        {
+            //Call StudentSetup card
+        }
+        else if(id>=5&&id<=8)
+        {
+            //Call InfluenceCard
+        }
+        else if(id>=9&&id>=11)
+        {
+            //Call TokenManipCard
+        }
+        else if (id==13)
+        {
+            //Call MNmanip card
+        }
+        else
+        {
+            System.out.println("Invalid ID from Player");
+        }
+    }
 
 
     public String getPowerDescription() {

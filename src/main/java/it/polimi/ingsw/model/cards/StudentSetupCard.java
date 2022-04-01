@@ -10,6 +10,12 @@ import java.util.Map;
 //This class of cards has a resource counter on it, thus needing to be initialized at the beginning of the game. CharacterIDs range from 1 to 3
 public class StudentSetupCard extends CharacterCard {
 
+    public StudentSetupCard(int characterID, int startingPrice, int price, String powerDescription, EnumMap<Students, Integer> studentsonCard, int id) {
+        super(characterID, startingPrice, price, powerDescription);
+        this.studentsonCard = studentsonCard;
+        this.id = id;
+    }
+
     private EnumMap<Students, Integer> studentsonCard = new EnumMap(Students.class);
     int id = this.getCharacterID();
 

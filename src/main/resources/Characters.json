@@ -6,15 +6,15 @@
     "id": 1,
     "initialcost": 1,
     "power": "setup",
-    "description": "Move students on the character card to any isle you wish!"
-
+    "description": "Move students on the character card to any isle you wish!",
+    "resourcestartingcount": 1
 
 
   },
   {
     "id": 2,
     "initialcost": 2,
-    "": "setup",
+    "power": "setup",
     "description": "Place a No Entry card on an isle and block Mother Nature's power once!"
 
 

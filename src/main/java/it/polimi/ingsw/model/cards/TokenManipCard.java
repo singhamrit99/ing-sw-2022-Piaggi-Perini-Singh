@@ -6,8 +6,9 @@ import it.polimi.ingsw.model.enumerations.Students;
 //This class of cards' power manipulates student tokens and professor behaviour connected to them. CharacterIDs range from 9 to 11
 public class TokenManipCard extends CharacterCard {
 
-
-    int id = this.getCharacterID();
+    public TokenManipCard(int characterID, int startingPrice, int price, String powerDescription, int id) {
+        super(characterID, startingPrice, price, powerDescription);
+    }
 
     @Override
     public void callPower(Player playercaller, int id) {

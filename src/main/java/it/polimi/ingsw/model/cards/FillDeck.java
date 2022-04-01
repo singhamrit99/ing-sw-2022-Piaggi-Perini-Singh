@@ -15,7 +15,7 @@ import com.google.gson.*;
 public class FillDeck {
 
     private ArrayList<AssistantCard> deck;
-
+    private String fileContent;
     public ArrayList<AssistantCard> newDeck(String pathToJSON, ArrayList<AssistantCard> deck) {
         this.deck = new ArrayList<>();
         loadFromJSON();
@@ -28,8 +28,8 @@ public class FillDeck {
         try {
             InputStreamReader streamReader = new InputStreamReader(FillDeck.class.getResourceAsStream(GetPaths.ASSISTANT_CARDS_LOCATION), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(streamReader);
-            String fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ASSISTANT_CARDS_LOCATION)));
-            deck = gson.fromJson(jsonReader, AssistantCard.class);
+             fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ASSISTANT_CARDS_LOCATION)));
+            deck = gson.fromJson(fileContent, ArrayList.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,4 +38,5 @@ public class FillDeck {
     public ArrayList<AssistantCard> getDeck() {
         return deck;
     }
+    public String getjson(){ return fileContent;}
 }

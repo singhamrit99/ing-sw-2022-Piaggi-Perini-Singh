@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.Player;
 //This class of cards' power modifies Mother Nature's behaviour. CharacterID is 13, as it is one lone card.
 public class MNManipCard extends CharacterCard {
 
+    public MNManipCard(int characterID, int startingPrice, int price, String powerDescription) {
+        super(characterID, startingPrice, price, powerDescription);
+    }
 
     @Override
     public void callPower(Player playercaller, int id) {

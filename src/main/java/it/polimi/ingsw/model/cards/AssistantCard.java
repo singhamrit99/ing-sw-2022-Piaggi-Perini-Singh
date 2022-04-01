@@ -19,6 +19,13 @@ public class AssistantCard extends Card {
 
     }
 
+    public AssistantCard(int value, int move, String wizard, boolean hasPlayed) {
+        this.value = value;
+        this.move = move;
+        this.wizard = wizard;
+        this.hasPlayed = hasPlayed;
+    }
+
     public int getMove() {
         return move;
     }
