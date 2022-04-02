@@ -29,15 +29,13 @@ public class FillDeck {
     private ArrayList<AssistantCard> loadFromJSON( ArrayList<AssistantCard> deck) {
         Gson gson = new Gson();
 
-        try {
+
             InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream("/Cards.json")), StandardCharsets.UTF_8);
-            //JsonReader jsonReader = new JsonReader(streamReader);
+
             Scanner s= new Scanner(streamReader).useDelimiter("\\A");
             String jsoncontent = s.hasNext() ? s.next(): "";
             deck  = gson.fromJson(jsoncontent, new TypeToken<List<AssistantCard>>(){}.getType());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         return deck;
     }
 

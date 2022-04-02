@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.cards;
 
-//This is the least specific Card in the game, as it refers both to Assistant Cards and Character Chards.
+//This is the least specific Card in the game.
 public abstract class Card {
 
     private String name;
