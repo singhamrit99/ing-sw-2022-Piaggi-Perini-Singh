@@ -11,7 +11,6 @@ import java.util.Map;
 public class IslandTile implements Tile {
     private String name;
     private EnumMap<Colors, Integer> students;
-    private Player towerOwner;
     private int numberOfTowers;
     private Towers towersColor;
     private boolean hasMotherNature;
@@ -20,7 +19,7 @@ public class IslandTile implements Tile {
     public IslandTile(String islandname) {
         name = islandname;
         hasMotherNature = false;
-        towerOwner = null;
+        towersColor = Towers.WHITE;
         numberOfTowers = 0;
         hasNoEntryTile = false;
     }
@@ -29,11 +28,11 @@ public class IslandTile implements Tile {
         return name;
     }
 
-    public Player getOwner() {
-        return towerOwner;
+    public Towers getTowersColor() {
+        return towersColor;
     }
-    public void setOwner(Player player) {
-        towerOwner = player;
+    public void setTowersColor(Towers newColor) {
+        towersColor=newColor;
     }
 
     public EnumMap<Colors, Integer> getStudents() {
