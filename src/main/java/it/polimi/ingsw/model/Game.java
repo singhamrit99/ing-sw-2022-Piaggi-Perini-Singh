@@ -154,8 +154,8 @@ public class Game {
         orderPlayers = new PriorityQueue<>(numOfPlayer);
     }
 
-    public void drawFromBag(Player playerCaller) throws IncorrectArgumentException {
-        if (state == State.PLANNINGPHASE && playerCaller.getNickname().equals(currentPlayer.getNickname()) && !playerDrawnOut) {
+    public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException {
+        if (state == State.PLANNINGPHASE && nicknameCaller.equals(currentPlayer.getNickname()) && !playerDrawnOut) {
             for (CloudTile cloud : clouds) {
                 cloud.addStudents(bag.drawStudents(numDrawnStudents));
             }
@@ -175,11 +175,11 @@ public class Game {
             throw new IncorrectStateException();
         }
         orderPlayers.add(currentPlayer);
-        nextPlayer(currentPlayer);
+        nextPlayer(currentPlayer.getNickname());
     }
 
-    private void nextPlayer(Player callerPlayer) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
-        if (callerPlayer.equals(currentPlayer)) { //TODO Player equals method
+    private void nextPlayer(String nicknameCaller) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
+        if (nicknameCaller.equals(currentPlayer.getNickname())) { //TODO Player equals method
             if (state == State.PLANNINGPHASE) {
                 if (counter > 0) {
                     counter--;
@@ -261,6 +261,8 @@ public class Game {
                 }
             }
         }
+
+        checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
     }
 
     public void moveMotherNature(int distanceChoosen) throws IncorrectArgumentException, MotherNatureLostException {
@@ -302,60 +304,91 @@ public class Game {
     }
 
     private void checkAndPlaceTower(IslandTile island) throws IncorrectArgumentException {
-        HashMap<Player, Integer> influenceScores = new HashMap<>();
-        for (Player p : players) {
-            influenceScores.put(p, 0);
-        }
+        HashMap<Towers, Integer> influenceScores = new HashMap<>();
+        influenceScores.put(Towers.BLACK, 0);
+        influenceScores.put(Towers.WHITE, 0);
+        if (numOfPlayer % 2 == 1) influenceScores.put(Towers.GREY, 0);
 
         EnumMap<Colors, Integer> students = island.getStudents();
 
         for (Colors studentColor : Colors.values()) {
-            if (students.get(studentColor) != 0) {
-                //find the player with that professor
+            if (students.get(studentColor) != 0){
                 for (Player p : players) {
-                    if (p.hasProfessorOfColor(studentColor)) {
-                        influenceScores.replace(p, influenceScores.get(p) + students.get(studentColor));
-                        //If it's the island owner I also add the towers number
-                        if (p.getNickname().equals(island.getOwner().getNickname())) {
-                            influenceScores.replace(p, influenceScores.get(p) + island.getNumOfTowers());
+                    if (p.hasProfessorOfColor(studentColor)){ //find the player with that professor
+                        Towers teamColor = p.getTowerColor();
+                        influenceScores.replace(teamColor, influenceScores.get(teamColor) + students.get(studentColor));
+                        if (teamColor.equals(island.getTowersColor())) { //counting the towers if team owns the island
+                            influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers());
                         }
                     }
                 }
             }
+        }
 
-            Player maxScorePlayer = null; //new owner
-            int maxScore = 0;
-            for (Player p : players) {
-                if (influenceScores.get(p) > maxScore) {
-                    maxScorePlayer = p;
-                    maxScore = influenceScores.get(p);
-                } else if (influenceScores.get(p) == maxScore) {
-                    maxScorePlayer = null; // there is a TIE!
-                }
-            }
-
-            if (maxScorePlayer != null) { //there is a max player
-                if (island.getOwner() == null) {
-                    island.setOwner(maxScorePlayer);
-                    maxScorePlayer.moveTowers(-1);
-                    island.sumTowers(1);
-                    checkUnificationIslands();
-                } else if ((!maxScorePlayer.getNickname().equals(island.getOwner().getNickname()))) { //the player with max influence is not the owner
-                    //I tell the owner to remove his towers
-                    int towersRemoved = island.getNumOfTowers();
-                    island.getOwner().moveTowers(towersRemoved);
-                    // Taking the same amount of towers from the new owner
-                    maxScorePlayer.moveTowers(towersRemoved);
-                    // Finally declaring the new owner
-                    island.setOwner(maxScorePlayer);
-                    checkUnificationIslands();
-                }
+        Towers newTeamOwner = null; //new owner
+        int maxScore = 0;
+        for (Map.Entry<Towers, Integer> team : influenceScores.entrySet()) {
+            if (team.getValue() > maxScore) {
+                newTeamOwner = team.getKey();
+                maxScore = team.getValue();
+            } else if (team.getValue() == maxScore) {
+                newTeamOwner = null; // there is a TIE! -> no new Team owner
             }
         }
-        // I make an array[numOfPlayer] in that array for each player I check all the students in that island
 
+        if (newTeamOwner != null) {
+            ArrayList<Player> newTeam = findPlayerFromTeam(newTeamOwner);
+            if (island.getTowersColor() == null){// The island was empty
+                moveTowersFromTeam(newTeam, -island.getNumOfTowers());
+            } else if (newTeamOwner != island.getTowersColor()) { //it means that there is a switch from team
+                int switchedTowers = island.getNumOfTowers();
+                moveTowersFromTeam(newTeam, -switchedTowers); //removing towers from new team player
+                ArrayList<Player> oldTeam = findPlayerFromTeam(island.getTowersColor()); //oldTeamOwnerShip
+                moveTowersFromTeam(oldTeam, switchedTowers); //adding towers to old team
+                island.setTowersColor(newTeamOwner); //set ownership
+            }
+        }
+    }
 
-        //I need to know towers number from player, if 0 -> wins
+    private ArrayList<Player> findPlayerFromTeam(Towers teamColor) {
+        Player firstPlayer = null;
+        Player secondPlayer = null; // in case of 4 players I have to check both players of the team
+        for (Player p : players) {
+            if (p.getTowerColor() == teamColor) if (firstPlayer == null) {
+                firstPlayer = p;
+                if (numOfPlayer != 4) break;
+            } else {
+                secondPlayer = p;
+            }
+        }
+        ArrayList<Player> returnedPlayers = new ArrayList<Player>();
+        returnedPlayers.add(firstPlayer);
+        if (secondPlayer != null) returnedPlayers.add(secondPlayer);
+
+        return returnedPlayers;
+    }
+
+    private void moveTowersFromTeam(ArrayList<Player> team, int amount) {
+        int numbersOfIterations = Math.abs(amount);
+        int oneTowerSigned;
+        if (amount < 0) oneTowerSigned = -1;
+        else oneTowerSigned = 1;
+
+        if (team.get(1) != null) { //It means we are 4 players game
+            while (numbersOfIterations > 0) {
+                if (oneTowerSigned > 0) { //this so that I always add/remove from the correct player
+                    if (team.get(0).getPlayerTowers() <= team.get(1).getPlayerTowers())
+                        team.get(0).moveTowers(oneTowerSigned);
+                    else team.get(1).moveTowers(oneTowerSigned);
+                    numbersOfIterations--;
+                } else {
+                    if (team.get(0).getPlayerTowers() >= team.get(1).getPlayerTowers())
+                        team.get(0).moveTowers(oneTowerSigned);
+                    else team.get(1).moveTowers(oneTowerSigned);
+                    numbersOfIterations--;
+                }
+            }
+        } else team.get(0).moveTowers(amount);
     }
 
     private void checkUnificationIslands() throws IncorrectArgumentException {
@@ -367,7 +400,7 @@ public class Game {
             currentTile = it.next();
             if (it.hasNext()) nextTile = it.next();
             else nextTile = islands.getFirst();
-            if (nextTile.getOwner().equals(currentTile.getOwner())) {
+            if (nextTile.getTowersColor().equals(currentTile.getTowersColor())) {
                 currentTile.addStudents(nextTile.getStudents());
                 currentTile.sumTowers(nextTile.getNumOfTowers());
                 islands.remove(nextTile);
@@ -378,10 +411,10 @@ public class Game {
     }
 
     public boolean isGameOver() throws IncorrectArgumentException {
-        for(Player p: players) {
-         if(p.getPlayerTowers()<=0)return true;
+        for (Player p : players) {
+            if (p.getPlayerTowers() <= 0) return true;
         }
-        if(!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9) return true;
         else return false;
     }
 
