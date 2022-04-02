@@ -156,6 +156,7 @@ public class CardsTest {
 
     //FillDeck testing
 
+    //TODO: exeption handler test
 
     @Test
     @DisplayName("Should check if JSON loaded correctly")
