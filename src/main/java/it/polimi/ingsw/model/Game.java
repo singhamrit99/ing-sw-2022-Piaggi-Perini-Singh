@@ -23,6 +23,7 @@ import java.util.*;
 public class Game {
     private State state;
     private Bag bag;
+    private boolean expertMode;
     private int numOfPlayer;
     private Player currentPlayer;
     private Player firstPlayerPlanPhase;
@@ -44,13 +45,12 @@ public class Game {
     private ArrayList<CharacterCard> listOfCharacters;
     private String jsoncontent;
 
-    public ArrayList<IslandTile> getimportingIslands(){
-        return importingIslands;
-    }
-    public ArrayList<CloudTile> getImportingClouds(){
-        return importingClouds;
-    }
-    public Game(int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException{
+
+
+
+
+    public Game(boolean expertMode,int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException{
+        this.expertMode = expertMode;
         this.numOfPlayer = numOfPlayer;
         numRounds = 0;
         counter = numOfPlayer - 1; //used to 'count' during the Planning Phase
@@ -66,9 +66,9 @@ public class Game {
                 colorTeam = indexColorTeam;
             } else {
                 if (indexColorTeam % 2 == 1) {
-                    colorTeam = 1; //black tower
+                    colorTeam = 0; //black tower
                 } else {
-                    colorTeam = 3; //white tower
+                    colorTeam = 2; //white tower
                 }
             }
             Player newPlayer = new Player(nickname, Towers.values()[colorTeam], numOfPlayer);
@@ -81,14 +81,14 @@ public class Game {
         //Initialization clouds
         clouds = new CloudTile[numOfPlayer];
         for (int i = 0; i < numOfPlayer; i++) {
-            CloudTile cloud = new CloudTile(importingClouds.get(i).getName());
+            CloudTile cloud = new CloudTile("TO REPLACE"); //LORE: importingClouds.get(i).getName()
             clouds[i] = cloud;
         }
 
         // initialization islands;
-        islands = new LinkedList<>(islands);
+        islands = new LinkedList<>();
         for (int i = 0; i < 12; i++) {
-            IslandTile island = new IslandTile(importingIslands.get(i).getName());
+            IslandTile island = new IslandTile("TO REPLACE"); //LORE: importingClouds.get(i).getName()
             islands.add(island);
         }
 
@@ -105,9 +105,9 @@ public class Game {
 
         //calculate opposite MotherNature's Island
         int oppositeMotherNaturePos = 0;
-        if (motherNaturePosition >= islands.size() / 2)
-            oppositeMotherNaturePos = motherNaturePosition + islands.size() - 1;
-        else oppositeMotherNaturePos = motherNaturePosition - islands.size() + 1;
+        if (motherNaturePosition >= islands.size()/2)
+            oppositeMotherNaturePos = motherNaturePosition - islands.size()/2 + 1;
+        else oppositeMotherNaturePos = motherNaturePosition + islands.size()/2 - 1;
         // placing students except MotherNature's Island and the opposite one
         IslandTile islandOppositeMN = islands.get(oppositeMotherNaturePos);
         for (IslandTile island : islands) {
@@ -126,10 +126,10 @@ public class Game {
         //initialization LinkedList<Player>
         playerIterator = players.listIterator();
         firstPlayerPlanPhase = players.get((int)(Math.random() * numOfPlayer)); //random init player
-        playerIterator.set(firstPlayerPlanPhase);
         playerDrawnOut = false;
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
+        currentPlayer = firstPlayerPlanPhase;
     }
 
     public void importingCharactersJson(){
@@ -464,6 +464,22 @@ public class Game {
             if (p.getPlayerTowers() == 0) winner = p;
         }
 
+    }
+
+
+    public ArrayList<IslandTile> getimportingIslands(){
+        return importingIslands;
+    }
+    public ArrayList<CloudTile> getImportingClouds(){
+        return importingClouds;
+    }
+
+    public LinkedList<Player> getPlayers(){
+        return players;
+    }
+
+    public Player getCurrentPlayer(){
+        return currentPlayer;
     }
 
 }
