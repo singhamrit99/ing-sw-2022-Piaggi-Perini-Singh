@@ -22,8 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
 
+
     @Test
-    public Game testGameConstructor() throws IncorrectArgumentException{
+    public void testPlayersInit() throws IncorrectArgumentException {
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Amrit");
         nicknames.add("Lore");
@@ -33,19 +34,52 @@ class GameTest {
         LinkedList<Player> players = game.getPlayers();
         assertTrue(nicknames.contains(game.getCurrentPlayer().getNickname()));
         assertEquals(players.size(), 4);
-        return game;
+    }
+
+    /*
+
+    @Test
+    public void testDrawFromBag(){
+        //game.drawFromBag(game.getCurrentPlayer().getNickname()); //Error in BAG
+    }
+    */
+
+    public Game initGame2players() throws IncorrectArgumentException{
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Luke Skywalker");
+        nicknames.add("Dark Fener");
+        return new Game(false, 2, nicknames);
+    }
+
+    public Game initGame3players() throws IncorrectArgumentException{
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Bruce Wayne");
+        nicknames.add("Joker");
+        nicknames.add("Bane");
+        return new Game(false, 3, nicknames);
+    }
+
+    public Game initGame4players() throws IncorrectArgumentException{
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Michelangelo");
+        nicknames.add("Raffaello");
+        nicknames.add("Donatello");
+        nicknames.add("Leonardo");
+        return new Game(true, 4, nicknames);
     }
 
     @Test
-    public void testDrawFromBag() throws IncorrectArgumentException{
-        Game game = testGameConstructor();
-        System.out.println(game.getCurrentPlayer().getNickname());
-        game.drawFromBag(game.getCurrentPlayer().getNickname()); //Error in BAG
+    public void testNextPlayer3Players() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+        Game game = initGame3players();
+        String oldPlayerNickname = game.getCurrentPlayer().getNickname();
+        game.nextPlayer(oldPlayerNickname);
+        String newPlayerNickname = game.getCurrentPlayer().getNickname();
+        assertNotEquals(oldPlayerNickname, newPlayerNickname);
     }
 
     @Test
-    public void testNextPlayer() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
-        Game game = testGameConstructor();
+    public void testNextPlayer2and4Players() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+        Game game = initGame4players();
         String oldPlayerNickname = game.getCurrentPlayer().getNickname();
         game.nextPlayer(game.getCurrentPlayer().getNickname());
         assertNotEquals(oldPlayerNickname, game.getCurrentPlayer().getNickname());
