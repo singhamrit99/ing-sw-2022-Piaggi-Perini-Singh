@@ -19,7 +19,7 @@ import com.google.gson.*;
 
 public class FillCharacterDeck {
 
-    private ArrayList<AssistantCard> deck;
+    private ArrayList<CharacterCard> deck;
     private String fileContent;
     public ArrayList<AssistantCard> newDeck(ArrayList<AssistantCard> deck) {
         this.deck = new ArrayList<>();
@@ -35,7 +35,7 @@ public class FillCharacterDeck {
 
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
             String jsoncontent = s.hasNext() ? s.next() : "";
-            deck = gson.fromJson(jsoncontent, new TypeToken<List<AssistantCard>>() {
+            deck = gson.fromJson(jsoncontent, new TypeToken<List<CharacterCard>>() {
             }.getType());
 
         }

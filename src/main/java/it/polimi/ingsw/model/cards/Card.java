@@ -4,6 +4,7 @@ package it.polimi.ingsw.model.cards;
 public abstract class Card {
 
     private String name;
+    private String type;
 
     public String getName() {
         return name;

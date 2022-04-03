@@ -161,6 +161,7 @@ public class CardsTest {
         String fileContent;
         expected = "[\n" +
                 "  {\n" +
+                "    \"type\": \"assistant\",\n" +
                 "    \"name\": \"Assistente(1)\",\n" +
                 "    \"value\": 1,\n" +
                 "    \"move\" : 1,\n" +
@@ -169,6 +170,7 @@ public class CardsTest {
                 "\n" +
                 "  },\n" +
                 "  {\n" +
+                "    \"type\": \"assistant\",\n" +
                 "    \"name\": \"Assistente(2)\",\n" +
                 "    \"value\": 2,\n" +
                 "    \"move\" : 1,\n" +
@@ -176,48 +178,56 @@ public class CardsTest {
                 "    \"hasplayed\": false\n" +
                 "  },\n" +
                 "  {\n" +
+                "    \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(3)\",\n" +
                 "  \"value\": 3,\n" +
                 "  \"move\" : 2,\n" +
                 "    \"wizard\": \"none\",\n" +
                 "    \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(4)\",\n" +
                 "  \"value\": 4,\n" +
                 "  \"move\" : 2,\n" +
                 "  \"wizard\": \"none\",\n" +
                 "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(5)\",\n" +
                 "  \"value\": 5,\n" +
                 "  \"move\" : 3,\n" +
                 "  \"wizard\": \"none\",\n" +
                 "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(6)\",\n" +
                 "  \"value\": 6,\n" +
                 "  \"move\" : 3,\n" +
                 "  \"wizard\": \"none\",\n" +
                 "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(7)\",\n" +
                 "  \"value\": 7,\n" +
                 "  \"move\" : 4,\n" +
                 "  \"wizard\": \"none\",\n" +
                 "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(8)\",\n" +
                 "  \"value\": 8,\n" +
                 "  \"move\" : 4,\n" +
                 "  \"wizard\": \"none\",\n" +
                 "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(9)\",\n" +
                 "  \"value\": 9,\n" +
                 "  \"move\" : 5,\n" +
                 "  \"wizard\": \"none\",\n" +
                 "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(10)\",\n" +
                 "  \"value\": 10,\n" +
                 "  \"move\" : 5,\n" +
@@ -246,48 +256,78 @@ public class CardsTest {
         String jsoncontent;
         jsoncontent = "[\n" +
                 "  {\n" +
+                "    \"type\": \"assistant\",\n" +
                 "    \"name\": \"Assistente(1)\",\n" +
                 "    \"value\": 1,\n" +
-                "    \"move\" : 1\n" +
+                "    \"move\" : 1,\n" +
+                "    \"wizard\": \"none\",\n" +
+                "    \"hasplayed\": false\n" +
                 "\n" +
                 "  },\n" +
                 "  {\n" +
+                "    \"type\": \"assistant\",\n" +
                 "    \"name\": \"Assistente(2)\",\n" +
-                "    \"value\": 1,\n" +
-                "    \"move\" : 1\n" +
+                "    \"value\": 2,\n" +
+                "    \"move\" : 1,\n" +
+                "    \"wizard\": \"none\",\n" +
+                "    \"hasplayed\": false\n" +
                 "  },\n" +
                 "  {\n" +
+                "    \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(3)\",\n" +
                 "  \"value\": 3,\n" +
-                "  \"move\" : 2\n" +
+                "  \"move\" : 2,\n" +
+                "    \"wizard\": \"none\",\n" +
+                "    \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(4)\",\n" +
                 "  \"value\": 4,\n" +
-                "  \"move\" : 2\n" +
+                "  \"move\" : 2,\n" +
+                "  \"wizard\": \"none\",\n" +
+                "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(5)\",\n" +
                 "  \"value\": 5,\n" +
-                "  \"move\" : 3\n" +
+                "  \"move\" : 3,\n" +
+                "  \"wizard\": \"none\",\n" +
+                "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(6)\",\n" +
                 "  \"value\": 6,\n" +
-                "  \"move\" : 3\n" +
+                "  \"move\" : 3,\n" +
+                "  \"wizard\": \"none\",\n" +
+                "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(7)\",\n" +
                 "  \"value\": 7,\n" +
-                "  \"move\" : 4\n" +
+                "  \"move\" : 4,\n" +
+                "  \"wizard\": \"none\",\n" +
+                "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(8)\",\n" +
                 "  \"value\": 8,\n" +
-                "  \"move\" : 4\n" +
+                "  \"move\" : 4,\n" +
+                "  \"wizard\": \"none\",\n" +
+                "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(9)\",\n" +
                 "  \"value\": 9,\n" +
-                "  \"move\" : 5\n" +
+                "  \"move\" : 5,\n" +
+                "  \"wizard\": \"none\",\n" +
+                "  \"hasplayed\": false\n" +
                 "}, {\n" +
+                "  \"type\": \"assistant\",\n" +
                 "  \"name\": \"Assistente(10)\",\n" +
                 "  \"value\": 10,\n" +
-                "  \"move\" : 5\n" +
+                "  \"move\" : 5,\n" +
+                "  \"wizard\": \"none\",\n" +
+                "  \"hasplayed\": false\n" +
                 "}\n" +
                 "\n" +
                 "]";

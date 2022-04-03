@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.cards.AssistantCard;
+import it.polimi.ingsw.model.cards.CharacterCard;
 import it.polimi.ingsw.model.cards.FillDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
@@ -40,6 +41,7 @@ public class Game {
     private String fileContent;
     private ArrayList<IslandTile> importingIslands;
     private ArrayList<CloudTile> importingClouds;
+    private ArrayList<CharacterCard> listOfCharacters;
     private String jsoncontent;
 
     public ArrayList<IslandTile> getimportingIslands(){
@@ -129,14 +131,53 @@ public class Game {
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
     }
-    //TODO fix json loading
+
+    public void importingCharactersJson(){
+        Gson gson = new Gson();
+        try {
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.CHARACTER_CARDS_LOCATION)), StandardCharsets.UTF_8);
+            Scanner s = new Scanner(streamReader).useDelimiter("\\A");
+             jsoncontent = s.hasNext() ? s.next() : "";
+        } catch (Exception FileNotFound) {
+            FileNotFound.printStackTrace();
+        }
+        listOfCharacters = gson.fromJson(jsoncontent, new TypeToken<List<IslandTile>>() {}.getType());
+
+    }
+
+    public void pickCharacter(Player player) {
+        int answer = 0;
+        char response = 0;
+        boolean getnewinput = true;
+        importingCharactersJson();
+        System.out.println("Choose your character!");
+
+        for (CharacterCard c : listOfCharacters) {
+            System.out.println("Power number" + c.getCharacterID() + ":" + c.getPowerDescription() + "\n");
+        }
+        while (getnewinput) {
+            System.out.println("Choose a power 1-12!\n");
+            answer = reader.nextInt();
+            if (answer > 12 || answer < 1) {
+                System.out.println("Invalid character number! Try again\n");
+            } else {
+                System.out.println("You chose character number " + answer + ". Are you sure? Y/N \n");
+                response = reader.next().charAt(0);
+                if (response == 'y' || response == 'Y')
+                    getnewinput = false;
+            }
+        }
+        System.out.println("You chose character number " + answer + ".");
+        player.setCharacterCard(answer);
+    }
+
     public void importingTilesJson() {
         //Loading IslandTiles Json file
         Gson gson = new Gson();
         try {
             InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
-            String jsoncontent = s.hasNext() ? s.next() : "";
+             jsoncontent = s.hasNext() ? s.next() : "";
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
