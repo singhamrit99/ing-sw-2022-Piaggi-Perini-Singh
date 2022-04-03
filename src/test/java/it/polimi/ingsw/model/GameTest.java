@@ -31,8 +31,8 @@ class GameTest {
         nicknames.add("Tony Stark");
         Game game = new Game(false, 4, nicknames);
         LinkedList<Player> players = game.getPlayers();
-        Assert.assertTrue(nicknames.contains(game.getCurrentPlayer().getNickname()));
-        Assert.assertEquals(players.size(),4);
+        assertTrue(nicknames.contains(game.getCurrentPlayer().getNickname()));
+        assertEquals(players.size(), 4);
         return game;
     }
 
