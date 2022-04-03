@@ -21,41 +21,22 @@ public class Bag {
         students = new EnumMap(Colors.class);
     }
 
-    //TODO aggiungere metodo per controllare n di pedine e ritorno sia se ne ho poche o nulle
-
-    public void addStudents(EnumMap<Colors, Integer> students) throws IncorrectArgumentException {
-        EnumMap<Colors, Integer> studentsDiscs = getStudents();
-
-        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
-            if (set.getValue() >= 0) {
-                if (studentsDiscs.containsKey(set.getKey())) {
-                    studentsDiscs.put(set.getKey(), set.getValue() + studentsDiscs.get(set.getKey()));
-                } else {
-                    studentsDiscs.put(set.getKey(), set.getValue());
-                }
-            } else {
-                throw new IncorrectArgumentException("EnumMap is not correct");
-            }
-
+    public void addStudents(EnumMap<Colors, Integer> studentsToAdd) throws IncorrectArgumentException {
+        EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getStudents(), studentsToAdd);
+        if (newStudents != null) {
+            setStudents(newStudents);
+        } else {
+            throw new IncorrectArgumentException();
         }
-        setStudents(studentsDiscs);
     }
 
     private void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws IncorrectArgumentException {
-        EnumMap<Colors, Integer> studentsDiscs = getStudents();
-
-        for (Map.Entry<Colors, Integer> set : studentsToRemove.entrySet()) {
-            if (set.getValue() >= 0) {
-                if (studentsDiscs.containsKey(set.getKey())) {
-                    studentsDiscs.put(set.getKey(), studentsDiscs.get(set.getKey()) - set.getValue());
-                } else {
-                    throw new IncorrectArgumentException("EnumMap is not correct");
-                }
-            } else {
-                throw new IncorrectArgumentException("EnumMap is not correct");
-            }
+        EnumMap<Colors, Integer> newStudents = StudentManager.removeStudent(getStudents(), studentsToRemove);
+        if (newStudents != null) {
+            setStudents(newStudents);
+        } else {
+            throw new IncorrectArgumentException();
         }
-        setStudents(studentsDiscs);
     }
 
     public EnumMap<Colors, Integer> drawStudents(int numberOfStudents) throws IncorrectArgumentException {
@@ -73,21 +54,12 @@ public class Bag {
         return studentsDrawn;
     }
 
-    public boolean hasEnoughStudents(int numberOfStudents) throws IncorrectArgumentException {
+    public boolean hasEnoughStudents(int numberOfStudents) {
+        int count = 0;
         for (Map.Entry<Colors, Integer> set : students.entrySet()) {
-            if (set.getValue() >= 0) {
-                if (getStudents().containsKey(set.getKey())) {
-                    if (getStudents().get(set.getKey()) < set.getValue()) {
-                        return false;
-                    }
-                } else {
-                    throw new IncorrectArgumentException("EnumMap is not correct");
-                }
-            } else {
-                throw new IncorrectArgumentException("EnumMap is not correct");
-            }
+            count += set.getValue();
         }
-        return true;
+        return count >= numberOfStudents;
     }
 
     public void setStudents(EnumMap<Colors, Integer> students) {

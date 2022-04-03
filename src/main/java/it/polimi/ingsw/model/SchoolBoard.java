@@ -28,69 +28,43 @@ public class SchoolBoard {
         }
     }
 
-    public void addStudents(EnumMap<Colors, Integer> students) throws IncorrectArgumentException {
-        EnumMap<Colors, Integer> studentsDiscs = getEntrance();
-
-        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
-            if (set.getValue() >= 0) {
-                if (studentsDiscs.containsKey(set.getKey())) {
-                    studentsDiscs.put(set.getKey(), set.getValue() + studentsDiscs.get(set.getKey()));
-                } else {
-                    studentsDiscs.put(set.getKey(), set.getValue());
-                }
-            } else {
-                throw new IncorrectArgumentException("EnumMap is not correct");
-            }
-
+    public void addStudents(EnumMap<Colors, Integer> studentsToAdd) throws IncorrectArgumentException {
+        EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getEntrance(), studentsToAdd);
+        if (newStudents != null) {
+            setEntrance(newStudents);
+        } else {
+            throw new IncorrectArgumentException();
         }
-        setEntrance(studentsDiscs);
     }
 
-    public void removeStudents(EnumMap<Colors, Integer> students) throws IncorrectArgumentException {
-        EnumMap<Colors, Integer> studentsDiscs = getEntrance();
-
-        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
-            if (set.getValue() >= 0) {
-                if (studentsDiscs.containsKey(set.getKey())) {
-                    studentsDiscs.put(set.getKey(), studentsDiscs.get(set.getKey()) - set.getValue());
-                } else {
-                    throw new IncorrectArgumentException("EnumMap is not correct");
-                }
-            } else {
-                throw new IncorrectArgumentException("EnumMap is not correct");
-            }
+    public void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws IncorrectArgumentException {
+        EnumMap<Colors, Integer> newStudents = StudentManager.removeStudent(getEntrance(), studentsToRemove);
+        if (newStudents != null) {
+            setEntrance(newStudents);
+        } else {
+            throw new IncorrectArgumentException();
         }
-        setEntrance(studentsDiscs);
     }
 
-    public void moveStudents(EnumMap<Colors, Integer> students) throws IncorrectArgumentException {
-        EnumMap<Colors, Integer> studentsDiscs = getDining();
-
-        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
-            if (set.getValue() >= 0) {
-                if (studentsDiscs.containsKey(set.getKey())) {
-                    studentsDiscs.put(set.getKey(), set.getValue() + studentsDiscs.get(set.getKey()));
-                } else {
-                    studentsDiscs.put(set.getKey(), set.getValue());
-                }
-            } else {
-                throw new IncorrectArgumentException("EnumMap is not correct");
-            }
-
+    public void moveStudents(EnumMap<Colors, Integer> studentsToMove) throws IncorrectArgumentException {
+        EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getDining(), studentsToMove);
+        if (newStudents != null) {
+            removeStudents(studentsToMove);
+            setDining(newStudents);
+        } else {
+            throw new IncorrectArgumentException();
         }
-        removeStudents(studentsDiscs);
-        setDining(studentsDiscs);
     }
 
-    public void addProfessor(Colors student) throws IncorrectArgumentException {
-        professorsTable.add(student);
+    public void addProfessor(Colors professor) {
+        professorsTable.add(professor);
     }
 
-    public void removeProfessor(Colors student) throws IncorrectArgumentException {
-
-        int index = professorsTable.indexOf(student);
+    public void removeProfessor(Colors professor) throws IncorrectArgumentException {
+        int index = professorsTable.indexOf(professor);
         if (index != -1) {
             professorsTable.remove(index);
+            return;
         }
 
         throw new IncorrectArgumentException();
@@ -116,23 +90,7 @@ public class SchoolBoard {
     }
 
     public void moveTowers(int towers) {
-        this.numberOfTowers += towers;
-    }
-
-    private void setEntrance(EnumMap<Colors, Integer> studentsDiscs) {
-        this.entrance = studentsDiscs;
-    }
-
-    private EnumMap<Colors, Integer> getEntrance() {
-        return entrance;
-    }
-
-    private void setDining(EnumMap<Colors, Integer> studentsDiscs) {
-        this.dining = studentsDiscs;
-    }
-
-    private EnumMap<Colors, Integer> getDining() {
-        return this.dining;
+        numberOfTowers += towers;
     }
 
     public ArrayList<Colors> getProfessorsTable() {
@@ -147,10 +105,27 @@ public class SchoolBoard {
         if (dining.containsKey(student)) {
             return dining.get(student);
         }
+
         throw new IncorrectArgumentException();
     }
 
-    public boolean hasProfessorOfColor(Colors student) throws IncorrectArgumentException {
-        return professorsTable.contains(student);
+    public boolean hasProfessorOfColor(Colors professor) {
+        return professorsTable.contains(professor);
+    }
+
+    private void setEntrance(EnumMap<Colors, Integer> students) {
+        this.entrance = students;
+    }
+
+    public EnumMap<Colors, Integer> getEntrance() {
+        return entrance;
+    }
+
+    private void setDining(EnumMap<Colors, Integer> students) {
+        this.dining = students;
+    }
+
+    public EnumMap<Colors, Integer> getDining() {
+        return this.dining;
     }
 }
