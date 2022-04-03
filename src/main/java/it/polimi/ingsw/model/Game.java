@@ -124,7 +124,7 @@ public class Game {
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
     }
-
+    //TODO fix json loading
     private void importingTilesJson() {
         //Loading IslandTiles Json file
         Gson gson = new Gson();
