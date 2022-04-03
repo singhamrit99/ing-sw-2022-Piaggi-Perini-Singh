@@ -22,6 +22,11 @@ public class IslandTile implements Tile {
         towersColor = Towers.WHITE;
         numberOfTowers = 0;
         hasNoEntryTile = false;
+        this.students= new EnumMap<>(Colors.class);
+        for (Colors color: Colors.values()) {
+            students.put(color, 0);
+        }
+
     }
 
     public String getName(){
@@ -47,11 +52,11 @@ public class IslandTile implements Tile {
         EnumMap<Colors, Integer> tmp = getStudents();
         for (Map.Entry<Colors, Integer> studentsNewEnumMap : summedStudents.entrySet()){
             if (studentsNewEnumMap.getValue() >= 0) {
-                if (tmp.containsKey(studentsNewEnumMap.getKey())) {
+                //if (tmp.containsKey(studentsNewEnumMap.getKey())) {
                     tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue() + tmp.get(studentsNewEnumMap.getKey()));
-                } else {
+               /* } else {
                     tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue());
-                }
+                }*/
             } else {
                 throw new IncorrectArgumentException("EnumMap is not correct");
             }
