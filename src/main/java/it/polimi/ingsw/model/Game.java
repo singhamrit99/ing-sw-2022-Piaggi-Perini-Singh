@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.model.cards.AssistantCard;
 import it.polimi.ingsw.model.cards.FillDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
@@ -16,13 +15,13 @@ import it.polimi.ingsw.model.tiles.IslandTile;
 
 
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
 public class Game {
-    private boolean expertMode;
     private State state;
     private Bag bag;
     private int numOfPlayer;
@@ -43,39 +42,9 @@ public class Game {
     private String fileContent;
     private IslandTile[] importingIslands;
     private CloudTile[] importingClouds;
-    private EnumMap<Colors, Integer> studentsoncloud;
 
-    public Game(boolean expertMode, int numOfPlayer) {
-        this.expertMode = expertMode;
+    public Game(int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException{
         this.numOfPlayer = numOfPlayer;
-    }
-
-    private void importingIslandsFromJson() {
-        //Loading IslandTiles Json file
-        Gson gson = new Gson();
-        try {
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
-            JsonReader jsonReader = new JsonReader(streamReader);
-            fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
-        } catch (Exception FileNotFound) {
-            FileNotFound.printStackTrace();
-        }
-        importingIslands = gson.fromJson(fileContent, IslandTile[].class);
-
-
-        // initialization clouds;
-        try { //Loading CloudTiles JSON file
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream("/Clouds.json")), StandardCharsets.UTF_8);
-
-            Scanner s = new Scanner(streamReader).useDelimiter("\\A");
-            String jsoncontent = s.hasNext() ? s.next() : "";
-        } catch (Exception FileNotFound) {
-            FileNotFound.printStackTrace();
-        }
-        importingClouds = gson.fromJson(fileContent, CloudTile[].class);
-    }
-
-    public void initializeGame(ArrayList<String> nicknames) throws IncorrectArgumentException, IncorrectStateException {
         numRounds = 0;
         counter = numOfPlayer - 1; //used to 'count' during the Planning Phase
         if (numOfPlayer == 3) numDrawnStudents = 4;
@@ -100,8 +69,7 @@ public class Game {
             indexColorTeam++;
         }
 
-
-        importingIslandsFromJson();
+        importingTilesJson();
 
         //Initialization clouds
         clouds = new CloudTile[numOfPlayer];
@@ -150,11 +118,35 @@ public class Game {
 
         //initialization LinkedList<Player>
         playerIterator = players.listIterator();
-        firstPlayerPlanPhase = players.get((int) Math.random() * numOfPlayer); //random init player
+        firstPlayerPlanPhase = players.get((int)(Math.random() * numOfPlayer)); //random init player
         playerIterator.set(firstPlayerPlanPhase);
         playerDrawnOut = false;
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
+    }
+
+    private void importingTilesJson() {
+        //Loading IslandTiles Json file
+        Gson gson = new Gson();
+        try {
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
+            JsonReader jsonReader = new JsonReader(streamReader);
+            fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
+        } catch (Exception FileNotFound) {
+            FileNotFound.printStackTrace();
+        }
+        importingIslands = gson.fromJson(fileContent, IslandTile[].class);
+
+
+        // initialization clouds;
+        try { //Loading CloudTiles JSON file
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(FillDeck.class.getResourceAsStream(GetPaths.CLOUD_TILES_LOCATION)), StandardCharsets.UTF_8);
+            JsonReader jsonReader = new JsonReader(streamReader);
+            fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
+        } catch (Exception FileNotFound) {
+            FileNotFound.printStackTrace();
+        }
+        importingClouds = gson.fromJson(fileContent, CloudTile[].class);
     }
 
     public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException {
@@ -353,7 +345,7 @@ public class Game {
         }
     }
 
-    private ArrayList<Player> findPlayerFromTeam(Towers teamColor) {
+    public ArrayList<Player> findPlayerFromTeam(Towers teamColor) {
         Player firstPlayer = null;
         Player secondPlayer = null; // in case of 4 players I have to check both players of the team
         for (Player p : players) {
@@ -371,7 +363,7 @@ public class Game {
         return returnedPlayers;
     }
 
-    private void moveTowersFromTeam(ArrayList<Player> team, int amount) {
+    public void moveTowersFromTeam(ArrayList<Player> team, int amount) {
         int numbersOfIterations = Math.abs(amount);
         int oneTowerSigned;
         if (amount < 0) oneTowerSigned = -1;
@@ -394,7 +386,7 @@ public class Game {
         } else team.get(0).moveTowers(amount);
     }
 
-    private void checkUnificationIslands() throws IncorrectArgumentException {
+    public void checkUnificationIslands() throws IncorrectArgumentException {
         boolean listChanged = false;
         ListIterator<IslandTile> it = islands.listIterator();
         IslandTile currentTile;
