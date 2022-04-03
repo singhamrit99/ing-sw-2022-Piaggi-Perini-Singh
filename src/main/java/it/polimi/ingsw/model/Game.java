@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
+import it.polimi.ingsw.model.cards.AssistantCard;
 import it.polimi.ingsw.model.cards.FillDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
@@ -42,6 +43,7 @@ public class Game {
     private String fileContent;
     private IslandTile[] importingIslands;
     private CloudTile[] importingClouds;
+    private EnumMap<Colors, Integer> studentsoncloud;
 
     public Game(boolean expertMode, int numOfPlayer) {
         this.expertMode = expertMode;
@@ -63,9 +65,10 @@ public class Game {
 
         // initialization clouds;
         try { //Loading CloudTiles JSON file
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(FillDeck.class.getResourceAsStream(GetPaths.CLOUD_TILES_LOCATION)), StandardCharsets.UTF_8);
-            JsonReader jsonReader = new JsonReader(streamReader);
-            fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream("/Clouds.json")), StandardCharsets.UTF_8);
+
+            Scanner s = new Scanner(streamReader).useDelimiter("\\A");
+            String jsoncontent = s.hasNext() ? s.next() : "";
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }

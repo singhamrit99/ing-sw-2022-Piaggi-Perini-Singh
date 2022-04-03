@@ -33,9 +33,9 @@ public class CardsTest {
 
     //Card testing
     @Test
-    public void SetName() {
+    public void testSetName() {
         final AssistantCard a = new AssistantCard(0, 0, "none", false);
-        String nome="Menisco";
+        String nome = "Menisco";
         a.setName(nome);
         assertEquals(a.getName(), nome);
 
@@ -44,7 +44,7 @@ public class CardsTest {
 
     //AssistantCard Testing
     @Test
-    public void AssistantCardConstructorTest() {
+    public void testAssistantCardConstructor() {
         final AssistantCard a = new AssistantCard(0, 0, "none", false);
         assertEquals(0, a.getValue());
         assertEquals(0, a.getMove());
@@ -53,7 +53,7 @@ public class CardsTest {
     }
 
     @Test
-    public void AssistantCardGetWizardTest() {
+    public void testAssistantCardGetWizard() {
 
         final AssistantCard a = new AssistantCard(0, 0, "none", false);
         String wizard = "Silt";
@@ -63,14 +63,14 @@ public class CardsTest {
     }
 
     @Test
-    public void AssistantCardGetMoveTest() {
+    public void testAssistantCardGetMove() {
         final AssistantCard a = new AssistantCard(0, 0, "none", false);
         final int move = a.getMove();
         assertEquals(move, a.getMove());
     }
 
     @Test
-    public void AssistantCardSetWizardTest() {
+    public void testAssistantCardSetWizard() {
         final AssistantCard a = new AssistantCard(0, 0, "none", false);
         String wizard = "Silt";
         a.setWizard(wizard);
@@ -78,7 +78,7 @@ public class CardsTest {
     }
 
     @Test
-    public void SetHasPlayedTest() {
+    public void testSetHasPlayed() {
         final AssistantCard a = new AssistantCard(0, 0, "none", false);
         boolean played = true;
         a.setHasPlayed(played);
@@ -86,12 +86,11 @@ public class CardsTest {
     }
 
     @Test
-    public void isHasPlayedTest() {
+    public void testisHasPlayed() {
         final AssistantCard a = new AssistantCard(0, 0, "none", false);
     }
 
     @Test
-    @DisplayName("Am I even getting the path right?")
     public void shouldPassFilepathsasStrings() {
         Assertions.assertEquals(GetPaths.ASSISTANT_CARDS_LOCATION, "/Cards.json");
         Assertions.assertEquals(GetPaths.ISLAND_TILES_LOCATION, "/IslandTiles.json");
@@ -105,51 +104,49 @@ public class CardsTest {
 
     //AssistantCardDeck testing
     @Test
-    public void getAssistantCardInOrderTest(){
-        FillDeck deckfiller= new FillDeck();
-        ArrayList<AssistantCard> deck= new ArrayList<>();
-        ArrayList<AssistantCard> testDeck= new ArrayList<>();
-        AssistantCardDeck newdeck=  new AssistantCardDeck();
-       deck=deckfiller.newDeck(deck);
-       newdeck.setAssistantCards(deck);
-
-
-        //Drawing in order
-        assertEquals("Assistente(1)",newdeck.getAssistantCard(1).getName());
-        assertEquals("Assistente(2)",newdeck.getAssistantCard(2).getName());
-        assertEquals("Assistente(3)",newdeck.getAssistantCard(3).getName());
-        assertEquals("Assistente(4)",newdeck.getAssistantCard(4).getName());
-        assertEquals("Assistente(5)",newdeck.getAssistantCard(5).getName());
-        assertEquals("Assistente(6)",newdeck.getAssistantCard(6).getName());
-        assertEquals("Assistente(7)",newdeck.getAssistantCard(7).getName());
-        assertEquals("Assistente(8)",newdeck.getAssistantCard(8).getName());
-        assertEquals("Assistente(9)",newdeck.getAssistantCard(9).getName());
-        assertEquals("Assistente(10)",newdeck.getAssistantCard(10).getName());
-
-
-
-    } @Test
-    public void getAssistantCardOutOfOrderTest(){
-        FillDeck deckfiller= new FillDeck();
-        ArrayList<AssistantCard> deck= new ArrayList<>();
-        ArrayList<AssistantCard> testDeck= new ArrayList<>();
-        AssistantCardDeck newdeck=  new AssistantCardDeck();
-        deck=deckfiller.newDeck(deck);
+    public void testgetAssistantCardInOrder() {
+        FillDeck deckfiller = new FillDeck();
+        ArrayList<AssistantCard> deck = new ArrayList<>();
+        ArrayList<AssistantCard> testDeck = new ArrayList<>();
+        AssistantCardDeck newdeck = new AssistantCardDeck();
+        deck = deckfiller.newDeck(deck);
         newdeck.setAssistantCards(deck);
 
 
         //Drawing in order
-        assertEquals("Assistente(5)",newdeck.getAssistantCard(5).getName());
-        assertEquals("Assistente(3)",newdeck.getAssistantCard(3).getName());
-        assertEquals("Assistente(4)",newdeck.getAssistantCard(4).getName());
-        assertEquals("Assistente(7)",newdeck.getAssistantCard(7).getName());
-        assertEquals("Assistente(8)",newdeck.getAssistantCard(8).getName());
-        assertEquals("Assistente(10)",newdeck.getAssistantCard(10).getName());
-        assertEquals("Assistente(1)",newdeck.getAssistantCard(1).getName());
-        assertEquals("Assistente(2)",newdeck.getAssistantCard(2).getName());
-        assertEquals("Assistente(6)",newdeck.getAssistantCard(6).getName());
-        assertEquals("Assistente(9)",newdeck.getAssistantCard(9).getName());
+        assertEquals("Assistente(1)", newdeck.getAssistantCard(1).getName());
+        assertEquals("Assistente(2)", newdeck.getAssistantCard(2).getName());
+        assertEquals("Assistente(3)", newdeck.getAssistantCard(3).getName());
+        assertEquals("Assistente(4)", newdeck.getAssistantCard(4).getName());
+        assertEquals("Assistente(5)", newdeck.getAssistantCard(5).getName());
+        assertEquals("Assistente(6)", newdeck.getAssistantCard(6).getName());
+        assertEquals("Assistente(7)", newdeck.getAssistantCard(7).getName());
+        assertEquals("Assistente(8)", newdeck.getAssistantCard(8).getName());
+        assertEquals("Assistente(9)", newdeck.getAssistantCard(9).getName());
+        assertEquals("Assistente(10)", newdeck.getAssistantCard(10).getName());
+    }
 
+    @Test
+    public void testGetAssistantCardOutOfOrder() {
+        FillDeck deckfiller = new FillDeck();
+        ArrayList<AssistantCard> deck = new ArrayList<>();
+        ArrayList<AssistantCard> testDeck = new ArrayList<>();
+        AssistantCardDeck newdeck = new AssistantCardDeck();
+        deck = deckfiller.newDeck(deck);
+        newdeck.setAssistantCards(deck);
+
+
+        //Drawing in order
+        assertEquals("Assistente(5)", newdeck.getAssistantCard(5).getName());
+        assertEquals("Assistente(3)", newdeck.getAssistantCard(3).getName());
+        assertEquals("Assistente(4)", newdeck.getAssistantCard(4).getName());
+        assertEquals("Assistente(7)", newdeck.getAssistantCard(7).getName());
+        assertEquals("Assistente(8)", newdeck.getAssistantCard(8).getName());
+        assertEquals("Assistente(10)", newdeck.getAssistantCard(10).getName());
+        assertEquals("Assistente(1)", newdeck.getAssistantCard(1).getName());
+        assertEquals("Assistente(2)", newdeck.getAssistantCard(2).getName());
+        assertEquals("Assistente(6)", newdeck.getAssistantCard(6).getName());
+        assertEquals("Assistente(9)", newdeck.getAssistantCard(9).getName());
 
 
     }
@@ -245,7 +242,7 @@ public class CardsTest {
     }
 
     @Test
-    public void shouldFillDeck() {
+    public void testFillDeck() {
         String jsoncontent;
         jsoncontent = "[\n" +
                 "  {\n" +
@@ -316,7 +313,5 @@ public class CardsTest {
     }
 
 
-
-
-    }
+}
 

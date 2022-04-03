@@ -10,8 +10,17 @@ public class CloudTile implements Tile {
     public String name;
     private EnumMap<Colors, Integer> students;
 
-    public CloudTile(String cloudname) {
-        name = cloudname;
+    public CloudTile(String name) {
+        this.name = name;
+        this.students= new EnumMap<>(Colors.class);
+        for (Colors color: Colors.values()) {
+            students.put(color, 0);
+        }
+
+    }
+
+    public EnumMap<Colors, Integer> getStudents() {
+        return students;
     }
 
     public EnumMap<Colors, Integer> removeStudents() {
@@ -28,11 +37,11 @@ public class CloudTile implements Tile {
         EnumMap<Colors, Integer> tmp = students;
         for (Map.Entry<Colors, Integer> studentsNewEnumMap : summedStudents.entrySet()) {
             if (studentsNewEnumMap.getValue() >= 0) {
-                if (tmp.containsKey(studentsNewEnumMap.getKey())) {
+                //if (tmp.containsKey(studentsNewEnumMap.getKey())) {
                     tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue() + tmp.get(studentsNewEnumMap.getKey()));
-                } else {
+                /*} else {
                     tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue());
-                }
+                }*/
             } else {
                 throw new IncorrectArgumentException("EnumMap is not correct");
             }

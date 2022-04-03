@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.tiles;
 
+import it.polimi.ingsw.model.enumerations.Towers;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,42 +9,56 @@ import static org.junit.jupiter.api.Assertions.*;
 class IslandTileTest {
 
     @Test
-    void getName() {
+    void testgetName() {
+        String test= "Test";
+        IslandTile island = new IslandTile("Test");
+
+        assertEquals(test, island.getName());
     }
 
     @Test
-    void getTowersColor() {
+    void testgetTowersColor() {
+        Towers color=Towers.WHITE;
+        IslandTile island = new IslandTile("Test");
+
+        island.setTowersColor(color);
+        assertEquals(color, island.getTowersColor());
     }
 
     @Test
-    void setTowersColor() {
+    void testsetTowersColor() {
+        Towers color= Towers.GREY;
+        IslandTile island = new IslandTile("Test");
+
+        island.setTowersColor(color);
+        assertEquals(island.getTowersColor(),color);
     }
 
     @Test
-    void getStudents() {
+    void testgetStudents() {
     }
 
     @Test
-    void getNumOfTowers() {
+    void testgetNumOfTowers() {
     }
 
     @Test
-    void addStudents() {
+    void testaddStudents() {
     }
 
     @Test
-    void sumTowers() {
+    void testsumTowers() {
     }
 
     @Test
-    void hasMotherNature() {
+    void testhasMotherNature() {
     }
 
     @Test
-    void moveMotherNature() {
+    void testmoveMotherNature() {
     }
 
     @Test
-    void removeMotherNature() {
+    void testremoveMotherNature() {
     }
 }
