@@ -24,11 +24,10 @@ public class Game {
     private State state;
     private Bag bag;
     private boolean expertMode;
-    private int numOfPlayer;
+    private final int numOfPlayer;
     private Player currentPlayer;
-    private Player firstPlayerPlanPhase;
-    private LinkedList<Player> players;
-    private ListIterator<Player> playerIterator;
+    private int playerPlanPhase;
+    private final LinkedList<Player> players;
     private PriorityQueue<Player> orderPlayers;
     private LinkedList<IslandTile> islands;
     private CloudTile[] clouds;
@@ -50,13 +49,12 @@ public class Game {
         this.expertMode = expertMode;
         this.numOfPlayer = numOfPlayer;
         numRounds = 0;
-        counter = numOfPlayer - 1; //used to 'count' during the Planning Phase
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
 
         //Initialization Players
         players = new LinkedList<Player>();
-        int indexColorTeam = 1;
+        int indexColorTeam = 0;
         for (String nickname : nicknames) {
             int colorTeam;
             if (numOfPlayer == 3) {
@@ -121,12 +119,12 @@ public class Game {
         bag = new Bag(students);
 
         //initialization LinkedList<Player>
-        playerIterator = players.listIterator();
-        firstPlayerPlanPhase = players.get((int)(Math.random() * numOfPlayer)); //random init player
+        playerPlanPhase = (int)(Math.random() * numOfPlayer-1); //random init player
+        counter = numOfPlayer - 1; //used to 'count' during the Planning Phase
         playerDrawnOut = false;
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
-        currentPlayer = firstPlayerPlanPhase;
+        currentPlayer = players.get(playerPlanPhase);
     }
 
     public void importingCharactersJson(){
@@ -216,17 +214,19 @@ public class Game {
         nextPlayer(currentPlayer.getNickname());
     }
 
+    //nextPlayer() is called only after playAssistantCard is called
     public void nextPlayer(String nicknameCaller) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
-        if (nicknameCaller.equals(currentPlayer.getNickname())) {
+        if (nicknameCaller.equals(currentPlayer.getNickname())){
             if (state == State.PLANNINGPHASE) {
                 if (counter > 0) {
                     counter--;
-                    if (playerIterator.hasNext()) currentPlayer = playerIterator.next();
-                    else playerIterator.set(players.getFirst());
+                    if(playerPlanPhase >= numOfPlayer){playerPlanPhase = 0;}
+                    currentPlayer = players.get(playerPlanPhase);
+                    playerPlanPhase++;
                     playerDrawnOut = false;
                 } else {
                     state = State.ACTIONPHASE;
-                    firstPlayerPlanPhase = orderPlayers.peek();
+                    playerPlanPhase = players.indexOf(orderPlayers.peek());
                 }
             } else if (state == State.ACTIONPHASE) {
                 if (!orderPlayers.isEmpty()) currentPlayer = orderPlayers.poll();
@@ -249,7 +249,7 @@ public class Game {
                 checkWinner();
             } else {
                 state = State.PLANNINGPHASE;
-                currentPlayer = firstPlayerPlanPhase;
+                currentPlayer = players.get(playerPlanPhase); //This is decided with the Assistant Card values and is assign in nextPlayer()
                 counter = numOfPlayer - 1;
             }
         } else throw new IncorrectStateException();
