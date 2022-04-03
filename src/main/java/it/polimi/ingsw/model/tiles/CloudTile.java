@@ -19,6 +19,10 @@ public class CloudTile implements Tile {
 
     }
 
+    public String getName() {
+        return name;
+    }
+
     public EnumMap<Colors, Integer> getStudents() {
         return students;
     }

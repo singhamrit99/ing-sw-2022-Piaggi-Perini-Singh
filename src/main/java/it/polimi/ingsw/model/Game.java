@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model;
 
 import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
+import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.model.cards.AssistantCard;
 import it.polimi.ingsw.model.cards.FillDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
@@ -15,10 +16,7 @@ import it.polimi.ingsw.model.tiles.IslandTile;
 
 
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class Game {
@@ -40,9 +38,16 @@ public class Game {
     private Player winner;
     private Scanner reader = new Scanner(System.in);
     private String fileContent;
-    private IslandTile[] importingIslands;
-    private CloudTile[] importingClouds;
+    private ArrayList<IslandTile> importingIslands;
+    private ArrayList<CloudTile> importingClouds;
+    private String jsoncontent;
 
+    public ArrayList<IslandTile> getimportingIslands(){
+        return importingIslands;
+    }
+    public ArrayList<CloudTile> getImportingClouds(){
+        return importingClouds;
+    }
     public Game(int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException{
         this.numOfPlayer = numOfPlayer;
         numRounds = 0;
@@ -74,14 +79,14 @@ public class Game {
         //Initialization clouds
         clouds = new CloudTile[numOfPlayer];
         for (int i = 0; i < numOfPlayer; i++) {
-            CloudTile cloud = new CloudTile(importingClouds[i].name);
+            CloudTile cloud = new CloudTile(importingClouds.get(i).getName());
             clouds[i] = cloud;
         }
 
         // initialization islands;
         islands = new LinkedList<>(islands);
         for (int i = 0; i < 12; i++) {
-            IslandTile island = new IslandTile(importingIslands[i].getName());
+            IslandTile island = new IslandTile(importingIslands.get(i).getName());
             islands.add(island);
         }
 
@@ -125,28 +130,28 @@ public class Game {
         orderPlayers = new PriorityQueue<>(numOfPlayer);
     }
     //TODO fix json loading
-    private void importingTilesJson() {
+    public void importingTilesJson() {
         //Loading IslandTiles Json file
         Gson gson = new Gson();
         try {
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(FillDeck.class.getResourceAsStream(GetPaths.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
-            JsonReader jsonReader = new JsonReader(streamReader);
-            fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
+            Scanner s = new Scanner(streamReader).useDelimiter("\\A");
+            String jsoncontent = s.hasNext() ? s.next() : "";
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
-        importingIslands = gson.fromJson(fileContent, IslandTile[].class);
+        importingIslands = gson.fromJson(jsoncontent, new TypeToken<List<IslandTile>>() {}.getType());
 
 
         // initialization clouds;
         try { //Loading CloudTiles JSON file
             InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(FillDeck.class.getResourceAsStream(GetPaths.CLOUD_TILES_LOCATION)), StandardCharsets.UTF_8);
-            JsonReader jsonReader = new JsonReader(streamReader);
-            fileContent = new String(Files.readAllBytes(Paths.get(GetPaths.ISLAND_TILES_LOCATION)));
+            Scanner s = new Scanner(streamReader).useDelimiter("\\A");
+            jsoncontent = s.hasNext() ? s.next() : "";
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
-        importingClouds = gson.fromJson(fileContent, CloudTile[].class);
+        importingClouds = gson.fromJson(jsoncontent, new TypeToken<List<CloudTile>>() {}.getType());
     }
 
     public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException {
