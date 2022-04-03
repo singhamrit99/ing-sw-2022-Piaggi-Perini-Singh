@@ -69,7 +69,7 @@ public class Game {
             indexColorTeam++;
         }
 
-        importingIslandsFromJson();
+        importingTilesJson();
 
         //Initialization clouds
         clouds = new CloudTile[numOfPlayer];
@@ -125,7 +125,7 @@ public class Game {
         orderPlayers = new PriorityQueue<>(numOfPlayer);
     }
 
-    private void importingIslandsFromJson() {
+    private void importingTilesJson() {
         //Loading IslandTiles Json file
         Gson gson = new Gson();
         try {
