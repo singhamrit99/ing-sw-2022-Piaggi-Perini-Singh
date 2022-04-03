@@ -46,9 +46,6 @@ public class Game {
     private String jsoncontent;
 
 
-
-
-
     public Game(boolean expertMode,int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException{
         this.expertMode = expertMode;
         this.numOfPlayer = numOfPlayer;
@@ -219,8 +216,8 @@ public class Game {
         nextPlayer(currentPlayer.getNickname());
     }
 
-    private void nextPlayer(String nicknameCaller) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
-        if (nicknameCaller.equals(currentPlayer.getNickname())) { //TODO Player equals method
+    public void nextPlayer(String nicknameCaller) throws IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
+        if (nicknameCaller.equals(currentPlayer.getNickname())) {
             if (state == State.PLANNINGPHASE) {
                 if (counter > 0) {
                     counter--;
@@ -482,4 +479,7 @@ public class Game {
         return currentPlayer;
     }
 
+    public State getCurrentState(){
+        return state;
+    }
 }

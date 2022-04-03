@@ -5,6 +5,8 @@ import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.cards.AssistantCard;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
+import it.polimi.ingsw.model.exceptions.IncorrectStateException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 import org.hamcrest.core.Is;
@@ -21,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTest {
 
     @Test
-    public void testGameConstructor() throws IncorrectArgumentException, NoSuchFieldException{
+    public Game testGameConstructor() throws IncorrectArgumentException{
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Amrit");
         nicknames.add("Lore");
@@ -29,8 +31,24 @@ class GameTest {
         nicknames.add("Tony Stark");
         Game game = new Game(false, 4, nicknames);
         LinkedList<Player> players = game.getPlayers();
+        Assert.assertTrue(nicknames.contains(game.getCurrentPlayer().getNickname()));
         Assert.assertEquals(players.size(),4);
+        return game;
+    }
+
+    @Test
+    public void testDrawFromBag() throws IncorrectArgumentException{
+        Game game = testGameConstructor();
         System.out.println(game.getCurrentPlayer().getNickname());
+        game.drawFromBag(game.getCurrentPlayer().getNickname()); //Error in BAG
+    }
+
+    @Test
+    public void testNextPlayer() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+        Game game = testGameConstructor();
+        String oldPlayerNickname = game.getCurrentPlayer().getNickname();
+        game.nextPlayer(game.getCurrentPlayer().getNickname());
+        assertNotEquals(oldPlayerNickname, game.getCurrentPlayer().getNickname());
     }
 
 
