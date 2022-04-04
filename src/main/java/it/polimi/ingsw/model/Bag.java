@@ -30,7 +30,7 @@ public class Bag {
         }
     }
 
-    private void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws IncorrectArgumentException {
+    public void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws IncorrectArgumentException {
         EnumMap<Colors, Integer> newStudents = StudentManager.removeStudent(getStudents(), studentsToRemove);
         if (newStudents != null) {
             setStudents(newStudents);
@@ -41,13 +41,24 @@ public class Bag {
 
     public EnumMap<Colors, Integer> drawStudents(int numberOfStudents) throws IncorrectArgumentException {
         int type, quantity;
+        boolean contains = false;
+        int previousValue = 0;
         EnumMap<Colors, Integer> studentsDrawn = new EnumMap(Colors.class);
 
         for (int i = 0; i < numberOfStudents; ) {
-            type = (int) Math.floor(Math.random() * (studentType + 1));
-            quantity = (int) Math.floor(Math.random() * (numberOfStudents - i) + 1);
-            studentsDrawn.put(Colors.getStudent(type), quantity);
-            i += quantity;
+            previousValue = 0;
+
+            type = (int) Math.floor(Math.random() * studentType);
+            quantity = (int) Math.floor(Math.random() * ((numberOfStudents - i) - 1) + 1);
+
+            if (getStudents().containsKey(Colors.getStudent(type))) {
+                if (getStudents().get(Colors.getStudent(type)) >= quantity) {
+                    previousValue = studentsDrawn.getOrDefault(Colors.getStudent(type), 0);
+                    studentsDrawn.put(Colors.getStudent(type), previousValue + quantity);
+                    i += quantity;
+                }
+            }
+
         }
 
         removeStudents(studentsDrawn);
