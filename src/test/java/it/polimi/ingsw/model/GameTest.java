@@ -31,16 +31,16 @@ class GameTest {
         nicknames.add("Tino");
         nicknames.add("Tony Stark");
         Game game = new Game(false, 4, nicknames);
-        LinkedList<Player> players = game.getPlayers();
+        ArrayList<Player> players = game.getPlayers();
         assertTrue(nicknames.contains(game.getCurrentPlayer().getNickname()));
         assertEquals(players.size(), 4);
     }
 
     /*
-
     @Test
-    public void testDrawFromBag(){
-        //game.drawFromBag(game.getCurrentPlayer().getNickname()); //Error in BAG
+    public void testDrawFromBag() throws IncorrectArgumentException{
+        Game game = initGame2players();
+        game.drawFromBag(game.getCurrentPlayer().getNickname()); //Error in BAG
     }
     */
 
@@ -69,22 +69,21 @@ class GameTest {
     }
 
     @Test
-    public void testNextPlayer3Players() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+    public void testNextPlayer3Players() throws IncorrectArgumentException, IncorrectStateException {
         Game game = initGame3players();
         String oldPlayerNickname = game.getCurrentPlayer().getNickname();
-        game.nextPlayer(oldPlayerNickname);
+        game.nextPlayer();
         String newPlayerNickname = game.getCurrentPlayer().getNickname();
         assertNotEquals(oldPlayerNickname, newPlayerNickname);
     }
 
     @Test
-    public void testNextPlayer2and4Players() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+    public void testNextPlayer2and4Players() throws IncorrectArgumentException, IncorrectStateException {
         Game game = initGame4players();
         String oldPlayerNickname = game.getCurrentPlayer().getNickname();
-        game.nextPlayer(game.getCurrentPlayer().getNickname());
+        game.nextPlayer();
         assertNotEquals(oldPlayerNickname, game.getCurrentPlayer().getNickname());
     }
-
 
     @Test
     void areJSONloadingOk() {
@@ -123,7 +122,6 @@ class GameTest {
             assertEquals("nuvola" + (i + 1), importingClouds.get(i).getName());
         }*/
     }
-
 
     @Test
     void playAssistantCard() {
