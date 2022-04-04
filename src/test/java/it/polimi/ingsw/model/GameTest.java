@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.cards.AssistantCard;
+import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
@@ -33,6 +34,7 @@ class GameTest {
         Game game = new Game(false, 4, nicknames);
         ArrayList<Player> players = game.getPlayers();
         assertTrue(nicknames.contains(game.getCurrentPlayer().getNickname()));
+        assertEquals(game.getCurrentState(), State.PLANNINGPHASE);
         assertEquals(players.size(), 4);
     }
 
@@ -86,6 +88,20 @@ class GameTest {
     }
 
     @Test
+    public void testFindPlayerFromTeam() throws IncorrectArgumentException{
+        Game game = initGame3players();
+        assertEquals(game.findPlayerFromTeam(Towers.GREY).size(),1);
+    }
+
+    @Test
+    public void testFindPlayerFromTeam4players() throws IncorrectArgumentException{
+        Game game = initGame4players();
+        assertEquals(game.findPlayerFromTeam(Towers.GREY).size(),0);
+        assertEquals(game.findPlayerFromTeam(Towers.WHITE).size(),2);
+        assertEquals(game.findPlayerFromTeam(Towers.BLACK).size(),2);
+    }
+
+    @Test
     void areJSONloadingOk() {
         ArrayList<IslandTile> importingIslands;
         String jsoncontent = "";
@@ -129,6 +145,7 @@ class GameTest {
 
     @Test
     void nextRound() {
+
     }
 
     @Test
@@ -148,11 +165,24 @@ class GameTest {
     }
 
     @Test
-    void findPlayerFromTeam() {
-    }
-
-    @Test
-    void moveTowersFromTeam() {
+    void testMoveTowersFromTeam() throws IncorrectArgumentException{
+        Game game = initGame4players();
+        ArrayList<Player> team = game.findPlayerFromTeam(Towers.WHITE);
+        int initialTowers=-1;
+        for (Player p : team) {
+            System.out.println(p.getPlayerTowers());
+            if(initialTowers==-1) initialTowers = p.getPlayerTowers();
+            else assertEquals(initialTowers, p.getPlayerTowers());
+        }
+        int endingTowers = -1;
+        game.moveTowersFromTeam(team,-4);
+        System.out.println("moved");
+        for (Player p : team) {
+            System.out.println(p.getPlayerTowers());
+            if(endingTowers==-1) endingTowers = p.getPlayerTowers();
+            else assertEquals(endingTowers, p.getPlayerTowers());
+        }
+        assertNotEquals(initialTowers, endingTowers);
     }
 
     @Test
@@ -160,10 +190,17 @@ class GameTest {
     }
 
     @Test
-    void isGameOver() {
+    void testIsGameOver() throws IncorrectArgumentException{
+        Game game = initGame4players();
+        assertFalse(game.isGameOver());
     }
 
     @Test
-    void checkWinner() {
+    void testIsGameOver3players() throws IncorrectArgumentException{
+        Game game = initGame3players();
+        assertFalse(game.isGameOver());
     }
+
+
+
 }

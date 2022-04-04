@@ -402,10 +402,9 @@ public class Game {
                 secondPlayer = p;
             }
         }
-        ArrayList<Player> returnedPlayers = new ArrayList<Player>();
-        returnedPlayers.add(firstPlayer);
+        ArrayList<Player> returnedPlayers = new ArrayList<>();
+        if (firstPlayer != null) returnedPlayers.add(firstPlayer);
         if (secondPlayer != null) returnedPlayers.add(secondPlayer);
-
         return returnedPlayers;
     }
 
@@ -421,13 +420,12 @@ public class Game {
                     if (team.get(0).getPlayerTowers() <= team.get(1).getPlayerTowers())
                         team.get(0).moveTowers(oneTowerSigned);
                     else team.get(1).moveTowers(oneTowerSigned);
-                    numbersOfIterations--;
                 } else {
                     if (team.get(0).getPlayerTowers() >= team.get(1).getPlayerTowers())
                         team.get(0).moveTowers(oneTowerSigned);
                     else team.get(1).moveTowers(oneTowerSigned);
-                    numbersOfIterations--;
                 }
+                numbersOfIterations--;
             }
         } else team.get(0).moveTowers(amount);
     }
