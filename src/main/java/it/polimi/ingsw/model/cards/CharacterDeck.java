@@ -1,15 +1,12 @@
 package it.polimi.ingsw.model.cards;
 
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 //import com.sun.tools.classfile.CharacterRangeTable_attribute;
 import it.polimi.ingsw.model.FilePaths;
-import it.polimi.ingsw.model.GetPaths;
 
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,32 +14,34 @@ import java.util.Scanner;
 
 import com.google.gson.*;
 
-public class FillCharacterDeck {
+public class CharacterDeck {
 
     private ArrayList<CharacterCard> deck;
-    private String fileContent;
-    public ArrayList<AssistantCard> newDeck(ArrayList<AssistantCard> deck) {
-        this.deck = new ArrayList<>();
-        deck= loadFromJSON(deck);
-        return deck;
+
+    public CharacterDeck(ArrayList<CharacterCard> deck) {
+        this.deck = deck;
     }
 
-    private ArrayList<AssistantCard> loadFromJSON( ArrayList<AssistantCard> deck) {
+    public void newDeck(String resourcefilepath) throws FileNotFoundException{
+        this.deck = new ArrayList<>();
+        loadFromJSON(resourcefilepath);
+        //System.out.println(deck.get(0).getDescription());
+    }
+
+    private void loadFromJSON(String filepaths) throws NullPointerException {
         Gson gson = new Gson();
 
-        try {
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.CHARACTER_CARDS_LOCATION)), StandardCharsets.UTF_8);
-
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CharacterCard.class.getResourceAsStream(filepaths)), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
             String jsoncontent = s.hasNext() ? s.next() : "";
             deck = gson.fromJson(jsoncontent, new TypeToken<List<CharacterCard>>() {
             }.getType());
 
-        }
-        catch(NullPointerException nil)
-        {
-            System.out.println("JSON card file not found\n");
-        }
+
+
+    }
+
+    public ArrayList<CharacterCard> getDeck(){
         return deck;
     }
 

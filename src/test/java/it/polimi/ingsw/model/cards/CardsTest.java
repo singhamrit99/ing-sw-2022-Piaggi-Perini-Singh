@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import it.polimi.ingsw.model.FilePaths;
 import it.polimi.ingsw.model.GetPaths;
+import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -12,15 +14,13 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -101,53 +101,18 @@ public class CardsTest {
 
     private String expected;
 
-
     //AssistantCardDeck testing
-    @Test
-    public void testgetAssistantCardInOrder() {
-        FillDeck deckfiller = new FillDeck();
-        ArrayList<AssistantCard> testDeck = new ArrayList<>();
-        AssistantCardDeck newdeck = new AssistantCardDeck();
-        newdeck.setAssistantCards(deckfiller.newDeck());
-
-
-        //Drawing in order
-        assertEquals("Assistente(1)", newdeck.getAssistantCard(1).getName());
-        assertEquals("Assistente(2)", newdeck.getAssistantCard(2).getName());
-        assertEquals("Assistente(3)", newdeck.getAssistantCard(3).getName());
-        assertEquals("Assistente(4)", newdeck.getAssistantCard(4).getName());
-        assertEquals("Assistente(5)", newdeck.getAssistantCard(5).getName());
-        assertEquals("Assistente(6)", newdeck.getAssistantCard(6).getName());
-        assertEquals("Assistente(7)", newdeck.getAssistantCard(7).getName());
-        assertEquals("Assistente(8)", newdeck.getAssistantCard(8).getName());
-        assertEquals("Assistente(9)", newdeck.getAssistantCard(9).getName());
-        assertEquals("Assistente(10)", newdeck.getAssistantCard(10).getName());
-    }
 
     @Test
-    public void testGetAssistantCardOutOfOrder() {
-        FillDeck deckfiller = new FillDeck();
+    public void testGetAssistantCard() {
         ArrayList<AssistantCard> testDeck = new ArrayList<>();
-        AssistantCardDeck newdeck = new AssistantCardDeck();
-        newdeck.setAssistantCards(deckfiller.newDeck());
-
-
-        //Drawing in order
-        assertEquals("Assistente(5)", newdeck.getAssistantCard(5).getName());
-        assertEquals("Assistente(3)", newdeck.getAssistantCard(3).getName());
-        assertEquals("Assistente(4)", newdeck.getAssistantCard(4).getName());
-        assertEquals("Assistente(7)", newdeck.getAssistantCard(7).getName());
-        assertEquals("Assistente(8)", newdeck.getAssistantCard(8).getName());
-        assertEquals("Assistente(10)", newdeck.getAssistantCard(10).getName());
-        assertEquals("Assistente(1)", newdeck.getAssistantCard(1).getName());
-        assertEquals("Assistente(2)", newdeck.getAssistantCard(2).getName());
-        assertEquals("Assistente(6)", newdeck.getAssistantCard(6).getName());
-        assertEquals("Assistente(9)", newdeck.getAssistantCard(9).getName());
-
-
+        AssistantCardDeck newdeck = new AssistantCardDeck(testDeck);
+        newdeck.newDeck(FilePaths.ASSISTANT_CARDS_LOCATION);
+        int i;
+        Random rand= new Random();
+            i = rand.nextInt(newdeck.getdeck().size());
+            assertEquals(i+1, newdeck.getAssistantCard(i).getValue());
     }
-
-    //FillDeck testing
 
     @Test
     @DisplayName("Should check if JSON loaded correctly")
@@ -245,107 +210,44 @@ public class CardsTest {
 
     }
 
+    //Assistant card deck testing
     @Test
-    public void testFillDeck() {
+    public void testnewDeck() {
         //String jsoncontent;
-        FillDeck test = new FillDeck();
-        AssistantCardDeck deck = new AssistantCardDeck();
-        /*jsoncontent = "[\n" +
-                "  {\n" +
-                "    \"type\": \"assistant\",\n" +
-                "    \"name\": \"Assistente(1)\",\n" +
-                "    \"value\": 1,\n" +
-                "    \"move\" : 1,\n" +
-                "    \"wizard\": \"none\",\n" +
-                "    \"hasplayed\": false\n" +
-                "\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"type\": \"assistant\",\n" +
-                "    \"name\": \"Assistente(2)\",\n" +
-                "    \"value\": 2,\n" +
-                "    \"move\" : 1,\n" +
-                "    \"wizard\": \"none\",\n" +
-                "    \"hasplayed\": false\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"type\": \"assistant\",\n" +
-                "  \"name\": \"Assistente(3)\",\n" +
-                "  \"value\": 3,\n" +
-                "  \"move\" : 2,\n" +
-                "    \"wizard\": \"none\",\n" +
-                "    \"hasplayed\": false\n" +
-                "}, {\n" +
-                "  \"type\": \"assistant\",\n" +
-                "  \"name\": \"Assistente(4)\",\n" +
-                "  \"value\": 4,\n" +
-                "  \"move\" : 2,\n" +
-                "  \"wizard\": \"none\",\n" +
-                "  \"hasplayed\": false\n" +
-                "}, {\n" +
-                "  \"type\": \"assistant\",\n" +
-                "  \"name\": \"Assistente(5)\",\n" +
-                "  \"value\": 5,\n" +
-                "  \"move\" : 3,\n" +
-                "  \"wizard\": \"none\",\n" +
-                "  \"hasplayed\": false\n" +
-                "}, {\n" +
-                "  \"type\": \"assistant\",\n" +
-                "  \"name\": \"Assistente(6)\",\n" +
-                "  \"value\": 6,\n" +
-                "  \"move\" : 3,\n" +
-                "  \"wizard\": \"none\",\n" +
-                "  \"hasplayed\": false\n" +
-                "}, {\n" +
-                "  \"type\": \"assistant\",\n" +
-                "  \"name\": \"Assistente(7)\",\n" +
-                "  \"value\": 7,\n" +
-                "  \"move\" : 4,\n" +
-                "  \"wizard\": \"none\",\n" +
-                "  \"hasplayed\": false\n" +
-                "}, {\n" +
-                "  \"type\": \"assistant\",\n" +
-                "  \"name\": \"Assistente(8)\",\n" +
-                "  \"value\": 8,\n" +
-                "  \"move\" : 4,\n" +
-                "  \"wizard\": \"none\",\n" +
-                "  \"hasplayed\": false\n" +
-                "}, {\n" +
-                "  \"type\": \"assistant\",\n" +
-                "  \"name\": \"Assistente(9)\",\n" +
-                "  \"value\": 9,\n" +
-                "  \"move\" : 5,\n" +
-                "  \"wizard\": \"none\",\n" +
-                "  \"hasplayed\": false\n" +
-                "}, {\n" +
-                "  \"type\": \"assistant\",\n" +
-                "  \"name\": \"Assistente(10)\",\n" +
-                "  \"value\": 10,\n" +
-                "  \"move\" : 5,\n" +
-                "  \"wizard\": \"none\",\n" +
-                "  \"hasplayed\": false\n" +
-                "}\n" +
-                "\n" +
-                "]";/*
-        /*Gson gson = new Gson();
-        try {
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream("/Cards.json")), StandardCharsets.UTF_8);
-            //JsonReader jsonReader = new JsonReader(streamReader);
-            Scanner s = new Scanner(streamReader).useDelimiter("\\A");
-            jsoncontent = s.hasNext() ? s.next() : "";
+        ArrayList<AssistantCard> arraydeck= new ArrayList<>();
+        AssistantCardDeck deck= new AssistantCardDeck(arraydeck);
+        deck.newDeck(FilePaths.ASSISTANT_CARDS_LOCATION);
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        ArrayList<AssistantCard> TestArray = gson.fromJson(jsoncontent, new TypeToken<List<AssistantCard>>() {
-        }.getType());
-        */
-        deck.setAssistantCards(test.newDeck());
         Assertions.assertEquals(1, deck.getdeck().get(0).getValue());
         Assertions.assertEquals("Assistente(1)", deck.getdeck().get(0).getName());
         Assertions.assertEquals("Assistente(10)", deck.getdeck().get(9).getName());
 
+
+    }
+    @Test
+    public void assistantCardfilenotFoundTest(){
+        ArrayList<AssistantCard> arraydeck= new ArrayList<>();
+        AssistantCardDeck deck= new AssistantCardDeck(arraydeck);
+        String nil= null;
+
+        NullPointerException e = assertThrows(NullPointerException.class, () -> deck.newDeck(nil));
+
+    }
+
+    @Test
+    public void testAssistantSetDeck(){
+
+        ArrayList<AssistantCard> basedeck= new ArrayList<>();
+        AssistantCardDeck deck= new AssistantCardDeck(basedeck);
+        AssistantCard card= new AssistantCard(4,5,"TestWizard", false);
+
+        deck.newDeck(FilePaths.ASSISTANT_CARDS_LOCATION);
+        ArrayList<AssistantCard> newdeck= new ArrayList<>();
+        newdeck.add(card);
+
+        deck.setdeck(newdeck);
+        assertEquals("TestWizard",deck.getdeck().get(0).getWizard());
 
     }
 
@@ -379,6 +281,26 @@ public class CardsTest {
     }
     //FillCharacterCardDeck testing
 
+    @Test
+    public void testnewcharacterDeck() throws FileNotFoundException {
+        //String jsoncontent;
+        ArrayList<CharacterCard> arraydeck= new ArrayList<>();
+        CharacterDeck deck= new CharacterDeck(arraydeck);
+        deck.newDeck(FilePaths.CHARACTER_CARDS_LOCATION);
+        assertEquals(1, deck.getDeck().get(0).getCharacterID());
+        assertEquals("Move students on the character card to any isle you wish!", deck.getDeck().get(0).getDescription());
+        assertEquals(1, deck.getDeck().get(0).getPrice());
+        assertEquals("setup", deck.getDeck().get(0).getPower());
+    }
+    @Test
+    public void characterfilenotFoundTest(){
+        ArrayList<CharacterCard> arraydeck= new ArrayList<>();
+        CharacterDeck deck= new CharacterDeck(arraydeck);
+        String nil= null;
+
+        NullPointerException e = assertThrows(NullPointerException.class, () -> deck.newDeck(nil));
+
+    }
     }
 
 

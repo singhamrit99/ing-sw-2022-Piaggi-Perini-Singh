@@ -1,95 +1,95 @@
 [
   {
     "type": "character",
-    "id": 1,
-    "initialcost": 1,
+    "characterID": 1,
+    "price": 1,
     "power": "setup",
     "description": "Move students on the character card to any isle you wish!"
 
   },
   {
     "type": "character",
-    "id": 2,
-    "initialcost": 2,
+    "characterID": 2,
+    "price": 2,
     "power": "manipulation",
     "description": "Snag an opponent's professor if you have the same number of their students!"
 
   },
   {
     "type": "character",
-    "id": 3,
-    "initialcost": 3,
+    "characterID": 3,
+    "price": 3,
     "power": "influence",
     "description": "Calculate the influence on any Island and reap the rewards!"
 
   },
   {
     "type": "character",
-    "id": 4,
-    "initialcost": 1,
+    "characterID": 4,
+    "price": 1,
     "power": "MNmanipulation",
     "description": "You may move Mother Nature up to 2 additional spaces!"
 
   },
   {
     "type": "character",
-    "id": 5,
-    "initialcost": 2,
+    "characterID": 5,
+    "price": 2,
     "power": "setup",
     "description": "Place a No Entry card on an isle and block Mother Nature's power once!"
 
   },
   {
     "type": "character",
-    "id": 6,
-    "initialcost": 3,
+    "characterID": 6,
+    "price": 3,
     "power": "influence",
     "description": "If somebody tries to Conquer an island, ignore the towers for this turn!"
 
   },
   {
     "type": "character",
-    "id": 7,
-    "initialcost": 1,
+    "characterID": 7,
+    "price": 1,
     "power": "setup",
     "description": "Swap 3 of the students on this card with 3 from your Entrance!"
 
   },
   {
     "type": "character",
-    "id": 8,
-    "initialcost": 2,
+    "characterID": 8,
+    "price": 2,
     "power": "influence",
     "description": "Add 2 to your Influence this turn!"
 
   },
   {
     "type": "character",
-    "id": 9,
-    "initialcost": 3,
+    "characterID": 9,
+    "price": 3,
     "power": "influence",
     "description": "Choose a student color to ignore when calculating Influence this turn!"
 
   },
   {
     "type": "character",
-    "id": 10,
-    "initialcost": 1,
+    "characterID": 10,
+    "price": 1,
     "power": "manipulation",
     "description": "Switch up to two students between your Entrance and your Dining Room!"
 
   }, {
   "type": "character",
-  "id": 1,
-  "initialcost": 2,
+  "characterID": 1,
+  "price": 2,
   "power": "setup",
   "description": "Take one student from this card and put them in the dining room, then draw another from the bag and replace them!"
 
 },
   {
     "type": "character",
-    "id": 12,
-    "initialcost": 3,
+    "characterID": 12,
+    "price": 3,
     "power": "manipulation",
     "description": "Choose a color: EVERYONE must return 3 students of that color to the bag!"
 

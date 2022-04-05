@@ -25,8 +25,7 @@ public class Player implements Comparable<Player> {
         this.nickname = nickname;
         this.schoolBoard = new SchoolBoard(numberOfPlayers);
         this.towerColor = towerColors;
-
-        assistantCardDeck = new AssistantCardDeck();
+        assistantCardDeck.newDeck(FilePaths.ASSISTANT_CARDS_LOCATION);
     }
 
     public void playAssistantCard(int index) {
