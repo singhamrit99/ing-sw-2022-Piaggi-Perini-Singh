@@ -1,20 +1,6 @@
 [
-
-
-  {
-    "name": "cloud1"
-
-
-  },
-  {
-    "name": "cloud2"
-
-
-  },
-  {
-    "name": "cloud3"
-
-
-  }
-
+    "cloud1",
+    "cloud2",
+    "cloud3",
+    "cloud4"
 ]

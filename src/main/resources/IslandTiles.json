@@ -1,62 +1,14 @@
 [
-  {
-
-    "name": "island1"
-
-  },
-  {
-
-    "name": "island2"
-
-  },
-  {
-
-    "name": "island3"
-
-  },
-  {
-
-    "name": "island4"
-
-  },
-  {
-
-    "name": "island5"
-
-  },
-  {
-
-    "name": "island6"
-
-  },
-  {
-
-    "name": "island7"
-
-  },
-  {
-
-    "name": "island8"
-
-  },
-  {
-
-    "name": "island9"
-
-  },
-  {
-
-    "name": "island10"
-
-  },
-  {
-
-    "name": "island11"
-
-  },
-  {
-
-    "name": "island12"
-
-  }
+  "island1",
+  "island2",
+  "island3",
+  "island4",
+  "island5",
+  "island6",
+  "island7",
+  "island8",
+  "island9",
+  "island10",
+  "island11",
+  "island12"
 ]
