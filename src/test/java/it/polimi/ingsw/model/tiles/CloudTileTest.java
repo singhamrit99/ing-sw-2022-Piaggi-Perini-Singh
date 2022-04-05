@@ -5,14 +5,14 @@ import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
-import java.util.Map;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CloudTileTest {
 
     @Test
-    void testremoveStudents() {
+    void testRemoveStudents() {
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         int i = 0;
         for (Colors color : Colors.values()) {
@@ -44,20 +44,20 @@ class CloudTileTest {
         }
 
         CloudTile tile = new CloudTile("TestCloud");
-        EnumMap<Colors, Integer> newstudents = new EnumMap<>(Colors.class);
+        EnumMap<Colors, Integer> newStudents = new EnumMap<>(Colors.class);
         int i = 0;
         for (Colors color : Colors.values()) {
-            newstudents.put(color, i);
+            newStudents.put(color, i);
             i++;
         }
 
         try {
-            tile.addStudents(newstudents);
+            tile.addStudents(newStudents);
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
         for (Colors color: Colors.values()) {
-            assertEquals(newstudents.get(color), tile.getStudents().get(color));
+            assertEquals(newStudents.get(color), tile.getStudents().get(color));
         }
 
     }
@@ -81,12 +81,12 @@ class CloudTileTest {
     }
 
     @Test
-    public void testgetName()
+    public void testGetName()
     {
 
-        CloudTile testtile= new CloudTile("NotTheTestName");
+        CloudTile testTile= new CloudTile("NotTheTestName");
 
-        assertEquals("NotTheTestName", testtile.getName());
+        assertEquals("NotTheTestName", testTile.getName());
 
     }
 

@@ -53,10 +53,6 @@ public class AssistantCardDeck {
     }
 
 
-    public void setdeck(ArrayList<it.polimi.ingsw.model.cards.AssistantCard> deck) {
-        this.deck = deck;
-    }
-
     public ArrayList<AssistantCard> getdeck() {
         return deck;
     }

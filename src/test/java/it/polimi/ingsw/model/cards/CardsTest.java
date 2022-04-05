@@ -1,31 +1,23 @@
 package it.polimi.ingsw.model.cards;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.model.FilePaths;
 import it.polimi.ingsw.model.GetPaths;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CardsTest {
+
+    private String expected;
 
     String RemoveSpaces(String input) {
         return input.replaceAll("\\s+", "");
@@ -40,7 +32,6 @@ public class CardsTest {
         assertEquals(a.getName(), nome);
 
     }
-
 
     //AssistantCard Testing
     @Test
@@ -91,7 +82,7 @@ public class CardsTest {
     }
 
     @Test
-    public void shouldPassFilepathsasStrings() {
+    public void shouldPassFilePathsAsStrings() {
         Assertions.assertEquals(GetPaths.ASSISTANT_CARDS_LOCATION, "/Cards.json");
         Assertions.assertEquals(GetPaths.ISLAND_TILES_LOCATION, "/IslandTiles.json");
         Assertions.assertEquals(GetPaths.CLOUD_TILES_LOCATION, "/Clouds.json");
@@ -99,25 +90,22 @@ public class CardsTest {
 
     }
 
-    private String expected;
-
     //AssistantCardDeck testing
 
     @Test
     public void testGetAssistantCard() {
 
-        AssistantCardDeck newdeck = new AssistantCardDeck();
-        newdeck.newDeck();
+        AssistantCardDeck newDeck = new AssistantCardDeck();
+        newDeck.newDeck();
         int i;
-        Random rand= new Random();
-            i = rand.nextInt(newdeck.getdeck().size());
-            assertEquals(i+1, newdeck.getAssistantCard(i).getValue());
+        Random rand = new Random();
+        i = rand.nextInt(newDeck.getdeck().size());
+        assertEquals(i + 1, newDeck.getAssistantCard(i).getValue());
     }
 
     @Test
     @DisplayName("Should check if JSON loaded correctly")
     public void shouldReadJson() {
-        String fileContent;
         expected = "[\n" +
                 "  {\n" +
                 "    \"type\": \"assistant\",\n" +
@@ -212,10 +200,9 @@ public class CardsTest {
 
     //Assistant card deck testing
     @Test
-    public void testnewDeck() {
-        //String jsoncontent;
+    public void testNewDeck() {
 
-        AssistantCardDeck deck= new AssistantCardDeck();
+        AssistantCardDeck deck = new AssistantCardDeck();
         deck.newDeck();
 
 
@@ -236,32 +223,31 @@ public class CardsTest {
         assertEquals("none", a.getPower());
         assertEquals("something cool", a.getDescription());
     }
+
     @Test
-    public void testsetPrice(){
+    public void testSetPrice() {
         final CharacterCard a = new CharacterCard(0, 0, "none", "something cool");
-            final int newprice= 5;
+        final int newPrice = 5;
 
-            a.setPrice(newprice);
+        a.setPrice(newPrice);
 
-            assertEquals(newprice,a.getPrice());
+        assertEquals(newPrice, a.getPrice());
 
     }
 
     @Test
-    public void testsetDescription()
-    {
+    public void testSetDescription() {
         final CharacterCard a = new CharacterCard(0, 0, "none", "something cool");
-        final String newdescrption = "A VERY cool new description!";
-        a.setDescription(newdescrption);
-        assertEquals(newdescrption, a.getDescription());
+        final String newDescription = "A VERY cool new description!";
+        a.setDescription(newDescription);
+        assertEquals(newDescription, a.getDescription());
     }
     //FillCharacterCardDeck testing
 
     @Test
-    public void testnewcharacterDeck() throws FileNotFoundException {
-        //String jsoncontent;
-        ArrayList<CharacterCard> arraydeck= new ArrayList<>();
-        CharacterDeck deck= new CharacterDeck(arraydeck);
+    public void testNewCharacterDeck() throws NullPointerException {
+        ArrayList<CharacterCard> arrayDeck = new ArrayList<>();
+        CharacterDeck deck = new CharacterDeck(arrayDeck);
         deck.newDeck();
         assertEquals(1, deck.getDeck().get(0).getCharacterID());
         assertEquals("Move students on the character card to any isle you wish!", deck.getDeck().get(0).getDescription());
@@ -269,7 +255,7 @@ public class CardsTest {
         assertEquals("setup", deck.getDeck().get(0).getPower());
     }
 
-    }
+}
 
 
 
