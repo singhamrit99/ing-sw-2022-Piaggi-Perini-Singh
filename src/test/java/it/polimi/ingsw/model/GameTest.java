@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.cards.AssistantCard;
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
@@ -38,13 +39,18 @@ class GameTest {
         assertEquals(players.size(), 4);
     }
 
-    /*
     @Test
-    public void testDrawFromBag() throws IncorrectArgumentException{
+    public void testDrawFromBag() throws IncorrectArgumentException,IncorrectPlayerException{
         Game game = initGame2players();
-        game.drawFromBag(game.getCurrentPlayer().getNickname()); //Error in BAG
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        assertTrue(game.getPlayerDrawnOut());
     }
-    */
+
+    @Test
+    public void testDrawFromBagFalse() throws IncorrectArgumentException{
+        Game game = initGame2players();
+        assertThrows(IncorrectPlayerException.class,()->game.drawFromBag("randomPlayer"));
+    }
 
     public Game initGame2players() throws IncorrectArgumentException{
         ArrayList<String> nicknames = new ArrayList<>();

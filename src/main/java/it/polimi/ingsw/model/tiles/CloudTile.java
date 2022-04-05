@@ -52,5 +52,4 @@ public class CloudTile implements Tile {
         }
         students = tmp;
     }
-
 }

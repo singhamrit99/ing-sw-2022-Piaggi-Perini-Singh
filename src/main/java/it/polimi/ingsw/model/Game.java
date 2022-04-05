@@ -122,7 +122,7 @@ public class Game {
         //initialization LinkedList<Player>
         playerPlanPhase = (int) (Math.random() * numOfPlayer - 1); //random init player
         counter = numOfPlayer - 1; //used to 'count' during the Planning Phase
-        playerDrawnOut = false;
+        playerDrawnOut = false; //used on drawBag and playAssistantCard
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
         currentPlayer = players.get(playerPlanPhase);
@@ -195,12 +195,15 @@ public class Game {
         }.getType());
     }
 
-    public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException {
-        if (state == State.PLANNINGPHASE && nicknameCaller.equals(currentPlayer.getNickname()) && !playerDrawnOut) {
-            for (CloudTile cloud : clouds) {
-                cloud.addStudents(bag.drawStudents(numDrawnStudents));
+    public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException{
+        if (state == State.PLANNINGPHASE && !playerDrawnOut) {
+            if(nicknameCaller.equals(currentPlayer.getNickname())){
+                for (CloudTile cloud : clouds) {
+                    cloud.addStudents(bag.drawStudents(numDrawnStudents));
+                }
+                playerDrawnOut = true;
             }
-            playerDrawnOut = true;
+            else throw new IncorrectPlayerException();
         } else throw new IncorrectArgumentException();
     }
 
@@ -502,5 +505,13 @@ public class Game {
 
     public State getCurrentState() {
         return state;
+    }
+
+    public boolean getPlayerDrawnOut(){
+        return playerDrawnOut;
+    }
+
+    public CloudTile getCloudTile(int index){
+        return clouds[index];
     }
 }
