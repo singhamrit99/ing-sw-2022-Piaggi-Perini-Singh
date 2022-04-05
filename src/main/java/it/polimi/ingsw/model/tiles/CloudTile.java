@@ -17,7 +17,6 @@ public class CloudTile{
         for (Colors color : Colors.values()) {
             students.put(color, 0);
         }
-
     }
 
     public String getName() {

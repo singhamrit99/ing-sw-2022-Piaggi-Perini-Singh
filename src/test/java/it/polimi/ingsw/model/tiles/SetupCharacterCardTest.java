@@ -12,7 +12,6 @@ class SetupCharacterCardTest {
 
     @Test
     void testAddStudents() {
-
         SetupCharacterCard tile = new SetupCharacterCard(1, 1, "test");
         EnumMap<Colors, Integer> newStudents = new EnumMap<>(Colors.class);
         int i = 0;
@@ -26,27 +25,23 @@ class SetupCharacterCardTest {
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
-        for (Colors color: Colors.values()) {
+        for (Colors color : Colors.values()) {
             assertEquals(newStudents.get(color), tile.getStudents().get(color));
         }
-
     }
+
     @Test
-    public void invalidEnumMapException()
-    {
+    public void testInvalidEnumMapException() {
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         int i = -1;
         for (Colors color : Colors.values()) {
             students.put(color, i);
-
         }
-        SetupCharacterCard tile = new SetupCharacterCard(1,1,"test power");
-
+        SetupCharacterCard tile = new SetupCharacterCard(1, 1, "test power");
         IncorrectArgumentException e = assertThrows(IncorrectArgumentException.class, () -> tile.addStudents(students));
 
-
-        String expectedMessage= "EnumMap is not correct";
-        String actualMessage= e.getMessage();
+        String expectedMessage = "EnumMap is not correct";
+        String actualMessage = e.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
 }

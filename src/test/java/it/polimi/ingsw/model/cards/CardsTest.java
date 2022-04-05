@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 
-import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CardsTest {
-
     private String expected;
 
     String RemoveSpaces(String input) {
@@ -30,7 +28,6 @@ public class CardsTest {
         String nome = "Menisco";
         a.setName(nome);
         assertEquals(a.getName(), nome);
-
     }
 
     //AssistantCard Testing
@@ -45,12 +42,10 @@ public class CardsTest {
 
     @Test
     public void testAssistantCardGetWizard() {
-
         final AssistantCard a = new AssistantCard(0, 0, "none", false);
         String wizard = "Silt";
         a.setWizard(wizard);
         assertEquals(wizard, a.getWizard());
-
     }
 
     @Test
@@ -77,7 +72,7 @@ public class CardsTest {
     }
 
     @Test
-    public void testisHasPlayed() {
+    public void testHasPlayed() {
         final AssistantCard a = new AssistantCard(0, 0, "none", false);
     }
 
@@ -89,15 +84,13 @@ public class CardsTest {
     }
 
     //AssistantCardDeck testing
-
     @Test
     public void testGetAssistantCard() {
-
         AssistantCardDeck newDeck = new AssistantCardDeck();
         newDeck.newDeck();
         int i;
         Random rand = new Random();
-        i = rand.nextInt(newDeck.getdeck().size());
+        i = rand.nextInt(newDeck.getDeck().size());
         assertEquals(i + 1, newDeck.getAssistantCard(i).getValue());
     }
 
@@ -187,28 +180,21 @@ public class CardsTest {
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
             String result = s.hasNext() ? s.next() : "";
 
-
             Assertions.assertEquals(RemoveSpaces(expected), RemoveSpaces(result));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     //Assistant card deck testing
     @Test
     public void testNewDeck() {
-
         AssistantCardDeck deck = new AssistantCardDeck();
         deck.newDeck();
 
-
-        Assertions.assertEquals(1, deck.getdeck().get(0).getValue());
-        Assertions.assertEquals("Assistente(1)", deck.getdeck().get(0).getName());
-        Assertions.assertEquals("Assistente(10)", deck.getdeck().get(9).getName());
-
-
+        Assertions.assertEquals(1, deck.getDeck().get(0).getValue());
+        Assertions.assertEquals("Assistente(1)", deck.getDeck().get(0).getName());
+        Assertions.assertEquals("Assistente(10)", deck.getDeck().get(9).getName());
     }
 
 
@@ -228,9 +214,7 @@ public class CardsTest {
         final int newPrice = 5;
 
         a.setPrice(newPrice);
-
         assertEquals(newPrice, a.getPrice());
-
     }
 
     @Test
@@ -252,7 +236,6 @@ public class CardsTest {
         assertEquals(1, deck.getDeck().get(0).getPrice());
         assertEquals("setup", deck.getDeck().get(0).getPower());
     }
-
 }
 
 

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.tiles;
 
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
@@ -16,8 +15,8 @@ public class IslandTile {
     private boolean hasMotherNature;
     private boolean hasNoEntryTile;
 
-    public IslandTile(String islandname) {
-        name = islandname;
+    public IslandTile(String islandName) {
+        name = islandName;
         hasMotherNature = false;
         towersColor = Towers.WHITE;
         numberOfTowers = 0;

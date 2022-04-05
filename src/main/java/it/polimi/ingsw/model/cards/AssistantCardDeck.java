@@ -13,9 +13,7 @@ import java.util.Scanner;
 
 //Each Player has to have a deck of Assistant Cards, numbered 1 thorough 10.
 public class AssistantCardDeck {
-
     private ArrayList<AssistantCard> deck;
-
 
     public AssistantCardDeck() {
         deck = new ArrayList<>();
@@ -28,31 +26,23 @@ public class AssistantCardDeck {
 
     private void loadFromJSON() throws NullPointerException {
         Gson gson = new Gson();
-
-
         InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.getAssistantCardLocation())), StandardCharsets.UTF_8);
 
         Scanner s = new Scanner(streamReader).useDelimiter("\\A");
-        String jsoncontent = s.hasNext() ? s.next() : "";
-        deck = gson.fromJson(jsoncontent, new TypeToken<List<AssistantCard>>() {
+        String JSONContent = s.hasNext() ? s.next() : "";
+        deck = gson.fromJson(JSONContent, new TypeToken<List<AssistantCard>>() {
         }.getType());
-
     }
 
     public AssistantCard getAssistantCard(int index) {
-        AssistantCard returncard;
-        int lenght = deck.size();
-        // System.out.println("I am playing the card number " + deck.get(actualposition).getValue());
+        AssistantCard returnCard;
 
-        returncard = deck.get(index);
+        returnCard = deck.get(index);
         deck.remove(index);
-        return returncard;
-
-
+        return returnCard;
     }
 
-
-    public ArrayList<AssistantCard> getdeck() {
+    public ArrayList<AssistantCard> getDeck() {
         return deck;
     }
 }

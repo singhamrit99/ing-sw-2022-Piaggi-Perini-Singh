@@ -9,18 +9,15 @@ public class AssistantCard extends Card {
     private String wizard;
     private boolean hasPlayed;
 
-    public int getValue() {
-        return value;
-    }
-
-
-
-
     public AssistantCard(int value, int move, String wizard, boolean hasPlayed) {
         this.value = value;
         this.move = move;
         this.wizard = wizard;
         this.hasPlayed = hasPlayed;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     public int getMove() {
@@ -40,6 +37,4 @@ public class AssistantCard extends Card {
     public void setHasPlayed(boolean hasPlayed) {
         this.hasPlayed = hasPlayed;
     }
-
-
 }
