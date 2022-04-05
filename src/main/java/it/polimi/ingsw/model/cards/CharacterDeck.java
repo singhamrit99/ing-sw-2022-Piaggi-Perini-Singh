@@ -31,7 +31,7 @@ public class CharacterDeck {
     private void loadFromJSON() throws NullPointerException {
         Gson gson = new Gson();
 
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CharacterCard.class.getResourceAsStream(FilePaths.CHARACTER_CARDS_LOCATION)), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CharacterCard.class.getResourceAsStream(FilePaths.getCharacterCardsLocation())), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
             String jsoncontent = s.hasNext() ? s.next() : "";
             deck = gson.fromJson(jsoncontent, new TypeToken<List<CharacterCard>>() {

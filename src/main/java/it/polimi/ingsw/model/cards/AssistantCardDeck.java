@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.FilePaths;
 
-import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class AssistantCardDeck {
         Gson gson = new Gson();
 
 
-        InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.ASSISTANT_CARDS_LOCATION)), StandardCharsets.UTF_8);
+        InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.getAssistantCardLocation())), StandardCharsets.UTF_8);
 
         Scanner s = new Scanner(streamReader).useDelimiter("\\A");
         String jsoncontent = s.hasNext() ? s.next() : "";

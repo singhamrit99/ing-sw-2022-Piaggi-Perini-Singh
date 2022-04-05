@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model.cards;
 
-import it.polimi.ingsw.model.GetPaths;
+import it.polimi.ingsw.model.FilePaths;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -83,11 +83,9 @@ public class CardsTest {
 
     @Test
     public void shouldPassFilePathsAsStrings() {
-        Assertions.assertEquals(GetPaths.ASSISTANT_CARDS_LOCATION, "/Cards.json");
-        Assertions.assertEquals(GetPaths.ISLAND_TILES_LOCATION, "/IslandTiles.json");
-        Assertions.assertEquals(GetPaths.CLOUD_TILES_LOCATION, "/Clouds.json");
-
-
+        Assertions.assertEquals(FilePaths.getAssistantCardLocation(), "/Cards.json");
+        Assertions.assertEquals(FilePaths.getIslandTilesLocation(), "/IslandTiles.json");
+        Assertions.assertEquals(FilePaths.getCloudTilesLocation(), "/Clouds.json");
     }
 
     //AssistantCardDeck testing
