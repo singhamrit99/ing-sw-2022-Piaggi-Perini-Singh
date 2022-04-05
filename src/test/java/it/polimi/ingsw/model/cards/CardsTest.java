@@ -107,7 +107,7 @@ public class CardsTest {
     public void testGetAssistantCard() {
         ArrayList<AssistantCard> testDeck = new ArrayList<>();
         AssistantCardDeck newdeck = new AssistantCardDeck(testDeck);
-        newdeck.newDeck(FilePaths.ASSISTANT_CARDS_LOCATION);
+        newdeck.newDeck();
         int i;
         Random rand= new Random();
             i = rand.nextInt(newdeck.getdeck().size());
@@ -216,22 +216,13 @@ public class CardsTest {
         //String jsoncontent;
         ArrayList<AssistantCard> arraydeck= new ArrayList<>();
         AssistantCardDeck deck= new AssistantCardDeck(arraydeck);
-        deck.newDeck(FilePaths.ASSISTANT_CARDS_LOCATION);
+        deck.newDeck();
 
 
         Assertions.assertEquals(1, deck.getdeck().get(0).getValue());
         Assertions.assertEquals("Assistente(1)", deck.getdeck().get(0).getName());
         Assertions.assertEquals("Assistente(10)", deck.getdeck().get(9).getName());
 
-
-    }
-    @Test
-    public void assistantCardfilenotFoundTest(){
-        ArrayList<AssistantCard> arraydeck= new ArrayList<>();
-        AssistantCardDeck deck= new AssistantCardDeck(arraydeck);
-        String nil= null;
-
-        NullPointerException e = assertThrows(NullPointerException.class, () -> deck.newDeck(nil));
 
     }
 
@@ -242,7 +233,7 @@ public class CardsTest {
         AssistantCardDeck deck= new AssistantCardDeck(basedeck);
         AssistantCard card= new AssistantCard(4,5,"TestWizard", false);
 
-        deck.newDeck(FilePaths.ASSISTANT_CARDS_LOCATION);
+        deck.newDeck();
         ArrayList<AssistantCard> newdeck= new ArrayList<>();
         newdeck.add(card);
 
@@ -286,21 +277,13 @@ public class CardsTest {
         //String jsoncontent;
         ArrayList<CharacterCard> arraydeck= new ArrayList<>();
         CharacterDeck deck= new CharacterDeck(arraydeck);
-        deck.newDeck(FilePaths.CHARACTER_CARDS_LOCATION);
+        deck.newDeck();
         assertEquals(1, deck.getDeck().get(0).getCharacterID());
         assertEquals("Move students on the character card to any isle you wish!", deck.getDeck().get(0).getDescription());
         assertEquals(1, deck.getDeck().get(0).getPrice());
         assertEquals("setup", deck.getDeck().get(0).getPower());
     }
-    @Test
-    public void characterfilenotFoundTest(){
-        ArrayList<CharacterCard> arraydeck= new ArrayList<>();
-        CharacterDeck deck= new CharacterDeck(arraydeck);
-        String nil= null;
 
-        NullPointerException e = assertThrows(NullPointerException.class, () -> deck.newDeck(nil));
-
-    }
     }
 
 

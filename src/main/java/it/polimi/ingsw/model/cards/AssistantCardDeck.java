@@ -22,16 +22,16 @@ public class AssistantCardDeck {
         this.deck = deck;
     }
 
-    public void newDeck(String resourcefilepath) throws NullPointerException{
+    public void newDeck() throws NullPointerException{
         this.deck = new ArrayList<>();
-         loadFromJSON(resourcefilepath);
+         loadFromJSON();
     }
 
-    private void loadFromJSON(String filepath) throws  NullPointerException {
+    private void loadFromJSON() throws  NullPointerException {
         Gson gson = new Gson();
 
 
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(filepath)), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.ASSISTANT_CARDS_LOCATION)), StandardCharsets.UTF_8);
 
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
             String jsoncontent = s.hasNext() ? s.next() : "";

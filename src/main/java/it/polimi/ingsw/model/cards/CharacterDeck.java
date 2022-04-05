@@ -22,16 +22,16 @@ public class CharacterDeck {
         this.deck = deck;
     }
 
-    public void newDeck(String resourcefilepath) throws FileNotFoundException{
+    public void newDeck() throws NullPointerException{
         this.deck = new ArrayList<>();
-        loadFromJSON(resourcefilepath);
+        loadFromJSON();
         //System.out.println(deck.get(0).getDescription());
     }
 
-    private void loadFromJSON(String filepaths) throws NullPointerException {
+    private void loadFromJSON() throws NullPointerException {
         Gson gson = new Gson();
 
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CharacterCard.class.getResourceAsStream(filepaths)), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CharacterCard.class.getResourceAsStream(FilePaths.CHARACTER_CARDS_LOCATION)), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
             String jsoncontent = s.hasNext() ? s.next() : "";
             deck = gson.fromJson(jsoncontent, new TypeToken<List<CharacterCard>>() {
