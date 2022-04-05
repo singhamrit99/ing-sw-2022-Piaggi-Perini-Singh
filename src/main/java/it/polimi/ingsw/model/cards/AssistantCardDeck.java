@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class AssistantCardDeck {
 
     private ArrayList<AssistantCard> assistantCards;
-    private AssistantCard AssistantCard;
+    private AssistantCard assistantCard;
 
     public AssistantCard getAssistantCard(int index) {
         int lenght=assistantCards.size();
@@ -20,11 +20,11 @@ public class AssistantCardDeck {
         }
         System.out.println("I am playing the card number " + assistantCards.get(actualposition).getValue());
 
-        AssistantCard = assistantCards.get(actualposition);
+        assistantCard = assistantCards.get(actualposition);
         assistantCards.remove(actualposition);
 
 
-        return AssistantCard;
+        return assistantCard;
 
 
     }
@@ -32,5 +32,9 @@ public class AssistantCardDeck {
 
     public void setAssistantCards(ArrayList<it.polimi.ingsw.model.cards.AssistantCard> assistantCards) {
         this.assistantCards = assistantCards;
+    }
+    public ArrayList<AssistantCard> getdeck()
+    {
+        return assistantCards;
     }
 }

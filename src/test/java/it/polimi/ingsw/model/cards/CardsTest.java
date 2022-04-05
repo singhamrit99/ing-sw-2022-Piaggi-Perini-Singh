@@ -106,11 +106,9 @@ public class CardsTest {
     @Test
     public void testgetAssistantCardInOrder() {
         FillDeck deckfiller = new FillDeck();
-        ArrayList<AssistantCard> deck = new ArrayList<>();
         ArrayList<AssistantCard> testDeck = new ArrayList<>();
         AssistantCardDeck newdeck = new AssistantCardDeck();
-        deck = deckfiller.newDeck(deck);
-        newdeck.setAssistantCards(deck);
+        newdeck.setAssistantCards(deckfiller.newDeck());
 
 
         //Drawing in order
@@ -129,11 +127,9 @@ public class CardsTest {
     @Test
     public void testGetAssistantCardOutOfOrder() {
         FillDeck deckfiller = new FillDeck();
-        ArrayList<AssistantCard> deck = new ArrayList<>();
         ArrayList<AssistantCard> testDeck = new ArrayList<>();
         AssistantCardDeck newdeck = new AssistantCardDeck();
-        deck = deckfiller.newDeck(deck);
-        newdeck.setAssistantCards(deck);
+        newdeck.setAssistantCards(deckfiller.newDeck());
 
 
         //Drawing in order
@@ -152,8 +148,6 @@ public class CardsTest {
     }
 
     //FillDeck testing
-
-    //TODO: exeption handler test
 
     @Test
     @DisplayName("Should check if JSON loaded correctly")
@@ -254,7 +248,9 @@ public class CardsTest {
     @Test
     public void testFillDeck() {
         String jsoncontent;
-        jsoncontent = "[\n" +
+        FillDeck test = new FillDeck();
+        AssistantCardDeck deck = new AssistantCardDeck();
+        /*jsoncontent = "[\n" +
                 "  {\n" +
                 "    \"type\": \"assistant\",\n" +
                 "    \"name\": \"Assistente(1)\",\n" +
@@ -330,8 +326,8 @@ public class CardsTest {
                 "  \"hasplayed\": false\n" +
                 "}\n" +
                 "\n" +
-                "]";
-        Gson gson = new Gson();
+                "]";/*
+        /*Gson gson = new Gson();
         try {
             InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream("/Cards.json")), StandardCharsets.UTF_8);
             //JsonReader jsonReader = new JsonReader(streamReader);
@@ -344,10 +340,11 @@ public class CardsTest {
         }
         ArrayList<AssistantCard> TestArray = gson.fromJson(jsoncontent, new TypeToken<List<AssistantCard>>() {
         }.getType());
-
-        Assertions.assertEquals(1, TestArray.get(0).getValue());
-        Assertions.assertEquals("Assistente(1)", TestArray.get(0).getName());
-        Assertions.assertEquals("Assistente(10)", TestArray.get(9).getName());
+        */
+        deck.setAssistantCards(test.newDeck());
+        Assertions.assertEquals(1, deck.getdeck().get(0).getValue());
+        Assertions.assertEquals("Assistente(1)", deck.getdeck().get(0).getName());
+        Assertions.assertEquals("Assistente(10)", deck.getdeck().get(9).getName());
 
 
     }

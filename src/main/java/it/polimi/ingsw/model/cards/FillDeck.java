@@ -20,13 +20,13 @@ public class FillDeck {
 
     private ArrayList<AssistantCard> deck;
     private String fileContent;
-    public ArrayList<AssistantCard> newDeck(ArrayList<AssistantCard> deck) {
+    public ArrayList<AssistantCard> newDeck() {
         this.deck = new ArrayList<>();
-        deck= loadFromJSON(deck);
+        deck= loadFromJSON();
         return deck;
     }
 
-    private ArrayList<AssistantCard> loadFromJSON( ArrayList<AssistantCard> deck) {
+    private ArrayList<AssistantCard> loadFromJSON() {
         Gson gson = new Gson();
 
                 try {
@@ -44,5 +44,6 @@ public class FillDeck {
                 }
         return deck;
     }
+
 
 }
