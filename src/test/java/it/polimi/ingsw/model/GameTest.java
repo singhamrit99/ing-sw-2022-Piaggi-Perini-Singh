@@ -107,16 +107,39 @@ class GameTest {
         assertEquals(game.findPlayerFromTeam(Towers.BLACK).size(),2);
     }
 
-
     @Test
     void testNextRound() throws IncorrectArgumentException{
         Game game = initGame2players();
         assertThrows(IncorrectStateException.class,()->game.nextRound());
     }
 
+    @Test
+    void testPlayAssistantCard() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+        Game game = initGame4players();
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        String oldPlayer = game.getCurrentPlayer().getNickname();
+        game.playAssistantCard(game.getCurrentPlayer(),3);
+    }
 
     @Test
-    void takeStudentsFromCloud() {
+    void testPlanningPhase() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException{
+        Game game = initGame4players();
+        String oldPlayer="null";
+        System.out.println("first random Player" + game.getCurrentPlayer().getNickname());
+        for(int i = 0; i<4;i++){
+            System.out.println("i cycle:"+i);
+            oldPlayer = game.getCurrentPlayer().getNickname();
+            game.drawFromBag(oldPlayer);
+            game.playAssistantCard(game.getCurrentPlayer(), 3);
+            String newPlayer = game.getCurrentPlayer().getNickname();
+            assertNotEquals(oldPlayer,newPlayer);
+            System.out.println(game.getCurrentState());
+        }
+        assertEquals(game.getCurrentState(),State.ACTIONPHASE);
+    }
+
+    @Test
+    void takeStudentsFromCloud(){
     }
 
     @Test
@@ -137,15 +160,12 @@ class GameTest {
         ArrayList<Player> team = game.findPlayerFromTeam(Towers.WHITE);
         int initialTowers=-1;
         for (Player p : team) {
-            System.out.println(p.getPlayerTowers());
             if(initialTowers==-1) initialTowers = p.getPlayerTowers();
             else assertEquals(initialTowers, p.getPlayerTowers());
         }
         int endingTowers = -1;
         game.moveTowersFromTeam(team,-4);
-        System.out.println("moved");
         for (Player p : team) {
-            System.out.println(p.getPlayerTowers());
             if(endingTowers==-1) endingTowers = p.getPlayerTowers();
             else assertEquals(endingTowers, p.getPlayerTowers());
         }

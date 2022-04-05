@@ -125,7 +125,7 @@ public class Game {
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
         currentPlayer = players.get(playerPlanPhase);
-        playerPlanPhase++;
+        //playerPlanPhase++;
     }
 
     public void importingCharactersJson() {
@@ -158,7 +158,7 @@ public class Game {
 
         // initialization clouds;
         try { //Loading CloudTiles JSON file
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CloudTile.class.getResourceAsStream(GetPaths.CLOUD_TILES_LOCATION)), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CloudTile.class.getResourceAsStream(FilePaths.CLOUD_TILES_LOCATION)), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
             jsoncontent = s.hasNext() ? s.next() : "";
         } catch (Exception FileNotFound) {
@@ -200,15 +200,16 @@ public class Game {
         if (state == State.PLANNINGPHASE){
             if (counter > 0){
                 counter--;
-                if (playerPlanPhase >= numOfPlayer) {
-                    playerPlanPhase = 0;
+                if (playerPlanPhase >= numOfPlayer-1){
+                    playerPlanPhase = -1;
                 }
-                currentPlayer = players.get(playerPlanPhase);
                 playerPlanPhase++;
+                currentPlayer = players.get(playerPlanPhase);
                 playerDrawnOut = false;
             } else {
                 state = State.ACTIONPHASE;
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
+                currentPlayer = players.get(playerPlanPhase);
             }
         } else if (state == State.ACTIONPHASE) {
             if (!orderPlayers.isEmpty()) currentPlayer = orderPlayers.poll();
@@ -482,6 +483,10 @@ public class Game {
 
     public boolean getPlayerDrawnOut(){
         return playerDrawnOut;
+    }
+
+    public int getPlayerPlanPhase(){
+        return playerPlanPhase;
     }
 
     public CloudTile getCloudTile(int index){
