@@ -105,8 +105,8 @@ public class CardsTest {
 
     @Test
     public void testGetAssistantCard() {
-        ArrayList<AssistantCard> testDeck = new ArrayList<>();
-        AssistantCardDeck newdeck = new AssistantCardDeck(testDeck);
+
+        AssistantCardDeck newdeck = new AssistantCardDeck();
         newdeck.newDeck();
         int i;
         Random rand= new Random();
@@ -214,8 +214,8 @@ public class CardsTest {
     @Test
     public void testnewDeck() {
         //String jsoncontent;
-        ArrayList<AssistantCard> arraydeck= new ArrayList<>();
-        AssistantCardDeck deck= new AssistantCardDeck(arraydeck);
+
+        AssistantCardDeck deck= new AssistantCardDeck();
         deck.newDeck();
 
 
@@ -226,21 +226,6 @@ public class CardsTest {
 
     }
 
-    @Test
-    public void testAssistantSetDeck(){
-
-        ArrayList<AssistantCard> basedeck= new ArrayList<>();
-        AssistantCardDeck deck= new AssistantCardDeck(basedeck);
-        AssistantCard card= new AssistantCard(4,5,"TestWizard", false);
-
-        deck.newDeck();
-        ArrayList<AssistantCard> newdeck= new ArrayList<>();
-        newdeck.add(card);
-
-        deck.setdeck(newdeck);
-        assertEquals("TestWizard",deck.getdeck().get(0).getWizard());
-
-    }
 
     //CharacterCard testing
     @Test

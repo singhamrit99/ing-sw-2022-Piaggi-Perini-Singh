@@ -80,5 +80,15 @@ class CloudTileTest {
 
     }
 
+    @Test
+    public void testgetName()
+    {
+
+        CloudTile testtile= new CloudTile("NotTheTestName");
+
+        assertEquals("NotTheTestName", testtile.getName());
+
+    }
+
 }
 

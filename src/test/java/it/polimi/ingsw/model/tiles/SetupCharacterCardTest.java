@@ -31,4 +31,22 @@ class SetupCharacterCardTest {
         }
 
     }
+    @Test
+    public void invalidEnummapException()
+    {
+        EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
+        int i = -1;
+        for (Colors color : Colors.values()) {
+            students.put(color, i);
+
+        }
+        SetupCharacterCard tile = new SetupCharacterCard(1,1,"testpower");
+
+        IncorrectArgumentException e = assertThrows(IncorrectArgumentException.class, () -> tile.addStudents(students));
+
+
+        String expectedMessage= "EnumMap is not correct";
+        String actualMessage= e.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 }

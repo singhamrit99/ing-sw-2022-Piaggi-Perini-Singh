@@ -141,32 +141,6 @@ public class Game {
         }.getType());
 
     }
-/*
-    public void pickCharacter(Player player) {
-        int answer = 0;
-        char response = 0;
-        boolean getnewinput = true;
-        importingCharactersJson();
-        System.out.println("Choose your character!");
-
-        for (CharacterCard c : listOfCharacters) {
-            System.out.println("Power number" + c.getCharacterID() + ":" + c.getPowerDescription() + "\n");
-        }
-        while (getnewinput) {
-            System.out.println("Choose a power 1-12!\n");
-            answer = reader.nextInt();
-            if (answer > 12 || answer < 1) {
-                System.out.println("Invalid character number! Try again\n");
-            } else {
-                System.out.println("You chose character number " + answer + ". Are you sure? Y/N \n");
-                response = reader.next().charAt(0);
-                if (response == 'y' || response == 'Y')
-                    getnewinput = false;
-            }
-        }
-        System.out.println("You chose character number " + answer + ".");
-        player.setCharacterCard(answer);
-    }*/
 
     public void importingTilesJson() {
         //Loading IslandTiles Json file
