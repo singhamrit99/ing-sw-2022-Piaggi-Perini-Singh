@@ -18,39 +18,36 @@ public class AssistantCardDeck {
     private ArrayList<AssistantCard> deck;
 
 
-    public AssistantCardDeck(ArrayList<AssistantCard> deck) {
-        this.deck = deck;
+    public AssistantCardDeck() {
+        deck = new ArrayList<>();
     }
 
-    public void newDeck() throws NullPointerException{
+    public void newDeck() throws NullPointerException {
         this.deck = new ArrayList<>();
-         loadFromJSON();
+        loadFromJSON();
     }
 
-    private void loadFromJSON() throws  NullPointerException {
+    private void loadFromJSON() throws NullPointerException {
         Gson gson = new Gson();
 
 
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.ASSISTANT_CARDS_LOCATION)), StandardCharsets.UTF_8);
+        InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.ASSISTANT_CARDS_LOCATION)), StandardCharsets.UTF_8);
 
-            Scanner s = new Scanner(streamReader).useDelimiter("\\A");
-            String jsoncontent = s.hasNext() ? s.next() : "";
-            deck = gson.fromJson(jsoncontent, new TypeToken<List<AssistantCard>>() {
-            }.getType());
+        Scanner s = new Scanner(streamReader).useDelimiter("\\A");
+        String jsoncontent = s.hasNext() ? s.next() : "";
+        deck = gson.fromJson(jsoncontent, new TypeToken<List<AssistantCard>>() {
+        }.getType());
 
     }
 
     public AssistantCard getAssistantCard(int index) {
         AssistantCard returncard;
-        int lenght=deck.size();
-       // System.out.println("I am playing the card number " + deck.get(actualposition).getValue());
+        int lenght = deck.size();
+        // System.out.println("I am playing the card number " + deck.get(actualposition).getValue());
 
-        returncard= deck.get(index);
+        returncard = deck.get(index);
         deck.remove(index);
         return returncard;
-
-
-
 
 
     }
@@ -59,8 +56,8 @@ public class AssistantCardDeck {
     public void setdeck(ArrayList<it.polimi.ingsw.model.cards.AssistantCard> deck) {
         this.deck = deck;
     }
-    public ArrayList<AssistantCard> getdeck()
-    {
+
+    public ArrayList<AssistantCard> getdeck() {
         return deck;
     }
 }
