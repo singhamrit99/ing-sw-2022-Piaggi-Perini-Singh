@@ -4,8 +4,7 @@
     "id": 1,
     "initialcost": 1,
     "power": "setup",
-    "description": "Move students on the character card to any isle you wish!",
-    "resourcestartingcount": 1
+    "description": "Move students on the character card to any isle you wish!"
 
   },
   {

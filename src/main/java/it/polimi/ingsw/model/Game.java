@@ -142,7 +142,7 @@ public class Game {
         }.getType());
 
     }
-
+/*
     public void pickCharacter(Player player) {
         int answer = 0;
         char response = 0;
@@ -167,7 +167,7 @@ public class Game {
         }
         System.out.println("You chose character number " + answer + ".");
         player.setCharacterCard(answer);
-    }
+    }*/
 
     public void importingTilesJson() {
         //Loading IslandTiles Json file
