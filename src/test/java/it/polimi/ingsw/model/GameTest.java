@@ -125,25 +125,43 @@ class GameTest {
     void testPlanningPhase() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException{
         Game game = initGame4players();
         String oldPlayer="null";
-        System.out.println("first random Player" + game.getCurrentPlayer().getNickname());
         for(int i = 0; i<4;i++){
-            System.out.println("i cycle:"+i);
             oldPlayer = game.getCurrentPlayer().getNickname();
             game.drawFromBag(oldPlayer);
             game.playAssistantCard(game.getCurrentPlayer(), 3);
             String newPlayer = game.getCurrentPlayer().getNickname();
             assertNotEquals(oldPlayer,newPlayer);
-            System.out.println(game.getCurrentState());
         }
         assertEquals(game.getCurrentState(),State.ACTIONPHASE);
     }
 
-    @Test
-    void takeStudentsFromCloud(){
+    Game planningPhaseComplete()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game game = initGame4players();
+        String oldPlayer="null";
+        for(int i = 0; i<4;i++){
+            oldPlayer = game.getCurrentPlayer().getNickname();
+            game.drawFromBag(oldPlayer);
+            game.playAssistantCard(game.getCurrentPlayer(), 3);
+            String newPlayer = game.getCurrentPlayer().getNickname();
+            assertNotEquals(oldPlayer,newPlayer);
+        }
+        return game;
     }
 
     @Test
-    void moveStudents() {
+    void moveStudents() throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException{
+        Game game = planningPhaseComplete();
+        assertEquals(game.getCurrentState(),State.ACTIONPHASE);
+        EnumMap<Colors,Integer> s = game.getCloudTile(0).getStudents();
+        System.out.println("PINK: "+s.get(Colors.PINK));
+        System.out.println("YELLOW: "+s.get(Colors.YELLOW));
+        System.out.println("GREEN: "+s.get(Colors.GREEN));
+        System.out.println("RED: "+s.get(Colors.RED));
+        System.out.println("BLUE: "+s.get(Colors.BLUE));
+    }
+
+    @Test
+    void takeStudentsFromCloud(){
     }
 
     @Test

@@ -16,7 +16,6 @@ import it.polimi.ingsw.model.tiles.IslandTile;
 
 
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -37,10 +36,8 @@ public class Game {
     private int counter;
     private boolean playerDrawnOut;
     private Player winner;
-    private Scanner reader = new Scanner(System.in);
-    private String fileContent;
-    private ArrayList<IslandTile> importingIslands;
-    private ArrayList<CloudTile> importingClouds;
+    private ArrayList<String> importingIslands;
+    private ArrayList<String> importingClouds;
     private ArrayList<CharacterCard> listOfCharacters;
     private String jsoncontent;
 
@@ -76,14 +73,14 @@ public class Game {
         //Initialization clouds
         clouds = new CloudTile[numOfPlayer];
         for (int i = 0; i < numOfPlayer; i++) {
-            CloudTile cloud = new CloudTile("TO REPLACE"); //LORE: importingClouds.get(i).getName()
+            CloudTile cloud = new CloudTile(importingClouds.get(i)); //LORE:
             clouds[i] = cloud;
         }
 
         // initialization islands;
         islands = new LinkedList<>();
         for (int i = 0; i < 12; i++) {
-            IslandTile island = new IslandTile("TO REPLACE"); //LORE: importingClouds.get(i).getName()
+            IslandTile island = new IslandTile(importingIslands.get(i));
             islands.add(island);
         }
 
@@ -128,23 +125,10 @@ public class Game {
         //playerPlanPhase++;
     }
 
-    public void importingCharactersJson() {
+    public void importingTilesJson(){
         Gson gson = new Gson();
-        try {
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.CHARACTER_CARDS_LOCATION)), StandardCharsets.UTF_8);
-            Scanner s = new Scanner(streamReader).useDelimiter("\\A");
-            jsoncontent = s.hasNext() ? s.next() : "";
-        } catch (Exception FileNotFound) {
-            FileNotFound.printStackTrace();
-        }
-        listOfCharacters = gson.fromJson(jsoncontent, new TypeToken<List<IslandTile>>() {
-        }.getType());
 
-    }
-
-    public void importingTilesJson() {
         //Loading IslandTiles Json file
-        Gson gson = new Gson();
         try {
             InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
@@ -152,7 +136,7 @@ public class Game {
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
-        importingIslands = gson.fromJson(jsoncontent, new TypeToken<List<IslandTile>>() {
+        importingIslands = gson.fromJson(jsoncontent, new TypeToken<List<String>>() {
         }.getType());
 
 
@@ -164,19 +148,18 @@ public class Game {
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
-        importingClouds = gson.fromJson(jsoncontent, new TypeToken<List<CloudTile>>() {
+        importingClouds = gson.fromJson(jsoncontent, new TypeToken<List<String>>() {
         }.getType());
     }
 
-    public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException{
+    public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException {
         if (state == State.PLANNINGPHASE && !playerDrawnOut) {
-            if(nicknameCaller.equals(currentPlayer.getNickname())){
+            if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 for (CloudTile cloud : clouds) {
                     cloud.addStudents(bag.drawStudents(numDrawnStudents));
                 }
                 playerDrawnOut = true;
-            }
-            else throw new IncorrectPlayerException();
+            } else throw new IncorrectPlayerException();
         } else throw new IncorrectArgumentException();
     }
 
@@ -196,11 +179,11 @@ public class Game {
     }
 
     //nextPlayer() is called only after playAssistantCard is called
-    public void nextPlayer() throws IncorrectArgumentException, IncorrectStateException {
-        if (state == State.PLANNINGPHASE){
-            if (counter > 0){
+    public void nextPlayer() throws IncorrectStateException {
+        if (state == State.PLANNINGPHASE) {
+            if (counter > 0) {
                 counter--;
-                if (playerPlanPhase >= numOfPlayer-1){
+                if (playerPlanPhase >= numOfPlayer - 1) {
                     playerPlanPhase = -1;
                 }
                 playerPlanPhase++;
@@ -238,7 +221,7 @@ public class Game {
     public void takeStudentsFromCloud(String nicknameCaller, int index) throws IncorrectStateException, IncorrectPlayerException, IncorrectArgumentException {
         if (state == State.ACTIONPHASE) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
-                currentPlayer.addStudents(clouds[index].removeStudents());
+                currentPlayer.addStudents(clouds[index].drawStudents());
             } else throw new IncorrectPlayerException();
         } else {
             throw new IncorrectStateException();
@@ -279,7 +262,6 @@ public class Game {
                 }
             }
         }
-
         checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
     }
 
@@ -430,7 +412,8 @@ public class Game {
         for (Player p : players) {
             if (p.getPlayerTowers() <= 0) return true;
         }
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9 || checkWinner()!=null) return true;
+        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9 || checkWinner() != null)
+            return true;
         else return false;
     }
 
@@ -440,32 +423,31 @@ public class Game {
         ArrayList<ArrayList<Player>> teams = new ArrayList<>();
         teams.add(team1);
         teams.add(team2);
-        if(numOfPlayer%2==1){
+        if (numOfPlayer % 2 == 1) {
             ArrayList<Player> team3 = findPlayerFromTeam(Towers.GREY);
             teams.add(team3);
         }
 
-        for(ArrayList<Player> team : teams){
+        for (ArrayList<Player> team : teams) {
             boolean teamWin = false;
             for (Player p : team) {
-                if (p.getPlayerTowers() == 0){
+                if (p.getPlayerTowers() == 0) {
                     teamWin = true;
-                }
-                else{
+                } else {
                     teamWin = false;
                 }
             }
-            if(teamWin)return team;
+            if (teamWin) return team;
         }
 
         return null;  //no win
     }
 
-    public ArrayList<IslandTile> getimportingIslands() {
+    public ArrayList<String> getimportingIslands() {
         return importingIslands;
     }
 
-    public ArrayList<CloudTile> getImportingClouds() {
+    public ArrayList<String> getImportingClouds() {
         return importingClouds;
     }
 
@@ -481,15 +463,15 @@ public class Game {
         return state;
     }
 
-    public boolean getPlayerDrawnOut(){
+    public boolean getPlayerDrawnOut() {
         return playerDrawnOut;
     }
 
-    public int getPlayerPlanPhase(){
+    public int getPlayerPlanPhase() {
         return playerPlanPhase;
     }
 
-    public CloudTile getCloudTile(int index){
+    public CloudTile getCloudTile(int index) {
         return clouds[index];
     }
 }
