@@ -248,7 +248,7 @@ public class Game {
         }
     }
 
-    public void nextRound() throws IncorrectArgumentException, IncorrectStateException {
+    public void nextRound() throws IncorrectStateException {
         if (state == State.ENDTURN) {
             if (isGameOver()) {
                 state = State.END;
