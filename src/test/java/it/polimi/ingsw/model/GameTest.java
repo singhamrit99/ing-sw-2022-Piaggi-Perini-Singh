@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.cards.AssistantCard;
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
@@ -38,13 +39,18 @@ class GameTest {
         assertEquals(players.size(), 4);
     }
 
-    /*
     @Test
-    public void testDrawFromBag() throws IncorrectArgumentException{
+    public void testDrawFromBag() throws IncorrectArgumentException,IncorrectPlayerException{
         Game game = initGame2players();
-        game.drawFromBag(game.getCurrentPlayer().getNickname()); //Error in BAG
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        assertTrue(game.getPlayerDrawnOut());
     }
-    */
+
+    @Test
+    public void testDrawFromBagFalse() throws IncorrectArgumentException{
+        Game game = initGame2players();
+        assertThrows(IncorrectPlayerException.class,()->game.drawFromBag("randomPlayer"));
+    }
 
     public Game initGame2players() throws IncorrectArgumentException{
         ArrayList<String> nicknames = new ArrayList<>();
@@ -101,52 +107,13 @@ class GameTest {
         assertEquals(game.findPlayerFromTeam(Towers.BLACK).size(),2);
     }
 
-    @Test
-    void areJSONloadingOk() {
-        ArrayList<IslandTile> importingIslands;
-        String jsoncontent = "";
-        Gson gson = new Gson();
-        try {
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
-            Scanner s = new Scanner(streamReader).useDelimiter("\\A");
-            jsoncontent = s.hasNext() ? s.next() : "";
-            System.out.println(jsoncontent);
-        } catch (Exception FileNotFound) {
-            FileNotFound.printStackTrace();
-        }
-        importingIslands = gson.fromJson(jsoncontent, new TypeToken<List<IslandTile>>() {
-        }.getType());
-
-        for (int i = 0; i < importingIslands.size(); i++) {
-            assertEquals("isola" + (i + 1), importingIslands.get(i).getName());
-        }
-    }
 
     @Test
-    void testImportingTilesJSON() throws IncorrectArgumentException {
-        ArrayList<IslandTile> importingIslands;
-        ArrayList<CloudTile> importingClouds;
-        ArrayList<String> nicknames = new ArrayList<>(Arrays.asList("p1", "p2"));
-        Game game = new Game(true, 3, nicknames);
-        game.importingTilesJson();
-        importingClouds = game.getImportingClouds();
-        importingIslands = game.getimportingIslands();
-       /* for(int i=0; i<importingIslands.size(); i++) {
-            assertEquals("isola" + (i + 1), importingIslands.get(i).getName());
-        }
-        for(int i=0; i<importingClouds.size()-1; i++) {
-            assertEquals("nuvola" + (i + 1), importingClouds.get(i).getName());
-        }*/
+    void testNextRound() throws IncorrectArgumentException{
+        Game game = initGame2players();
+        assertThrows(IncorrectStateException.class,()->game.nextRound());
     }
 
-    @Test
-    void playAssistantCard() {
-    }
-
-    @Test
-    void nextRound() {
-
-    }
 
     @Test
     void takeStudentsFromCloud() {
@@ -194,6 +161,13 @@ class GameTest {
         Game game = initGame4players();
         assertFalse(game.isGameOver());
     }
+
+    @Test
+    void testCheckWinner() throws IncorrectArgumentException{
+        Game game = initGame4players();
+        assertNull(game.checkWinner());
+    }
+
 
     @Test
     void testIsGameOver3players() throws IncorrectArgumentException{
