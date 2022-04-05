@@ -3,18 +3,14 @@ package it.polimi.ingsw.model.tiles;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
-import org.hamcrest.core.Is;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import java.util.EnumMap;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class IslandTileTest {
 
     @Test
-    void testgetName() {
+    void testGetName() {
         String test = "Test";
         IslandTile island = new IslandTile("Test");
 
@@ -22,7 +18,7 @@ class IslandTileTest {
     }
 
     @Test
-    void testgetTowersColor() {
+    void testGetTowersColor() {
         IslandTile island = new IslandTile("Test");
         for (Towers color : Towers.values()) {
             island.setTowersColor(color);
@@ -31,7 +27,7 @@ class IslandTileTest {
     }
 
     @Test
-    void testsetTowersColor() {
+    void testSetTowersColor() {
 
         IslandTile island = new IslandTile("Test");
 
@@ -42,7 +38,7 @@ class IslandTileTest {
     }
 
     @Test
-    void testgetStudents() {
+    void testGetStudents() {
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         int i = 0;
         for (Colors color : Colors.values()) {
@@ -60,7 +56,7 @@ class IslandTileTest {
     }
 
     @Test
-    void testgetNumOfTowers() throws IncorrectArgumentException {
+    void testGetNumOfTowers() throws IncorrectArgumentException {
         int towers = 3;
         IslandTile island = new IslandTile("Test");
         island.sumTowers(towers);
@@ -73,7 +69,7 @@ class IslandTileTest {
     }
 
     @Test
-    void testaddStudents() {
+    void testAddStudents() {
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         int i = 0;
         for (Colors color : Colors.values()) {
@@ -109,7 +105,7 @@ class IslandTileTest {
     }
 
     @Test
-    void testhasMotherNature() {
+    void testHasMotherNature() {
 
         IslandTile island = new IslandTile("Test");
         assertFalse(island.hasMotherNature());
@@ -118,7 +114,7 @@ class IslandTileTest {
     }
 
     @Test
-    void testmoveMotherNature() {
+    void testMoveMotherNature() {
         IslandTile island = new IslandTile("Test");
         assertFalse(island.hasMotherNature());
         island.moveMotherNature();
@@ -126,7 +122,7 @@ class IslandTileTest {
     }
 
     @Test
-    void testremoveMotherNature() {
+    void testRemoveMotherNature() {
         IslandTile island = new IslandTile("Test");
         island.moveMotherNature();
         assertTrue(island.hasMotherNature());

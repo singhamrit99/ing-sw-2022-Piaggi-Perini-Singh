@@ -11,28 +11,28 @@ import static org.junit.jupiter.api.Assertions.*;
 class SetupCharacterCardTest {
 
     @Test
-    void testaddStudents() {
+    void testAddStudents() {
 
         SetupCharacterCard tile = new SetupCharacterCard(1, 1, "test");
-        EnumMap<Colors, Integer> newstudents = new EnumMap<>(Colors.class);
+        EnumMap<Colors, Integer> newStudents = new EnumMap<>(Colors.class);
         int i = 0;
         for (Colors color : Colors.values()) {
-            newstudents.put(color, i);
+            newStudents.put(color, i);
             i++;
         }
 
         try {
-            tile.addStudents(newstudents);
+            tile.addStudents(newStudents);
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
         for (Colors color: Colors.values()) {
-            assertEquals(newstudents.get(color), tile.getStudents().get(color));
+            assertEquals(newStudents.get(color), tile.getStudents().get(color));
         }
 
     }
     @Test
-    public void invalidEnummapException()
+    public void invalidEnumMapException()
     {
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         int i = -1;
@@ -40,7 +40,7 @@ class SetupCharacterCardTest {
             students.put(color, i);
 
         }
-        SetupCharacterCard tile = new SetupCharacterCard(1,1,"testpower");
+        SetupCharacterCard tile = new SetupCharacterCard(1,1,"test power");
 
         IncorrectArgumentException e = assertThrows(IncorrectArgumentException.class, () -> tile.addStudents(students));
 
