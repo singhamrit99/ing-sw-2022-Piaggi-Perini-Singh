@@ -25,6 +25,7 @@ public class Player implements Comparable<Player> {
         this.nickname = nickname;
         this.schoolBoard = new SchoolBoard(numberOfPlayers);
         this.towerColor = towerColors;
+        assistantCardDeck = new AssistantCardDeck();
         assistantCardDeck.newDeck();
     }
 
