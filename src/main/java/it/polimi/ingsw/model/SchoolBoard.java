@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
+import java.awt.font.FontRenderContext;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
 public class SchoolBoard {
     private EnumMap<Colors, Integer> entrance;
     private EnumMap<Colors, Integer> dining;
+    private EnumMap<Colors, Integer> coins;
     private ArrayList<Colors> professorsTable;
     private int numberOfTowers;
 
@@ -25,6 +27,11 @@ public class SchoolBoard {
             numberOfTowers = 6;
         } else {
             numberOfTowers = 8;
+        }
+
+        coins = new EnumMap<Colors, Integer>(Colors.class);
+        for (Colors colors : Colors.values()) {
+            coins.put(colors, 0);
         }
     }
 
@@ -46,14 +53,34 @@ public class SchoolBoard {
         }
     }
 
-    public void moveStudents(EnumMap<Colors, Integer> studentsToMove) throws IncorrectArgumentException {
+    public int moveStudents(EnumMap<Colors, Integer> studentsToMove) throws IncorrectArgumentException {
         EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getDining(), studentsToMove);
+        int count = 0;
+
         if (newStudents != null) {
             removeStudents(studentsToMove);
             setDining(newStudents);
         } else {
             throw new IncorrectArgumentException();
         }
+
+        /*Muovo 3 studenti di un tipo RED = 3               RED = 4             RED = 6
+                                        cRED = 0 cRed = 1   cRED = 0 cRED = 1   cRED = 1 cRED = 2
+          si        si      si
+          RED, 1    RED, 1  non fa nulla
+         */
+        for (Map.Entry<Colors, Integer> set : getDining().entrySet()) {
+            if (set.getValue() >= 3) {
+                //se lo è controllo che il valore di coins sia stato messo già a 1, 2, 3
+                if (coins.get(set.getKey()) != set.getValue() / 3) {
+                    //se è già fatto non faccio nulla altrimenti lo incremento
+                    coins.put(set.getKey(), set.getValue() / 3);
+                    count++;
+                }
+            }
+        }
+
+        return count;
     }
 
     public void addProfessor(Colors professor) {

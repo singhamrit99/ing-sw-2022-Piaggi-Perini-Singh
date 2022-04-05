@@ -20,6 +20,7 @@ public class Player implements Comparable<Player> {
     private AssistantCardDeck assistantCardDeck;
     private AssistantCard playedCard;
     private int characterCard;
+    private int coins;
 
     public Player(String nickname, Towers towerColors, int numberOfPlayers) {
         this.nickname = nickname;
@@ -27,6 +28,7 @@ public class Player implements Comparable<Player> {
         this.towerColor = towerColors;
         assistantCardDeck = new AssistantCardDeck();
         assistantCardDeck.newDeck();
+        coins = 1;
     }
 
     public void playAssistantCard(int index) {
@@ -67,7 +69,9 @@ public class Player implements Comparable<Player> {
         } else {
             throw new IncorrectArgumentException();
         }
-        if (studentsToMove.size() != 0) schoolBoard.moveStudents(studentsToMove);
+        if (studentsToMove.size() != 0) {
+            coins += schoolBoard.moveStudents(studentsToMove);
+        }
         if (studentsToRemove.size() != 0) schoolBoard.removeStudents(studentsToRemove);
     }
 
@@ -122,5 +126,17 @@ public class Player implements Comparable<Player> {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public void removeCoins(int value) throws IncorrectArgumentException {
+        if (value >= 0) {
+            coins -= value;
+        } else {
+            throw new IncorrectArgumentException();
+        }
+    }
+
+    public int getCoins() {
+        return coins;
     }
 }
