@@ -13,11 +13,15 @@ public class CharacterCard extends Card {
 
     private String power;
 
-    public CharacterCard(int characterID, int startingPrice, String powerDescription) {
+    private String description;
+
+
+    public CharacterCard(int characterID, int startingPrice, String powertype, String powerDescription) {
         this.characterID = characterID;
         this.startingPrice = startingPrice;
         this.price = startingPrice;
-        this.power = powerDescription;
+        this.power = powertype;
+        this.description= powerDescription;
 
     }
 
@@ -26,17 +30,14 @@ public class CharacterCard extends Card {
         return characterID;
     }
 
-    public void setCharacterID(int characterID) {
-        this.characterID = characterID;
-    }
+
+
 
     public int getStartingPrice() {
         return startingPrice;
     }
 
-    public void setStartingPrice(int startingPrice) {
-        this.startingPrice = startingPrice;
-    }
+
 
     public int getPrice() {
         return price;
@@ -44,6 +45,19 @@ public class CharacterCard extends Card {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getPower() {
+        return power;
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 

@@ -247,7 +247,7 @@ public class CardsTest {
 
     @Test
     public void testFillDeck() {
-        String jsoncontent;
+        //String jsoncontent;
         FillDeck test = new FillDeck();
         AssistantCardDeck deck = new AssistantCardDeck();
         /*jsoncontent = "[\n" +
@@ -349,6 +349,38 @@ public class CardsTest {
 
     }
 
+    //CharacterCard testing
+    @Test
+    public void testCharacterCardConstructor() {
+        final CharacterCard a = new CharacterCard(0, 0, "none", "something cool");
+        assertEquals(0, a.getCharacterID());
+        assertEquals(0, a.getStartingPrice());
+        assertEquals("none", a.getPower());
+        assertEquals("something cool", a.getDescription());
+    }
+    @Test
+    public void testsetPrice(){
+        final CharacterCard a = new CharacterCard(0, 0, "none", "something cool");
+            final int newprice= 5;
 
-}
+            a.setPrice(newprice);
+
+            assertEquals(newprice,a.getPrice());
+
+    }
+
+    @Test
+    public void testsetDescription()
+    {
+        final CharacterCard a = new CharacterCard(0, 0, "none", "something cool");
+        final String newdescrption = "A VERY cool new description!";
+        a.setDescription(newdescrption);
+        assertEquals(newdescrption, a.getDescription());
+    }
+    //FillCharacterCardDeck testing
+
+    }
+
+
+
 
