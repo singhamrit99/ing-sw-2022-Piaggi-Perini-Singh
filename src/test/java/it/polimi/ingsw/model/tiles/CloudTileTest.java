@@ -13,20 +13,17 @@ class CloudTileTest {
     void testRemoveStudents() {
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         int i = 0;
-
         for (Colors color : Colors.values()) {
             students.put(color, i);
             i++;
         }
         CloudTile tile = new CloudTile("TestCloud");
-
         try {
             tile.addStudents(students);
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
         tile.drawStudents();
-
         for (Colors color : Colors.values()) {
             assertEquals(0, tile.getStudents().get(color));
         }
@@ -41,12 +38,12 @@ class CloudTileTest {
             newStudents.put(color, i);
             i++;
         }
-
         try {
             tile.addStudents(newStudents);
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
+
         for (Colors color : Colors.values()) {
             assertEquals(newStudents.get(color), tile.getStudents().get(color));
         }

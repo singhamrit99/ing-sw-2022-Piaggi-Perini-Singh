@@ -72,11 +72,6 @@ public class CardsTest {
     }
 
     @Test
-    public void testHasPlayed() {
-        final AssistantCard a = new AssistantCard(0, 0, "none", false);
-    }
-
-    @Test
     public void shouldPassFilePathsAsStrings() {
         Assertions.assertEquals(FilePaths.getAssistantCardLocation(), "/Cards.json");
         Assertions.assertEquals(FilePaths.getIslandTilesLocation(), "/IslandTiles.json");
@@ -191,7 +186,6 @@ public class CardsTest {
     public void testNewDeck() {
         AssistantCardDeck deck = new AssistantCardDeck();
         deck.newDeck();
-
         Assertions.assertEquals(1, deck.getDeck().get(0).getValue());
         Assertions.assertEquals("Assistente(1)", deck.getDeck().get(0).getName());
         Assertions.assertEquals("Assistente(10)", deck.getDeck().get(9).getName());
@@ -212,7 +206,6 @@ public class CardsTest {
     public void testSetPrice() {
         final CharacterCard a = new CharacterCard(0, 0, "none", "something cool");
         final int newPrice = 5;
-
         a.setPrice(newPrice);
         assertEquals(newPrice, a.getPrice());
     }
