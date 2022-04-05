@@ -6,13 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class CloudTileTest {
 
     @Test
-    void testRemoveStudents() {
+    void testremoveStudents() {
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         int i = 0;
         for (Colors color : Colors.values()) {
@@ -26,7 +25,7 @@ class CloudTileTest {
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
-        tile.removeStudents();
+        tile.drawStudents();
 
 
         for (Colors color : Colors.values()) {
@@ -35,6 +34,7 @@ class CloudTileTest {
 
 
     }
+
     @Test
     void testAddStudents() {
 
@@ -44,25 +44,26 @@ class CloudTileTest {
         }
 
         CloudTile tile = new CloudTile("TestCloud");
-        EnumMap<Colors, Integer> newStudents = new EnumMap<>(Colors.class);
+        EnumMap<Colors, Integer> newstudents = new EnumMap<>(Colors.class);
         int i = 0;
         for (Colors color : Colors.values()) {
-            newStudents.put(color, i);
+            newstudents.put(color, i);
             i++;
         }
 
         try {
-            tile.addStudents(newStudents);
+            tile.addStudents(newstudents);
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
-        for (Colors color: Colors.values()) {
-            assertEquals(newStudents.get(color), tile.getStudents().get(color));
+        for (Colors color : Colors.values()) {
+            assertEquals(newstudents.get(color), tile.getStudents().get(color));
         }
 
     }
+
     @Test
-    void testAddStudentsException(){
+    void testAddStudentsException() {
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         int i = -1;
         for (Colors color : Colors.values()) {
@@ -70,23 +71,15 @@ class CloudTileTest {
 
         }
         CloudTile tile = new CloudTile("TestCloud");
-
-        IncorrectArgumentException e = assertThrows(IncorrectArgumentException.class, () -> tile.addStudents(students));
-
-
-            String expectedMessage= "EnumMap is not correct";
-            String actualMessage= e.getMessage();
-            assertTrue(actualMessage.contains(expectedMessage));
-
+        assertThrows(IncorrectArgumentException.class, () -> tile.addStudents(students));
     }
 
     @Test
-    public void testGetName()
-    {
+    public void testgetName() {
 
-        CloudTile testTile= new CloudTile("NotTheTestName");
+        CloudTile testtile = new CloudTile("NotTheTestName");
 
-        assertEquals("NotTheTestName", testTile.getName());
+        assertEquals("NotTheTestName", testtile.getName());
 
     }
 

@@ -120,7 +120,7 @@ public class Player implements Comparable<Player> {
         return characterCard;
     }
 
-    public boolean hasProfessorOfColor(Colors student) throws IncorrectArgumentException {
+    public boolean hasProfessorOfColor(Colors student){
         return schoolBoard.hasProfessorOfColor(student);
     }
 

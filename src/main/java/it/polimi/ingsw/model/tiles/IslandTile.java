@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class IslandTile implements Tile {
+public class IslandTile {
     private String name;
     private EnumMap<Colors, Integer> students;
     private int numberOfTowers;
@@ -22,22 +22,22 @@ public class IslandTile implements Tile {
         towersColor = Towers.WHITE;
         numberOfTowers = 0;
         hasNoEntryTile = false;
-        this.students= new EnumMap<>(Colors.class);
-        for (Colors color: Colors.values()) {
+        this.students = new EnumMap<>(Colors.class);
+        for (Colors color : Colors.values()) {
             students.put(color, 0);
         }
-
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
     public Towers getTowersColor() {
         return towersColor;
     }
+
     public void setTowersColor(Towers newColor) {
-        towersColor=newColor;
+        towersColor = newColor;
     }
 
     public EnumMap<Colors, Integer> getStudents() {
@@ -48,12 +48,12 @@ public class IslandTile implements Tile {
         return numberOfTowers;
     }
 
-    public void addStudents(EnumMap<Colors, Integer> summedStudents) throws  IncorrectArgumentException{
+    public void addStudents(EnumMap<Colors, Integer> summedStudents) throws IncorrectArgumentException {
         EnumMap<Colors, Integer> tmp = getStudents();
-        for (Map.Entry<Colors, Integer> studentsNewEnumMap : summedStudents.entrySet()){
+        for (Map.Entry<Colors, Integer> studentsNewEnumMap : summedStudents.entrySet()) {
             if (studentsNewEnumMap.getValue() >= 0) {
                 //if (tmp.containsKey(studentsNewEnumMap.getKey())) {
-                    tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue() + tmp.get(studentsNewEnumMap.getKey()));
+                tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue() + tmp.get(studentsNewEnumMap.getKey()));
                /* } else {
                     tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue());
                 }*/
@@ -64,9 +64,9 @@ public class IslandTile implements Tile {
         students = tmp;
     }
 
-    public void sumTowers(int towers) throws IncorrectArgumentException{
+    public void sumTowers(int towers) throws IncorrectArgumentException {
         numberOfTowers += towers;
-        if(numberOfTowers<0)throw new IncorrectArgumentException();
+        if (numberOfTowers < 0) throw new IncorrectArgumentException();
     }
 
     public boolean hasMotherNature() {

@@ -3,7 +3,6 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
-import java.awt.font.FontRenderContext;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
