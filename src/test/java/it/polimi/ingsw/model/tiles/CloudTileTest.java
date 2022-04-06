@@ -9,11 +9,11 @@ import java.util.EnumMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CloudTileTest {
-
     @Test
-    void testremoveStudents() {
+    void testRemoveStudents() {
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         int i = 0;
+
         for (Colors color : Colors.values()) {
             students.put(color, i);
             i++;
@@ -27,39 +27,29 @@ class CloudTileTest {
         }
         tile.drawStudents();
 
-
         for (Colors color : Colors.values()) {
             assertEquals(0, tile.getStudents().get(color));
         }
-
-
     }
 
     @Test
     void testAddStudents() {
-
-        EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
-        for (Colors color : Colors.values()) {
-            students.put(color, 0);
-        }
-
         CloudTile tile = new CloudTile("TestCloud");
-        EnumMap<Colors, Integer> newstudents = new EnumMap<>(Colors.class);
+        EnumMap<Colors, Integer> newStudents = new EnumMap<>(Colors.class);
         int i = 0;
         for (Colors color : Colors.values()) {
-            newstudents.put(color, i);
+            newStudents.put(color, i);
             i++;
         }
 
         try {
-            tile.addStudents(newstudents);
+            tile.addStudents(newStudents);
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
         for (Colors color : Colors.values()) {
-            assertEquals(newstudents.get(color), tile.getStudents().get(color));
+            assertEquals(newStudents.get(color), tile.getStudents().get(color));
         }
-
     }
 
     @Test
@@ -68,20 +58,15 @@ class CloudTileTest {
         int i = -1;
         for (Colors color : Colors.values()) {
             students.put(color, i);
-
         }
         CloudTile tile = new CloudTile("TestCloud");
         assertThrows(IncorrectArgumentException.class, () -> tile.addStudents(students));
     }
 
     @Test
-    public void testgetName() {
-
-        CloudTile testtile = new CloudTile("NotTheTestName");
-
-        assertEquals("NotTheTestName", testtile.getName());
-
+    public void testGetName() {
+        CloudTile testTile = new CloudTile("NotTheTestName");
+        assertEquals("NotTheTestName", testTile.getName());
     }
-
 }
 

@@ -15,35 +15,28 @@ import java.util.Scanner;
 import com.google.gson.*;
 
 public class CharacterDeck {
-
     private ArrayList<CharacterCard> deck;
 
     public CharacterDeck(ArrayList<CharacterCard> deck) {
         this.deck = deck;
     }
 
-    public void newDeck() throws NullPointerException{
+    public void newDeck() throws NullPointerException {
         this.deck = new ArrayList<>();
         loadFromJSON();
-        //System.out.println(deck.get(0).getDescription());
     }
 
     private void loadFromJSON() throws NullPointerException {
         Gson gson = new Gson();
 
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CharacterCard.class.getResourceAsStream(FilePaths.CHARACTER_CARDS_LOCATION)), StandardCharsets.UTF_8);
-            Scanner s = new Scanner(streamReader).useDelimiter("\\A");
-            String jsoncontent = s.hasNext() ? s.next() : "";
-            deck = gson.fromJson(jsoncontent, new TypeToken<List<CharacterCard>>() {
-            }.getType());
-
-
-
+        InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CharacterCard.class.getResourceAsStream(FilePaths.getCharacterCardsLocation())), StandardCharsets.UTF_8);
+        Scanner s = new Scanner(streamReader).useDelimiter("\\A");
+        String JSONContent = s.hasNext() ? s.next() : "";
+        deck = gson.fromJson(JSONContent, new TypeToken<List<CharacterCard>>() {
+        }.getType());
     }
 
-    public ArrayList<CharacterCard> getDeck(){
+    public ArrayList<CharacterCard> getDeck() {
         return deck;
     }
-
-
 }

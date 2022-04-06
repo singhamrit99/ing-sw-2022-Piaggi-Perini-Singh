@@ -75,7 +75,7 @@ public class Player implements Comparable<Player> {
         if (studentsToRemove.size() != 0) schoolBoard.removeStudents(studentsToRemove);
     }
 
-    public void addProfessor(Colors student) throws IncorrectArgumentException {
+    public void addProfessor(Colors student) {
         schoolBoard.addProfessor(student);
     }
 
@@ -120,7 +120,7 @@ public class Player implements Comparable<Player> {
         return characterCard;
     }
 
-    public boolean hasProfessorOfColor(Colors student){
+    public boolean hasProfessorOfColor(Colors student) {
         return schoolBoard.hasProfessorOfColor(student);
     }
 

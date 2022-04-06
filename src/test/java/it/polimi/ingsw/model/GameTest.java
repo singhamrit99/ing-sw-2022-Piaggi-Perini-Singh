@@ -107,20 +107,61 @@ class GameTest {
         assertEquals(game.findPlayerFromTeam(Towers.BLACK).size(),2);
     }
 
-
     @Test
     void testNextRound() throws IncorrectArgumentException{
         Game game = initGame2players();
         assertThrows(IncorrectStateException.class,()->game.nextRound());
     }
 
-
     @Test
-    void takeStudentsFromCloud() {
+    void testPlayAssistantCard() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+        Game game = initGame4players();
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        String oldPlayer = game.getCurrentPlayer().getNickname();
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(),3);
     }
 
     @Test
-    void moveStudents() {
+    void testPlanningPhase() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException{
+        Game game = initGame4players();
+        String oldPlayer="null";
+        for(int i = 0; i<4;i++){
+            oldPlayer = game.getCurrentPlayer().getNickname();
+            game.drawFromBag(oldPlayer);
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), 3);
+            String newPlayer = game.getCurrentPlayer().getNickname();
+            assertNotEquals(oldPlayer,newPlayer);
+        }
+        assertEquals(game.getCurrentState(),State.ACTIONPHASE);
+    }
+
+    Game planningPhaseComplete()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game game = initGame4players();
+        String oldPlayer="null";
+        for(int i = 0; i<4;i++){
+            oldPlayer = game.getCurrentPlayer().getNickname();
+            game.drawFromBag(oldPlayer);
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), 3);
+            String newPlayer = game.getCurrentPlayer().getNickname();
+            assertNotEquals(oldPlayer,newPlayer);
+        }
+        return game;
+    }
+
+    @Test
+    void moveStudents() throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException{
+        Game game = planningPhaseComplete();
+        assertEquals(game.getCurrentState(),State.ACTIONPHASE);
+        EnumMap<Colors,Integer> s = game.getCloudTile(0).getStudents();
+        System.out.println("PINK: "+s.get(Colors.PINK));
+        System.out.println("YELLOW: "+s.get(Colors.YELLOW));
+        System.out.println("GREEN: "+s.get(Colors.GREEN));
+        System.out.println("RED: "+s.get(Colors.RED));
+        System.out.println("BLUE: "+s.get(Colors.BLUE));
+    }
+
+    @Test
+    void takeStudentsFromCloud(){
     }
 
     @Test
@@ -137,15 +178,12 @@ class GameTest {
         ArrayList<Player> team = game.findPlayerFromTeam(Towers.WHITE);
         int initialTowers=-1;
         for (Player p : team) {
-            System.out.println(p.getPlayerTowers());
             if(initialTowers==-1) initialTowers = p.getPlayerTowers();
             else assertEquals(initialTowers, p.getPlayerTowers());
         }
         int endingTowers = -1;
         game.moveTowersFromTeam(team,-4);
-        System.out.println("moved");
         for (Player p : team) {
-            System.out.println(p.getPlayerTowers());
             if(endingTowers==-1) endingTowers = p.getPlayerTowers();
             else assertEquals(endingTowers, p.getPlayerTowers());
         }

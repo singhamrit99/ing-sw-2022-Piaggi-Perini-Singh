@@ -4,22 +4,23 @@ import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import org.junit.jupiter.api.Test;
+
 import java.util.EnumMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class IslandTileTest {
-
     @Test
     void testGetName() {
         String test = "Test";
         IslandTile island = new IslandTile("Test");
-
         assertEquals(test, island.getName());
     }
 
     @Test
     void testGetTowersColor() {
         IslandTile island = new IslandTile("Test");
+
         for (Towers color : Towers.values()) {
             island.setTowersColor(color);
             assertEquals(color, island.getTowersColor());
@@ -28,7 +29,6 @@ class IslandTileTest {
 
     @Test
     void testSetTowersColor() {
-
         IslandTile island = new IslandTile("Test");
 
         for (Towers color : Towers.values()) {
@@ -52,7 +52,6 @@ class IslandTileTest {
             e.printStackTrace();
         }
         assertEquals(students, island.getStudents());
-
     }
 
     @Test
@@ -64,8 +63,6 @@ class IslandTileTest {
         island.sumTowers(towers);
         towers += towers;
         assertEquals(towers, island.getNumOfTowers());
-
-
     }
 
     @Test
@@ -94,19 +91,14 @@ class IslandTileTest {
 
         }
         IslandTile tile = new IslandTile("Test");
-
         IncorrectArgumentException e = assertThrows(IncorrectArgumentException.class, () -> tile.addStudents(students));
-
-
         String expectedMessage = "EnumMap is not correct";
         String actualMessage = e.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
-
     }
 
     @Test
     void testHasMotherNature() {
-
         IslandTile island = new IslandTile("Test");
         assertFalse(island.hasMotherNature());
         island.moveMotherNature();
