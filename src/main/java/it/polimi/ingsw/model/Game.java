@@ -33,7 +33,7 @@ public class Game {
     private int motherNaturePosition;
     private int numRounds;
     private int numDrawnStudents;
-    private int counter;
+    private int counterPlanningPhase;
     private boolean playerDrawnOut;
     private Player winner;
     private ArrayList<String> importingIslands;
@@ -41,7 +41,14 @@ public class Game {
     private ArrayList<CharacterCard> listOfCharacters;
     private String jsoncontent;
 
-
+    /**
+     * Constructor it initializes everything following the rules of the game. It finishes initialize the first (random)
+     * player of the Plan Phase, initializing the specific counters for the phase like 'counter' and 'playerPlanPhase'
+     * @param expertMode
+     * @param numOfPlayer
+     * @param nicknames
+     * @throws IncorrectArgumentException in case of bad arguments
+     */
     public Game(boolean expertMode, int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException {
         this.expertMode = expertMode;
         this.numOfPlayer = numOfPlayer;
@@ -117,7 +124,7 @@ public class Game {
 
         //initialization LinkedList<Player>
         playerPlanPhase = (int) (Math.random() * numOfPlayer - 1); //random init player
-        counter = numOfPlayer - 1; //used to 'count' during the Planning Phase
+        counterPlanningPhase = numOfPlayer - 1; //used to 'count' during the Planning Phase
         playerDrawnOut = false; //used on drawBag and playAssistantCard
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
@@ -125,6 +132,9 @@ public class Game {
         //playerPlanPhase++;
     }
 
+    /**
+     * Method use to import the textures (that we used as name id) of clouds and islands from the Json
+     */
     public void importingTilesJson(){
         Gson gson = new Gson();
 
@@ -152,6 +162,16 @@ public class Game {
         }.getType());
     }
 
+    /**
+     * the first action of the PlanPhase, it takes a randomize set of students from bag
+     * numDrawnStudent is a variable that depends on the rules and it changes according to the number of
+     * players. playerDrawnOut is a boolean variable that it's necessary to block possible calles from
+     * the callerPlayer to the method 'playAssistantCard' without drawing from bag before. playerDrawnOut it's
+     * initialized in the Game() constructor
+     * @param nicknameCaller
+     * @throws IncorrectArgumentException
+     * @throws IncorrectPlayerException
+     */
     public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException {
         if (state == State.PLANNINGPHASE && !playerDrawnOut) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
@@ -163,9 +183,19 @@ public class Game {
         } else throw new IncorrectArgumentException();
     }
 
-    public void playAssistantCard(Player player, int indexCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException {
+    /**
+     * Action used to play a card. Notice that it calls 'nextPlayer() at the end and creates
+     * the correct order of player for the ActionPhase. It is based using a PriorityQueue and
+     * taking advantage of the comparable interface of Player
+     * @param nicknameCaller
+     * @param indexCard
+     * @throws IncorrectPlayerException
+     * @throws IncorrectStateException
+     * @throws IncorrectArgumentException
+     */
+    public void playAssistantCard(String nicknameCaller, int indexCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException {
         if (state == State.PLANNINGPHASE) {
-            if (player.equals(currentPlayer) && playerDrawnOut) {  //playerDrawnOut = player has drawn from bag
+            if (nicknameCaller.equals(currentPlayer.getNickname()) && playerDrawnOut) {  //playerDrawnOut = player has drawn from bag
                 currentPlayer.playAssistantCard(indexCard);
 
             } else {
@@ -178,11 +208,16 @@ public class Game {
         nextPlayer();
     }
 
-    //nextPlayer() is called only after playAssistantCard is called
+    /**
+     * This is the function that correctly switch the player during the phases. It is called at the end
+     * of the last action of each phase: so at the end of playAssistantCard for the Planning Phase and
+     * at the end of takeStudentsFromCloud for the Action Phase. It also switch the state of the game.
+     * @throws IncorrectStateException
+     */
     public void nextPlayer() throws IncorrectStateException {
         if (state == State.PLANNINGPHASE) {
-            if (counter > 0) {
-                counter--;
+            if (counterPlanningPhase > 0) {
+                counterPlanningPhase--;
                 if (playerPlanPhase >= numOfPlayer - 1) {
                     playerPlanPhase = -1;
                 }
@@ -205,6 +240,13 @@ public class Game {
         }
     }
 
+    /**
+     * Supporting method to nextPlayer() , it's call at the end of the turn of the last player of the action
+     * phase. It checks if there is a gameOver and a winner, otherwise it starts the planning phase assigning
+     * the correct currentPlayer, initializing the counter for the PlanningPhase and increasing the num of rounds
+     * counter (that is one of the gameOver conditions.
+     * @throws IncorrectStateException
+     */
     public void nextRound() throws IncorrectStateException {
         if (state == State.ENDTURN) {
             if (isGameOver()) {
@@ -212,23 +254,43 @@ public class Game {
                 checkWinner();
             } else {
                 state = State.PLANNINGPHASE;
+                numRounds++;
                 currentPlayer = players.get(playerPlanPhase); //This is decided with the Assistant Card values and is assign in nextPlayer()
-                counter = numOfPlayer - 1;
+                counterPlanningPhase = numOfPlayer - 1;
             }
         } else throw new IncorrectStateException();
     }
 
+    /**
+     * It takes the students from a cloud and throw them to the entrance using a method of the player. It checks
+     * that is the correct moment and the correct plaer to perform the action.
+     * @param nicknameCaller
+     * @param index
+     * @throws IncorrectStateException
+     * @throws IncorrectPlayerException
+     * @throws IncorrectArgumentException
+     */
     public void takeStudentsFromCloud(String nicknameCaller, int index) throws IncorrectStateException, IncorrectPlayerException, IncorrectArgumentException {
         if (state == State.ACTIONPHASE) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 currentPlayer.addStudents(clouds[index].drawStudents());
+                nextPlayer();
             } else throw new IncorrectPlayerException();
         } else {
             throw new IncorrectStateException();
         }
     }
 
-    //0 dining room , 1 to island tile
+    /**
+     * It sends the student to one of the destination: 0 for the dining room, 1 to the islands.
+     * It makes a split of the students, checking which of them go to islands or to the Player that controls the dining room
+     * In case the destination is the islands, it is used an array of islandDestination that is used by the game to send
+     * the students in the correct place (the array uses the unique name of each island).
+     * @param students
+     * @param destinations
+     * @param islandDestinations
+     * @throws IncorrectArgumentException
+     */
     public void moveStudents(EnumMap<Colors, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
         int DestCounter = 0;
         EnumMap<Colors, Integer> studentsToMoveToIsland = new EnumMap<>(Colors.class);
@@ -265,6 +327,13 @@ public class Game {
         checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
     }
 
+    /**
+     * It uses a method in player to check if the distance choosen by the player is legal. After the
+     * control it moves the Mother Nature and it eventually moves the towers and unify islands.
+     * @param distanceChoosen
+     * @throws IncorrectArgumentException
+     * @throws MotherNatureLostException
+     */
     public void moveMotherNature(int distanceChoosen) throws IncorrectArgumentException, MotherNatureLostException {
         int destinationMotherNature = motherNaturePosition + distanceChoosen;
         if (islands.get(motherNaturePosition).hasMotherNature()) {
@@ -282,6 +351,11 @@ public class Game {
         }
     }
 
+    /**
+     * It is called if new students are added to the dining room and it checks if new professor are placed.
+     * It is only called in moveStudents method in the Action Phase.
+     * @throws IncorrectArgumentException
+     */
     public void checkAndPlaceProfessor() throws IncorrectArgumentException {
         int max = 0;
         Player maxPlayer = null;
@@ -303,6 +377,13 @@ public class Game {
         }
     }
 
+    /**
+     * It computes the influence of each team on a given island. If it finds a team with more influence
+     * than another assign the ownership and a new tower only if the island hasn't any owner or has an owner
+     * different from the new team. It works with 2 players, 3 players and 4 players.
+     * @param island
+     * @throws IncorrectArgumentException
+     */
     private void checkAndPlaceTower(IslandTile island) throws IncorrectArgumentException {
         HashMap<Towers, Integer> influenceScores = new HashMap<>();
         influenceScores.put(Towers.BLACK, 0);
@@ -367,6 +448,13 @@ public class Game {
         return returnedPlayers;
     }
 
+    /**
+     * It is used from checkAndPlaceTowers to add or remove towers from a team. The towers must be
+     * removed from each player ONCE at time each. For example if playerA and playerB of same team have 3 and 4 towers
+     * and 3 towers will be removed, it will leave this configuration: 2 and 2.
+     * @param team
+     * @param amount
+     */
     public void moveTowersFromTeam(ArrayList<Player> team, int amount) {
         int numbersOfIterations = Math.abs(amount);
         int oneTowerSigned;
@@ -408,6 +496,10 @@ public class Game {
         if (listChanged) checkUnificationIslands();
     }
 
+    /**
+     * Check the game over returning true if it is
+     * @return
+     */
     public boolean isGameOver() {
         for (Player p : players) {
             if (p.getPlayerTowers() <= 0) return true;
@@ -417,6 +509,12 @@ public class Game {
         else return false;
     }
 
+    /**
+     * It checks the winner and it is used as supporting method inside isGameOver() . It return the
+     * winning team using an arrayList of Player (that could have size of 1 or 2 depending of numOfPLayers).
+     * If it return a null team there isn't a winning team.
+     * @return
+     */
     public ArrayList<Player> checkWinner() {
         ArrayList<Player> team1 = findPlayerFromTeam(Towers.WHITE);
         ArrayList<Player> team2 = findPlayerFromTeam(Towers.BLACK);
