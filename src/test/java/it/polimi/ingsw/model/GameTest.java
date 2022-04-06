@@ -1,23 +1,12 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.model.cards.AssistantCard;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
-import it.polimi.ingsw.model.tiles.CloudTile;
-import it.polimi.ingsw.model.tiles.IslandTile;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,11 +96,7 @@ class GameTest {
         assertEquals(game.findPlayerFromTeam(Towers.BLACK).size(),2);
     }
 
-    @Test
-    void testNextRound() throws IncorrectArgumentException{
-        Game game = initGame2players();
-        assertThrows(IncorrectStateException.class,()->game.nextRound());
-    }
+
 
     @Test
     void testPlayAssistantCard() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
@@ -137,15 +122,19 @@ class GameTest {
 
     Game planningPhaseComplete()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
         Game game = initGame4players();
-        String oldPlayer="null";
         for(int i = 0; i<4;i++){
-            oldPlayer = game.getCurrentPlayer().getNickname();
-            game.drawFromBag(oldPlayer);
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), 3);
-            String newPlayer = game.getCurrentPlayer().getNickname();
-            assertNotEquals(oldPlayer,newPlayer);
+            game.drawFromBag(game.getCurrentPlayer().getNickname());
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int)(Math.random()*9));
         }
         return game;
+    }
+
+    @Test
+    void testNextRound()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game g = planningPhaseComplete();
+        for(int i = 0; i<5;i++){
+            g.nextPlayer();
+        }
     }
 
     @Test

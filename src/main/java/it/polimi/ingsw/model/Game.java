@@ -204,7 +204,7 @@ public class Game {
         } else {
             throw new IncorrectStateException();
         }
-        orderPlayers.add(currentPlayer);
+        orderPlayers.add(currentPlayer); //adding to priority queue the player in the correct order
         nextPlayer();
     }
 
@@ -229,8 +229,10 @@ public class Game {
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
                 currentPlayer = players.get(playerPlanPhase);
             }
-        } else if (state == State.ACTIONPHASE) {
-            if (!orderPlayers.isEmpty()) currentPlayer = orderPlayers.poll();
+        } else if (state == State.ACTIONPHASE){
+            if (!orderPlayers.isEmpty()){
+                currentPlayer = orderPlayers.poll();
+            }
             else {
                 state = State.ENDTURN;
                 nextRound();
@@ -247,7 +249,7 @@ public class Game {
      * counter (that is one of the gameOver conditions.
      * @throws IncorrectStateException
      */
-    public void nextRound() throws IncorrectStateException {
+    private void nextRound() throws IncorrectStateException {
         if (state == State.ENDTURN) {
             if (isGameOver()) {
                 state = State.END;
@@ -263,7 +265,7 @@ public class Game {
 
     /**
      * It takes the students from a cloud and throw them to the entrance using a method of the player. It checks
-     * that is the correct moment and the correct plaer to perform the action.
+     * that is the correct moment and the correct player to perform the action.
      * @param nicknameCaller
      * @param index
      * @throws IncorrectStateException
@@ -541,14 +543,6 @@ public class Game {
         return null;  //no win
     }
 
-    public ArrayList<String> getimportingIslands() {
-        return importingIslands;
-    }
-
-    public ArrayList<String> getImportingClouds() {
-        return importingClouds;
-    }
-
     public ArrayList<Player> getPlayers() {
         return players;
     }
@@ -563,10 +557,6 @@ public class Game {
 
     public boolean getPlayerDrawnOut() {
         return playerDrawnOut;
-    }
-
-    public int getPlayerPlanPhase() {
-        return playerPlanPhase;
     }
 
     public CloudTile getCloudTile(int index) {
