@@ -118,7 +118,7 @@ class GameTest {
         Game game = initGame4players();
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldPlayer = game.getCurrentPlayer().getNickname();
-        game.playAssistantCard(game.getCurrentPlayer(),3);
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(),3);
     }
 
     @Test
@@ -128,7 +128,7 @@ class GameTest {
         for(int i = 0; i<4;i++){
             oldPlayer = game.getCurrentPlayer().getNickname();
             game.drawFromBag(oldPlayer);
-            game.playAssistantCard(game.getCurrentPlayer(), 3);
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), 3);
             String newPlayer = game.getCurrentPlayer().getNickname();
             assertNotEquals(oldPlayer,newPlayer);
         }
@@ -141,7 +141,7 @@ class GameTest {
         for(int i = 0; i<4;i++){
             oldPlayer = game.getCurrentPlayer().getNickname();
             game.drawFromBag(oldPlayer);
-            game.playAssistantCard(game.getCurrentPlayer(), 3);
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), 3);
             String newPlayer = game.getCurrentPlayer().getNickname();
             assertNotEquals(oldPlayer,newPlayer);
         }
