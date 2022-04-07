@@ -343,21 +343,23 @@ public class Game {
      * @throws IncorrectArgumentException
      * @throws MotherNatureLostException
      */
-    public void moveMotherNature(int distanceChoosen) throws IncorrectArgumentException, MotherNatureLostException {
-        int destinationMotherNature = motherNaturePosition + distanceChoosen;
-        if (islands.get(motherNaturePosition).hasMotherNature()) {
-            if (currentPlayer.moveMotherNature(distanceChoosen)) {
-                islands.get(motherNaturePosition).removeMotherNature();
-                islands.get(destinationMotherNature).moveMotherNature();
-                checkAndPlaceTower(islands.get(destinationMotherNature));
-                checkUnificationIslands();
+    public void moveMotherNature(String playerCaller, int distanceChoosen) throws IncorrectPlayerException,IncorrectArgumentException, MotherNatureLostException {
+        if(playerCaller.equals(currentPlayer.getNickname())){
+            int destinationMotherNature = motherNaturePosition + distanceChoosen;
+            if (islands.get(motherNaturePosition).hasMotherNature()) {
+                if (currentPlayer.moveMotherNature(distanceChoosen)) {
+                    islands.get(motherNaturePosition).removeMotherNature();
+                    islands.get(destinationMotherNature).moveMotherNature();
+                    checkAndPlaceTower(islands.get(destinationMotherNature));
+                    checkUnificationIslands();
 
+                } else {
+                    throw new IncorrectArgumentException();
+                }
             } else {
-                throw new IncorrectArgumentException();
+                throw new MotherNatureLostException();
             }
-        } else {
-            throw new MotherNatureLostException();
-        }
+        }else throw new IncorrectPlayerException();
     }
 
     /**

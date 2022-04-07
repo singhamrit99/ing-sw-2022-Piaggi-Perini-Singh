@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
+import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import org.junit.jupiter.api.Test;
 import java.util.*;
 
@@ -165,12 +166,15 @@ class GameTest {
     }
 
     @Test
-    void moveMotherNature() {
-
+    void moveMotherNature()throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException, MotherNatureLostException {
+        Game g = planningPhaseComplete();
+        g.moveMotherNature(g.getCurrentPlayer().getNickname(),1);
     }
 
     @Test
-    void checkAndPlaceProfessor() {
+    void checkAndPlaceProfessor() throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game g = planningPhaseComplete();
+        g.checkAndPlaceProfessor();
     }
 
     @Test
