@@ -133,28 +133,40 @@ class GameTest {
     void testNextRound()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
         Game g = planningPhaseComplete();
         for(int i = 0; i<5;i++){
-            g.nextPlayer();
+            assertEquals(g.getCurrentState(),State.ACTIONPHASE);
+            g.nextPlayer(); //fake Action Phase turn
+        }
+        assertEquals(g.getCurrentState(),State.PLANNINGPHASE);
+    }
+
+    @Test
+    void testTakeStudentsFromCloud()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game g = planningPhaseComplete();
+        EnumMap<Colors,Integer> s = g.getCloudTile(0).getStudents();
+        g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(),0);
+        s = g.getCloudTile(0).getStudents();
+        for(Colors c: Colors.values()){
+            assertEquals(s.get(c),0);
         }
     }
 
     @Test
-    void moveStudents() throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException{
+    void testMoveStudentsException() throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException{
         Game game = planningPhaseComplete();
-        assertEquals(game.getCurrentState(),State.ACTIONPHASE);
-        EnumMap<Colors,Integer> s = game.getCloudTile(0).getStudents();
-        System.out.println("PINK: "+s.get(Colors.PINK));
-        System.out.println("YELLOW: "+s.get(Colors.YELLOW));
-        System.out.println("GREEN: "+s.get(Colors.GREEN));
-        System.out.println("RED: "+s.get(Colors.RED));
-        System.out.println("BLUE: "+s.get(Colors.BLUE));
-    }
-
-    @Test
-    void takeStudentsFromCloud(){
+        EnumMap<Colors,Integer> s = game.getCloudTile(0).getStudents(); //random one from an island
+        ArrayList<Integer> destinations = new ArrayList<>();
+        ArrayList<String> islandsDest = new ArrayList<>();
+        for(Colors c: Colors.values()){
+            destinations.add(1);
+            islandsDest.add("island1");
+        }
+        ;
+        assertThrows(IncorrectArgumentException.class, () -> game.moveStudents(s,destinations,islandsDest));
     }
 
     @Test
     void moveMotherNature() {
+
     }
 
     @Test

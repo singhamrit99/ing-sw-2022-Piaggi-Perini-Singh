@@ -18,7 +18,7 @@ public class IslandTile {
     public IslandTile(String islandName) {
         name = islandName;
         hasMotherNature = false;
-        towersColor = Towers.WHITE;
+        towersColor = Towers.WHITE; //this value is ignored if numberOfTowers=0
         numberOfTowers = 0;
         hasNoEntryTile = false;
         this.students = new EnumMap<>(Colors.class);
