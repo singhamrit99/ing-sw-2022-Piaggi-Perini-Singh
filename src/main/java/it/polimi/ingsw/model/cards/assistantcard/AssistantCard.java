@@ -1,19 +1,26 @@
-package it.polimi.ingsw.model.cards;
+package it.polimi.ingsw.model.cards.assistantcard;
+
+import it.polimi.ingsw.model.cards.Card;
 
 /*The Assistant Card is the only card that can be played. It is defined mechanically by an integer 1 through 10 and a
  * number of tiles Mother Nature can move, dependant on the card. There are 4 copies of each card, the only difference being the wizard
  * depicted on the back.*/
 public class AssistantCard extends Card {
-    final private int value;
-    final private int move;
+    private int value;
+    private int move;
     private String wizard;
     private boolean hasPlayed;
 
-    public AssistantCard(int value, int move, String wizard, boolean hasPlayed) {
+    public AssistantCard(String imageName, int value, int move, String wizard) {
+        super(imageName);
         this.value = value;
         this.move = move;
-        this.wizard = wizard;
-        this.hasPlayed = hasPlayed;
+        this.wizard = "";
+        this.hasPlayed = false;
+    }
+
+    public AssistantCard(int value, int move, String wizard) {
+        this("", value, move, wizard);
     }
 
     public int getValue() {
@@ -24,13 +31,15 @@ public class AssistantCard extends Card {
         return move;
     }
 
-    public String getWizard() {return wizard;}
+    public String getWizard() {
+        return wizard;
+    }
 
     public void setWizard(String wizard) {
         this.wizard = wizard;
     }
 
-    public boolean isHasPlayed() {
+    public boolean getHasPlayed() {
         return hasPlayed;
     }
 
