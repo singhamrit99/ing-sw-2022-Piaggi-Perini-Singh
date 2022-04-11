@@ -1,15 +1,13 @@
 package it.polimi.ingsw.model.cards;
 
-//This is the least specific Card in the game.
 public abstract class Card {
-    private String name;
-    private String type;
+    private String imageName;
 
-    public String getName() {
-        return name;
+    public Card(String imageName) {
+        this.imageName = imageName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getImageName() {
+        return imageName;
     }
 }
