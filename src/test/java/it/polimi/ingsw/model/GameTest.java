@@ -8,13 +8,13 @@ import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
 import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import org.junit.jupiter.api.Test;
+
+import java.awt.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
-
-
     @Test
     public void testPlayersInit() throws IncorrectArgumentException {
         ArrayList<String> nicknames = new ArrayList<>();
@@ -97,8 +97,6 @@ class GameTest {
         assertEquals(game.findPlayerFromTeam(Towers.BLACK).size(),2);
     }
 
-
-
     @Test
     void testPlayAssistantCard() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
         Game game = initGame4players();
@@ -118,7 +116,7 @@ class GameTest {
             String newPlayer = game.getCurrentPlayer().getNickname();
             assertNotEquals(oldPlayer,newPlayer);
         }
-        assertEquals(game.getCurrentState(),State.ACTIONPHASE);
+        assertEquals(game.getCurrentState(),State.ACTIONPHASE_1);
     }
 
     Game planningPhaseComplete()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
@@ -134,7 +132,7 @@ class GameTest {
     void testNextRound()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
         Game g = planningPhaseComplete();
         for(int i = 0; i<5;i++){
-            assertEquals(g.getCurrentState(),State.ACTIONPHASE);
+            assertEquals(g.getCurrentState(),State.ACTIONPHASE_1);
             g.nextPlayer(); //fake Action Phase turn
         }
         assertEquals(g.getCurrentState(),State.PLANNINGPHASE);
@@ -152,6 +150,12 @@ class GameTest {
     }
 
     @Test
+    void testTakeStudentsFromCloudException()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game g = planningPhaseComplete();
+        assertThrows(IncorrectStateException.class, () -> g.takeStudentsFromCloud("wrong player",0));
+    }
+
+    @Test
     void testMoveStudentsException() throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException{
         Game game = planningPhaseComplete();
         EnumMap<Colors,Integer> s = game.getCloudTile(0).getStudents(); //random one from an island
@@ -161,20 +165,15 @@ class GameTest {
             destinations.add(1);
             islandsDest.add("island1");
         }
-        ;
-        assertThrows(IncorrectArgumentException.class, () -> game.moveStudents(s,destinations,islandsDest));
+        assertThrows(IncorrectArgumentException.class, () -> game.moveStudents(game.getCurrentPlayer().getNickname(),s,destinations,islandsDest));
     }
 
     @Test
     void moveMotherNature()throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException, MotherNatureLostException {
         Game g = planningPhaseComplete();
-        g.moveMotherNature(g.getCurrentPlayer().getNickname(),1);
-    }
-
-    @Test
-    void checkAndPlaceProfessor() throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
-        Game g = planningPhaseComplete();
-        g.checkAndPlaceProfessor();
+        int oldPosMN = g.getMotherNaturePosition();
+        g.moveMotherNature(g.getCurrentPlayer().getNickname(),5);
+        assertNotEquals(g.getMotherNaturePosition(),oldPosMN);
     }
 
     @Test
@@ -196,7 +195,14 @@ class GameTest {
     }
 
     @Test
-    void checkUnificationIslands() {
+    void checkAndPlaceProfessor() throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game g = planningPhaseComplete();
+        g.checkAndPlaceProfessor();
+    }
+
+    @Test
+    void checkUnificationIslands(){
+
     }
 
     @Test
@@ -218,6 +224,14 @@ class GameTest {
         assertFalse(game.isGameOver());
     }
 
-
+    @Test
+    void valueOfEnumTest()throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException{
+        Game g = initGame2players();
+        EnumMap<Colors,Integer> test = new EnumMap(Colors.class);
+        for(Colors c: Colors.values()){
+            test.put(c,42);
+        }
+        assertEquals(42* Colors.values().length, g.valueOfEnum(test));
+    }
 
 }
