@@ -15,9 +15,11 @@ import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
 
+import java.awt.*;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.List;
 
 public class Game {
     private State state;
@@ -122,6 +124,13 @@ public class Game {
             students.put(studentColor, 24); //26  (total discStudents) -2 (used before) for each color
         }
         bag = new Bag(students);
+
+        //Insertion in each Schoolboard 7 students drawn from Bag
+        students = new EnumMap(Colors.class);
+        for(Player p : players){
+            students = bag.drawStudents(7);
+            p.addStudents(students);
+        }
 
         //initialization LinkedList<Player>
         playerPlanPhase = (int) (Math.random() * numOfPlayer - 1); //random init player
@@ -229,13 +238,14 @@ public class Game {
                 currentPlayer = players.get(playerPlanPhase);
                 playerDrawnOut = false;
             } else {
-                state = State.ACTIONPHASE;
+                state = State.ACTIONPHASE_1;
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
                 currentPlayer = players.get(playerPlanPhase);
             }
-        } else if (state == State.ACTIONPHASE) {
+        } else if (state == State.ACTIONPHASE_3 || state == State.ACTIONPHASE_2 || state == State.ACTIONPHASE_1) { //Last player did the 3 step of Action Phase
             if (!orderPlayers.isEmpty()) {
                 currentPlayer = orderPlayers.poll();
+                state = State.ACTIONPHASE_1;
             } else {
                 state = State.ENDTURN;
                 nextRound();
@@ -278,7 +288,7 @@ public class Game {
      * @throws IncorrectArgumentException
      */
     public void takeStudentsFromCloud(String nicknameCaller, int index) throws IncorrectStateException, IncorrectPlayerException, IncorrectArgumentException {
-        if (state == State.ACTIONPHASE) {
+        if (state == State.ACTIONPHASE_3) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 currentPlayer.addStudents(clouds[index].drawStudents());
                 nextPlayer();
@@ -299,40 +309,46 @@ public class Game {
      * @param islandDestinations
      * @throws IncorrectArgumentException
      */
-    public void moveStudents(EnumMap<Colors, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException {
-        int DestCounter = 0;
-        EnumMap<Colors, Integer> studentsToMoveToIsland = new EnumMap<>(Colors.class);
-        if (students.size() == destinations.size()) {
-            for (Map.Entry<Colors, Integer> set : students.entrySet()) {
-                if (destinations.get(DestCounter) == 1) {
-                    studentsToMoveToIsland.put(set.getKey(), set.getValue());
-                }
-                DestCounter++;
-            }
-        } else {
-            throw new IncorrectArgumentException();
-        }
-        //Sending ALL the students (including the islands ones) so that Player remove them from the entrance
-        currentPlayer.moveStudents(students, destinations);
-
-        if (!studentsToMoveToIsland.isEmpty() && studentsToMoveToIsland.size() == islandDestinations.size()) {
-            boolean islandNameFound = true;
-            for (String dest : islandDestinations) {
-                if (islandNameFound) { //I check that the Island that I was searching in the last iteration it's found
-                    islandNameFound = false;
-                    for (IslandTile island : islands) {
-                        if (island.getName().equals(dest)) {
-                            islandNameFound = true;
-                            island.addStudents(studentsToMoveToIsland);
-                            break;
+    public void moveStudents(String playerCaller, EnumMap<Colors, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException {
+        if (currentPlayer.getNickname().equals(playerCaller)) {
+            if (state == State.ACTIONPHASE_1) {
+                int DestCounter = 0;
+                EnumMap<Colors, Integer> studentsToMoveToIsland = new EnumMap<>(Colors.class);
+                if (students.size() == destinations.size()) {
+                    for (Map.Entry<Colors, Integer> set : students.entrySet()) {
+                        if (destinations.get(DestCounter) == 1) {
+                            studentsToMoveToIsland.put(set.getKey(), set.getValue());
                         }
+                        DestCounter++;
                     }
                 } else {
-                    throw new IncorrectArgumentException("The island is not found");
+                    throw new IncorrectArgumentException();
                 }
-            }
-        }
-        checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
+                //Sending ALL the students (including the islands ones) so that Player remove them from the entrance
+                currentPlayer.moveStudents(students, destinations);
+
+                if (!studentsToMoveToIsland.isEmpty() && studentsToMoveToIsland.size() == islandDestinations.size()) {
+                    boolean islandNameFound = true;
+                    for (String dest : islandDestinations) {
+                        if (islandNameFound) { //I check that the Island that I was searching in the last iteration it's found
+                            islandNameFound = false;
+                            for (IslandTile island : islands) {
+                                if (island.getName().equals(dest)) {
+                                    islandNameFound = true;
+                                    island.addStudents(studentsToMoveToIsland);
+                                    break;
+                                }
+                            }
+                        } else {
+                            throw new IncorrectArgumentException("The island is not found");
+                        }
+                    }
+                }
+                state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
+                checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
+
+            } else throw new IncorrectStateException();
+        } else throw new IncorrectPlayerException();
     }
 
     /**
@@ -343,23 +359,26 @@ public class Game {
      * @throws IncorrectArgumentException
      * @throws MotherNatureLostException
      */
-    public void moveMotherNature(String playerCaller, int distanceChoosen) throws IncorrectPlayerException,IncorrectArgumentException, MotherNatureLostException {
-        if(playerCaller.equals(currentPlayer.getNickname())){
-            int destinationMotherNature = motherNaturePosition + distanceChoosen;
-            if (islands.get(motherNaturePosition).hasMotherNature()) {
-                if (currentPlayer.moveMotherNature(distanceChoosen)) {
-                    islands.get(motherNaturePosition).removeMotherNature();
-                    islands.get(destinationMotherNature).moveMotherNature();
-                    checkAndPlaceTower(islands.get(destinationMotherNature));
-                    checkUnificationIslands();
-
+    public void moveMotherNature(String playerCaller, int distanceChoosen) throws IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException{
+        if (playerCaller.equals(currentPlayer.getNickname())) {
+            if(state == State.ACTIONPHASE_2){
+                int destinationMotherNature = motherNaturePosition + distanceChoosen;
+                if (islands.get(motherNaturePosition).hasMotherNature()) {
+                    if (currentPlayer.moveMotherNature(distanceChoosen)) {
+                        islands.get(motherNaturePosition).removeMotherNature();
+                        islands.get(destinationMotherNature).moveMotherNature();
+                        motherNaturePosition = destinationMotherNature;
+                        checkAndPlaceTower(islands.get(destinationMotherNature));
+                        checkUnificationIslands();
+                        state = State.ACTIONPHASE_3;
+                    } else {
+                        throw new IncorrectArgumentException();
+                    }
                 } else {
-                    throw new IncorrectArgumentException();
+                    throw new MotherNatureLostException();
                 }
-            } else {
-                throw new MotherNatureLostException();
-            }
-        }else throw new IncorrectPlayerException();
+            }else throw new IncorrectStateException();
+        } else throw new IncorrectPlayerException();
     }
 
     /**
@@ -511,6 +530,7 @@ public class Game {
         if (listChanged) checkUnificationIslands();
     }
 
+
     /**
      * Check the game over returning true if it is
      *
@@ -558,6 +578,19 @@ public class Game {
         return null;  //no win
     }
 
+    /**
+     * Primitive method used to count the number of students inside an enumMap.
+     * @param map
+     * @return
+     */
+    public int valueOfEnum(EnumMap<Colors,Integer> map){
+        int sum = 0;
+        for(Colors c: Colors.values()){
+            sum += map.get(c);
+        }
+        return sum;
+    }
+
     public ArrayList<Player> getPlayers() {
         return players;
     }
@@ -576,5 +609,9 @@ public class Game {
 
     public CloudTile getCloudTile(int index) {
         return clouds[index];
+    }
+
+    public int getMotherNaturePosition() {
+        return motherNaturePosition;
     }
 }
