@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.model.cards.AssistantCard;
 import it.polimi.ingsw.model.cards.CharacterCard;
+import it.polimi.ingsw.model.deck.FileJSONPath;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
@@ -14,12 +14,9 @@ import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
-
-import java.awt.*;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.List;
 
 public class Game {
     private State state;
@@ -41,7 +38,7 @@ public class Game {
     private ArrayList<String> importingIslands;
     private ArrayList<String> importingClouds;
     private ArrayList<CharacterCard> listOfCharacters;
-    private String jsoncontent;
+    private String JSONContent;
 
     /**
      * Constructor it initializes everything following the rules of the game. It finishes initialize the first (random)
@@ -150,25 +147,25 @@ public class Game {
 
         //Loading IslandTiles Json file
         try {
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(AssistantCard.class.getResourceAsStream(FilePaths.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(IslandTile.class.getResourceAsStream(FileJSONPath.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
-            jsoncontent = s.hasNext() ? s.next() : "";
+            JSONContent = s.hasNext() ? s.next() : "";
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
-        importingIslands = gson.fromJson(jsoncontent, new TypeToken<List<String>>() {
+        importingIslands = gson.fromJson(JSONContent, new TypeToken<List<String>>() {
         }.getType());
 
 
         // initialization clouds;
         try { //Loading CloudTiles JSON file
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CloudTile.class.getResourceAsStream(FilePaths.CLOUD_TILES_LOCATION)), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CloudTile.class.getResourceAsStream(FileJSONPath.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
-            jsoncontent = s.hasNext() ? s.next() : "";
+            JSONContent = s.hasNext() ? s.next() : "";
         } catch (Exception FileNotFound) {
             FileNotFound.printStackTrace();
         }
-        importingClouds = gson.fromJson(jsoncontent, new TypeToken<List<String>>() {
+        importingClouds = gson.fromJson(JSONContent, new TypeToken<List<String>>() {
         }.getType());
     }
 
