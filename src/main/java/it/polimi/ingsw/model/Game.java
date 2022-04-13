@@ -2,8 +2,9 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.model.cards.CharacterCard;
+import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.deck.FileJSONPath;
+import it.polimi.ingsw.model.deck.characterdeck.CharacterCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
@@ -37,7 +38,7 @@ public class Game {
     private Player winner;
     private ArrayList<String> importingIslands;
     private ArrayList<String> importingClouds;
-    private ArrayList<CharacterCard> listOfCharacters;
+    private ArrayList<CharacterCard> characterCards;
     private String JSONContent;
 
     /**
@@ -53,9 +54,25 @@ public class Game {
         this.expertMode = expertMode;
         this.numOfPlayer = numOfPlayer;
         numRounds = 0;
+        characterCards = new ArrayList<>();
+
         players = new ArrayList<>();
         initializationPlayers(nicknames);
         initializationTilesBag();
+        importingCharacterCards();
+    }
+
+    private void importingCharacterCards() {
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        int index = -1;
+
+        //pick three random cards
+        for (int i = 0; i < 3; i++) {
+            index = (int) Math.floor(Math.random() * characterCards.size());
+            characterCards.add(characterCardDeck.get(index));
+            characterCardDeck.discardCard(index);
+        }
     }
 
     private void initializationPlayers(ArrayList<String> nicknames) throws IncorrectArgumentException {
