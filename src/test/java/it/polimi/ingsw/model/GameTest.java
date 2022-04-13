@@ -224,14 +224,4 @@ class GameTest {
         assertFalse(game.isGameOver());
     }
 
-    @Test
-    void valueOfEnumTest()throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException{
-        Game g = initGame2players();
-        EnumMap<Colors,Integer> test = new EnumMap(Colors.class);
-        for(Colors c: Colors.values()){
-            test.put(c,42);
-        }
-        assertEquals(42* Colors.values().length, g.valueOfEnum(test));
-    }
-
 }
