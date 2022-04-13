@@ -53,9 +53,11 @@ public class Game {
         this.expertMode = expertMode;
         this.numOfPlayer = numOfPlayer;
         numRounds = 0;
-        if (numOfPlayer == 3) numDrawnStudents = 4;
-        else numDrawnStudents = 3;
+        initializationPlayers();
+        initializationTilesBag();
+    }
 
+    public void initializationPlayers() {
         //Initialization Players
         players = new ArrayList<>();
         int indexColorTeam = 0;
@@ -75,6 +77,19 @@ public class Game {
             indexColorTeam++;
         }
 
+        //initialization LinkedList<Player>
+        playerPlanPhase = (int) (Math.random() * numOfPlayer - 1); //random init player
+        counterPlanningPhase = numOfPlayer - 1; //used to 'count' during the Planning Phase
+        playerDrawnOut = false; //used on drawBag and playAssistantCard
+        state = State.PLANNINGPHASE;
+        orderPlayers = new PriorityQueue<>(numOfPlayer);
+        currentPlayer = players.get(playerPlanPhase);
+
+        if (numOfPlayer == 3) numDrawnStudents = 4;
+        else numDrawnStudents = 3;
+    }
+
+    public void initializationTilesBag() {
         importingTilesJson();
 
         //Initialization clouds
@@ -94,6 +109,7 @@ public class Game {
         // place MotherNature on a random island
         motherNaturePosition = (int) (Math.random() * numOfPlayer);
         islands.get(motherNaturePosition).moveMotherNature();
+
 
         // create Bag and students
         EnumMap<Colors, Integer> students = new EnumMap(Colors.class);
@@ -124,19 +140,10 @@ public class Game {
 
         //Insertion in each Schoolboard 7 students drawn from Bag
         students = new EnumMap(Colors.class);
-        for(Player p : players){
+        for (Player p : players) {
             students = bag.drawStudents(7);
             p.addStudents(students);
         }
-
-        //initialization LinkedList<Player>
-        playerPlanPhase = (int) (Math.random() * numOfPlayer - 1); //random init player
-        counterPlanningPhase = numOfPlayer - 1; //used to 'count' during the Planning Phase
-        playerDrawnOut = false; //used on drawBag and playAssistantCard
-        state = State.PLANNINGPHASE;
-        orderPlayers = new PriorityQueue<>(numOfPlayer);
-        currentPlayer = players.get(playerPlanPhase);
-        //playerPlanPhase++;
     }
 
     /**
@@ -356,9 +363,9 @@ public class Game {
      * @throws IncorrectArgumentException
      * @throws MotherNatureLostException
      */
-    public void moveMotherNature(String playerCaller, int distanceChoosen) throws IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException{
+    public void moveMotherNature(String playerCaller, int distanceChoosen) throws IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException {
         if (playerCaller.equals(currentPlayer.getNickname())) {
-            if(state == State.ACTIONPHASE_2){
+            if (state == State.ACTIONPHASE_2) {
                 int destinationMotherNature = motherNaturePosition + distanceChoosen;
                 if (islands.get(motherNaturePosition).hasMotherNature()) {
                     if (currentPlayer.moveMotherNature(distanceChoosen)) {
@@ -374,7 +381,7 @@ public class Game {
                 } else {
                     throw new MotherNatureLostException();
                 }
-            }else throw new IncorrectStateException();
+            } else throw new IncorrectStateException();
         } else throw new IncorrectPlayerException();
     }
 
@@ -577,12 +584,13 @@ public class Game {
 
     /**
      * Primitive method used to count the number of students inside an enumMap.
+     *
      * @param map
      * @return
      */
-    public int valueOfEnum(EnumMap<Colors,Integer> map){
+    public int valueOfEnum(EnumMap<Colors, Integer> map) {
         int sum = 0;
-        for(Colors c: Colors.values()){
+        for (Colors c : Colors.values()) {
             sum += map.get(c);
         }
         return sum;
