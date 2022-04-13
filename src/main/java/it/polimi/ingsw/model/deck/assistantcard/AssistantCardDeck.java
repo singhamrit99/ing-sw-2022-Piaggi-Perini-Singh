@@ -9,7 +9,9 @@ import it.polimi.ingsw.model.deck.FileJSONPath;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-//Each Player has to have a deck of Assistant Cards, numbered 1 thorough 10.
+/**
+ * @author Amrit
+ */
 public class AssistantCardDeck implements Deck<AssistantCard> {
     private ArrayList<AssistantCard> assistantCards;
 
@@ -30,11 +32,6 @@ public class AssistantCardDeck implements Deck<AssistantCard> {
     }
 
     @Override
-    public int getDeckSize() {
-        return assistantCards.size();
-    }
-
-    @Override
     public AssistantCard get(int index) {
         return assistantCards.get(index);
     }
@@ -45,22 +42,7 @@ public class AssistantCardDeck implements Deck<AssistantCard> {
     }
 
     @Override
-    public void addCard(AssistantCard card) {
-        assistantCards.add(card);
-    }
-
-    @Override
-    public void addCards(ArrayList<AssistantCard> cards) {
-        assistantCards.addAll(cards);
-    }
-
-    @Override
-    public void discardCard(AssistantCard card) {
-        assistantCards.remove(card);
-    }
-
-    @Override
-    public void discardCards(ArrayList<AssistantCard> cards) {
-        assistantCards.removeAll(cards);
+    public void discardCard(int index) {
+        assistantCards.remove(index);
     }
 }
