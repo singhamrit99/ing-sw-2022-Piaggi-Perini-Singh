@@ -1,0 +1,74 @@
+[
+  {
+    "imageName": "character1",
+    "startingPrice": 1,
+    "type": "",
+    "description": "Move students on the character card to any isle you wish!"
+  },
+  {
+    "imageName": "character2",
+    "startingPrice": 2,
+    "type": "",
+    "description": "Snag an opponent's professor if you have the same number of their students!"
+  },
+  {
+    "imageName": "character3",
+    "startingPrice": 3,
+    "type": "",
+    "description": "Calculate the influence on any Island and reap the rewards!"
+  },
+  {
+    "imageName": "character4",
+    "startingPrice": 1,
+    "type": "",
+    "description": "You may move Mother Nature up to 2 additional spaces!"
+  },
+  {
+    "imageName": "character5",
+    "startingPrice": 2,
+    "type": "",
+    "description": "Place a No Entry card on an isle and block Mother Nature's power once!"
+  },
+  {
+    "imageName": "character6",
+    "startingPrice": 3,
+    "type": "",
+    "description": "If somebody tries to Conquer an island, ignore the towers for this turn!"
+  },
+  {
+    "imageName": "character7",
+    "startingPrice": 1,
+    "type": "",
+    "description": "Swap 3 of the students on this card with 3 from your Entrance!"
+  },
+  {
+    "imageName": "character8",
+    "startingPrice": 2,
+    "type": "",
+    "description": "Add 2 to your Influence this turn!"
+  },
+  {
+    "imageName": "character9",
+    "startingPrice": 3,
+    "type": "",
+    "description": "Choose a student color to ignore when calculating Influence this turn!"
+  },
+  {
+    "imageName": "character10",
+    "startingPrice": 1,
+    "type": "",
+    "description": "Switch up to two students between your Entrance and your Dining Room!"
+  },
+  {
+    "imageName": "character11",
+    "startingPrice": 2,
+    "type": "",
+    "description": "Take one student from this card and put them in the dining room, then draw another from the bag and replace them!"
+  },
+  {
+    "imageName": "character12",
+    "startingPrice": 3,
+    "type": "",
+    "description": "Choose a color: EVERYONE must return 3 students of that color to the bag!"
+  }
+]
