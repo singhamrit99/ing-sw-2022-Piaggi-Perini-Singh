@@ -36,7 +36,7 @@ public class Controller {
 
     public void CallPickCloud(int cloudTileID) {
         try {
-            if (cloudTileID < 1 || cloudTileID >4) {
+            if (cloudTileID < 0 || cloudTileID >3) {
                 throw new IncorrectArgumentException();
             }
         } catch (IncorrectArgumentException e) {
@@ -51,7 +51,7 @@ public class Controller {
 
     public void CallPlayAssistantCard(int playedCard) {
         try {
-            if (playedCard < 1 || playedCard > 12) {
+            if (playedCard < 0 || playedCard > 11) {
                 throw new IncorrectArgumentException();
             }
         } catch (IncorrectArgumentException e) {
@@ -59,7 +59,8 @@ public class Controller {
         }
 
         try {
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), playedCard);
+            String nickname= game.getCurrentPlayer().getNickname();
+            game.playAssistantCard(nickname, playedCard);
         } catch (IncorrectStateException | IncorrectPlayerException | IncorrectArgumentException e) {
             e.printStackTrace();
         }

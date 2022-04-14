@@ -103,6 +103,7 @@ class GameTest {
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldPlayer = game.getCurrentPlayer().getNickname();
         game.playAssistantCard(game.getCurrentPlayer().getNickname(),3);
+        assertNotEquals(oldPlayer,game.getCurrentPlayer().getNickname());
     }
 
     @Test
