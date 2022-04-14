@@ -19,7 +19,6 @@ public class Player implements Comparable<Player> {
     private final Towers towerColor;
     private AssistantCardDeck assistantCardDeck;
     private AssistantCard playedCard;
-    private int characterCard;
     private int coins;
 
     public Player(String nickname, Towers towerColors, int numberOfPlayers) {
@@ -50,21 +49,17 @@ public class Player implements Comparable<Player> {
         EnumMap<Colors, Integer> studentsToRemove = new EnumMap(Colors.class);
 
         if (schoolBoard.hasEnoughStudents(students)) {
-            if (students.size() == destinations.size()) {
-                for (Map.Entry<Colors, Integer> set : students.entrySet()) {
-                    if (destinations.get(i) != 1 && destinations.get(i) != 0) {
-                        throw new IncorrectArgumentException();
+            for (Map.Entry<Colors, Integer> set : students.entrySet()) {
+                if (destinations.get(i) != 1 && destinations.get(i) != 0) {
+                    throw new IncorrectArgumentException();
+                } else {
+                    if (destinations.get(i) == 0) {
+                        studentsToMove.put(set.getKey(), set.getValue());
                     } else {
-                        if (destinations.get(i) == 0) {
-                            studentsToMove.put(set.getKey(), set.getValue());
-                        } else {
-                            studentsToRemove.put(set.getKey(), set.getValue());
-                        }
-                        i++;
+                        studentsToRemove.put(set.getKey(), set.getValue());
                     }
+                    i++;
                 }
-            } else {
-                throw new IncorrectArgumentException();
             }
         } else {
             throw new IncorrectArgumentException();
@@ -100,6 +95,10 @@ public class Player implements Comparable<Player> {
         return playedCard;
     }
 
+    public AssistantCardDeck getAssistantCardDeck() {
+        return assistantCardDeck;
+    }
+
     public int getPlayerTowers() {
         return schoolBoard.getTowers();
     }
@@ -110,14 +109,6 @@ public class Player implements Comparable<Player> {
 
     public void moveTowers(int num) {
         schoolBoard.moveTowers(num);
-    }
-
-    public void setCharacterCard(int characterCard) {
-        this.characterCard = characterCard;
-    }
-
-    public int getCharacterCard() {
-        return characterCard;
     }
 
     public boolean hasProfessorOfColor(Colors student) {
