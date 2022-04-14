@@ -2,7 +2,15 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PlayerMove;
+import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
+import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
+import it.polimi.ingsw.model.exceptions.IncorrectStateException;
+import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
 
 public class Controller {
 
@@ -12,49 +20,55 @@ public class Controller {
         this.game = game;
     }
 
+    public void CallMoveMotherNature() {
+        try {
+            game.moveMotherNature(game.getCurrentPlayer().getNickname(),game.getCurrentPlayer().getPlayedCard().getMove());
+        } catch (IncorrectStateException | IncorrectArgumentException | IncorrectPlayerException | MotherNatureLostException e) {
+            e.printStackTrace();
+        }
 
-    public void playermove(PlayerMove playerMove) {
-            if(game.getCurrentPlayer()!=playerMove.getPlayer()&&game.getCurrentState()!= State.PLANNINGPHASE)
-            {
-                playerMove.getView().errorMessage("It's not your turn to play!\n");
-                return;
-            }
-            //Depending on the move the player wants to do there will be more checks
-            switch (playerMove.getMove())
-            {
-                //Play assistant card
-                case 1:
-                {
+    }
 
+    public void CallMoveStudent(EnumMap<Colors, ArrayList<String>> students)
+    {
+        try
+        {
+            game.moveStudents(game.getCurrentPlayer().getNickname(), students);
 
+        } catch (IncorrectStateException | IncorrectArgumentException | IncorrectPlayerException e) {
+            e.printStackTrace();
+        }
 
-                }
-                //Play character card
-                case 2:
-                {
+    }
 
-                }
-                //Move students
-                case 3:
-                {
+    public void CallPickCloud(int cloudTileID)
+    {
+        try
+        {
+            game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), cloudTileID);
+        } catch (IncorrectStateException | IncorrectArgumentException | IncorrectPlayerException e) {
+            e.printStackTrace();
+        }
+    }
+    public void CallPlayAssistantCard(int playedCard){
 
-                }
-                //Move mother Nature
-                case 4:
-                {
+        try
+        {
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), playedCard);
+        } catch (IncorrectStateException | IncorrectPlayerException | IncorrectArgumentException e) {
+            e.printStackTrace();
+        }
 
-                }
-                //Take students from cloud
-                case 5:
-                {
+    }
 
-                }
+   /* public void CallPlayCharacterCard(){
 
+        try{
 
-            }
-
+        }
+    }*/
 
     }
 
 
-}
+
