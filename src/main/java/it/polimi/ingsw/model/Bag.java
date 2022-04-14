@@ -45,6 +45,10 @@ public class Bag {
         int previousValue = 0;
         EnumMap<Colors, Integer> studentsDrawn = new EnumMap(Colors.class);
 
+        for (Colors color : Colors.values()) {
+            studentsDrawn.put(color, 0);
+        }
+
         for (int i = 0; i < numberOfStudents; ) {
             previousValue = 0;
 
@@ -53,7 +57,7 @@ public class Bag {
 
             if (getStudents().containsKey(Colors.getStudent(type))) {
                 if (getStudents().get(Colors.getStudent(type)) >= quantity) {
-                    previousValue = studentsDrawn.getOrDefault(Colors.getStudent(type), 0);
+                    previousValue = studentsDrawn.get(Colors.getStudent(type));
                     studentsDrawn.put(Colors.getStudent(type), previousValue + quantity);
                     i += quantity;
                 }

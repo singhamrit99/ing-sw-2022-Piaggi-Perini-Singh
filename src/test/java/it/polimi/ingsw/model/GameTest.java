@@ -128,16 +128,36 @@ class GameTest {
         return game;
     }
 
+    /*
     @Test
-    void testNextRound()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+    void testMoveStudents()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
         Game g = planningPhaseComplete();
-        for(int i = 0; i<5;i++){
-            assertEquals(g.getCurrentState(),State.ACTIONPHASE_1);
-            g.nextPlayer(); //fake Action Phase turn
+        assertEquals(g.getCurrentState(),State.ACTIONPHASE_1);
+        EnumMap<Colors,Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
+        EnumMap<Colors,Integer> studentsMoving = new EnumMap(Colors.class);
+        for(Colors c : Colors.values()){
+            studentsMoving.put(c,0);
         }
-        assertEquals(g.getCurrentState(),State.PLANNINGPHASE);
+        assertEquals(g.valueOfEnum(entrance),7);
+        for(Colors c : Colors.values()){
+            if(entrance.get(c)!=null){
+                while(entrance.get(c)>0 && g.valueOfEnum(studentsMoving)<3){
+                    studentsMoving.put(c,studentsMoving.get(c)+1);
+                    entrance.put(c,entrance.get(c)-1);
+                }
+            }
+        }
+        ArrayList<Integer> destinations = new ArrayList<>();
+        destinations.add(0);
+        destinations.add(0);
+        destinations.add(0);
+        destinations.add(0);
+        destinations.add(0);
+        destinations.add(0);
+        ArrayList<String> islandsDest = new ArrayList<>();
+        g.moveStudents(g.getCurrentPlayer().getNickname(),studentsMoving,destinations,islandsDest);
     }
-
+*/
     @Test
     void testTakeStudentsFromCloud()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
         Game g = planningPhaseComplete();
@@ -155,6 +175,7 @@ class GameTest {
         assertThrows(IncorrectStateException.class, () -> g.takeStudentsFromCloud("wrong player",0));
     }
 
+    /*
     @Test
     void testMoveStudentsException() throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException{
         Game game = planningPhaseComplete();
@@ -167,6 +188,8 @@ class GameTest {
         }
         assertThrows(IncorrectArgumentException.class, () -> game.moveStudents(game.getCurrentPlayer().getNickname(),s,destinations,islandsDest));
     }
+    */
+
 
     @Test
     void moveMotherNature()throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException, MotherNatureLostException {
