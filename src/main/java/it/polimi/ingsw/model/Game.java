@@ -263,7 +263,7 @@ public class Game {
             } else {
                 state = State.ACTIONPHASE_1;
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
-                currentPlayer = players.get(playerPlanPhase);
+                currentPlayer = orderPlayers.poll(); //first player of Action Phase
             }
         } else if (state == State.ACTIONPHASE_3) { //Last player did the 3 step of Action Phase
             if (!orderPlayers.isEmpty()) {
