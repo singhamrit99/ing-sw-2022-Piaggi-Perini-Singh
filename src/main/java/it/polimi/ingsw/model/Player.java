@@ -43,31 +43,18 @@ public class Player implements Comparable<Player> {
         schoolBoard.addStudents(students);
     }
 
-    public void moveStudents(EnumMap<Colors, Integer> students, ArrayList<Integer> destinations) throws IncorrectArgumentException {
-        int i = 0;
-        EnumMap<Colors, Integer> studentsToMove = new EnumMap(Colors.class);
-        EnumMap<Colors, Integer> studentsToRemove = new EnumMap(Colors.class);
+    public void moveStudents(EnumMap<Colors, Integer> move, EnumMap<Colors, Integer> remove) throws IncorrectArgumentException {
+        EnumMap<Colors, Integer> total = new EnumMap<Colors, Integer>(Colors.class);
+        for (Colors color : Colors.values()) {
+            total.put(color, move.get(color) + remove.get(color));
+        }
 
-        if (schoolBoard.hasEnoughStudents(students)) {
-            for (Map.Entry<Colors, Integer> set : students.entrySet()) {
-                if (destinations.get(i) != 1 && destinations.get(i) != 0) {
-                    throw new IncorrectArgumentException();
-                } else {
-                    if (destinations.get(i) == 0) {
-                        studentsToMove.put(set.getKey(), set.getValue());
-                    } else {
-                        studentsToRemove.put(set.getKey(), set.getValue());
-                    }
-                    i++;
-                }
-            }
+        if (schoolBoard.hasEnoughStudents(total)) {
+            if (move.size() != 0) coins += schoolBoard.moveStudents(move);
+            if (remove.size() != 0) schoolBoard.removeStudents(remove);
         } else {
             throw new IncorrectArgumentException();
         }
-        if (studentsToMove.size() != 0) {
-            coins += schoolBoard.moveStudents(studentsToMove);
-        }
-        if (studentsToRemove.size() != 0) schoolBoard.removeStudents(studentsToRemove);
     }
 
     public void addProfessor(Colors student) {
