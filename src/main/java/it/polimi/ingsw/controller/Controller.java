@@ -1,9 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.PlayerMove;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
@@ -22,43 +20,49 @@ public class Controller {
 
     public void CallMoveMotherNature() {
         try {
-            game.moveMotherNature(game.getCurrentPlayer().getNickname(),game.getCurrentPlayer().getPlayedCard().getMove());
+            game.moveMotherNature(game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getPlayedCard().getMove());
         } catch (IncorrectStateException | IncorrectArgumentException | IncorrectPlayerException | MotherNatureLostException e) {
             e.printStackTrace();
         }
-
     }
 
-    public void CallMoveStudent(EnumMap<Colors, ArrayList<String>> students)
-    {
-        try
-        {
+    public void CallMoveStudent(EnumMap<Colors, ArrayList<String>> students) {
+        try {
             game.moveStudents(game.getCurrentPlayer().getNickname(), students);
-
         } catch (IncorrectStateException | IncorrectArgumentException | IncorrectPlayerException e) {
             e.printStackTrace();
         }
-
     }
 
-    public void CallPickCloud(int cloudTileID)
-    {
-        try
-        {
+    public void CallPickCloud(int cloudTileID) {
+        try {
+            if (cloudTileID < 1 || cloudTileID >4) {
+                throw new IncorrectArgumentException();
+            }
+        } catch (IncorrectArgumentException e) {
+            e.printStackTrace();
+        }
+        try {
             game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), cloudTileID);
         } catch (IncorrectStateException | IncorrectArgumentException | IncorrectPlayerException e) {
             e.printStackTrace();
         }
     }
-    public void CallPlayAssistantCard(int playedCard){
 
-        try
-        {
+    public void CallPlayAssistantCard(int playedCard) {
+        try {
+            if (playedCard < 1 || playedCard > 12) {
+                throw new IncorrectArgumentException();
+            }
+        } catch (IncorrectArgumentException e) {
+            e.printStackTrace();
+        }
+
+        try {
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), playedCard);
         } catch (IncorrectStateException | IncorrectPlayerException | IncorrectArgumentException e) {
             e.printStackTrace();
         }
-
     }
 
    /* public void CallPlayCharacterCard(){
@@ -68,7 +72,7 @@ public class Controller {
         }
     }*/
 
-    }
+}
 
 
 

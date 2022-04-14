@@ -1,8 +1,6 @@
-package it.polimi.ingsw.commands;
+package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.controller.Controller;
-
-public class PlayAssistantCardCommand implements Commands{
+public class PlayAssistantCardCommand implements Commands {
 
     Controller controller;
     int assistantCardID;
@@ -13,7 +11,5 @@ public class PlayAssistantCardCommand implements Commands{
     }
 
     @Override
-    public void execute() {
-        controller.CallPlayAssistantCard(assistantCardID);
-    }
+    public void execute() {controller.CallPlayAssistantCard(assistantCardID);}
 }

@@ -1,14 +1,11 @@
-package it.polimi.ingsw.commands;
+package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.enumerations.Colors;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-public class MoveStudentCommand implements Commands{
-
-
+public class MoveStudentCommand implements Commands {
     Controller controller;
     EnumMap<Colors, ArrayList<String>> students;
 
@@ -18,11 +15,5 @@ public class MoveStudentCommand implements Commands{
     }
 
     @Override
-    public void execute() {
-
-        controller.CallMoveStudent(students);
-
-
-
-    }
+    public void execute() {controller.CallMoveStudent(students);}
 }

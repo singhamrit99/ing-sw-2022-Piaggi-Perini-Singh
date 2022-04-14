@@ -1,4 +1,4 @@
-package it.polimi.ingsw.commands;
+package it.polimi.ingsw.controller;
 
 public class PlayCharacterCardCommand {
 }
