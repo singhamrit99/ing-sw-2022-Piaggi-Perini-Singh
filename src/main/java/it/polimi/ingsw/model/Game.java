@@ -50,7 +50,7 @@ public class Game {
      * @param nicknames
      * @throws IncorrectArgumentException in case of bad arguments
      */
-    public Game(boolean expertMode, int numOfPlayer, ArrayList<String> nicknames)throws IncorrectArgumentException {
+    public Game(boolean expertMode, int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException {
         this.expertMode = expertMode;
         this.numOfPlayer = numOfPlayer;
         numRounds = 0;
@@ -333,22 +333,22 @@ public class Game {
     public void moveStudents(String playerCaller, EnumMap<Colors, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException {
         if (currentPlayer.getNickname().equals(playerCaller)) {
             int numOfStudents;
-            if(numOfPlayer==3)numOfStudents=4;
-            else numOfStudents =3;
-            if(valueOfEnum(students)==numOfStudents){
+            if (numOfPlayer == 3) numOfStudents = 4;
+            else numOfStudents = 3;
+            if (valueOfEnum(students) == numOfStudents) {
                 if (state == State.ACTIONPHASE_1) {
                     int DestCounter = 0;
                     EnumMap<Colors, Integer> studentsToMoveToIsland = new EnumMap<>(Colors.class);
-                    if (students.size() == destinations.size()) {
-                        for (Map.Entry<Colors, Integer> set : students.entrySet()) {
-                            if (destinations.get(DestCounter) == 1) {
-                                studentsToMoveToIsland.put(set.getKey(), set.getValue());
-                            }
+                    for (Map.Entry<Colors, Integer> set : students.entrySet()){
+                        if(set.getValue()>0){
+                            if (destinations.get(DestCounter)!= null) {
+                                if(destinations.get(DestCounter)== 1)
+                                    studentsToMoveToIsland.put(set.getKey(), set.getValue());
+                            }else throw new IncorrectArgumentException("Destinations array is wrong");
                             DestCounter++;
                         }
-                    } else {
-                        throw new IncorrectArgumentException();
                     }
+
                     //Sending ALL the students (including the islands ones) so that Player remove them from the entrance
                     currentPlayer.moveStudents(students, destinations);
 
@@ -373,8 +373,7 @@ public class Game {
                     checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
 
                 } else throw new IncorrectStateException();
-            }
-            else throw new IncorrectArgumentException();
+            } else throw new IncorrectArgumentException();
         } else throw new IncorrectPlayerException();
     }
 
@@ -611,7 +610,7 @@ public class Game {
      * @param map
      * @return
      */
-    private int valueOfEnum(EnumMap<Colors, Integer> map) {
+    public int valueOfEnum(EnumMap<Colors, Integer> map) {
         int sum = 0;
         for (Colors c : Colors.values()) {
             sum += map.get(c);
