@@ -55,10 +55,10 @@ class ControllerTest {
             }
         }
         game.moveStudents(game.getCurrentPlayer().getNickname(),movingStudents);
-        int oldPosMN=game.getMotherNaturePosition();
+        int oldPosMotherNature=game.getMotherNaturePosition();
         controller.CallMoveMotherNature();
 
-        assertNotEquals(game.getMotherNaturePosition(),oldPosMN);
+        assertNotEquals(game.getMotherNaturePosition(),oldPosMotherNature);
 
 
 
