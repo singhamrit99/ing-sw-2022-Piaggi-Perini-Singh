@@ -324,56 +324,65 @@ public class Game {
      * It makes a split of the students, checking which of them go to islands or to the Player that controls the dining room
      * In case the destination is the islands, it is used an array of islandDestination that is used by the game to send
      * the students in the correct place (the array uses the unique name of each island).
-     *
-     * @param students
-     * @param destinations
-     * @param islandDestinations
-     * @throws IncorrectArgumentException
      */
-    public void moveStudents(String playerCaller, EnumMap<Colors, Integer> students, ArrayList<Integer> destinations, ArrayList<String> islandDestinations) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException {
+    public void moveStudents(String playerCaller, EnumMap<Colors,ArrayList<String>> students) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException {
         if (currentPlayer.getNickname().equals(playerCaller)) {
-            int numOfStudents;
-            if (numOfPlayer == 3) numOfStudents = 4;
-            else numOfStudents = 3;
-            if (valueOfEnum(students) == numOfStudents) {
-                if (state == State.ACTIONPHASE_1) {
-                    int DestCounter = 0;
-                    EnumMap<Colors, Integer> studentsToMoveToIsland = new EnumMap<>(Colors.class);
-                    for (Map.Entry<Colors, Integer> set : students.entrySet()){
-                        if(set.getValue()>0){
-                            if (destinations.get(DestCounter)!= null) {
-                                if(destinations.get(DestCounter)== 1)
-                                    studentsToMoveToIsland.put(set.getKey(), set.getValue());
-                            }else throw new IncorrectArgumentException("Destinations array is wrong");
-                            DestCounter++;
+            if (state == State.ACTIONPHASE_1) {
+                int numOfStudents;
+                if (numOfPlayer == 3) numOfStudents = 4;
+                else numOfStudents = 3;
+
+                for (Colors c : Colors.values()) {
+                    if (!students.get(c).isEmpty()) {
+                        int i = 0;
+                        while (students.get(c).get(i) != null) {
+                            numOfStudents--;
+                            i++;
                         }
                     }
+                }
+                if (numOfStudents != 0) throw new IncorrectArgumentException("Numbers of students is wrong");
 
-                    //Sending ALL the students (including the islands ones) so that Player remove them from the entrance
-                    currentPlayer.moveStudents(students, destinations);
 
-                    if (!studentsToMoveToIsland.isEmpty() && studentsToMoveToIsland.size() == islandDestinations.size()) {
-                        boolean islandNameFound = true;
-                        for (String dest : islandDestinations) {
-                            if (islandNameFound) { //I check that the Island that I was searching in the last iteration it's found
-                                islandNameFound = false;
-                                for (IslandTile island : islands) {
-                                    if (island.getName().equals(dest)) {
-                                        islandNameFound = true;
-                                        island.addStudents(studentsToMoveToIsland);
-                                        break;
-                                    }
-                                }
+                EnumMap<Colors, Integer> initializedEnumMap = new EnumMap(Colors.class);
+                for (Colors c : Colors.values()) {
+                    initializedEnumMap.put(c, 0);
+                }
+                EnumMap<Colors, Integer> studentsToDining = initializedEnumMap;
+                EnumMap<Colors, Integer> studentsToRemove = initializedEnumMap;
+
+                for (Colors c : Colors.values()) {
+                    if (!students.get(c).isEmpty()) {
+                        int i = 0;
+                        while (students.get(c).get(i) != null) {
+                            if (students.get(c).get(i).equals("dining")) {
+                                studentsToDining.put(c, studentsToDining.get(c) + 1);
                             } else {
-                                throw new IncorrectArgumentException("The island is not found");
+                                studentsToRemove.put(c, studentsToRemove.get(c) + 1);
+                                String dest = students.get(c).get(i);
+                                int islandsIndex = 0;
+                                while (islandsIndex < islands.size()) {
+                                    if (islands.get(islandsIndex).getName().equals(dest)) {
+                                        EnumMap<Colors, Integer> tmp = initializedEnumMap;
+                                        tmp.put(c, 1);
+                                        islands.get(islandsIndex).addStudents(tmp);
+                                    }
+                                    islandsIndex++;
+                                }
                             }
+
+                            i++;
                         }
                     }
-                    state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
-                    checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
+                }
+                //AMRIT DEVE FARE METODO E GLI PASSO REMOVESTUDENTS E DININGSTUDENTS
+                state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
+                checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
 
-                } else throw new IncorrectStateException();
-            } else throw new IncorrectArgumentException();
+            } else {
+                throw new IncorrectStateException();
+            }
+
         } else throw new IncorrectPlayerException();
     }
 
@@ -385,7 +394,8 @@ public class Game {
      * @throws IncorrectArgumentException
      * @throws MotherNatureLostException
      */
-    public void moveMotherNature(String playerCaller, int distanceChoosen) throws IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException {
+    public void moveMotherNature(String playerCaller, int distanceChoosen) throws
+            IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException {
         if (playerCaller.equals(currentPlayer.getNickname())) {
             if (state == State.ACTIONPHASE_2) {
                 int destinationMotherNature = motherNaturePosition + distanceChoosen;
@@ -617,6 +627,7 @@ public class Game {
         }
         return sum;
     }
+
 
     public ArrayList<Player> getPlayers() {
         return players;

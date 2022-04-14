@@ -128,6 +128,7 @@ class GameTest {
         return game;
     }
 
+    /*
     @Test
     void testMoveStudents()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
         Game g = planningPhaseComplete();
@@ -137,7 +138,7 @@ class GameTest {
         for(Colors c : Colors.values()){
             studentsMoving.put(c,0);
         }
-        //assertEquals(g.valueOfEnum(entrance),7);
+        assertEquals(g.valueOfEnum(entrance),7);
         for(Colors c : Colors.values()){
             if(entrance.get(c)!=null){
                 while(entrance.get(c)>0 && g.valueOfEnum(studentsMoving)<3){
@@ -156,7 +157,7 @@ class GameTest {
         ArrayList<String> islandsDest = new ArrayList<>();
         g.moveStudents(g.getCurrentPlayer().getNickname(),studentsMoving,destinations,islandsDest);
     }
-
+*/
     @Test
     void testTakeStudentsFromCloud()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
         Game g = planningPhaseComplete();
@@ -174,6 +175,7 @@ class GameTest {
         assertThrows(IncorrectStateException.class, () -> g.takeStudentsFromCloud("wrong player",0));
     }
 
+    /*
     @Test
     void testMoveStudentsException() throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException{
         Game game = planningPhaseComplete();
@@ -186,6 +188,8 @@ class GameTest {
         }
         assertThrows(IncorrectArgumentException.class, () -> game.moveStudents(game.getCurrentPlayer().getNickname(),s,destinations,islandsDest));
     }
+    */
+
 
     @Test
     void moveMotherNature()throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException, MotherNatureLostException {
