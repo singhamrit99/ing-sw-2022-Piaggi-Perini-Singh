@@ -1,30 +1,20 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.model.cards.AssistantCard;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.model.exceptions.IncorrectStateException;
-import it.polimi.ingsw.model.tiles.CloudTile;
-import it.polimi.ingsw.model.tiles.IslandTile;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
+import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import org.junit.jupiter.api.Test;
 
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.nio.charset.StandardCharsets;
+import java.awt.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
-
-
     @Test
     public void testPlayersInit() throws IncorrectArgumentException {
         ArrayList<String> nicknames = new ArrayList<>();
@@ -108,17 +98,11 @@ class GameTest {
     }
 
     @Test
-    void testNextRound() throws IncorrectArgumentException{
-        Game game = initGame2players();
-        assertThrows(IncorrectStateException.class,()->game.nextRound());
-    }
-
-    @Test
     void testPlayAssistantCard() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
         Game game = initGame4players();
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldPlayer = game.getCurrentPlayer().getNickname();
-        game.playAssistantCard(game.getCurrentPlayer(),3);
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(),3);
     }
 
     @Test
@@ -128,48 +112,68 @@ class GameTest {
         for(int i = 0; i<4;i++){
             oldPlayer = game.getCurrentPlayer().getNickname();
             game.drawFromBag(oldPlayer);
-            game.playAssistantCard(game.getCurrentPlayer(), 3);
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), 3);
             String newPlayer = game.getCurrentPlayer().getNickname();
             assertNotEquals(oldPlayer,newPlayer);
         }
-        assertEquals(game.getCurrentState(),State.ACTIONPHASE);
+        assertEquals(game.getCurrentState(),State.ACTIONPHASE_1);
     }
 
     Game planningPhaseComplete()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
         Game game = initGame4players();
-        String oldPlayer="null";
         for(int i = 0; i<4;i++){
-            oldPlayer = game.getCurrentPlayer().getNickname();
-            game.drawFromBag(oldPlayer);
-            game.playAssistantCard(game.getCurrentPlayer(), 3);
-            String newPlayer = game.getCurrentPlayer().getNickname();
-            assertNotEquals(oldPlayer,newPlayer);
+            game.drawFromBag(game.getCurrentPlayer().getNickname());
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int)(Math.random()*9));
         }
         return game;
     }
 
     @Test
-    void moveStudents() throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException{
+    void testNextRound()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game g = planningPhaseComplete();
+        for(int i = 0; i<5;i++){
+            assertEquals(g.getCurrentState(),State.ACTIONPHASE_1);
+            g.nextPlayer(); //fake Action Phase turn
+        }
+        assertEquals(g.getCurrentState(),State.PLANNINGPHASE);
+    }
+
+    @Test
+    void testTakeStudentsFromCloud()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game g = planningPhaseComplete();
+        EnumMap<Colors,Integer> s = g.getCloudTile(0).getStudents();
+        g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(),0);
+        s = g.getCloudTile(0).getStudents();
+        for(Colors c: Colors.values()){
+            assertEquals(s.get(c),0);
+        }
+    }
+
+    @Test
+    void testTakeStudentsFromCloudException()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game g = planningPhaseComplete();
+        assertThrows(IncorrectStateException.class, () -> g.takeStudentsFromCloud("wrong player",0));
+    }
+
+    @Test
+    void testMoveStudentsException() throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException{
         Game game = planningPhaseComplete();
-        assertEquals(game.getCurrentState(),State.ACTIONPHASE);
-        EnumMap<Colors,Integer> s = game.getCloudTile(0).getStudents();
-        System.out.println("PINK: "+s.get(Colors.PINK));
-        System.out.println("YELLOW: "+s.get(Colors.YELLOW));
-        System.out.println("GREEN: "+s.get(Colors.GREEN));
-        System.out.println("RED: "+s.get(Colors.RED));
-        System.out.println("BLUE: "+s.get(Colors.BLUE));
+        EnumMap<Colors,Integer> s = game.getCloudTile(0).getStudents(); //random one from an island
+        ArrayList<Integer> destinations = new ArrayList<>();
+        ArrayList<String> islandsDest = new ArrayList<>();
+        for(Colors c: Colors.values()){
+            destinations.add(1);
+            islandsDest.add("island1");
+        }
+        assertThrows(IncorrectArgumentException.class, () -> game.moveStudents(game.getCurrentPlayer().getNickname(),s,destinations,islandsDest));
     }
 
     @Test
-    void takeStudentsFromCloud(){
-    }
-
-    @Test
-    void moveMotherNature() {
-    }
-
-    @Test
-    void checkAndPlaceProfessor() {
+    void moveMotherNature()throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException, MotherNatureLostException {
+        Game g = planningPhaseComplete();
+        int oldPosMN = g.getMotherNaturePosition();
+        g.moveMotherNature(g.getCurrentPlayer().getNickname(),5);
+        assertNotEquals(g.getMotherNaturePosition(),oldPosMN);
     }
 
     @Test
@@ -191,7 +195,14 @@ class GameTest {
     }
 
     @Test
-    void checkUnificationIslands() {
+    void checkAndPlaceProfessor() throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+        Game g = planningPhaseComplete();
+        g.checkAndPlaceProfessor();
+    }
+
+    @Test
+    void checkUnificationIslands(){
+
     }
 
     @Test
@@ -212,7 +223,5 @@ class GameTest {
         Game game = initGame3players();
         assertFalse(game.isGameOver());
     }
-
-
 
 }

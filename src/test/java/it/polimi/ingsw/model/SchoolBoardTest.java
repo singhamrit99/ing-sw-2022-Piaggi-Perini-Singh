@@ -216,7 +216,7 @@ class SchoolBoardTest {
             e.printStackTrace();
         }
 
-        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.getStudentsByColor(Colors.GREEN));
+        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.getStudentsByColor(Colors.getStudent(6)));
     }
 
     @Test

@@ -21,6 +21,7 @@ public class SchoolBoard {
         this.entrance = new EnumMap(Colors.class);
         this.dining = new EnumMap(Colors.class);
         this.professorsTable = new ArrayList<>();
+        coins = new EnumMap<Colors, Integer>(Colors.class);
 
         if (numberOfPlayers == 3) {
             numberOfTowers = 6;
@@ -28,9 +29,9 @@ public class SchoolBoard {
             numberOfTowers = 8;
         }
 
-        coins = new EnumMap<Colors, Integer>(Colors.class);
-        for (Colors colors : Colors.values()) {
-            coins.put(colors, 0);
+        for (Colors color : Colors.values()) {
+            dining.put(color, 0);
+            coins.put(color, 0);
         }
     }
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.cards.AssistantCard;
-import it.polimi.ingsw.model.cards.AssistantCardDeck;
+import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
+import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
@@ -27,13 +27,13 @@ public class Player implements Comparable<Player> {
         this.schoolBoard = new SchoolBoard(numberOfPlayers);
         this.towerColor = towerColors;
         assistantCardDeck = new AssistantCardDeck();
-        assistantCardDeck.newDeck();
+        assistantCardDeck.fillDeck();
         coins = 1;
     }
 
     public void playAssistantCard(int index) {
-        playedCard = assistantCardDeck.getAssistantCard(index);
-        assistantCardDeck.getAssistantCard(index).setHasPlayed(true);
+        playedCard = assistantCardDeck.get(index);
+        assistantCardDeck.get(index).setHasPlayed(true);
     }
 
     public boolean moveMotherNature(int distance) {
