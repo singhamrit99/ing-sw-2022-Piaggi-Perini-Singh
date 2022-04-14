@@ -128,39 +128,77 @@ class GameTest {
         return game;
     }
 
-    /*
     @Test
     void testMoveStudents()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
         Game g = planningPhaseComplete();
         assertEquals(g.getCurrentState(),State.ACTIONPHASE_1);
         EnumMap<Colors,Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
-        EnumMap<Colors,Integer> studentsMoving = new EnumMap(Colors.class);
+        assertEquals(7,g.valueOfEnum(entrance));
+        EnumMap<Colors,ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+        int countNumStudents = 3;
         for(Colors c : Colors.values()){
-            studentsMoving.put(c,0);
-        }
-        assertEquals(g.valueOfEnum(entrance),7);
-        for(Colors c : Colors.values()){
-            if(entrance.get(c)!=null){
-                while(entrance.get(c)>0 && g.valueOfEnum(studentsMoving)<3){
-                    studentsMoving.put(c,studentsMoving.get(c)+1);
-                    entrance.put(c,entrance.get(c)-1);
+            ArrayList<String> tmp = new ArrayList<>();
+            movingStudents.put(c,tmp);
+            for(int x = entrance.get(c); countNumStudents>0 && x>0;x--){
+                tmp = movingStudents.get(c);
+                if(Math.random()>0.5){
+                    tmp.add("dining");
                 }
+                else tmp.add("island4");
+                movingStudents.put(c,tmp);
+                countNumStudents--;
             }
         }
-        ArrayList<Integer> destinations = new ArrayList<>();
-        destinations.add(0);
-        destinations.add(0);
-        destinations.add(0);
-        destinations.add(0);
-        destinations.add(0);
-        destinations.add(0);
-        ArrayList<String> islandsDest = new ArrayList<>();
-        g.moveStudents(g.getCurrentPlayer().getNickname(),studentsMoving,destinations,islandsDest);
+        g.moveStudents(g.getCurrentPlayer().getNickname(),movingStudents);
+        assertEquals(4,g.valueOfEnum(entrance));
     }
-*/
+
     @Test
-    void testTakeStudentsFromCloud()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
+    void moveMotherNature()throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException, MotherNatureLostException {
         Game g = planningPhaseComplete();
+        EnumMap<Colors,Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
+        EnumMap<Colors,ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+        int countNumStudents = 3;
+        for(Colors c : Colors.values()){
+            ArrayList<String> tmp = new ArrayList<>();
+            movingStudents.put(c,tmp);
+            for(int x = entrance.get(c); countNumStudents>0 && x>0;x--){
+                tmp = movingStudents.get(c);
+                if(Math.random()>0.5){
+                    tmp.add("dining");
+                }
+                else tmp.add("island4");
+                movingStudents.put(c,tmp);
+                countNumStudents--;
+            }
+        }
+        g.moveStudents(g.getCurrentPlayer().getNickname(),movingStudents);
+        int oldPosMN = g.getMotherNaturePosition();
+        g.moveMotherNature(g.getCurrentPlayer().getNickname(),5);
+        assertNotEquals(g.getMotherNaturePosition(),oldPosMN);
+    }
+
+    @Test
+    void testTakeStudentsFromCloud()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException, MotherNatureLostException{
+        Game g = planningPhaseComplete();
+        EnumMap<Colors,Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
+        EnumMap<Colors,ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+        int countNumStudents = 3;
+        for(Colors c : Colors.values()){
+            ArrayList<String> tmp = new ArrayList<>();
+            movingStudents.put(c,tmp);
+            for(int x = entrance.get(c); countNumStudents>0 && x>0;x--){
+                tmp = movingStudents.get(c);
+                if(Math.random()>0.5){
+                    tmp.add("dining");
+                }
+                else tmp.add("island4");
+                movingStudents.put(c,tmp);
+                countNumStudents--;
+            }
+        }
+        g.moveStudents(g.getCurrentPlayer().getNickname(),movingStudents);
+        g.moveMotherNature(g.getCurrentPlayer().getNickname(),1);
         EnumMap<Colors,Integer> s = g.getCloudTile(0).getStudents();
         g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(),0);
         s = g.getCloudTile(0).getStudents();
@@ -169,35 +207,42 @@ class GameTest {
         }
     }
 
+
+    @Test
+    void testNextRound()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException, MotherNatureLostException{
+        Game g = planningPhaseComplete();
+        for(int playersTurn = 0;playersTurn<4;playersTurn++){
+            EnumMap<Colors,Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
+            EnumMap<Colors,ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+            int countNumStudents = 3;
+            for(Colors c : Colors.values()){
+                ArrayList<String> tmp = new ArrayList<>();
+                movingStudents.put(c,tmp);
+                for(int x = entrance.get(c); countNumStudents>0 && x>0;x--){
+                    tmp = movingStudents.get(c);
+                    if(Math.random()>0.5){
+                        tmp.add("dining");
+                    }
+                    else tmp.add("island4");
+                    movingStudents.put(c,tmp);
+                    countNumStudents--;
+                }
+            }
+            g.moveStudents(g.getCurrentPlayer().getNickname(),movingStudents);
+            g.moveMotherNature(g.getCurrentPlayer().getNickname(),1);
+            EnumMap<Colors,Integer> s = g.getCloudTile(0).getStudents();
+            g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(),playersTurn);
+
+        }
+        assertEquals(State.PLANNINGPHASE,g.getCurrentState());
+    }
+
     @Test
     void testTakeStudentsFromCloudException()throws IncorrectArgumentException,IncorrectPlayerException,IncorrectStateException{
         Game g = planningPhaseComplete();
         assertThrows(IncorrectStateException.class, () -> g.takeStudentsFromCloud("wrong player",0));
     }
 
-    /*
-    @Test
-    void testMoveStudentsException() throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException{
-        Game game = planningPhaseComplete();
-        EnumMap<Colors,Integer> s = game.getCloudTile(0).getStudents(); //random one from an island
-        ArrayList<Integer> destinations = new ArrayList<>();
-        ArrayList<String> islandsDest = new ArrayList<>();
-        for(Colors c: Colors.values()){
-            destinations.add(1);
-            islandsDest.add("island1");
-        }
-        assertThrows(IncorrectArgumentException.class, () -> game.moveStudents(game.getCurrentPlayer().getNickname(),s,destinations,islandsDest));
-    }
-    */
-
-
-    @Test
-    void moveMotherNature()throws IncorrectArgumentException,IncorrectStateException,IncorrectPlayerException, MotherNatureLostException {
-        Game g = planningPhaseComplete();
-        int oldPosMN = g.getMotherNaturePosition();
-        g.moveMotherNature(g.getCurrentPlayer().getNickname(),5);
-        assertNotEquals(g.getMotherNaturePosition(),oldPosMN);
-    }
 
     @Test
     void testMoveTowersFromTeam() throws IncorrectArgumentException{

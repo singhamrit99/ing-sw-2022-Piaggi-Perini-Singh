@@ -15,9 +15,11 @@ import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
+import java.awt.*;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.List;
 
 public class Game {
     private State state;
@@ -261,7 +263,7 @@ public class Game {
             } else {
                 state = State.ACTIONPHASE_1;
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
-                currentPlayer = players.get(playerPlanPhase);
+                currentPlayer = orderPlayers.poll(); //first player of Action Phase
             }
         } else if (state == State.ACTIONPHASE_3) { //Last player did the 3 step of Action Phase
             if (!orderPlayers.isEmpty()) {
@@ -335,7 +337,7 @@ public class Game {
                 for (Colors c : Colors.values()) {
                     if (!students.get(c).isEmpty()) {
                         int i = 0;
-                        while (students.get(c).get(i) != null) {
+                        while (i < students.get(c).size()) {
                             numOfStudents--;
                             i++;
                         }
@@ -343,46 +345,42 @@ public class Game {
                 }
                 if (numOfStudents != 0) throw new IncorrectArgumentException("Numbers of students is wrong");
 
+                EnumMap<Colors, Integer> studentsToDining = new EnumMap(Colors.class);
+                EnumMap<Colors, Integer> studentsToRemove = new EnumMap(Colors.class);
 
-                EnumMap<Colors, Integer> initializedEnumMap = new EnumMap(Colors.class);
-                for (Colors c : Colors.values()) {
-                    initializedEnumMap.put(c, 0);
+                for (Colors c : Colors.values()){
+                    studentsToDining.put(c, 0);
+                    studentsToRemove.put(c, 0);
                 }
-                EnumMap<Colors, Integer> studentsToDining = initializedEnumMap;
-                EnumMap<Colors, Integer> studentsToRemove = initializedEnumMap;
 
                 for (Colors c : Colors.values()) {
-                    if (!students.get(c).isEmpty()) {
+                    if (!students.get(c).isEmpty()){
                         int i = 0;
-                        while (students.get(c).get(i) != null) {
-                            if (students.get(c).get(i).equals("dining")) {
+                        while (i < students.get(c).size()) {
+                            if (students.get(c).get(i).equals("dining")){
                                 studentsToDining.put(c, studentsToDining.get(c) + 1);
-                            } else {
+                            }else{
                                 studentsToRemove.put(c, studentsToRemove.get(c) + 1);
                                 String dest = students.get(c).get(i);
                                 int islandsIndex = 0;
                                 while (islandsIndex < islands.size()) {
                                     if (islands.get(islandsIndex).getName().equals(dest)) {
-                                        EnumMap<Colors, Integer> tmp = initializedEnumMap;
+                                        EnumMap<Colors, Integer> tmp = new EnumMap<>(Colors.class);
+                                        for(Colors color : Colors.values()){tmp.put(color,0);}
                                         tmp.put(c, 1);
                                         islands.get(islandsIndex).addStudents(tmp);
                                     }
                                     islandsIndex++;
                                 }
                             }
-
                             i++;
                         }
                     }
                 }
-                //AMRIT DEVE FARE METODO E GLI PASSO REMOVESTUDENTS E DININGSTUDENTS
+                currentPlayer.moveStudents(studentsToDining,studentsToRemove);
                 state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
                 checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
-
-            } else {
-                throw new IncorrectStateException();
-            }
-
+            } else throw new IncorrectStateException();
         } else throw new IncorrectPlayerException();
     }
 
