@@ -26,8 +26,6 @@ public final class StudentManager {
             if (set.getValue() >= 0) {
                 if (students.containsKey(set.getKey())) {
                     students.put(set.getKey(), students.get(set.getKey()) - set.getValue());
-                } else {
-                    return null;
                 }
             } else {
                 return null;
@@ -36,5 +34,12 @@ public final class StudentManager {
         return students;
     }
 
-    //TODO add method to create an empty enummap of Colors type
+    public static EnumMap<Colors, Integer> createEmptyStudentsEnum() {
+        EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
+        for (Colors color : Colors.values()) {
+            students.put(color, 0);
+        }
+
+        return students;
+    }
 }
