@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -36,4 +35,6 @@ public final class StudentManager {
         }
         return students;
     }
+
+    //TODO add method to create an empty enummap of Colors type
 }
