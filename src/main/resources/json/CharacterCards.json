@@ -2,73 +2,205 @@
   {
     "imageName": "character1",
     "startingPrice": 1,
-    "type": "",
+    "type": {
+      "name": "STUDENT",
+      "value": 4
+    },
+    "ability": {
+      "action": "ADD_ISLAND",
+      "value": 1
+    },
+    "requirements": {
+      "resource": "ISLAND",
+      "value": 1
+    },
     "description": "Move students on the character card to any isle you wish!"
   },
   {
     "imageName": "character2",
     "startingPrice": 2,
-    "type": "",
-    "description": "Snag an opponent's professor if you have the same number of their students!"
+    "description": "Snag an opponent's professor if you have the same number of their students!",
+    "type": {
+      "name": "CONTROL",
+      "value": 0
+    },
+    "ability": {
+      "action": "TAKEPROFESSORS",
+      "value": 0
+    },
+    "requirements": {
+      "resource": "",
+      "value": 0
+    }
   },
   {
     "imageName": "character3",
     "startingPrice": 3,
-    "type": "",
-    "description": "Calculate the influence on any Island and reap the rewards!"
+    "description": "Calculate the influence on any Island and reap the rewards!",
+    "type": {
+      "name": "SELECTOR",
+      "value": 0
+    },
+    "ability": {
+      "action": "CALCULATE_INFLUENCE",
+      "value": 0
+    },
+    "requirements": {
+      "resource": "ISLAND",
+      "value": 1
+    }
   },
   {
     "imageName": "character4",
     "startingPrice": 1,
-    "type": "",
-    "description": "You may move Mother Nature up to 2 additional spaces!"
+    "description": "You may move Mother Nature up to 2 additional spaces!",
+    "type": {
+      "name": "CONTROL",
+      "value": 0
+    },
+    "ability": {
+      "action": "MOVE_MOTHER_NATURE",
+      "value": 2
+    },
+    "requirements": {
+      "resource": "",
+      "value": 0
+    }
   },
   {
     "imageName": "character5",
     "startingPrice": 2,
-    "type": "",
-    "description": "Place a No Entry card on an isle and block Mother Nature's power once!"
+    "description": "Place a No Entry card on an isle and block Mother Nature's power once!",
+    "type": {
+      "name": "SELECTOR",
+      "value": 4
+    },
+    "ability": {
+      "action": "NO_ENTRY_TILE",
+      "value": 1
+    },
+    "requirements": {
+      "resource": "",
+      "value": 0
+    }
   },
   {
     "imageName": "character6",
     "startingPrice": 3,
-    "type": "",
-    "description": "If somebody tries to Conquer an island, ignore the towers for this turn!"
+    "description": "If somebody tries to Conquer an island, ignore the towers for this turn!",
+    "type": {
+      "name": "CONTROL",
+      "value": 1
+    },
+    "ability": {
+      "action": "NO_TOWER_INFLUENCE",
+      "value": 0
+    },
+    "requirements": {
+      "resource": "",
+      "value": 0
+    }
   },
   {
     "imageName": "character7",
     "startingPrice": 1,
-    "type": "",
-    "description": "Swap 3 of the students on this card with 3 from your Entrance!"
+    "description": "Swap 3 of the students on this card with 3 from your Entrance!",
+    "type": {
+      "name": "STUDENT",
+      "value": 6
+    },
+    "ability": {
+      "action": "SWAP_ENTRANCE",
+      "value": 3
+    },
+    "requirements": {
+      "resource": "COLORS",
+      "value": 6
+    }
   },
   {
     "imageName": "character8",
     "startingPrice": 2,
-    "type": "",
-    "description": "Add 2 to your Influence this turn!"
+    "description": "Add 2 to your Influence this turn!",
+    "type": {
+      "name": "CONTROL",
+      "value": 0
+    },
+    "ability": {
+      "action": "ADD_POINTS",
+      "value": 2
+    },
+    "requirements": {
+      "resource": "",
+      "value": 0
+    }
   },
   {
     "imageName": "character9",
     "startingPrice": 3,
-    "type": "",
-    "description": "Choose a student color to ignore when calculating Influence this turn!"
+    "description": "Choose a student color to ignore when calculating Influence this turn!",
+    "type": {
+      "name": "SELECTOR",
+      "value": 0
+    },
+    "ability": {
+      "action": "AVOID_COLOR_INFLUENCE",
+      "value": 0
+    },
+    "requirements": {
+      "resource": "COLORS",
+      "value": 1
+    }
   },
   {
     "imageName": "character10",
     "startingPrice": 1,
-    "type": "",
-    "description": "Switch up to two students between your Entrance and your Dining Room!"
+    "description": "Switch up to two students between your Entrance and your Dining Room!",
+    "type": {
+      "name": "SELECTOR",
+      "value": 0
+    },
+    "ability": {
+      "action": "SWAP_ENTRANCE_DINING",
+      "value": 2
+    },
+    "requirements": {
+      "resource": "COLORS",
+      "value": 2
+    }
   },
   {
     "imageName": "character11",
     "startingPrice": 2,
-    "type": "",
-    "description": "Take one student from this card and put them in the dining room, then draw another from the bag and replace them!"
+    "description": "Take one student from this card and put them in the dining room, then draw another from the bag and replace them!",
+    "type": {
+      "name": "STUDENT",
+      "value": 4
+    },
+    "ability": {
+      "action": "ADD_DINING",
+      "value": 1
+    },
+    "requirements": {
+      "resource": "COLORS",
+      "value": 1
+    }
   },
   {
     "imageName": "character12",
     "startingPrice": 3,
-    "type": "",
-    "description": "Choose a color: EVERYONE must return 3 students of that color to the bag!"
+    "description": "Choose a color: EVERYONE must return 3 students of that color to the bag!",
+    "type": {
+      "name": "SELECTOR",
+      "value": 1
+    },
+    "ability": {
+      "action": "RETURN_STUDENT",
+      "value": 3
+    },
+    "requirements": {
+      "resource": "COLORS",
+      "value": 1
+    }
   }
 ]
