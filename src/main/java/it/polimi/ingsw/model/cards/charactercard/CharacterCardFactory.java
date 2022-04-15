@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
 
 public class CharacterCardFactory {
-    public CharacterCard getCard(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) throws IncorrectArgumentException {
+    public CharacterCard getCard(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) throws IncorrectArgumentException, NegativeValueException {
         if (type.getName() == null) {
             return null;
         }
