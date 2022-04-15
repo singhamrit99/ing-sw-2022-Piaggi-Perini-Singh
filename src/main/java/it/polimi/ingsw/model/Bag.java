@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -15,34 +15,32 @@ public class Bag {
 
     private Bag() {
         students = new EnumMap<>(Colors.class);
-        for (Colors color : Colors.values()) {
-            students.put(color, 0);
-        }
+        students = StudentManager.createEmptyStudentsEnum();
     }
 
     public static Bag getInstance() {
         return instance;
     }
 
-    public void addStudents(EnumMap<Colors, Integer> studentsToAdd) throws IncorrectArgumentException {
+    public void addStudents(EnumMap<Colors, Integer> studentsToAdd) throws NegativeValueException {
         EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getStudents(), studentsToAdd);
         if (newStudents != null) {
             setStudents(newStudents);
         } else {
-            throw new IncorrectArgumentException();
+            throw new NegativeValueException();
         }
     }
 
-    public void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws IncorrectArgumentException {
+    public void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws NegativeValueException {
         EnumMap<Colors, Integer> newStudents = StudentManager.removeStudent(getStudents(), studentsToRemove);
         if (newStudents != null) {
             setStudents(newStudents);
         } else {
-            throw new IncorrectArgumentException();
+            throw new NegativeValueException();
         }
     }
 
-    public EnumMap<Colors, Integer> drawStudents(int numberOfStudents) throws IncorrectArgumentException {
+    public EnumMap<Colors, Integer> drawStudents(int numberOfStudents) throws NegativeValueException {
         int type, quantity;
         int studentType = 5;
 
