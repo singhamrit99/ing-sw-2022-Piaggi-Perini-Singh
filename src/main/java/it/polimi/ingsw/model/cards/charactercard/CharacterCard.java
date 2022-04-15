@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.cards.Card;
 
 public class CharacterCard extends Card {
@@ -62,6 +63,6 @@ public class CharacterCard extends Card {
         return requirements;
     }
 
-    public void activate() {
+    public void activate(Game game) {
     }
 }
