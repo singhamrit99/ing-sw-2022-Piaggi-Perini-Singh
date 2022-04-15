@@ -9,13 +9,20 @@ import java.util.EnumMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BagTest {
-    Bag bag = new Bag();
-    EnumMap<Colors, Integer> enumMap = new EnumMap<Colors, Integer>(Colors.class);
+    Bag bag = Bag.getInstance();
+    EnumMap<Colors, Integer> enumMap = new EnumMap<>(Colors.class);
 
     void setupEnum() {
         enumMap.put(Colors.BLUE, 2);
         enumMap.put(Colors.PINK, 3);
         enumMap.put(Colors.YELLOW, 1);
+    }
+
+    void clearBag() {
+        for (Colors color : Colors.values()) {
+            enumMap.put(color, 0);
+        }
+        bag.setStudents(enumMap);
     }
 
     @Test
@@ -34,6 +41,7 @@ class BagTest {
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
+
         assertEquals(2, bag.getStudents().get(Colors.BLUE));
         assertEquals(3, bag.getStudents().get(Colors.PINK));
         assertEquals(1, bag.getStudents().get(Colors.YELLOW));
@@ -47,6 +55,8 @@ class BagTest {
         assertEquals(4, bag.getStudents().get(Colors.BLUE));
         assertEquals(6, bag.getStudents().get(Colors.PINK));
         assertEquals(2, bag.getStudents().get(Colors.YELLOW));
+
+        clearBag();
     }
 
     @Test
@@ -57,16 +67,13 @@ class BagTest {
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
-
-        enumMap.clear();
-        enumMap.put(Colors.YELLOW, 1);
-        //if key not found
-        assertThrows(IncorrectArgumentException.class, () -> bag.removeStudents(enumMap));
-
         enumMap.clear();
         enumMap.put(Colors.BLUE, -1);
+
         //if value is negative
         assertThrows(IncorrectArgumentException.class, () -> bag.removeStudents(enumMap));
+
+        clearBag();
     }
 
     @Test
@@ -88,6 +95,8 @@ class BagTest {
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
+
+        clearBag();
     }
 
     @Test
@@ -107,6 +116,8 @@ class BagTest {
         } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
+
+        clearBag();
     }
 
     @Test
@@ -120,5 +131,6 @@ class BagTest {
 
         assertTrue(bag.hasEnoughStudents(5));
         assertFalse(bag.hasEnoughStudents(7));
+        clearBag();
     }
 }
