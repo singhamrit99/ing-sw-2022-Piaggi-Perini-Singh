@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model.tiles;
 
+import it.polimi.ingsw.model.StudentManager;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
 
 import java.util.EnumMap;
-import java.util.Map;
 
 public class IslandTile {
     private String name;
@@ -21,10 +21,8 @@ public class IslandTile {
         towersColor = Towers.WHITE; //this value is ignored if numberOfTowers=0
         numberOfTowers = 0;
         hasNoEntryTile = false;
-        this.students = new EnumMap<>(Colors.class);
-        for (Colors color : Colors.values()) {
-            students.put(color, 0);
-        }
+        students = new EnumMap<>(Colors.class);
+        students = StudentManager.createEmptyStudentsEnum();
     }
 
     public String getName() {
@@ -47,25 +45,18 @@ public class IslandTile {
         return numberOfTowers;
     }
 
-    public void addStudents(EnumMap<Colors, Integer> summedStudents) throws IncorrectArgumentException {
-        EnumMap<Colors, Integer> tmp = getStudents();
-        for (Map.Entry<Colors, Integer> studentsNewEnumMap : summedStudents.entrySet()) {
-            if (studentsNewEnumMap.getValue() >= 0) {
-                //if (tmp.containsKey(studentsNewEnumMap.getKey())) {
-                tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue() + tmp.get(studentsNewEnumMap.getKey()));
-               /* } else {
-                    tmp.put(studentsNewEnumMap.getKey(), studentsNewEnumMap.getValue());
-                }*/
-            } else {
-                throw new IncorrectArgumentException("EnumMap is not correct");
-            }
+    public void addStudents(EnumMap<Colors, Integer> summedStudents) throws NegativeValueException {
+        EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(students, summedStudents);
+        if (newStudents != null) {
+            setStudents(newStudents);
+        } else {
+            throw new NegativeValueException();
         }
-        students = tmp;
     }
 
-    public void sumTowers(int towers) throws IncorrectArgumentException {
+    public void sumTowers(int towers) throws NegativeValueException {
         numberOfTowers += towers;
-        if (numberOfTowers < 0) throw new IncorrectArgumentException();
+        if (numberOfTowers < 0) throw new NegativeValueException();
     }
 
     public boolean hasMotherNature() {
@@ -78,6 +69,10 @@ public class IslandTile {
 
     public void removeMotherNature() {
         hasMotherNature = false;
+    }
+
+    private void setStudents(EnumMap<Colors, Integer> students) {
+        this.students = students;
     }
 
 }
