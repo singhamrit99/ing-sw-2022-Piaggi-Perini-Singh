@@ -3,10 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
-import it.polimi.ingsw.model.exceptions.IncorrectStateException;
-import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
+import it.polimi.ingsw.model.exceptions.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -16,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
     @Test
-    public void testPlayersInit() throws IncorrectArgumentException {
+    public void testPlayersInit() throws IncorrectArgumentException, NegativeValueException {
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Amrit");
         nicknames.add("Lore");
@@ -30,26 +27,26 @@ class GameTest {
     }
 
     @Test
-    public void testDrawFromBag() throws IncorrectArgumentException, IncorrectPlayerException {
+    public void testDrawFromBag() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         Game game = initGame2players();
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         assertTrue(game.getPlayerDrawnOut());
     }
 
     @Test
-    public void testDrawFromBagFalse() throws IncorrectArgumentException {
+    public void testDrawFromBagFalse() throws IncorrectArgumentException, NegativeValueException {
         Game game = initGame2players();
         assertThrows(IncorrectPlayerException.class, () -> game.drawFromBag("randomPlayer"));
     }
 
-    public Game initGame2players() throws IncorrectArgumentException {
+    public Game initGame2players() throws IncorrectArgumentException, NegativeValueException {
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Luke Skywalker");
         nicknames.add("Dark Fener");
         return new Game(false, 2, nicknames);
     }
 
-    public Game initGame3players() throws IncorrectArgumentException {
+    public Game initGame3players() throws IncorrectArgumentException, NegativeValueException {
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Bruce Wayne");
         nicknames.add("Joker");
@@ -57,7 +54,7 @@ class GameTest {
         return new Game(false, 3, nicknames);
     }
 
-    public Game initGame4players() throws IncorrectArgumentException {
+    public Game initGame4players() throws IncorrectArgumentException, NegativeValueException {
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
         nicknames.add("Raffaello");
@@ -67,7 +64,7 @@ class GameTest {
     }
 
     @Test
-    public void testNextPlayer3Players() throws IncorrectArgumentException, IncorrectStateException {
+    public void testNextPlayer3Players() throws IncorrectArgumentException, IncorrectStateException, NegativeValueException {
         Game game = initGame3players();
 
         String oldPlayerNickname = game.getCurrentPlayer().getNickname();
@@ -77,7 +74,7 @@ class GameTest {
     }
 
     @Test
-    public void testNextPlayer2and4Players() throws IncorrectArgumentException, IncorrectStateException {
+    public void testNextPlayer2and4Players() throws IncorrectArgumentException, IncorrectStateException, NegativeValueException {
         Game game = initGame4players();
         String oldPlayerNickname = game.getCurrentPlayer().getNickname();
         game.nextPlayer();
@@ -85,13 +82,13 @@ class GameTest {
     }
 
     @Test
-    public void testFindPlayerFromTeam() throws IncorrectArgumentException {
+    public void testFindPlayerFromTeam() throws IncorrectArgumentException, NegativeValueException {
         Game game = initGame3players();
         assertEquals(game.findPlayerFromTeam(Towers.GREY).size(), 1);
     }
 
     @Test
-    public void testFindPlayerFromTeam4players() throws IncorrectArgumentException {
+    public void testFindPlayerFromTeam4players() throws IncorrectArgumentException, NegativeValueException {
         Game game = initGame4players();
         assertEquals(game.findPlayerFromTeam(Towers.GREY).size(), 0);
         assertEquals(game.findPlayerFromTeam(Towers.WHITE).size(), 2);
@@ -99,7 +96,7 @@ class GameTest {
     }
 
     @Test
-    void testPlayAssistantCard() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+    void testPlayAssistantCard() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, NegativeValueException {
         Game game = initGame4players();
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldPlayer = game.getCurrentPlayer().getNickname();
@@ -108,7 +105,7 @@ class GameTest {
     }
 
     @Test
-    void testPlanningPhase() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException {
+    void testPlanningPhase() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException {
         Game game = initGame4players();
         String oldPlayer = "null";
         for (int i = 0; i < 4; i++) {
@@ -121,7 +118,7 @@ class GameTest {
         assertEquals(game.getCurrentState(), State.ACTIONPHASE_1);
     }
 
-    Game planningPhaseComplete() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+    Game planningPhaseComplete() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, NegativeValueException {
         Game game = initGame4players();
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
@@ -131,12 +128,12 @@ class GameTest {
     }
 
     @Test
-    void testMoveStudents() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+    void testMoveStudents() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, NegativeValueException, ProfessorNotFoundException {
         Game g = planningPhaseComplete();
         assertEquals(g.getCurrentState(), State.ACTIONPHASE_1);
         EnumMap<Colors, Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
         assertEquals(7, g.valueOfEnum(entrance));
-        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
             ArrayList<String> tmp = new ArrayList<>();
@@ -155,10 +152,10 @@ class GameTest {
     }
 
     @Test
-    void moveMotherNature() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, MotherNatureLostException {
+    void moveMotherNature() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, MotherNatureLostException, NegativeValueException, ProfessorNotFoundException {
         Game g = planningPhaseComplete();
         EnumMap<Colors, Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
-        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
             ArrayList<String> tmp = new ArrayList<>();
@@ -174,15 +171,15 @@ class GameTest {
         }
         g.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
         int oldPosMN = g.getMotherNaturePosition();
-        g.moveMotherNature(g.getCurrentPlayer().getNickname(), 5);
+        g.moveMotherNature(g.getCurrentPlayer().getNickname(), 1);
         assertNotEquals(g.getMotherNaturePosition(), oldPosMN);
     }
 
     @Test
-    void testTakeStudentsFromCloud() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, MotherNatureLostException {
+    void testTakeStudentsFromCloud() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, MotherNatureLostException, NegativeValueException, ProfessorNotFoundException {
         Game g = planningPhaseComplete();
         EnumMap<Colors, Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
-        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
             ArrayList<String> tmp = new ArrayList<>();
@@ -208,11 +205,11 @@ class GameTest {
 
 
     @Test
-    void testNextRound() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, MotherNatureLostException {
+    void testNextRound() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, MotherNatureLostException, NegativeValueException, ProfessorNotFoundException {
         Game g = planningPhaseComplete();
         for (int playersTurn = 0; playersTurn < 4; playersTurn++) {
             EnumMap<Colors, Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
-            EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+            EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
             int countNumStudents = 3;
             for (Colors c : Colors.values()) {
                 ArrayList<String> tmp = new ArrayList<>();
@@ -236,14 +233,14 @@ class GameTest {
     }
 
     @Test
-    void testTakeStudentsFromCloudException() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+    void testTakeStudentsFromCloudException() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, NegativeValueException {
         Game g = planningPhaseComplete();
         assertThrows(IncorrectStateException.class, () -> g.takeStudentsFromCloud("wrong player", 0));
     }
 
 
     @Test
-    void testMoveTowersFromTeam() throws IncorrectArgumentException {
+    void testMoveTowersFromTeam() throws IncorrectArgumentException, NegativeValueException {
         Game game = initGame4players();
         ArrayList<Player> team = game.findPlayerFromTeam(Towers.WHITE);
         int initialTowers = -1;
@@ -261,7 +258,7 @@ class GameTest {
     }
 
     @Test
-    void checkAndPlaceProfessor() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+    void checkAndPlaceProfessor() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, NegativeValueException, ProfessorNotFoundException {
         Game g = planningPhaseComplete();
         g.checkAndPlaceProfessor();
     }
@@ -272,22 +269,21 @@ class GameTest {
     }
 
     @Test
-    void testIsGameOver() throws IncorrectArgumentException {
+    void testIsGameOver() throws IncorrectArgumentException, NegativeValueException {
         Game game = initGame4players();
         assertFalse(game.isGameOver());
     }
 
     @Test
-    void testCheckWinner() throws IncorrectArgumentException {
+    void testCheckWinner() throws IncorrectArgumentException, NegativeValueException {
         Game game = initGame4players();
         assertNull(game.checkWinner());
     }
 
 
     @Test
-    void testIsGameOver3players() throws IncorrectArgumentException {
+    void testIsGameOver3players() throws IncorrectArgumentException, NegativeValueException {
         Game game = initGame3players();
         assertFalse(game.isGameOver());
     }
-
 }
