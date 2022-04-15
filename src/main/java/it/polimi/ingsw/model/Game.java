@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
+import it.polimi.ingsw.model.cards.charactercard.CharacterCardFactory;
 import it.polimi.ingsw.model.deck.FileJSONPath;
 import it.polimi.ingsw.model.deck.characterdeck.CharacterCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
@@ -15,11 +16,9 @@ import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
-import java.awt.*;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.List;
 
 public class Game {
     private State state;
@@ -64,20 +63,27 @@ public class Game {
         importingCharacterCards();
     }
 
-    private void importingCharacterCards() {
+    private void importingCharacterCards() throws IncorrectArgumentException {
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
-        int index = -1;
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
 
         //pick three random cards
+        CharacterCard card;
         for (int i = 0; i < 3; i++) {
-            index = (int) Math.floor(Math.random() * characterCards.size());
-            characterCards.add(characterCardDeck.get(index));
+            index = (int) Math.floor(Math.random() * characterCardDeck.getDeck().size());
+            card = characterCardDeck.get(index);
+            characterCards.add(factory.getCard(card.getImageName(), card.getStartingPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
             characterCardDeck.discardCard(index);
+        }
+
+        for (CharacterCard characterCard : characterCards) {
+            characterCard.activate();
         }
     }
 
-    private void initializationPlayers(ArrayList<String> nicknames) throws IncorrectArgumentException {
+    private void initializationPlayers(ArrayList<String> nicknames) {
         //Initialization Players
         int indexColorTeam = 0;
         for (String nickname : nicknames) {
@@ -131,14 +137,15 @@ public class Game {
 
 
         // create Bag and students
-        EnumMap<Colors, Integer> students = new EnumMap(Colors.class);
+        EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         for (Colors studentColor : Colors.values()) {
-            students.put(studentColor, 2);
+            students.put(studentColor, 26);
         }
-        bag = new Bag(students);
+        bag = Bag.getInstance();
+        bag.setStudents(students);
 
         //calculate opposite MotherNature's Island
-        int oppositeMotherNaturePos = 0;
+        int oppositeMotherNaturePos;
         if (motherNaturePosition >= islands.size() / 2)
             oppositeMotherNaturePos = motherNaturePosition - islands.size() / 2 + 1;
         else oppositeMotherNaturePos = motherNaturePosition + islands.size() / 2 - 1;
@@ -151,17 +158,15 @@ public class Game {
         }
 
         //Re-populate the Bag after 'placing Islands and Students phase'
-        students = new EnumMap(Colors.class);
+        students = new EnumMap<>(Colors.class);
         for (Colors studentColor : Colors.values()) {
             students.put(studentColor, 24); //26  (total discStudents) -2 (used before) for each color
         }
-        bag = new Bag(students);
+        bag.setStudents(students);
 
-        //Insertion in each Schoolboard 7 students drawn from Bag
-        students = new EnumMap(Colors.class);
+        //Insertion in each SchoolBoard 7 students drawn from Bag
         for (Player p : players) {
-            students = bag.drawStudents(7);
-            p.addStudents(students);
+            p.addStudents(bag.drawStudents(7));
         }
     }
 
@@ -327,7 +332,7 @@ public class Game {
      * In case the destination is the islands, it is used an array of islandDestination that is used by the game to send
      * the students in the correct place (the array uses the unique name of each island).
      */
-    public void moveStudents(String playerCaller, EnumMap<Colors,ArrayList<String>> students) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException {
+    public void moveStudents(String playerCaller, EnumMap<Colors, ArrayList<String>> students) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException {
         if (currentPlayer.getNickname().equals(playerCaller)) {
             if (state == State.ACTIONPHASE_1) {
                 int numOfStudents;
@@ -345,28 +350,30 @@ public class Game {
                 }
                 if (numOfStudents != 0) throw new IncorrectArgumentException("Numbers of students is wrong");
 
-                EnumMap<Colors, Integer> studentsToDining = new EnumMap(Colors.class);
-                EnumMap<Colors, Integer> studentsToRemove = new EnumMap(Colors.class);
+                EnumMap<Colors, Integer> studentsToDining = new EnumMap<>(Colors.class);
+                EnumMap<Colors, Integer> studentsToRemove = new EnumMap<>(Colors.class);
 
-                for (Colors c : Colors.values()){
+                for (Colors c : Colors.values()) {
                     studentsToDining.put(c, 0);
                     studentsToRemove.put(c, 0);
                 }
 
                 for (Colors c : Colors.values()) {
-                    if (!students.get(c).isEmpty()){
+                    if (!students.get(c).isEmpty()) {
                         int i = 0;
                         while (i < students.get(c).size()) {
-                            if (students.get(c).get(i).equals("dining")){
+                            if (students.get(c).get(i).equals("dining")) {
                                 studentsToDining.put(c, studentsToDining.get(c) + 1);
-                            }else{
+                            } else {
                                 studentsToRemove.put(c, studentsToRemove.get(c) + 1);
                                 String dest = students.get(c).get(i);
                                 int islandsIndex = 0;
                                 while (islandsIndex < islands.size()) {
                                     if (islands.get(islandsIndex).getName().equals(dest)) {
                                         EnumMap<Colors, Integer> tmp = new EnumMap<>(Colors.class);
-                                        for(Colors color : Colors.values()){tmp.put(color,0);}
+                                        for (Colors color : Colors.values()) {
+                                            tmp.put(color, 0);
+                                        }
                                         tmp.put(c, 1);
                                         islands.get(islandsIndex).addStudents(tmp);
                                     }
@@ -377,7 +384,7 @@ public class Game {
                         }
                     }
                 }
-                currentPlayer.moveStudents(studentsToDining,studentsToRemove);
+                currentPlayer.moveStudents(studentsToDining, studentsToRemove);
                 state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
                 checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
             } else throw new IncorrectStateException();
@@ -448,9 +455,8 @@ public class Game {
      * different from the new team. It works with 2 players, 3 players and 4 players.
      *
      * @param island
-     * @throws IncorrectArgumentException
      */
-    private void checkAndPlaceTower(IslandTile island) throws IncorrectArgumentException {
+    private void checkAndPlaceTower(IslandTile island) {
         HashMap<Towers, Integer> influenceScores = new HashMap<>();
         influenceScores.put(Towers.BLACK, 0);
         influenceScores.put(Towers.WHITE, 0);
@@ -564,7 +570,6 @@ public class Game {
         if (listChanged) checkUnificationIslands();
     }
 
-
     /**
      * Check the game over returning true if it is
      *
@@ -574,9 +579,7 @@ public class Game {
         for (Player p : players) {
             if (p.getPlayerTowers() <= 0) return true;
         }
-        if (!bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9 || checkWinner() != null)
-            return true;
-        else return false;
+        return !bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9 || checkWinner() != null;
     }
 
     /**
@@ -600,11 +603,7 @@ public class Game {
         for (ArrayList<Player> team : teams) {
             boolean teamWin = false;
             for (Player p : team) {
-                if (p.getPlayerTowers() == 0) {
-                    teamWin = true;
-                } else {
-                    teamWin = false;
-                }
+                teamWin = p.getPlayerTowers() == 0;
             }
             if (teamWin) return team;
         }
