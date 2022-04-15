@@ -25,10 +25,10 @@ public enum Colors implements Serializable {
         return index;
     }
 
-    public static Colors getStudent(int index) throws IncorrectArgumentException {
+    public static Colors getStudent(int index) throws IllegalArgumentException {
         for (Colors student : values()) {
             if (student.getIndex() == index) return student;
         }
-        throw new IncorrectArgumentException("Index not associated with any color");
+        throw new IllegalArgumentException("Index not associated with any color");
     }
 }
