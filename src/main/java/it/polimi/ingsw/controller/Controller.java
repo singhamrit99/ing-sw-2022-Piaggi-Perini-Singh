@@ -3,10 +3,8 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.ControllerExceptions;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
-import it.polimi.ingsw.model.exceptions.IncorrectStateException;
-import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
+import it.polimi.ingsw.model.exceptions.*;
+
 import java.util.ArrayList;
 import java.util.EnumMap;
 
@@ -18,15 +16,17 @@ public class Controller {
         this.game = game;
     }
 
-    public Game initializeGame(boolean expertmode, int numofplayers, ArrayList<String> nicknames)
-  {
-      try {
-          game=new Game(expertmode, numofplayers, nicknames);
-      } catch (IncorrectArgumentException e) {
-          manageException(e);
-      }
-      return game;
-  }
+    public Game initializeGame(boolean expertmode, int numofplayers, ArrayList<String> nicknames) {
+        try {
+            game = new Game(expertmode, numofplayers, nicknames);
+        } catch (NegativeValueException e) {
+            manageException(e);
+        } catch (IncorrectArgumentException e) {
+            manageException(e);
+        }
+        return game;
+    }
+
     public void callMoveMotherNature() {
         try {
             game.moveMotherNature(game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getPlayedCard().getMove());
@@ -37,6 +37,8 @@ public class Controller {
         } catch (IncorrectPlayerException e) {
             manageException(e);
         } catch (IncorrectArgumentException e) {
+            manageException(e);
+        } catch (NegativeValueException e) {
             manageException(e);
         }
     }
@@ -49,6 +51,10 @@ public class Controller {
         } catch (IncorrectPlayerException e) {
             manageException(e);
         } catch (IncorrectArgumentException e) {
+            manageException(e);
+        } catch (NegativeValueException e) {
+            manageException(e);
+        } catch (ProfessorNotFoundException e) {
             manageException(e);
         }
     }
@@ -68,6 +74,8 @@ public class Controller {
         } catch (IncorrectPlayerException e) {
             manageException(e);
         } catch (IncorrectArgumentException e) {
+            manageException(e);
+        } catch (NegativeValueException e) {
             manageException(e);
         }
     }
@@ -105,6 +113,11 @@ public class Controller {
         // game.error(error);
     }
 
+    public void manageException(NegativeValueException e) {
+        ControllerExceptions error = ControllerExceptions.NEGATIVE_VALUE_EXCEPTION;
+        // game.error(error);
+    }
+
     public void manageException(IncorrectPlayerException e) {
         ControllerExceptions error = ControllerExceptions.INCORRECT_PLAYER_EXCEPTION;
         // game.error(error);
@@ -120,6 +133,10 @@ public class Controller {
         // game.error(error);
     }
 
+    public void manageException(ProfessorNotFoundException e) {
+        ControllerExceptions error = ControllerExceptions.PROFESSOR_NOT_FOUND_EXCEPTION;
+        // game.error(error);
+    }
 
 
 }
