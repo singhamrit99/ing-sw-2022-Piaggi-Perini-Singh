@@ -11,8 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SchoolBoardTest {
     SchoolBoard schoolBoard2 = new SchoolBoard(2);
     SchoolBoard schoolBoard3 = new SchoolBoard(3);
-
-    EnumMap<Colors, Integer> enumMap = new EnumMap<Colors, Integer>(Colors.class);
+    EnumMap<Colors, Integer> enumMap = new EnumMap<>(Colors.class);
 
     void setupEnum() {
         enumMap.put(Colors.BLUE, 2);
