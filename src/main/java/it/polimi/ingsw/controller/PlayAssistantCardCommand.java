@@ -9,7 +9,6 @@ public class PlayAssistantCardCommand implements Commands {
         this.controller = controller;
         this.assistantCardID = assistantCardID;
     }
-
     @Override
-    public void execute() {controller.CallPlayAssistantCard(assistantCardID);}
+    public void execute() {controller.callPlayAssistantCard(assistantCardID);}
 }

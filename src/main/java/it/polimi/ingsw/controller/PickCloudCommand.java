@@ -9,7 +9,6 @@ public class PickCloudCommand implements Commands {
         this.controller = controller;
         this.cloudTileID=cloudTileID;
     }
-
     @Override
-    public void execute() {controller.CallPickCloud(cloudTileID);}
+    public void execute() {controller.callPickCloud(cloudTileID);}
 }

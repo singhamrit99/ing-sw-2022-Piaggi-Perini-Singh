@@ -18,7 +18,16 @@ public class Controller {
         this.game = game;
     }
 
-    public void CallMoveMotherNature() {
+    public Game initializeGame(boolean expertmode, int numofplayers, ArrayList<String> nicknames)
+  {
+      try {
+          game=new Game(expertmode, numofplayers, nicknames);
+      } catch (IncorrectArgumentException e) {
+          manageException(e);
+      }
+      return game;
+  }
+    public void callMoveMotherNature() {
         try {
             game.moveMotherNature(game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getPlayedCard().getMove());
         } catch (IncorrectStateException e) {
@@ -32,7 +41,7 @@ public class Controller {
         }
     }
 
-    public void CallMoveStudent(EnumMap<Colors, ArrayList<String>> students) {
+    public void callMoveStudent(EnumMap<Colors, ArrayList<String>> students) {
         try {
             game.moveStudents(game.getCurrentPlayer().getNickname(), students);
         } catch (IncorrectStateException e) {
@@ -44,7 +53,7 @@ public class Controller {
         }
     }
 
-    public void CallPickCloud(int cloudTileID) {
+    public void callPickCloud(int cloudTileID) {
         try {
             if (cloudTileID < 0 || cloudTileID > 3) {
                 throw new IncorrectArgumentException();
@@ -63,7 +72,7 @@ public class Controller {
         }
     }
 
-    public void CallPlayAssistantCard(int playedCard) {
+    public void callPlayAssistantCard(int playedCard) {
         try {
             if (playedCard < 0 || playedCard > 11) {
                 throw new IncorrectArgumentException();
@@ -82,7 +91,7 @@ public class Controller {
             manageException(e);
         }
     }
-       /* public void CallPlayCharacterCard(){
+       /* public void callPlayCharacterCard(){
 
         try{
             String nickname= game.getCurrentPlayer().getNickname();

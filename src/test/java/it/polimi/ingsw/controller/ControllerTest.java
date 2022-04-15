@@ -56,7 +56,7 @@ class ControllerTest {
         }
         game.moveStudents(game.getCurrentPlayer().getNickname(),movingStudents);
         int oldPosMotherNature=game.getMotherNaturePosition();
-        controller.CallMoveMotherNature();
+        controller.callMoveMotherNature();
 
         assertNotEquals(game.getMotherNaturePosition(),oldPosMotherNature);
 
@@ -86,7 +86,7 @@ class ControllerTest {
                 countNumStudents--;
             }
         }
-        controller.CallMoveStudent(movingStudents);
+        controller.callMoveStudent(movingStudents);
         assertEquals(4,game.valueOfEnum(entrance));
     }
 
@@ -110,9 +110,9 @@ class ControllerTest {
                 countNumStudents--;
             }
         }
-        controller.CallMoveStudent(movingStudents);
-        controller.CallMoveMotherNature();
-        controller.CallPickCloud(0);
+        controller.callMoveStudent(movingStudents);
+        controller.callMoveMotherNature();
+        controller.callPickCloud(0);
         EnumMap<Colors,Integer> studentsoncloud= game.getCloudTile(0).getStudents();
         for(Colors color: Colors.values())
         {
@@ -128,7 +128,7 @@ class ControllerTest {
         Controller controller= new Controller(game);
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldplayer= game.getCurrentPlayer().getNickname();
-        controller.CallPlayAssistantCard(3);
+        controller.callPlayAssistantCard(3);
         assertNotEquals(oldplayer, game.getCurrentPlayer().getNickname());
 
 

@@ -8,6 +8,4 @@ public enum ControllerExceptions {
     INCORRECT_PLAYER_EXCEPTION,
     INCORRECT_STATE_EXCEPTION,
     MOTHER_NATURE_LOST_EXCEPTION
-
-
 }

@@ -8,5 +8,5 @@ public class MoveMNCommand implements Commands {
     }
 
     @Override
-    public void execute() {controller.CallMoveMotherNature();}
+    public void execute() {controller.callMoveMotherNature();}
 }
