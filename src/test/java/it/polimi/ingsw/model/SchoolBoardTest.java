@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
+import it.polimi.ingsw.model.exceptions.ProfessorNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
@@ -22,7 +24,7 @@ class SchoolBoardTest {
     @Test
     void testAddStudentsException() {
         enumMap.put(Colors.PINK, -1);
-        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.addStudents(enumMap));
+        assertThrows(NegativeValueException.class, () -> schoolBoard2.addStudents(enumMap));
     }
 
     @Test
@@ -32,7 +34,7 @@ class SchoolBoardTest {
         //if students are not present in the board
         try {
             schoolBoard2.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         assertEquals(2, schoolBoard2.getEntrance().get(Colors.BLUE));
@@ -42,7 +44,7 @@ class SchoolBoardTest {
         //if students are present in the board
         try {
             schoolBoard2.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         assertEquals(4, schoolBoard2.getEntrance().get(Colors.BLUE));
@@ -55,19 +57,14 @@ class SchoolBoardTest {
         enumMap.put(Colors.BLUE, 2);
         try {
             schoolBoard2.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
         enumMap.clear();
-        enumMap.put(Colors.YELLOW, 1);
-        //if key not found
-        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.removeStudents(enumMap));
-
-        enumMap.clear();
         enumMap.put(Colors.BLUE, -1);
         //if value is negative
-        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.removeStudents(enumMap));
+        assertThrows(NegativeValueException.class, () -> schoolBoard2.removeStudents(enumMap));
     }
 
     @Test
@@ -76,7 +73,7 @@ class SchoolBoardTest {
 
         try {
             schoolBoard2.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         enumMap.clear();
@@ -86,7 +83,7 @@ class SchoolBoardTest {
         //remove
         try {
             schoolBoard2.removeStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
     }
@@ -94,7 +91,7 @@ class SchoolBoardTest {
     @Test
     void testMoveStudentsException() {
         enumMap.put(Colors.PINK, -1);
-        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.moveStudents(enumMap));
+        assertThrows(NegativeValueException.class, () -> schoolBoard2.moveStudents(enumMap));
     }
 
     @Test
@@ -102,25 +99,25 @@ class SchoolBoardTest {
         setupEnum();
         try {
             schoolBoard2.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         //if students are not present in the board
         try {
             schoolBoard2.moveStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
         try {
             schoolBoard2.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         //if students are present in the board
         try {
             schoolBoard2.moveStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
     }
@@ -133,7 +130,7 @@ class SchoolBoardTest {
 
     @Test
     void testRemoveProfessorException() {
-        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.removeProfessor(Colors.BLUE));
+        assertThrows(ProfessorNotFoundException.class, () -> schoolBoard2.removeProfessor(Colors.BLUE));
     }
 
     @Test
@@ -143,7 +140,7 @@ class SchoolBoardTest {
 
         try {
             schoolBoard2.removeProfessor(Colors.BLUE);
-        } catch (IncorrectArgumentException e) {
+        } catch (ProfessorNotFoundException e) {
             e.printStackTrace();
         }
         assertEquals(0, schoolBoard2.getProfessorsTable().size());
@@ -154,19 +151,14 @@ class SchoolBoardTest {
         enumMap.put(Colors.BLUE, 2);
         try {
             schoolBoard2.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
         enumMap.clear();
-        enumMap.put(Colors.YELLOW, 1);
-        //if key not found
-        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.hasEnoughStudents(enumMap));
-
-        enumMap.clear();
         enumMap.put(Colors.BLUE, -1);
         //if value is negative
-        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.hasEnoughStudents(enumMap));
+        assertThrows(NegativeValueException.class, () -> schoolBoard2.hasEnoughStudents(enumMap));
     }
 
     @Test
@@ -174,7 +166,7 @@ class SchoolBoardTest {
         setupEnum();
         try {
             schoolBoard2.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
@@ -183,7 +175,7 @@ class SchoolBoardTest {
         //return true
         try {
             assertTrue(schoolBoard2.hasEnoughStudents(enumMap));
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
@@ -191,7 +183,7 @@ class SchoolBoardTest {
         //return false
         try {
             assertFalse(schoolBoard2.hasEnoughStudents(enumMap));
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
     }
@@ -211,11 +203,11 @@ class SchoolBoardTest {
         try {
             schoolBoard2.addStudents(enumMap);
             schoolBoard2.moveStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
-        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.getStudentsByColor(Colors.getStudent(6)));
+        assertThrows(IllegalArgumentException.class, () -> schoolBoard2.getStudentsByColor(Colors.getStudent(6)));
     }
 
     @Test
@@ -224,15 +216,11 @@ class SchoolBoardTest {
         try {
             schoolBoard2.addStudents(enumMap);
             schoolBoard2.moveStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
-        try {
-            assertEquals(2, schoolBoard2.getStudentsByColor(Colors.BLUE));
-        } catch (IncorrectArgumentException e) {
-            e.printStackTrace();
-        }
+        assertEquals(2, schoolBoard2.getStudentsByColor(Colors.BLUE));
     }
 
     @Test
