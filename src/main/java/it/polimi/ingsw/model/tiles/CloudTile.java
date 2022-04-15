@@ -2,21 +2,19 @@ package it.polimi.ingsw.model.tiles;
 
 import it.polimi.ingsw.model.StudentManager;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-public class CloudTile{
+public class CloudTile {
     public String name;
     private EnumMap<Colors, Integer> students;
 
     public CloudTile(String name) {
         this.name = name;
-        this.students = new EnumMap<>(Colors.class);
-        for (Colors color : Colors.values()) {
-            students.put(color, 0);
-        }
+        students = new EnumMap<>(Colors.class);
+        students = StudentManager.createEmptyStudentsEnum();
     }
 
     public String getName() {
@@ -37,12 +35,12 @@ public class CloudTile{
         return returnedStudents;
     }
 
-    public void addStudents(EnumMap<Colors, Integer> summedStudents) throws IncorrectArgumentException {
+    public void addStudents(EnumMap<Colors, Integer> summedStudents) throws NegativeValueException {
         EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getStudents(), summedStudents);
         if (newStudents != null) {
             setStudents(newStudents);
         } else {
-            throw new IncorrectArgumentException();
+            throw new NegativeValueException();
         }
     }
 
