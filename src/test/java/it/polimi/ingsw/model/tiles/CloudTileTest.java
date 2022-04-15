@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.tiles;
 
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
@@ -20,7 +21,7 @@ class CloudTileTest {
         CloudTile tile = new CloudTile("TestCloud");
         try {
             tile.addStudents(students);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         tile.drawStudents();
@@ -40,7 +41,7 @@ class CloudTileTest {
         }
         try {
             tile.addStudents(newStudents);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
@@ -57,7 +58,7 @@ class CloudTileTest {
             students.put(color, i);
         }
         CloudTile tile = new CloudTile("TestCloud");
-        assertThrows(IncorrectArgumentException.class, () -> tile.addStudents(students));
+        assertThrows(NegativeValueException.class, () -> tile.addStudents(students));
     }
 
     @Test
