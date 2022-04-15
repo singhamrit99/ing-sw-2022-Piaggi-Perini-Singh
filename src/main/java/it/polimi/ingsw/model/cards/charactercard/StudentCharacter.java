@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
 import it.polimi.ingsw.model.Bag;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.StudentManager;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
 
 import java.util.EnumMap;
 
@@ -11,7 +13,7 @@ public class StudentCharacter extends CharacterCard {
     EnumMap<Colors, Integer> students;
     Bag bag;
 
-    public StudentCharacter(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) throws IncorrectArgumentException {
+    public StudentCharacter(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) throws NegativeValueException {
         super(imageName, startingPrice, description, type, ability, requirements);
         bag = Bag.getInstance();
 
@@ -22,8 +24,8 @@ public class StudentCharacter extends CharacterCard {
 
         try {
             students = bag.drawStudents(this.getType().getValue());
-        } catch (IncorrectArgumentException e) {
-            throw new IncorrectArgumentException();
+        } catch (NegativeValueException e) {
+            throw new NegativeValueException();
         }
     }
 
@@ -36,8 +38,17 @@ public class StudentCharacter extends CharacterCard {
         }
     }
 
+    public void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws IncorrectArgumentException {
+        EnumMap<Colors, Integer> newStudents = StudentManager.removeStudent(students, studentsToRemove);
+        if (newStudents != null) {
+            setStudents(newStudents);
+        } else {
+            throw new IncorrectArgumentException();
+        }
+    }
+
     @Override
-    public void activate() {
+    public void activate(Game game) {
 
     }
 
