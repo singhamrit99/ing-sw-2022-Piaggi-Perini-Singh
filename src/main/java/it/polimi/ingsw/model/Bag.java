@@ -11,14 +11,17 @@ import java.util.Map;
  */
 public class Bag {
     private EnumMap<Colors, Integer> students;
-    private final int studentType = 5;
+    private static Bag instance = new Bag();
 
-    public Bag(EnumMap<Colors, Integer> students) {
-        this.students = students;
+    private Bag() {
+        students = new EnumMap<>(Colors.class);
+        for (Colors color : Colors.values()) {
+            students.put(color, 0);
+        }
     }
 
-    public Bag() {
-        students = new EnumMap(Colors.class);
+    public static Bag getInstance() {
+        return instance;
     }
 
     public void addStudents(EnumMap<Colors, Integer> studentsToAdd) throws IncorrectArgumentException {
@@ -41,30 +44,24 @@ public class Bag {
 
     public EnumMap<Colors, Integer> drawStudents(int numberOfStudents) throws IncorrectArgumentException {
         int type, quantity;
-        boolean contains = false;
-        int previousValue = 0;
-        EnumMap<Colors, Integer> studentsDrawn = new EnumMap(Colors.class);
+        int studentType = 5;
 
+        EnumMap<Colors, Integer> studentsDrawn = new EnumMap<>(Colors.class);
         for (Colors color : Colors.values()) {
             studentsDrawn.put(color, 0);
         }
 
         for (int i = 0; i < numberOfStudents; ) {
-            previousValue = 0;
-
             type = (int) Math.floor(Math.random() * studentType);
             quantity = (int) Math.floor(Math.random() * ((numberOfStudents - i) - 1) + 1);
 
             if (getStudents().containsKey(Colors.getStudent(type))) {
                 if (getStudents().get(Colors.getStudent(type)) >= quantity) {
-                    previousValue = studentsDrawn.get(Colors.getStudent(type));
-                    studentsDrawn.put(Colors.getStudent(type), previousValue + quantity);
+                    studentsDrawn.put(Colors.getStudent(type), studentsDrawn.get(Colors.getStudent(type)) + quantity);
                     i += quantity;
                 }
             }
-
         }
-
         removeStudents(studentsDrawn);
         return studentsDrawn;
     }
