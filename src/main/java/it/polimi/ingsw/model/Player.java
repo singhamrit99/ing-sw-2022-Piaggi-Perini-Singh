@@ -5,10 +5,10 @@ import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
+import it.polimi.ingsw.model.exceptions.ProfessorNotFoundException;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.Map;
 
 /**
  * @author Amrit
@@ -39,12 +39,12 @@ public class Player implements Comparable<Player> {
         return distance <= playedCard.getValue();
     }
 
-    public void addStudents(EnumMap<Colors, Integer> students) throws IncorrectArgumentException {
+    public void addStudents(EnumMap<Colors, Integer> students) throws NegativeValueException {
         schoolBoard.addStudents(students);
     }
 
-    public void moveStudents(EnumMap<Colors, Integer> move, EnumMap<Colors, Integer> remove) throws IncorrectArgumentException {
-        EnumMap<Colors, Integer> total = new EnumMap<Colors, Integer>(Colors.class);
+    public void moveStudents(EnumMap<Colors, Integer> move, EnumMap<Colors, Integer> remove) throws NegativeValueException {
+        EnumMap<Colors, Integer> total = new EnumMap<>(Colors.class);
         for (Colors color : Colors.values()) {
             total.put(color, move.get(color) + remove.get(color));
         }
@@ -53,7 +53,7 @@ public class Player implements Comparable<Player> {
             if (move.size() != 0) coins += schoolBoard.moveStudents(move);
             if (remove.size() != 0) schoolBoard.removeStudents(remove);
         } else {
-            throw new IncorrectArgumentException();
+            throw new IllegalArgumentException("EnumMap is incorrect");
         }
     }
 
@@ -61,7 +61,7 @@ public class Player implements Comparable<Player> {
         schoolBoard.addProfessor(student);
     }
 
-    public void removeProfessor(Colors student) throws IncorrectArgumentException {
+    public void removeProfessor(Colors student) throws ProfessorNotFoundException {
         schoolBoard.removeProfessor(student);
     }
 
@@ -90,7 +90,7 @@ public class Player implements Comparable<Player> {
         return schoolBoard.getTowers();
     }
 
-    public int getNumOfStudent(Colors student) throws IncorrectArgumentException {
+    public int getNumOfStudent(Colors student) {
         return schoolBoard.getStudentsByColor(student);
     }
 
@@ -106,11 +106,11 @@ public class Player implements Comparable<Player> {
         return nickname;
     }
 
-    public void removeCoins(int value) throws IncorrectArgumentException {
+    public void removeCoins(int value) throws NegativeValueException {
         if (value >= 0) {
             coins -= value;
         } else {
-            throw new IncorrectArgumentException();
+            throw new NegativeValueException();
         }
     }
 
