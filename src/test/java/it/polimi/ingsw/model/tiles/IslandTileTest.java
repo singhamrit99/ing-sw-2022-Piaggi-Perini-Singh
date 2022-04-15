@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.tiles;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
@@ -48,14 +49,14 @@ class IslandTileTest {
         IslandTile island = new IslandTile("Test");
         try {
             island.addStudents(students);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         assertEquals(students, island.getStudents());
     }
 
     @Test
-    void testGetNumOfTowers() throws IncorrectArgumentException {
+    void testGetNumOfTowers() throws NegativeValueException {
         int towers = 3;
         IslandTile island = new IslandTile("Test");
         island.sumTowers(towers);
@@ -76,7 +77,7 @@ class IslandTileTest {
         IslandTile island = new IslandTile("Test");
         try {
             island.addStudents(students);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         assertEquals(students, island.getStudents());
@@ -91,10 +92,7 @@ class IslandTileTest {
 
         }
         IslandTile tile = new IslandTile("Test");
-        IncorrectArgumentException e = assertThrows(IncorrectArgumentException.class, () -> tile.addStudents(students));
-        String expectedMessage = "EnumMap is not correct";
-        String actualMessage = e.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertThrows(NegativeValueException.class, () -> tile.addStudents(students));
     }
 
     @Test
