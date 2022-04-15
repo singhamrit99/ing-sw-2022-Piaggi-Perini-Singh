@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
+import it.polimi.ingsw.model.exceptions.ProfessorNotFoundException;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -18,10 +19,10 @@ public class SchoolBoard {
     private int numberOfTowers;
 
     public SchoolBoard(int numberOfPlayers) {
-        this.entrance = new EnumMap(Colors.class);
-        this.dining = new EnumMap(Colors.class);
-        this.professorsTable = new ArrayList<>();
-        coins = new EnumMap<Colors, Integer>(Colors.class);
+        entrance = new EnumMap<>(Colors.class);
+        dining = new EnumMap<>(Colors.class);
+        professorsTable = new ArrayList<>();
+        coins = new EnumMap<>(Colors.class);
 
         if (numberOfPlayers == 3) {
             numberOfTowers = 6;
@@ -29,31 +30,29 @@ public class SchoolBoard {
             numberOfTowers = 8;
         }
 
-        for (Colors color : Colors.values()) {
-            dining.put(color, 0);
-            coins.put(color, 0);
-        }
+        dining = StudentManager.createEmptyStudentsEnum();
+        coins = StudentManager.createEmptyStudentsEnum();
     }
 
-    public void addStudents(EnumMap<Colors, Integer> studentsToAdd) throws IncorrectArgumentException {
-        EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getEntrance(), studentsToAdd);
+    public void addStudents(EnumMap<Colors, Integer> studentsToAdd) throws NegativeValueException {
+        EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(entrance, studentsToAdd);
         if (newStudents != null) {
             setEntrance(newStudents);
         } else {
-            throw new IncorrectArgumentException();
+            throw new NegativeValueException();
         }
     }
 
-    public void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws IncorrectArgumentException {
+    public void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws NegativeValueException {
         EnumMap<Colors, Integer> newStudents = StudentManager.removeStudent(getEntrance(), studentsToRemove);
         if (newStudents != null) {
             setEntrance(newStudents);
         } else {
-            throw new IncorrectArgumentException();
+            throw new NegativeValueException();
         }
     }
 
-    public int moveStudents(EnumMap<Colors, Integer> studentsToMove) throws IncorrectArgumentException {
+    public int moveStudents(EnumMap<Colors, Integer> studentsToMove) throws NegativeValueException {
         EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getDining(), studentsToMove);
         int count = 0;
 
@@ -61,14 +60,9 @@ public class SchoolBoard {
             removeStudents(studentsToMove);
             setDining(newStudents);
         } else {
-            throw new IncorrectArgumentException();
+            throw new NegativeValueException();
         }
 
-        /*Muovo 3 studenti di un tipo RED = 3               RED = 4             RED = 6
-                                        cRED = 0 cRed = 1   cRED = 0 cRED = 1   cRED = 1 cRED = 2
-          si        si      si
-          RED, 1    RED, 1  non fa nulla
-         */
         for (Map.Entry<Colors, Integer> set : getDining().entrySet()) {
             if (set.getValue() >= 3) {
                 //se lo è controllo che il valore di coins sia stato messo già a 1, 2, 3
@@ -87,17 +81,17 @@ public class SchoolBoard {
         professorsTable.add(professor);
     }
 
-    public void removeProfessor(Colors professor) throws IncorrectArgumentException {
+    public void removeProfessor(Colors professor) throws ProfessorNotFoundException {
         int index = professorsTable.indexOf(professor);
         if (index != -1) {
             professorsTable.remove(index);
             return;
         }
 
-        throw new IncorrectArgumentException();
+        throw new ProfessorNotFoundException();
     }
 
-    public boolean hasEnoughStudents(EnumMap<Colors, Integer> students) throws IncorrectArgumentException {
+    public boolean hasEnoughStudents(EnumMap<Colors, Integer> students) throws IllegalArgumentException, NegativeValueException {
         EnumMap<Colors, Integer> studentsDiscs = this.getEntrance();
 
         for (Map.Entry<Colors, Integer> set : students.entrySet()) {
@@ -107,10 +101,10 @@ public class SchoolBoard {
                         return false;
                     }
                 } else {
-                    throw new IncorrectArgumentException("EnumMap is not correct");
+                    throw new IllegalArgumentException("EnumMap is not correct");
                 }
             } else {
-                throw new IncorrectArgumentException("EnumMap is not correct");
+                throw new NegativeValueException("EnumMap is not correct");
             }
         }
         return true;
@@ -128,12 +122,12 @@ public class SchoolBoard {
         return numberOfTowers;
     }
 
-    public int getStudentsByColor(Colors student) throws IncorrectArgumentException {
+    public int getStudentsByColor(Colors student) throws IllegalArgumentException {
         if (dining.containsKey(student)) {
             return dining.get(student);
         }
 
-        throw new IncorrectArgumentException();
+        throw new IllegalArgumentException("student is not correct");
     }
 
     public boolean hasProfessorOfColor(Colors professor) {
