@@ -9,10 +9,7 @@ import it.polimi.ingsw.model.deck.characterdeck.CharacterCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.model.exceptions.IncorrectPlayerException;
-import it.polimi.ingsw.model.exceptions.IncorrectStateException;
-import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.tiles.CloudTile;
 import it.polimi.ingsw.model.tiles.IslandTile;
 
@@ -51,7 +48,7 @@ public class Game {
      * @param nicknames
      * @throws IncorrectArgumentException in case of bad arguments
      */
-    public Game(boolean expertMode, int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException {
+    public Game(boolean expertMode, int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException, NegativeValueException {
         this.expertMode = expertMode;
         this.numOfPlayer = numOfPlayer;
         numRounds = 0;
@@ -63,7 +60,7 @@ public class Game {
         importingCharacterCards();
     }
 
-    private void importingCharacterCards() throws IncorrectArgumentException {
+    private void importingCharacterCards() throws IncorrectArgumentException, NegativeValueException {
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
         CharacterCardFactory factory = new CharacterCardFactory();
@@ -77,10 +74,14 @@ public class Game {
             characterCards.add(factory.getCard(card.getImageName(), card.getStartingPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
             characterCardDeck.discardCard(index);
         }
+    }
 
-        for (CharacterCard characterCard : characterCards) {
-            characterCard.activate();
-        }
+    public void activateCharacterCardEffect(int index) {
+        //controlla prima se puoi comprare la carta
+        //se si attivi l' effetto
+        //altrimenti invi eccezione
+        characterCards.get(index).activate(this);
+
     }
 
     private void initializationPlayers(ArrayList<String> nicknames) {
@@ -114,7 +115,7 @@ public class Game {
         else numDrawnStudents = 3;
     }
 
-    private void initializationTilesBag() throws IncorrectArgumentException {
+    private void initializationTilesBag() throws IncorrectArgumentException, NegativeValueException {
         importingTilesJson();
 
         //Initialization clouds
@@ -187,10 +188,9 @@ public class Game {
         importingIslands = gson.fromJson(JSONContent, new TypeToken<List<String>>() {
         }.getType());
 
-
         // initialization clouds;
         try { //Loading CloudTiles JSON file
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CloudTile.class.getResourceAsStream(FileJSONPath.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CloudTile.class.getResourceAsStream(FileJSONPath.CLOUD_TILES_LOCATION)), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
             JSONContent = s.hasNext() ? s.next() : "";
         } catch (Exception FileNotFound) {
@@ -211,7 +211,7 @@ public class Game {
      * @throws IncorrectArgumentException
      * @throws IncorrectPlayerException
      */
-    public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException {
+    public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         if (state == State.PLANNINGPHASE && !playerDrawnOut) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 for (CloudTile cloud : clouds) {
@@ -315,7 +315,7 @@ public class Game {
      * @throws IncorrectPlayerException
      * @throws IncorrectArgumentException
      */
-    public void takeStudentsFromCloud(String nicknameCaller, int index) throws IncorrectStateException, IncorrectPlayerException, IncorrectArgumentException {
+    public void takeStudentsFromCloud(String nicknameCaller, int index) throws IncorrectStateException, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException {
         if (state == State.ACTIONPHASE_3) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 currentPlayer.addStudents(clouds[index].drawStudents());
@@ -332,7 +332,7 @@ public class Game {
      * In case the destination is the islands, it is used an array of islandDestination that is used by the game to send
      * the students in the correct place (the array uses the unique name of each island).
      */
-    public void moveStudents(String playerCaller, EnumMap<Colors, ArrayList<String>> students) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException {
+    public void moveStudents(String playerCaller, EnumMap<Colors, ArrayList<String>> students) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException {
         if (currentPlayer.getNickname().equals(playerCaller)) {
             if (state == State.ACTIONPHASE_1) {
                 int numOfStudents;
@@ -400,7 +400,7 @@ public class Game {
      * @throws MotherNatureLostException
      */
     public void moveMotherNature(String playerCaller, int distanceChoosen) throws
-            IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException {
+            IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, NegativeValueException {
         if (playerCaller.equals(currentPlayer.getNickname())) {
             if (state == State.ACTIONPHASE_2) {
                 int destinationMotherNature = motherNaturePosition + distanceChoosen;
@@ -428,7 +428,7 @@ public class Game {
      *
      * @throws IncorrectArgumentException
      */
-    public void checkAndPlaceProfessor() throws IncorrectArgumentException {
+    public void checkAndPlaceProfessor() throws IncorrectArgumentException, ProfessorNotFoundException {
         int max = 0;
         Player maxPlayer = null;
         for (Colors studentColor : Colors.values()) {
@@ -550,7 +550,7 @@ public class Game {
         } else team.get(0).moveTowers(amount);
     }
 
-    public void checkUnificationIslands() throws IncorrectArgumentException {
+    public void checkUnificationIslands() throws NegativeValueException {
         boolean listChanged = false;
         ListIterator<IslandTile> it = islands.listIterator();
         IslandTile currentTile;
@@ -624,7 +624,6 @@ public class Game {
         }
         return sum;
     }
-
 
     public ArrayList<Player> getPlayers() {
         return players;
