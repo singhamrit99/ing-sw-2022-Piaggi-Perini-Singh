@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
@@ -28,7 +28,7 @@ class BagTest {
     @Test
     void testAddStudentsException() {
         enumMap.put(Colors.PINK, -1);
-        assertThrows(IncorrectArgumentException.class, () -> bag.addStudents(enumMap));
+        assertThrows(NegativeValueException.class, () -> bag.addStudents(enumMap));
     }
 
     @Test
@@ -38,7 +38,7 @@ class BagTest {
         //if students are not present in the board
         try {
             bag.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
@@ -49,7 +49,7 @@ class BagTest {
         //if students are present in the board
         try {
             bag.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         assertEquals(4, bag.getStudents().get(Colors.BLUE));
@@ -64,14 +64,14 @@ class BagTest {
         enumMap.put(Colors.BLUE, 2);
         try {
             bag.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         enumMap.clear();
         enumMap.put(Colors.BLUE, -1);
 
         //if value is negative
-        assertThrows(IncorrectArgumentException.class, () -> bag.removeStudents(enumMap));
+        assertThrows(NegativeValueException.class, () -> bag.removeStudents(enumMap));
 
         clearBag();
     }
@@ -82,7 +82,7 @@ class BagTest {
 
         try {
             bag.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
         enumMap.clear();
@@ -92,7 +92,7 @@ class BagTest {
         //remove
         try {
             bag.removeStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
@@ -107,13 +107,13 @@ class BagTest {
         enumMap.put(Colors.YELLOW, 1);
         try {
             bag.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
         try {
             bag.drawStudents(3);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
@@ -125,7 +125,7 @@ class BagTest {
         setupEnum();
         try {
             bag.addStudents(enumMap);
-        } catch (IncorrectArgumentException e) {
+        } catch (NegativeValueException e) {
             e.printStackTrace();
         }
 
