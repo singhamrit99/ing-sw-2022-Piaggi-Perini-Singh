@@ -1,4 +1,5 @@
 package it.polimi.ingsw.server;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -13,8 +14,10 @@ public class ClientConnection implements Runnable {
     private ObjectOutputStream out;
     private Scanner in;
     final private Server server;
-    private String clientRoom= null;
-
+    private String clientRoom = null;
+    private boolean isLeader = false;
+    private String playerName;
+    //only the lobby leader can start the game once everyone joined
     private boolean active = true;
 
     public ClientConnection(Socket socket, Server server) {
@@ -22,31 +25,34 @@ public class ClientConnection implements Runnable {
         this.server = server;
     }
 
-    private synchronized boolean isActive(){
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    private synchronized boolean isActive() {
         return active;
     }
 
     @Override
-    public void run(){
-        String name;
-        try{
+    public void run() {
+        try {
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
             sendString("Welcome!\nWhat is your name?");
-            name = in.nextLine();
+            playerName = in.nextLine();
 
-            while(server.getUserNames().contains(name)){
+            while (server.getUserNames().contains(playerName)) {
                 sendString("Ops, there is another client with the same username! Choose another one please. \n");
-                name = in.nextLine();
+                playerName = in.nextLine();
             }
-            server.registerUser(this, name);
+            server.registerUser(this, playerName);
 
             sendString("Possible options: \n JOIN to join a room; \n CREATE to create a new room; LOBBIES to list existing lobbies; PLAYERS to list players in current lobby;");
 
             String command;
-            while(true){
+            while (true) {
                 command = in.nextLine().toLowerCase(Locale.ROOT);
-                switch(command){
+                switch (command) {
                     case "join":
                         requestRoomJoin();
                         break;
@@ -64,7 +70,7 @@ public class ClientConnection implements Runnable {
                         break;
                 }
             }
-        }catch (IOException | NoSuchElementException e) {
+        } catch (IOException | NoSuchElementException e) {
             System.err.println("Error from client, " + e.getMessage());
             closeConnection();
         }
@@ -72,8 +78,7 @@ public class ClientConnection implements Runnable {
 
     private void requestLobbies() {
         sendString("List of lobbies:\n");
-        for (String s: server.getRoomsList())
-        {
+        for (String s : server.getRoomsList()) {
             sendString(s);
         }
     }
@@ -81,50 +86,77 @@ public class ClientConnection implements Runnable {
     private void requestPlayersInLobby() {
 
         sendString("List of players in lobby:\n");
-        if (clientRoom!=null) {
-            ArrayList<String> userNamesInRoom = server.getUserNamesInRoom(clientRoom);
-            if (!userNamesInRoom.isEmpty()) sendArrayList(userNamesInRoom);
+        if (clientRoom != null) {
+            ArrayList<ClientConnection> playersInRoom = server.getUserNamesInRoom(clientRoom);
+            if (!playersInRoom.isEmpty()) {
+
+                for (ClientConnection user: playersInRoom) {
+                    if (user.isLeader)
+                        sendString(user.getPlayerName()+ " *");
+                    else
+                        sendString(user.getPlayerName());
+
+                }
+            }
+        } else {
+            sendString("You're not in a room yet! Join one with the JOIN command or create a new one with CREATE!");
         }
-        else{sendString("You're not in a room yet! Join one with the JOIN command or create a new one with CREATE!");}
 
     }
 
-    public synchronized void requestRoomCreation(){
+    public synchronized void requestRoomCreation() {
         sendString("Insert room name: \n");
         String nameRoom;
         nameRoom = in.nextLine();
-        while(server.getRoomsList().contains(nameRoom)){
+        while (server.getRoomsList().contains(nameRoom)) {
             sendString("Ops, there is another room with the same name! Choose another one please. \n");
             nameRoom = in.nextLine();
         }
-        server.createRoom(nameRoom,this);
+        server.createRoom(nameRoom, this);
+        isLeader = true;
+        clientRoom = nameRoom;
     }
 
-    public synchronized void requestRoomJoin(){
+    public synchronized void requestRoomJoin() {
+        String requestedRoom;
         sendString("Select the room: \n");
-        if(server.getRoomsList().isEmpty()) sendString("There are no rooms, you can only create a new one");
-        else{
+        if (server.getRoomsList().isEmpty()) sendString("There are no rooms, you can only create a new one");
+        else {
             sendArrayList(server.getRoomsList());
-            clientRoom = in.nextLine();
-            while(!server.getRoomsList().contains(clientRoom)){
-                sendString("Ops, there aren't rooms with the same name\n");
-                clientRoom = in.nextLine();
+            requestedRoom = in.nextLine();
+            while (!server.getRoomsList().contains(requestedRoom)) {
+                sendString("Ops, there are no rooms with that name\n");
+                requestedRoom = in.nextLine();
             }
-            if(server.getRoomsList().contains(clientRoom)&&clientRoom!=null)
-            {
-                sendString("You already joined this room!\n");
-            }
-            else {
-                server.joinRoom(clientRoom, this);
+
+            if (requestedRoom.equals(clientRoom)) {
+                sendString("You're already in that room!\n");
+            } else {
+                isLeader = false;
+                server.joinRoom(requestedRoom, this);
+                clientRoom = requestedRoom;
                 sendString("You entered room " + clientRoom + " successfully \n");
                 sendString("Players in this room:");
-                ArrayList<String> userNamesInRoom = server.getUserNamesInRoom(clientRoom);
-                if (!userNamesInRoom.isEmpty()) sendArrayList(userNamesInRoom);
+                ArrayList<ClientConnection> playersInRoom = server.getUserNamesInRoom(clientRoom);
+                if (!playersInRoom.isEmpty()) {
+                    for (ClientConnection user: playersInRoom) {
+                        if (user.isLeader)
+                            sendString(user.getPlayerName()+ " *");
+                        else
+                            sendString(user.getPlayerName());
+
+                    }
+                    }
+                }
             }
         }
+
+
+
+    public String getClientRoom() {
+        return clientRoom;
     }
-    
-    
+
     public synchronized void closeConnection() {
         sendString("Connection closed!");
         try {
@@ -142,12 +174,13 @@ public class ClientConnection implements Runnable {
             out.reset();
             out.writeObject(message);
             out.flush();
-        } catch(IOException e){
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }
+
     public synchronized void sendArrayList(ArrayList<String> messageArray) {
-        for(String message : messageArray)sendString(message);
+        for (String message : messageArray) sendString(message);
     }
 
 }
