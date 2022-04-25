@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -12,6 +13,7 @@ public class ClientConnection implements Runnable {
     private ObjectOutputStream out;
     private Scanner in;
     final private Server server;
+    private String clientRoom= null;
 
     private boolean active = true;
 
@@ -39,17 +41,23 @@ public class ClientConnection implements Runnable {
             }
             server.registerUser(this, name);
 
-            sendString("Possible options: \n JOIN to join a room; \n CREATE to create a new room;");
+            sendString("Possible options: \n JOIN to join a room; \n CREATE to create a new room; LOBBIES to list existing lobbies; PLAYERS to list players in current lobby;");
 
             String command;
             while(true){
-                command = in.nextLine();
+                command = in.nextLine().toLowerCase(Locale.ROOT);
                 switch(command){
                     case "join":
                         requestRoomJoin();
                         break;
                     case "create":
                         requestRoomCreation();
+                        break;
+                    case "players":
+                        requestPlayersInLobby();
+                        break;
+                    case "lobbies":
+                        requestLobbies();
                         break;
                     default:
                         sendString("Command not recognized");
@@ -60,6 +68,25 @@ public class ClientConnection implements Runnable {
             System.err.println("Error from client, " + e.getMessage());
             closeConnection();
         }
+    }
+
+    private void requestLobbies() {
+        sendString("List of lobbies:\n");
+        for (String s: server.getRoomsList())
+        {
+            sendString(s);
+        }
+    }
+
+    private void requestPlayersInLobby() {
+
+        sendString("List of players in lobby:\n");
+        if (clientRoom!=null) {
+            ArrayList<String> userNamesInRoom = server.getUserNamesInRoom(clientRoom);
+            if (!userNamesInRoom.isEmpty()) sendArrayList(userNamesInRoom);
+        }
+        else{sendString("You're not in a room yet! Join one with the JOIN command or create a new one with CREATE!");}
+
     }
 
     public synchronized void requestRoomCreation(){
@@ -75,23 +102,29 @@ public class ClientConnection implements Runnable {
 
     public synchronized void requestRoomJoin(){
         sendString("Select the room: \n");
-        if(server.getRoomsList().isEmpty()) sendString("There aren't rooms, you can only create a new one");
+        if(server.getRoomsList().isEmpty()) sendString("There are no rooms, you can only create a new one");
         else{
             sendArrayList(server.getRoomsList());
-            String nameRoomToJoin;
-            nameRoomToJoin = in.nextLine();
-            while(!server.getRoomsList().contains(nameRoomToJoin)){
+            clientRoom = in.nextLine();
+            while(!server.getRoomsList().contains(clientRoom)){
                 sendString("Ops, there aren't rooms with the same name\n");
-                nameRoomToJoin = in.nextLine();
+                clientRoom = in.nextLine();
             }
-            server.joinRoom(nameRoomToJoin,this);
-            sendString("You are entered room "+nameRoomToJoin+ " successfully \n");
-            sendString("In this room there are:");
-            ArrayList<String> userNamesInRoom = server.getUserNamesInRoom(nameRoomToJoin);
-            if(!userNamesInRoom.isEmpty())sendArrayList(userNamesInRoom);
+            if(server.getRoomsList().contains(clientRoom)&&clientRoom!=null)
+            {
+                sendString("You already joined this room!\n");
+            }
+            else {
+                server.joinRoom(clientRoom, this);
+                sendString("You entered room " + clientRoom + " successfully \n");
+                sendString("Players in this room:");
+                ArrayList<String> userNamesInRoom = server.getUserNamesInRoom(clientRoom);
+                if (!userNamesInRoom.isEmpty()) sendArrayList(userNamesInRoom);
+            }
         }
     }
-
+    
+    
     public synchronized void closeConnection() {
         sendString("Connection closed!");
         try {

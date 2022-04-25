@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.ControllerExceptions;
 import it.polimi.ingsw.model.exceptions.*;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
 
