@@ -1,5 +1,4 @@
 package it.polimi.ingsw.server;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -90,7 +89,7 @@ public class Server {
     }
 
     public synchronized boolean isExpertMode(String roomName){
-        return rooms.get(roomName).isExpertMode();
+        return rooms.get(roomName).getExpertMode();
     }
 
     public synchronized boolean isLeader(ClientConnection cl , String roomName){

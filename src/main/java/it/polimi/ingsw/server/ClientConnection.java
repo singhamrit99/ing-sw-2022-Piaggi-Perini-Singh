@@ -17,8 +17,6 @@ public class ClientConnection implements Runnable {
     private String clientRoom = null;
     private String nickname;
 
-    private boolean active = true;
-
     public ClientConnection(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
@@ -26,10 +24,6 @@ public class ClientConnection implements Runnable {
 
     public String getNickname() {
         return nickname;
-    }
-
-    private synchronized boolean isActive() {
-        return active;
     }
 
     @Override
@@ -60,13 +54,13 @@ public class ClientConnection implements Runnable {
                         requestRoomCreation();
                         break;
                     case "players":
-                        requestPlayersInLobby();
+                        getPlayersInRoom();
                         break;
                     case "lobbies":
-                        requestLobbies();
+                        getRooms();
                         break;
                     case "info":
-                        requestLobbyInfo();
+                        getLobbyInfo();
                         break;
                     case "change":
                         setExpertMode();
@@ -82,63 +76,25 @@ public class ClientConnection implements Runnable {
         }
     }
 
-    private void requestLobbies() {
+    private void getRooms() {
         sendString("List of lobbies:\n");
-        for (String s : server.getRoomsList()) {
-            sendString(s);
-        }
+        sendArrayString(server.getRoomsList());
     }
 
-    private void requestPlayersInLobby() {
-        sendString("List of players in lobby:\n");
+    private void getPlayersInRoom() {
+        sendString("List of players in room:\n");
         if (clientRoom != null) {
-            server.getNicknamesInRoom(clientRoom);
+            sendArrayString(server.getNicknamesInRoom(clientRoom));
         } else {
             sendString("You're not in a room yet! Join one with the JOIN command or create a new one with CREATE!");
         }
     }
 
-    public synchronized void requestRoomCreation() {
-        sendString("Insert room name: \n");
-        String nameRoom;
-        nameRoom = in.nextLine();
-        while (server.getRoomsList().contains(nameRoom)) {
-            sendString("Ops, there is another room with the same name! Choose another one please. \n");
-            nameRoom = in.nextLine();
-        }
-        server.createRoom(nameRoom, this);
-        clientRoom = nameRoom;
-    }
-
-    public synchronized void requestRoomJoin() {
-        String requestedRoom;
-        sendString("Select the room: \n");
-        if (server.getRoomsList().isEmpty()) sendString("There are no rooms, you can only create a new one");
-        else {
-            sendArrayList(server.getRoomsList());
-            requestedRoom = in.nextLine();
-            while (!server.getRoomsList().contains(requestedRoom)) {
-                sendString("Ops, there are no rooms with that name\n");
-                requestedRoom = in.nextLine();
-            }
-            if (requestedRoom.equals(clientRoom)) {
-                sendString("You're already in that room!\n");
-            } else {
-                server.joinRoom(requestedRoom, this);
-                clientRoom = requestedRoom;
-                sendString("You entered room " + clientRoom + " successfully \n");
-                sendString("Players in this room:");
-                ArrayList<String> nicknamesInRoom = server.getNicknamesInRoom(clientRoom);
-            }
-        }
-    }
-
-
     public String getClientRoom() {
         return clientRoom;
     }
 
-    public void requestLobbyInfo() {
+    public void getLobbyInfo() {
         sendString("Lobby Name: " + clientRoom + "\n");
         sendString("Leader " + server.getNicknamesInRoom(clientRoom).get(0));
         sendString("ExpertMode " + server.isExpertMode(clientRoom));
@@ -173,6 +129,40 @@ public class ClientConnection implements Runnable {
             sendString("You're not in a room now!\n");
     }
 
+    public synchronized void requestRoomCreation() {
+        sendString("Insert room name: \n");
+        String nameRoom;
+        nameRoom = in.nextLine();
+        while (server.getRoomsList().contains(nameRoom)) {
+            sendString("Ops, there is another room with the same name! Choose another one please. \n");
+            nameRoom = in.nextLine();
+        }
+        server.createRoom(nameRoom, this);
+        clientRoom = nameRoom;
+    }
+
+    public synchronized void requestRoomJoin() {
+        String requestedRoom;
+        sendString("Select the room: \n");
+        if (server.getRoomsList().isEmpty()) sendString("There are no rooms, you can only create a new one");
+        else {
+            sendArrayString(server.getRoomsList());
+            requestedRoom = in.nextLine();
+            while (!server.getRoomsList().contains(requestedRoom)) {
+                sendString("Ops, there are no rooms with that name\n");
+                requestedRoom = in.nextLine();
+            }
+            if (requestedRoom.equals(clientRoom)) {
+                sendString("You're already in that room!\n");
+            } else {
+                server.joinRoom(requestedRoom, this);
+                clientRoom = requestedRoom;
+                sendString("You entered room " + clientRoom + " successfully \n");
+                sendString("Players in this room:");
+                ArrayList<String> nicknamesInRoom = server.getNicknamesInRoom(clientRoom);
+            }
+        }
+    }
 
     public synchronized void closeConnection() {
         sendString("Connection closed!");
@@ -182,11 +172,9 @@ public class ClientConnection implements Runnable {
         } catch (IOException e) {
             System.err.println("Error when closing socket!");
         }
-        active = false;
     }
 
-
-    public synchronized void sendString(String message) {
+    private synchronized void sendString(String message) {
         try {
             out.reset();
             out.writeObject(message);
@@ -196,8 +184,7 @@ public class ClientConnection implements Runnable {
         }
     }
 
-    public synchronized void sendArrayList(ArrayList<String> messageArray) {
+    private synchronized void sendArrayString(ArrayList<String> messageArray) {
         for (String message : messageArray) sendString(message);
     }
-
 }

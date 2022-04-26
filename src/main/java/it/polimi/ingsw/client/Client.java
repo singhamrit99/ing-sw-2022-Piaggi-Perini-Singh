@@ -10,44 +10,36 @@ public class Client {
 
     final private String ip;
     final private int port;
-    private boolean active;
 
     public Client(String ip, int port){
         this.ip = ip;
         this.port = port;
-        active = true;
     }
 
-    public synchronized boolean isActive(){
-        return active;
-    }
-
-    public synchronized void setActive(boolean active){
-        this.active = active;
-    }
-
-    public Thread readFromSocket(final ObjectInputStream socketIn){
+    private Thread readFromSocket(final ObjectInputStream socketIn){
         Thread t = new Thread(() -> {
             try {
-                while (isActive()) {
+                while (true) {
                     Object inputObject = socketIn.readObject();
                     System.out.println((String)inputObject);
                 }
-            } catch (Exception e){setActive(false);}
+            } catch (Exception e){
+                System.out.println("Error while reading from socket");
+            }
         });
         t.start();
         return t;
     }
 
-    public Thread writeToSocket(final Scanner stdin, final PrintWriter socketOut){
+    private Thread writeToSocket(final Scanner stdin, final PrintWriter socketOut){
         Thread t = new Thread(() -> {
             try {
-                while (isActive()) {
+                while (true) {
                     String inputLine = stdin.nextLine();
                     socketOut.println(inputLine);
                     socketOut.flush();
                 }
-            }catch(Exception e){ setActive(false);}
+            }catch(Exception e){ System.out.println("Error while writing to socket");}
         });
         t.start();
         return t;
