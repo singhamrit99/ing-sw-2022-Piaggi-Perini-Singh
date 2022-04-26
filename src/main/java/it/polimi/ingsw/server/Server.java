@@ -14,8 +14,7 @@ public class Server {
     final private ServerSocket serverSocket;
     final private ExecutorService executor = Executors.newFixedThreadPool(128);
     private HashMap<ClientConnection, String> users;
-    private HashMap<String, Lobby> rooms;
-    private int connections = 0;
+    private HashMap<String, Room> rooms;
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(PORT);
@@ -28,9 +27,8 @@ public class Server {
         while (true) {
             try {
                 Socket newSocket = serverSocket.accept();
-                connections++;
                 ClientConnection socketConnection = new ClientConnection(newSocket, this);
-                System.out.println("Just connected a new dude! #" + connections);
+                System.out.println("Just connected a new dude! #");
                 executor.submit(socketConnection);
             } catch (IOException e) {
                 System.out.println("Connection Error!");
@@ -51,7 +49,7 @@ public class Server {
         return new ArrayList<>(rooms.keySet());
     }
 
-    public Lobby getClientRoom(String roomName) {
+    public Room getClientRoom(String roomName) {
         return rooms.get(roomName);
     }
 
@@ -64,40 +62,47 @@ public class Server {
     public synchronized void createRoom(String roomName, ClientConnection user) {
         ArrayList<ClientConnection> userInNewRoom = new ArrayList<>();
         userInNewRoom.add(user);
-        Lobby newlobby = new Lobby(user.getPlayerName(), roomName, userInNewRoom);
-        rooms.put(newlobby.getRoomName(), newlobby);
+        Room newRoom = new Room(roomName, userInNewRoom);
+        rooms.put(newRoom.getRoomName(), newRoom);
         System.out.println("User " + users.get(user) + " just created " + roomName + "\n");
     }
 
-
-   /* public synchronized void createRoom(String roomName, ClientConnection user){
-        ArrayList<ClientConnection> userInNewRoom = new ArrayList<>();
-        userInNewRoom.add(user);
-        rooms.put(roomName,userInNewRoom);
-        System.out.println("User "+ users.get(user) +" just created "+roomName+"\n");
-    }*/
-
     public synchronized void joinRoom(String roomName, ClientConnection user) {
         if (rooms.containsKey(roomName)) {
-            Lobby newUsers;
+            Room newUsers;
             newUsers = rooms.get(roomName);
             if (user.getClientRoom() != null) {
-                Lobby oldLobby;
+                Room oldLobby;
                 oldLobby = rooms.get(user.getClientRoom());
                 oldLobby.removeUser(user);
-                System.out.println("Player " + user.getPlayerName() + " in lobby " + user.getClientRoom() + " changed lobby\n");
+                System.out.println("Player " + user.getNickname() + " in lobby " + user.getClientRoom() + " changed lobby\n");
             }
             newUsers.addUser(user);
             rooms.replace(roomName, newUsers);
         }
     }
 
-    public synchronized ArrayList<ClientConnection> getUserNamesInRoom(String roomName) {
-
-        return rooms.get(roomName).getPlayerList();
-
+    public synchronized ArrayList<String> getNicknamesInRoom(String roomName) {
+        ArrayList<ClientConnection> players = rooms.get(roomName).getPlayers();
+        ArrayList<String> nicknames = new ArrayList<>();
+        for(ClientConnection cl : players)nicknames.add(cl.getNickname());
+        return nicknames;
     }
 
+    public synchronized boolean isExpertMode(String roomName){
+        return rooms.get(roomName).isExpertMode();
+    }
 
+    public synchronized boolean isLeader(ClientConnection cl , String roomName){
+        if(cl.getNickname().equals(getNicknamesInRoom(roomName).get(0))){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public synchronized void setExpertModeRoom(String roomName, Boolean expertMode){
+        rooms.get(roomName).setExpertmode(expertMode);
+    }
 }
 
