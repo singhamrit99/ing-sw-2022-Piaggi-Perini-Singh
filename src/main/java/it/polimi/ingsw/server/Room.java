@@ -1,22 +1,19 @@
 package it.polimi.ingsw.server;
-
+import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
 
 import java.util.ArrayList;
 
-public class Lobby {
-    private final String leader;
+public class Room {
     private final String roomName;
-    private final ArrayList<ClientConnection> playerList;
-    private ArrayList<String> playerNicknames;
+    private final ArrayList<ClientConnection> players;
     private boolean expertMode;
 
-    public Lobby(String leader, String roomName, ArrayList<ClientConnection> playerList) {
-        this.leader = leader;
+    public Room(String roomName, ArrayList<ClientConnection> playerList) {
         this.roomName = roomName;
-        this.playerList = playerList;
+        this.players = playerList;
     }
 
     public void setExpertmode(boolean expertmode) {
@@ -27,31 +24,27 @@ public class Lobby {
         return expertMode;
     }
 
-    public String getLeader() {
-        return leader;
-    }
-
     public String getRoomName() {
         return roomName;
     }
 
-    public ArrayList<ClientConnection> getPlayerList() {
-        return playerList;
+    public ArrayList<ClientConnection> getPlayers() {
+        return players;
     }
 
     public void addUser(ClientConnection user) {
-        playerList.add(user);
+        players.add(user);
     }
 
     public void removeUser(ClientConnection user) {
-        playerList.remove(user);
+        players.remove(user);
     }
 
     public void startGame() throws NegativeValueException, IncorrectArgumentException {
-        for (ClientConnection cl : playerList) {
-            playerNicknames.add(cl.getPlayerName());
+        ArrayList<String> nicknames = new ArrayList<>();
+        for (ClientConnection cl : players) {
+                nicknames.add(cl.getNickname());
         }
-        Game game = new Game(this.expertMode, this.playerList.size(), this.playerNicknames);
-
+        Game game = new Game(expertMode, players.size(), nicknames);
     }
 }
