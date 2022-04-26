@@ -1,5 +1,4 @@
 package it.polimi.ingsw.server;
-import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
@@ -20,7 +19,7 @@ public class Room {
         this.expertMode = expertmode;
     }
 
-    public boolean isExpertMode() {
+    public boolean getExpertMode() {
         return expertMode;
     }
 
