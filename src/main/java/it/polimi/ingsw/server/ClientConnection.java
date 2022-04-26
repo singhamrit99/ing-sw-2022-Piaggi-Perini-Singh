@@ -11,9 +11,9 @@ import java.util.Scanner;
 public class ClientConnection implements Runnable {
 
     final private Socket socket;
+    final private Server server;
     private ObjectOutputStream out;
     private Scanner in;
-    final private Server server;
     private String clientRoom = null;
     private boolean isLeader = false;
     private String playerName;
@@ -47,7 +47,8 @@ public class ClientConnection implements Runnable {
             }
             server.registerUser(this, playerName);
 
-            sendString("Possible options: \n JOIN to join a room; \n CREATE to create a new room; LOBBIES to list existing lobbies; PLAYERS to list players in current lobby;");
+            sendString("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n LOBBIES to list existing lobbies;" +
+                    "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information; CHANGE to toggle expert mode for the current lobby.");
 
             String command;
             while (true) {
@@ -64,6 +65,12 @@ public class ClientConnection implements Runnable {
                         break;
                     case "lobbies":
                         requestLobbies();
+                        break;
+                    case "info":
+                        requestLobbyInfo();
+                        break;
+                    case "change":
+                        changeLobbyParameters();
                         break;
                     default:
                         sendString("Command not recognized");
@@ -90,18 +97,16 @@ public class ClientConnection implements Runnable {
             ArrayList<ClientConnection> playersInRoom = server.getUserNamesInRoom(clientRoom);
             if (!playersInRoom.isEmpty()) {
 
-                for (ClientConnection user: playersInRoom) {
+                for (ClientConnection user : playersInRoom) {
                     if (user.isLeader)
-                        sendString(user.getPlayerName()+ " *");
+                        sendString(user.getPlayerName() + " *");
                     else
                         sendString(user.getPlayerName());
-
                 }
             }
         } else {
             sendString("You're not in a room yet! Join one with the JOIN command or create a new one with CREATE!");
         }
-
     }
 
     public synchronized void requestRoomCreation() {
@@ -128,7 +133,6 @@ public class ClientConnection implements Runnable {
                 sendString("Ops, there are no rooms with that name\n");
                 requestedRoom = in.nextLine();
             }
-
             if (requestedRoom.equals(clientRoom)) {
                 sendString("You're already in that room!\n");
             } else {
@@ -139,23 +143,60 @@ public class ClientConnection implements Runnable {
                 sendString("Players in this room:");
                 ArrayList<ClientConnection> playersInRoom = server.getUserNamesInRoom(clientRoom);
                 if (!playersInRoom.isEmpty()) {
-                    for (ClientConnection user: playersInRoom) {
+                    for (ClientConnection user : playersInRoom) {
                         if (user.isLeader)
-                            sendString(user.getPlayerName()+ " *");
+                            sendString(user.getPlayerName() + " *");
                         else
                             sendString(user.getPlayerName());
 
                     }
-                    }
                 }
             }
         }
-
+    }
 
 
     public String getClientRoom() {
         return clientRoom;
     }
+
+    public void requestLobbyInfo() {
+        Lobby response;
+        response = server.getClientRoom(clientRoom);
+        sendString("Lobby Name: " + response.getRoomName() + "\n");
+        sendString("Leader " + response.getLeader());
+        sendString("ExpertMode " + response.isExpertMode());
+    }
+
+    public void changeLobbyParameters() {
+        if (clientRoom != null) {
+            if (isLeader) {
+                boolean result = false;
+                sendString("Do you want to play in expert mode? Y/N");
+                String answer;
+                answer = in.nextLine().toLowerCase(Locale.ROOT);
+                switch (answer) {
+                    case "y": {
+                        result = true;
+                        sendString("Expert mode enabled!\n");
+                        break;
+                    }
+                    case "n": {
+                        result = false;
+                        sendString("Expert mode disabled|\n");
+                        break;
+                    }
+                    default:
+                        sendString("Command not recognized\n");
+
+                }
+                server.getClientRoom(clientRoom).setExpertmode(result);
+            } else
+                sendString("You're not this lobby's leader, you can't do that!\n");
+        } else
+            sendString("You're not in a room now!\n");
+    }
+
 
     public synchronized void closeConnection() {
         sendString("Connection closed!");
