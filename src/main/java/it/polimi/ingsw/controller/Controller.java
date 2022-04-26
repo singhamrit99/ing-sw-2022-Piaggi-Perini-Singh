@@ -1,9 +1,12 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.ControllerExceptions;
 import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.model.tiles.CloudTile;
+
 import java.util.ArrayList;
 import java.util.EnumMap;
 
@@ -11,13 +14,19 @@ public class Controller {
 
     private Game game;
 
-    public Controller(Game game) {
-        this.game = game;
-    }
 
-    public Game initializeGame(boolean expertmode, int numofplayers, ArrayList<String> nicknames) {
+    public Game initializeGame(boolean expertMode, int numOfPlayers, ArrayList<String> nicknames) throws IncorrectArgumentException {
+
+        if (numOfPlayers<1||numOfPlayers>4)
+        {
+            throw new IncorrectArgumentException("Invalid number of players\n");
+        }
+        else if (numOfPlayers!=nicknames.size())
+        {
+            throw new IncorrectArgumentException("Number of players and nicknames array list lenght mismatch\n");
+        }
         try {
-            game = new Game(expertmode, numofplayers, nicknames);
+            game = new Game(expertMode, numOfPlayers, nicknames);
         } catch (NegativeValueException e) {
             manageException(e);
         } catch (IncorrectArgumentException e) {
@@ -107,14 +116,24 @@ public class Controller {
         catch(
     }*/
 
+    public void checkPlayerBoard(Player player)
+    {
+
+    }
+    public void checkIslands(){
+
+    }
+    public void checkClouds(){
+
+    }
     public void manageException(IncorrectArgumentException e) {
         ControllerExceptions error = ControllerExceptions.INCORRECT_ARGUMENT_EXCEPTION;
-        // game.error(error);
+        //game.error(error);
     }
 
     public void manageException(NegativeValueException e) {
         ControllerExceptions error = ControllerExceptions.NEGATIVE_VALUE_EXCEPTION;
-        // game.error(error);
+        //game.error(error);
     }
 
     public void manageException(IncorrectPlayerException e) {

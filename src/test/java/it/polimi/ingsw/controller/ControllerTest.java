@@ -35,8 +35,17 @@ class ControllerTest {
 
     @Test
     void testCallMoveMotherNature() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException {
-        Game game = planningPhaseComplete();
-        Controller controller = new Controller(game);
+        Controller controller = new Controller();
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Michelangelo");
+        nicknames.add("Raffaello");
+        nicknames.add("Donatello");
+        nicknames.add("Leonardo");
+        Game game= controller.initializeGame(true, 4, nicknames);
+        for (int i = 0; i < 4; i++) {
+            game.drawFromBag(game.getCurrentPlayer().getNickname());
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
+        }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
         int countNumStudents = 3;
@@ -55,16 +64,22 @@ class ControllerTest {
         game.moveStudents(game.getCurrentPlayer().getNickname(), movingStudents);
         int oldPosMotherNature = game.getMotherNaturePosition();
         controller.callMoveMotherNature();
-
         assertNotEquals(game.getMotherNaturePosition(), oldPosMotherNature);
-
-
     }
 
     @Test
     void testCallMoveStudent() throws IncorrectStateException, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException {
-        Game game = planningPhaseComplete();
-        Controller controller = new Controller(game);
+        Controller controller = new Controller();
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Michelangelo");
+        nicknames.add("Raffaello");
+        nicknames.add("Donatello");
+        nicknames.add("Leonardo");
+        Game game = controller.initializeGame(true,4,nicknames);
+        for (int i = 0; i < 4; i++) {
+            game.drawFromBag(game.getCurrentPlayer().getNickname());
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
+        }
         assertEquals(game.getCurrentState(), State.ACTIONPHASE_1);
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
         assertEquals(7, game.valueOfEnum(entrance));
@@ -88,8 +103,17 @@ class ControllerTest {
 
     @Test
     void testCallPickCloud() throws IncorrectStateException, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException {
-        Game game = planningPhaseComplete();
-        Controller controller = new Controller(game);
+        Controller controller = new Controller();
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Michelangelo");
+        nicknames.add("Raffaello");
+        nicknames.add("Donatello");
+        nicknames.add("Leonardo");
+        Game game= controller.initializeGame(true, 4, nicknames);
+        for (int i = 0; i < 4; i++) {
+            game.drawFromBag(game.getCurrentPlayer().getNickname());
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
+        }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
         int countNumStudents = 3;
@@ -112,14 +136,17 @@ class ControllerTest {
         for (Colors color : Colors.values()) {
             assertEquals(0, studentsoncloud.get(color));
         }
-
-
     }
 
     @Test
     void testCallPlayAssistantCard() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
-        Game game = initGame4players();
-        Controller controller = new Controller(game);
+        Controller controller = new Controller();
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Michelangelo");
+        nicknames.add("Raffaello");
+        nicknames.add("Donatello");
+        nicknames.add("Leonardo");
+        Game game= controller.initializeGame(true, 4, nicknames);
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldplayer = game.getCurrentPlayer().getNickname();
         controller.callPlayAssistantCard(3);
