@@ -25,7 +25,7 @@ public class CharacterCard extends Card {
         super(imageName);
         this.price = price;
         this.description = description;
-        
+
         status = 0;
     }
 
