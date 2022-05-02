@@ -2,11 +2,13 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.model.cards.charactercard.Ability;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCardFactory;
 import it.polimi.ingsw.model.deck.FileJSONPath;
 import it.polimi.ingsw.model.deck.characterdeck.CharacterCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.ControllerExceptions;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.*;
@@ -57,7 +59,10 @@ public class Game {
         players = new ArrayList<>();
         initializationPlayers(nicknames);
         initializationTilesBag();
-        importingCharacterCards();
+
+        if (expertMode) {
+            importingCharacterCards();
+        }
     }
 
     private void importingCharacterCards() throws IncorrectArgumentException, NegativeValueException {
@@ -71,17 +76,78 @@ public class Game {
         for (int i = 0; i < 3; i++) {
             index = (int) Math.floor(Math.random() * characterCardDeck.getDeck().size());
             card = characterCardDeck.get(index);
-            characterCards.add(factory.getCard(card.getImageName(), card.getStartingPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+            characterCards.add(factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
             characterCardDeck.discardCard(index);
         }
     }
 
-    public void activateCharacterCardEffect(int index) {
-        //controlla prima se puoi comprare la carta
-        //se si attivi l' effetto
-        //altrimenti invi eccezione
-        characterCards.get(index).activate(this);
+    public boolean buyCharacterCard(int index) {
+        if (getCurrentState().equals(State.ACTIONPHASE_1) && expertMode) //TODO ACTIONPHASE CE NE SONO TRE, CHIEDERE A TINO
+            if (characterCards.get(index).getPrice() <= currentPlayer.getCoins()) {
+                characterCards.get(index).setStatus(1);
+                currentPlayer.setPlayedCharacterCard(characterCards.get(index));
+                return true;
+            }
+        return false;
+    }
 
+    public void activateCharacterCard(int index) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
+        if (buyCharacterCard(index) && expertMode) {
+            currentPlayer.getPlayedCharacterCard().activate(this);
+        } else {
+            throw new NotEnoughCoinsException();
+        }
+        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) {
+            currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
+            characterCards.get(index).increasePrice();
+            characterCards.get(index).setStatus(0);
+            currentPlayer.setPlayedCharacterCard(null);
+        }
+    }
+
+    public void activateCharacterCharacter(int index, int choice) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
+        if (buyCharacterCard(index) && expertMode) {
+            currentPlayer.getPlayedCharacterCard().setChoiceIndex(choice);
+            currentPlayer.getPlayedCharacterCard().activate(this);
+        } else {
+            throw new NotEnoughCoinsException();
+        }
+        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) {
+            currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
+            characterCards.get(index).increasePrice();
+            characterCards.get(index).setStatus(0);
+            currentPlayer.setPlayedCharacterCard(null);
+        }
+    }
+
+    public void activateCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
+        if (buyCharacterCard(index) && expertMode) {
+            currentPlayer.getPlayedCharacterCard().setEnums(students1, students2);
+            currentPlayer.getPlayedCharacterCard().activate(this);
+        } else {
+            throw new NotEnoughCoinsException();
+        }
+        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) {
+            currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
+            characterCards.get(index).increasePrice();
+            characterCards.get(index).setStatus(0);
+            currentPlayer.setPlayedCharacterCard(null);
+        }
+    }
+
+    public void activateCharacterCard(int index, int student, int island) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
+        if (buyCharacterCard(index) && expertMode) {
+            currentPlayer.getPlayedCharacterCard().setChoices(student, island);
+            currentPlayer.getPlayedCharacterCard().activate(this);
+        } else {
+            throw new NotEnoughCoinsException();
+        }
+        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) {
+            currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
+            characterCards.get(index).increasePrice();
+            characterCards.get(index).setStatus(0);
+            currentPlayer.setPlayedCharacterCard(null);
+        }
     }
 
     private void initializationPlayers(ArrayList<String> nicknames) {
@@ -115,7 +181,7 @@ public class Game {
         else numDrawnStudents = 3;
     }
 
-    private void initializationTilesBag() throws IncorrectArgumentException, NegativeValueException {
+    private void initializationTilesBag() throws NegativeValueException {
         importingTilesJson();
 
         //Initialization clouds
@@ -135,7 +201,6 @@ public class Game {
         // place MotherNature on a random island
         motherNaturePosition = (int) (Math.random() * numOfPlayer);
         islands.get(motherNaturePosition).moveMotherNature();
-
 
         // create Bag and students
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
@@ -224,7 +289,7 @@ public class Game {
 
     /**
      * Action used to play a card. Notice that it calls 'nextPlayer() at the end and creates
-     * the correct order of player for the ActionPhase. It is based using a PriorityQueue and
+     * * the correct order of player for the ActionPhase. It is based using a PriorityQueue and
      * taking advantage of the comparable interface of Player
      *
      * @param nicknameCaller
@@ -295,6 +360,7 @@ public class Game {
         if (state == State.ENDTURN) {
             if (isGameOver()) {
                 state = State.END;
+                //TODO incrementa valore carte e vedi altro se c'è da fare
                 checkWinner();
             } else {
                 state = State.PLANNINGPHASE;
@@ -395,22 +461,22 @@ public class Game {
      * It uses a method in player to check if the distance choosen by the player is legal. After the
      * control it moves the Mother Nature and it eventually moves the towers and unify islands.
      *
-     * @param distanceChoosen
+     * @param distanceChosen
      * @throws IncorrectArgumentException
      * @throws MotherNatureLostException
      */
-    public void moveMotherNature(String playerCaller, int distanceChoosen) throws
+    public void moveMotherNature(String playerCaller, int distanceChosen) throws
             IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, NegativeValueException {
         if (playerCaller.equals(currentPlayer.getNickname())) {
             if (state == State.ACTIONPHASE_2) {
-                int destinationMotherNature = motherNaturePosition + distanceChoosen;
+                int destinationMotherNature = motherNaturePosition + distanceChosen;
                 if (islands.get(motherNaturePosition).hasMotherNature()) {
-                    if (currentPlayer.moveMotherNature(distanceChoosen)) {
+                    if (distanceChosen <= getMaxMotherNatureMove()) {
                         islands.get(motherNaturePosition).removeMotherNature();
                         islands.get(destinationMotherNature).moveMotherNature();
                         motherNaturePosition = destinationMotherNature;
-                        checkAndPlaceTower(islands.get(destinationMotherNature));
-                        checkUnificationIslands();
+
+                        resolveMotherNature(destinationMotherNature);
                         state = State.ACTIONPHASE_3;
                     } else {
                         throw new IncorrectArgumentException();
@@ -422,13 +488,18 @@ public class Game {
         } else throw new IncorrectPlayerException();
     }
 
+    public void resolveMotherNature(int island) throws NegativeValueException {
+        checkAndPlaceTower(islands.get(island));
+        checkUnificationIslands();
+    }
+
     /**
      * It is called if new students are added to the dining room and it checks if new professor are placed.
      * It is only called in moveStudents method in the Action Phase.
      *
      * @throws IncorrectArgumentException
      */
-    public void checkAndPlaceProfessor() throws IncorrectArgumentException, ProfessorNotFoundException {
+    public void checkAndPlaceProfessor() throws ProfessorNotFoundException {
         int max = 0;
         Player maxPlayer = null;
         for (Colors studentColor : Colors.values()) {
@@ -437,7 +508,17 @@ public class Game {
                     maxPlayer = player;
                     max = player.getNumOfStudent(studentColor);
                 } else if (player.getNumOfStudent(studentColor) == max) {
-                    maxPlayer = null; //in case of ties noone should have assign the professor
+                    CharacterCard cardPlayed = player.getPlayedCharacterCard();
+                    if (cardPlayed != null) {
+                        if (cardPlayed.getAbility().getAction().equals(Ability.Actions.TAKE_PROFESSORS) && cardPlayed.getStatus() >= 1) {
+                            maxPlayer = currentPlayer;
+                            currentPlayer.getPlayedCharacterCard().setStatus(2);
+                        } else {
+                            maxPlayer = null;
+                        }
+                    } else {
+                        maxPlayer = null; //in case of ties no one should have assign the professor
+                    }
                 }
             }
             if (maxPlayer != null) {
@@ -460,18 +541,45 @@ public class Game {
         HashMap<Towers, Integer> influenceScores = new HashMap<>();
         influenceScores.put(Towers.BLACK, 0);
         influenceScores.put(Towers.WHITE, 0);
+        CharacterCard cardPlayed = currentPlayer.getPlayedCharacterCard();
+
         if (numOfPlayer % 2 == 1) influenceScores.put(Towers.GREY, 0);
 
         EnumMap<Colors, Integer> students = island.getStudents();
 
         for (Colors studentColor : Colors.values()) {
+            if (cardPlayed != null) {
+                if (cardPlayed.getAbility().getAction().equals(Ability.Actions.AVOID_COLOR_INFLUENCE) && cardPlayed.getStatus() >= 1) {
+                    if (studentColor.getIndex() == cardPlayed.getAbility().getValue()) {
+                        currentPlayer.getPlayedCharacterCard().setStatus(2);
+                        continue;
+                    }
+                }
+            }
+
             if (students.get(studentColor) != 0) {
                 for (Player p : players) {
                     if (p.hasProfessorOfColor(studentColor)) { //find the player with that professor
                         Towers teamColor = p.getTowerColor();
                         influenceScores.replace(teamColor, influenceScores.get(teamColor) + students.get(studentColor));
-                        if (teamColor.equals(island.getTowersColor())) { //counting the towers if team owns the island
-                            influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers());
+
+                        if (cardPlayed != null) {
+                            if (cardPlayed.getAbility().getAction().equals(Ability.Actions.TOWER_INFLUENCE) && cardPlayed.getStatus() >= 1) {
+                                currentPlayer.getPlayedCharacterCard().setStatus(2);
+                                influenceScores.replace(teamColor, influenceScores.get(teamColor));
+                                currentPlayer.getPlayedCharacterCard().setStatus(2);
+                            } else if (cardPlayed.getAbility().getAction().equals(Ability.Actions.ADD_POINTS) && cardPlayed.getStatus() >= 1) {
+                                currentPlayer.getPlayedCharacterCard().setStatus(2);
+                                influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers() + cardPlayed.getAbility().getValue());
+                            } else {
+                                if (teamColor.equals(island.getTowersColor())) { //counting the towers if team owns the island
+                                    influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers());
+                                }
+                            }
+                        } else {
+                            if (teamColor.equals(island.getTowersColor())) { //counting the towers if team owns the island
+                                influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers());
+                            }
                         }
                     }
                 }
@@ -647,5 +755,38 @@ public class Game {
 
     public int getMotherNaturePosition() {
         return motherNaturePosition;
+    }
+
+    public int getMaxMotherNatureMove() {
+        CharacterCard cardPlayed = currentPlayer.getPlayedCharacterCard();
+        if (cardPlayed != null) {
+            if (cardPlayed.getAbility().getAction().equals(Ability.Actions.MOVE_MOTHER_NATURE) && cardPlayed.getStatus() >= 1) {
+                currentPlayer.getPlayedCharacterCard().setStatus(2);
+                return currentPlayer.getPlayedAssistantCard().getMove() + currentPlayer.getPlayedCharacterCard().getAbility().getValue();
+            }
+        }
+        return currentPlayer.getPlayedAssistantCard().getMove();
+    }
+
+    public void error(ControllerExceptions error) {
+        //TODO GUARDARE ANCHE QUESTO E SISTEMARE
+    }
+
+    public IslandTile getIsland(int index) {
+        return islands.get(index);
+    }
+
+    public void returnStudentsEffect(int choiceIndex) throws NegativeValueException {
+        EnumMap<Colors, Integer> enumMap = new EnumMap<>(Colors.class);
+        for (Player player : players) {
+            if (player.getSchoolBoard().getStudentsByColor(Colors.getStudent(choiceIndex)) < 3) {
+                enumMap.put(Colors.getStudent(choiceIndex), player.getSchoolBoard().getStudentsByColor(Colors.getStudent(choiceIndex)));
+                player.getSchoolBoard().removeDiningStudents(enumMap);
+            } else {
+                enumMap.put(Colors.getStudent(choiceIndex), 3);
+                player.getSchoolBoard().removeDiningStudents(enumMap);
+            }
+
+        }
     }
 }
