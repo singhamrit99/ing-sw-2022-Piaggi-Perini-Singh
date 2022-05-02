@@ -149,4 +149,22 @@ public class SchoolBoard {
     public EnumMap<Colors, Integer> getDining() {
         return this.dining;
     }
+
+    public void removeDiningStudents(EnumMap<Colors, Integer> studentsToRemove) throws NegativeValueException {
+        EnumMap<Colors, Integer> newStudents = StudentManager.removeStudent(getEntrance(), studentsToRemove);
+        if (newStudents != null) {
+            setDining(newStudents);
+        } else {
+            throw new NegativeValueException();
+        }
+    }
+
+    public void addStudentsDining(EnumMap<Colors, Integer> studentsToAddDining) throws NegativeValueException {
+        EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(entrance, studentsToAddDining);
+        if (newStudents != null) {
+            setDining(newStudents);
+        } else {
+            throw new NegativeValueException();
+        }
+    }
 }
