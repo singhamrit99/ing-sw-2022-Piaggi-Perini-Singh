@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.enumerations;
+package it.polimi.ingsw.model.exceptions;
 
 import it.polimi.ingsw.model.exceptions.MotherNatureLostException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
