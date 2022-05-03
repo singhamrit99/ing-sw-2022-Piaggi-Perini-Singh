@@ -10,13 +10,14 @@ public enum ControllerExceptions {
     INCORRECT_STATE_EXCEPTION(103, "Game logic error! Incorrect phase of the game."),
     MOTHER_NATURE_LOST_EXCEPTION(104, "Game logic error! Can't find Mother Nature."),
     NEGATIVE_VALUE_EXCEPTION(105, "Game logic error! Negative value."),
-    PROFESSOR_NOT_FOUND_EXCEPTION(106, "Game logic error! Can't find professor.");
-    int errorcode;
+    PROFESSOR_NOT_FOUND_EXCEPTION(106, "Game logic error! Can't find professor."),
+    NOT_ENOUGH_COINS_EXCEPTION(107, "Game logic error! Not enough coins to play card.");
+    final int errorcode;
 
     ControllerExceptions(int errorcode, String message) {
         this.errorcode = errorcode;
         this.message = message;
     }
 
-    String message;
+    final String message;
 }
