@@ -1,11 +1,13 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller.commands;
 
-public class PlayAssistantCardCommand implements Commands {
+import it.polimi.ingsw.controller.Controller;
+
+public class PlayAssistantCard implements Command {
 
     Controller controller;
     int assistantCardID;
 
-    public PlayAssistantCardCommand(Controller controller, int assistantCardID) {
+    public PlayAssistantCard(Controller controller, int assistantCardID) {
         this.controller = controller;
         this.assistantCardID = assistantCardID;
     }
