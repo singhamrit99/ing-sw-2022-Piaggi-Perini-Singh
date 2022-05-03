@@ -4,13 +4,18 @@ public class Requirements {
     private Resources resource;
     private int value;
 
+    public Requirements() {
+        resource = null;
+        value = -1;
+    }
+
     public Requirements(Resources resource, int value) {
         this.resource = resource;
         this.value = value;
     }
 
     public enum Resources {
-        COLORS, ISLANDS;
+        COLORS, ISLANDS
     }
 
     public String getRequirements() {

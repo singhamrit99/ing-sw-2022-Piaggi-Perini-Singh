@@ -1,7 +1,7 @@
 [
   {
     "imageName": "character1",
-    "startingPrice": 1,
+    "price": 1,
     "type": {
       "name": "STUDENT",
       "value": 4
@@ -18,7 +18,7 @@
   },
   {
     "imageName": "character2",
-    "startingPrice": 2,
+    "price": 2,
     "description": "Snag an opponent's professor if you have the same number of their students!",
     "type": {
       "name": "CONTROL",
@@ -35,7 +35,7 @@
   },
   {
     "imageName": "character3",
-    "startingPrice": 3,
+    "price": 3,
     "description": "Calculate the influence on any Island and reap the rewards!",
     "type": {
       "name": "SELECTOR",
@@ -52,7 +52,7 @@
   },
   {
     "imageName": "character4",
-    "startingPrice": 1,
+    "price": 1,
     "description": "You may move Mother Nature up to 2 additional spaces!",
     "type": {
       "name": "CONTROL",
@@ -69,7 +69,7 @@
   },
   {
     "imageName": "character5",
-    "startingPrice": 2,
+    "price": 2,
     "description": "Place a No Entry card on an isle and block Mother Nature's power once!",
     "type": {
       "name": "SELECTOR",
@@ -86,7 +86,7 @@
   },
   {
     "imageName": "character6",
-    "startingPrice": 3,
+    "price": 3,
     "description": "If somebody tries to Conquer an island, ignore the towers for this turn!",
     "type": {
       "name": "CONTROL",
@@ -103,7 +103,7 @@
   },
   {
     "imageName": "character7",
-    "startingPrice": 1,
+    "price": 1,
     "description": "Swap 3 of the students on this card with 3 from your Entrance!",
     "type": {
       "name": "STUDENT",
@@ -120,7 +120,7 @@
   },
   {
     "imageName": "character8",
-    "startingPrice": 2,
+    "price": 2,
     "description": "Add 2 to your Influence this turn!",
     "type": {
       "name": "CONTROL",
@@ -137,7 +137,7 @@
   },
   {
     "imageName": "character9",
-    "startingPrice": 3,
+    "price": 3,
     "description": "Choose a student color to ignore when calculating Influence this turn!",
     "type": {
       "name": "SELECTOR",
@@ -154,10 +154,10 @@
   },
   {
     "imageName": "character10",
-    "startingPrice": 1,
+    "price": 1,
     "description": "Switch up to two students between your Entrance and your Dining Room!",
     "type": {
-      "name": "SELECTOR",
+      "name": "STUDENT",
       "value": 0
     },
     "ability": {
@@ -171,7 +171,7 @@
   },
   {
     "imageName": "character11",
-    "startingPrice": 2,
+    "price": 2,
     "description": "Take one student from this card and put them in the dining room, then draw another from the bag and replace them!",
     "type": {
       "name": "STUDENT",
@@ -188,7 +188,7 @@
   },
   {
     "imageName": "character12",
-    "startingPrice": 3,
+    "price": 3,
     "description": "Choose a color: EVERYONE must return 3 students of that color to the bag!",
     "type": {
       "name": "SELECTOR",

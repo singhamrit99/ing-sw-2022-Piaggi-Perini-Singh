@@ -1,10 +1,10 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
+import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
 import it.polimi.ingsw.model.exceptions.ProfessorNotFoundException;
 
@@ -18,7 +18,8 @@ public class Player implements Comparable<Player> {
     private SchoolBoard schoolBoard;
     private final Towers towerColor;
     private AssistantCardDeck assistantCardDeck;
-    private AssistantCard playedCard;
+    private AssistantCard playedAssistantCard;
+    private CharacterCard playedCharacterCard;
     private int coins;
 
     public Player(String nickname, Towers towerColors, int numberOfPlayers) {
@@ -31,12 +32,16 @@ public class Player implements Comparable<Player> {
     }
 
     public void playAssistantCard(int index) {
-        playedCard = assistantCardDeck.get(index);
+        playedAssistantCard = assistantCardDeck.get(index);
         assistantCardDeck.get(index).setHasPlayed(true);
     }
 
+    public void playCharacterCard(CharacterCard card) {
+        playedCharacterCard = card;
+    }
+
     public boolean moveMotherNature(int distance) {
-        return distance <= playedCard.getValue();
+        return distance <= playedAssistantCard.getMove();
     }
 
     public void addStudents(EnumMap<Colors, Integer> students) throws NegativeValueException {
@@ -67,7 +72,7 @@ public class Player implements Comparable<Player> {
 
     @Override
     public int compareTo(Player otherPlayer) {
-        return Integer.compare(otherPlayer.getPlayedCard().getValue(), playedCard.getValue());
+        return Integer.compare(otherPlayer.getPlayedAssistantCard().getMove(), playedAssistantCard.getMove());
     }
 
     public SchoolBoard getSchoolBoard() {
@@ -78,8 +83,8 @@ public class Player implements Comparable<Player> {
         return towerColor;
     }
 
-    public AssistantCard getPlayedCard() {
-        return playedCard;
+    public AssistantCard getPlayedAssistantCard() {
+        return playedAssistantCard;
     }
 
     public AssistantCardDeck getAssistantCardDeck() {
@@ -116,5 +121,13 @@ public class Player implements Comparable<Player> {
 
     public int getCoins() {
         return coins;
+    }
+
+    public CharacterCard getPlayedCharacterCard() {
+        return playedCharacterCard;
+    }
+
+    public void setPlayedCharacterCard(CharacterCard characterCard) {
+        playedCharacterCard = characterCard;
     }
 }

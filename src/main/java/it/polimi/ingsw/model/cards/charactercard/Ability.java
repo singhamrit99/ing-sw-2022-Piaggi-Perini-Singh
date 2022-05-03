@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
+/**
+ * @author Amrit
+ */
 public class Ability {
     private Actions action;
     private int value;
@@ -24,8 +27,9 @@ public class Ability {
         RETURN_STUDENT
     }
 
-    public String getAction() {
-        return action.toString();
+
+    public Actions getAction() {
+        return action;
     }
 
     public int getValue() {

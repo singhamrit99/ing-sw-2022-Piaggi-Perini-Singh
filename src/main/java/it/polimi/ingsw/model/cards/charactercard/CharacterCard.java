@@ -2,25 +2,31 @@ package it.polimi.ingsw.model.cards.charactercard;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.cards.Card;
+import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.model.exceptions.NegativeValueException;
+import it.polimi.ingsw.model.exceptions.ProfessorNotFoundException;
+
+import java.util.EnumMap;
 
 public class CharacterCard extends Card {
-    private final int startingPrice;
+    private int status;
     private int price;
     private String description;
     private Type type;
     private Ability ability;
     private Requirements requirements;
 
-    public CharacterCard(int startingPrice, String description) {
-        this("", startingPrice, description);
+    public CharacterCard(int price, String description) {
+        this("", price, description);
     }
 
-    public CharacterCard(String imageName, int startingPrice, String description) {
+    public CharacterCard(String imageName, int price, String description) {
         super(imageName);
-        this.startingPrice = startingPrice;
+        this.price = price;
         this.description = description;
 
-        this.price = startingPrice;
+        status = 0;
     }
 
     public CharacterCard(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) {
@@ -35,16 +41,8 @@ public class CharacterCard extends Card {
         return super.getImageName();
     }
 
-    public int getStartingPrice() {
-        return startingPrice;
-    }
-
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public String getDescription() {
@@ -63,6 +61,28 @@ public class CharacterCard extends Card {
         return requirements;
     }
 
-    public void activate(Game game) {
+    public void activate(Game game) throws ProfessorNotFoundException, NegativeValueException, IncorrectArgumentException {
+        status = 1;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setChoiceIndex(int choiceIndex) {
+    }
+
+    public void increasePrice() {
+        price++;
+    }
+
+    public void setEnums(EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) {
+    }
+
+    public void setChoices(int student, int island) {
     }
 }

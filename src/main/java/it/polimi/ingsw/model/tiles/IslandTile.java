@@ -75,4 +75,7 @@ public class IslandTile {
         this.students = students;
     }
 
+    public void setHasNoEntryTile(boolean bool) {
+        hasNoEntryTile = bool;
+    }
 }

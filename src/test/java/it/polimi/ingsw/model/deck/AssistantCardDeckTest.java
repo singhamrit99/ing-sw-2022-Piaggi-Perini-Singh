@@ -21,7 +21,6 @@ class AssistantCardDeckTest {
     void getLeaderCards() {
         // Testing each card in deck
         for (AssistantCard assistantCard : ASSISTANT_CARD_DECK.getAllCards()) {
-            assertTrue(assistantCard.getValue() > 0);
             assertTrue(assistantCard.getMove() > 0);
         }
     }
