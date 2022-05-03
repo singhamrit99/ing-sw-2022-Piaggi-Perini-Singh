@@ -115,11 +115,9 @@ public class Controller {
         } catch (IncorrectArgumentException e) {
             manageException(e);
         }
-
     }
 
     public void callPlayCharacterCard(int index, int student, int island) {
-
         try {
             game.activateCharacterCard(index, student, island);
         } catch (NotEnoughCoinsException e) {
@@ -131,7 +129,6 @@ public class Controller {
         } catch (IncorrectArgumentException e) {
             manageException(e);
         }
-
     }
 
     public void callPlayCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) {
@@ -146,7 +143,6 @@ public class Controller {
         } catch (IncorrectArgumentException e) {
             manageException(e);
         }
-
     }
 
     public void callPlayCharacterCard(int index, int choice) {
