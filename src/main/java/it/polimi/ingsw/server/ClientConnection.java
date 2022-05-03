@@ -1,5 +1,8 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.client.ViewCLI;
+import it.polimi.ingsw.client.ViewGUI;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -16,11 +19,13 @@ public class ClientConnection implements Runnable {
     private Scanner in;
     private String clientRoom = null;
     private String nickname;
+    private int mode;
 
     public ClientConnection(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
     }
+
 
     public String getNickname() {
         return nickname;
@@ -39,9 +44,19 @@ public class ClientConnection implements Runnable {
                 nickname = in.nextLine();
             }
             server.registerUser(this, nickname);
+            sendString("Would you like to play in CLI(1) or GUI (2)?\n");
+            mode = in.nextInt();
+            while (mode<1 || mode> 2) {
+                sendString("Whoops, that's not right! Try again: 1 to play in CLI or 2 to play in the GUI!\n");
+                mode = in.nextInt();
+            }
+            if (mode == 2)
+                sendString("Your preference has been set to GUI. You can change it at any time with the command MODE\n");
+            else
+                sendString("Your preference has been set to CLI. You can change it at any time with the command MODE\n");
 
             sendString("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n LOBBIES to list existing lobbies;" +
-                    "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information; CHANGE to toggle expert mode for the current lobby.");
+                    "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby.\n MODE to change between CLI and GUI interface before the game starts.\n");
 
             String command;
             while (true) {
@@ -65,6 +80,8 @@ public class ClientConnection implements Runnable {
                     case "change":
                         setExpertMode();
                         break;
+                    case "mode":
+                        changeMode();
                     default:
                         sendString("Command not recognized");
                         break;
@@ -74,6 +91,20 @@ public class ClientConnection implements Runnable {
             System.err.println("Error from client, " + e.getMessage());
             closeConnection();
         }
+    }
+
+    private void changeMode() {
+        sendString("Would you like to play in CLI(1) or GUI (2)?\n");
+        mode = in.nextInt();
+        while (mode < 1 || mode > 2) {
+            sendString("Whoops, that's not right! Try again: 1 to play in CLI or 2 to play in the GUI!\n");
+            mode = in.nextInt();
+        }
+        if (mode == 2)
+            sendString("Your preference has been set to GUI. You can change it at any time with the command MODE\n");
+        else 
+            sendString("Your preference has been set to CLI. You can change it at any time with the command MODE\n");
+
     }
 
     private void getRooms() {
@@ -102,7 +133,7 @@ public class ClientConnection implements Runnable {
 
     public void setExpertMode() {
         if (clientRoom != null) {
-            if (server.isLeader(this,clientRoom)) {
+            if (server.isLeader(this, clientRoom)) {
                 boolean result = false;
                 sendString("Do you want to play in expert mode? Y/N");
                 String answer;
@@ -161,6 +192,16 @@ public class ClientConnection implements Runnable {
                 sendString("Players in this room:");
                 ArrayList<String> nicknamesInRoom = server.getNicknamesInRoom(clientRoom);
             }
+        }
+    }
+
+    public void startView() {
+        if (mode == 1) {
+            ViewCLI view = new ViewCLI();
+            view.standardBehaviour();
+        } else if (mode == 2) {
+            ViewGUI view = new ViewGUI();
+            view.standardBehaviour();
         }
     }
 

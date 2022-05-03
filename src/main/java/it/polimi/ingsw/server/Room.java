@@ -45,5 +45,9 @@ public class Room {
                 nicknames.add(cl.getNickname());
         }
         Game game = new Game(expertMode, players.size(), nicknames);
+        for(ClientConnection c: players)
+        {
+            c.startView();
+        }
     }
 }

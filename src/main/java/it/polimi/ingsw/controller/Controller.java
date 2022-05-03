@@ -37,7 +37,7 @@ public class Controller {
 
     public void callMoveMotherNature() {
         try {
-            game.moveMotherNature(game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getPlayedCard().getMove());
+            game.moveMotherNature(game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getPlayedAssistantCard().getMove());
         } catch (IncorrectStateException e) {
             manageException(e);
         } catch (MotherNatureLostException e) {
@@ -111,21 +111,14 @@ public class Controller {
 
         try{
             String nickname= game.getCurrentPlayer().getNickname();
-           game.playCharacterCard(nickname)
+
         }
-        catch(
+        catch()
+        {
+
+        }
     }*/
 
-    public void checkPlayerBoard(Player player)
-    {
-
-    }
-    public void checkIslands(){
-
-    }
-    public void checkClouds(){
-
-    }
     public void manageException(IncorrectArgumentException e) {
         ControllerExceptions error = ControllerExceptions.INCORRECT_ARGUMENT_EXCEPTION;
         //game.error(error);
