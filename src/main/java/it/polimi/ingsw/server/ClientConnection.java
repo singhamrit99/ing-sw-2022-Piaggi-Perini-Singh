@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.client.ViewCLI;
 import it.polimi.ingsw.client.ViewGUI;
+import it.polimi.ingsw.controller.Controller;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -102,7 +103,7 @@ public class ClientConnection implements Runnable {
         }
         if (mode == 2)
             sendString("Your preference has been set to GUI. You can change it at any time with the command MODE\n");
-        else 
+        else
             sendString("Your preference has been set to CLI. You can change it at any time with the command MODE\n");
 
     }
@@ -195,13 +196,13 @@ public class ClientConnection implements Runnable {
         }
     }
 
-    public void startView() {
+    public void startView(Controller controller) {
         if (mode == 1) {
-            ViewCLI view = new ViewCLI();
+            ViewCLI view = new ViewCLI(controller);
             view.standardBehaviour();
         } else if (mode == 2) {
             ViewGUI view = new ViewGUI();
-            view.standardBehaviour();
+            view.standardBehaviour(controller);
         }
     }
 

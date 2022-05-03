@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.cards.charactercard.CharacterCardFactory;
 import it.polimi.ingsw.model.deck.FileJSONPath;
 import it.polimi.ingsw.model.deck.characterdeck.CharacterCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.enumerations.ControllerExceptions;
+import it.polimi.ingsw.model.exceptions.ControllerExceptions;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.*;

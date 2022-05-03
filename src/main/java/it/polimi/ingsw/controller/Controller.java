@@ -3,7 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.enumerations.ControllerExceptions;
+import it.polimi.ingsw.model.exceptions.ControllerExceptions;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.tiles.CloudTile;
 

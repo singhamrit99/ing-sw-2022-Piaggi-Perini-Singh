@@ -1,8 +1,13 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.model.stripped.StrippedModel;
+
 public class ViewGUI {
 
-    public void standardBehaviour()
+    StrippedModel myModel= new StrippedModel();
+    Controller controller;
+    public void standardBehaviour(Controller controller)
     {
 
     }

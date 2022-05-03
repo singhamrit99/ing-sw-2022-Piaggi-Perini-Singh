@@ -1,4 +1,5 @@
 package it.polimi.ingsw.server;
+import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
@@ -44,10 +45,11 @@ public class Room {
         for (ClientConnection cl : players) {
                 nicknames.add(cl.getNickname());
         }
-        Game game = new Game(expertMode, players.size(), nicknames);
+        Controller controller= new Controller();
+        controller.initializeGame(expertMode, players.size(), nicknames);
         for(ClientConnection c: players)
         {
-            c.startView();
+            c.startView(controller);
         }
     }
 }
