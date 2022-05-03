@@ -1,11 +1,13 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller.commands;
 
-public class PickCloudCommand implements Commands {
+import it.polimi.ingsw.controller.Controller;
+
+public class PickCloud implements Command {
 
     Controller controller;
     int cloudTileID;
 
-    public PickCloudCommand(Controller controller, int cloudTileID) {
+    public PickCloud(Controller controller, int cloudTileID) {
         this.controller = controller;
         this.cloudTileID=cloudTileID;
     }
