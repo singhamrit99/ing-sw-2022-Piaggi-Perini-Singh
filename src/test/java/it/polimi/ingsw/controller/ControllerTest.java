@@ -42,7 +42,7 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game= controller.initializeGame(true, 4, nicknames);
+        Game game = controller.initializeGame(true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
@@ -64,8 +64,8 @@ class ControllerTest {
         }
         game.moveStudents(game.getCurrentPlayer().getNickname(), movingStudents);
         int oldPosMotherNature = game.getMotherNaturePosition();
-        Random casual= new Random();
-        int randomMovement= casual.nextInt(game.getCurrentPlayer().getPlayedAssistantCard().getMove())+1;
+        Random casual = new Random();
+        int randomMovement = casual.nextInt(game.getCurrentPlayer().getPlayedAssistantCard().getMove()) + 1;
         controller.callMoveMotherNature(randomMovement);
         assertNotEquals(game.getMotherNaturePosition(), oldPosMotherNature);
     }
@@ -78,7 +78,7 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game = controller.initializeGame(true,4,nicknames);
+        Game game = controller.initializeGame(true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
@@ -112,7 +112,7 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game= controller.initializeGame(true, 4, nicknames);
+        Game game = controller.initializeGame(true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
@@ -149,12 +149,10 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game= controller.initializeGame(true, 4, nicknames);
+        Game game = controller.initializeGame(true, 4, nicknames);
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldplayer = game.getCurrentPlayer().getNickname();
         controller.callPlayAssistantCard(3);
         assertNotEquals(oldplayer, game.getCurrentPlayer().getNickname());
-
-
     }
 }
