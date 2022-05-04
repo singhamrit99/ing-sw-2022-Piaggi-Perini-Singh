@@ -3,14 +3,11 @@ package it.polimi.ingsw.controller.commands;
 import it.polimi.ingsw.controller.Controller;
 
 public class PickCloud implements Command {
-
-    Controller controller;
     int cloudTileID;
 
-    public PickCloud(Controller controller, int cloudTileID) {
-        this.controller = controller;
+    public PickCloud(int cloudTileID) {
         this.cloudTileID=cloudTileID;
     }
     @Override
-    public void execute() {controller.callPickCloud(cloudTileID);}
+    public void execute(Controller controller) {controller.callPickCloud(cloudTileID);}
 }

@@ -4,18 +4,16 @@ import it.polimi.ingsw.controller.Controller;
 
 public class PlayCharacterCardD implements Command {
 
-    Controller controller;
     int characterCardID;
     int choice;
 
-    public PlayCharacterCardD(Controller controller, int characterCardID,int choice) {
-        this.controller = controller;
+    public PlayCharacterCardD(int characterCardID,int choice) {
         this.characterCardID = characterCardID;
         this.choice = choice;
     }
 
     @Override
-    public void execute() {
+    public void execute(Controller controller) {
         controller.callPlayCharacterCard(characterCardID, choice);
     }
 }

@@ -28,9 +28,9 @@ public class Controller {
         return game;
     }
 
-    public void callMoveMotherNature() {
+    public void callMoveMotherNature(int distance) {
         try {
-            game.moveMotherNature(game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getPlayedAssistantCard().getMove());
+            game.moveMotherNature(game.getCurrentPlayer().getNickname(), distance);
         } catch (IncorrectStateException e) {
             manageException(e);
         } catch (MotherNatureLostException e) {

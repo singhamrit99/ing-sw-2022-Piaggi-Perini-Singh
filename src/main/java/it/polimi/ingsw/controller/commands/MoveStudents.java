@@ -6,13 +6,11 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 
 public class MoveStudents implements Command {
-    Controller controller;
     EnumMap<Colors, ArrayList<String>> students;
 
-    public MoveStudents(Controller controller, EnumMap<Colors, ArrayList<String>> students) {
-        this.controller = controller;
+    public MoveStudents(EnumMap<Colors, ArrayList<String>> students) {
         this.students = students;
     }
     @Override
-    public void execute() {controller.callMoveStudent(students);}
+    public void execute(Controller controller) {controller.callMoveStudent(students);}
 }
