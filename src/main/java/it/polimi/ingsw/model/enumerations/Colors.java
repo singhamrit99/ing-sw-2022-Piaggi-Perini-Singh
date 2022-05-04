@@ -14,7 +14,6 @@ public enum Colors implements Serializable {
     RED(3),
     PINK(4);
 
-
     private final int index;
 
     Colors(int index) {
