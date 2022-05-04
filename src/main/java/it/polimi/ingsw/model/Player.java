@@ -36,14 +36,6 @@ public class Player implements Comparable<Player> {
         assistantCardDeck.get(index).setHasPlayed(true);
     }
 
-    public void playCharacterCard(CharacterCard card) {
-        playedCharacterCard = card;
-    }
-
-    public boolean moveMotherNature(int distance) {
-        return distance <= playedAssistantCard.getMove();
-    }
-
     public void addStudents(EnumMap<Colors, Integer> students) throws NegativeValueException {
         schoolBoard.addStudents(students);
     }
