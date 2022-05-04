@@ -7,7 +7,7 @@ import java.util.Map;
 
 public final class StudentManager {
     public static EnumMap<Colors, Integer> addStudent(EnumMap<Colors, Integer> students, EnumMap<Colors, Integer> studentsToAdd) {
-        for (Map.Entry<Colors, Integer> set : studentsToAdd.entrySet()) {
+        for(Map.Entry<Colors, Integer> set : studentsToAdd.entrySet()) {
             if (set.getValue() >= 0) {
                 if (students.containsKey(set.getKey())) {
                     students.put(set.getKey(), set.getValue() + students.get(set.getKey()));
