@@ -63,7 +63,7 @@ class ControllerTest {
         }
         game.moveStudents(game.getCurrentPlayer().getNickname(), movingStudents);
         int oldPosMotherNature = game.getMotherNaturePosition();
-        controller.callMoveMotherNature();
+        //controller.callMoveMotherNature(); TODO
         assertNotEquals(game.getMotherNaturePosition(), oldPosMotherNature);
     }
 
@@ -130,7 +130,7 @@ class ControllerTest {
             }
         }
         controller.callMoveStudent(movingStudents);
-        controller.callMoveMotherNature();
+        //controller.callMoveMotherNature(); TODO
         controller.callPickCloud(0);
         EnumMap<Colors, Integer> studentsoncloud = game.getCloudTile(0).getStudents();
         for (Colors color : Colors.values()) {
