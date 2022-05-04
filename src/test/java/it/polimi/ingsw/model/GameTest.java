@@ -203,7 +203,6 @@ class GameTest {
         }
     }
 
-
     @Test
     void testNextRound() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, MotherNatureLostException, NegativeValueException, ProfessorNotFoundException {
         Game g = planningPhaseComplete();
