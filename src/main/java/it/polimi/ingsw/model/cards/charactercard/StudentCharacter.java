@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.StudentManager;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
+import it.polimi.ingsw.model.exceptions.ProfessorNotFoundException;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class StudentCharacter extends CharacterCard {
     }
 
     @Override
-    public void activate(Game game) throws NegativeValueException, IncorrectArgumentException {
+    public void activate(Game game) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException {
         Ability.Actions action = this.getAbility().getAction();
         switch (action) {
             case ADD_ISLAND:
@@ -124,6 +125,7 @@ public class StudentCharacter extends CharacterCard {
 
                 if (hasEnoughStudents(studentsToAddDining)) {
                     game.getCurrentPlayer().getSchoolBoard().addStudentsDining(studentsToAddDining);
+                    game.checkAndPlaceProfessor();
                     removeStudents(studentsToAddDining);
                     addStudents(bag.drawStudents(getAbility().getValue()));
                     setStatus(2);
