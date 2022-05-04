@@ -16,8 +16,9 @@ public class PlayCharacterCardC implements Command {
         this.students1 = students1;
         this.students2 = students2;
     }
+
     @Override
     public void execute(Controller controller) {
-        controller.callPlayCharacterCard(characterCardID, students1,  students2);
+        controller.callPlayCharacterCard(characterCardID, students1, students2);
     }
 }

@@ -6,8 +6,11 @@ public class PickCloud implements Command {
     int cloudTileID;
 
     public PickCloud(int cloudTileID) {
-        this.cloudTileID=cloudTileID;
+        this.cloudTileID = cloudTileID;
     }
+
     @Override
-    public void execute(Controller controller) {controller.callPickCloud(cloudTileID);}
+    public void execute(Controller controller) {
+        controller.callPickCloud(cloudTileID);
+    }
 }

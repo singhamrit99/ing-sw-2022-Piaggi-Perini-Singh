@@ -15,6 +15,6 @@ public class PlayCharacterCardB implements Command {
 
     @Override
     public void execute(Controller controller) {
-        controller.callPlayCharacterCard(characterCardID, student,  island);
+        controller.callPlayCharacterCard(characterCardID, student, island);
     }
 }
