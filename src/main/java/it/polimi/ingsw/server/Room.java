@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.commands.Command;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
@@ -10,10 +11,13 @@ public class Room {
     private final String roomName;
     private final ArrayList<ClientConnection> players;
     private boolean expertMode;
+    final private Controller controller;
 
     public Room(String roomName, ArrayList<ClientConnection> playerList) {
         this.roomName = roomName;
         this.players = playerList;
+        expertMode = false;
+        controller= new Controller();
     }
 
     public void setExpertmode(boolean expertmode) {
@@ -45,11 +49,14 @@ public class Room {
         for (ClientConnection cl : players) {
                 nicknames.add(cl.getNickname());
         }
-        Controller controller= new Controller();
         controller.initializeGame(expertMode, players.size(), nicknames);
         for(ClientConnection c: players)
         {
             c.startView(controller);
         }
+    }
+
+    public void commandInvoker(Command command){
+        command.execute(controller);
     }
 }
