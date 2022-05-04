@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,7 +64,9 @@ class ControllerTest {
         }
         game.moveStudents(game.getCurrentPlayer().getNickname(), movingStudents);
         int oldPosMotherNature = game.getMotherNaturePosition();
-        //controller.callMoveMotherNature(); TODO
+        Random casual= new Random();
+        int randomMovement= casual.nextInt(game.getCurrentPlayer().getPlayedAssistantCard().getMove())+1;
+        controller.callMoveMotherNature(randomMovement);
         assertNotEquals(game.getMotherNaturePosition(), oldPosMotherNature);
     }
 
@@ -130,7 +133,7 @@ class ControllerTest {
             }
         }
         controller.callMoveStudent(movingStudents);
-        //controller.callMoveMotherNature(); TODO
+        controller.callMoveMotherNature(1);
         controller.callPickCloud(0);
         EnumMap<Colors, Integer> studentsoncloud = game.getCloudTile(0).getStudents();
         for (Colors color : Colors.values()) {
