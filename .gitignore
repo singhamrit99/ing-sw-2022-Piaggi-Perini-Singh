@@ -5,6 +5,7 @@
 !resources/ 
 !src/
 !javadoc/
+!deliverables
 .idea/
 project.iml 
 target/
