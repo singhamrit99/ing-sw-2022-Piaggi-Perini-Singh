@@ -5,15 +5,15 @@ import it.polimi.ingsw.controller.Controller;
 public class PlayCharacterCardA implements Command {
 
     Controller controller;
-    int assistantCardID;
+    int characterCardID;
 
-    public PlayCharacterCardA(Controller controller, int assistantCardID) {
+    public PlayCharacterCardA(Controller controller, int ID) {
         this.controller = controller;
-        this.assistantCardID = assistantCardID;
+        this.characterCardID = ID;
     }
 
     @Override
     public void execute() {
-        controller.callPlayAssistantCard(assistantCardID); //TODO
+        controller.callPlayCharacterCard(characterCardID) ;
     }
 }

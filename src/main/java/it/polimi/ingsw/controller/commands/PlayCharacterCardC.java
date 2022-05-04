@@ -1,19 +1,25 @@
 package it.polimi.ingsw.controller.commands;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.model.enumerations.Colors;
+
+import java.util.EnumMap;
 
 public class PlayCharacterCardC implements Command {
-
     Controller controller;
-    int assistantCardID;
+    int characterCardID;
+    EnumMap<Colors, Integer> students1;
+    EnumMap<Colors, Integer> students2;
 
-    public PlayCharacterCardC(Controller controller, int assistantCardID) {
+    public PlayCharacterCardC(Controller controller, int characterCardID,
+                              EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) {
         this.controller = controller;
-        this.assistantCardID = assistantCardID;
+        this.characterCardID = characterCardID;
+        this.students1 = students1;
+        this.students2 = students2;
     }
-
     @Override
     public void execute() {
-        controller.callPlayAssistantCard(assistantCardID); //TODO
+        controller.callPlayCharacterCard(characterCardID, students1,  students2);
     }
 }

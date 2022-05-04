@@ -3,6 +3,8 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.client.ViewCLI;
 import it.polimi.ingsw.client.ViewGUI;
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.commands.Command;
+import it.polimi.ingsw.server.commands.ServerCommand;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -26,7 +28,6 @@ public class ClientConnection implements Runnable {
         this.socket = socket;
         this.server = server;
     }
-
 
     public String getNickname() {
         return nickname;
@@ -92,6 +93,14 @@ public class ClientConnection implements Runnable {
             System.err.println("Error from client, " + e.getMessage());
             closeConnection();
         }
+    }
+
+    public void commandToClient(ServerCommand command){
+        //TODO
+    }
+
+    public void commandToServer(Command command){
+        //TODO
     }
 
     private void changeMode() {
