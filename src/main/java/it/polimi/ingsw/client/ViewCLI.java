@@ -1,11 +1,9 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.model.stripped.StrippedModel;
 
 
 public class ViewCLI {
-    StrippedModel myModel= new StrippedModel();
     Controller controller;
 
     public ViewCLI(Controller controller) {

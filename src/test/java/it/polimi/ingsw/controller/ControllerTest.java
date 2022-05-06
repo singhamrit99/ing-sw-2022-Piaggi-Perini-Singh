@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.*;
-import it.polimi.ingsw.model.tiles.CloudTile;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

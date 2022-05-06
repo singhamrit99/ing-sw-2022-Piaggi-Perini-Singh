@@ -1,9 +1,7 @@
 package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.tiles.CloudTile;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 
 public class StrippedClouds {

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model.stripped;
 
-import it.polimi.ingsw.model.SchoolBoard;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.tiles.IslandTile;
 
 import java.util.ArrayList;
 import java.util.EnumMap;

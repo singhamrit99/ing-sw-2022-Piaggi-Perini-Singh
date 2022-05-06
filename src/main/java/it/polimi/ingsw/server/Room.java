@@ -1,17 +1,18 @@
 package it.polimi.ingsw.server;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.commands.Command;
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
-
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
-public class Room {
+public class Room implements PropertyChangeListener {
     private final String roomName;
     private final ArrayList<ClientConnection> players;
     private boolean expertMode;
     final private Controller controller;
+
 
     public Room(String roomName, ArrayList<ClientConnection> playerList) {
         this.roomName = roomName;
@@ -55,8 +56,20 @@ public class Room {
             c.startView(controller);
         }
     }
-
     public void commandInvoker(Command command){
         command.execute(controller);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt){
+        switch ((String)evt.getSource()){
+            case "boards": break;
+            case "characters": break;
+            case "clouds": break;
+            case "islands":
+                String islandName = evt.getPropertyName();
+                break;
+            case "players": break;
+        }
     }
 }
