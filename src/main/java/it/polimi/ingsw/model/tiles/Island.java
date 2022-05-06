@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.exceptions.NegativeValueException;
 
 import java.util.EnumMap;
 
-public class IslandTile {
+public class Island {
     private String name;
     private EnumMap<Colors, Integer> students;
     private int numberOfTowers;
@@ -15,7 +15,7 @@ public class IslandTile {
     private boolean hasMotherNature;
     private boolean hasNoEntryTile;
 
-    public IslandTile(String islandName) {
+    public Island(String islandName) {
         name = islandName;
         hasMotherNature = false;
         towersColor = Towers.WHITE; //this value is ignored if numberOfTowers=0

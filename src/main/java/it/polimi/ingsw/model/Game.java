@@ -12,8 +12,8 @@ import it.polimi.ingsw.model.exceptions.ControllerExceptions;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.*;
-import it.polimi.ingsw.model.tiles.CloudTile;
-import it.polimi.ingsw.model.tiles.IslandTile;
+import it.polimi.ingsw.model.tiles.Cloud;
+import it.polimi.ingsw.model.tiles.Island;
 
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -28,8 +28,8 @@ public class Game {
     private int playerPlanPhase;
     private final ArrayList<Player> players;
     private PriorityQueue<Player> orderPlayers;
-    private LinkedList<IslandTile> islands;
-    private CloudTile[] clouds;
+    private LinkedList<Island> islands;
+    private Cloud[] clouds;
     private int motherNaturePosition;
     private int numRounds;
     private int numDrawnStudents;
@@ -181,16 +181,16 @@ public class Game {
         importingTilesJson();
 
         //Initialization clouds
-        clouds = new CloudTile[numOfPlayer];
+        clouds = new Cloud[numOfPlayer];
         for (int i = 0; i < numOfPlayer; i++) {
-            CloudTile cloud = new CloudTile(importingClouds.get(i)); //LORE:
+            Cloud cloud = new Cloud(importingClouds.get(i)); //LORE:
             clouds[i] = cloud;
         }
 
         // initialization islands;
         islands = new LinkedList<>();
         for (int i = 0; i < 12; i++) {
-            IslandTile island = new IslandTile(importingIslands.get(i));
+            Island island = new Island(importingIslands.get(i));
             islands.add(island);
         }
 
@@ -212,8 +212,8 @@ public class Game {
             oppositeMotherNaturePos = motherNaturePosition - islands.size() / 2 + 1;
         else oppositeMotherNaturePos = motherNaturePosition + islands.size() / 2 - 1;
         // placing students except MotherNature's Island and the opposite one
-        IslandTile islandOppositeMN = islands.get(oppositeMotherNaturePos);
-        for (IslandTile island : islands) {
+        Island islandOppositeMN = islands.get(oppositeMotherNaturePos);
+        for (Island island : islands) {
             if (!island.hasMotherNature() && !(island.getName().equals(islandOppositeMN.getName()))) {
                 island.addStudents(bag.drawStudents(1));
             }
@@ -240,7 +240,7 @@ public class Game {
 
         //Loading IslandTiles Json file
         try {
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(IslandTile.class.getResourceAsStream(FileJSONPath.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(Island.class.getResourceAsStream(FileJSONPath.ISLAND_TILES_LOCATION)), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
             JSONContent = s.hasNext() ? s.next() : "";
         } catch (Exception FileNotFound) {
@@ -251,7 +251,7 @@ public class Game {
 
         // initialization clouds;
         try { //Loading CloudTiles JSON file
-            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(CloudTile.class.getResourceAsStream(FileJSONPath.CLOUD_TILES_LOCATION)), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(Cloud.class.getResourceAsStream(FileJSONPath.CLOUD_TILES_LOCATION)), StandardCharsets.UTF_8);
             Scanner s = new Scanner(streamReader).useDelimiter("\\A");
             JSONContent = s.hasNext() ? s.next() : "";
         } catch (Exception FileNotFound) {
@@ -271,7 +271,7 @@ public class Game {
     public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         if (state == State.PLANNINGPHASE && !playerDrawnOut) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
-                for (CloudTile cloud : clouds) {
+                for (Cloud cloud : clouds) {
                     cloud.addStudents(bag.drawStudents(numDrawnStudents));
                 }
                 playerDrawnOut = true;
@@ -505,7 +505,7 @@ public class Game {
      * than another assign the ownership and a new tower only if the island hasn't any owner or has an owner
      * different from the new team. It works with 2 players, 3 players and 4 players.
      */
-    private void checkAndPlaceTower(IslandTile island) {
+    private void checkAndPlaceTower(Island island) {
         HashMap<Towers, Integer> influenceScores = new HashMap<>();
         influenceScores.put(Towers.BLACK, 0);
         influenceScores.put(Towers.WHITE, 0);
@@ -625,9 +625,9 @@ public class Game {
 
     public void checkUnificationIslands() throws NegativeValueException {
         boolean listChanged = false;
-        ListIterator<IslandTile> it = islands.listIterator();
-        IslandTile currentTile;
-        IslandTile nextTile;
+        ListIterator<Island> it = islands.listIterator();
+        Island currentTile;
+        Island nextTile;
         while (it.hasNext()) {
             currentTile = it.next();
             if (it.hasNext()) nextTile = it.next();
@@ -707,7 +707,7 @@ public class Game {
         return playerDrawnOut;
     }
 
-    public CloudTile getCloudTile(int index) {
+    public Cloud getCloudTile(int index) {
         return clouds[index];
     }
 
@@ -730,7 +730,7 @@ public class Game {
         //TODO GUARDARE ANCHE QUESTO E SISTEMARE
     }
 
-    public IslandTile getIsland(int index) {
+    public Island getIsland(int index) {
         return islands.get(index);
     }
 

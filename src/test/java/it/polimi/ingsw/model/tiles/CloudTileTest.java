@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.tiles;
 
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +17,7 @@ class CloudTileTest {
             students.put(color, i);
             i++;
         }
-        CloudTile tile = new CloudTile("TestCloud");
+        Cloud tile = new Cloud("TestCloud");
         try {
             tile.addStudents(students);
         } catch (NegativeValueException e) {
@@ -32,7 +31,7 @@ class CloudTileTest {
 
     @Test
     void testAddStudents() {
-        CloudTile tile = new CloudTile("TestCloud");
+        Cloud tile = new Cloud("TestCloud");
         EnumMap<Colors, Integer> newStudents = new EnumMap<>(Colors.class);
         int i = 0;
         for (Colors color : Colors.values()) {
@@ -57,13 +56,13 @@ class CloudTileTest {
         for (Colors color : Colors.values()) {
             students.put(color, i);
         }
-        CloudTile tile = new CloudTile("TestCloud");
+        Cloud tile = new Cloud("TestCloud");
         assertThrows(NegativeValueException.class, () -> tile.addStudents(students));
     }
 
     @Test
     public void testGetName() {
-        CloudTile testTile = new CloudTile("NotTheTestName");
+        Cloud testTile = new Cloud("NotTheTestName");
         assertEquals("NotTheTestName", testTile.getName());
     }
 }

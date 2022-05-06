@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.tiles;
 
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
 import org.junit.jupiter.api.Test;
 
@@ -14,13 +13,13 @@ class IslandTileTest {
     @Test
     void testGetName() {
         String test = "Test";
-        IslandTile island = new IslandTile("Test");
+        Island island = new Island("Test");
         assertEquals(test, island.getName());
     }
 
     @Test
     void testGetTowersColor() {
-        IslandTile island = new IslandTile("Test");
+        Island island = new Island("Test");
 
         for (Towers color : Towers.values()) {
             island.setTowersColor(color);
@@ -30,7 +29,7 @@ class IslandTileTest {
 
     @Test
     void testSetTowersColor() {
-        IslandTile island = new IslandTile("Test");
+        Island island = new Island("Test");
 
         for (Towers color : Towers.values()) {
             island.setTowersColor(color);
@@ -46,7 +45,7 @@ class IslandTileTest {
             students.put(color, i);
             i++;
         }
-        IslandTile island = new IslandTile("Test");
+        Island island = new Island("Test");
         try {
             island.addStudents(students);
         } catch (NegativeValueException e) {
@@ -58,7 +57,7 @@ class IslandTileTest {
     @Test
     void testGetNumOfTowers() throws NegativeValueException {
         int towers = 3;
-        IslandTile island = new IslandTile("Test");
+        Island island = new Island("Test");
         island.sumTowers(towers);
         assertEquals(towers, island.getNumOfTowers());
         island.sumTowers(towers);
@@ -74,7 +73,7 @@ class IslandTileTest {
             students.put(color, i);
             i++;
         }
-        IslandTile island = new IslandTile("Test");
+        Island island = new Island("Test");
         try {
             island.addStudents(students);
         } catch (NegativeValueException e) {
@@ -91,13 +90,13 @@ class IslandTileTest {
             students.put(color, i);
 
         }
-        IslandTile tile = new IslandTile("Test");
+        Island tile = new Island("Test");
         assertThrows(NegativeValueException.class, () -> tile.addStudents(students));
     }
 
     @Test
     void testHasMotherNature() {
-        IslandTile island = new IslandTile("Test");
+        Island island = new Island("Test");
         assertFalse(island.hasMotherNature());
         island.moveMotherNature();
         assertTrue(island.hasMotherNature());
@@ -105,7 +104,7 @@ class IslandTileTest {
 
     @Test
     void testMoveMotherNature() {
-        IslandTile island = new IslandTile("Test");
+        Island island = new Island("Test");
         assertFalse(island.hasMotherNature());
         island.moveMotherNature();
         assertTrue(island.hasMotherNature());
@@ -113,7 +112,7 @@ class IslandTileTest {
 
     @Test
     void testRemoveMotherNature() {
-        IslandTile island = new IslandTile("Test");
+        Island island = new Island("Test");
         island.moveMotherNature();
         assertTrue(island.hasMotherNature());
         island.removeMotherNature();

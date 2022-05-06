@@ -7,11 +7,11 @@ import it.polimi.ingsw.model.exceptions.NegativeValueException;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class CloudTile {
+public class Cloud {
     public String name;
     private EnumMap<Colors, Integer> students;
 
-    public CloudTile(String name) {
+    public Cloud(String name) {
         this.name = name;
         students = new EnumMap<>(Colors.class);
         students = StudentManager.createEmptyStudentsEnum();
