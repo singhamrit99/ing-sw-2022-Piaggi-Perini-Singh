@@ -1,9 +1,8 @@
 package it.polimi.ingsw.server;
-import it.polimi.ingsw.client.LocalModel;
+import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.commands.Command;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.SchoolBoard;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
@@ -16,7 +15,6 @@ import it.polimi.ingsw.model.tiles.Island;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -25,7 +23,7 @@ public class Room implements PropertyChangeListener {
     private final ArrayList<ClientConnection> players;
     private boolean expertMode;
     final private Controller controller;
-    private LocalModel localModel;
+    private StrippedModel localModel;
 
     public Room(String roomName, ArrayList<ClientConnection> playerList) {
         this.roomName = roomName;
@@ -87,7 +85,7 @@ public class Room implements PropertyChangeListener {
         StrippedClouds strippedClouds = new StrippedClouds(clouds);
         StrippedIslands strippedIslands = new StrippedIslands(islands);
 
-        localModel = new LocalModel(strippedBoards,strippedCharacters,strippedClouds,strippedIslands);
+        localModel = new StrippedModel(strippedBoards,strippedCharacters,strippedClouds,strippedIslands);
         //broadcast(); //invio con il Command Pattern del LocalModel a tutti i clients , maybe da sostituire con una richiesta .
     }
 

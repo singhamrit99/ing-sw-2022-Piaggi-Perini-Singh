@@ -1,19 +1,18 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.model.stripped.*;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Optional;
 
-public class LocalModel {
+public class StrippedModel {
     ArrayList<StrippedBoard> boards;
     ArrayList<StrippedCharacter> characters;
     StrippedClouds clouds;
     StrippedIslands islands;
 
-    public LocalModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters, StrippedClouds clouds, StrippedIslands islands) {
+    public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters, StrippedClouds clouds, StrippedIslands islands) {
         this.boards = boards;
         this.characters = characters;
         this.clouds = clouds;

@@ -5,8 +5,6 @@ import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.stripped.*;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.Scanner;
 
 
@@ -50,7 +48,7 @@ public class ViewCLI {
     }
 
 
-    public void performAction(LocalModel localModel) {
+    public void performAction(StrippedModel localModel) {
 
     }
 
@@ -58,12 +56,12 @@ public class ViewCLI {
 
     }
 
-    public void displayBoardIdle(LocalModel localModel) {
+    public void displayBoardIdle(StrippedModel localModel) {
 
 
     }
 
-    public void printPlayerBoards(LocalModel localModel) {
+    public void printPlayerBoards(StrippedModel localModel) {
         ArrayList<StrippedBoard> boards = localModel.getBoards();
         System.out.println("Player boards:\n");
         for (StrippedBoard s : boards) {
@@ -85,14 +83,14 @@ public class ViewCLI {
         }
     }
 
-    public void printPlayerNames(LocalModel localModel) {
+    public void printPlayerNames(StrippedModel localModel) {
 
         for (StrippedBoard board : localModel.getBoards()) {
             System.out.println(board.getOwner() + "\n");
         }
     }
 
-    public void printIslands(LocalModel localModel) {
+    public void printIslands(StrippedModel localModel) {
         StrippedIslands islands = localModel.getIslands();
 
         for (StrippedIsland island : islands.getStrippedIslands()) {
