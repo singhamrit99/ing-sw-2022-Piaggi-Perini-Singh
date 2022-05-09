@@ -52,7 +52,7 @@ public class ViewCLI {
     }
 
 
-    public void performAction(StrippedModel strippedModel)
+    public void performAction(LocalModel localModel)
     {
 
     }
@@ -61,15 +61,15 @@ public class ViewCLI {
 
     }
 
-    public void displayBoardIdle(StrippedModel strippedModel)
+    public void displayBoardIdle(LocalModel localModel)
     {
 
 
     }
 
-    public void printPlayerBoards(StrippedModel strippedModel)
+    public void printPlayerBoards(LocalModel localModel)
     {
-       ArrayList<StrippedBoard> boards= strippedModel.getBoards();
+       ArrayList<StrippedBoard> boards= localModel.getBoards();
         System.out.println("Player boards:\n");
         for (StrippedBoard s: boards)
         {
@@ -94,18 +94,18 @@ public class ViewCLI {
         }
     }
 
-    public void printPlayerNames(StrippedModel strippedModel)
+    public void printPlayerNames(LocalModel localModel)
     {
-        ArrayList<StrippedPlayer> players= strippedModel.getPlayers();
+        ArrayList<StrippedPlayer> players= localModel.getPlayers();
         for (StrippedPlayer player: players)
         {
             System.out.println(player.getNickname());
         }
     }
 
-    public void printIslands(StrippedModel strippedModel)
+    public void printIslands(LocalModel localModel)
     {
-        StrippedIslands islands = strippedModel.getIslands();
+        StrippedIslands islands = localModel.getIslands();
 
         for (StrippedIsland island : islands.getStrippedIslands())
         {
