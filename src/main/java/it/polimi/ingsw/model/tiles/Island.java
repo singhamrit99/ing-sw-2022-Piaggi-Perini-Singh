@@ -78,4 +78,8 @@ public class Island {
     public void setHasNoEntryTile(boolean bool) {
         hasNoEntryTile = bool;
     }
+
+    public boolean hasNoEntryTile() {
+        return hasNoEntryTile;
+    }
 }
