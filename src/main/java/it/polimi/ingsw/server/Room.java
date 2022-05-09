@@ -2,11 +2,23 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.client.LocalModel;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.commands.Command;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.SchoolBoard;
+import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
+import it.polimi.ingsw.model.stripped.StrippedBoard;
+import it.polimi.ingsw.model.stripped.StrippedCharacter;
+import it.polimi.ingsw.model.stripped.StrippedClouds;
+import it.polimi.ingsw.model.stripped.StrippedIslands;
+import it.polimi.ingsw.model.tiles.Cloud;
+import it.polimi.ingsw.model.tiles.Island;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Room implements PropertyChangeListener {
     private final String roomName;
@@ -58,23 +70,37 @@ public class Room implements PropertyChangeListener {
         }
     }
 
+    public void buildLocalModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands){
+        ArrayList<StrippedBoard> strippedBoards =new ArrayList<>();
+        ArrayList<StrippedCharacter> strippedCharacters = new ArrayList<>();
+
+        for (Player p: players) {
+           StrippedBoard newStrippedBoard = new StrippedBoard(p);
+           strippedBoards.add(newStrippedBoard);
+        }
+
+        for(CharacterCard c: charactersCard){
+            StrippedCharacter newStrippedCharCard = new StrippedCharacter(c);
+            strippedCharacters.add(newStrippedCharCard);
+        }
+
+        StrippedClouds strippedClouds = new StrippedClouds(clouds);
+        StrippedIslands strippedIslands = new StrippedIslands(islands);
+
+        localModel = new LocalModel(strippedBoards,strippedCharacters,strippedClouds,strippedIslands);
+        //broadcast(); //invio con il Command Pattern del LocalModel a tutti i clients , maybe da sostituire con una richiesta .
+    }
+
     public void commandInvoker(Command command){
         command.execute(controller);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt){
-        switch ((String)evt.getSource()){
-            case "boards": break;
-            case "character": break;
-            case "clouds": break;
-            case "islands":
-                String islandName = evt.getPropertyName();
-                break;
-        }
+        broadcast(evt);
     }
 
-    private void broadcast(Object event){
+    private void broadcast(PropertyChangeEvent event){ //todo we have to use Command Pattern and ServerCommand interface
         for (ClientConnection client: players) {
             client.sendEvent(event);
         }
