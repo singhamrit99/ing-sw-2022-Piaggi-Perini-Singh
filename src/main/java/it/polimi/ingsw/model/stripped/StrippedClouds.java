@@ -1,26 +1,24 @@
 package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.tiles.Cloud;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 
 public class StrippedClouds {
-    public String name;
-    private EnumMap<Colors, Integer> students;
 
-    public String getName() {
-        return name;
+    private ArrayList<StrippedCloud> clouds;
+
+    public StrippedClouds(ArrayList<Cloud> clouds){
+        this.clouds = new ArrayList<>();
+        for (Cloud c:clouds) {
+            StrippedCloud strippedCloud = new StrippedCloud(c.getName(),c.getStudents());
+            this.clouds.add(strippedCloud);
+        }
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public EnumMap<Colors, Integer> getStudents() {
-        return students;
-    }
-
-    public void setStudents(EnumMap<Colors, Integer> students) {
-        this.students = students;
+    public ArrayList<StrippedCloud> getClouds() {
+        return clouds;
     }
 }
