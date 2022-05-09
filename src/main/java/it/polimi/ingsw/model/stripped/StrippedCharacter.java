@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.stripped;
 
-import it.polimi.ingsw.model.cards.charactercard.Ability;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.Requirements;
 import it.polimi.ingsw.model.cards.charactercard.Type;
@@ -8,15 +7,15 @@ import it.polimi.ingsw.model.cards.charactercard.Type;
 public class StrippedCharacter {
 
     private int price;
-    private String description;
-    private Type type;
-    private Requirements requirements;
+    final private String description;
+    final private Type type;
+    final private Requirements requirements;
 
-    public StrippedCharacter(int price, String description, Type type, Requirements requirements) {
-        this.price = price;
-        this.description = description;
-        this.type = type;
-        this.requirements = requirements;
+    public StrippedCharacter(CharacterCard card) {
+        this.price = card.getPrice();
+        this.description = card.getDescription();
+        this.type = card.getType();
+        this.requirements = card.getRequirements();
     }
 
     public int getPrice() {
