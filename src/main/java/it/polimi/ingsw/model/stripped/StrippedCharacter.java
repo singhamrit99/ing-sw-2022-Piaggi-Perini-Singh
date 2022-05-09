@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.Requirements;
 import it.polimi.ingsw.model.cards.charactercard.Type;
 
+import java.util.Objects;
+
 public class StrippedCharacter {
 
     private int price;
@@ -36,6 +38,12 @@ public class StrippedCharacter {
 
     public Requirements getRequirements() {
         return requirements;
+    }
+
+    public boolean sameCard(StrippedCharacter other) {
+        if (this == other) return true;
+        return description.equals(other.description) && type.getName().equals(other.type.getName())
+                && requirements.equals(other.getRequirements());
     }
 
 }
