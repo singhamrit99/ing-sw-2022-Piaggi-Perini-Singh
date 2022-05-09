@@ -8,7 +8,7 @@ import java.util.EnumMap;
 
 public class StrippedClouds {
 
-    private ArrayList<StrippedCloud> clouds;
+    final private ArrayList<StrippedCloud> clouds;
 
     public StrippedClouds(ArrayList<Cloud> clouds){
         this.clouds = new ArrayList<>();
