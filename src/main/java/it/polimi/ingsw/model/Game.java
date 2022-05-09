@@ -29,7 +29,7 @@ public class Game {
     private final ArrayList<Player> players;
     private PriorityQueue<Player> orderPlayers;
     private LinkedList<Island> islands;
-    private Cloud[] clouds;
+    private ArrayList<Cloud> clouds;
     private int motherNaturePosition;
     private int numRounds;
     private int numDrawnStudents;
@@ -181,10 +181,10 @@ public class Game {
         importingTilesJson();
 
         //Initialization clouds
-        clouds = new Cloud[numOfPlayer];
+        clouds = new ArrayList<>();
         for (int i = 0; i < numOfPlayer; i++) {
             Cloud cloud = new Cloud(importingClouds.get(i)); //LORE:
-            clouds[i] = cloud;
+            clouds.add(cloud);
         }
 
         // initialization islands;
@@ -425,7 +425,7 @@ public class Game {
     public void takeStudentsFromCloud(String nicknameCaller, int index) throws IncorrectStateException, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException {
         if (state == State.ACTIONPHASE_3) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
-                currentPlayer.addStudents(clouds[index].drawStudents());
+                currentPlayer.addStudents(clouds.get(index).drawStudents());
                 nextPlayer();
             } else throw new IncorrectPlayerException();
         } else {
@@ -708,7 +708,7 @@ public class Game {
     }
 
     public Cloud getCloudTile(int index) {
-        return clouds[index];
+        return clouds.get(index);
     }
 
     public int getMotherNaturePosition() {
