@@ -54,8 +54,24 @@ public class StrippedModel {
         return characters;
     }
 
-    public void setCharacters(ArrayList<StrippedCharacter> characters) {
-        this.characters = characters;
+    public void changePriceCharacterCard(PropertyChangeEvent evt, String propertyName) {
+        StrippedCharacter changedCard = (StrippedCharacter) evt.getSource();
+        StrippedCharacter cardToUpdate = null;
+        for(StrippedCharacter card: characters){
+            if(card.sameCard(changedCard)){
+                cardToUpdate = card;
+            }
+        }
+
+        if(cardToUpdate!= null){
+            if(cardToUpdate.getPrice()!= (int)evt.getOldValue())
+            cardToUpdate.setPrice((int)evt.getNewValue()); //update
+            else{
+                System.out.println("buttare fuori una exception sensata"); //todo
+            }
+        }else{
+            System.out.println("buttare fuori una exception sensata"); //todo
+        }
     }
 
     public StrippedClouds getClouds() {
