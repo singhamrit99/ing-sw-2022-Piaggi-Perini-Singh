@@ -10,8 +10,14 @@ public class StrippedCharacter {
     private int price;
     private String description;
     private Type type;
-    private Ability ability;
     private Requirements requirements;
+
+    public StrippedCharacter(int price, String description, Type type, Requirements requirements) {
+        this.price = price;
+        this.description = description;
+        this.type = type;
+        this.requirements = requirements;
+    }
 
     public int getPrice() {
         return price;
@@ -25,31 +31,12 @@ public class StrippedCharacter {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Type getType() {
         return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public Ability getAbility() {
-        return ability;
-    }
-
-    public void setAbility(Ability ability) {
-        this.ability = ability;
     }
 
     public Requirements getRequirements() {
         return requirements;
     }
 
-    public void setRequirements(Requirements requirements) {
-        this.requirements = requirements;
-    }
 }
