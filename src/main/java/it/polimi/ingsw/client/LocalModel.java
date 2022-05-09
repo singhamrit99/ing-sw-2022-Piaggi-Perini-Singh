@@ -8,7 +8,6 @@ public class LocalModel {
     ArrayList<StrippedBoard> boards;
     StrippedCharacter character;
     StrippedClouds clouds;
-    ArrayList<StrippedPlayer> players;
     StrippedIslands islands;
 
     public ArrayList<StrippedBoard> getBoards() {
@@ -35,13 +34,6 @@ public class LocalModel {
         this.clouds = clouds;
     }
 
-    public ArrayList<StrippedPlayer> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(ArrayList<StrippedPlayer> players) {
-        this.players = players;
-    }
 
     public StrippedIslands getIslands() {
         return islands;

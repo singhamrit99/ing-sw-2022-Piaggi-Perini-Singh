@@ -1,4 +1,5 @@
 package it.polimi.ingsw.client;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
@@ -11,19 +12,19 @@ public class ClientGUI {
     final private String ip;
     final private int port;
 
-    public ClientGUI(String ip, int port){
+    public ClientGUI(String ip, int port) {
         this.ip = ip;
         this.port = port;
     }
 
-    private Thread readFromSocket(final ObjectInputStream socketIn){
+    private Thread readFromSocket(final ObjectInputStream socketIn) {
         Thread t = new Thread(() -> {
             try {
                 while (true) {
                     Object inputObject = socketIn.readObject();
-                    System.out.println((String)inputObject);
+                    System.out.println((String) inputObject);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Error while reading from socket");
             }
         });
@@ -31,7 +32,7 @@ public class ClientGUI {
         return t;
     }
 
-    private Thread writeToSocket(final Scanner stdin, final PrintWriter socketOut){
+    private Thread writeToSocket(final Scanner stdin, final PrintWriter socketOut) {
         Thread t = new Thread(() -> {
             try {
                 while (true) {
@@ -39,7 +40,9 @@ public class ClientGUI {
                     socketOut.println(inputLine);
                     socketOut.flush();
                 }
-            }catch(Exception e){ System.out.println("Error while writing to socket");}
+            } catch (Exception e) {
+                System.out.println("Error while writing to socket");
+            }
         });
         t.start();
         return t;
@@ -51,14 +54,14 @@ public class ClientGUI {
         ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
         PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
         Scanner stdin = new Scanner(System.in);
-        try{
+        try {
             Thread t0 = readFromSocket(socketIn);
             Thread t1 = writeToSocket(stdin, socketOut);
             t0.join();
             t1.join();
-        } catch(InterruptedException | NoSuchElementException e){
+        } catch (InterruptedException | NoSuchElementException e) {
             System.out.println("Connection closed from the client side");
-        } finally{
+        } finally {
             stdin.close();
             socketIn.close();
             socketOut.close();
