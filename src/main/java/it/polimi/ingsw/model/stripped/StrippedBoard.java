@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.stripped;
-
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.SchoolBoard;
 import it.polimi.ingsw.model.enumerations.Colors;
 
 import java.util.ArrayList;
@@ -9,17 +10,18 @@ public class StrippedBoard {
     private String owner;
     private EnumMap<Colors, Integer> entrance;
     private EnumMap<Colors, Integer> dining;
-    private EnumMap<Colors, Integer> coins;
     private ArrayList<Colors> professorsTable;
+    private int coins;
     private int numberOfTowers;
 
-    public StrippedBoard(String owner, EnumMap<Colors, Integer> entrance, EnumMap<Colors, Integer> dining, EnumMap<Colors, Integer> coins, ArrayList<Colors> professorsTable, int numberOfTowers) {
-        this.owner = owner;
-        this.entrance = entrance;
-        this.dining = dining;
-        this.coins = coins;
-        this.professorsTable = professorsTable;
-        this.numberOfTowers = numberOfTowers;
+    public StrippedBoard(Player boardOwner) {
+        this.owner = boardOwner.getNickname();
+        SchoolBoard tmpBoard = boardOwner.getSchoolBoard();
+        this.entrance = tmpBoard.getEntrance();
+        this.dining = tmpBoard.getDining();
+        this.professorsTable = tmpBoard.getProfessorsTable();
+        this.coins = boardOwner.getCoins();
+        this.numberOfTowers = tmpBoard.getTowers();
     }
 
     public String getOwner() {
