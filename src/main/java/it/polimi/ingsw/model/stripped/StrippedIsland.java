@@ -9,14 +9,16 @@ public class StrippedIsland {
     final int numberOfTowers;
     final private Towers towersColor;
     final boolean hasNoEnterTile;
+    public boolean hasMotherNature;
 
     public StrippedIsland(String islandName, Towers towersColor, int numOfTowers,
-                          EnumMap<Colors,Integer> students, boolean hasNoEnterTile) {
+                          EnumMap<Colors,Integer> students, boolean hasNoEnterTile, boolean hasMotherNature) {
         name = islandName;
         this.towersColor = towersColor;
         numberOfTowers = numOfTowers;
         this.students = students;
         this.hasNoEnterTile = hasNoEnterTile;
+        this.hasMotherNature = hasMotherNature;
     }
     public String getName() {
         return name;
@@ -32,5 +34,13 @@ public class StrippedIsland {
     }
     public boolean isHasNoEnterTile(){
         return hasNoEnterTile;
+    }
+
+    public boolean hasMotherNature() {
+        return hasMotherNature;
+    }
+
+    public void setHasMotherNature(boolean hasMotherNature) {
+        this.hasMotherNature = hasMotherNature;
     }
 }
