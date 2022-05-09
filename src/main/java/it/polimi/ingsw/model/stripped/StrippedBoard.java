@@ -12,6 +12,14 @@ public class StrippedBoard {
     private ArrayList<Colors> professorsTable;
     private int numberOfTowers;
 
+    public StrippedBoard(EnumMap<Colors, Integer> entrance, EnumMap<Colors, Integer> dining, EnumMap<Colors, Integer> coins, ArrayList<Colors> professorsTable, int numberOfTowers) {
+        this.entrance = entrance;
+        this.dining = dining;
+        this.coins = coins;
+        this.professorsTable = professorsTable;
+        this.numberOfTowers = numberOfTowers;
+    }
+
     public EnumMap<Colors, Integer> getEntrance() {
         return entrance;
     }
