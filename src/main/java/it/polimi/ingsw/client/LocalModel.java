@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class LocalModel {
     ArrayList<StrippedBoard> boards;
-    StrippedCharacter character;
+    ArrayList<StrippedCharacter> characters;
     StrippedClouds clouds;
     StrippedIslands islands;
 
@@ -18,12 +18,12 @@ public class LocalModel {
         this.boards = boards;
     }
 
-    public StrippedCharacter getCharacter() {
-        return character;
+    public  ArrayList<StrippedCharacter> getCharacters() {
+        return characters;
     }
 
-    public void setCharacter(StrippedCharacter character) {
-        this.character = character;
+    public void setCharacters(ArrayList<StrippedCharacter> characters) {
+        this.characters = characters;
     }
 
     public StrippedClouds getClouds() {
@@ -33,7 +33,6 @@ public class LocalModel {
     public void setClouds(StrippedClouds clouds) {
         this.clouds = clouds;
     }
-
 
     public StrippedIslands getIslands() {
         return islands;
