@@ -213,4 +213,14 @@ public class ClientConnection implements Runnable {
     private synchronized void sendArrayString(ArrayList<String> messageArray) {
         for (String message : messageArray) sendString(message);
     }
+
+    public synchronized void sendEvent(Object evt){ //this has to be replaced by the ServerCommand pattern
+        try {
+            out.reset();
+            out.writeObject(evt);
+            out.flush();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }
