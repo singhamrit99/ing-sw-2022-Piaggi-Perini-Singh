@@ -44,11 +44,11 @@ public class StrippedBoard {
         this.dining = dining;
     }
 
-    public EnumMap<Colors, Integer> getCoins() {
+    public int getCoins() {
         return coins;
     }
 
-    public void setCoins(EnumMap<Colors, Integer> coins) {
+    public void setCoins(int coins) {
         this.coins = coins;
     }
 
