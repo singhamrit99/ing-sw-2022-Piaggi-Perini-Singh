@@ -6,18 +6,24 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 
 public class StrippedBoard {
+    private String owner;
     private EnumMap<Colors, Integer> entrance;
     private EnumMap<Colors, Integer> dining;
     private EnumMap<Colors, Integer> coins;
     private ArrayList<Colors> professorsTable;
     private int numberOfTowers;
 
-    public StrippedBoard(EnumMap<Colors, Integer> entrance, EnumMap<Colors, Integer> dining, EnumMap<Colors, Integer> coins, ArrayList<Colors> professorsTable, int numberOfTowers) {
+    public StrippedBoard(String owner, EnumMap<Colors, Integer> entrance, EnumMap<Colors, Integer> dining, EnumMap<Colors, Integer> coins, ArrayList<Colors> professorsTable, int numberOfTowers) {
+        this.owner = owner;
         this.entrance = entrance;
         this.dining = dining;
         this.coins = coins;
         this.professorsTable = professorsTable;
         this.numberOfTowers = numberOfTowers;
+    }
+
+    public String getOwner() {
+        return owner;
     }
 
     public EnumMap<Colors, Integer> getEntrance() {
