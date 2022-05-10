@@ -81,17 +81,25 @@ public class StrippedModel {
                     }
                 }
                 else{
-                    System.out.println("Exception"); //todo
+                    System.out.println("Exception changeIsland , strippedModel"); //todo
                 }
     }
 
-    
-
+    public void changeCloud(PropertyChangeEvent evt, String propertyName){
+        StrippedCloud newCloud = (StrippedCloud ) evt.getSource();
+        Optional<StrippedCloud > cloudFound = clouds.stream().filter(x -> x.getName().equals(newCloud.getName())).findFirst();
+        if(cloudFound.isPresent()){
+            clouds.remove(cloudFound);
+            clouds.add((StrippedCloud) evt.getNewValue());
+        }
+        else{
+            System.out.println("Exception changeCloud , strippedModel"); //todo
+        }
+    }
 
     public  ArrayList<StrippedCharacter> getCharacters() {
         return characters;
     }
-
 
     public ArrayList<StrippedCloud> getClouds() {
         return clouds;
