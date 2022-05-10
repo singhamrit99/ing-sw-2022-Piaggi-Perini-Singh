@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class StrippedModel {
-    ArrayList<StrippedBoard> boards;
-    ArrayList<StrippedCharacter> characters;
-    StrippedClouds clouds;
-    StrippedIslands islands;
+    private ArrayList<StrippedBoard> boards;
+    private ArrayList<StrippedCharacter> characters;
+    private ArrayList<StrippedCloud> clouds;
+    private ArrayList<StrippedIsland> islands;
 
-    public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters, StrippedClouds clouds, StrippedIslands islands) {
+    public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters,
+                         ArrayList<StrippedCloud> clouds, ArrayList<StrippedIsland> islands) {
         this.boards = boards;
         this.characters = characters;
         this.clouds = clouds;
@@ -50,10 +51,6 @@ public class StrippedModel {
         }
     }
 
-    public  ArrayList<StrippedCharacter> getCharacters() {
-        return characters;
-    }
-
     public void changePriceCharacterCard(PropertyChangeEvent evt, String propertyName) {
         StrippedCharacter changedCard = (StrippedCharacter) evt.getSource();
         StrippedCharacter cardToUpdate = null;
@@ -65,7 +62,7 @@ public class StrippedModel {
 
         if(cardToUpdate!= null){
             if(cardToUpdate.getPrice()!= (int)evt.getOldValue())
-            cardToUpdate.setPrice((int)evt.getNewValue()); //update
+                cardToUpdate.setPrice((int)evt.getNewValue()); //update
             else{
                 System.out.println("buttare fuori una exception sensata"); //todo
             }
@@ -74,19 +71,41 @@ public class StrippedModel {
         }
     }
 
-    public StrippedClouds getClouds() {
+    public void changeIsland(PropertyChangeEvent evt, String propertyName){
+                StrippedIsland newIsland = (StrippedIsland) evt.getSource();
+                Optional<StrippedIsland> islandFound = islands.stream().filter(x -> x.getName().equals(newIsland.getName())).findFirst();
+                if(islandFound.isPresent()){
+                    islands.remove(islandFound); //Island Deletion
+                    if(evt.getNewValue() != null){
+                        islands.add((StrippedIsland) evt.getNewValue());
+                    }
+                }
+                else{
+                    System.out.println("Exception"); //todo
+                }
+    }
+
+    
+
+
+    public  ArrayList<StrippedCharacter> getCharacters() {
+        return characters;
+    }
+
+
+    public ArrayList<StrippedCloud> getClouds() {
         return clouds;
     }
 
-    public void setClouds(StrippedClouds clouds) {
-        this.clouds = clouds;
+    public void setCloud(StrippedCloud newCloud) {
+        clouds.add(newCloud);
     }
 
-    public StrippedIslands getIslands() {
-        return islands;
+    public StrippedIsland getIsland() {
+        return islands.get(0);
     }
 
-    public void setIslands(StrippedIslands islands) {
-        this.islands = islands;
+    public void setIslands(StrippedIsland island) {
+        islands.add(island);
     }
 }
