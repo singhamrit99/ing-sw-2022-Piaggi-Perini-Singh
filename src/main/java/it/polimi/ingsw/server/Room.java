@@ -1,4 +1,5 @@
 package it.polimi.ingsw.server;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.stripped.*;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.commands.Command;
@@ -19,7 +20,7 @@ public class Room implements PropertyChangeListener {
     private final ArrayList<ClientConnection> players;
     private boolean expertMode;
     final private Controller controller;
-    private StrippedModel localModel;
+    private StrippedModel strippedModel;
 
     public Room(String roomName, ArrayList<ClientConnection> playerList) {
         this.roomName = roomName;
@@ -57,14 +58,16 @@ public class Room implements PropertyChangeListener {
         for (ClientConnection cl : players) {
                 nicknames.add(cl.getNickname());
         }
-        controller.initializeGame(expertMode, players.size(), nicknames);
+        Game newGame = controller.initializeGame(expertMode, players.size(), nicknames);
+        buildStrippedModel(newGame.getPlayers(),newGame.getCharacterCards(),
+                newGame.getClouds(),newGame.getIslands());
         for(ClientConnection c: players)
         {
             c.startView(controller);
         }
     }
 
-    public void buildLocalModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands){
+    private void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands){
         ArrayList<StrippedBoard> strippedBoards =new ArrayList<>();
         ArrayList<StrippedCharacter> strippedCharacters = new ArrayList<>();
         ArrayList<StrippedCloud> strippedClouds = new ArrayList<>();
@@ -90,9 +93,7 @@ public class Room implements PropertyChangeListener {
                     s.getNumOfTowers(),s.getStudents(),s.hasMotherNature(), s.hasNoEntryTile());
             strippedIslands.add(newStrippedIsland);
         }
-
-        localModel = new StrippedModel(strippedBoards,strippedCharacters,strippedClouds,strippedIslands);
-        //broadcast(); //invio con il Command Pattern del LocalModel a tutti i clients , maybe da sostituire con una richiesta .
+        strippedModel = new StrippedModel(strippedBoards,strippedCharacters,strippedClouds,strippedIslands);
     }
 
     public void commandInvoker(Command command){

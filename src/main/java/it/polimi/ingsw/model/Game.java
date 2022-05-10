@@ -12,9 +12,14 @@ import it.polimi.ingsw.model.exceptions.ControllerExceptions;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.model.stripped.StrippedBoard;
+import it.polimi.ingsw.model.stripped.StrippedCharacter;
+import it.polimi.ingsw.model.stripped.StrippedCloud;
+import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
 
+import java.beans.PropertyChangeEvent;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -745,4 +750,19 @@ public class Game {
             player.getSchoolBoard().removeDiningStudents(enumMap);
         }
     }
+
+
+    //getters necessary to build StrippedModel :
+    public ArrayList<CharacterCard> getCharacterCards() {
+        return characterCards;
+    }
+
+    public ArrayList<Cloud> getClouds() {
+        return clouds;
+    }
+
+    public LinkedList<Island> getIslands() {
+        return islands;
+    }
+
 }
