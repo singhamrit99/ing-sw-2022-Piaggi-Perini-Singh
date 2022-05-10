@@ -24,11 +24,11 @@ public class StrippedModel {
         return boards;
     }
 
-    public void setBoard(PropertyChangeEvent evt, String propertyName){
+    public void setBoard(PropertyChangeEvent evt){
         StrippedBoard boardSource = (StrippedBoard) evt.getSource();
         Optional<StrippedBoard> boardToModify = boards.stream().filter(b -> boardSource.getOwner().equals(b.getOwner())).findFirst();
         if(boardToModify.isPresent()){
-            switch(propertyName) {
+            switch((String)evt.getPropertyName()) {
                 case "entrance":
                     boardToModify.get().setEntrance(boardSource.getEntrance());
                     break;
@@ -51,7 +51,7 @@ public class StrippedModel {
         }
     }
 
-    public void changePriceCharacterCard(PropertyChangeEvent evt, String propertyName) {
+    public void changePriceCharacterCard(PropertyChangeEvent evt) {
         StrippedCharacter changedCard = (StrippedCharacter) evt.getSource();
         StrippedCharacter cardToUpdate = null;
         for(StrippedCharacter card: characters){
@@ -71,7 +71,7 @@ public class StrippedModel {
         }
     }
 
-    public void changeIsland(PropertyChangeEvent evt, String propertyName){
+    public void changeIsland(PropertyChangeEvent evt){
                 StrippedIsland newIsland = (StrippedIsland) evt.getSource();
                 Optional<StrippedIsland> islandFound = islands.stream().filter(x -> x.getName().equals(newIsland.getName())).findFirst();
                 if(islandFound.isPresent()){
@@ -85,7 +85,7 @@ public class StrippedModel {
                 }
     }
 
-    public void changeCloud(PropertyChangeEvent evt, String propertyName){
+    public void changeCloud(PropertyChangeEvent evt){
         StrippedCloud newCloud = (StrippedCloud ) evt.getSource();
         Optional<StrippedCloud > cloudFound = clouds.stream().filter(x -> x.getName().equals(newCloud.getName())).findFirst();
         if(cloudFound.isPresent()){
