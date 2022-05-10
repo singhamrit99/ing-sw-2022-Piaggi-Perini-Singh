@@ -9,6 +9,10 @@ import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
+import it.polimi.ingsw.server.events.Board;
+import it.polimi.ingsw.server.events.Character;
+import it.polimi.ingsw.server.events.Event;
+import it.polimi.ingsw.server.events.Message;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -102,10 +106,37 @@ public class Room implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt){
-        broadcast(evt);
+        switch((String) evt.getPropertyName()){
+            case "entrance":
+            case "dining":
+            case "coins":
+            case "professorTable":
+                Board boardCommand = new Board(evt);
+                broadcast(boardCommand);
+                break;
+            case "character":
+                Character charCommand = new Character(evt);
+                broadcast(charCommand);
+                break;
+            case "cloud":
+                it.polimi.ingsw.server.events.Cloud cloudCommand = new it.polimi.ingsw.server.events.Cloud(evt);
+                broadcast(cloudCommand);
+                break;
+            case "island":
+                it.polimi.ingsw.server.events.Island islandCommand = new it.polimi.ingsw.server.events.Island(evt);
+                broadcast(islandCommand);
+                break;
+            case "message":
+                Message messageCommand = new Message(evt);
+                broadcast(messageCommand);
+                break;
+            default:
+                System.out.println("exception da fare in Room"); //todo
+                break;
+        }
     }
 
-    private void broadcast(PropertyChangeEvent event){ //todo we have to use Command Pattern and ServerCommand interface
+    private void broadcast(Event event){
         for (ClientConnection client: players) {
             client.sendEvent(event);
         }
