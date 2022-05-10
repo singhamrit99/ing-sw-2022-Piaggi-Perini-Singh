@@ -89,7 +89,7 @@ public class ViewCLI {
             System.out.println(board.getOwner() + "\n");
         }
     }
-
+/*
     public void printIslands(StrippedModel localModel) {
         StrippedIslands islands = localModel.getIslands();
 
@@ -104,5 +104,5 @@ public class ViewCLI {
             System.out.println("Towers: " + island.getNumOfTowers() + island.getTowersColor() + "towers \n");
         }
     }
-
+*/
 }
