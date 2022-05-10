@@ -1,15 +1,11 @@
 package it.polimi.ingsw.server;
-import it.polimi.ingsw.model.stripped.StrippedModel;
+import it.polimi.ingsw.model.stripped.*;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.commands.Command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
-import it.polimi.ingsw.model.stripped.StrippedBoard;
-import it.polimi.ingsw.model.stripped.StrippedCharacter;
-import it.polimi.ingsw.model.stripped.StrippedClouds;
-import it.polimi.ingsw.model.stripped.StrippedIslands;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
 
@@ -71,6 +67,8 @@ public class Room implements PropertyChangeListener {
     public void buildLocalModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands){
         ArrayList<StrippedBoard> strippedBoards =new ArrayList<>();
         ArrayList<StrippedCharacter> strippedCharacters = new ArrayList<>();
+        ArrayList<StrippedCloud> strippedClouds = new ArrayList<>();
+        ArrayList<StrippedIsland> strippedIslands = new ArrayList<>();
 
         for (Player p: players) {
            StrippedBoard newStrippedBoard = new StrippedBoard(p);
@@ -82,8 +80,16 @@ public class Room implements PropertyChangeListener {
             strippedCharacters.add(newStrippedCharCard);
         }
 
-        StrippedClouds strippedClouds = new StrippedClouds(clouds);
-        StrippedIslands strippedIslands = new StrippedIslands(islands);
+        for (Cloud c:clouds) {
+            StrippedCloud newStrippedCloud = new StrippedCloud(c.getName(),c.getStudents());
+            strippedClouds.add(newStrippedCloud);
+        }
+
+        for (Island s: islands) {
+            StrippedIsland newStrippedIsland = new StrippedIsland(s.getName(),s.getTowersColor(),
+                    s.getNumOfTowers(),s.getStudents(),s.hasMotherNature(), s.hasNoEntryTile());
+            strippedIslands.add(newStrippedIsland);
+        }
 
         localModel = new StrippedModel(strippedBoards,strippedCharacters,strippedClouds,strippedIslands);
         //broadcast(); //invio con il Command Pattern del LocalModel a tutti i clients , maybe da sostituire con una richiesta .
