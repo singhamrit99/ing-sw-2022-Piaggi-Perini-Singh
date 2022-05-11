@@ -30,7 +30,7 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        return new Game(true, 4, nicknames);
+        return new Game(null,true, 4, nicknames);
     }
 
     @Test
@@ -41,7 +41,7 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game = controller.initializeGame(true, 4, nicknames);
+        Game game = controller.initializeGame(null, true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
@@ -77,7 +77,7 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game = controller.initializeGame(true, 4, nicknames);
+        Game game = controller.initializeGame(null,true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
@@ -111,7 +111,7 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game = controller.initializeGame(true, 4, nicknames);
+        Game game = controller.initializeGame(null,true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
@@ -148,7 +148,7 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game = controller.initializeGame(true, 4, nicknames);
+        Game game = controller.initializeGame(null,true, 4, nicknames);
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldplayer = game.getCurrentPlayer().getNickname();
         controller.callPlayAssistantCard(3);

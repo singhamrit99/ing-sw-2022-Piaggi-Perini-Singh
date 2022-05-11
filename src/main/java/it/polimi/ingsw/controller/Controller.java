@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.server.Room;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -10,14 +11,14 @@ import java.util.EnumMap;
 public class Controller {
     private Game game;
 
-    public Game initializeGame(boolean expertMode, int numOfPlayers, ArrayList<String> nicknames) throws IncorrectArgumentException {
+    public Game initializeGame(Room room, boolean expertMode, int numOfPlayers, ArrayList<String> nicknames) throws IncorrectArgumentException {
         if (numOfPlayers < 1 || numOfPlayers > 4) {
             throw new IncorrectArgumentException("Invalid number of players\n");
         } else if (numOfPlayers != nicknames.size()) {
             throw new IncorrectArgumentException("Number of players and nicknames array list lenght mismatch\n");
         }
         try {
-            game = new Game(expertMode, numOfPlayers, nicknames);
+            game = new Game(room,expertMode, numOfPlayers, nicknames);
         } catch (NegativeValueException e) {
             manageException(e);
         } catch (IncorrectArgumentException e) {

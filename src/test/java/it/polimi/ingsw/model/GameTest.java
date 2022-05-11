@@ -19,7 +19,7 @@ class GameTest {
         nicknames.add("Lore");
         nicknames.add("Tino");
         nicknames.add("Tony Stark");
-        Game game = new Game(false, 4, nicknames);
+        Game game = new Game(null,false, 4, nicknames);
         ArrayList<Player> players = game.getPlayers();
         assertTrue(nicknames.contains(game.getCurrentPlayer().getNickname()));
         assertEquals(game.getCurrentState(), State.PLANNINGPHASE);
@@ -43,7 +43,7 @@ class GameTest {
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Luke Skywalker");
         nicknames.add("Dark Fener");
-        return new Game(false, 2, nicknames);
+        return new Game(null,false, 2, nicknames);
     }
 
     public Game initGame3players() throws IncorrectArgumentException, NegativeValueException {
@@ -51,7 +51,7 @@ class GameTest {
         nicknames.add("Bruce Wayne");
         nicknames.add("Joker");
         nicknames.add("Bane");
-        return new Game(false, 3, nicknames);
+        return new Game(null,false, 3, nicknames);
     }
 
     public Game initGame4players() throws IncorrectArgumentException, NegativeValueException {
@@ -60,7 +60,7 @@ class GameTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        return new Game(true, 4, nicknames);
+        return new Game(null,true, 4, nicknames);
     }
 
     @Test

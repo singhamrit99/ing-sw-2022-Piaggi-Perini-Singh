@@ -62,7 +62,7 @@ public class Room implements PropertyChangeListener {
         for (ClientConnection cl : players) {
                 nicknames.add(cl.getNickname());
         }
-        Game newGame = controller.initializeGame(expertMode, players.size(), nicknames);
+        Game newGame = controller.initializeGame(this,expertMode, players.size(), nicknames);
         buildStrippedModel(newGame.getPlayers(),newGame.getCharacterCards(),
                 newGame.getClouds(),newGame.getIslands());
         for(ClientConnection c: players)
