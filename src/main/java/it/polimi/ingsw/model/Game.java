@@ -18,13 +18,15 @@ import it.polimi.ingsw.model.stripped.StrippedCloud;
 import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
+import it.polimi.ingsw.server.Room;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class Game {
+public class Game{
     private State state;
     private Bag bag;
     private final boolean expertMode;
@@ -45,13 +47,16 @@ public class Game {
     private ArrayList<CharacterCard> characterCards;
     private String JSONContent;
 
+    private PropertyChangeListener gameListener;
+
     /**
      * Constructor it initializes everything following the rules of the game. It finishes initialize the first (random)
      * player of the Plan Phase, initializing the specific counters for the phase like 'counter' and 'playerPlanPhase'
      *
      * @throws IncorrectArgumentException in case of bad arguments
      */
-    public Game(boolean expertMode, int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException, NegativeValueException {
+    public Game(Room room, boolean expertMode, int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException, NegativeValueException {
+        gameListener = room; //necessary for the event notification
         this.expertMode = expertMode;
         this.numOfPlayer = numOfPlayer;
         numRounds = 0;
@@ -99,10 +104,19 @@ public class Game {
             throw new NotEnoughCoinsException();
         }
         if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) {
+            CharacterCard card = characterCards.get(index);
             currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
-            characterCards.get(index).increasePrice();
-            characterCards.get(index).setStatus(0);
+            card.increasePrice();
+            card.setStatus(0);
             currentPlayer.setPlayedCharacterCard(null);
+
+            PropertyChangeEvent evtPrice =
+                    new PropertyChangeEvent(new StrippedCharacter(card),"character",0,card.getPrice());
+            gameListener.propertyChange(evtPrice);
+            StrippedBoard strippedBoard = new StrippedBoard(currentPlayer);
+            PropertyChangeEvent evtCoinsBoard =
+                    new PropertyChangeEvent(strippedBoard,"coins",0,currentPlayer.getCoins());
+            gameListener.propertyChange(evtCoinsBoard);
         }
     }
 
