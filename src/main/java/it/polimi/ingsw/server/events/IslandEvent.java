@@ -4,10 +4,10 @@ import it.polimi.ingsw.model.stripped.StrippedModel;
 
 import java.beans.PropertyChangeEvent;
 
-public class Island implements Event {
+public class IslandEvent extends Event {
     private PropertyChangeEvent evt;
 
-    public Island(PropertyChangeEvent evt) {
+    public IslandEvent(PropertyChangeEvent evt) {
         this.evt = evt;
     }
 
@@ -16,8 +16,4 @@ public class Island implements Event {
         localModel.changeIsland(evt);
     }
 
-    @Override
-    public String message() {
-        return null;
-    }
 }
