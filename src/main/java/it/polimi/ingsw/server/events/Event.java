@@ -2,9 +2,20 @@ package it.polimi.ingsw.server.events;
 
 import it.polimi.ingsw.model.stripped.StrippedModel;
 
-public interface Event {
+import java.beans.PropertyChangeEvent;
 
-    public void updateLocalModel(StrippedModel localModel);
+public class Event {
+    private PropertyChangeEvent evt;
+    public void updateLocalModel(StrippedModel localModel){
+        return;
+    }
 
-    public String message();
+    public SourceEvent getSource(){
+        return (SourceEvent) evt.getSource();
+    }
+
+    public boolean isError() {
+        return false;
+    }
+
 }
