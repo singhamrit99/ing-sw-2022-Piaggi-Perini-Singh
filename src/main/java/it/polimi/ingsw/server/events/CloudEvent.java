@@ -4,10 +4,10 @@ import it.polimi.ingsw.model.stripped.StrippedModel;
 
 import java.beans.PropertyChangeEvent;
 
-public class Cloud implements Event {
+public class CloudEvent extends Event {
     private PropertyChangeEvent evt;
 
-    public Cloud(PropertyChangeEvent evt) {
+    public CloudEvent(PropertyChangeEvent evt) {
         this.evt = evt;
     }
 
@@ -16,8 +16,4 @@ public class Cloud implements Event {
         localModel.changeCloud(evt);
     }
 
-    @Override
-    public String message() {
-        return null;
-    }
 }
