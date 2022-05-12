@@ -1,16 +1,17 @@
 package it.polimi.ingsw.model.stripped;
 
-import it.polimi.ingsw.model.stripped.*;
-
+import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.server.events.SourceEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Optional;
 
 public class StrippedModel {
-    private ArrayList<StrippedBoard> boards;
-    private ArrayList<StrippedCharacter> characters;
-    private ArrayList<StrippedCloud> clouds;
-    private ArrayList<StrippedIsland> islands;
+    final private ArrayList<StrippedBoard> boards;
+    final private ArrayList<StrippedCharacter> characters;
+    final private ArrayList<StrippedCloud> clouds;
+    final private ArrayList<StrippedIsland> islands;
 
     public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters,
                          ArrayList<StrippedCloud> clouds, ArrayList<StrippedIsland> islands) {
@@ -25,21 +26,22 @@ public class StrippedModel {
     }
 
     public void setBoard(PropertyChangeEvent evt){
-        StrippedBoard boardSource = (StrippedBoard) evt.getSource();
-        Optional<StrippedBoard> boardToModify = boards.stream().filter(b -> boardSource.getOwner().equals(b.getOwner())).findFirst();
+        SourceEvent source = (SourceEvent)evt.getSource();
+        String ownerBoard = source.getWho();
+        Optional<StrippedBoard> boardToModify = boards.stream().filter(b -> ownerBoard.equals(b.getOwner())).findFirst();
         if(boardToModify.isPresent()){
-            switch((String)evt.getPropertyName()) {
+            switch(evt.getPropertyName()) {
                 case "entrance":
-                    boardToModify.get().setEntrance(boardSource.getEntrance());
+                    boardToModify.get().setEntrance((EnumMap<Colors, Integer>)evt.getNewValue());
                     break;
                 case "dining":
-                    boardToModify.get().setDining(boardSource.getDining());
+                    boardToModify.get().setDining((EnumMap<Colors, Integer>)evt.getNewValue());
                     break;
                 case "coins":
-                    boardToModify.get().setCoins(boardSource.getCoins());
+                    boardToModify.get().setCoins((int)evt.getNewValue());
                     break;
                 case "professorTable":
-                    boardToModify.get().setProfessorsTable(boardSource.getProfessorsTable());
+                    boardToModify.get().setProfessorsTable((ArrayList<Colors>)evt.getNewValue());
                     break;
                 default:
                     System.out.println("exception da fare setBoard");
@@ -52,7 +54,7 @@ public class StrippedModel {
     }
 
     public void changePriceCharacterCard(PropertyChangeEvent evt) {
-        StrippedCharacter changedCard = (StrippedCharacter) evt.getSource();
+        StrippedCharacter changedCard = (StrippedCharacter) evt.getOldValue();
         StrippedCharacter cardToUpdate = null;
         for(StrippedCharacter card: characters){
             if(card.sameCard(changedCard)){
@@ -61,21 +63,23 @@ public class StrippedModel {
         }
 
         if(cardToUpdate!= null){
-            if(cardToUpdate.getPrice()!= (int)evt.getOldValue())
-                cardToUpdate.setPrice((int)evt.getNewValue()); //update
+            if(cardToUpdate.getPrice() == changedCard.getPrice()){
+                int newPriceCard = (int)evt.getNewValue();
+                cardToUpdate.setPrice(newPriceCard); //update
+            }
             else{
-                System.out.println("buttare fuori una exception sensata"); //todo
+                System.out.println("throws an exception because the old price of character is not the same"); //todo
             }
         }else{
-            System.out.println("buttare fuori una exception sensata"); //todo
+            System.out.println("throws an exception not found card to update"); //todo
         }
     }
 
     public void changeIsland(PropertyChangeEvent evt){
-                StrippedIsland newIsland = (StrippedIsland) evt.getSource();
-                Optional<StrippedIsland> islandFound = islands.stream().filter(x -> x.getName().equals(newIsland.getName())).findFirst();
+                StrippedIsland changedIsland = (StrippedIsland) evt.getOldValue();
+                Optional<StrippedIsland> islandFound = islands.stream().filter(x -> x.getName().equals(changedIsland.getName())).findFirst();
                 if(islandFound.isPresent()){
-                    islands.remove(islandFound); //Island Deletion
+                    islands.remove(islandFound); //IslandEvent Deletion
                     if(evt.getNewValue() != null){
                         islands.add((StrippedIsland) evt.getNewValue());
                     }
@@ -86,8 +90,8 @@ public class StrippedModel {
     }
 
     public void changeCloud(PropertyChangeEvent evt){
-        StrippedCloud newCloud = (StrippedCloud ) evt.getSource();
-        Optional<StrippedCloud > cloudFound = clouds.stream().filter(x -> x.getName().equals(newCloud.getName())).findFirst();
+        StrippedCloud changedCloud = (StrippedCloud )evt.getOldValue();
+        Optional<StrippedCloud > cloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
         if(cloudFound.isPresent()){
             clouds.remove(cloudFound);
             clouds.add((StrippedCloud) evt.getNewValue());
