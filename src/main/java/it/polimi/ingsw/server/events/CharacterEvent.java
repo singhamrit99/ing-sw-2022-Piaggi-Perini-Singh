@@ -4,10 +4,10 @@ import it.polimi.ingsw.model.stripped.StrippedModel;
 
 import java.beans.PropertyChangeEvent;
 
-public class Character implements Event {
+public class CharacterEvent extends Event {
     private PropertyChangeEvent evt;
 
-    public Character(PropertyChangeEvent evt) {
+    public CharacterEvent(PropertyChangeEvent evt) {
         this.evt = evt;
     }
 
@@ -16,8 +16,4 @@ public class Character implements Event {
         localModel.changePriceCharacterCard(evt);
     }
 
-    @Override
-    public String message() {
-        return null;
-    }
 }
