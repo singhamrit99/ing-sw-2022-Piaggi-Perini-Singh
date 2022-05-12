@@ -9,10 +9,7 @@ import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.exceptions.NegativeValueException;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
-import it.polimi.ingsw.server.events.Board;
-import it.polimi.ingsw.server.events.Character;
-import it.polimi.ingsw.server.events.Event;
-import it.polimi.ingsw.server.events.Message;
+import it.polimi.ingsw.server.events.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -111,25 +108,28 @@ public class Room implements PropertyChangeListener {
             case "dining":
             case "coins":
             case "professorTable":
-                Board boardCommand = new Board(evt);
-                broadcast(boardCommand);
+                BoardEvent boardEvent = new BoardEvent(evt);
+                broadcast(boardEvent);
                 break;
             case "character":
-                Character charCommand = new Character(evt);
+                CharacterEvent charCommand = new CharacterEvent(evt);
                 broadcast(charCommand);
                 break;
             case "cloud":
-                it.polimi.ingsw.server.events.Cloud cloudCommand = new it.polimi.ingsw.server.events.Cloud(evt);
-                broadcast(cloudCommand);
+                CloudEvent cloudEventCommand = new CloudEvent(evt);
+                broadcast(cloudEventCommand);
                 break;
             case "island":
-                it.polimi.ingsw.server.events.Island islandCommand = new it.polimi.ingsw.server.events.Island(evt);
-                broadcast(islandCommand);
+                IslandEvent islandEventCommand = new IslandEvent(evt);
+                broadcast(islandEventCommand);
                 break;
             case "message":
-                Message messageCommand = new Message(evt);
-                broadcast(messageCommand);
+                MessageEvent messageEventCommand = new MessageEvent(evt,false);
+                broadcast(messageEventCommand);
                 break;
+            case "error":
+                MessageEvent errorEvent = new MessageEvent(evt,true);
+                sendErrorEvent(errorEvent);
             default:
                 System.out.println("exception da fare in Room"); //todo
                 break;
@@ -139,6 +139,16 @@ public class Room implements PropertyChangeListener {
     private void broadcast(Event event){
         for (ClientConnection client: players) {
             client.sendEvent(event);
+        }
+    }
+
+    private void sendErrorEvent(Event error){
+        String nickname = error.getSource().getWho();
+        for (ClientConnection client: players) {
+            if(client.getNickname().equals(nickname)){
+                client.sendEvent(error);
+                break;
+            }
         }
     }
 }
