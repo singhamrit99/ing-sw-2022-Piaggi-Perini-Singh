@@ -109,14 +109,6 @@ public class Game{
             card.increasePrice();
             card.setStatus(0);
             currentPlayer.setPlayedCharacterCard(null);
-
-            PropertyChangeEvent evtPrice =
-                    new PropertyChangeEvent(new StrippedCharacter(card),"character",0,card.getPrice());
-            gameListener.propertyChange(evtPrice);
-            StrippedBoard strippedBoard = new StrippedBoard(currentPlayer);
-            PropertyChangeEvent evtCoinsBoard =
-                    new PropertyChangeEvent(strippedBoard,"coins",0,currentPlayer.getCoins());
-            gameListener.propertyChange(evtCoinsBoard);
         }
     }
 
