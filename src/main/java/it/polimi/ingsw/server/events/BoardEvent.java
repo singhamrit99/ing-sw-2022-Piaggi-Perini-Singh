@@ -4,10 +4,10 @@ import it.polimi.ingsw.model.stripped.StrippedModel;
 
 import java.beans.PropertyChangeEvent;
 
-public class Board implements Event {
+public class BoardEvent extends Event {
     private PropertyChangeEvent evt;
 
-    public Board(PropertyChangeEvent evt) {
+    public BoardEvent(PropertyChangeEvent evt) {
         this.evt = evt;
     }
 
@@ -16,8 +16,4 @@ public class Board implements Event {
         localModel.setBoard(evt);
     }
 
-    @Override
-    public String message() {
-        return null;
-    }
 }
