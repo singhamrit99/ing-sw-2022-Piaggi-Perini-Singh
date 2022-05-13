@@ -90,8 +90,7 @@ public class Room implements PropertyChangeListener {
         }
 
         for (Island s: islands) {
-            StrippedIsland newStrippedIsland = new StrippedIsland(s.getName(),s.getTowersColor(),
-                    s.getNumOfTowers(),s.getStudents(),s.hasMotherNature(), s.hasNoEntryTile());
+            StrippedIsland newStrippedIsland = new StrippedIsland(s);
             strippedIslands.add(newStrippedIsland);
         }
         strippedModel = new StrippedModel(strippedBoards,strippedCharacters,strippedClouds,strippedIslands);

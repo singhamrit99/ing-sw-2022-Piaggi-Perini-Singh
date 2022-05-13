@@ -9,7 +9,6 @@ public class StrippedCloud {
     public String name;
     private EnumMap<Colors, Integer> students;
 
-
     public StrippedCloud(String name, EnumMap<Colors, Integer> students) {
         this.name = name;
         this.students = students;

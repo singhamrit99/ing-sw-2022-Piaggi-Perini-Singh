@@ -90,11 +90,11 @@ public class StrippedModel {
     }
 
     public void changeCloud(PropertyChangeEvent evt){
-        StrippedCloud changedCloud = (StrippedCloud )evt.getOldValue();
+        StrippedCloud changedCloud = (StrippedCloud )evt.getNewValue();
         Optional<StrippedCloud > cloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
         if(cloudFound.isPresent()){
             clouds.remove(cloudFound);
-            clouds.add((StrippedCloud) evt.getNewValue());
+            clouds.add(changedCloud);
         }
         else{
             System.out.println("Exception changeCloud , strippedModel"); //todo
