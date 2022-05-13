@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.server.ClientConnection;
+import it.polimi.ingsw.server.Room;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -19,7 +21,9 @@ class GameTest {
         nicknames.add("Lore");
         nicknames.add("Tino");
         nicknames.add("Tony Stark");
-        Game game = new Game(null,false, 4, nicknames);
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        Game game = new Game(roomTest,false, 4, nicknames);
         ArrayList<Player> players = game.getPlayers();
         assertTrue(nicknames.contains(game.getCurrentPlayer().getNickname()));
         assertEquals(game.getCurrentState(), State.PLANNINGPHASE);
@@ -43,7 +47,9 @@ class GameTest {
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Luke Skywalker");
         nicknames.add("Dark Fener");
-        return new Game(null,false, 2, nicknames);
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        return new Game(roomTest,true, 2, nicknames);
     }
 
     public Game initGame3players() throws IncorrectArgumentException, NegativeValueException {
@@ -51,7 +57,9 @@ class GameTest {
         nicknames.add("Bruce Wayne");
         nicknames.add("Joker");
         nicknames.add("Bane");
-        return new Game(null,false, 3, nicknames);
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        return new Game(roomTest,false, 3, nicknames);
     }
 
     public Game initGame4players() throws IncorrectArgumentException, NegativeValueException {
@@ -60,7 +68,9 @@ class GameTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        return new Game(null,true, 4, nicknames);
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        return new Game(roomTest,true, 4, nicknames);
     }
 
     @Test
