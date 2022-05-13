@@ -4,8 +4,11 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.server.ClientConnection;
+import it.polimi.ingsw.server.Room;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Random;
@@ -41,7 +44,9 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game = controller.initializeGame(null, true, 4, nicknames);
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
@@ -77,7 +82,9 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game = controller.initializeGame(null,true, 4, nicknames);
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
@@ -111,7 +118,9 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game = controller.initializeGame(null,true, 4, nicknames);
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        Game game = controller.initializeGame(roomTest,true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
@@ -148,7 +157,9 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        Game game = controller.initializeGame(null,true, 4, nicknames);
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldplayer = game.getCurrentPlayer().getNickname();
         controller.callPlayAssistantCard(3);
