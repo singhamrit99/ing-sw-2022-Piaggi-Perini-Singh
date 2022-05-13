@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.cards.charactercard.Type;
 import java.util.Objects;
 
 public class StrippedCharacter {
-
     private int price;
     final private String description;
     final private Type type;

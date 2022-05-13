@@ -19,6 +19,7 @@ import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
 import it.polimi.ingsw.server.Room;
+import it.polimi.ingsw.server.events.SourceEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -103,13 +104,24 @@ public class Game{
         } else {
             throw new NotEnoughCoinsException();
         }
-        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) {
-            CharacterCard card = characterCards.get(index);
-            currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
-            card.increasePrice();
-            card.setStatus(0);
-            currentPlayer.setPlayedCharacterCard(null);
-        }
+        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
+    }
+
+    private void increaseCharacterPrice(int index) throws NegativeValueException {
+        CharacterCard updatedCard = characterCards.get(index);
+        CharacterCard oldCard = new CharacterCard(updatedCard.getImageName(),updatedCard.getPrice(),updatedCard.getDescription());
+        currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
+        updatedCard.increasePrice();
+        updatedCard.setStatus(0);
+        currentPlayer.setPlayedCharacterCard(null);
+        notifyCharacterEvent(oldCard, updatedCard);
+    }
+
+    private void notifyCharacterEvent(CharacterCard oldCard, CharacterCard updatedCard){
+        StrippedCharacter strippedCard = new StrippedCharacter(updatedCard);
+        SourceEvent src = new SourceEvent(currentPlayer.getNickname(),"played character card");
+        PropertyChangeEvent cardEvent = new PropertyChangeEvent(src,"character",oldCard,updatedCard);
+        gameListener.propertyChange(cardEvent);
     }
 
     public void activateCharacterCharacter(int index, int choice) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
@@ -119,12 +131,7 @@ public class Game{
         } else {
             throw new NotEnoughCoinsException();
         }
-        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) {
-            currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
-            characterCards.get(index).increasePrice();
-            characterCards.get(index).setStatus(0);
-            currentPlayer.setPlayedCharacterCard(null);
-        }
+        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
     }
 
     public void activateCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
@@ -134,12 +141,7 @@ public class Game{
         } else {
             throw new NotEnoughCoinsException();
         }
-        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) {
-            currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
-            characterCards.get(index).increasePrice();
-            characterCards.get(index).setStatus(0);
-            currentPlayer.setPlayedCharacterCard(null);
-        }
+        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
     }
 
     public void activateCharacterCard(int index, int student, int island) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
@@ -149,12 +151,7 @@ public class Game{
         } else {
             throw new NotEnoughCoinsException();
         }
-        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) {
-            currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
-            characterCards.get(index).increasePrice();
-            characterCards.get(index).setStatus(0);
-            currentPlayer.setPlayedCharacterCard(null);
-        }
+        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2)increaseCharacterPrice(index);
     }
 
     private void initializationPlayers(ArrayList<String> nicknames) {
