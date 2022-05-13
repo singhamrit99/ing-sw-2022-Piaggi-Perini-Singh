@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.ViewCLI;
 import it.polimi.ingsw.client.ViewGUI;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.commands.Command;
-import it.polimi.ingsw.server.events.Event;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -80,14 +79,6 @@ public class ClientConnection implements Runnable {
             System.err.println("Error from client, " + e.getMessage());
             closeConnection();
         }
-    }
-
-    public void commandToClient(Event command){
-        //TODO
-    }
-
-    public void commandToServer(Command command){
-        //TODO
     }
 
 
