@@ -21,11 +21,27 @@ public class StrippedModel {
         this.islands = islands;
     }
 
-    public ArrayList<StrippedBoard> getBoards() {
-        return boards;
+    public void updateModel(PropertyChangeEvent evt){
+        switch (evt.getPropertyName()){
+            case "board":
+                setBoard(evt);
+                break;
+            case "character":
+                changePriceCharacterCard(evt);
+                break;
+            case "island":
+                changeIsland(evt);
+                break;
+            case "cloud":
+                changeCloud(evt);
+                break;
+                default:
+                System.out.println("scrivere una exception sensata");
+                break;
+        }
     }
 
-    public void setBoard(PropertyChangeEvent evt){
+    private void setBoard(PropertyChangeEvent evt){
         SourceEvent source = (SourceEvent)evt.getSource();
         String ownerBoard = source.getWho();
         Optional<StrippedBoard> boardToModify = boards.stream().filter(b -> ownerBoard.equals(b.getOwner())).findFirst();
@@ -53,7 +69,7 @@ public class StrippedModel {
         }
     }
 
-    public void changePriceCharacterCard(PropertyChangeEvent evt) {
+    private void changePriceCharacterCard(PropertyChangeEvent evt) {
         StrippedCharacter changedCard = (StrippedCharacter) evt.getOldValue();
         StrippedCharacter cardToUpdate = null;
         for(StrippedCharacter card: characters){
@@ -75,7 +91,7 @@ public class StrippedModel {
         }
     }
 
-    public void changeIsland(PropertyChangeEvent evt){
+    private  void changeIsland(PropertyChangeEvent evt){
                 StrippedIsland changedIsland = (StrippedIsland) evt.getOldValue();
                 Optional<StrippedIsland> islandFound = islands.stream().filter(x -> x.getName().equals(changedIsland.getName())).findFirst();
                 if(islandFound.isPresent()){
@@ -89,7 +105,7 @@ public class StrippedModel {
                 }
     }
 
-    public void changeCloud(PropertyChangeEvent evt){
+    private  void changeCloud(PropertyChangeEvent evt){
         StrippedCloud changedCloud = (StrippedCloud )evt.getOldValue();
         Optional<StrippedCloud > cloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
         if(cloudFound.isPresent()){
@@ -109,15 +125,12 @@ public class StrippedModel {
         return clouds;
     }
 
-    public void setCloud(StrippedCloud newCloud) {
-        clouds.add(newCloud);
-    }
-
     public StrippedIsland getIsland() {
         return islands.get(0);
     }
 
-    public void setIslands(StrippedIsland island) {
-        islands.add(island);
+    public ArrayList<StrippedBoard> getBoards() {
+        return boards;
     }
+
 }
