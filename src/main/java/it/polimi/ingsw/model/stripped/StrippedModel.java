@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.server.events.SourceEvent;
+import it.polimi.ingsw.server.SourceEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -106,7 +106,7 @@ public class StrippedModel {
     }
 
     public void changeCloud(PropertyChangeEvent evt){
-        StrippedCloud changedCloud = (StrippedCloud )evt.getOldValue();
+        StrippedCloud changedCloud = (StrippedCloud)evt.getOldValue();
         Optional<StrippedCloud > cloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
         if(cloudFound.isPresent()){
             clouds.remove(cloudFound);

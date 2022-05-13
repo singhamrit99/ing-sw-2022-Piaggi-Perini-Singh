@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.events;
+package it.polimi.ingsw.server;
 
 public class SourceEvent {
     final private String who;

@@ -12,16 +12,14 @@ import it.polimi.ingsw.model.exceptions.ControllerExceptions;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.*;
-import it.polimi.ingsw.model.stripped.StrippedBoard;
 import it.polimi.ingsw.model.stripped.StrippedCharacter;
 import it.polimi.ingsw.model.stripped.StrippedCloud;
 import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
 import it.polimi.ingsw.server.Room;
-import it.polimi.ingsw.server.events.SourceEvent;
+import it.polimi.ingsw.server.SourceEvent;
 
-import javax.xml.transform.Source;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.InputStreamReader;
