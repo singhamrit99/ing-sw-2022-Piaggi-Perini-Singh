@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
 import it.polimi.ingsw.server.events.*;
 
+import javax.xml.transform.Source;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ public class Room implements PropertyChangeListener {
     private final ArrayList<ClientConnection> players;
     private boolean expertMode;
     final private Controller controller;
-    private StrippedModel strippedModel;
 
     public Room(String roomName, ArrayList<ClientConnection> playerList) {
         this.roomName = roomName;
@@ -94,7 +94,10 @@ public class Room implements PropertyChangeListener {
                     s.getNumOfTowers(),s.getStudents(),s.hasMotherNature(), s.hasNoEntryTile());
             strippedIslands.add(newStrippedIsland);
         }
-        strippedModel = new StrippedModel(strippedBoards,strippedCharacters,strippedClouds,strippedIslands);
+        StrippedModel strippedModel = new StrippedModel(strippedBoards,strippedCharacters,strippedClouds,strippedIslands);
+        SourceEvent modelInitSource = new SourceEvent(getRoomName(),"init");
+        PropertyChangeEvent evtInitialGame = new PropertyChangeEvent(modelInitSource,"init",null,strippedModel);
+        broadcast(evtInitialGame);
     }
 
     public void commandInvoker(Command command){
@@ -103,47 +106,19 @@ public class Room implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt){
-        switch((String) evt.getPropertyName()){
-            case "entrance":
-            case "dining":
-            case "coins":
-            case "professorTable":
-                BoardEvent boardEvent = new BoardEvent(evt);
-                broadcast(boardEvent);
-                break;
-            case "character":
-                CharacterEvent charCommand = new CharacterEvent(evt);
-                broadcast(charCommand);
-                break;
-            case "cloud":
-                CloudEvent cloudEventCommand = new CloudEvent(evt);
-                broadcast(cloudEventCommand);
-                break;
-            case "island":
-                IslandEvent islandEventCommand = new IslandEvent(evt);
-                broadcast(islandEventCommand);
-                break;
-            case "message":
-                MessageEvent messageEventCommand = new MessageEvent(evt,false);
-                broadcast(messageEventCommand);
-                break;
-            case "error":
-                MessageEvent errorEvent = new MessageEvent(evt,true);
-                sendErrorEvent(errorEvent);
-            default:
-                System.out.println("exception da fare in Room"); //todo
-                break;
-        }
+        if(evt.getPropertyName().equals("error"))sendErrorEvent(evt);
+        else broadcast(evt);
     }
 
-    private void broadcast(Event event){
+    private void broadcast(PropertyChangeEvent event){
         for (ClientConnection client: players) {
             client.sendEvent(event);
         }
     }
 
-    private void sendErrorEvent(Event error){
-        String nickname = error.getSource().getWho();
+    private void sendErrorEvent(PropertyChangeEvent error){
+        SourceEvent src = (SourceEvent)error.getSource();
+        String nickname = src.getWho();
         for (ClientConnection client: players) {
             if(client.getNickname().equals(nickname)){
                 client.sendEvent(error);
