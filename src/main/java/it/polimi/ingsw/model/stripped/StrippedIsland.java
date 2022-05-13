@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.stripped;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
+import it.polimi.ingsw.model.tiles.Island;
+
 import java.util.EnumMap;
 
 public class StrippedIsland {
@@ -11,14 +13,13 @@ public class StrippedIsland {
     final boolean hasNoEnterTile;
     public boolean hasMotherNature;
 
-    public StrippedIsland(String islandName, Towers towersColor, int numOfTowers,
-                          EnumMap<Colors,Integer> students, boolean hasNoEnterTile, boolean hasMotherNature) {
-        name = islandName;
-        this.towersColor = towersColor;
-        numberOfTowers = numOfTowers;
-        this.students = students;
-        this.hasNoEnterTile = hasNoEnterTile;
-        this.hasMotherNature = hasMotherNature;
+    public StrippedIsland(Island island) {
+        name = island.getName();
+        this.towersColor = island.getTowersColor();
+        numberOfTowers = island.getNumOfTowers();
+        this.students = island.getStudents();
+        this.hasNoEnterTile = island.hasNoEntryTile();
+        this.hasMotherNature = island.hasMotherNature();
     }
     public String getName() {
         return name;
