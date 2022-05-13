@@ -21,13 +21,14 @@ import it.polimi.ingsw.model.tiles.Island;
 import it.polimi.ingsw.server.Room;
 import it.polimi.ingsw.server.events.SourceEvent;
 
+import javax.xml.transform.Source;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class Game{
+public class Game {
     private State state;
     private Bag bag;
     private final boolean expertMode;
@@ -109,7 +110,7 @@ public class Game{
 
     private void increaseCharacterPrice(int index) throws NegativeValueException {
         CharacterCard updatedCard = characterCards.get(index);
-        CharacterCard oldCard = new CharacterCard(updatedCard.getImageName(),updatedCard.getPrice(),updatedCard.getDescription());
+        CharacterCard oldCard = new CharacterCard(updatedCard.getImageName(), updatedCard.getPrice(), updatedCard.getDescription());
         currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
         updatedCard.increasePrice();
         updatedCard.setStatus(0);
@@ -117,10 +118,10 @@ public class Game{
         notifyCharacterEvent(oldCard, updatedCard);
     }
 
-    private void notifyCharacterEvent(CharacterCard oldCard, CharacterCard updatedCard){
+    private void notifyCharacterEvent(CharacterCard oldCard, CharacterCard updatedCard) {
         StrippedCharacter strippedCard = new StrippedCharacter(updatedCard);
-        SourceEvent src = new SourceEvent(currentPlayer.getNickname(),"played character card");
-        PropertyChangeEvent cardEvent = new PropertyChangeEvent(src,"character",oldCard,updatedCard);
+        SourceEvent src = new SourceEvent(currentPlayer.getNickname(), "played character card");
+        PropertyChangeEvent cardEvent = new PropertyChangeEvent(src, "character", oldCard, updatedCard);
         gameListener.propertyChange(cardEvent);
     }
 
@@ -151,7 +152,7 @@ public class Game{
         } else {
             throw new NotEnoughCoinsException();
         }
-        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2)increaseCharacterPrice(index);
+        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
     }
 
     private void initializationPlayers(ArrayList<String> nicknames) {
@@ -281,6 +282,9 @@ public class Game{
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 for (Cloud cloud : clouds) {
                     cloud.addStudents(bag.drawStudents(numDrawnStudents));
+                    SourceEvent cloudSrc = new SourceEvent(nicknameCaller, "draw from Bag to clouds");
+                    StrippedCloud newCloud = new StrippedCloud(cloud.getName(), cloud.getStudents());
+                    PropertyChangeEvent evt = new PropertyChangeEvent(cloudSrc, "cloud", null, newCloud);
                 }
                 playerDrawnOut = true;
             } else throw new IncorrectPlayerException();
@@ -338,6 +342,10 @@ public class Game{
         } else {
             throw new IncorrectStateException();
         }
+
+        SourceEvent notifyCurrentPlayer = new SourceEvent(currentPlayer.getNickname(), "start turn");
+        PropertyChangeEvent changeCurrentPlayer = new PropertyChangeEvent(notifyCurrentPlayer, "message", null, null);
+        gameListener.propertyChange(changeCurrentPlayer);
     }
 
     /**
@@ -367,17 +375,17 @@ public class Game{
      * In case the destination is the islands, it is used an array of islandDestination that is used by the game to send
      * the students in the correct place (the array uses the unique name of each island).
      */
-    public void moveStudents(String playerCaller, EnumMap<Colors, ArrayList<String>> students) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException {
+    public void moveStudents(String playerCaller, EnumMap<Colors, ArrayList<String>> studentsToMove) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException {
         if (currentPlayer.getNickname().equals(playerCaller)) {
             if (state == State.ACTIONPHASE_1) {
+                //First a check if the number of students moved is right
                 int numOfStudents;
                 if (numOfPlayer == 3) numOfStudents = 4;
                 else numOfStudents = 3;
-
                 for (Colors c : Colors.values()) {
-                    if (!students.get(c).isEmpty()) {
+                    if (!studentsToMove.get(c).isEmpty()) {
                         int i = 0;
-                        while (i < students.get(c).size()) {
+                        while (i < studentsToMove.get(c).size()) {
                             numOfStudents--;
                             i++;
                         }
@@ -385,34 +393,39 @@ public class Game{
                 }
                 if (numOfStudents != 0) throw new IncorrectArgumentException("Numbers of students is wrong");
 
+                //initialization of the two EnumMap, one for a destination
                 EnumMap<Colors, Integer> studentsToDining = new EnumMap<>(Colors.class);
                 EnumMap<Colors, Integer> studentsToRemove = new EnumMap<>(Colors.class);
-
                 for (Colors c : Colors.values()) {
                     studentsToDining.put(c, 0);
                     studentsToRemove.put(c, 0);
                 }
 
+                boolean isDiningChanged = false; //necessary to know if the dining has changed at the end of this method
+
                 for (Colors c : Colors.values()) {
-                    if (!students.get(c).isEmpty()) {
+                    if (!studentsToMove.get(c).isEmpty()) {
                         int i = 0;
-                        while (i < students.get(c).size()) {
-                            if (students.get(c).get(i).equals("dining")) {
+                        while (i < studentsToMove.get(c).size()) {
+                            if (studentsToMove.get(c).get(i).equals("dining")) {
                                 studentsToDining.put(c, studentsToDining.get(c) + 1);
+                                isDiningChanged = true; //dining CHANGED
                             } else {
                                 studentsToRemove.put(c, studentsToRemove.get(c) + 1);
-                                String dest = students.get(c).get(i);
-                                int islandsIndex = 0;
-                                while (islandsIndex < islands.size()) {
-                                    if (islands.get(islandsIndex).getName().equals(dest)) {
+                                String dest = studentsToMove.get(c).get(i);
+                                for (Island islandToChange : islands) {
+                                    if (islandToChange.getName().equals(dest)) {
                                         EnumMap<Colors, Integer> tmp = new EnumMap<>(Colors.class);
-                                        for (Colors color : Colors.values()) {
-                                            tmp.put(color, 0);
-                                        }
+                                        for (Colors color : Colors.values()) tmp.put(color, 0); //tmp initialization
                                         tmp.put(c, 1);
-                                        islands.get(islandsIndex).addStudents(tmp);
+                                        //notify island change and modify
+                                        StrippedIsland oldIsland = new StrippedIsland(islandToChange);
+                                        islandToChange.addStudents(tmp); //adding students
+                                        StrippedIsland changedIsland = new StrippedIsland(islandToChange);
+                                        SourceEvent islandEvent = new SourceEvent(playerCaller, "add students to island");
+                                        PropertyChangeEvent evt = new PropertyChangeEvent(islandEvent, "island", oldIsland, changedIsland);
+                                        gameListener.propertyChange(evt);
                                     }
-                                    islandsIndex++;
                                 }
                             }
                             i++;
@@ -421,7 +434,9 @@ public class Game{
                 }
                 currentPlayer.moveStudents(studentsToDining, studentsToRemove);
                 state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
-                checkAndPlaceProfessor(); //maybe some students have arrived in the dining table
+                if(isDiningChanged){
+                    checkAndPlaceProfessor(); //maybe some students have arrived in the dining table and professors have moved
+                }
             } else throw new IncorrectStateException();
         } else throw new IncorrectPlayerException();
     }
