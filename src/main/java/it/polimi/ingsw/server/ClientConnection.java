@@ -173,7 +173,7 @@ public class ClientConnection implements Runnable {
         //TODO differentiate between GUI startup and CLI startup before ClientConnection
     public void startView(Controller controller) {
         if (mode == 1) {
-            ViewCLI view = new ViewCLI(controller);
+            ViewCLI view = new ViewCLI(controller, nickname);
             view.gameStart();
         } else if (mode == 2) {
             ViewGUI view = new ViewGUI();
