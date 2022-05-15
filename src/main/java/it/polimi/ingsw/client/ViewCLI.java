@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.stripped.*;
 
 import javax.swing.event.ChangeEvent;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Locale;
@@ -23,7 +24,7 @@ public class ViewCLI {
 
     public ViewCLI(Controller controller, String nickName) {
         this.controller = controller;
-        this.nickName= nickName;
+        this.nickName = nickName;
 
     }
 
@@ -40,8 +41,6 @@ public class ViewCLI {
             {
 
             }*/
-
-
 
 
         }
@@ -65,11 +64,11 @@ public class ViewCLI {
         do {
             printCommandHelp();
             System.out.println("Select an action: ");
-            String s= in.nextLine();
-            action= Integer.parseInt(s);
-        }while(action<1||action>7);
+            String s = in.nextLine();
+            action = Integer.parseInt(s);
+        } while (action < 1 || action > 7);
 
-        switch(action){
+        switch (action) {
             case 1:
                 printPlayerBoards();
                 break;
@@ -85,24 +84,21 @@ public class ViewCLI {
                 break;
 
             case 5:
-            moveMN();
+                moveMN();
                 break;
 
             case 6:
-            playCharacterCard();
+                playCharacterCard();
                 break;
 
             case 7:
-            printCommandHelp();
+                printCommandHelp();
                 break;
 
             default:
 
 
-
         }
-
-
 
 
     }
@@ -114,20 +110,19 @@ public class ViewCLI {
     public void displayBoard(String owner) {
 
 
-
     }
 
 
-    public void playCharacterCard()
-    {
+    public void playCharacterCard() {
 
     }
-    public void moveMN()
-    {
+
+    public void moveMN() {
 
     }
+
     public void moveStudents() {
-        EnumMap<Colors, ArrayList<String>> studentsToMove = new EnumMap<Colors, ArrayList<String>>(Colors.class);
+        EnumMap<Colors, ArrayList<String>> studentsToMove = new EnumMap<>(Colors.class);
         StrippedBoard myBoard;
         int i = 0;
         while (!localModel.getBoards().get(i).getOwner().equals(nickName)) {
@@ -139,28 +134,31 @@ public class ViewCLI {
         for (Colors c : myBoard.getEntrance().keySet()) {
             System.out.println(c + " students: " + myBoard.getEntrance().get(c) + "\n");
         }
+        PropertyChangeEvent event;
         String answer;
         String[] parts;
         String color;
         Colors pickColor;
         int value;
         int island;
-        int movedStudents=0;
+        int movedStudents = 0;
         boolean isValidInputYN = false;
         boolean doItAgain;
+        EnumMap<Colors, Integer> moveStudents;
+        ArrayList<StrippedIsland> myIslands = localModel.getIslands();
         System.out.println("Do you want to move students to the dining room? Y\\N\n");
         do {
             answer = in.nextLine();
-            answer= answer.toLowerCase(Locale.ROOT);
-            if (answer.equals("y")||answer.equals("n"))
-                isValidInputYN=true;
+            answer = answer.toLowerCase(Locale.ROOT);
+            if (answer.equals("y") || answer.equals("n"))
+                isValidInputYN = true;
             else
                 System.out.println("Whoops! That's not right. Try again: \n");
-        }while (!isValidInputYN);
+        } while (!isValidInputYN);
 
         //Move students to the dining room
-        doItAgain=true;
-        isValidInputYN= false;
+        doItAgain = true;
+        isValidInputYN = false;
         if (answer.equals("y")) {
             do {
                 System.out.println("Type the students you want to move to the dining room as \"color, number\"");
@@ -170,77 +168,98 @@ public class ViewCLI {
                 color = color.replaceAll("[^a-zA Z0-9]", "");
                 value = Integer.parseInt(parts[1]);
                 color = color.toUpperCase(Locale.ROOT);
-                //TODO: replace incorrect checks on string value for color
                 if (isValidColor(color)) {
                     if (myBoard.getEntrance().get(stringToColor(color)) <= value) {
-                        //Move the students to the dining room
-                        movedStudents+=value;
+                        moveStudents = myBoard.getDining();
+                        moveStudents.put(stringToColor(color), moveStudents.get(stringToColor(color)) + value);
+                        movedStudents += value;
+
                         System.out.println("Do you want to move other students to the dining room?\n");
                         do {
                             answer = in.nextLine();
-                            answer= answer.toLowerCase(Locale.ROOT);
-                            if (answer.equals("y")||answer.equals("n"))
-                                isValidInputYN=true;
+                            answer = answer.toLowerCase(Locale.ROOT);
+                            if (answer.equals("y") || answer.equals("n"))
+                                isValidInputYN = true;
                             else
                                 System.out.println("Whoops! That's not right. Try again: \n");
-                        }while (!isValidInputYN&&movedStudents<3);
+                        } while (!isValidInputYN && movedStudents < 3);
                         //Since a player can only move 3 students in a turn there needs to be a check here too
-                        if(answer.equals(("n")))
+                        if (answer.equals(("n"))) {
                             doItAgain = false;
-
-
+                            myBoard.setDining(moveStudents);
+                        }
                     } else
                         System.out.println("You don't have enough students of that color! Try again.\n");
                 } else
                     System.out.println("There is no such color as " + color + "! Try again. \n");
-            } while (doItAgain&&movedStudents<3);
+            } while (doItAgain && movedStudents < 3);
 
         }
+        //Code to update the board with the new value after the dining room change
+        event= new PropertyChangeEvent(nickName, "dining", localModel.getBoards().get(i), myBoard.getDining());
+        localModel.updateModel(event);
         //Move students to the islands if the player has moved less than 3 students already
-       if (movedStudents<3)
-       {
-           System.out.println("Type the students you want to move to the island as \"color, number, number of island\" (for example, \"RED, 1, 5)\"");
-           answer = in.nextLine();
-           parts = answer.split(" ");
-           color = parts[0];
-           color = color.replaceAll("[^a-zA Z0-9]", "");
-           value = Integer.parseInt(parts[1]);
-           island= Integer.parseInt(parts[2]);
-           color = color.toUpperCase(Locale.ROOT);
+        if (movedStudents < 3) {
+            do {
+            System.out.println("Type the students you want to move to the island as \"color, number, number of island\" (for example, \"RED, 1, 5)\"");
+            answer = in.nextLine();
+            parts = answer.split(" ");
+            color = parts[0];
+            color = color.replaceAll("[^a-zA Z0-9]", "");
+            value = Integer.parseInt(parts[1]);
+            island = Integer.parseInt(parts[2]);
+            color = color.toUpperCase(Locale.ROOT);
 
-           do {
-               if (isValidColor(color)) {
-                   if (myBoard.getEntrance().get(stringToColor(color)) <= value) {
-                       if(island>0&& island<localModel.getIslands().size())
-                       {
-                           //...
-                           doItAgain= false;
-                           //...
-                       }
-                       else
-                           System.out.println("Invalid island number! Try again.\n");
-                   }
-                   else
-                       System.out.println("You don't have enough students of that color! Try again.\n");
-               } else
-                   System.out.println("There is no such color as " + color + "! Try again. \n");
-           }while (doItAgain);
+            moveStudents = myIslands.get(island).getStudents();
 
-       }
-       else
-           System.out.println("You already moved three students this turn\n");
+                if (isValidColor(color)) {
+                    if (myBoard.getEntrance().get(stringToColor(color)) <= value) {
+                        if (island > 0 && island < localModel.getIslands().size()) {
+
+                            moveStudents.put(stringToColor(color), myIslands.get(island).getStudents().get(stringToColor(color)) + value);
+                            movedStudents+=value;
+
+                            System.out.println("Do you want to move other students to the islands?\n");
+                            do {
+                                answer = in.nextLine();
+                                answer = answer.toLowerCase(Locale.ROOT);
+                                if (answer.equals("y") || answer.equals("n"))
+                                    isValidInputYN = true;
+                                else
+                                    System.out.println("Whoops! That's not right. Try again: \n");
+                            } while (!isValidInputYN && movedStudents < 3);
+                            if (answer.equals("n")&&movedStudents==3)
+                            {
+                                doItAgain=false;
+                            }
+                            else
+                                System.out.println("You still have "+(3-movedStudents)+" students to move!\n");
+
+                        } else
+                            System.out.println("Invalid island number! Try again.\n");
+                    } else
+                        System.out.println("You don't have enough students of that color! Try again.\n");
+                } else
+                    System.out.println("There is no such color as " + color + "! Try again. \n");
 
 
-       //TODO: add send event
-       }
+            } while (doItAgain);
 
+        } else
+            System.out.println("You already moved three students this turn\n");
+
+
+        //TODO: add send event
+        event= new PropertyChangeEvent(nickName, "islands", localModel.getIslands(),myIslands);
+        localModel.updateModel(event);
+    }
 
 
     public void printPlayerBoards() {
         ArrayList<StrippedBoard> boards = localModel.getBoards();
         System.out.println("Player boards:\n");
         for (StrippedBoard s : boards) {
-            System.out.println(s.getOwner()+ "'s board: ");
+            System.out.println(s.getOwner() + "'s board: ");
             System.out.println("Coins: " + s.getCoins());
             System.out.println("\nDining room configuration: ");
             for (Colors c : s.getDining().keySet()) {
@@ -280,31 +299,29 @@ public class ViewCLI {
         }
     }
 
-    public boolean isValidColor(String input)
-    {
-        for (Colors c: Colors.values())
-        {
+    public boolean isValidColor(String input) {
+        for (Colors c : Colors.values()) {
             if (c.name().equals(input))
                 return true;
         }
         return false;
     }
-    public Colors stringToColor(String input)
-    {
-        switch (input){
-            case "red":
+
+    public Colors stringToColor(String input) {
+        switch (input) {
+            case "RED":
                 return Colors.RED;
-            case "blue":
+            case "BLUE":
                 return Colors.BLUE;
-            case "yellow":
+            case "YELLOW":
                 return Colors.YELLOW;
-            case "green":
+            case "GREEN":
                 return Colors.GREEN;
-            case "pink":
+            case "PINK":
                 return Colors.PINK;
             default:
 
-    }
+        }
         return Colors.BLUE;
     }
 
