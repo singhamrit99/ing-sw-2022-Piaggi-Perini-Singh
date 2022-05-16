@@ -11,12 +11,20 @@ public class StrippedCharacter {
     final private String description;
     final private Type type;
     final private Requirements requirements;
-
+    private int characterID;
     public StrippedCharacter(CharacterCard card) {
         this.price = card.getPrice();
         this.description = card.getDescription();
         this.type = card.getType();
         this.requirements = card.getRequirements();
+    }
+
+    public int getCharacterID() {
+        return characterID;
+    }
+
+    public void setCharacterID(int characterID) {
+        this.characterID = characterID;
     }
 
     public int getPrice() {

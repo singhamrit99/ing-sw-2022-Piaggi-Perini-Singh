@@ -76,10 +76,13 @@ public class Room implements PropertyChangeListener {
             StrippedBoard newStrippedBoard = new StrippedBoard(p);
             strippedBoards.add(newStrippedBoard);
         }
-
+        //This should be able to provide strippedCharacters with the correct id for controller calls
+        int i=0;
         for (CharacterCard c : charactersCard) {
             StrippedCharacter newStrippedCharCard = new StrippedCharacter(c);
+            newStrippedCharCard.setCharacterID(i);
             strippedCharacters.add(newStrippedCharCard);
+            i++;
         }
 
         for (Cloud c : clouds) {

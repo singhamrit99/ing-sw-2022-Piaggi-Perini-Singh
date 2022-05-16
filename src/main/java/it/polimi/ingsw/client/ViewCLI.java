@@ -77,6 +77,12 @@ public class ViewCLI {
                 "Press 7 to view this message again\n");
     }
 
+    public void playAssistantCard(){
+
+        System.out.println("It's your turn! Play an assistant card! \n");
+
+    }
+
 
     public void performActionInTurn() {
         do {
@@ -96,11 +102,9 @@ public class ViewCLI {
             case 3:
                 printIslands();
                 break;
-
             case 4:
                 moveStudents();
                 break;
-
             case 5:
                 moveMN();
                 break;
@@ -151,7 +155,7 @@ public class ViewCLI {
                 playCharacterB(i);
                 break;
             case "colors,islands":
-                playCharacterC(i);
+                playCharacterC(i, tmp);
                 break;
             default:
                 if(tmp.getRequirements().getRequirements().equals(""))
@@ -178,9 +182,17 @@ public class ViewCLI {
         System.out.println("You have chosen a student island card\n");
 
     }
-    public void playCharacterC(int id)
+    public void playCharacterC(int id, StrippedCharacter card)
     {
         System.out.println("You have chosen a card that requires two sets of students\n");
+        System.out.println("These are the students on your card: \n");
+
+        //TODO: add students on card implementation for StrippedCharacters
+        for (Colors c: Colors.values())
+        {
+
+
+        }
 
     }
     public void playCharacterD(int id)
