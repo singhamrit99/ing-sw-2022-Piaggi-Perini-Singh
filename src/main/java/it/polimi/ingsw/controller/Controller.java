@@ -101,8 +101,6 @@ public class Controller {
     }
 
     public void callPlayCharacterCard(int index) {
-
-
         try {
             game.activateCharacterCard(index);
         } catch (NotEnoughCoinsException e) {

@@ -1,4 +1,5 @@
 package it.polimi.ingsw.server;
+
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.stripped.*;
 import it.polimi.ingsw.controller.Controller;
@@ -25,7 +26,7 @@ public class Room implements PropertyChangeListener {
         this.roomName = roomName;
         this.players = playerList;
         expertMode = false;
-        controller= new Controller();
+        controller = new Controller();
     }
 
     public void setExpertmode(boolean expertmode) {
@@ -55,69 +56,68 @@ public class Room implements PropertyChangeListener {
     public void startGame() throws NegativeValueException, IncorrectArgumentException {
         ArrayList<String> nicknames = new ArrayList<>();
         for (ClientConnection cl : players) {
-                nicknames.add(cl.getNickname());
+            nicknames.add(cl.getNickname());
         }
-        Game newGame = controller.initializeGame(this,expertMode, players.size(), nicknames);
-        buildStrippedModel(newGame.getPlayers(),newGame.getCharacterCards(),
-                newGame.getClouds(),newGame.getIslands());
-        for(ClientConnection c: players)
-        {
+        Game newGame = controller.initializeGame(this, expertMode, players.size(), nicknames);
+        buildStrippedModel(newGame.getPlayers(), newGame.getCharacterCards(),
+                newGame.getClouds(), newGame.getIslands());
+        for (ClientConnection c : players) {
             c.startView(controller);
         }
     }
 
-    private void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands){
-        ArrayList<StrippedBoard> strippedBoards =new ArrayList<>();
+    private void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands) {
+        ArrayList<StrippedBoard> strippedBoards = new ArrayList<>();
         ArrayList<StrippedCharacter> strippedCharacters = new ArrayList<>();
         ArrayList<StrippedCloud> strippedClouds = new ArrayList<>();
         ArrayList<StrippedIsland> strippedIslands = new ArrayList<>();
 
-        for (Player p: players) {
-           StrippedBoard newStrippedBoard = new StrippedBoard(p);
-           strippedBoards.add(newStrippedBoard);
+        for (Player p : players) {
+            StrippedBoard newStrippedBoard = new StrippedBoard(p);
+            strippedBoards.add(newStrippedBoard);
         }
 
-        for(CharacterCard c: charactersCard){
+        for (CharacterCard c : charactersCard) {
             StrippedCharacter newStrippedCharCard = new StrippedCharacter(c);
             strippedCharacters.add(newStrippedCharCard);
         }
 
-        for (Cloud c:clouds) {
-            StrippedCloud newStrippedCloud = new StrippedCloud(c.getName(),c.getStudents());
+        for (Cloud c : clouds) {
+            StrippedCloud newStrippedCloud = new StrippedCloud(c.getName(), c.getStudents());
             strippedClouds.add(newStrippedCloud);
         }
 
-        for (Island s: islands) {
+        for (Island s : islands) {
             StrippedIsland newStrippedIsland = new StrippedIsland(s);
             strippedIslands.add(newStrippedIsland);
         }
-        StrippedModel strippedModel = new StrippedModel(strippedBoards,strippedCharacters,strippedClouds,strippedIslands);
-        SourceEvent modelInitSource = new SourceEvent(getRoomName(),"init");
-        PropertyChangeEvent evtInitialGame = new PropertyChangeEvent(modelInitSource,"init",null,strippedModel);
+        StrippedModel strippedModel = new StrippedModel(strippedBoards, strippedCharacters, strippedClouds, strippedIslands);
+        SourceEvent modelInitSource = new SourceEvent(getRoomName(), "init");
+        PropertyChangeEvent evtInitialGame = new PropertyChangeEvent(modelInitSource, "init", null, strippedModel);
         broadcast(evtInitialGame);
     }
 
-    public void commandInvoker(Command command){
+    public void commandInvoker(Command command) {
         command.execute(controller);
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt){
-        if(evt.getPropertyName().equals("error"))sendErrorEvent(evt);
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("error")) sendErrorEvent(evt);
         else broadcast(evt);
     }
 
-    private void broadcast(PropertyChangeEvent event){
-        for (ClientConnection client: players) {
+    private void broadcast(PropertyChangeEvent event) {
+        for (ClientConnection client : players) {
             client.sendEvent(event);
         }
     }
 
-    private void sendErrorEvent(PropertyChangeEvent error){
-        SourceEvent src = (SourceEvent)error.getSource();
+    private void sendErrorEvent(PropertyChangeEvent error) {
+        SourceEvent src = (SourceEvent) error.getSource();
         String nickname = src.getWho();
-        for (ClientConnection client: players) {
-            if(client.getNickname().equals(nickname)){
+        for (ClientConnection client : players) {
+            if (client.getNickname().equals(nickname)) {
                 client.sendEvent(error);
                 break;
             }
