@@ -15,7 +15,7 @@ public class Controller {
         if (numOfPlayers < 1 || numOfPlayers > 4) {
             throw new IncorrectArgumentException("Invalid number of players\n");
         } else if (numOfPlayers != nicknames.size()) {
-            throw new IncorrectArgumentException("Number of players and nicknames array list lenght mismatch\n");
+            throw new IncorrectArgumentException("Number of players and nicknames array list length mismatch\n");
         }
         try {
             game = new Game(room,expertMode, numOfPlayers, nicknames);

@@ -15,8 +15,6 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ControllerTest {
-
-
     Game planningPhaseComplete() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, NegativeValueException {
         Game game = initGame4players();
         for (int i = 0; i < 4; i++) {
