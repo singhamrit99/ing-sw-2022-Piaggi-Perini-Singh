@@ -2,10 +2,7 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.exceptions.IncorrectPlayerException;
-import it.polimi.ingsw.exceptions.IncorrectStateException;
-import it.polimi.ingsw.exceptions.NegativeValueException;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.cards.charactercard.Ability;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCardFactory;

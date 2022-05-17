@@ -5,7 +5,7 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.commands.*;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.stripped.*;
 
 import java.beans.PropertyChangeEvent;
