@@ -1,4 +1,5 @@
 package it.polimi.ingsw.server;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -57,7 +58,6 @@ public class Server {
         users.remove(c);
     }
 
-
     public synchronized void createRoom(String roomName, ClientConnection user) {
         ArrayList<ClientConnection> userInNewRoom = new ArrayList<>();
         userInNewRoom.add(user);
@@ -84,23 +84,23 @@ public class Server {
     public synchronized ArrayList<String> getNicknamesInRoom(String roomName) {
         ArrayList<ClientConnection> players = rooms.get(roomName).getPlayers();
         ArrayList<String> nicknames = new ArrayList<>();
-        for(ClientConnection cl : players)nicknames.add(cl.getNickname());
+        for (ClientConnection cl : players) nicknames.add(cl.getNickname());
         return nicknames;
     }
 
-    public synchronized boolean isExpertMode(String roomName){
+    public synchronized boolean isExpertMode(String roomName) {
         return rooms.get(roomName).getExpertMode();
     }
 
-    public synchronized boolean isLeader(ClientConnection cl , String roomName){
-        if(cl.getNickname().equals(getNicknamesInRoom(roomName).get(0))){
+    public synchronized boolean isLeader(ClientConnection cl, String roomName) {
+        if (cl.getNickname().equals(getNicknamesInRoom(roomName).get(0))) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public synchronized void setExpertModeRoom(String roomName, Boolean expertMode){
+    public synchronized void setExpertModeRoom(String roomName, Boolean expertMode) {
         rooms.get(roomName).setExpertmode(expertMode);
     }
 }
