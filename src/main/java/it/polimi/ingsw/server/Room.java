@@ -6,8 +6,8 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.commands.Command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.model.exceptions.NegativeValueException;
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
 
