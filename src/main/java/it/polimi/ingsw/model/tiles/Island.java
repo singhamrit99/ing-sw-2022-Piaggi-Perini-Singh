@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.tiles;
 import it.polimi.ingsw.model.StudentManager;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.model.exceptions.NegativeValueException;
+import it.polimi.ingsw.exceptions.NegativeValueException;
 
 import java.util.EnumMap;
 
