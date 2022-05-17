@@ -4,7 +4,7 @@ import it.polimi.ingsw.controller.Controller;
 
 public class ViewGUI {
     Controller controller;
-    public void standardBehaviour(Controller controller)
+    public void standardBehaviour()
     {
 
     }

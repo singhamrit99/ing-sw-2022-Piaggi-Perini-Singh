@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.stripped;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.SchoolBoard;
+import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
+import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 
 import java.util.ArrayList;
@@ -22,6 +24,10 @@ public class StrippedBoard {
         this.professorsTable = tmpBoard.getProfessorsTable();
         this.coins = boardOwner.getCoins();
         this.numberOfTowers = tmpBoard.getTowers();
+        ArrayList<AssistantCard> temp= boardOwner.getAssistantCardDeck().getAllCards();
+        AssistantCard add = null;
+        int i=0;
+
     }
 
     public String getOwner() {

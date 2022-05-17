@@ -61,10 +61,8 @@ public class Room implements PropertyChangeListener {
         Game newGame = controller.initializeGame(this, expertMode, players.size(), nicknames);
         buildStrippedModel(newGame.getPlayers(), newGame.getCharacterCards(),
                 newGame.getClouds(), newGame.getIslands());
-        for (ClientConnection c : players) {
-            c.startView(controller);
         }
-    }
+
 
     private void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands) {
         ArrayList<StrippedBoard> strippedBoards = new ArrayList<>();
@@ -98,7 +96,7 @@ public class Room implements PropertyChangeListener {
         SourceEvent modelInitSource = new SourceEvent(getRoomName(), "init");
         PropertyChangeEvent evtInitialGame = new PropertyChangeEvent(modelInitSource, "init", null, strippedModel);
         broadcast(evtInitialGame);
-    }
+}
 
     public void commandInvoker(Command command) {
         command.execute(controller);
