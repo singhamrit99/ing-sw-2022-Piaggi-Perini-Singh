@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.exceptions.ControllerExceptions;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.model.stripped.StrippedBoard;
 import it.polimi.ingsw.model.stripped.StrippedCharacter;
 import it.polimi.ingsw.model.stripped.StrippedCloud;
 import it.polimi.ingsw.model.stripped.StrippedIsland;
@@ -433,7 +434,12 @@ public class Game {
                 currentPlayer.moveStudents(studentsToDining, studentsToRemove);
                 state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
                 if(isDiningChanged){
-                    checkAndPlaceProfessor(); //maybe some students have arrived in the dining table and professors have moved
+                    checkAndPlaceProfessor(); //check and eventually modifies and notifies
+                    //notify dining change
+                    EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
+                    SourceEvent islandEvent = new SourceEvent(currentPlayer.getNickname(), "dining changed");
+                    PropertyChangeEvent evt = new PropertyChangeEvent(islandEvent, "dining", null, newDining);
+                    gameListener.propertyChange(evt);
                 }
             } else throw new IncorrectStateException();
         } else throw new IncorrectPlayerException();
@@ -447,6 +453,8 @@ public class Game {
         if (state == State.ACTIONPHASE_3) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 currentPlayer.addStudents(clouds.get(index).drawStudents());
+                //notify
+
                 nextPlayer();
             } else throw new IncorrectPlayerException();
         } else {
@@ -488,10 +496,12 @@ public class Game {
 
     /**
      * It is called if new students are added to the dining room and it checks if new professor are placed.
-     * It is only called in moveStudents method in the Action Phase.
+     * It is only called in moveStudents method in the Action Phase and by the CharactersCard.
+     * It returns a boolean to signal if it has been a change in the professor table.
      */
     public void checkAndPlaceProfessor() throws ProfessorNotFoundException {
         int max = 0;
+        boolean professorTableIsChanged = false;
         Player maxPlayer = null;
         for (Colors studentColor : Colors.values()) {
             for (Player player : players) {
@@ -513,12 +523,26 @@ public class Game {
                 }
             }
             if (maxPlayer != null) {
-                for (Player player : players) { //eventually remove all the players that had that professor
-                    if (player.hasProfessorOfColor(studentColor)) player.removeProfessor(studentColor);
+                for (Player player : players) { //eventually remove the player who had that professor
+                    if (player.hasProfessorOfColor(studentColor)){
+                        player.removeProfessor(studentColor);
+                        //notify the removed professors
+                        ArrayList<Colors> professors = player.getSchoolBoard().getProfessorsTable();
+                        SourceEvent islandEvent = new SourceEvent(player.getNickname(), "prof deleted");
+                        PropertyChangeEvent evt = new PropertyChangeEvent(islandEvent, "professorTable", null, professors);
+                        gameListener.propertyChange(evt);
+                    }
                 }
                 maxPlayer.addProfessor(studentColor);
+                //notify the added prof
+                ArrayList<Colors> professors = maxPlayer.getSchoolBoard().getProfessorsTable();
+                SourceEvent islandEvent = new SourceEvent(maxPlayer.getNickname(), "prof added");
+                PropertyChangeEvent evt = new PropertyChangeEvent(islandEvent, "professorTable", null, professors);
+                gameListener.propertyChange(evt);
+                professorTableIsChanged = true;
             }
         }
+        return professorTableIsChanged;
     }
 
     /**
