@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.tiles.Cloud;
 
 import java.util.EnumMap;
 
@@ -9,9 +10,9 @@ public class StrippedCloud {
     public String name;
     private EnumMap<Colors, Integer> students;
 
-    public StrippedCloud(String name, EnumMap<Colors, Integer> students) {
-        this.name = name;
-        this.students = students;
+    public StrippedCloud(Cloud cloud) {
+        this.name = cloud.getName();
+        this.students = cloud.getStudents();
     }
 
     public String getName() {

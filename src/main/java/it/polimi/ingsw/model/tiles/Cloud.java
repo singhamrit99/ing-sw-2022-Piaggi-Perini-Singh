@@ -8,7 +8,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class Cloud {
-    public String name;
+    final private String name;
     private EnumMap<Colors, Integer> students;
 
     public Cloud(String name) {

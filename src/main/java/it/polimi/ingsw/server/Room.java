@@ -86,7 +86,7 @@ public class Room implements PropertyChangeListener {
         }
 
         for (Cloud c : clouds) {
-            StrippedCloud newStrippedCloud = new StrippedCloud(c.getName(), c.getStudents());
+            StrippedCloud newStrippedCloud = new StrippedCloud(c);
             strippedClouds.add(newStrippedCloud);
         }
 
