@@ -18,10 +18,23 @@ class AssistantCardDeckTest {
     }
 
     @Test
-    void getLeaderCards() {
+    void testGetAllCards() {
         // Testing each card in deck
         for (AssistantCard assistantCard : ASSISTANT_CARD_DECK.getAllCards()) {
             assertTrue(assistantCard.getMove() > 0);
         }
+    }
+
+    @Test
+    void testGetDeck(){
+        ASSISTANT_CARD_DECK.fillDeck();
+        assertEquals(NUM_OF_ASSISTANT_CARDS, ASSISTANT_CARD_DECK.getDeck().size());
+    }
+
+    @Test
+    void testDiscardCard(){
+        ASSISTANT_CARD_DECK.fillDeck();
+        ASSISTANT_CARD_DECK.discardCard(0);
+        assertEquals(NUM_OF_ASSISTANT_CARDS-1 ,ASSISTANT_CARD_DECK.getAllCards().size());
     }
 }
