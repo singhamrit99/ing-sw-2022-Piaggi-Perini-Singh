@@ -4,9 +4,9 @@ import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.StudentManager;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.model.exceptions.NegativeValueException;
-import it.polimi.ingsw.model.exceptions.ProfessorNotFoundException;
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.exceptions.NegativeValueException;
+import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
 
 import java.util.EnumMap;
 import java.util.Map;
