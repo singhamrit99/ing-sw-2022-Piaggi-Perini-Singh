@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.exceptions.NegativeValueException;
+import it.polimi.ingsw.exceptions.NegativeValueException;
 
 public class SelectorCharacter extends CharacterCard {
     private int noTileNumber;
