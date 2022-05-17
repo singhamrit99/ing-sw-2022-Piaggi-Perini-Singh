@@ -1,9 +1,8 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.model.exceptions.NegativeValueException;
-import it.polimi.ingsw.model.exceptions.ProfessorNotFoundException;
+import it.polimi.ingsw.exceptions.NegativeValueException;
+import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
@@ -224,6 +223,69 @@ class SchoolBoardTest {
     }
 
     @Test
-    void hasProfessorOfColor() {
+    void testRemoveDiningStudentsException() {
+        enumMap.put(Colors.BLUE, 2);
+        try {
+            schoolBoard2.addStudentsDining(enumMap);
+        } catch (NegativeValueException e) {
+            e.printStackTrace();
+        }
+
+        enumMap.clear();
+        enumMap.put(Colors.BLUE, -1);
+        //if value is negative
+        assertThrows(NegativeValueException.class, () -> schoolBoard2.removeDiningStudents(enumMap));
+    }
+
+    @Test
+    void testRemoveDiningStudents() {
+        setupEnum();
+
+        try {
+            schoolBoard2.addStudentsDining(enumMap);
+        } catch (NegativeValueException e) {
+            e.printStackTrace();
+        }
+        enumMap.clear();
+        enumMap.put(Colors.BLUE, 1);
+        enumMap.put(Colors.PINK, 2);
+
+        //remove
+        try {
+            schoolBoard2.removeDiningStudents(enumMap);
+        } catch (NegativeValueException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testAddStudentsDiningException() {
+        enumMap.put(Colors.PINK, -1);
+        assertThrows(NegativeValueException.class, () -> schoolBoard2.addStudentsDining(enumMap));
+    }
+
+    @Test
+    void testAddStudentsDining() {
+        setupEnum();
+
+        //if students are not present in the board
+        try {
+            schoolBoard2.addStudentsDining(enumMap);
+        } catch (NegativeValueException e) {
+            e.printStackTrace();
+        }
+        assertEquals(2, schoolBoard2.getDining().get(Colors.BLUE));
+        assertEquals(3, schoolBoard2.getDining().get(Colors.PINK));
+        assertEquals(1, schoolBoard2.getDining().get(Colors.YELLOW));
+
+        //if students are present in the board
+        try {
+            schoolBoard2.addStudentsDining(enumMap);
+        } catch (NegativeValueException e) {
+            e.printStackTrace();
+        }
+        assertEquals(4, schoolBoard2.getDining().get(Colors.BLUE));
+        assertEquals(6, schoolBoard2.getDining().get(Colors.PINK));
+        assertEquals(2, schoolBoard2.getDining().get(Colors.YELLOW));
     }
 }
