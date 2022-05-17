@@ -22,6 +22,7 @@ import it.polimi.ingsw.model.tiles.Island;
 import it.polimi.ingsw.server.Room;
 import it.polimi.ingsw.server.SourceEvent;
 
+import javax.xml.transform.Source;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.InputStreamReader;
@@ -48,7 +49,6 @@ public class Game {
     private ArrayList<String> importingClouds;
     private ArrayList<CharacterCard> characterCards;
     private String JSONContent;
-
     private PropertyChangeListener gameListener;
 
     /**
@@ -358,8 +358,10 @@ public class Game {
         if (state == State.ENDTURN) {
             if (isGameOver()) {
                 state = State.END;
-                //TODO incrementa valore carte e vedi altro se c'è da fare
-                checkWinner();
+                ArrayList<Player> teamWinner = checkWinner();
+                SourceEvent gameOver = new SourceEvent("game","gameOver");
+                PropertyChangeEvent gameOverEvt = new PropertyChangeEvent(gameOver,"message",null,teamWinner);
+                gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
                 numRounds++;
@@ -671,10 +673,11 @@ public class Game {
      * and 3 towers will be removed, it will leave this configuration: 2 and 2.
      */
     public void moveTowersFromTeam(ArrayList<Player> team, int amount){
-        int numbersOfIterations = Math.abs(amount);
+        int numbersOfIterations = Math.abs(amount); //necessary for the 'alternation between team members' of moves
+        //this method is used to add and remove towers
         int oneTowerSigned;
-        if (amount < 0) oneTowerSigned = -1;
-        else oneTowerSigned = 1;
+        if (amount < 0) oneTowerSigned = -1; //in case I want to remove towers
+        else oneTowerSigned = 1; //in case I want to add towers
 
         if (team.get(1) != null) { //It means we are 4 players game
             while (numbersOfIterations > 0) {
@@ -690,9 +693,17 @@ public class Game {
                 numbersOfIterations--;
             }
         } else team.get(0).moveTowers(amount);
+
+        //notify boards changes
+        for(Player teamMember: team){
+            int changedTowers = teamMember.getSchoolBoard().getTowers();
+            SourceEvent towersEventSrc = new SourceEvent(teamMember.getNickname(), "changed towers");
+            PropertyChangeEvent towersEvent = new PropertyChangeEvent(towersEventSrc,"towers",null,changedTowers);
+            gameListener.propertyChange(towersEvent);
+        }
     }
 
-    public void checkUnificationIslands() throws NegativeValueException {
+    private void checkUnificationIslands() throws NegativeValueException {
         boolean listChanged = false;
         ListIterator<Island> it = islands.listIterator();
         Island currentTile;
@@ -705,11 +716,20 @@ public class Game {
                     && (nextTile.getTowersColor().equals(currentTile.getTowersColor()))) {
                 currentTile.addStudents(nextTile.getStudents());
                 currentTile.sumTowers(nextTile.getNumOfTowers());
+                StrippedIsland mergedTile = new StrippedIsland(currentTile); //notify currentTile
+                StrippedIsland deletedTile = new StrippedIsland(nextTile); //notify tile to deleted
                 islands.remove(nextTile);
+                //notifications send
+                SourceEvent islandSrc = new SourceEvent(currentPlayer.getNickname(), "island merged");
+                PropertyChangeEvent islandMergeEvent = new PropertyChangeEvent(islandSrc,"island",mergedTile,mergedTile);
+                gameListener.propertyChange(islandMergeEvent);
+                islandSrc = new SourceEvent(currentPlayer.getNickname(), "island deleted");
+                PropertyChangeEvent islandDeletedEvent = new PropertyChangeEvent(islandSrc,"island",deletedTile,null);
+                gameListener.propertyChange(islandDeletedEvent);
                 listChanged = true;
             }
         }
-        if (listChanged) checkUnificationIslands();
+        if (listChanged){checkUnificationIslands();} //recursive method necessary to check double+ unification in a single time
     }
 
     /**
@@ -796,7 +816,9 @@ public class Game {
     }
 
     public void error(ControllerExceptions error) {
-        //TODO GUARDARE ANCHE QUESTO E SISTEMARE
+        SourceEvent srcError = new SourceEvent(currentPlayer.getNickname(), error.toString());
+        PropertyChangeEvent errorEvt = new PropertyChangeEvent(srcError,"error",null,null);
+        gameListener.propertyChange(errorEvt);
     }
 
     public Island getIsland(int index) {
@@ -814,7 +836,6 @@ public class Game {
             player.getSchoolBoard().removeDiningStudents(enumMap);
         }
     }
-
 
     //getters necessary to build StrippedModel :
     public ArrayList<CharacterCard> getCharacterCards() {
