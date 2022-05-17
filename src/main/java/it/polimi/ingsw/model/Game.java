@@ -2,6 +2,10 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.exceptions.IncorrectPlayerException;
+import it.polimi.ingsw.exceptions.IncorrectStateException;
+import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.model.cards.charactercard.Ability;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCardFactory;
@@ -282,7 +286,7 @@ public class Game {
                 for (Cloud cloud : clouds) {
                     cloud.addStudents(bag.drawStudents(numDrawnStudents));
                     SourceEvent cloudSrc = new SourceEvent(nicknameCaller, "draw from Bag to clouds");
-                    StrippedCloud newCloud = new StrippedCloud(cloud.getName(), cloud.getStudents());
+                    StrippedCloud newCloud = new StrippedCloud(cloud);
                     PropertyChangeEvent evt = new PropertyChangeEvent(cloudSrc, "cloud", null, newCloud);
                 }
                 playerDrawnOut = true;
@@ -437,8 +441,8 @@ public class Game {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
                     //notify dining change
                     EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
-                    SourceEvent islandEvent = new SourceEvent(currentPlayer.getNickname(), "dining changed");
-                    PropertyChangeEvent evt = new PropertyChangeEvent(islandEvent, "dining", null, newDining);
+                    SourceEvent diningEvent = new SourceEvent(currentPlayer.getNickname(), "dining changed");
+                    PropertyChangeEvent evt = new PropertyChangeEvent(diningEvent, "dining", null, newDining);
                     gameListener.propertyChange(evt);
                 }
             } else throw new IncorrectStateException();
@@ -453,8 +457,16 @@ public class Game {
         if (state == State.ACTIONPHASE_3) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 currentPlayer.addStudents(clouds.get(index).drawStudents());
-                //notify
-
+                //notify entrance
+                EnumMap<Colors, Integer> newEntrance = currentPlayer.getSchoolBoard().getEntrance();
+                SourceEvent entranceEvent = new SourceEvent(currentPlayer.getNickname(), "added students");
+                PropertyChangeEvent evt = new PropertyChangeEvent(entranceEvent, "entrance", null, newEntrance);
+                gameListener.propertyChange(evt);
+                //notify cloud change
+                StrippedCloud changedCloud = new StrippedCloud(clouds.get(index));
+                SourceEvent cloudEvent = new SourceEvent(currentPlayer.getNickname(), "drawedStudents");
+                evt = new PropertyChangeEvent(cloudEvent, "cloud", null, changedCloud);
+                gameListener.propertyChange(evt);
                 nextPlayer();
             } else throw new IncorrectPlayerException();
         } else {
@@ -501,7 +513,6 @@ public class Game {
      */
     public void checkAndPlaceProfessor() throws ProfessorNotFoundException {
         int max = 0;
-        boolean professorTableIsChanged = false;
         Player maxPlayer = null;
         for (Colors studentColor : Colors.values()) {
             for (Player player : players) {
@@ -528,21 +539,19 @@ public class Game {
                         player.removeProfessor(studentColor);
                         //notify the removed professors
                         ArrayList<Colors> professors = player.getSchoolBoard().getProfessorsTable();
-                        SourceEvent islandEvent = new SourceEvent(player.getNickname(), "prof deleted");
-                        PropertyChangeEvent evt = new PropertyChangeEvent(islandEvent, "professorTable", null, professors);
+                        SourceEvent profEvent = new SourceEvent(player.getNickname(), "prof deleted");
+                        PropertyChangeEvent evt = new PropertyChangeEvent(profEvent, "professorTable", null, professors);
                         gameListener.propertyChange(evt);
                     }
                 }
                 maxPlayer.addProfessor(studentColor);
                 //notify the added prof
                 ArrayList<Colors> professors = maxPlayer.getSchoolBoard().getProfessorsTable();
-                SourceEvent islandEvent = new SourceEvent(maxPlayer.getNickname(), "prof added");
-                PropertyChangeEvent evt = new PropertyChangeEvent(islandEvent, "professorTable", null, professors);
+                SourceEvent profEvent = new SourceEvent(maxPlayer.getNickname(), "prof added");
+                PropertyChangeEvent evt = new PropertyChangeEvent(profEvent, "professorTable", null, professors);
                 gameListener.propertyChange(evt);
-                professorTableIsChanged = true;
             }
         }
-        return professorTableIsChanged;
     }
 
     /**
