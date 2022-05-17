@@ -3,12 +3,11 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
-import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.server.ClientConnection;
 import it.polimi.ingsw.server.Room;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Random;
