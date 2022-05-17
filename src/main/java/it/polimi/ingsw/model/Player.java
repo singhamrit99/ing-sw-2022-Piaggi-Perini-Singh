@@ -5,8 +5,8 @@ import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.model.exceptions.NegativeValueException;
-import it.polimi.ingsw.model.exceptions.ProfessorNotFoundException;
+import it.polimi.ingsw.exceptions.NegativeValueException;
+import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
 
 import java.util.EnumMap;
 

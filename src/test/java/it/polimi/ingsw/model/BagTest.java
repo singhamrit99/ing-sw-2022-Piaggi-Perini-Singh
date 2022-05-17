@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.exceptions.NegativeValueException;
+import it.polimi.ingsw.exceptions.NegativeValueException;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;

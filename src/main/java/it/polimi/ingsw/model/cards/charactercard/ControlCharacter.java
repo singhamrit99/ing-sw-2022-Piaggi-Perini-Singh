@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.exceptions.ProfessorNotFoundException;
+import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
 
 public class ControlCharacter extends CharacterCard {
     public ControlCharacter(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) {

@@ -15,8 +15,7 @@ public enum Towers implements Serializable {
     Towers(int index) {
         this.index = index;
     }
-
-    public int getIndex() {
+    /*public int getIndex() {
         return index;
-    }
+    }*/
 }

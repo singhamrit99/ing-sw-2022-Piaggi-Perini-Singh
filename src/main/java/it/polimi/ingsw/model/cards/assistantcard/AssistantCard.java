@@ -6,32 +6,17 @@ import it.polimi.ingsw.model.cards.Card;
  * @author Amrit
  */
 public class AssistantCard extends Card {
-    private int value;
-    private int move;
-    private String wizard;
+    private final int move;
     private boolean hasPlayed;
 
     public AssistantCard(String imageName, int move) {
         super(imageName);
         this.move = move;
-        this.wizard = "";
         this.hasPlayed = false;
-    }
-
-    public AssistantCard(int value, int move, String wizard) {
-        this("", move);
     }
 
     public int getMove() {
         return move;
-    }
-
-    public String getWizard() {
-        return wizard;
-    }
-
-    public void setWizard(String wizard) {
-        this.wizard = wizard;
     }
 
     public boolean getHasPlayed() {
@@ -40,17 +25,5 @@ public class AssistantCard extends Card {
 
     public void setHasPlayed(boolean hasPlayed) {
         this.hasPlayed = hasPlayed;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public void setMove(int move) {
-        this.move = move;
     }
 }
