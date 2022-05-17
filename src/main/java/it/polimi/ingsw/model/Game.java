@@ -482,10 +482,23 @@ public class Game {
                 int destinationMotherNature = motherNaturePosition + distanceChosen;
                 if (islands.get(motherNaturePosition).hasMotherNature()) {
                     if (distanceChosen <= getMaxMotherNatureMove()) {
+                        //notify oldIsland
+                        StrippedIsland oldIsland = new StrippedIsland(islands.get(motherNaturePosition)); //saving oldIsland source
                         islands.get(motherNaturePosition).removeMotherNature();
+                        StrippedIsland changedIsland = new StrippedIsland(islands.get(motherNaturePosition));
+                        SourceEvent islandSrc = new SourceEvent(playerCaller, "MN moved away");
+                        PropertyChangeEvent evt = new PropertyChangeEvent(islandSrc, "island", oldIsland, changedIsland);
+                        gameListener.propertyChange(evt);
+                        //notify destination island
+                        StrippedIsland oldIslandDest = new StrippedIsland(islands.get(destinationMotherNature)); //saving oldIsland destination
                         islands.get(destinationMotherNature).moveMotherNature();
+                        //notify new newIslandDest (changedIsland)
+                        changedIsland = new StrippedIsland(islands.get(destinationMotherNature));
+                        SourceEvent destSrc = new SourceEvent(playerCaller, "MN moved here");
+                        PropertyChangeEvent evtDest = new PropertyChangeEvent(destSrc, "island", oldIslandDest,changedIsland);
+                        gameListener.propertyChange(evtDest);
+                        //ended notifications
                         motherNaturePosition = destinationMotherNature;
-
                         resolveMotherNature(destinationMotherNature);
                         state = State.ACTIONPHASE_3;
                     } else {
@@ -626,6 +639,11 @@ public class Game {
                 ArrayList<Player> oldTeam = findPlayerFromTeam(island.getTowersColor()); //oldTeamOwnerShip
                 moveTowersFromTeam(oldTeam, switchedTowers); //adding towers to old team
                 island.setTowersColor(newTeamOwner); //set ownership
+                //notify island change
+                StrippedIsland islandStripped = new StrippedIsland(island);
+                SourceEvent islandSrc = new SourceEvent(newTeamOwner.name(), "conquered");
+                PropertyChangeEvent evtConquest = new PropertyChangeEvent(islandSrc, "island", null, islandStripped);
+                gameListener.propertyChange(evtConquest);
             }
         }
     }
@@ -652,7 +670,7 @@ public class Game {
      * removed from each player ONCE at time each. For example if playerA and playerB of same team have 3 and 4 towers
      * and 3 towers will be removed, it will leave this configuration: 2 and 2.
      */
-    public void moveTowersFromTeam(ArrayList<Player> team, int amount) {
+    public void moveTowersFromTeam(ArrayList<Player> team, int amount){
         int numbersOfIterations = Math.abs(amount);
         int oneTowerSigned;
         if (amount < 0) oneTowerSigned = -1;
