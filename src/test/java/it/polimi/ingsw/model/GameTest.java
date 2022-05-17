@@ -3,7 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.server.ClientConnection;
 import it.polimi.ingsw.server.Room;
 import org.junit.jupiter.api.Test;
