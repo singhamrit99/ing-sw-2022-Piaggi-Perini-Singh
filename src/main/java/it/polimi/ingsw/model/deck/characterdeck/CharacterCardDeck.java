@@ -28,7 +28,6 @@ public class CharacterCardDeck implements Deck<CharacterCard> {
         characterCards = deckGenerator.getDeck();
     }
 
-    @Override
     public CharacterCard get(int index) {
         return characterCards.get(index);
     }
@@ -38,7 +37,6 @@ public class CharacterCardDeck implements Deck<CharacterCard> {
         return characterCards;
     }
 
-    @Override
     public void discardCard(int index) {
         characterCards.remove(index);
     }

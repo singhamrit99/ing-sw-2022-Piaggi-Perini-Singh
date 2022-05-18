@@ -25,7 +25,6 @@ public class DeckGenerator<T> {
      */
     private void loadDeckFromJSON(Type collectionType) {
         Gson gson = new Gson();
-
         try {
             InputStreamReader inputStreamReader = new InputStreamReader(DeckGenerator.class.getResourceAsStream(JSONFilePath), StandardCharsets.UTF_8);
             JsonReader jsonReader = new JsonReader(inputStreamReader);

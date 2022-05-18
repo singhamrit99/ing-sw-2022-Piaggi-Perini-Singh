@@ -11,12 +11,6 @@ public interface Deck<T> {
      */
     void fillDeck();
 
-    T get(int index);
-
     ArrayList<T> getAllCards();
 
-    /**
-     * Eliminate a specific card from deck
-     */
-    void discardCard(int index);
 }
