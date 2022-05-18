@@ -15,11 +15,11 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ControllerTest {
-    Game planningPhaseComplete() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, NegativeValueException {
+    Game planningPhaseComplete() throws IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException, NegativeValueException, AssistantCardNotFound {
         Game game = initGame4players();
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
         }
         return game;
     }
@@ -34,7 +34,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallMoveMotherNature() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException {
+    void testCallMoveMotherNature() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException, AssistantCardNotFound {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
@@ -46,7 +46,7 @@ class ControllerTest {
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
         }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
@@ -72,7 +72,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallMoveStudent() throws IncorrectStateException, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException {
+    void testCallMoveStudent() throws IncorrectStateException, AssistantCardNotFound, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
@@ -84,7 +84,7 @@ class ControllerTest {
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
         }
         assertEquals(game.getCurrentState(), State.ACTIONPHASE_1);
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
@@ -108,7 +108,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallPickCloud() throws IncorrectStateException, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException {
+    void testCallPickCloud() throws IncorrectStateException,AssistantCardNotFound, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
@@ -120,7 +120,7 @@ class ControllerTest {
         Game game = controller.initializeGame(roomTest,true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), (int) (Math.random() * 9));
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
         }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
@@ -159,7 +159,7 @@ class ControllerTest {
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldplayer = game.getCurrentPlayer().getNickname();
-        controller.callPlayAssistantCard(3);
+        controller.callPlayAssistantCard("Assistente1");
         assertNotEquals(oldplayer, game.getCurrentPlayer().getNickname());
     }
 }

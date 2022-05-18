@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.AssistantCardNotFound;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
@@ -31,9 +32,8 @@ public class Player implements Comparable<Player> {
         coins = 1;
     }
 
-    public void playAssistantCard(int index) {
-        playedAssistantCard = assistantCardDeck.get(index);
-        assistantCardDeck.get(index).setHasPlayed(true);
+    public void playAssistantCard(String nameCard) throws AssistantCardNotFound {
+        playedAssistantCard = assistantCardDeck.get(nameCard);
     }
 
     public void addStudents(EnumMap<Colors, Integer> students) throws NegativeValueException {

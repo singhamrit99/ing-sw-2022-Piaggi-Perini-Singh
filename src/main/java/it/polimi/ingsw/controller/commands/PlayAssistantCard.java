@@ -3,14 +3,14 @@ package it.polimi.ingsw.controller.commands;
 import it.polimi.ingsw.controller.Controller;
 
 public class PlayAssistantCard implements Command {
-    int assistantCardID;
+    String assistantCardName;
 
-    public PlayAssistantCard(int assistantCardID) {
-        this.assistantCardID = assistantCardID;
+    public PlayAssistantCard(String assistantCardName) {
+        this.assistantCardName = assistantCardName;
     }
 
     @Override
     public void execute(Controller controller) {
-        controller.callPlayAssistantCard(assistantCardID);
+        controller.callPlayAssistantCard(assistantCardName);
     }
 }

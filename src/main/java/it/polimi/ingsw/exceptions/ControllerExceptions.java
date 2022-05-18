@@ -7,7 +7,8 @@ public enum ControllerExceptions {
     MOTHER_NATURE_LOST_EXCEPTION(104, "Game logic error! Can't find Mother Nature."),
     NEGATIVE_VALUE_EXCEPTION(105, "Game logic error! Negative value."),
     PROFESSOR_NOT_FOUND_EXCEPTION(106, "Game logic error! Can't find professor."),
-    NOT_ENOUGH_COINS_EXCEPTION(107, "Game logic error! Not enough coins to play card.");
+    NOT_ENOUGH_COINS_EXCEPTION(107, "Game logic error! Not enough coins to play card."),
+    ASSISTANT_CARD_NOT_FOUND (108, "Game logic error! AssistantCard not found.");
     final int errorCode;
 
     ControllerExceptions(int errorCode, String message) {

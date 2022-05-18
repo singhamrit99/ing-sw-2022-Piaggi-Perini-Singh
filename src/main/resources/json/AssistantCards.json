@@ -1,42 +1,42 @@
 [
   {
-    "name": "Assistente(1)",
+    "name": "Assistente1)",
     "move": 1
   },
   {
-    "name": "Assistente(2)",
+    "name": "Assistente2",
     "move": 1
   },
   {
-    "name": "Assistente(3)",
+    "name": "Assistente3",
     "move": 2
   },
   {
-    "name": "Assistente(4)",
+    "name": "Assistente4",
     "move": 2
   },
   {
-    "name": "Assistente(5)",
+    "name": "Assistente5",
     "move": 3
   },
   {
-    "name": "Assistente(6)",
+    "name": "Assistente6",
     "move": 3
   },
   {
-    "name": "Assistente(7)",
+    "name": "Assistente7",
     "move": 4
   },
   {
-    "name": "Assistente(8)",
+    "name": "Assistente8",
     "move": 4
   },
   {
-    "name": "Assistente(9)",
+    "name": "Assistente9",
     "move": 5
   },
   {
-    "name": "Assistente(10)",
+    "name": "Assistente10",
     "move": 5
   }
 ]

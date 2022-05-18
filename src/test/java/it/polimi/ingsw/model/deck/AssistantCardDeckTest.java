@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.deck;
 
+import it.polimi.ingsw.exceptions.AssistantCardNotFound;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import org.junit.jupiter.api.Test;
@@ -32,9 +33,9 @@ class AssistantCardDeckTest {
     }
 
     @Test
-    void testDiscardCard(){
+    void testDiscardCard() throws AssistantCardNotFound {
         ASSISTANT_CARD_DECK.fillDeck();
-        ASSISTANT_CARD_DECK.discardCard(0);
-        assertEquals(NUM_OF_ASSISTANT_CARDS-1 ,ASSISTANT_CARD_DECK.getAllCards().size());
+        ASSISTANT_CARD_DECK.get("Assistente1");
+        assertEquals(NUM_OF_ASSISTANT_CARDS-1 , ASSISTANT_CARD_DECK.getAllCards().size());
     }
 }

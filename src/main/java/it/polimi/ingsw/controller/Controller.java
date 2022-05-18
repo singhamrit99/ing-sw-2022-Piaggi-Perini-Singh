@@ -80,17 +80,12 @@ public class Controller {
         }
     }
 
-    public void callPlayAssistantCard(int playedCard) {
-        try {
-            if (playedCard < 0 || playedCard > 11) {
-                throw new IncorrectArgumentException();
-            }
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        }
+    public void callPlayAssistantCard(String playedCardName) {
         try {
             String nickname = game.getCurrentPlayer().getNickname();
-            game.playAssistantCard(nickname, playedCard);
+            game.playAssistantCard(nickname, playedCardName);
+        } catch (AssistantCardNotFound e) {
+            manageException(e);
         } catch (IncorrectStateException e) {
             manageException(e);
         } catch (IncorrectPlayerException e) {
@@ -189,6 +184,11 @@ public class Controller {
 
     public void manageException(ProfessorNotFoundException e) {
         ControllerExceptions error = ControllerExceptions.PROFESSOR_NOT_FOUND_EXCEPTION;
+        game.error(error);
+    }
+
+    public void manageException(AssistantCardNotFound e) {
+        ControllerExceptions error = ControllerExceptions.ASSISTANT_CARD_NOT_FOUND;
         game.error(error);
     }
 }
