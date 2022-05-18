@@ -299,10 +299,10 @@ public class Game {
      * * the correct order of player for the ActionPhase. It is based using a PriorityQueue and
      * taking advantage of the comparable interface of Player
      */
-    public void playAssistantCard(String nicknameCaller, int indexCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException {
+    public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFound {
         if (state == State.PLANNINGPHASE) {
             if (nicknameCaller.equals(currentPlayer.getNickname()) && playerDrawnOut) {  //playerDrawnOut = player has drawn from bag
-                currentPlayer.playAssistantCard(indexCard);
+                currentPlayer.playAssistantCard(nameCard);
 
             } else {
                 throw new IncorrectPlayerException();
@@ -361,8 +361,10 @@ public class Game {
         if (state == State.ENDTURN) {
             if (isGameOver()) {
                 state = State.END;
-                //TODO incrementa valore carte e vedi altro se c'è da fare
-                checkWinner();
+                ArrayList<Player> teamWinner = checkWinner();
+                SourceEvent gameOver = new SourceEvent("game","gameOver");
+                PropertyChangeEvent gameOverEvt = new PropertyChangeEvent(gameOver,"message",null,teamWinner);
+                gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
                 numRounds++;
@@ -485,10 +487,23 @@ public class Game {
                 int destinationMotherNature = motherNaturePosition + distanceChosen;
                 if (islands.get(motherNaturePosition).hasMotherNature()) {
                     if (distanceChosen <= getMaxMotherNatureMove()) {
+                        //notify oldIsland
+                        StrippedIsland oldIsland = new StrippedIsland(islands.get(motherNaturePosition)); //saving oldIsland source
                         islands.get(motherNaturePosition).removeMotherNature();
+                        StrippedIsland changedIsland = new StrippedIsland(islands.get(motherNaturePosition));
+                        SourceEvent islandSrc = new SourceEvent(playerCaller, "MN moved away");
+                        PropertyChangeEvent evt = new PropertyChangeEvent(islandSrc, "island", oldIsland, changedIsland);
+                        gameListener.propertyChange(evt);
+                        //notify destination island
+                        StrippedIsland oldIslandDest = new StrippedIsland(islands.get(destinationMotherNature)); //saving oldIsland destination
                         islands.get(destinationMotherNature).moveMotherNature();
+                        //notify new newIslandDest (changedIsland)
+                        changedIsland = new StrippedIsland(islands.get(destinationMotherNature));
+                        SourceEvent destSrc = new SourceEvent(playerCaller, "MN moved here");
+                        PropertyChangeEvent evtDest = new PropertyChangeEvent(destSrc, "island", oldIslandDest,changedIsland);
+                        gameListener.propertyChange(evtDest);
+                        //ended notifications
                         motherNaturePosition = destinationMotherNature;
-
                         resolveMotherNature(destinationMotherNature);
                         state = State.ACTIONPHASE_3;
                     } else {
@@ -629,6 +644,11 @@ public class Game {
                 ArrayList<Player> oldTeam = findPlayerFromTeam(island.getTowersColor()); //oldTeamOwnerShip
                 moveTowersFromTeam(oldTeam, switchedTowers); //adding towers to old team
                 island.setTowersColor(newTeamOwner); //set ownership
+                //notify island change
+                StrippedIsland islandStripped = new StrippedIsland(island);
+                SourceEvent islandSrc = new SourceEvent(newTeamOwner.name(), "conquered");
+                PropertyChangeEvent evtConquest = new PropertyChangeEvent(islandSrc, "island", null, islandStripped);
+                gameListener.propertyChange(evtConquest);
             }
         }
     }
@@ -675,6 +695,14 @@ public class Game {
                 numbersOfIterations--;
             }
         } else team.get(0).moveTowers(amount);
+
+        //notify boards changes
+        for(Player teamMember: team){
+            int changedTowers = teamMember.getSchoolBoard().getTowers();
+            SourceEvent towersEventSrc = new SourceEvent(teamMember.getNickname(), "changed towers");
+            PropertyChangeEvent towersEvent = new PropertyChangeEvent(towersEventSrc,"towers",null,changedTowers);
+            gameListener.propertyChange(towersEvent);
+        }
     }
 
     public void checkUnificationIslands() throws NegativeValueException {
@@ -690,11 +718,20 @@ public class Game {
                     && (nextTile.getTowersColor().equals(currentTile.getTowersColor()))) {
                 currentTile.addStudents(nextTile.getStudents());
                 currentTile.sumTowers(nextTile.getNumOfTowers());
+                StrippedIsland mergedTile = new StrippedIsland(currentTile); //notify currentTile
+                StrippedIsland deletedTile = new StrippedIsland(nextTile); //notify tile to deleted
                 islands.remove(nextTile);
+                //notifications send
+                SourceEvent islandSrc = new SourceEvent(currentPlayer.getNickname(), "island merged");
+                PropertyChangeEvent islandMergeEvent = new PropertyChangeEvent(islandSrc,"island",mergedTile,mergedTile);
+                gameListener.propertyChange(islandMergeEvent);
+                islandSrc = new SourceEvent(currentPlayer.getNickname(), "island deleted");
+                PropertyChangeEvent islandDeletedEvent = new PropertyChangeEvent(islandSrc,"island",deletedTile,null);
+                gameListener.propertyChange(islandDeletedEvent);
                 listChanged = true;
             }
         }
-        if (listChanged) checkUnificationIslands();
+        if (listChanged) checkUnificationIslands();//recursive method necessary to check double+ unification in a single time
     }
 
     /**
@@ -781,7 +818,9 @@ public class Game {
     }
 
     public void error(ControllerExceptions error) {
-        //TODO GUARDARE ANCHE QUESTO E SISTEMARE
+        SourceEvent cloudEvent = new SourceEvent(currentPlayer.getNickname(), error.name());
+        PropertyChangeEvent evtError = new PropertyChangeEvent(cloudEvent, "error", null, null);
+        gameListener.propertyChange(evtError);
     }
 
     public Island getIsland(int index) {
