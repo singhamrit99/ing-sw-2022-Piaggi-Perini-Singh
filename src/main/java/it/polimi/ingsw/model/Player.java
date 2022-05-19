@@ -29,7 +29,7 @@ public class Player implements Comparable<Player> {
         this.schoolBoard = new SchoolBoard(numberOfPlayers);
         this.towerColor = towerColors;
         assistantCardPlayedInThisTurn = false;
-        assistantCardDeck = new AssistantCardDeck();
+        assistantCardDeck = new AssistantCardDeck(nickname);
         assistantCardDeck.fillDeck();
         coins = 1;
     }

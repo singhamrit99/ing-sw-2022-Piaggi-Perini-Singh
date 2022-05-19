@@ -1,9 +1,12 @@
 package it.polimi.ingsw.model.stripped;
 
+import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.server.SourceEvent;
 
+import javax.xml.transform.Source;
 import java.beans.PropertyChangeEvent;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Optional;
@@ -14,12 +17,14 @@ public class StrippedModel {
     final private ArrayList<StrippedCloud> clouds;
     final private ArrayList<StrippedIsland> islands;
 
+    final private ArrayList<AssistantCardDeck> assistantDecks;
     public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters,
-                         ArrayList<StrippedCloud> clouds, ArrayList<StrippedIsland> islands) {
+                         ArrayList<StrippedCloud> clouds, ArrayList<StrippedIsland> islands, ArrayList<AssistantCardDeck> assistantDecks) {
         this.boards = boards;
         this.characters = characters;
         this.clouds = clouds;
         this.islands = islands;
+        this.assistantDecks = assistantDecks;
     }
 
     public void updateModel(PropertyChangeEvent evt) {
@@ -36,9 +41,22 @@ public class StrippedModel {
             case "cloud":
                 changeCloud(evt);
                 break;
+            case "assistant":
+                changeAssistantDeck(evt);
+                break;
             default:
                 System.out.println("scrivere una exception sensata");
                 break;
+        }
+    }
+
+    private void changeAssistantDeck(PropertyChangeEvent evt){
+        SourceEvent source = (SourceEvent) evt.getSource();
+        String ownerDeck = source.getWho();
+        Optional<AssistantCardDeck> deckToModify = assistantDecks.stream().filter(d ->  d.getOwner().equals(ownerDeck)).findFirst();
+        if(deckToModify.isPresent()){
+            assistantDecks.remove(deckToModify);
+            assistantDecks.add((AssistantCardDeck) evt.getNewValue());
         }
     }
 
