@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AssistantCardDeckTest {
     final int NUM_OF_ASSISTANT_CARDS = 10;
-    final AssistantCardDeck ASSISTANT_CARD_DECK = new AssistantCardDeck();
+    final AssistantCardDeck ASSISTANT_CARD_DECK = new AssistantCardDeck("random Nickname");
 
     @Test
     void fillDeck() {
