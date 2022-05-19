@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.stripped.*;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.commands.Command;
@@ -69,10 +70,12 @@ public class Room implements PropertyChangeListener {
         ArrayList<StrippedCharacter> strippedCharacters = new ArrayList<>();
         ArrayList<StrippedCloud> strippedClouds = new ArrayList<>();
         ArrayList<StrippedIsland> strippedIslands = new ArrayList<>();
+        ArrayList<AssistantCardDeck> assistantCardDecks = new ArrayList<>();
 
         for (Player p : players) {
             StrippedBoard newStrippedBoard = new StrippedBoard(p);
             strippedBoards.add(newStrippedBoard);
+            assistantCardDecks.add(p.getAssistantCardDeck());
         }
         //This should be able to provide strippedCharacters with the correct id for controller calls
         int i=0;
@@ -92,7 +95,8 @@ public class Room implements PropertyChangeListener {
             StrippedIsland newStrippedIsland = new StrippedIsland(s);
             strippedIslands.add(newStrippedIsland);
         }
-        StrippedModel strippedModel = new StrippedModel(strippedBoards, strippedCharacters, strippedClouds, strippedIslands);
+
+        StrippedModel strippedModel = new StrippedModel(strippedBoards, strippedCharacters, strippedClouds, strippedIslands,assistantCardDecks);
         SourceEvent modelInitSource = new SourceEvent(getRoomName(), "init");
         PropertyChangeEvent evtInitialGame = new PropertyChangeEvent(modelInitSource, "init", null, strippedModel);
         broadcast(evtInitialGame);
