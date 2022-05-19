@@ -30,7 +30,7 @@ class ControllerTest {
         nicknames.add("Raffaello");
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
-        return new Game(null,true, 4, nicknames);
+        return new Game(null, true, 4, nicknames);
     }
 
     @Test
@@ -42,7 +42,7 @@ class ControllerTest {
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
-        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
@@ -80,7 +80,7 @@ class ControllerTest {
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
-        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
@@ -108,7 +108,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallPickCloud() throws IncorrectStateException,AssistantCardNotFound, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException {
+    void testCallPickCloud() throws IncorrectStateException, AssistantCardNotFound, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
@@ -116,12 +116,16 @@ class ControllerTest {
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
-        Room roomTest = new Room("testRoom",emptyClientListsTest);
-        Game game = controller.initializeGame(roomTest,true, 4, nicknames);
-        for (int i = 0; i < 4; i++) {
-            game.drawFromBag(game.getCurrentPlayer().getNickname());
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
-        }
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
+        Game game = controller.initializeGame(roomTest, true, 4, nicknames);
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente2");
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente3");
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente6");
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
         int countNumStudents = 3;
@@ -155,7 +159,7 @@ class ControllerTest {
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
-        Room roomTest = new Room("testRoom",emptyClientListsTest);
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldplayer = game.getCurrentPlayer().getNickname();

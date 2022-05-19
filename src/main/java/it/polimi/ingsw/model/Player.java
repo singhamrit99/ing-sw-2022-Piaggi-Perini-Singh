@@ -20,6 +20,7 @@ public class Player implements Comparable<Player> {
     private final Towers towerColor;
     private AssistantCardDeck assistantCardDeck;
     private AssistantCard playedAssistantCard;
+    private Boolean assistantCardPlayedInThisTurn;
     private CharacterCard playedCharacterCard;
     private int coins;
 
@@ -27,6 +28,7 @@ public class Player implements Comparable<Player> {
         this.nickname = nickname;
         this.schoolBoard = new SchoolBoard(numberOfPlayers);
         this.towerColor = towerColors;
+        assistantCardPlayedInThisTurn = false;
         assistantCardDeck = new AssistantCardDeck();
         assistantCardDeck.fillDeck();
         coins = 1;
@@ -34,8 +36,16 @@ public class Player implements Comparable<Player> {
 
     public void playAssistantCard(String nameCard) throws AssistantCardNotFound {
         playedAssistantCard = assistantCardDeck.get(nameCard);
+        assistantCardPlayedInThisTurn = true;
     }
 
+    public void forgetAssistantCard(){ //necessary to check if others players play the same assistantCard in THIS turn (it s necessary to 'reset' at the end of any planning phase)
+        assistantCardPlayedInThisTurn = false;
+    }
+
+    public boolean hasPlayedAssistantInThisTurn(){
+        return assistantCardPlayedInThisTurn;
+    }
     public void addStudents(EnumMap<Colors, Integer> students) throws NegativeValueException {
         schoolBoard.addStudents(students);
     }

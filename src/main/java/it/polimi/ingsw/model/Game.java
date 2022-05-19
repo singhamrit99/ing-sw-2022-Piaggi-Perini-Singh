@@ -302,8 +302,14 @@ public class Game {
     public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFound {
         if (state == State.PLANNINGPHASE) {
             if (nicknameCaller.equals(currentPlayer.getNickname()) && playerDrawnOut) {  //playerDrawnOut = player has drawn from bag
+                for (Player p : players) {
+                        if (p.hasPlayedAssistantInThisTurn()){
+                            if (p.getPlayedAssistantCard().getImageName().equals(nameCard)){
+                                throw new AssistantCardNotFound();
+                            }
+                        }
+                }
                 currentPlayer.playAssistantCard(nameCard);
-
             } else {
                 throw new IncorrectPlayerException();
             }
@@ -330,6 +336,8 @@ public class Game {
                 currentPlayer = players.get(playerPlanPhase);
                 playerDrawnOut = false;
             } else {
+                for (Player p : players)
+                    p.forgetAssistantCard(); //necessary to always play the AssistantCards that hasn't played by any other players during the SAME turn (for the Planning Phase)
                 state = State.ACTIONPHASE_1;
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
                 currentPlayer = orderPlayers.poll(); //first player of Action Phase
@@ -362,8 +370,8 @@ public class Game {
             if (isGameOver()) {
                 state = State.END;
                 ArrayList<Player> teamWinner = checkWinner();
-                SourceEvent gameOver = new SourceEvent("game","gameOver");
-                PropertyChangeEvent gameOverEvt = new PropertyChangeEvent(gameOver,"message",null,teamWinner);
+                SourceEvent gameOver = new SourceEvent("game", "gameOver");
+                PropertyChangeEvent gameOverEvt = new PropertyChangeEvent(gameOver, "message", null, teamWinner);
                 gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
@@ -439,7 +447,7 @@ public class Game {
                 }
                 currentPlayer.moveStudents(studentsToDining, studentsToRemove);
                 state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
-                if(isDiningChanged){
+                if (isDiningChanged) {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
                     //notify dining change
                     EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
@@ -500,7 +508,7 @@ public class Game {
                         //notify new newIslandDest (changedIsland)
                         changedIsland = new StrippedIsland(islands.get(destinationMotherNature));
                         SourceEvent destSrc = new SourceEvent(playerCaller, "MN moved here");
-                        PropertyChangeEvent evtDest = new PropertyChangeEvent(destSrc, "island", oldIslandDest,changedIsland);
+                        PropertyChangeEvent evtDest = new PropertyChangeEvent(destSrc, "island", oldIslandDest, changedIsland);
                         gameListener.propertyChange(evtDest);
                         //ended notifications
                         motherNaturePosition = destinationMotherNature;
@@ -550,7 +558,7 @@ public class Game {
             }
             if (maxPlayer != null) {
                 for (Player player : players) { //eventually remove the player who had that professor
-                    if (player.hasProfessorOfColor(studentColor)){
+                    if (player.hasProfessorOfColor(studentColor)) {
                         player.removeProfessor(studentColor);
                         //notify the removed professors
                         ArrayList<Colors> professors = player.getSchoolBoard().getProfessorsTable();
@@ -697,10 +705,10 @@ public class Game {
         } else team.get(0).moveTowers(amount);
 
         //notify boards changes
-        for(Player teamMember: team){
+        for (Player teamMember : team) {
             int changedTowers = teamMember.getSchoolBoard().getTowers();
             SourceEvent towersEventSrc = new SourceEvent(teamMember.getNickname(), "changed towers");
-            PropertyChangeEvent towersEvent = new PropertyChangeEvent(towersEventSrc,"towers",null,changedTowers);
+            PropertyChangeEvent towersEvent = new PropertyChangeEvent(towersEventSrc, "towers", null, changedTowers);
             gameListener.propertyChange(towersEvent);
         }
     }
@@ -723,15 +731,16 @@ public class Game {
                 islands.remove(nextTile);
                 //notifications send
                 SourceEvent islandSrc = new SourceEvent(currentPlayer.getNickname(), "island merged");
-                PropertyChangeEvent islandMergeEvent = new PropertyChangeEvent(islandSrc,"island",mergedTile,mergedTile);
+                PropertyChangeEvent islandMergeEvent = new PropertyChangeEvent(islandSrc, "island", mergedTile, mergedTile);
                 gameListener.propertyChange(islandMergeEvent);
                 islandSrc = new SourceEvent(currentPlayer.getNickname(), "island deleted");
-                PropertyChangeEvent islandDeletedEvent = new PropertyChangeEvent(islandSrc,"island",deletedTile,null);
+                PropertyChangeEvent islandDeletedEvent = new PropertyChangeEvent(islandSrc, "island", deletedTile, null);
                 gameListener.propertyChange(islandDeletedEvent);
                 listChanged = true;
             }
         }
-        if (listChanged) checkUnificationIslands();//recursive method necessary to check double+ unification in a single time
+        if (listChanged)
+            checkUnificationIslands();//recursive method necessary to check double+ unification in a single time
     }
 
     /**

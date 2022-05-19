@@ -121,7 +121,7 @@ class GameTest {
         for (int i = 0; i < 4; i++) {
             oldPlayer = game.getCurrentPlayer().getNickname();
             game.drawFromBag(oldPlayer);
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente3");
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente"+ (i + 1));
             String newPlayer = game.getCurrentPlayer().getNickname();
             assertNotEquals(oldPlayer, newPlayer);
         }
@@ -130,10 +130,14 @@ class GameTest {
 
     Game planningPhaseComplete() throws IncorrectArgumentException, AssistantCardNotFound, IncorrectPlayerException, IncorrectStateException, NegativeValueException {
         Game game = initGame4players();
-        for (int i = 0; i < 4; i++) {
-            game.drawFromBag(game.getCurrentPlayer().getNickname());
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
-        }
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente2");
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente9");
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente10");
         return game;
     }
 
