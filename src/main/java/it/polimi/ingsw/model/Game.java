@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.cards.charactercard.Ability;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCardFactory;
 import it.polimi.ingsw.model.deck.FileJSONPath;
+import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.deck.characterdeck.CharacterCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.exceptions.ControllerExceptions;
@@ -309,7 +310,15 @@ public class Game {
                             }
                         }
                 }
-                currentPlayer.playAssistantCard(nameCard);
+                currentPlayer.playAssistantCard(nameCard); //notice that when a card is played, is removed from the deck of the player
+                //notify played AssistantCard
+                SourceEvent sourceMessagePlayedCard = new SourceEvent(nicknameCaller,"played assistant card");
+                PropertyChangeEvent assistantEvent = new PropertyChangeEvent(sourceMessagePlayedCard,"message",null,currentPlayer.getPlayedCharacterCard());
+                gameListener.propertyChange(assistantEvent);
+                //notify deck change
+                SourceEvent sourceDeck = new SourceEvent(nicknameCaller,nameCard);
+                PropertyChangeEvent assistantDeckUpdateEvent = new PropertyChangeEvent(sourceDeck,"assistant",null,currentPlayer.getAssistantCardDeck());
+                gameListener.propertyChange(assistantDeckUpdateEvent);
             } else {
                 throw new IncorrectPlayerException();
             }
