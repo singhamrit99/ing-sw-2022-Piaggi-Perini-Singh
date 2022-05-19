@@ -16,12 +16,19 @@ import java.util.ArrayList;
 public class AssistantCardDeck implements Deck<AssistantCard> {
     private ArrayList<AssistantCard> assistantCards;
 
-    public AssistantCardDeck() {
+    private String owner;
+
+    public AssistantCardDeck(String owner) {
+        this.owner = owner;
         assistantCards = new ArrayList<>();
     }
 
     public ArrayList<AssistantCard> getDeck() {
         return assistantCards;
+    }
+
+    public String getOwner() {
+        return owner;
     }
 
     @Override
@@ -34,17 +41,17 @@ public class AssistantCardDeck implements Deck<AssistantCard> {
 
     public AssistantCard get(String cardName) throws AssistantCardNotFound {
         for (AssistantCard card : assistantCards) {
-                if(card.getImageName().equals(cardName)){
-                    int indexToRemove = assistantCards.indexOf(card);
-                    AssistantCard returnedCard = new AssistantCard(card.getImageName(),card.getMove());
-                    assistantCards.remove(indexToRemove);
-                    return returnedCard;
+            if (card.getImageName().equals(cardName)) {
+                int indexToRemove = assistantCards.indexOf(card);
+                AssistantCard returnedCard = new AssistantCard(card.getImageName(), card.getMove());
+                assistantCards.remove(indexToRemove);
+                return returnedCard;
             }
         }
         throw new AssistantCardNotFound();
     }
 
-    public ArrayList<AssistantCard> getAllCards(){
+    public ArrayList<AssistantCard> getAllCards() {
         return assistantCards;
     }
 
