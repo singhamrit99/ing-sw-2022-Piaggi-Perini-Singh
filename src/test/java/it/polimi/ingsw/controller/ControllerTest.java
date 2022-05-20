@@ -58,7 +58,7 @@ class ControllerTest {
         int oldPosMotherNature = game.getMotherNaturePosition();
         Random casual = new Random();
         int randomMovement = casual.nextInt(game.getCurrentPlayer().getPlayedAssistantCard().getMove()) + 1;
-        controller.callMoveMotherNature(randomMovement);
+        controller.callMoveMotherNature(game.getCurrentPlayer().getNickname(), randomMovement);
         assertNotEquals(game.getMotherNaturePosition(), oldPosMotherNature);
     }
 
@@ -94,7 +94,7 @@ class ControllerTest {
                 countNumStudents--;
             }
         }
-        controller.callMoveStudent(movingStudents);
+        controller.callMoveStudent(game.getCurrentPlayer().getNickname(), movingStudents);
         assertEquals(4, game.valueOfEnum(entrance));
     }
 
@@ -128,9 +128,9 @@ class ControllerTest {
                 countNumStudents--;
             }
         }
-        controller.callMoveStudent(movingStudents);
-        controller.callMoveMotherNature(1);
-        controller.callPickCloud(0);
+        controller.callMoveStudent(game.getCurrentPlayer().getNickname(), movingStudents);
+        controller.callMoveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        controller.callPickCloud(game.getCurrentPlayer().getNickname(), 0);
         EnumMap<Colors, Integer> studentsoncloud = game.getCloudTile(0).getStudents();
         for (Colors color : Colors.values()) {
             assertEquals(0, studentsoncloud.get(color));
@@ -150,7 +150,7 @@ class ControllerTest {
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldplayer = game.getCurrentPlayer().getNickname();
-        controller.callPlayAssistantCard("Assistente1");
+        controller.callPlayAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
         assertNotEquals(oldplayer, game.getCurrentPlayer().getNickname());
     }
 }

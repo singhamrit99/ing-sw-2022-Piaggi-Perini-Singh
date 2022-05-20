@@ -1,17 +1,13 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.controller.CommandInvoker;
-import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.commands.*;
+import it.polimi.ingsw.controller.roomCommands.GetRoomInfo;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.stripped.StrippedBoard;
 import it.polimi.ingsw.model.stripped.StrippedCharacter;
 import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.model.stripped.StrippedModel;
-import it.polimi.ingsw.server.SourceEvent;
 
-import java.beans.PropertyChangeEvent;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Locale;
@@ -27,6 +23,7 @@ public class ViewCLI {
     boolean isMyTurn;
     int action;
     int turnMoves;
+    GetRoomInfo getRoomInfoOrder;
     MoveMotherNature moveMotherNatureOrder;
     MoveStudents moveStudentsOrder;
     PickCloud pickCloudOrder;
@@ -80,6 +77,9 @@ public class ViewCLI {
 
     public void getLobbyInfo()
     {
+        getRoomInfoOrder = new GetRoomInfo(nickName);
+
+
 
     }
     public void sendNameToServer(String nickname){
@@ -226,7 +226,7 @@ public class ViewCLI {
             input = in.nextInt();
         }
         //We now have a valid move for Mother Nature
-        moveMotherNatureOrder = new MoveMotherNature(input);
+        moveMotherNatureOrder = new MoveMotherNature(nickName, input);
 
     }
 
@@ -303,7 +303,7 @@ public class ViewCLI {
 
         }
         //End of dining room move segment
-        moveStudentsOrder = new MoveStudents(strippedToDining(moveStudents));
+        moveStudentsOrder = new MoveStudents(nickName, strippedToDining(moveStudents));
 
         //Move students to the islands if the player has moved less than 3 students already
         if (movedStudents < 3) {

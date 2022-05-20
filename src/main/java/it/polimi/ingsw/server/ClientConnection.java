@@ -56,7 +56,7 @@ public class ClientConnection implements Runnable {
                         requestRoomJoin();
                         break;
                     case "create":
-                        requestRoomCreation();
+                        requestRoomCreation("placeholder");
                         break;
                     case "players":
                         getPlayersInRoom();
@@ -65,7 +65,7 @@ public class ClientConnection implements Runnable {
                         getRooms();
                         break;
                     case "info":
-                        getLobbyInfo();
+                        getLobbyInfo(nickname);
                         break;
                     case "change":
                         setExpertMode();
@@ -100,10 +100,12 @@ public class ClientConnection implements Runnable {
         return clientRoom;
     }
 
-    public void getLobbyInfo() {
+    public void getLobbyInfo(String playercaller) {
+        getPlayersInRoom();
         sendString("Lobby Name: " + clientRoom + "\n");
         sendString("Leader " + server.getNicknamesInRoom(clientRoom).get(0));
         sendString("ExpertMode " + server.isExpertMode(clientRoom));
+
     }
 
     public void setExpertMode() {
@@ -135,11 +137,12 @@ public class ClientConnection implements Runnable {
             sendString("You're not in a room now!\n");
     }
 
-    public synchronized void requestRoomCreation() {
+    public synchronized void requestRoomCreation(String playercaller) {
+        //TODO: adapt all of this for network communication
         sendString("Insert room name: \n");
         String nameRoom;
         nameRoom = in.nextLine();
-        while (server.getRoomsList().contains(nameRoom)) {
+        if (server.getRoomsList().contains(nameRoom)) {
             sendString("Ops, there is another room with the same name! Choose another one please. \n");
             nameRoom = in.nextLine();
         }

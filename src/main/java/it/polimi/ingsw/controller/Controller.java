@@ -27,9 +27,9 @@ public class Controller {
         return game;
     }
 
-    public void callMoveMotherNature(int distance) {
+    public void callMoveMotherNature(String playerCaller, int distance) {
         try {
-            game.moveMotherNature(game.getCurrentPlayer().getNickname(), distance);
+            game.moveMotherNature(playerCaller, distance);
         } catch (IncorrectStateException e) {
             manageException(e);
         } catch (MotherNatureLostException e) {
@@ -43,9 +43,9 @@ public class Controller {
         }
     }
 
-    public void callMoveStudent(EnumMap<Colors, ArrayList<String>> students) {
+    public void callMoveStudent(String playerCaller, EnumMap<Colors, ArrayList<String>> students) {
         try {
-            game.moveStudents(game.getCurrentPlayer().getNickname(), students);
+            game.moveStudents(playerCaller, students);
         } catch (IncorrectStateException e) {
             manageException(e);
         } catch (IncorrectPlayerException e) {
@@ -59,7 +59,7 @@ public class Controller {
         }
     }
 
-    public void callPickCloud(int cloudTileID) {
+    public void callPickCloud(String playerCaller, int cloudTileID) {
         try {
             if (cloudTileID < 0 || cloudTileID > 3) {
                 throw new IncorrectArgumentException();
@@ -68,7 +68,7 @@ public class Controller {
             manageException(e);
         }
         try {
-            game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), cloudTileID);
+            game.takeStudentsFromCloud(playerCaller, cloudTileID);
         } catch (IncorrectStateException e) {
             manageException(e);
         } catch (IncorrectPlayerException e) {
@@ -80,10 +80,9 @@ public class Controller {
         }
     }
 
-    public void callPlayAssistantCard(String playedCardName) {
+    public void callPlayAssistantCard(String playerCaller, String playedCardName) {
         try {
-            String nickname = game.getCurrentPlayer().getNickname();
-            game.playAssistantCard(nickname, playedCardName);
+            game.playAssistantCard(playerCaller, playedCardName);
         } catch (AssistantCardNotFound e) {
             manageException(e);
         } catch (IncorrectStateException e) {
