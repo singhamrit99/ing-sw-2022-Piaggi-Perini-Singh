@@ -26,47 +26,47 @@ public class Server extends UnicastRemoteObject implements serverStub {
     }
 
     @Override
-    public void deregisterConnection(String username) throws RemoteException {
+    public synchronized void deregisterConnection(String username) throws RemoteException {
         ClientConnection clientToRemove = users.get(username);
         if(rooms.containsKey(clientToRemove.getRoom()))rooms.get(clientToRemove.getRoom()).removeUser(clientToRemove);
         users.remove(clientToRemove);
     }
 
     @Override
-    public HashMap<String, Room> getRoomsList() throws RemoteException {
+    public synchronized HashMap<String, Room> getRoomsList() throws RemoteException {
         return rooms;
     }
 
     @Override
-    public void createRoom(String roomName, ClientConnection user) throws RemoteException {
+    public synchronized void createRoom(String roomName, ClientConnection user) throws RemoteException {
         ArrayList<ClientConnection> newRoomUsers = new ArrayList<ClientConnection>();
         newRoomUsers.add(user);
         Room newRoom = new Room(roomName,newRoomUsers);
     }
 
     @Override
-    public void joinRoom(String roomName, ClientConnection user) throws RemoteException {
+    public synchronized void joinRoom(String roomName, ClientConnection user) throws RemoteException {
 
     }
 
     @Override
-    public void getLobbyInfo(String playercaller) throws RemoteException {
+    public synchronized void getLobbyInfo(String playercaller) throws RemoteException {
 
     }
 
     @Override
-    public void setExpertMode(String playercaller, String roomName) throws RemoteException {
+    public synchronized void setExpertMode(String playercaller, String roomName) throws RemoteException {
 
     }
 
     @Override
-    public void startGame(String playercaller) throws RemoteException {
+    public synchronized void startGame(String playercaller) throws RemoteException {
 
     }
 
 
     @Override
-    public void performGameAction(Command gameAction)throws RemoteException {
+    public synchronized void performGameAction(Command gameAction)throws RemoteException {
         if(users.containsKey(gameAction.getCaller())){
             if(users.get(gameAction.getCaller()).isPlaying()){
                 rooms.get(users.get(gameAction.getCaller()).getRoom()).commandInvoker(gameAction);
@@ -74,6 +74,10 @@ public class Server extends UnicastRemoteObject implements serverStub {
         }
     }
 
+
+    public synchronized String testPing()throws RemoteException{
+        return "ping";
+    }
 
 }
 

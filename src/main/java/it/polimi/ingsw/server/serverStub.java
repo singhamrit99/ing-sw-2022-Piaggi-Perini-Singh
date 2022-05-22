@@ -25,4 +25,6 @@ public interface serverStub extends Remote {
     public void startGame(String playercaller) throws RemoteException;
 
     public void performGameAction(Command gameAction)throws RemoteException;
+
+    public String testPing()throws RemoteException;
 }
