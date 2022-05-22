@@ -3,12 +3,15 @@ package it.polimi.ingsw.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.*;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server {
+public class Server implements Remote {
 
     private static final int PORT = 23023;
     final private ServerSocket serverSocket;
@@ -16,10 +19,12 @@ public class Server {
     private HashMap<ClientConnection, String> users;
     private HashMap<String, Room> rooms;
 
-    public Server() throws IOException {
-        this.serverSocket = new ServerSocket(PORT);
+    public Server() throws IOException, RemoteException, AlreadyBoundException {
+        System.out.println("Binding server implementation to registry...");
+        Registry registry = LocateRegistry.getRegistry();
+        registry.bind("server", this);
+        System.out.println("Waiting for invocations from clients...");
     }
-
     public void run() {
         users = new HashMap<>();
         rooms = new HashMap<>();
@@ -99,9 +104,45 @@ public class Server {
             return false;
         }
     }
-
     public synchronized void setExpertModeRoom(String roomName, Boolean expertMode) {
         rooms.get(roomName).setExpertmode(expertMode);
     }
+
+    private void getRooms() {
+        sendString("List of lobbies:\n");
+        sendArrayString(server.getRoomsList());
+    }
+
+    private void getPlayersInRoom() {
+        sendString("List of players in room:\n");
+        if (clientRoom != null) {
+            sendArrayString(server.getNicknamesInRoom(clientRoom));
+        } else {
+            sendString("You're not in a room yet! Join one with the JOIN command or create a new one with CREATE!");
+        }
+    }
+
+    public void getLobbyInfo(String playercaller) {
+        getPlayersInRoom();
+        sendString("Lobby Name: " + clientRoom + "\n");
+        sendString("Leader " + server.getNicknamesInRoom(clientRoom).get(0));
+        sendString("ExpertMode " + server.isExpertMode(clientRoom));
+
+    }
+
+    public void setExpertMode() {
+        //server.setExpertModeRoom(clientRoom, result);
+    }
+
+    public synchronized void requestRoomCreation(String playercaller) {
+        //if (!server.getRoomsList().contains(nameRoom))
+        //  server.createRoom(nameRoom, this);
+        //clientRoom = nameRoom;
+    }
+
+    public synchronized void requestRoomJoin() {
+//todo remember to check if there is already in the room etc.
+    }
+
 }
 
