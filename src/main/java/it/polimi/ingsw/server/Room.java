@@ -14,7 +14,9 @@ import it.polimi.ingsw.model.tiles.Island;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Room implements PropertyChangeListener {
@@ -22,6 +24,8 @@ public class Room implements PropertyChangeListener {
     private final ArrayList<ClientConnection> players;
     private boolean expertMode;
     final private Controller controller;
+
+    private HashMap<ClientConnection, ArrayList<PropertyChangeEvent>> eventsBuffer;
 
     public Room(String roomName, ArrayList<ClientConnection> playerList) {
         this.roomName = roomName;
@@ -56,13 +60,16 @@ public class Room implements PropertyChangeListener {
 
     public void startGame() throws NegativeValueException, IncorrectArgumentException {
         ArrayList<String> nicknames = new ArrayList<>();
+        eventsBuffer = new HashMap<>();
         for (ClientConnection cl : players) {
             nicknames.add(cl.getNickname());
+            ArrayList<PropertyChangeEvent> bufferArrayEvent = new ArrayList<>();
+            eventsBuffer.put(cl, bufferArrayEvent);
         }
         Game newGame = controller.initializeGame(this, expertMode, players.size(), nicknames);
         buildStrippedModel(newGame.getPlayers(), newGame.getCharacterCards(),
                 newGame.getClouds(), newGame.getIslands());
-        }
+    }
 
 
     private void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands) {
@@ -78,7 +85,7 @@ public class Room implements PropertyChangeListener {
             assistantCardDecks.add(p.getAssistantCardDeck());
         }
         //This should be able to provide strippedCharacters with the correct id for controller calls
-        int i=0;
+        int i = 0;
         for (CharacterCard c : charactersCard) {
             StrippedCharacter newStrippedCharCard = new StrippedCharacter(c);
             newStrippedCharCard.setCharacterID(i);
@@ -96,11 +103,11 @@ public class Room implements PropertyChangeListener {
             strippedIslands.add(newStrippedIsland);
         }
 
-        StrippedModel strippedModel = new StrippedModel(strippedBoards, strippedCharacters, strippedClouds, strippedIslands,assistantCardDecks);
+        StrippedModel strippedModel = new StrippedModel(strippedBoards, strippedCharacters, strippedClouds, strippedIslands, assistantCardDecks);
         SourceEvent modelInitSource = new SourceEvent(getRoomName(), "init");
         PropertyChangeEvent evtInitialGame = new PropertyChangeEvent(modelInitSource, "init", null, strippedModel);
-        broadcast(evtInitialGame);
-}
+        addEventToBuffer(evtInitialGame);
+    }
 
     public void commandInvoker(Command command) {
         command.execute(controller);
@@ -108,24 +115,39 @@ public class Room implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("error")) sendErrorEvent(evt);
-        else broadcast(evt);
+        if (evt.getPropertyName().equals("error")) addErrorEventToBuffer(evt);
+        else addEventToBuffer(evt);
     }
 
-    private void broadcast(PropertyChangeEvent event) {
-        for (ClientConnection client : players) {
-            //client.sendEvent(event);
+    private void addEventToBuffer(PropertyChangeEvent event) {
+        for (ClientConnection clientBufferEvents : players) {
+            ArrayList<PropertyChangeEvent> eventsQueue = eventsBuffer.get(clientBufferEvents);
+            eventsQueue.add(event);
+            eventsBuffer.replace(clientBufferEvents, eventsQueue);
         }
     }
 
-    private void sendErrorEvent(PropertyChangeEvent error) {
+    private void addErrorEventToBuffer(PropertyChangeEvent error) {
         SourceEvent src = (SourceEvent) error.getSource();
         String nickname = src.getWho();
-        for (ClientConnection client : players) {
-            if (client.getNickname().equals(nickname)) {
-                //client.sendEvent(error);
+        for (ClientConnection clientBuffer : players) {
+            if (clientBuffer.getNickname().equals(nickname)) {
+                ArrayList<PropertyChangeEvent> eventsQueue = eventsBuffer.get(clientBuffer);
+                eventsQueue.add(error);
+                eventsBuffer.replace(clientBuffer, eventsQueue);
                 break;
             }
         }
     }
+
+
+    public synchronized ArrayList<PropertyChangeEvent> getBuffer(ClientConnection asker){
+        ArrayList<PropertyChangeEvent> buffer = new ArrayList<>();
+        for (PropertyChangeEvent event: eventsBuffer.get(asker)){
+            buffer.add(event);
+        }
+        eventsBuffer.replace(asker,new ArrayList<>()); //flushing the buffer of Events on Server side
+        return buffer;
+    }
+
 }

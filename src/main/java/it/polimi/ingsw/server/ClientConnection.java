@@ -14,5 +14,9 @@ public class ClientConnection{
     public String getRoom() {
         return clientRoom;
     }
+
+    public void setRoom(String room) {
+        this.clientRoom = room;
+    }
     public boolean isPlaying(){ return isPlaying;}
 }

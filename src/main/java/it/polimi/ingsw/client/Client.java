@@ -5,8 +5,9 @@ import it.polimi.ingsw.server.serverStub;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Random;
 
-public class Client implements Runnable {
+public class Client{
     final private String ip;
     final private int port;
 
@@ -16,7 +17,6 @@ public class Client implements Runnable {
         this.ip = ip;
         this.port = port;
         connect();
-        run();
     }
 
     public void connect() {
@@ -35,15 +35,17 @@ public class Client implements Runnable {
     }
 
 
+    /*
     @Override
     public void run() {
-        while (true) {
+         while (true) {
             try {
-                System.out.println(server.testPing());
                 Thread.sleep(1000);
             } catch (RemoteException | InterruptedException e) {
                 System.err.println("Remote exception: " + e.toString());
             }
         }
+
     }
+    */
 }
