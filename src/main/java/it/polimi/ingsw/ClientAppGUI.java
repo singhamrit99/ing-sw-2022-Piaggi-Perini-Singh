@@ -1,12 +1,11 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.client.ClientGUI;
+import it.polimi.ingsw.client.Client;
 
 import java.io.IOException;
 
 public class ClientAppGUI {
     public static void main(String[] args) throws IOException {
-        ClientGUI clientGUI = new ClientGUI("127.0.0.1", 23023);
-        clientGUI.run();
+        Client client = new Client("localhost",23023);
     }
 }

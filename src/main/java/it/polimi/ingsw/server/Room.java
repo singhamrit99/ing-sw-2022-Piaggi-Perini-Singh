@@ -114,7 +114,7 @@ public class Room implements PropertyChangeListener {
 
     private void broadcast(PropertyChangeEvent event) {
         for (ClientConnection client : players) {
-            client.sendEvent(event);
+            //client.sendEvent(event);
         }
     }
 
@@ -123,7 +123,7 @@ public class Room implements PropertyChangeListener {
         String nickname = src.getWho();
         for (ClientConnection client : players) {
             if (client.getNickname().equals(nickname)) {
-                client.sendEvent(error);
+                //client.sendEvent(error);
                 break;
             }
         }

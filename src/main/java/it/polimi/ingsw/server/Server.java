@@ -1,69 +1,44 @@
 package it.polimi.ingsw.server;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.rmi.*;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class Server implements Remote {
-
-    private static final int PORT = 23023;
-    final private ServerSocket serverSocket;
-    final private ExecutorService executor = Executors.newFixedThreadPool(128);
+public class Server extends UnicastRemoteObject implements Remote {
     private HashMap<ClientConnection, String> users;
     private HashMap<String, Room> rooms;
 
-    public Server() throws IOException, RemoteException, AlreadyBoundException {
-        System.out.println("Binding server implementation to registry...");
-        Registry registry = LocateRegistry.getRegistry();
-        registry.bind("server", this);
-        System.out.println("Waiting for invocations from clients...");
-    }
-    public void run() {
+    public Server() throws IOException{
         users = new HashMap<>();
         rooms = new HashMap<>();
-        System.out.println("Server has started");
-        while (true) {
-            try {
-                Socket newSocket = serverSocket.accept();
-                ClientConnection socketConnection = new ClientConnection(newSocket, this);
-                System.out.println("Just connected a new dude! #");
-                executor.submit(socketConnection);
-            } catch (IOException e) {
-                System.out.println("Connection Error!");
-            }
-        }
     }
-
-    public synchronized void registerUser(ClientConnection c, String name) {
+    public synchronized void registerUser(String name) throws RemoteException {
+        ClientConnection c = new ClientConnection(name);
         users.put(c, name);
         System.out.println("user '" + name + "' is in Waiting List");
     }
 
-    public ArrayList<String> getUserNames() {
+    public ArrayList<String> getUserNames() throws RemoteException {
         return new ArrayList<>(users.values());
     }
 
-    public ArrayList<String> getRoomsList() {
+    public ArrayList<String> getRoomsList() throws RemoteException {
         return new ArrayList<>(rooms.keySet());
     }
 
-    public Room getClientRoom(String roomName) {
+    public Room getClientRoom(String roomName) throws RemoteException {
         return rooms.get(roomName);
     }
 
-    public synchronized void deregisterConnection(ClientConnection c) {
+    public synchronized void deregisterConnection(ClientConnection c)throws RemoteException {
         System.out.println("Client deregistered");
         users.remove(c);
     }
 
-    public synchronized void createRoom(String roomName, ClientConnection user) {
+    public synchronized void createRoom(String roomName, ClientConnection user)throws RemoteException {
         ArrayList<ClientConnection> userInNewRoom = new ArrayList<>();
         userInNewRoom.add(user);
         Room newRoom = new Room(roomName, userInNewRoom);
@@ -71,76 +46,67 @@ public class Server implements Remote {
         System.out.println("User " + users.get(user) + " just created " + roomName + "\n");
     }
 
-    public synchronized void joinRoom(String roomName, ClientConnection user) {
+    public synchronized void joinRoom(String roomName, ClientConnection user)throws RemoteException {
         if (rooms.containsKey(roomName)) {
             Room newUsers;
             newUsers = rooms.get(roomName);
-            if (user.getClientRoom() != null) {
+            if (user.getRoom() != null) {
                 Room oldLobby;
-                oldLobby = rooms.get(user.getClientRoom());
+                oldLobby = rooms.get(user.getRoom());
                 oldLobby.removeUser(user);
-                System.out.println("Player " + user.getNickname() + " in lobby " + user.getClientRoom() + " changed lobby\n");
+                System.out.println("Player " + user.getNickname() + " in lobby " + user.getRoom() + " changed lobby\n");
             }
             newUsers.addUser(user);
             rooms.replace(roomName, newUsers);
         }
     }
 
-    public synchronized ArrayList<String> getNicknamesInRoom(String roomName) {
+    public synchronized ArrayList<String> getNicknamesInRoom(String roomName) throws RemoteException {
         ArrayList<ClientConnection> players = rooms.get(roomName).getPlayers();
         ArrayList<String> nicknames = new ArrayList<>();
         for (ClientConnection cl : players) nicknames.add(cl.getNickname());
         return nicknames;
     }
 
-    public synchronized boolean isExpertMode(String roomName) {
+    public synchronized boolean isExpertMode(String roomName)throws RemoteException {
         return rooms.get(roomName).getExpertMode();
     }
 
-    public synchronized boolean isLeader(ClientConnection cl, String roomName) {
+    public synchronized boolean isLeader(ClientConnection cl, String roomName)throws RemoteException {
         if (cl.getNickname().equals(getNicknamesInRoom(roomName).get(0))) {
             return true;
         } else {
             return false;
         }
     }
-    public synchronized void setExpertModeRoom(String roomName, Boolean expertMode) {
+    public synchronized void setExpertModeRoom(String roomName, Boolean expertMode)throws RemoteException {
         rooms.get(roomName).setExpertmode(expertMode);
     }
 
-    private void getRooms() {
-        sendString("List of lobbies:\n");
-        sendArrayString(server.getRoomsList());
+    private void getRooms() throws RemoteException{
+        //
     }
 
-    private void getPlayersInRoom() {
-        sendString("List of players in room:\n");
-        if (clientRoom != null) {
-            sendArrayString(server.getNicknamesInRoom(clientRoom));
-        } else {
-            sendString("You're not in a room yet! Join one with the JOIN command or create a new one with CREATE!");
-        }
+    private void getPlayersInRoom() throws RemoteException{
+        //
     }
 
-    public void getLobbyInfo(String playercaller) {
+    public void getLobbyInfo(String playercaller) throws RemoteException{
         getPlayersInRoom();
-        sendString("Lobby Name: " + clientRoom + "\n");
-        sendString("Leader " + server.getNicknamesInRoom(clientRoom).get(0));
-        sendString("ExpertMode " + server.isExpertMode(clientRoom));
-
+        //
     }
 
-    public void setExpertMode() {
+    public void setExpertMode() throws RemoteException{
         //server.setExpertModeRoom(clientRoom, result);
     }
 
-    public synchronized void requestRoomCreation(String playercaller) {
+    public synchronized void requestRoomCreation(String playercaller) throws RemoteException {
         //if (!server.getRoomsList().contains(nameRoom))
         //  server.createRoom(nameRoom, this);
         //clientRoom = nameRoom;
     }
 
-    public synchronized void requestRoomJoin() {
+    public synchronized void requestRoomJoin() throws RemoteException {
 //todo remember to check if there is already in the room etc.
     }
 
