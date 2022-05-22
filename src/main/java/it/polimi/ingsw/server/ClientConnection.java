@@ -11,7 +11,6 @@ public class ClientConnection{
     public String getNickname() {
         return nickname;
     }
-
     public String getRoom() {
         return clientRoom;
     }
