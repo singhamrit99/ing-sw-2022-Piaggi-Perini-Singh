@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.commands;
+package it.polimi.ingsw.server.commands;
 
 import it.polimi.ingsw.controller.Controller;
 
@@ -11,6 +11,10 @@ public class PickCloud implements Command {
         this.cloudTileID = cloudTileID;
     }
 
+    @Override
+    public String getCaller() {
+        return playerCaller;
+    }
     @Override
     public void execute(Controller controller) {
         controller.callPickCloud(playerCaller, cloudTileID);

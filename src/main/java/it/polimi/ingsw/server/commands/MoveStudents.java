@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.commands;
+package it.polimi.ingsw.server.commands;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.enumerations.Colors;
@@ -15,6 +15,10 @@ public class MoveStudents implements Command {
         this.students = students;
     }
 
+    @Override
+    public String getCaller() {
+        return playerCaller;
+    }
     @Override
     public void execute(Controller controller) {
         controller.callMoveStudent(playerCaller, students);
