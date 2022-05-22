@@ -66,6 +66,7 @@ public class Server extends UnicastRemoteObject implements serverStub {
                 if(desiredRoom.getPlayers().size()<3){
                     desiredRoom.addUser(userClient);
                     userClient.setRoom(desiredRoom.getRoomName());
+                    System.out.println(playerCaller+" joined room "+ roomName);
                 }
             }
         }
@@ -73,7 +74,13 @@ public class Server extends UnicastRemoteObject implements serverStub {
 
     @Override
     public synchronized void leaveRoom(String playerCaller, String roomName)  throws RemoteException {
-        //to do
+        if (users.containsKey(playerCaller)&&rooms.containsKey(roomName))
+        {
+            users.get(playerCaller).setRoom(null);
+            rooms.get(roomName).getPlayers().remove(users.get(playerCaller));
+            System.out.println("User" +playerCaller+ "left room"+ roomName);
+        }
+
     }
 
     @Override
@@ -86,18 +93,42 @@ public class Server extends UnicastRemoteObject implements serverStub {
 
     @Override
     public synchronized ArrayList<String> getPlayers(String roomName) throws RemoteException {
+
         if(rooms.containsKey(roomName)){
             return rooms.get(roomName).getPlayers().stream().map(ClientConnection::getNickname).collect(toCollection(ArrayList::new));
         }
+        else
         throw new RemoteException();
+    }
+    @Override
+    public synchronized ArrayList<String> getLobbyInfo(String roomName) throws RemoteException {
+        ArrayList<String> result = new ArrayList<>();
+        result.add("Lobby Name: " + roomName);
+        result.add ("Leader: "+ getPlayers(roomName).get(0));
+        result.add("Expert Mode: " + isExpertMode(roomName));
+
+
+        return result;
+    }
+    @Override
+    public synchronized boolean isExpertMode(String roomName) throws RemoteException {
+        if (rooms.containsKey(roomName))
+        return rooms.get(roomName).getExpertMode();
+        else
+            throw new RemoteException();
+
     }
 
     @Override
-    public synchronized void setExpertMode(String playerCaller, boolean expertMode) throws RemoteException {
-        if(users.containsKey(playerCaller)){
-            if(rooms.containsKey(users.get(playerCaller).getRoom())){
+    //FIXME expert mode does not work correctly, need to fix second if condition
+    public synchronized void setExpertMode(String playerCaller, String roomName, boolean expertMode) throws RemoteException {
+        if(rooms.containsKey(roomName)){
+            System.out.println("room was found\n");
+            if(rooms.containsKey(playerCaller)){
+                System.out.println("Player caller found in lobby\n");
                 ClientConnection userClient = users.get(playerCaller);
                 Room targetRoom = rooms.get(userClient.getRoom());
+                System.out.println("Changing mode\n");
                 targetRoom.setExpertmode(expertMode);
             }
         }

@@ -15,27 +15,31 @@ import static java.util.stream.Collectors.toCollection;
 
 public interface serverStub extends Remote {
 
-    public void registerUser(String name) throws RemoteException;
+    void registerUser(String name) throws RemoteException;
 
-    public void deregisterConnection(String username) throws RemoteException;
+    void deregisterConnection(String username) throws RemoteException;
 
-    public ArrayList<String> getRoomsList() throws RemoteException;
+    ArrayList<String> getRoomsList() throws RemoteException;
 
-    public void createRoom(String username, String roomName) throws RemoteException;
+    void createRoom(String username, String roomName) throws RemoteException;
 
-    public void joinRoom(String playerCaller, String roomName) throws RemoteException;
+    void joinRoom(String playerCaller, String roomName) throws RemoteException;
 
-    public void leaveRoom(String playerCaller, String roomName) throws RemoteException;
+    void leaveRoom(String playerCaller, String roomName) throws RemoteException;
 
-    public boolean getExpertModeRoom(String roomName) throws RemoteException;
+    boolean getExpertModeRoom(String roomName) throws RemoteException;
 
-    public ArrayList<String> getPlayers(String roomName) throws RemoteException;
+    ArrayList<String> getPlayers(String roomName) throws RemoteException;
 
-    public void setExpertMode(String playerCaller, boolean expertMode) throws RemoteException;
+    void setExpertMode(String playerCaller, String roomName, boolean expertMode) throws RemoteException;
 
-    public void startGame(String playerCaller) throws RemoteException;
+    void startGame(String playerCaller) throws RemoteException;
 
-    public void performGameAction(Command gameAction) throws RemoteException;
+    void performGameAction(Command gameAction) throws RemoteException;
 
-    public ArrayList<PropertyChangeEvent> getUpdates(String playercaller) throws RemoteException;
+    ArrayList<PropertyChangeEvent> getUpdates(String playercaller) throws RemoteException;
+
+    ArrayList<String> getLobbyInfo(String roomName) throws RemoteException;
+
+    boolean isExpertMode(String roomName) throws RemoteException;
 }

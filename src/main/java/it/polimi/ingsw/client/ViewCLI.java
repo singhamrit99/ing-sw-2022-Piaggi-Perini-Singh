@@ -7,10 +7,9 @@ import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.*;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.Locale;
-import java.util.Scanner;
+import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.*;
 
 
 public class ViewCLI {
@@ -19,7 +18,7 @@ public class ViewCLI {
     boolean isGameOver = false;
     StrippedModel localModel;
     int playerNumber;
-    boolean isMyTurn;
+    String clientRoom= null;
     int action;
     int turnMoves;
     MoveMotherNature moveMotherNatureOrder;
@@ -38,42 +37,137 @@ public class ViewCLI {
 
     }
 
-    public void Start() {
+    public void Start() throws RemoteException {
 
 
         System.out.println("Welcome!\nWhat is your name?");
         nickName = in.nextLine();
+        client.sendName(nickName);
 
         System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n LOBBIES to list existing lobbies;" +
                 "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby.\n " +
-                "MODE to change between CLI and GUI interface before the game starts.\n");
+                "\n");
 
 
-        playerNumber = 0;
-        while (!localModel.getBoards().get(playerNumber).getOwner().equals(nickName)) {
-            playerNumber++;
-        }
-
-        printCommandHelp();
         //Main game loop with messages
         while (!isGameOver) {
-
-            //If it's not your turn the game just displays some game info and updates when it changes
-
-            /*while (isMyTurn)
-            {
-
-            }*/
-
-
+            
+        //codice della lobby
+            String command = in.nextLine().toLowerCase(Locale.ROOT);
+                switch (command) {
+                    case "join":
+                        requestRoomJoin(); //fatto
+                        break;
+                    case "create":
+                        requestRoomCreation(); //fatto
+                        break;
+                    case "players":
+                        getPlayersInRoom();//fatto
+                        break;
+                    case "lobbies":
+                        getRooms();//fatto
+                        break;
+                    case "info":
+                        getLobbyInfo();//fatto
+                        break;
+                    case "change":
+                        setExpertMode();//fatto
+                        break;
+                    case "leave":
+                        leaveRoom();//buggato
+                        break;
+                    default:
+                        System.out.println("Command not recognized");
+                        break;
+                }
+            }
         }
 
-
+    private void getPlayersInRoom() throws RemoteException {
+        if (clientRoom!=null) {
+            ArrayList<String> response = client.getNicknamesInRoom(clientRoom);
+            sendArrayString(response);
+        }
+        else
+            System.out.println("You're not in a room, so there are no players to show\n");
     }
 
+    private void getLobbyInfo() throws RemoteException {
+        if(clientRoom!=null)
+            sendArrayString(client.requestLobbyInfo(clientRoom));
+        else
+            System.out.println("You're not in a room yet\n");
+    }
 
-    public void sendNameToServer(String nickname){
+    private void leaveRoom() throws RemoteException {
+        client.leaveRoom(nickName,clientRoom);
+    }
+    public void getRooms() throws RemoteException {
+       ArrayList<String> response=  client.getRooms();
+       sendArrayString(response);
+    }
 
+    public void setExpertMode() throws RemoteException {
+        if (clientRoom != null) {
+            if (client.getNicknamesInRoom(clientRoom).get(0).equals(nickName)) {
+                boolean result = false;
+                System.out.println("Do you want to play in expert mode? Y/N");
+                String answer;
+                answer = in.nextLine().toLowerCase(Locale.ROOT);
+                switch (answer) {
+                    case "y": {
+                        result = true;
+                        System.out.println("Expert mode enabled!\n");
+                        break;
+                    }
+                    case "n": {
+                        result = false;
+                        System.out.println("Expert mode disabled|\n");
+                        break;
+                    }
+                    default:
+                        System.out.println("Command not recognized\n");
+
+                }
+                client.setExpertMode(nickName, clientRoom, result);
+            } else
+                System.out.println("You're not this lobby's leader, you can't do that!\n");
+        } else
+            System.out.println("You're not in a room now!\n");
+    }
+
+    public synchronized void requestRoomCreation() throws RemoteException {
+        System.out.println("Insert room name: \n");
+        String nameRoom;
+        nameRoom = in.nextLine();
+        while (client.getRooms().contains(nameRoom)) {
+            System.out.println("Ops, there is another room with the same name! Choose another one please. \n");
+            nameRoom = in.nextLine();
+        }
+        client.createRoom(nickName, nameRoom);
+        clientRoom = nameRoom;
+    }
+    public synchronized void requestRoomJoin() throws RemoteException {
+        String requestedRoom;
+        System.out.println("Select the room: \n");
+        if (client.getRooms().isEmpty()) System.out.println("There are no rooms, you can only create a new one");
+        else {
+            sendArrayString(client.getRooms());
+            requestedRoom = in.nextLine();
+            while (!client.getRooms().contains(requestedRoom)) {
+                System.out.println("Ops, there are no rooms with that name: try again\n");
+                requestedRoom = in.nextLine();
+            }
+            if (requestedRoom.equals(clientRoom)) {
+                System.out.println("You're already in that room!\n");
+            } else {
+                client.requestRoomJoin(nickName, requestedRoom);
+                clientRoom = requestedRoom;
+                System.out.println("You entered room " + clientRoom + " successfully \n");
+                System.out.println("Players in this room:");
+                sendArrayString(client.getNicknamesInRoom(clientRoom));
+            }
+        }
     }
     public void printCommandHelp() {
         System.out.println("The commands available are the following:\n" +
@@ -132,11 +226,6 @@ public class ViewCLI {
     }
 
     public void printAssistantCards() {
-
-    }
-
-    public void messageHandler()
-    {
 
     }
 
@@ -205,7 +294,6 @@ public class ViewCLI {
         System.out.println("You have to make a choice, for in determination we find strength\n");
         //There are two cards that only need a color to work, and the effects then take place
         //Globally.
-
     }
 
     public void moveMN() {
@@ -217,7 +305,6 @@ public class ViewCLI {
         }
         //We now have a valid move for Mother Nature
         moveMotherNatureOrder = new MoveMotherNature(nickName, input);
-
     }
 
     public void moveStudents() {
@@ -441,7 +528,6 @@ public class ViewCLI {
             case "pink":
                 return Colors.PINK;
             default:
-
         }
         return Colors.BLUE;
     }
@@ -455,7 +541,7 @@ public class ViewCLI {
             while (i > 0) {
                 destinations.add("dining");
                 returnedStudents.put(c, destinations);
-                //FIXME: this doesn't really work but I'm doing other work to keep my sanity
+                //FIXME: this doesn't really work, have to come back to this
             }
 
         }
@@ -463,5 +549,7 @@ public class ViewCLI {
         return returnedStudents;
 
     }
-
+    private synchronized void sendArrayString(ArrayList<String> messageArray) {
+        for (String message : messageArray) System.out.println(message);
+    }
 }
