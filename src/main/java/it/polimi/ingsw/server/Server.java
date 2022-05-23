@@ -3,6 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.exceptions.NegativeValueException;
+import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw.server.commands.Command;
 
 import java.beans.PropertyChangeEvent;
@@ -25,9 +26,11 @@ public class Server extends UnicastRemoteObject implements serverStub {
     }
 
     @Override
-    public synchronized void registerUser(String name) throws RemoteException {
+    public synchronized void registerUser(String name) throws RemoteException, UserAlreadyExistsException {
         ClientConnection c = new ClientConnection(name);
+        if (!users.containsKey(name))
         users.put(name,c);
+        else throw new UserAlreadyExistsException();
         System.out.println("user '" + name + "' is in Waiting List");
     }
 

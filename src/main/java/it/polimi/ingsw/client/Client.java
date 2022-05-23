@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw.server.serverStub;
 
 import java.rmi.RemoteException;
@@ -37,7 +38,7 @@ public class Client {
         }
     }
 
-    public void sendName(String nickName) throws RemoteException {
+    public void sendName(String nickName) throws RemoteException, UserAlreadyExistsException {
         server.registerUser(nickName);
     }
 

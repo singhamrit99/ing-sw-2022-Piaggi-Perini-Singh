@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.exceptions.NegativeValueException;
+import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw.server.commands.Command;
 
 import java.beans.PropertyChangeEvent;
@@ -15,7 +16,7 @@ import static java.util.stream.Collectors.toCollection;
 
 public interface serverStub extends Remote {
 
-    void registerUser(String name) throws RemoteException;
+    void registerUser(String name) throws RemoteException, UserAlreadyExistsException;
 
     void deregisterConnection(String username) throws RemoteException;
 

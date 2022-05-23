@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.stripped.StrippedBoard;
 import it.polimi.ingsw.model.stripped.StrippedCharacter;
@@ -40,9 +41,20 @@ public class ViewCLI {
     public void Start() throws RemoteException {
 
 
-        System.out.println("Welcome!\nWhat is your name?");
-        nickName = in.nextLine();
-        client.sendName(nickName);
+            System.out.println("Welcome!\nWhat is your name?");
+
+            while(true) {
+                try {
+                    nickName = in.nextLine();
+                    client.sendName(nickName);
+                    break;
+                } catch (UserAlreadyExistsException e) {
+                    System.out.println("That username is already in the game! Try another.");
+                }
+            }
+
+
+
 
         System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n LOBBIES to list existing lobbies;" +
                 "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby.\n " +
