@@ -1,0 +1,23 @@
+.root {
+    -fx-background-image: url(../img/main-menu.jpg);
+    -fx-background-size: stretch;
+    -fx-background-repeat: no-repeat;
+    -fx-opacity: 1;
+}
+
+.error {
+    -fx-border-width:2;
+    -fx-border-color: red;
+}
+
+.button {
+    -fx-border-width: 3;
+    -fx-border-radius: 30;
+    -fx-background-radius: 30;
+    -fx-background-color: #6270de;
+    -fx-border-color: #3441a8;
+}
+
+.button:hover {
+    -fx-background-color: #1d33e0;
+}
