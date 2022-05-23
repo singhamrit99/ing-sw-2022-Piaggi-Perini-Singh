@@ -39,12 +39,12 @@ public class Client implements Runnable{
         run();
     }
 
-    public void createRoom(String username, String roomName) throws RemoteException {
-        server.createRoom(username, roomName);
+    public void createRoom(String roomName) throws RemoteException {
+        server.createRoom(nickname, roomName);
     }
 
-    public void requestRoomJoin(String playerCaller, String roomName) throws RemoteException {
-        server.joinRoom(playerCaller, roomName);
+    public void requestRoomJoin(String roomName) throws RemoteException {
+        server.joinRoom(nickname, roomName);
     }
 
     public ArrayList<String> requestLobbyInfo(String roomName) throws RemoteException {
@@ -59,16 +59,12 @@ public class Client implements Runnable{
         return server.getPlayers(roomName);
     }
 
-    public boolean getLeader(String playercaller, String roomName) {
-        return true;
+    public void setExpertMode(String roomName, boolean value) throws RemoteException {
+        server.setExpertMode(nickname, roomName, value);
     }
 
-    public void setExpertMode(String playerCaller, String roomName, boolean value) throws RemoteException {
-        server.setExpertMode(playerCaller, roomName, value);
-    }
-
-    public void leaveRoom(String playercaller, String roomName) throws RemoteException {
-        server.leaveRoom(playercaller, roomName);
+    public void leaveRoom(String roomName) throws RemoteException {
+        server.leaveRoom(nickname, roomName);
     }
 
     @Override
