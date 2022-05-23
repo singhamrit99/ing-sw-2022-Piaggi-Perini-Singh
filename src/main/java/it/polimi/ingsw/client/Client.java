@@ -3,21 +3,23 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw.server.serverStub;
 
+import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import java.util.Random;
 
-public class Client {
+public class Client implements Runnable{
     final private String ip;
     final private int port;
 
+    private String nickname;
     private serverStub server;
-
+    private boolean inGame;
     public Client(String ip, int port) {
         this.ip = ip;
         this.port = port;
+        inGame = false;
     }
 
     public void connect() {
@@ -31,8 +33,10 @@ public class Client {
         }
     }
 
-    public void sendName(String nickName) throws RemoteException, UserAlreadyExistsException {
+    public void registerClient(String nickName) throws RemoteException, UserAlreadyExistsException {
         server.registerUser(nickName);
+        this.nickname = nickName;
+        run();
     }
 
     public void createRoom(String username, String roomName) throws RemoteException {
@@ -67,17 +71,24 @@ public class Client {
         server.leaveRoom(playercaller, roomName);
     }
 
-    /*
     @Override
     public void run() {
          while (true) {
             try {
-                Thread.sleep(1000);
+                if(inGame){
+                    System.out.println("the room is playing");
+                    ArrayList<PropertyChangeEvent> newUpdates = server.getUpdates(nickname);
+                }
+                else {
+                    if(server.inGame(nickname))inGame=true;
+                    else inGame=false;
+                }
+
+                Thread.sleep(2000);
             } catch (RemoteException | InterruptedException e) {
                 System.err.println("Remote exception: " + e.toString());
             }
         }
 
     }
-    */
 }

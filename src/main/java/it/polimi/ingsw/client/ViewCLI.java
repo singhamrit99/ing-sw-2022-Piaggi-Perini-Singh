@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.*;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -44,7 +43,7 @@ public class ViewCLI {
         while (true) {
             try {
                 nickName = in.nextLine();
-                client.sendName(nickName);
+                client.registerClient(nickName);
                 break;
             } catch (UserAlreadyExistsException e) {
                 System.out.println("That username is already in the game! Try another.\n");
