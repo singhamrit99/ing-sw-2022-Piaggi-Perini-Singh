@@ -18,20 +18,13 @@ public class Client {
     public Client(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        connect();
     }
 
     public void connect() {
         try {
-            // Getting the registry
             Registry registry = LocateRegistry.getRegistry(ip, port);
-            // Looking up the registry for the remote object
             server = (serverStub) registry.lookup("server");
             System.out.println("connection done");
-            ViewCLI viewCLI = new ViewCLI(this);
-            viewCLI.Start();
-
-
         } catch (Exception e) {
             System.err.println("Client exception: " + e);
             e.printStackTrace();

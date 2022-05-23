@@ -33,9 +33,7 @@ public class ViewCLI {
     private final Scanner in = new Scanner(System.in);
 
     public ViewCLI(Client client) {
-
         this.client = client;
-
     }
 
     public void Start() throws RemoteException {
