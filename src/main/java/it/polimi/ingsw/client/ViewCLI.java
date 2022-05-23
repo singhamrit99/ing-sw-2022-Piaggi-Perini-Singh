@@ -114,8 +114,13 @@ public class ViewCLI {
     }
 
     private void getLobbyInfo() throws RemoteException {
+        ArrayList<String> result = client.requestLobbyInfo(clientRoom);
         if (clientRoom != null)
-            sendArrayString(client.requestLobbyInfo(clientRoom));
+        {
+            System.out.println("Lobby name: "+ result.get(0));
+            System.out.println("Leader: "+ result.get(1));
+            System.out.println("Expert mode: "+ result.get(2));
+        }
         else
             System.out.println("You're not in a room yet\n");
     }
