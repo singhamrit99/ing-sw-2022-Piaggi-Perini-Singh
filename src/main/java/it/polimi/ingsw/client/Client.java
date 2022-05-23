@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class Client implements Runnable{
     final private String ip;
     final private int port;
-
     private String nickname;
     private serverStub server;
     private boolean inGame;
@@ -36,7 +35,6 @@ public class Client implements Runnable{
     public void registerClient(String nickName) throws RemoteException, UserAlreadyExistsException {
         server.registerUser(nickName);
         this.nickname = nickName;
-        run();
     }
 
     public void createRoom(String roomName) throws RemoteException {
