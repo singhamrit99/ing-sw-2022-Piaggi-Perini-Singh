@@ -7,6 +7,7 @@ import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw.server.commands.Command;
 
 import java.beans.PropertyChangeEvent;
+import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.lang.String.valueOf;
 import static java.util.stream.Collectors.toCollection;
 
 public class Server extends UnicastRemoteObject implements serverStub {
@@ -66,10 +68,12 @@ public class Server extends UnicastRemoteObject implements serverStub {
             if (users.get(playerCaller).getRoom() == null) {
                 ClientConnection userClient = users.get(playerCaller);
                 Room desiredRoom = rooms.get(roomName);
-                if (desiredRoom.getPlayers().size() < 3) {
-                    desiredRoom.addUser(userClient);
-                    userClient.setRoom(desiredRoom.getRoomName());
-                    System.out.println(playerCaller + " joined room " + roomName);
+                if(!desiredRoom.isInGame()){
+                    if (desiredRoom.getPlayers().size() < 3) {
+                        desiredRoom.addUser(userClient);
+                        userClient.setRoom(desiredRoom.getRoomName());
+                        System.out.println(playerCaller + " joined room " + roomName);
+                    }
                 }
             }
         }
@@ -104,9 +108,9 @@ public class Server extends UnicastRemoteObject implements serverStub {
     @Override
     public synchronized ArrayList<String> getLobbyInfo(String roomName) throws RemoteException {
         ArrayList<String> result = new ArrayList<>();
-        result.add("Lobby Name: " + roomName);
-        result.add("Leader: " + getPlayers(roomName).get(0));
-        result.add("Expert Mode: " + isExpertMode(roomName));
+        result.add(roomName);
+        result.add(getPlayers(roomName).get(0));
+        result.add(valueOf(isExpertMode(roomName)));
         return result;
     }
 
@@ -145,15 +149,26 @@ public class Server extends UnicastRemoteObject implements serverStub {
                     } catch (IncorrectArgumentException e) {
                         throw new RuntimeException(e);
                     }
+                    for (ClientConnection player : targetRoom.getPlayers()) {
+                        player.setInGame(true);
+                    }
                 }
             }
         }
     }
 
     @Override
-    public synchronized void performGameAction(Command gameAction) throws RemoteException {
+    public boolean inGame(String username) throws RemoteException {
+        if(users.containsKey(username)){
+            return  users.get(username).inGame();
+        }
+        return false; //TODO exception
+    }
+
+    @Override
+    public synchronized void performGameAction(Command gameAction) throws RemoteException { //TODO ControllerException
         if (users.containsKey(gameAction.getCaller())) {
-            if (users.get(gameAction.getCaller()).isPlaying()) {
+            if (users.get(gameAction.getCaller()).inGame()) {
                 rooms.get(users.get(gameAction.getCaller()).getRoom()).commandInvoker(gameAction);
             }
         }
@@ -163,7 +178,7 @@ public class Server extends UnicastRemoteObject implements serverStub {
     public synchronized ArrayList<PropertyChangeEvent> getUpdates(String playercaller) throws RemoteException {
         if (users.containsKey(playercaller)) {
             ClientConnection callerClientConnection = users.get(playercaller);
-            if (callerClientConnection.isPlaying()) {
+            if (callerClientConnection.inGame()) {
                 Room callerRoom = rooms.get(callerClientConnection.getRoom());
                 return callerRoom.getBuffer(callerClientConnection);
             }

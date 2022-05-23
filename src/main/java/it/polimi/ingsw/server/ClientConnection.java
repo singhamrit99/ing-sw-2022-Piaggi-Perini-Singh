@@ -3,10 +3,10 @@ import java.io.IOException;
 public class ClientConnection{
     private String clientRoom = null;
     private String nickname;
-    private boolean isPlaying;
+    private boolean inGame;
     public ClientConnection(String nickname) {
         this.nickname = nickname;
-        isPlaying = false;
+        inGame = false;
     }
     public String getNickname() {
         return nickname;
@@ -18,5 +18,9 @@ public class ClientConnection{
     public void setRoom(String room) {
         this.clientRoom = room;
     }
-    public boolean isPlaying(){ return isPlaying;}
+    public boolean inGame(){ return inGame;}
+
+    public void setInGame(boolean isPlaying){
+        inGame = isPlaying;
+    }
 }

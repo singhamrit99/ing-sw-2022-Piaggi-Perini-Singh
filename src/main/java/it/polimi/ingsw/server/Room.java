@@ -25,6 +25,8 @@ public class Room implements PropertyChangeListener {
     private boolean expertMode;
     final private Controller controller;
 
+    private boolean inGame;
+
     private HashMap<ClientConnection, ArrayList<PropertyChangeEvent>> eventsBuffer;
 
     public Room(String roomName, ArrayList<ClientConnection> playerList) {
@@ -115,8 +117,7 @@ public class Room implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("error")) addErrorEventToBuffer(evt);
-        else addEventToBuffer(evt);
+        addEventToBuffer(evt);
     }
 
     private void addEventToBuffer(PropertyChangeEvent event) {
@@ -126,21 +127,6 @@ public class Room implements PropertyChangeListener {
             eventsBuffer.replace(clientBufferEvents, eventsQueue);
         }
     }
-
-    private void addErrorEventToBuffer(PropertyChangeEvent error) {
-        SourceEvent src = (SourceEvent) error.getSource();
-        String nickname = src.getWho();
-        for (ClientConnection clientBuffer : players) {
-            if (clientBuffer.getNickname().equals(nickname)) {
-                ArrayList<PropertyChangeEvent> eventsQueue = eventsBuffer.get(clientBuffer);
-                eventsQueue.add(error);
-                eventsBuffer.replace(clientBuffer, eventsQueue);
-                break;
-            }
-        }
-    }
-
-
     public synchronized ArrayList<PropertyChangeEvent> getBuffer(ClientConnection asker){
         ArrayList<PropertyChangeEvent> buffer = new ArrayList<>();
         for (PropertyChangeEvent event: eventsBuffer.get(asker)){
@@ -150,4 +136,12 @@ public class Room implements PropertyChangeListener {
         return buffer;
     }
 
+
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
+    }
+
+    public boolean isInGame() {
+        return inGame;
+    }
 }

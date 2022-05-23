@@ -22,6 +22,7 @@ public interface serverStub extends Remote {
 
     ArrayList<String> getRoomsList() throws RemoteException;
 
+    boolean inGame(String username) throws RemoteException;
     void createRoom(String username, String roomName) throws RemoteException;
 
     void joinRoom(String playerCaller, String roomName) throws RemoteException;
