@@ -113,8 +113,13 @@ public class ViewCLI {
     }
 
     private void getLobbyInfo() throws RemoteException {
+        ArrayList<String> result = client.requestLobbyInfo(clientRoom);
         if (clientRoom != null)
-            sendArrayString(client.requestLobbyInfo(clientRoom));
+        {
+            System.out.println("Lobby name: "+ result.get(0));
+            System.out.println("Leader: "+ result.get(1));
+            System.out.println("Expert mode: "+ result.get(2));
+        }
         else
             System.out.println("You're not in a room yet\n");
     }
@@ -123,7 +128,7 @@ public class ViewCLI {
         if (clientRoom == null)
             System.out.println("You're not in a room yet, you can't leave!\n");
         else {
-            client.leaveRoom(nickName, clientRoom);
+            client.leaveRoom(clientRoom);
             clientRoom = null;
         }
     }
@@ -155,7 +160,7 @@ public class ViewCLI {
                         System.out.println("Command not recognized\n");
 
                 }
-                client.setExpertMode(nickName, clientRoom, result);
+                client.setExpertMode(clientRoom, result);
             } else
                 System.out.println("You're not this lobby's leader, you can't do that!\n");
         } else
@@ -170,7 +175,7 @@ public class ViewCLI {
             System.out.println("Ops, there is another room with the same name! Choose another one please. \n");
             nameRoom = in.nextLine();
         }
-        client.createRoom(nickName, nameRoom);
+        client.createRoom(nameRoom);
         clientRoom = nameRoom;
     }
 
@@ -188,7 +193,7 @@ public class ViewCLI {
             if (requestedRoom.equals(clientRoom)) {
                 System.out.println("You're already in that room!\n");
             } else {
-                client.requestRoomJoin(nickName, requestedRoom);
+                client.requestRoomJoin(requestedRoom);
                 clientRoom = requestedRoom;
                 System.out.println("You entered room " + clientRoom + " successfully \n");
                 System.out.println("Players in this room:");
