@@ -92,8 +92,8 @@ public class ViewCLI {
                     break;
                 case "help":
                     System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
-                            "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby.\n " +
-                            "\n" +
+                            "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby;\n " +
+                            "HELP to see this message again.\n" +
                             "When you're ready to go and everyone is in the lobby type START to start the game!\n");
                     break;
                 default:
