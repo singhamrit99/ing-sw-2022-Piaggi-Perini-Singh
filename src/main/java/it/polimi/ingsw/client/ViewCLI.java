@@ -16,10 +16,10 @@ import java.util.*;
 public class ViewCLI {
     Client client;
     String nickName;
-    boolean isGameOver = false;
+    boolean hasGameStarted = false;
     StrippedModel localModel;
     int playerNumber;
-    String clientRoom= null;
+    String clientRoom = null;
     int action;
     int turnMoves;
     MoveMotherNature moveMotherNatureOrder;
@@ -34,89 +34,106 @@ public class ViewCLI {
 
     public ViewCLI(Client client) {
 
-        this.client= client;
+        this.client = client;
 
     }
 
     public void Start() throws RemoteException {
 
 
-            System.out.println("Welcome!\nWhat is your name?");
+        System.out.println("Welcome to the lobby!\nWhat's your name?");
 
-            while(true) {
-                try {
-                    nickName = in.nextLine();
-                    client.sendName(nickName);
-                    break;
-                } catch (UserAlreadyExistsException e) {
-                    System.out.println("That username is already in the game! Try another.");
-                }
+        while (true) {
+            try {
+                nickName = in.nextLine();
+                client.sendName(nickName);
+                break;
+            } catch (UserAlreadyExistsException e) {
+                System.out.println("That username is already in the game! Try another.\n");
             }
+        }
 
 
-
-
-        System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n LOBBIES to list existing lobbies;" +
-                "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby.\n " +
-                "\n");
+        System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
+                "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby;\n " +
+                "HELP to see this message again.\n" +
+                "When you're ready to go and everyone is in the lobby type START to start the game!\n");
 
 
         //Main game loop with messages
-        while (!isGameOver) {
-            
-        //codice della lobby
+        while (!hasGameStarted) {
+
+            //codice della lobby
             String command = in.nextLine().toLowerCase(Locale.ROOT);
-                switch (command) {
-                    case "join":
-                        requestRoomJoin(); //fatto
-                        break;
-                    case "create":
-                        requestRoomCreation(); //fatto
-                        break;
-                    case "players":
-                        getPlayersInRoom();//fatto
-                        break;
-                    case "lobbies":
-                        getRooms();//fatto
-                        break;
-                    case "info":
-                        getLobbyInfo();//fatto
-                        break;
-                    case "change":
-                        setExpertMode();//fatto
-                        break;
-                    case "leave":
-                        leaveRoom();//buggato
-                        break;
-                    default:
-                        System.out.println("Command not recognized");
-                        break;
-                }
+            switch (command) {
+                case "join":
+                    requestRoomJoin(); //fatto
+                    break;
+                case "create":
+                    requestRoomCreation(); //fatto
+                    break;
+                case "players":
+                    getPlayersInRoom();//fatto
+                    break;
+                case "rooms":
+                    getRooms();//fatto
+                    break;
+                case "info":
+                    getLobbyInfo();//fatto
+                    break;
+                case "change":
+                    setExpertMode();//fatto
+                    break;
+                case "leave":
+                    leaveRoom();//fatto
+                    break;
+                case "start":
+                    startGame();
+                    break;
+                case "help":
+                    System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
+                            "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby.\n " +
+                            "\n" +
+                            "When you're ready to go and everyone is in the lobby type START to start the game!\n");
+                    break;
+                default:
+                    System.out.println("Command not recognized");
+                    break;
             }
         }
+    }
+
+    private void startGame() {
+
+    }
 
     private void getPlayersInRoom() throws RemoteException {
-        if (clientRoom!=null) {
+        if (clientRoom != null) {
             ArrayList<String> response = client.getNicknamesInRoom(clientRoom);
             sendArrayString(response);
-        }
-        else
+        } else
             System.out.println("You're not in a room, so there are no players to show\n");
     }
 
     private void getLobbyInfo() throws RemoteException {
-        if(clientRoom!=null)
+        if (clientRoom != null)
             sendArrayString(client.requestLobbyInfo(clientRoom));
         else
             System.out.println("You're not in a room yet\n");
     }
 
     private void leaveRoom() throws RemoteException {
-        client.leaveRoom(nickName,clientRoom);
+        if (clientRoom == null)
+            System.out.println("You're not in a room yet, you can't leave!\n");
+        else {
+            client.leaveRoom(nickName, clientRoom);
+            clientRoom = null;
+        }
     }
+
     public void getRooms() throws RemoteException {
-       ArrayList<String> response=  client.getRooms();
-       sendArrayString(response);
+        ArrayList<String> response = client.getRooms();
+        sendArrayString(response);
     }
 
     public void setExpertMode() throws RemoteException {
@@ -159,6 +176,7 @@ public class ViewCLI {
         client.createRoom(nickName, nameRoom);
         clientRoom = nameRoom;
     }
+
     public synchronized void requestRoomJoin() throws RemoteException {
         String requestedRoom;
         System.out.println("Select the room: \n");
@@ -181,6 +199,7 @@ public class ViewCLI {
             }
         }
     }
+
     public void printCommandHelp() {
         System.out.println("The commands available are the following:\n" +
                 "Press 1 to view everyone's boards\n" +
@@ -188,7 +207,7 @@ public class ViewCLI {
                 "Press 3 to view all the islands\n" +
                 "Press 4 to move students across the islands and the dining room\n" +
                 "Press 5 to move mother nature\n" +
-                "Press 6 to see the character cards in the game\n"+
+                "Press 6 to see the character cards in the game\n" +
                 "Press 7 to play a character card\n" +
                 "Press 8 to view this message again\n");
     }
@@ -476,7 +495,7 @@ public class ViewCLI {
         while (!localModel.getBoards().get(i).getOwner().equals(playerNickname)) {
             i++;
         }
-        StrippedBoard s= localModel.getBoards().get(i);
+        StrippedBoard s = localModel.getBoards().get(i);
         System.out.println(s.getOwner() + "'s board: ");
         System.out.println("Coins: " + s.getCoins());
         System.out.println("\nDining room configuration: ");
@@ -495,6 +514,7 @@ public class ViewCLI {
 
         System.out.println("Player boards:\n");
     }
+
     public void printPlayerNames() {
 
         for (StrippedBoard board : localModel.getBoards()) {
@@ -561,6 +581,7 @@ public class ViewCLI {
         return returnedStudents;
 
     }
+
     private synchronized void sendArrayString(ArrayList<String> messageArray) {
         for (String message : messageArray) System.out.println(message);
     }

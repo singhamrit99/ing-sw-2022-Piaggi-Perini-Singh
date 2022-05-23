@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toCollection;
 
 public class Server extends UnicastRemoteObject implements serverStub {
-    private HashMap<String,ClientConnection> users;
+    private HashMap<String, ClientConnection> users;
     private HashMap<String, Room> rooms;
 
     public Server() throws RemoteException {
@@ -29,7 +29,7 @@ public class Server extends UnicastRemoteObject implements serverStub {
     public synchronized void registerUser(String name) throws RemoteException, UserAlreadyExistsException {
         ClientConnection c = new ClientConnection(name);
         if (!users.containsKey(name))
-        users.put(name,c);
+            users.put(name, c);
         else throw new UserAlreadyExistsException();
         System.out.println("user '" + name + "' is in Waiting List");
     }
@@ -37,14 +37,14 @@ public class Server extends UnicastRemoteObject implements serverStub {
     @Override
     public synchronized void deregisterConnection(String username) throws RemoteException {
         ClientConnection clientToRemove = users.get(username);
-        if(rooms.containsKey(clientToRemove.getRoom()))rooms.get(clientToRemove.getRoom()).removeUser(clientToRemove);
+        if (rooms.containsKey(clientToRemove.getRoom())) rooms.get(clientToRemove.getRoom()).removeUser(clientToRemove);
         users.remove(clientToRemove);
     }
 
     @Override
     public synchronized ArrayList<String> getRoomsList() throws RemoteException {
         ArrayList<String> roomList = new ArrayList<>();
-        for(Map.Entry<String,Room> entry : rooms.entrySet()){
+        for (Map.Entry<String, Room> entry : rooms.entrySet()) {
             roomList.add(entry.getKey());
         }
         return roomList;
@@ -52,43 +52,41 @@ public class Server extends UnicastRemoteObject implements serverStub {
 
     @Override
     public synchronized void createRoom(String username, String roomName) throws RemoteException {
-        if(!rooms.containsKey(roomName) && users.containsKey(username)){
+        if (!rooms.containsKey(roomName) && users.containsKey(username)) {
             ArrayList<ClientConnection> members = new ArrayList<>();
             members.add(users.get(username));
-            Room newRoom = new Room(roomName,members);
-            rooms.put(roomName,newRoom);
+            Room newRoom = new Room(roomName, members);
+            rooms.put(roomName, newRoom);
         }
     }
 
     @Override
-    public synchronized void joinRoom(String playerCaller, String roomName)  throws RemoteException {
-        if(users.containsKey(playerCaller) && rooms.containsKey(roomName)){
-            if(users.get(playerCaller).getRoom()==null){
+    public synchronized void joinRoom(String playerCaller, String roomName) throws RemoteException {
+        if (users.containsKey(playerCaller) && rooms.containsKey(roomName)) {
+            if (users.get(playerCaller).getRoom() == null) {
                 ClientConnection userClient = users.get(playerCaller);
                 Room desiredRoom = rooms.get(roomName);
-                if(desiredRoom.getPlayers().size()<3){
+                if (desiredRoom.getPlayers().size() < 3) {
                     desiredRoom.addUser(userClient);
                     userClient.setRoom(desiredRoom.getRoomName());
-                    System.out.println(playerCaller+" joined room "+ roomName);
+                    System.out.println(playerCaller + " joined room " + roomName);
                 }
             }
         }
     }
 
     @Override
-    public synchronized void leaveRoom(String playerCaller, String roomName)  throws RemoteException {
-        if (users.containsKey(playerCaller)&&rooms.containsKey(roomName))
-        {
+    public synchronized void leaveRoom(String playerCaller, String roomName) throws RemoteException {
+        if (users.containsKey(playerCaller) && rooms.containsKey(roomName)) {
             users.get(playerCaller).setRoom(null);
             rooms.get(roomName).getPlayers().remove(users.get(playerCaller));
-            System.out.println("User" +playerCaller+ "left room"+ roomName);
+            System.out.println("User " + playerCaller + "left room " + roomName);
         }
-
     }
 
     @Override
     public synchronized boolean getExpertModeRoom(String roomName) throws RemoteException {
-        if(rooms.containsKey(roomName)){
+        if (rooms.containsKey(roomName)) {
             return rooms.get(roomName).getExpertMode();
         }
         throw new RemoteException();
@@ -97,40 +95,36 @@ public class Server extends UnicastRemoteObject implements serverStub {
     @Override
     public synchronized ArrayList<String> getPlayers(String roomName) throws RemoteException {
 
-        if(rooms.containsKey(roomName)){
+        if (rooms.containsKey(roomName)) {
             return rooms.get(roomName).getPlayers().stream().map(ClientConnection::getNickname).collect(toCollection(ArrayList::new));
-        }
-        else
-        throw new RemoteException();
+        } else
+            throw new RemoteException();
     }
+
     @Override
     public synchronized ArrayList<String> getLobbyInfo(String roomName) throws RemoteException {
         ArrayList<String> result = new ArrayList<>();
         result.add("Lobby Name: " + roomName);
-        result.add ("Leader: "+ getPlayers(roomName).get(0));
+        result.add("Leader: " + getPlayers(roomName).get(0));
         result.add("Expert Mode: " + isExpertMode(roomName));
-
-
         return result;
     }
+
     @Override
     public synchronized boolean isExpertMode(String roomName) throws RemoteException {
         if (rooms.containsKey(roomName))
-        return rooms.get(roomName).getExpertMode();
+            return rooms.get(roomName).getExpertMode();
         else
             throw new RemoteException();
-
     }
 
     @Override
-    //FIXME expert mode does not work correctly, need to fix second if condition
     public synchronized void setExpertMode(String playerCaller, String roomName, boolean expertMode) throws RemoteException {
-        if(rooms.containsKey(roomName)){
-            System.out.println("room was found\n");
-            if(rooms.containsKey(playerCaller)){
-                System.out.println("Player caller found in lobby\n");
-                ClientConnection userClient = users.get(playerCaller);
-                Room targetRoom = rooms.get(userClient.getRoom());
+        if (rooms.containsKey(roomName)) {
+            System.out.println("Toggle expert mode request: room found\n");
+            Room targetRoom = rooms.get(roomName);
+            if (targetRoom.getPlayers().get(0).getNickname().equals(playerCaller)) {
+                System.out.println("Player caller is leader of lobby\n");
                 System.out.println("Changing mode\n");
                 targetRoom.setExpertmode(expertMode);
             }
@@ -138,12 +132,12 @@ public class Server extends UnicastRemoteObject implements serverStub {
     }
 
     @Override
-    public synchronized void startGame(String playerCaller) throws RemoteException{
-        if(users.containsKey(playerCaller)){
-            if(rooms.containsKey(users.get(playerCaller).getRoom())){
+    public synchronized void startGame(String playerCaller) throws RemoteException {
+        if (users.containsKey(playerCaller)) {
+            if (rooms.containsKey(users.get(playerCaller).getRoom())) {
                 ClientConnection userClient = users.get(playerCaller);
                 Room targetRoom = rooms.get(userClient.getRoom());
-                if(targetRoom.getPlayers().get(0).getNickname().equals(playerCaller)){   //only leader of the Room (players.get(0) can start the game)
+                if (targetRoom.getPlayers().get(0).getNickname().equals(playerCaller)) {   //only leader of the Room (players.get(0) can start the game)
                     try {
                         targetRoom.startGame();
                     } catch (NegativeValueException e) {
@@ -155,20 +149,21 @@ public class Server extends UnicastRemoteObject implements serverStub {
             }
         }
     }
+
     @Override
-    public synchronized void performGameAction(Command gameAction)throws RemoteException {
-        if(users.containsKey(gameAction.getCaller())){
-            if(users.get(gameAction.getCaller()).isPlaying()){
+    public synchronized void performGameAction(Command gameAction) throws RemoteException {
+        if (users.containsKey(gameAction.getCaller())) {
+            if (users.get(gameAction.getCaller()).isPlaying()) {
                 rooms.get(users.get(gameAction.getCaller()).getRoom()).commandInvoker(gameAction);
             }
         }
     }
 
     @Override
-    public synchronized ArrayList<PropertyChangeEvent> getUpdates(String playercaller)throws RemoteException{
-        if(users.containsKey(playercaller)){
+    public synchronized ArrayList<PropertyChangeEvent> getUpdates(String playercaller) throws RemoteException {
+        if (users.containsKey(playercaller)) {
             ClientConnection callerClientConnection = users.get(playercaller);
-            if(callerClientConnection.isPlaying()){
+            if (callerClientConnection.isPlaying()) {
                 Room callerRoom = rooms.get(callerClientConnection.getRoom());
                 return callerRoom.getBuffer(callerClientConnection);
             }
