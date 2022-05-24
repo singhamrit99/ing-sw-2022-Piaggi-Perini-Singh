@@ -25,15 +25,15 @@ public interface serverStub extends Remote {
 
     void joinRoom(String playerCaller, String roomName) throws RemoteException;
 
-    void leaveRoom(String playerCaller, String roomName) throws RemoteException;
+    public void leaveRoom(String playerCaller) throws RemoteException,UserNotInRoom;
 
     boolean getExpertModeRoom(String roomName) throws RemoteException;
 
     ArrayList<String> getPlayers(String roomName) throws RemoteException;
 
-    void setExpertMode(String playerCaller, String roomName, boolean expertMode) throws RemoteException;
+    public void setExpertMode(String playerCaller, boolean expertMode) throws RemoteException,UserNotInRoom,NotLeaderRoomException;
 
-    void startGame(String playerCaller) throws RemoteException;
+    public void startGame(String playerCaller) throws RemoteException, NotLeaderRoomException, UserNotInRoom;
 
     void performGameAction(Command gameAction) throws RemoteException, MotherNatureLostException, NegativeValueException, AssistantCardNotFound, IncorrectArgumentException, IncorrectPlayerException, ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException;
 

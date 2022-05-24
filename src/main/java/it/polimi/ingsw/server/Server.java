@@ -78,11 +78,19 @@ public class Server extends UnicastRemoteObject implements serverStub {
     }
 
     @Override
-    public synchronized void leaveRoom(String playerCaller, String roomName) throws RemoteException {
-        if (users.containsKey(playerCaller) && rooms.containsKey(roomName)) {
-            users.get(playerCaller).setRoom(null);
-            rooms.get(roomName).getPlayers().remove(users.get(playerCaller));
-            System.out.println("User " + playerCaller + "left room " + roomName);
+    public synchronized void leaveRoom(String playerCaller) throws RemoteException,UserNotInRoom {
+        if (users.containsKey(playerCaller)) {
+            if(users.get(playerCaller).getRoom()!=null){
+                String roomName = users.get(playerCaller).getRoom();
+                rooms.get(roomName).getPlayers().remove(users.get(playerCaller));
+                if(rooms.get(roomName).getPlayers().size()==0){
+                    rooms.remove(roomName);
+                    System.out.println("Room" + roomName + " deleted after"+ playerCaller + "left room");
+                }
+                else System.out.println("User " + playerCaller + "left room " + roomName);
+                users.get(playerCaller).setRoom(null);
+            }
+            else throw new UserNotInRoom();
         }
     }
 
@@ -121,36 +129,48 @@ public class Server extends UnicastRemoteObject implements serverStub {
     }
 
     @Override
-    public synchronized void setExpertMode(String playerCaller, String roomName, boolean expertMode) throws RemoteException {
-        if (rooms.containsKey(roomName)) {
-            System.out.println("Toggle expert mode request: room found\n");
-            Room targetRoom = rooms.get(roomName);
-            if (targetRoom.getPlayers().get(0).getNickname().equals(playerCaller)) {
-                System.out.println("Player caller is leader of lobby\n");
-                System.out.println("Changing mode\n");
-                targetRoom.setExpertmode(expertMode);
+    public synchronized void setExpertMode(String playerCaller, boolean expertMode) throws RemoteException,UserNotInRoom,NotLeaderRoomException {
+        if (users.containsKey(playerCaller)) {
+            if(users.get(playerCaller).getRoom()!=null){
+                System.out.println("Toggle expert mode request: room found\n");
+                String roomName = users.get(playerCaller).getRoom();
+                Room targetRoom = rooms.get(roomName);
+                if (targetRoom.getPlayers().get(0).getNickname().equals(playerCaller)) {
+                    System.out.println("Expert mode changed \n");
+                    targetRoom.setExpertmode(expertMode);
+                }
+                else throw new NotLeaderRoomException();
             }
+            else throw new UserNotInRoom();
         }
     }
 
     @Override
-    public synchronized void startGame(String playerCaller) throws RemoteException {
+    public synchronized void startGame(String playerCaller) throws RemoteException, NotLeaderRoomException, UserNotInRoom {
         if (users.containsKey(playerCaller)) {
-            if (rooms.containsKey(users.get(playerCaller).getRoom())) {
-                ClientConnection userClient = users.get(playerCaller);
-                Room targetRoom = rooms.get(userClient.getRoom());
-                if (targetRoom.getPlayers().get(0).getNickname().equals(playerCaller)) {   //only leader of the Room (players.get(0) can start the game)
-                    try {
-                        targetRoom.startGame();
-                    } catch (NegativeValueException e) {
-                        throw new RuntimeException(e);
-                    } catch (IncorrectArgumentException e) {
-                        throw new RuntimeException(e);
+            if(users.get(playerCaller).getRoom()!=null){
+                if (rooms.containsKey(users.get(playerCaller).getRoom())) {
+                    ClientConnection userClient = users.get(playerCaller);
+                    Room targetRoom = rooms.get(userClient.getRoom());
+                    if (targetRoom.getPlayers().get(0).getNickname().equals(playerCaller)){   //only leader of the Room (players.get(0) can start the game)
+                        try {
+                            targetRoom.startGame();
+                        } catch (NegativeValueException e) {
+                            throw new RuntimeException(e);
+                        } catch (IncorrectArgumentException e) {
+                            throw new RuntimeException(e);
+                        }
+                        for (ClientConnection player : targetRoom.getPlayers()) {
+                            player.setInGame(true);
+                        }
                     }
-                    for (ClientConnection player : targetRoom.getPlayers()) {
-                        player.setInGame(true);
+                    else{
+                        throw new NotLeaderRoomException();
                     }
                 }
+            }
+            else{
+                throw new UserNotInRoom();
             }
         }
     }
