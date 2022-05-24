@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.commands;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class MoveStudents implements Command {
         return playerCaller;
     }
     @Override
-    public void execute(Controller controller) {
+    public void execute(Controller controller) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, IncorrectStateException {
         controller.callMoveStudent(playerCaller, students);
     }
 }
