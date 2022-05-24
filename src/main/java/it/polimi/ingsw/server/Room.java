@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.stripped.*;
@@ -7,8 +8,6 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.server.commands.Command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
-import it.polimi.ingsw.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
 
@@ -111,7 +110,7 @@ public class Room implements PropertyChangeListener {
         addEventToBuffer(evtInitialGame);
     }
 
-    public void commandInvoker(Command command) {
+    public void commandInvoker(Command command) throws MotherNatureLostException, NegativeValueException, AssistantCardNotFound, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NotEnoughCoinsException, IncorrectStateException {
         command.execute(controller);
     }
 
