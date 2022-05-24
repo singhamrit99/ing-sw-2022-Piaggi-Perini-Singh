@@ -10,14 +10,12 @@ import it.polimi.ingsw.model.cards.charactercard.Ability;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCardFactory;
 import it.polimi.ingsw.model.deck.FileJSONPath;
-import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.deck.characterdeck.CharacterCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.exceptions.ControllerExceptions;
+import it.polimi.ingsw.exceptions.ControllerExceptionsException;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.stripped.StrippedBoard;
 import it.polimi.ingsw.model.stripped.StrippedCharacter;
 import it.polimi.ingsw.model.stripped.StrippedCloud;
 import it.polimi.ingsw.model.stripped.StrippedIsland;
@@ -300,13 +298,13 @@ public class Game {
      * * the correct order of player for the ActionPhase. It is based using a PriorityQueue and
      * taking advantage of the comparable interface of Player
      */
-    public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFound {
+    public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFoundException {
         if (state == State.PLANNINGPHASE) {
             if (nicknameCaller.equals(currentPlayer.getNickname()) && playerDrawnOut) {  //playerDrawnOut = player has drawn from bag
                 for (Player p : players) {
                         if (p.hasPlayedAssistantInThisTurn()){
                             if (p.getPlayedAssistantCard().getImageName().equals(nameCard)){
-                                throw new AssistantCardNotFound();
+                                throw new AssistantCardNotFoundException();
                             }
                         }
                 }
@@ -835,7 +833,7 @@ public class Game {
         return currentPlayer.getPlayedAssistantCard().getMove();
     }
 
-    public void error(ControllerExceptions error) {
+    public void error(ControllerExceptionsException error) {
         SourceEvent cloudEvent = new SourceEvent(currentPlayer.getNickname(), error.name());
         PropertyChangeEvent evtError = new PropertyChangeEvent(cloudEvent, "error", null, null);
         gameListener.propertyChange(evtError);

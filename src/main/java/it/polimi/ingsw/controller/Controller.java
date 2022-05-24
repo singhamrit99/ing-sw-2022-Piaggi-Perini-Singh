@@ -37,7 +37,7 @@ public class Controller {
         game.takeStudentsFromCloud(playerCaller, cloudTileID);
     }
 
-    public void callPlayAssistantCard(String playerCaller, String playedCardName) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFound, IncorrectStateException {
+    public void callPlayAssistantCard(String playerCaller, String playedCardName) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException {
         game.playAssistantCard(playerCaller, playedCardName);
     }
 

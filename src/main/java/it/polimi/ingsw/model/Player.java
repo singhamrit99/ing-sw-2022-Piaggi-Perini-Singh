@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.exceptions.AssistantCardNotFound;
+import it.polimi.ingsw.exceptions.AssistantCardNotFoundException;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
@@ -34,7 +34,7 @@ public class Player implements Comparable<Player> {
         coins = 1;
     }
 
-    public void playAssistantCard(String nameCard) throws AssistantCardNotFound {
+    public void playAssistantCard(String nameCard) throws AssistantCardNotFoundException {
         playedAssistantCard = assistantCardDeck.get(nameCard);
         assistantCardPlayedInThisTurn = true;
     }

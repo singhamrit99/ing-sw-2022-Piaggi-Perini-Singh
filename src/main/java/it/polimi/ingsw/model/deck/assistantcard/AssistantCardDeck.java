@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.deck.assistantcard;
 
 import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.exceptions.AssistantCardNotFound;
+import it.polimi.ingsw.exceptions.AssistantCardNotFoundException;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.Deck;
 import it.polimi.ingsw.model.deck.DeckGenerator;
@@ -39,7 +39,7 @@ public class AssistantCardDeck implements Deck<AssistantCard> {
         assistantCards = deckGenerator.getDeck();
     }
 
-    public AssistantCard get(String cardName) throws AssistantCardNotFound {
+    public AssistantCard get(String cardName) throws AssistantCardNotFoundException {
         for (AssistantCard card : assistantCards) {
             if (card.getImageName().equals(cardName)) {
                 int indexToRemove = assistantCards.indexOf(card);
@@ -48,7 +48,7 @@ public class AssistantCardDeck implements Deck<AssistantCard> {
                 return returnedCard;
             }
         }
-        throw new AssistantCardNotFound();
+        throw new AssistantCardNotFoundException();
     }
 
     public ArrayList<AssistantCard> getAllCards() {

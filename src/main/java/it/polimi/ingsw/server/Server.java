@@ -1,17 +1,14 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.server.commands.Command;
 
 import java.beans.PropertyChangeEvent;
-import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.lang.String.valueOf;
 import static java.util.stream.Collectors.toCollection;
@@ -78,7 +75,7 @@ public class Server extends UnicastRemoteObject implements serverStub {
     }
 
     @Override
-    public synchronized void leaveRoom(String playerCaller) throws RemoteException,UserNotInRoom {
+    public synchronized void leaveRoom(String playerCaller) throws RemoteException, UserNotInRoomException {
         if (users.containsKey(playerCaller)) {
             if(users.get(playerCaller).getRoom()!=null){
                 String roomName = users.get(playerCaller).getRoom();
@@ -90,7 +87,7 @@ public class Server extends UnicastRemoteObject implements serverStub {
                 else System.out.println("User " + playerCaller + "left room " + roomName);
                 users.get(playerCaller).setRoom(null);
             }
-            else throw new UserNotInRoom();
+            else throw new UserNotInRoomException();
         }
     }
 
@@ -129,7 +126,7 @@ public class Server extends UnicastRemoteObject implements serverStub {
     }
 
     @Override
-    public synchronized void setExpertMode(String playerCaller, boolean expertMode) throws RemoteException,UserNotInRoom,NotLeaderRoomException {
+    public synchronized void setExpertMode(String playerCaller, boolean expertMode) throws RemoteException, UserNotInRoomException,NotLeaderRoomException {
         if (users.containsKey(playerCaller)) {
             if(users.get(playerCaller).getRoom()!=null){
                 System.out.println("Toggle expert mode request: room found\n");
@@ -141,12 +138,12 @@ public class Server extends UnicastRemoteObject implements serverStub {
                 }
                 else throw new NotLeaderRoomException();
             }
-            else throw new UserNotInRoom();
+            else throw new UserNotInRoomException();
         }
     }
 
     @Override
-    public synchronized void startGame(String playerCaller) throws RemoteException, NotLeaderRoomException, UserNotInRoom {
+    public synchronized void startGame(String playerCaller) throws RemoteException, NotLeaderRoomException, UserNotInRoomException {
         if (users.containsKey(playerCaller)) {
             if(users.get(playerCaller).getRoom()!=null){
                 if (rooms.containsKey(users.get(playerCaller).getRoom())) {
@@ -170,7 +167,7 @@ public class Server extends UnicastRemoteObject implements serverStub {
                 }
             }
             else{
-                throw new UserNotInRoom();
+                throw new UserNotInRoomException();
             }
         }
     }
@@ -184,7 +181,7 @@ public class Server extends UnicastRemoteObject implements serverStub {
     }
 
     @Override
-    public synchronized void performGameAction(Command gameAction) throws RemoteException, MotherNatureLostException, NegativeValueException, AssistantCardNotFound, IncorrectArgumentException, IncorrectPlayerException, ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException { //TODO ControllerException
+    public synchronized void performGameAction(Command gameAction) throws RemoteException, MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, IncorrectArgumentException, IncorrectPlayerException, ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException { //TODO ControllerException
         if (users.containsKey(gameAction.getCaller())) {
             if (users.get(gameAction.getCaller()).inGame()) {
                 rooms.get(users.get(gameAction.getCaller()).getRoom()).commandInvoker(gameAction);

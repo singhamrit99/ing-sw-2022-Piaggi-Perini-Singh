@@ -13,7 +13,6 @@ import it.polimi.ingsw.model.tiles.Island;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -107,7 +106,7 @@ public class Room implements PropertyChangeListener {
         addEventToBuffer(evtInitialGame);
     }
 
-    public void commandInvoker(Command command) throws MotherNatureLostException, NegativeValueException, AssistantCardNotFound, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NotEnoughCoinsException, IncorrectStateException {
+    public void commandInvoker(Command command) throws MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NotEnoughCoinsException, IncorrectStateException {
         command.execute(controller);
     }
 

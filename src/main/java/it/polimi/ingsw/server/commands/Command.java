@@ -7,5 +7,5 @@ import it.polimi.ingsw.exceptions.*;
 public interface Command {
 
     String getCaller();
-    void execute(Controller controller) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, ProfessorNotFoundException, NotEnoughCoinsException, AssistantCardNotFound;
+    void execute(Controller controller) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, ProfessorNotFoundException, NotEnoughCoinsException, AssistantCardNotFoundException;
 }
