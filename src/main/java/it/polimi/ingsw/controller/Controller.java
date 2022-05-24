@@ -11,184 +11,50 @@ import java.util.EnumMap;
 public class Controller {
     private Game game;
 
-    public Game initializeGame(Room room, boolean expertMode, int numOfPlayers, ArrayList<String> nicknames) throws IncorrectArgumentException {
+    public Game initializeGame(Room room, boolean expertMode, int numOfPlayers, ArrayList<String> nicknames) throws IncorrectArgumentException, NegativeValueException {
         if (numOfPlayers < 1 || numOfPlayers > 4) {
             throw new IncorrectArgumentException("Invalid number of players\n");
         } else if (numOfPlayers != nicknames.size()) {
             throw new IncorrectArgumentException("Number of players and nicknames array list length mismatch\n");
         }
-        try {
-            game = new Game(room,expertMode, numOfPlayers, nicknames);
-        } catch (NegativeValueException e) {
-            manageException(e);
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        }
+        game = new Game(room, expertMode, numOfPlayers, nicknames);
+
         return game;
     }
 
-    public void callMoveMotherNature(String playerCaller, int distance) {
-        try {
-            game.moveMotherNature(playerCaller, distance);
-        } catch (IncorrectStateException e) {
-            manageException(e);
-        } catch (MotherNatureLostException e) {
-            manageException(e);
-        } catch (IncorrectPlayerException e) {
-            manageException(e);
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        } catch (NegativeValueException e) {
-            manageException(e);
+    public void callMoveMotherNature(String playerCaller, int distance) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException {
+        game.moveMotherNature(playerCaller, distance);
+    }
+
+    public void callMoveStudent(String playerCaller, EnumMap<Colors, ArrayList<String>> students) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, IncorrectStateException {
+        game.moveStudents(playerCaller, students);
+    }
+
+    public void callPickCloud(String playerCaller, int cloudTileID) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, IncorrectStateException {
+        if (cloudTileID < 0 || cloudTileID > 3) {
+            throw new IncorrectArgumentException();
         }
+        game.takeStudentsFromCloud(playerCaller, cloudTileID);
     }
 
-    public void callMoveStudent(String playerCaller, EnumMap<Colors, ArrayList<String>> students) {
-        try {
-            game.moveStudents(playerCaller, students);
-        } catch (IncorrectStateException e) {
-            manageException(e);
-        } catch (IncorrectPlayerException e) {
-            manageException(e);
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        } catch (NegativeValueException e) {
-            manageException(e);
-        } catch (ProfessorNotFoundException e) {
-            manageException(e);
-        }
+    public void callPlayAssistantCard(String playerCaller, String playedCardName) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFound, IncorrectStateException {
+        game.playAssistantCard(playerCaller, playedCardName);
     }
 
-    public void callPickCloud(String playerCaller, int cloudTileID) {
-        try {
-            if (cloudTileID < 0 || cloudTileID > 3) {
-                throw new IncorrectArgumentException();
-            }
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        }
-        try {
-            game.takeStudentsFromCloud(playerCaller, cloudTileID);
-        } catch (IncorrectStateException e) {
-            manageException(e);
-        } catch (IncorrectPlayerException e) {
-            manageException(e);
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        } catch (NegativeValueException e) {
-            manageException(e);
-        }
+    public void callPlayCharacterCard(int index) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException {
+        game.activateCharacterCard(index);
     }
 
-    public void callPlayAssistantCard(String playerCaller, String playedCardName) {
-        try {
-            game.playAssistantCard(playerCaller, playedCardName);
-        } catch (AssistantCardNotFound e) {
-            manageException(e);
-        } catch (IncorrectStateException e) {
-            manageException(e);
-        } catch (IncorrectPlayerException e) {
-            manageException(e);
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        }
+    public void callPlayCharacterCard(int index, int student, int island) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException {
+        game.activateCharacterCard(index, student, island);
     }
 
-    public void callPlayCharacterCard(int index) {
-        try {
-            game.activateCharacterCard(index);
-        } catch (NotEnoughCoinsException e) {
-            manageException(e);
-        } catch (NegativeValueException e) {
-            manageException(e);
-        } catch (ProfessorNotFoundException e) {
-            manageException(e);
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        }
+    public void callPlayCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException {
+        game.activateCharacterCard(index, students1, students2);
     }
 
-    public void callPlayCharacterCard(int index, int student, int island) {
-        try {
-            game.activateCharacterCard(index, student, island);
-        } catch (NotEnoughCoinsException e) {
-            manageException(e);
-        } catch (NegativeValueException e) {
-            manageException(e);
-        } catch (ProfessorNotFoundException e) {
-            manageException(e);
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        }
-    }
-
-    public void callPlayCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) {
-        try {
-            game.activateCharacterCard(index, students1, students2);
-        } catch (NotEnoughCoinsException e) {
-            manageException(e);
-        } catch (NegativeValueException e) {
-            manageException(e);
-        } catch (ProfessorNotFoundException e) {
-            manageException(e);
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        }
-    }
-
-    public void callPlayCharacterCard(int index, int choice) {
-        try {
-            game.activateCharacterCharacter(index, choice);
-        } catch (NotEnoughCoinsException e) {
-            manageException(e);
-        } catch (NegativeValueException e) {
-            manageException(e);
-        } catch (ProfessorNotFoundException e) {
-            manageException(e);
-        } catch (IncorrectArgumentException e) {
-            manageException(e);
-        }
-
-    }
-
-    public void manageException(NotEnoughCoinsException e) {
-        ControllerExceptions error = ControllerExceptions.NOT_ENOUGH_COINS_EXCEPTION;
-        game.error(error);
-    }
-
-    public void manageException(IncorrectArgumentException e) {
-        ControllerExceptions error = ControllerExceptions.INCORRECT_ARGUMENT_EXCEPTION;
-        game.error(error);
-    }
-
-    public void manageException(NegativeValueException e) {
-        ControllerExceptions error = ControllerExceptions.NEGATIVE_VALUE_EXCEPTION;
-        game.error(error);
-    }
-
-    public void manageException(IncorrectPlayerException e) {
-        ControllerExceptions error = ControllerExceptions.INCORRECT_PLAYER_EXCEPTION;
-        game.error(error);
-    }
-
-    public void manageException(IncorrectStateException e) {
-        ControllerExceptions error = ControllerExceptions.INCORRECT_STATE_EXCEPTION;
-        game.error(error);
-    }
-
-    public void manageException(MotherNatureLostException e) {
-        ControllerExceptions error = ControllerExceptions.MOTHER_NATURE_LOST_EXCEPTION;
-        game.error(error);
-    }
-
-    public void manageException(ProfessorNotFoundException e) {
-        ControllerExceptions error = ControllerExceptions.PROFESSOR_NOT_FOUND_EXCEPTION;
-        game.error(error);
-    }
-
-    public void manageException(AssistantCardNotFound e) {
-        ControllerExceptions error = ControllerExceptions.ASSISTANT_CARD_NOT_FOUND;
-        game.error(error);
+    public void callPlayCharacterCard(int index, int choice) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException {
+        game.activateCharacterCharacter(index, choice);
     }
 }
 
