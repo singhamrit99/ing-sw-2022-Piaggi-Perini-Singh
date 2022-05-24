@@ -84,7 +84,7 @@ public class Server extends UnicastRemoteObject implements serverStub {
                     rooms.remove(roomName);
                     System.out.println("Room" + roomName + " deleted after"+ playerCaller + "left room");
                 }
-                else System.out.println("User " + playerCaller + "left room " + roomName);
+                else System.out.println("User " + playerCaller + " left room " + roomName);
                 users.get(playerCaller).setRoom(null);
             }
             else throw new UserNotInRoomException();

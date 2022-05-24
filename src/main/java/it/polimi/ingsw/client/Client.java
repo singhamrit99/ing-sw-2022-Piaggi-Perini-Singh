@@ -16,7 +16,7 @@ public class Client implements Runnable{
     final private String ip;
     final private int port;
     private String nickname;
-    private String roomName;
+    private String clientRoom= null;
     private ArrayList<String> roomList;
     private serverStub server;
     private boolean inGame;
@@ -55,9 +55,12 @@ public class Client implements Runnable{
     }
     public void createRoom(String roomName) throws RemoteException {
         server.createRoom(nickname, roomName);
+        clientRoom=roomName;
     }
     public void requestRoomJoin(String roomName) throws RemoteException {
         server.joinRoom(nickname, roomName);
+        clientRoom= roomName;
+
     }
     public ArrayList<String> requestLobbyInfo(String roomName) throws RemoteException {
         return server.getLobbyInfo(roomName);
@@ -72,8 +75,18 @@ public class Client implements Runnable{
         server.setExpertMode(nickname, value);
     }
     public void leaveRoom() throws RemoteException, UserNotInRoomException {
-        server.leaveRoom(nickname);
-        roomName = null;
+        if (clientRoom==null)
+        {
+            throw new UserNotInRoomException();
+        }
+        else {
+            server.leaveRoom(nickname);
+            clientRoom = null;
+        }
+    }
+
+    public boolean isLeader() throws RemoteException {
+        return getNicknamesInRoom(clientRoom).get(0).equals(nickname);
     }
 
     public void startGame() throws  RemoteException, NotLeaderRoomException, UserNotInRoomException {

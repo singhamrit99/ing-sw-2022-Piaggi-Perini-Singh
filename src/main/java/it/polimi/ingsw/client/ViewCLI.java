@@ -16,8 +16,8 @@ import java.util.*;
 
 public class ViewCLI {
     Client client;
-    String nickName;
     boolean hasGameStarted = false;
+    String nickName;
     StrippedModel localModel;
     int playerNumber;
     String clientRoom = null;
@@ -44,7 +44,7 @@ public class ViewCLI {
 
         while (true) {
             try {
-                nickName = in.nextLine();
+                 nickName = in.nextLine();
                 client.registerClient(nickName);
                 break;
             } catch (UserAlreadyExistsException e) {
@@ -125,11 +125,12 @@ public class ViewCLI {
     }
 
     private void leaveRoom() throws RemoteException {
-        if (clientRoom == null)
-            System.out.println("You're not in a room yet, you can't leave!\n");
-        else {
-            //client.leaveRoom(clientRoom); TODO
-            clientRoom = null; //da spostare in client
+        try {
+            client.leaveRoom();
+        }
+        catch (UserNotInRoomException e)
+        {
+            System.out.println("You're not in a room yet\n");
         }
     }
 
@@ -140,7 +141,7 @@ public class ViewCLI {
 
     public void setExpertMode() throws RemoteException, UserNotInRoomException, NotLeaderRoomException {
         if (clientRoom != null) {
-            if (client.getNicknamesInRoom(clientRoom).get(0).equals(nickName)) {
+            if (client.isLeader()) {
                 boolean result = false;
                 System.out.println("Do you want to play in expert mode? Y/N");
                 String answer;
@@ -208,7 +209,7 @@ public class ViewCLI {
                 "Press 2 to view every player's name\n" +
                 "Press 3 to view all the islands\n" +
                 "Press 4 to move students across the islands and the dining room\n" +
-                "Press 5 to move mother nature\n" +
+                "Press 5 to move mother nature. This will end your turn\n" +
                 "Press 6 to see the character cards in the game\n" +
                 "Press 7 to play a character card\n" +
                 "Press 8 to view this message again\n");
@@ -337,7 +338,6 @@ public class ViewCLI {
             input = in.nextInt();
         }
         //We now have a valid move for Mother Nature
-        moveMotherNatureOrder = new MoveMotherNature(nickName, input);
     }
 
     public void moveStudents() {
@@ -361,7 +361,7 @@ public class ViewCLI {
         int movedStudents = 0;
         boolean isValidInputYN = false;
         boolean doItAgain;
-        EnumMap<Colors, Integer> moveStudents = null;
+        EnumMap<Colors, Integer> studentsToMove = null;
         ArrayList<StrippedIsland> myIslands = localModel.getIslands();
         System.out.println("Do you want to move students to the dining room? Y\\N\n");
         do {
@@ -387,8 +387,8 @@ public class ViewCLI {
                 color = color.toUpperCase(Locale.ROOT);
                 if (isValidColor(color)) {
                     if (myBoard.getEntrance().get(stringToColor(color)) <= value) {
-                        moveStudents = myBoard.getDining();
-                        moveStudents.put(stringToColor(color), moveStudents.get(stringToColor(color)) + value);
+                        studentsToMove = myBoard.getDining();
+                        studentsToMove.put(stringToColor(color), studentsToMove.get(stringToColor(color)) + value);
                         movedStudents += value;
 
                         System.out.println("Do you want to move other students to the dining room?\n");
@@ -403,7 +403,7 @@ public class ViewCLI {
                         //Since a player can only move 3 students in a turn there needs to be a check here too
                         if (answer.equals(("n"))) {
                             doItAgain = false;
-                            myBoard.setDining(moveStudents);
+                            myBoard.setDining(studentsToMove);
                         }
                     } else
                         System.out.println("You don't have enough students of that color! Try again.\n");
@@ -413,7 +413,7 @@ public class ViewCLI {
 
         }
         //End of dining room move segment
-        moveStudentsOrder = new MoveStudents(nickName, strippedToDining(moveStudents));
+        moveStudentsOrder = new MoveStudents(nickName, strippedToDining(studentsToMove));
 
         //Move students to the islands if the player has moved less than 3 students already
         if (movedStudents < 3) {
@@ -427,13 +427,13 @@ public class ViewCLI {
                 island = Integer.parseInt(parts[2]);
                 color = color.toUpperCase(Locale.ROOT);
 
-                moveStudents = myIslands.get(island).getStudents();
+                studentsToMove = myIslands.get(island).getStudents();
 
                 if (isValidColor(color)) {
                     if (myBoard.getEntrance().get(stringToColor(color)) <= value) {
                         if (island > 0 && island < localModel.getIslands().size()) {
 
-                            moveStudents.put(stringToColor(color), myIslands.get(island).getStudents().get(stringToColor(color)) + value);
+                            studentsToMove.put(stringToColor(color), myIslands.get(island).getStudents().get(stringToColor(color)) + value);
                             movedStudents += value;
 
                             System.out.println("Do you want to move other students to the islands?\n");
@@ -459,6 +459,7 @@ public class ViewCLI {
 
 
             } while (doItAgain);
+
 
         } else
             System.out.println("You already moved three students this turn\n");
