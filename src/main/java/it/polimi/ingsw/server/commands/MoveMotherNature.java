@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.commands;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.exceptions.*;
 
 public class MoveMotherNature implements Command {
     String playerCaller;
@@ -17,7 +18,7 @@ public class MoveMotherNature implements Command {
     }
 
     @Override
-    public void execute(Controller controller) {
+    public void execute(Controller controller) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException {
         controller.callMoveMotherNature(playerCaller, distance);
     }
 }
