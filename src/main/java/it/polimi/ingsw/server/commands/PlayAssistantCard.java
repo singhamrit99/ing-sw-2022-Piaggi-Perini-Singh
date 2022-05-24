@@ -1,6 +1,10 @@
 package it.polimi.ingsw.server.commands;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.exceptions.AssistantCardNotFound;
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
+import it.polimi.ingsw.exceptions.IncorrectPlayerException;
+import it.polimi.ingsw.exceptions.IncorrectStateException;
 
 public class PlayAssistantCard implements Command {
     String playerCaller;
@@ -16,7 +20,7 @@ public class PlayAssistantCard implements Command {
         return playerCaller;
     }
     @Override
-    public void execute(Controller controller) {
+    public void execute(Controller controller) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFound, IncorrectStateException {
         controller.callPlayAssistantCard(playerCaller, assistantCardName);
     }
 }
