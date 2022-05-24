@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.exceptions.NotLeaderRoomException;
 import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
+import it.polimi.ingsw.exceptions.UserNotInRoomException;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.stripped.StrippedBoard;
 import it.polimi.ingsw.model.stripped.StrippedCharacter;
@@ -35,7 +37,7 @@ public class ViewCLI {
         this.client = client;
     }
 
-    public void Start() throws RemoteException {
+    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException {
 
 
         System.out.println("Welcome to the lobby!\nWhat's your name?");
@@ -50,12 +52,10 @@ public class ViewCLI {
             }
         }
 
-
         System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
                 "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby;\n " +
                 "HELP to see this message again.\n" +
                 "When you're ready to go and everyone is in the lobby type START to start the game!\n");
-
 
         //Main game loop with messages
         while (!hasGameStarted) {
@@ -79,7 +79,7 @@ public class ViewCLI {
                     getLobbyInfo();//fatto
                     break;
                 case "change":
-                    setExpertMode();//fatto
+                    setExpertMode();// TODO exception
                     break;
                 case "leave":
                     leaveRoom();//fatto
@@ -128,8 +128,8 @@ public class ViewCLI {
         if (clientRoom == null)
             System.out.println("You're not in a room yet, you can't leave!\n");
         else {
-            client.leaveRoom(clientRoom);
-            clientRoom = null;
+            //client.leaveRoom(clientRoom); TODO
+            clientRoom = null; //da spostare in client
         }
     }
 
@@ -138,7 +138,7 @@ public class ViewCLI {
         sendArrayString(response);
     }
 
-    public void setExpertMode() throws RemoteException {
+    public void setExpertMode() throws RemoteException, UserNotInRoomException, NotLeaderRoomException {
         if (clientRoom != null) {
             if (client.getNicknamesInRoom(clientRoom).get(0).equals(nickName)) {
                 boolean result = false;
@@ -160,7 +160,7 @@ public class ViewCLI {
                         System.out.println("Command not recognized\n");
 
                 }
-                client.setExpertMode(clientRoom, result);
+                client.setExpertMode(result); //TODO exception
             } else
                 System.out.println("You're not this lobby's leader, you can't do that!\n");
         } else
