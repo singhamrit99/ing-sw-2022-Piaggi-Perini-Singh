@@ -1,8 +1,11 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
+import it.polimi.ingsw.exceptions.NotLeaderRoomException;
 import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
+import it.polimi.ingsw.exceptions.UserNotInRoomException;
+import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.serverStub;
-
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -13,14 +16,20 @@ public class Client implements Runnable{
     final private String ip;
     final private int port;
     private String nickname;
+    private String roomName;
+    private ArrayList<String> roomList;
     private serverStub server;
     private boolean inGame;
+    private StrippedModel localModel;
+    private boolean localModelLoaded;
+    private boolean userRegistered;
     public Client(String ip, int port) {
         this.ip = ip;
         this.port = port;
         inGame = false;
+        localModelLoaded = false;
+        userRegistered = false;
     }
-
     public void connect() {
         try {
             Registry registry = LocateRegistry.getRegistry(ip, port);
@@ -31,58 +40,84 @@ public class Client implements Runnable{
             e.printStackTrace();
         }
     }
-
     public void registerClient(String nickName) throws RemoteException, UserAlreadyExistsException {
         server.registerUser(nickName);
         this.nickname = nickName;
+        userRegistered=true;
     }
 
+    public void deregisterClient() throws RemoteException{
+        if(userRegistered){
+            server.deregisterConnection(nickname);
+            this.nickname = null;
+            userRegistered=false;
+        }
+    }
     public void createRoom(String roomName) throws RemoteException {
         server.createRoom(nickname, roomName);
     }
-
     public void requestRoomJoin(String roomName) throws RemoteException {
         server.joinRoom(nickname, roomName);
     }
-
     public ArrayList<String> requestLobbyInfo(String roomName) throws RemoteException {
         return server.getLobbyInfo(roomName);
     }
-
     public ArrayList<String> getRooms() throws RemoteException {
         return server.getRoomsList();
     }
-
     public ArrayList<String> getNicknamesInRoom(String roomName) throws RemoteException {
         return server.getPlayers(roomName);
     }
-
-    public void setExpertMode(String roomName, boolean value) throws RemoteException {
-        server.setExpertMode(nickname, roomName, value);
+    public void setExpertMode(boolean value) throws RemoteException, NotLeaderRoomException, UserNotInRoomException {
+        server.setExpertMode(nickname, value);
+    }
+    public void leaveRoom() throws RemoteException, UserNotInRoomException {
+        server.leaveRoom(nickname);
+        roomName = null;
     }
 
-    public void leaveRoom(String roomName) throws RemoteException {
-        server.leaveRoom(nickname, roomName);
+    public void startGame() throws  RemoteException, NotLeaderRoomException, UserNotInRoomException {
+        server.startGame(nickname);
     }
-
-    @Override
+    @Override //TODO DEPRECATED CODE, REPLACE WITH THREAD POOL EXECUTOR
     public void run() {
-         while (true) {
+         while (userRegistered) {
             try {
                 if(inGame){
                     System.out.println("the room is playing");
                     ArrayList<PropertyChangeEvent> newUpdates = server.getUpdates(nickname);
+                    manageUpdates(newUpdates);
                 }
                 else {
-                    if(server.inGame(nickname))inGame=true;
-                    else inGame=false;
+                    inGame=server.inGame(nickname);
+                    roomList = server.getRoomsList();
                 }
-
                 Thread.sleep(2000);
-            } catch (RemoteException | InterruptedException e) {
-                System.err.println("Remote exception: " + e.toString());
+            } catch (RemoteException | InterruptedException | LocalModelNotLoadedException e) {
+                System.err.println("Client exception: " + e.toString());
             }
         }
-
     }
+
+    private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
+        for(PropertyChangeEvent evt: evtArray){
+            switch (evt.getPropertyName()){
+                case "init":
+                    localModel = (StrippedModel) evt.getNewValue();
+                    break;
+                case "message":
+                    //notify message to view TODO
+                    break;
+                default:
+                    if(localModel!=null){
+                        localModel.updateModel(evt);
+                    }
+                    else{
+                        throw new LocalModelNotLoadedException();
+                    }
+                    break;
+            }
+        }
+    }
+
 }
