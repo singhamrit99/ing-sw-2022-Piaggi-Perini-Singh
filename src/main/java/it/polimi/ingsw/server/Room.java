@@ -23,9 +23,7 @@ public class Room implements PropertyChangeListener {
     private final ArrayList<ClientConnection> players;
     private boolean expertMode;
     final private Controller controller;
-
     private boolean inGame;
-
     private HashMap<ClientConnection, ArrayList<PropertyChangeEvent>> eventsBuffer;
 
     public Room(String roomName, ArrayList<ClientConnection> playerList) {
@@ -71,7 +69,6 @@ public class Room implements PropertyChangeListener {
         buildStrippedModel(newGame.getPlayers(), newGame.getCharacterCards(),
                 newGame.getClouds(), newGame.getIslands());
     }
-
 
     private void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands) {
         ArrayList<StrippedBoard> strippedBoards = new ArrayList<>();

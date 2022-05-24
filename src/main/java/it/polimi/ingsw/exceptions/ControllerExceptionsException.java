@@ -1,6 +1,6 @@
 package it.polimi.ingsw.exceptions;
 
-public enum ControllerExceptions {
+public enum ControllerExceptionsException {
     INCORRECT_ARGUMENT_EXCEPTION(101, "Game logic error! Incorrect argument provided."),
     INCORRECT_PLAYER_EXCEPTION(102, "Game logic error! Wrong player."),
     INCORRECT_STATE_EXCEPTION(103, "Game logic error! Incorrect phase of the game."),
@@ -11,7 +11,7 @@ public enum ControllerExceptions {
     ASSISTANT_CARD_NOT_FOUND (108, "Game logic error! AssistantCard not found.");
     final int errorCode;
 
-    ControllerExceptions(int errorCode, String message) {
+    ControllerExceptionsException(int errorCode, String message) {
         this.errorCode = errorCode;
         this.message = message;
     }

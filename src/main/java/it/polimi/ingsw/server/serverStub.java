@@ -7,10 +7,6 @@ import java.beans.PropertyChangeEvent;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.stream.Collectors.toCollection;
 
 public interface serverStub extends Remote {
 
@@ -25,17 +21,17 @@ public interface serverStub extends Remote {
 
     void joinRoom(String playerCaller, String roomName) throws RemoteException;
 
-    public void leaveRoom(String playerCaller) throws RemoteException,UserNotInRoom;
+    public void leaveRoom(String playerCaller) throws RemoteException, UserNotInRoomException;
 
     boolean getExpertModeRoom(String roomName) throws RemoteException;
 
     ArrayList<String> getPlayers(String roomName) throws RemoteException;
 
-    public void setExpertMode(String playerCaller, boolean expertMode) throws RemoteException,UserNotInRoom,NotLeaderRoomException;
+    public void setExpertMode(String playerCaller, boolean expertMode) throws RemoteException, UserNotInRoomException,NotLeaderRoomException;
 
-    public void startGame(String playerCaller) throws RemoteException, NotLeaderRoomException, UserNotInRoom;
+    public void startGame(String playerCaller) throws RemoteException, NotLeaderRoomException, UserNotInRoomException;
 
-    void performGameAction(Command gameAction) throws RemoteException, MotherNatureLostException, NegativeValueException, AssistantCardNotFound, IncorrectArgumentException, IncorrectPlayerException, ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException;
+    void performGameAction(Command gameAction) throws RemoteException, MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, IncorrectArgumentException, IncorrectPlayerException, ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException;
 
     ArrayList<PropertyChangeEvent> getUpdates(String playercaller) throws RemoteException;
 
