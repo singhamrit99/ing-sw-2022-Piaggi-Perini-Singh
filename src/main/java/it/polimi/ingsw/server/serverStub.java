@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.exceptions.NegativeValueException;
-import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.server.commands.Command;
 
 import java.beans.PropertyChangeEvent;
@@ -37,7 +35,7 @@ public interface serverStub extends Remote {
 
     void startGame(String playerCaller) throws RemoteException;
 
-    void performGameAction(Command gameAction) throws RemoteException;
+    void performGameAction(Command gameAction) throws RemoteException, MotherNatureLostException, NegativeValueException, AssistantCardNotFound, IncorrectArgumentException, IncorrectPlayerException, ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException;
 
     ArrayList<PropertyChangeEvent> getUpdates(String playercaller) throws RemoteException;
 
