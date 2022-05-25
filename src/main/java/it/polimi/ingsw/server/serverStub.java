@@ -38,4 +38,6 @@ public interface serverStub extends Remote {
     ArrayList<String> getLobbyInfo(String roomName) throws RemoteException;
 
     boolean isExpertMode(String roomName) throws RemoteException;
+
+    void ping(String nickname) throws  RemoteException;
 }

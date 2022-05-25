@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.server.commands.Command;
 
@@ -13,13 +14,15 @@ import java.util.Map;
 import static java.lang.String.valueOf;
 import static java.util.stream.Collectors.toCollection;
 
-public class Server extends UnicastRemoteObject implements serverStub {
+public class Server extends UnicastRemoteObject implements serverStub, Runnable{
     private HashMap<String, ClientConnection> users;
     private HashMap<String, Room> rooms;
 
+    private boolean serverActive;
     public Server() throws RemoteException {
         users = new HashMap<>();
         rooms = new HashMap<>();
+        serverActive = true;
     }
 
     @Override
@@ -28,14 +31,25 @@ public class Server extends UnicastRemoteObject implements serverStub {
         if (!users.containsKey(name))
             users.put(name, c);
         else throw new UserAlreadyExistsException();
-        System.out.println("user '" + name + "' is in Waiting List");
+        System.out.println("user '" + name + "' is registered in the server");
     }
-
     @Override
     public synchronized void deregisterConnection(String username) throws RemoteException {
-        ClientConnection clientToRemove = users.get(username);
-        if (rooms.containsKey(clientToRemove.getRoom())) rooms.get(clientToRemove.getRoom()).removeUser(clientToRemove);
-        users.remove(clientToRemove);
+        if(users.containsKey(username)){
+            if (rooms.containsKey(users.get(username).getRoom())){
+                try{
+                    leaveRoom(username);
+                }
+                catch(UserNotInRoomException e){
+                    System.out.println("Error during client "+ username + " deletion");
+                }
+            }
+            users.remove(username);
+            System.out.println("De-registered "+ username + " because inactivity");
+        }
+        else{
+            //TODO fare eccezione
+        }
     }
 
     @Override
@@ -199,6 +213,34 @@ public class Server extends UnicastRemoteObject implements serverStub {
             }
         }
         throw new RemoteException();
+    }
+
+    @Override
+    public synchronized void ping(String nickname) throws RemoteException{
+        if(users.containsKey(nickname)){
+            users.get(nickname).setUp();
+        }
+    }
+
+    private void findDisconnectedUsers() throws RemoteException{
+        for(ClientConnection client : users.values()){
+            if(!client.isUp()){
+                deregisterConnection(client.getNickname());
+            }
+            else client.setDown();
+        }
+    }
+
+    @Override
+    public void run() {
+        while(serverActive){
+            try {
+                findDisconnectedUsers();
+                Thread.sleep(1000); //must be double client ping timeout
+            } catch (RemoteException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }

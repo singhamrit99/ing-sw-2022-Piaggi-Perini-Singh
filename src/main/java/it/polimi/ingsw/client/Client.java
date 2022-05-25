@@ -44,6 +44,7 @@ public class Client implements Runnable{
         server.registerUser(nickName);
         this.nickname = nickName;
         userRegistered=true;
+        run(); //it's important that the thread runs only after the correct registration!
     }
 
     public void deregisterClient() throws RemoteException{
@@ -92,13 +93,18 @@ public class Client implements Runnable{
                     inGame=server.inGame(nickname);
                     roomList = server.getRoomsList();
                 }
-                Thread.sleep(2000);
+                Ping();
+                Thread.sleep(500); //should be half of server ping timeout
             } catch (RemoteException | InterruptedException | LocalModelNotLoadedException e) {
                 System.err.println("Client exception: " + e.toString());
             }
         }
     }
 
+    private void Ping() throws  RemoteException{
+        server.ping(nickname);
+        System.out.println("Ho pingato il server");
+    }
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
         for(PropertyChangeEvent evt: evtArray){
             switch (evt.getPropertyName()){
