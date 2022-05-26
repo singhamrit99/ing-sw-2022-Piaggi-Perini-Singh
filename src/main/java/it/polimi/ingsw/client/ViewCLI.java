@@ -107,13 +107,21 @@ public class ViewCLI {
             System.out.println("You're not in a room yet!\n");
         } catch (NotLeaderRoomException e) {
             System.out.println("You're not the leader of this room you can't start the game!\n");
+        } catch (RoomNotExistsException e) {
+            throw new RuntimeException(e);
+        } catch (UserNotRegisteredException e) {
+            throw new RuntimeException(e);
         }
     }
 
-
     private void getPlayersInRoom() throws RemoteException {
         if (clientRoom != null) {
-            ArrayList<String> response = client.getNicknamesInRoom(clientRoom);
+            ArrayList<String> response = null;
+            try {
+                response = client.getNicknamesInRoom(clientRoom);
+            } catch (RoomNotExistsException e) {
+                throw new RuntimeException(e);
+            }
             sendArrayString(response);
         } else
             System.out.println("You're not in a room, so there are no players to show\n");
@@ -122,7 +130,13 @@ public class ViewCLI {
     private void getLobbyInfo() throws RemoteException {
 
         if (clientRoom != null)
-        {ArrayList<String> result = client.requestLobbyInfo(clientRoom);
+        {
+            ArrayList<String> result = null;
+            try {
+                result = client.requestLobbyInfo(clientRoom);
+            } catch (RoomNotExistsException e) {
+                throw new RuntimeException(e);
+            }
             System.out.println("Lobby name: "+ result.get(0));
             System.out.println("Leader: "+ result.get(1));
             System.out.println("Expert mode: "+ result.get(2));
@@ -138,6 +152,8 @@ public class ViewCLI {
         catch (UserNotInRoomException e)
         {
             System.out.println("You're not in a room yet\n");
+        } catch (UserNotRegisteredException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -181,6 +197,8 @@ public class ViewCLI {
                 {
                     System.out.println("You're not this lobby's leader, you can't do that!\n");
 
+                } catch (UserNotRegisteredException e) {
+                    throw new RuntimeException(e);
                 }
 
 
@@ -194,7 +212,13 @@ public class ViewCLI {
             System.out.println("Ops, there is another room with the same name! Choose another one please. \n");
             nameRoom = in.nextLine();
         }
-        client.createRoom(nameRoom);
+        try {
+            client.createRoom(nameRoom);
+        } catch (UserNotRegisteredException e) {
+            throw new RuntimeException(e);
+        } catch (RoomAlreadyExistsException e) {
+            throw new RuntimeException(e);
+        }
         clientRoom = nameRoom;
     }
 
@@ -212,11 +236,23 @@ public class ViewCLI {
             if (requestedRoom.equals(clientRoom)) {
                 System.out.println("You're already in that room!\n");
             } else {
-                client.requestRoomJoin(requestedRoom);
+                try {
+                    client.requestRoomJoin(requestedRoom);
+                } catch (RoomNotExistsException e) {
+                    throw new RuntimeException(e);
+                } catch (UserInRoomException e) {
+                    throw new RuntimeException(e);
+                } catch (UserNotRegisteredException e) {
+                    throw new RuntimeException(e);
+                }
                 clientRoom = requestedRoom;
                 System.out.println("You entered room " + clientRoom + " successfully \n");
                 System.out.println("Players in this room:");
-                sendArrayString(client.getNicknamesInRoom(clientRoom));
+                try {
+                    sendArrayString(client.getNicknamesInRoom(clientRoom));
+                } catch (RoomNotExistsException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -244,7 +280,13 @@ public class ViewCLI {
             i=in.nextInt();
         }
         playAssistantCardOrder= new PlayAssistantCard(nickName,"Assistente("+i+")");
-        client.performGameAction(playAssistantCardOrder);
+        try {
+            client.performGameAction(playAssistantCardOrder);
+        } catch (UserNotInRoomException e) {
+            throw new RuntimeException(e);
+        } catch (UserNotRegisteredException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -335,7 +377,13 @@ public class ViewCLI {
     public void playCharacterA(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have chosen a no parameter character! Buckle up, the effects are on the way!\n");
         playCharacterCardAOrder = new PlayCharacterCardA(nickName, id);
-        client.performGameAction(playCharacterCardAOrder);
+        try {
+            client.performGameAction(playCharacterCardAOrder);
+        } catch (UserNotInRoomException e) {
+            throw new RuntimeException(e);
+        } catch (UserNotRegisteredException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void playCharacterB(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
@@ -343,7 +391,13 @@ public class ViewCLI {
         int students = 0, island = 0;
         System.out.println(localModel.getCharacters().get(id).getDescription());
         playCharacterCardBOrder= new PlayCharacterCardB(nickName, id, students,island);
-        client.performGameAction(playCharacterCardBOrder);
+        try {
+            client.performGameAction(playCharacterCardBOrder);
+        } catch (UserNotInRoomException e) {
+            throw new RuntimeException(e);
+        } catch (UserNotRegisteredException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -358,7 +412,13 @@ public class ViewCLI {
 
         }
         playCharacterCardCOrder= new PlayCharacterCardC(nickName,id,students1,students2);
-        client.performGameAction(playCharacterCardCOrder);
+        try {
+            client.performGameAction(playCharacterCardCOrder);
+        } catch (UserNotInRoomException e) {
+            throw new RuntimeException(e);
+        } catch (UserNotRegisteredException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void playCharacterD(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
@@ -366,7 +426,13 @@ public class ViewCLI {
         //There are two cards that only need a color to work, and the effects then take place
         //Globally.
         playCharacterCardDOrder= new PlayCharacterCardD(nickName, id,0);
-        client.performGameAction(playAssistantCardOrder);
+        try {
+            client.performGameAction(playAssistantCardOrder);
+        } catch (UserNotInRoomException e) {
+            throw new RuntimeException(e);
+        } catch (UserNotRegisteredException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void moveMN() {

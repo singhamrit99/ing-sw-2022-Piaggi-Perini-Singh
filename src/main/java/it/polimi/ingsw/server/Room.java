@@ -32,31 +32,31 @@ public class Room implements PropertyChangeListener {
         controller = new Controller();
     }
 
-    public void setExpertmode(boolean expertmode) {
+    public synchronized void setExpertmode(boolean expertmode) {
         this.expertMode = expertmode;
     }
 
-    public boolean getExpertMode() {
+    public synchronized boolean getExpertMode() {
         return expertMode;
     }
 
-    public String getRoomName() {
+    public synchronized String getRoomName() {
         return roomName;
     }
 
-    public ArrayList<ClientConnection> getPlayers() {
+    public synchronized ArrayList<ClientConnection> getPlayers() {
         return players;
     }
 
-    public void addUser(ClientConnection user) {
+    public synchronized void addUser(ClientConnection user) {
         players.add(user);
     }
 
-    public void removeUser(ClientConnection user) {
+    public synchronized void removeUser(ClientConnection user) {
         players.remove(user);
     }
 
-    public void startGame() throws NegativeValueException, IncorrectArgumentException {
+    public synchronized void startGame() throws NegativeValueException, IncorrectArgumentException {
         ArrayList<String> nicknames = new ArrayList<>();
         eventsBuffer = new HashMap<>();
         for (ClientConnection cl : players) {
@@ -69,7 +69,7 @@ public class Room implements PropertyChangeListener {
                 newGame.getClouds(), newGame.getIslands());
     }
 
-    private void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands) {
+    private synchronized void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands) {
         ArrayList<StrippedBoard> strippedBoards = new ArrayList<>();
         ArrayList<StrippedCharacter> strippedCharacters = new ArrayList<>();
         ArrayList<StrippedCloud> strippedClouds = new ArrayList<>();
@@ -106,7 +106,7 @@ public class Room implements PropertyChangeListener {
         addEventToBuffer(evtInitialGame);
     }
 
-    public void commandInvoker(Command command) throws MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NotEnoughCoinsException, IncorrectStateException {
+    public synchronized void commandInvoker(Command command) throws MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NotEnoughCoinsException, IncorrectStateException {
         command.execute(controller);
     }
 
@@ -114,7 +114,6 @@ public class Room implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         addEventToBuffer(evt);
     }
-
     private void addEventToBuffer(PropertyChangeEvent event) {
         for (ClientConnection clientBufferEvents : players) {
             ArrayList<PropertyChangeEvent> eventsQueue = eventsBuffer.get(clientBufferEvents);
@@ -130,13 +129,10 @@ public class Room implements PropertyChangeListener {
         eventsBuffer.replace(asker,new ArrayList<>()); //flushing the buffer of Events on Server side
         return buffer;
     }
-
-
-    public void setInGame(boolean inGame) {
+    public synchronized void setInGame(boolean inGame) {
         this.inGame = inGame;
     }
-
-    public boolean isInGame() {
+    public synchronized boolean isInGame() {
         return inGame;
     }
 }

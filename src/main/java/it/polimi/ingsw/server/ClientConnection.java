@@ -11,28 +11,26 @@ public class ClientConnection{
         inGame = false;
         up = true;
     }
-    public String getNickname() {
+    public synchronized String getNickname() {
         return nickname;
     }
-    public String getRoom() {
+    public synchronized String getRoom() {
         return clientRoom;
     }
-    public void setRoom(String room) {
+    public synchronized  void setRoom(String room) {
         this.clientRoom = room;
     }
-    public boolean inGame(){ return inGame;}
-    public void setInGame(boolean isPlaying){
+    public synchronized boolean inGame(){ return inGame;}
+    public synchronized void setInGame(boolean isPlaying){
         inGame = isPlaying;
     }
-
-    public boolean isUp(){
+    public synchronized boolean isUp(){
         return up;
     }
-
     public synchronized void setUp(){
         up = true;
     }
-    public synchronized  void setDown(){
+    public synchronized void setDown(){
         up = false;
     }
 }
