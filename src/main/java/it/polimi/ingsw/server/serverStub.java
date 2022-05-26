@@ -12,32 +12,32 @@ public interface serverStub extends Remote {
 
     void registerUser(String name) throws RemoteException, UserAlreadyExistsException;
 
-    void deregisterConnection(String username) throws RemoteException;
+    void deregisterConnection(String username) throws RemoteException, UserNotRegisteredException;
 
     ArrayList<String> getRoomsList() throws RemoteException;
 
-    boolean inGame(String username) throws RemoteException;
-    void createRoom(String username, String roomName) throws RemoteException;
+    void createRoom(String username, String roomName) throws RemoteException, RoomAlreadyExistsException, UserNotRegisteredException;
 
-    void joinRoom(String playerCaller, String roomName) throws RemoteException;
+    void joinRoom(String username, String roomName) throws RemoteException, UserNotRegisteredException, RoomNotExistsException, UserInRoomException;
 
-    public void leaveRoom(String playerCaller) throws RemoteException, UserNotInRoomException;
+    void leaveRoom(String username) throws RemoteException, UserNotInRoomException, UserNotRegisteredException;
 
-    boolean getExpertModeRoom(String roomName) throws RemoteException;
+    ArrayList<String> getPlayers(String roomName) throws RemoteException, RoomNotExistsException;
 
-    ArrayList<String> getPlayers(String roomName) throws RemoteException;
+    ArrayList<String> getLobbyInfo(String roomName) throws RemoteException, RoomNotExistsException;
 
-    public void setExpertMode(String playerCaller, boolean expertMode) throws RemoteException, UserNotInRoomException,NotLeaderRoomException;
+    void setExpertMode(String username, boolean expertMode) throws RemoteException, UserNotInRoomException, NotLeaderRoomException, UserNotRegisteredException;
 
-    public void startGame(String playerCaller) throws RemoteException, NotLeaderRoomException, UserNotInRoomException;
+    void startGame(String username) throws RemoteException, NotLeaderRoomException, UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException;
 
-    void performGameAction(Command gameAction) throws RemoteException, MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, IncorrectArgumentException, IncorrectPlayerException, ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException;
+    boolean inGame(String username) throws RemoteException, UserNotRegisteredException;
 
-    ArrayList<PropertyChangeEvent> getUpdates(String playercaller) throws RemoteException;
+    void performGameAction(String username, Command gameAction) throws RemoteException, MotherNatureLostException,
+            NegativeValueException, AssistantCardNotFoundException, IncorrectArgumentException, IncorrectPlayerException,
+            ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException, UserNotRegisteredException, UserNotInRoomException;
 
-    ArrayList<String> getLobbyInfo(String roomName) throws RemoteException;
+    ArrayList<PropertyChangeEvent> getUpdates(String username) throws RemoteException, UserNotRegisteredException, UserNotInRoomException;
 
-    boolean isExpertMode(String roomName) throws RemoteException;
+    void ping(String username) throws RemoteException, UserNotRegisteredException;
 
-    void ping(String nickname) throws  RemoteException;
 }
