@@ -11,10 +11,6 @@ public class Type implements Serializable {
         this.value = value;
     }
 
-    public enum Types implements Serializable {
-        STUDENT, CONTROL, SELECTOR
-    }
-
     public String getName() {
         return name.toString();
     }

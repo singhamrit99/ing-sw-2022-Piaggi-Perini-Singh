@@ -8,12 +8,12 @@ public class CharacterCardFactory {
         if (type.getName() == null) {
             return null;
         }
-        if (type.getName().equalsIgnoreCase(Type.Types.STUDENT.toString())) {
+        if (type.getName().equalsIgnoreCase(Types.STUDENT.toString())) {
             return new StudentCharacter(imageName, startingPrice, description, type, ability, requirements);
-        } else if (type.getName().equalsIgnoreCase(Type.Types.CONTROL.toString())) {
+        } else if (type.getName().equalsIgnoreCase(Types.CONTROL.toString())) {
             return new ControlCharacter(imageName, startingPrice, description, type, ability, requirements);
 
-        } else if (type.getName().equalsIgnoreCase(Type.Types.SELECTOR.toString())) {
+        } else if (type.getName().equalsIgnoreCase(Types.SELECTOR.toString())) {
             return new SelectorCharacter(imageName, startingPrice, description, type, ability, requirements);
         }
 
