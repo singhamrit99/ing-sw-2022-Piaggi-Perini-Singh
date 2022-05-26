@@ -3,15 +3,17 @@ package it.polimi.ingsw.model.cards.charactercard;
 import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.StudentManager;
+import it.polimi.ingsw.model.enumerations.Actions;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class StudentCharacter extends CharacterCard {
+public class StudentCharacter extends CharacterCard implements Serializable {
     private EnumMap<Colors, Integer> students;
     private Bag bag;
 
@@ -79,7 +81,7 @@ public class StudentCharacter extends CharacterCard {
 
     @Override
     public void activate(Game game) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException {
-        Ability.Actions action = this.getAbility().getAction();
+        Actions action = this.getAbility().getAction();
         switch (action) {
             case ADD_ISLAND:
                 EnumMap<Colors, Integer> studentsToAddIsland = new EnumMap<>(Colors.class);
