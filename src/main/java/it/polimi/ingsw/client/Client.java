@@ -1,10 +1,9 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
-import it.polimi.ingsw.exceptions.NotLeaderRoomException;
-import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
-import it.polimi.ingsw.exceptions.UserNotInRoomException;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.stripped.StrippedModel;
+import it.polimi.ingsw.server.commands.Command;
+import it.polimi.ingsw.server.commands.PlayCharacterCardA;
 import it.polimi.ingsw.server.serverStub;
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
@@ -44,7 +43,8 @@ public class Client implements Runnable{
         server.registerUser(nickName);
         this.nickname = nickName;
         userRegistered=true;
-        run(); //it's important that the thread runs only after the correct registration!
+        new Thread(this).start();
+        //it's important that the thread runs only after the correct registration!
     }
 
     public void deregisterClient() throws RemoteException{
@@ -93,6 +93,8 @@ public class Client implements Runnable{
     public void startGame() throws  RemoteException, NotLeaderRoomException, UserNotInRoomException {
         server.startGame(nickname);
     }
+
+
     @Override //TODO DEPRECATED CODE, REPLACE WITH THREAD POOL EXECUTOR
     public void run() {
          while (userRegistered) {
@@ -106,17 +108,19 @@ public class Client implements Runnable{
                     inGame=server.inGame(nickname);
                     roomList = server.getRoomsList();
                 }
-                Ping();
+
+                        Ping();
+
                 Thread.sleep(500); //should be half of server ping timeout
             } catch (RemoteException | InterruptedException | LocalModelNotLoadedException e) {
-                System.err.println("Client exception: " + e.toString());
+                System.err.println("Client exception: " + e);
             }
         }
     }
 
     private void Ping() throws  RemoteException{
         server.ping(nickname);
-        System.out.println("Ho pingato il server");
+       //System.out.println("Ho pingato il server");
     }
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
         for(PropertyChangeEvent evt: evtArray){
@@ -139,4 +143,7 @@ public class Client implements Runnable{
         }
     }
 
+    public void performGameAction(Command command) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+        server.performGameAction(command);
+    }
 }

@@ -68,6 +68,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable{
             members.add(users.get(username));
             Room newRoom = new Room(roomName, members);
             rooms.put(roomName, newRoom);
+            users.get(username).setRoom(roomName);
         }
     }
 
@@ -158,17 +159,18 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable{
 
     @Override
     public synchronized void startGame(String playerCaller) throws RemoteException, NotLeaderRoomException, UserNotInRoomException {
+        System.out.println("Start game request received\n");
         if (users.containsKey(playerCaller)) {
+            System.out.println("Player " + playerCaller+ " found\n");
             if(users.get(playerCaller).getRoom()!=null){
+                System.out.println("Player room found\n");
                 if (rooms.containsKey(users.get(playerCaller).getRoom())) {
                     ClientConnection userClient = users.get(playerCaller);
                     Room targetRoom = rooms.get(userClient.getRoom());
                     if (targetRoom.getPlayers().get(0).getNickname().equals(playerCaller)){   //only leader of the Room (players.get(0) can start the game)
                         try {
                             targetRoom.startGame();
-                        } catch (NegativeValueException e) {
-                            throw new RuntimeException(e);
-                        } catch (IncorrectArgumentException e) {
+                        } catch (NegativeValueException | IncorrectArgumentException e) {
                             throw new RuntimeException(e);
                         }
                         for (ClientConnection player : targetRoom.getPlayers()) {

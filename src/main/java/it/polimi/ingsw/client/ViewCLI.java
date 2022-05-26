@@ -1,8 +1,8 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.exceptions.NotLeaderRoomException;
-import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
-import it.polimi.ingsw.exceptions.UserNotInRoomException;
+import it.polimi.ingsw.exceptions.*;
+import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
+import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.stripped.StrippedBoard;
 import it.polimi.ingsw.model.stripped.StrippedCharacter;
@@ -100,9 +100,16 @@ public class ViewCLI {
         }
     }
 
-    private void startGame() {
-
+    private void startGame() throws  RemoteException  {
+        try {
+            client.startGame();
+        } catch (UserNotInRoomException e) {
+            System.out.println("You're not in a room yet!\n");
+        } catch (NotLeaderRoomException e) {
+            System.out.println("You're not the leader of this room you can't start the game!\n");
+        }
     }
+
 
     private void getPlayersInRoom() throws RemoteException {
         if (clientRoom != null) {
@@ -113,9 +120,9 @@ public class ViewCLI {
     }
 
     private void getLobbyInfo() throws RemoteException {
-        ArrayList<String> result = client.requestLobbyInfo(clientRoom);
+
         if (clientRoom != null)
-        {
+        {ArrayList<String> result = client.requestLobbyInfo(clientRoom);
             System.out.println("Lobby name: "+ result.get(0));
             System.out.println("Leader: "+ result.get(1));
             System.out.println("Expert mode: "+ result.get(2));
@@ -140,8 +147,7 @@ public class ViewCLI {
     }
 
     public void setExpertMode() throws RemoteException, UserNotInRoomException, NotLeaderRoomException {
-        if (clientRoom != null) {
-            if (client.isLeader()) {
+
                 boolean result = false;
                 System.out.println("Do you want to play in expert mode? Y/N");
                 String answer;
@@ -149,23 +155,35 @@ public class ViewCLI {
                 switch (answer) {
                     case "y": {
                         result = true;
-                        System.out.println("Expert mode enabled!\n");
                         break;
                     }
                     case "n": {
                         result = false;
-                        System.out.println("Expert mode disabled|\n");
                         break;
                     }
                     default:
                         System.out.println("Command not recognized\n");
 
                 }
-                client.setExpertMode(result); //TODO exception
-            } else
-                System.out.println("You're not this lobby's leader, you can't do that!\n");
-        } else
-            System.out.println("You're not in a room now!\n");
+                try {
+                    client.setExpertMode(result);
+                    if (result)
+                        System.out.println("Expert mode enabled!\n");
+                    else
+                        System.out.println("Expert mode disabled|\n");
+                        //TODO exception
+                }
+                catch(UserNotInRoomException e)
+                {
+                    System.out.println("You're not in a room now!\n");
+                }
+                catch (NotLeaderRoomException e)
+                {
+                    System.out.println("You're not this lobby's leader, you can't do that!\n");
+
+                }
+
+
     }
 
     public synchronized void requestRoomCreation() throws RemoteException {
@@ -215,14 +233,33 @@ public class ViewCLI {
                 "Press 8 to view this message again\n");
     }
 
-    public void playAssistantCard() {
+    public void playAssistantCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
 
-        System.out.println("It's your turn! Play an assistant card! \n");
-
+        System.out.println("It's your turn! Pick an assistant card to play. \n");
+        printAssistantCards();
+        int i= in.nextInt();
+        while(i<0||i>localModel.getAssistantDecks().size())
+        {
+            System.out.println("Invalid number, try again\n");
+            i=in.nextInt();
+        }
+        playAssistantCardOrder= new PlayAssistantCard(nickName,"Assistente("+i+")");
+        client.performGameAction(playAssistantCardOrder);
 
     }
 
-    public void performActionInTurn() {
+
+    public void printAssistantCards() {
+        AssistantCardDeck myDeck =  localModel.getAssistantDecks().get(playerNumber);
+        int i=0;
+        for(AssistantCard a: myDeck.getDeck())
+        {
+            System.out.println("Card number "+i+ a.getImageName().replaceAll("[^a-zA Z0-9]", "") + a.getMove());
+            i++;
+        }
+
+    }
+    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         do {
             printCommandHelp();
             System.out.println("Select an action: ");
@@ -259,11 +296,7 @@ public class ViewCLI {
 
     }
 
-    public void printAssistantCards() {
-
-    }
-
-    public void playCharacterCard() {
+    public void playCharacterCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         StrippedCharacter tmp;
         System.out.println("Select the character you want to play! You currently have " + localModel.getBoards().get(playerNumber).getCoins() + " coins \n");
         int i = 0;
@@ -299,35 +332,41 @@ public class ViewCLI {
 
     }
 
-    public void playCharacterA(int id) {
+    public void playCharacterA(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have chosen a no parameter character! Buckle up, the effects are on the way!\n");
-        //playCharacterCardAOrder = new PlayCharacterCardA(id);
-
-
+        playCharacterCardAOrder = new PlayCharacterCardA(nickName, id);
+        client.performGameAction(playCharacterCardAOrder);
     }
 
-    public void playCharacterB(int id) {
+    public void playCharacterB(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have chosen a student island card\n");
-
+        int students = 0, island = 0;
+        System.out.println(localModel.getCharacters().get(id).getDescription());
+        playCharacterCardBOrder= new PlayCharacterCardB(nickName, id, students,island);
+        client.performGameAction(playCharacterCardBOrder);
 
     }
 
-    public void playCharacterC(int id, StrippedCharacter card) {
+    public void playCharacterC(int id, StrippedCharacter card) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have chosen a card that requires two sets of students\n");
         System.out.println("These are the students on your card: \n");
 
+        EnumMap<Colors, Integer> students1=null, students2= null;
         //TODO: add students on card implementation for StrippedCharacters
         for (Colors c : Colors.values()) {
 
 
         }
-
+        playCharacterCardCOrder= new PlayCharacterCardC(nickName,id,students1,students2);
+        client.performGameAction(playCharacterCardCOrder);
     }
 
-    public void playCharacterD(int id) {
-        System.out.println("You have to make a choice, for in determination we find strength\n");
+    public void playCharacterD(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+        System.out.println("You have to make a choice\n");
         //There are two cards that only need a color to work, and the effects then take place
         //Globally.
+        playCharacterCardDOrder= new PlayCharacterCardD(nickName, id,0);
+        client.performGameAction(playAssistantCardOrder);
     }
 
     public void moveMN() {
@@ -576,7 +615,7 @@ public class ViewCLI {
             while (i > 0) {
                 destinations.add("dining");
                 returnedStudents.put(c, destinations);
-                //FIXME: this doesn't really work, have to come back to this
+                //TODO: this doesn't really work, have to come back to this
             }
 
         }

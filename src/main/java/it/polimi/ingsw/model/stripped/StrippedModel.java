@@ -6,16 +6,21 @@ import it.polimi.ingsw.server.SourceEvent;
 
 import javax.xml.transform.Source;
 import java.beans.PropertyChangeEvent;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Optional;
 
-public class StrippedModel {
+public class StrippedModel implements Serializable {
     final private ArrayList<StrippedBoard> boards;
     final private ArrayList<StrippedCharacter> characters;
     final private ArrayList<StrippedCloud> clouds;
     final private ArrayList<StrippedIsland> islands;
+
+    public ArrayList<AssistantCardDeck> getAssistantDecks() {
+        return assistantDecks;
+    }
 
     final private ArrayList<AssistantCardDeck> assistantDecks;
     public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters,

@@ -3,9 +3,10 @@ package it.polimi.ingsw.model.stripped;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.tiles.Cloud;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 
-public class StrippedCloud {
+public class StrippedCloud implements Serializable {
 
     public String name;
     private EnumMap<Colors, Integer> students;

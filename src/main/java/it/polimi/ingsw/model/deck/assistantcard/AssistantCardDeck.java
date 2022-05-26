@@ -7,13 +7,14 @@ import it.polimi.ingsw.model.deck.Deck;
 import it.polimi.ingsw.model.deck.DeckGenerator;
 import it.polimi.ingsw.model.deck.FileJSONPath;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
  * @author Amrit
  */
-public class AssistantCardDeck implements Deck<AssistantCard> {
+public class AssistantCardDeck implements Deck<AssistantCard>, Serializable {
     private ArrayList<AssistantCard> assistantCards;
 
     private String owner;

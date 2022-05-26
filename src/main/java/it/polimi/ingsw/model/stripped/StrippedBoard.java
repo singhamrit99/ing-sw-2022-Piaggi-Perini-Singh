@@ -5,10 +5,11 @@ import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-public class StrippedBoard {
+public class StrippedBoard implements Serializable {
     private String owner;
     private EnumMap<Colors, Integer> entrance;
     private EnumMap<Colors, Integer> dining;

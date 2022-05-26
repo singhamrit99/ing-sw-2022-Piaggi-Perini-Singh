@@ -3,9 +3,10 @@ import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.tiles.Island;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 
-public class StrippedIsland {
+public class StrippedIsland implements Serializable {
     final private String name;
     final private EnumMap<Colors, Integer> students;
     final int numberOfTowers;
