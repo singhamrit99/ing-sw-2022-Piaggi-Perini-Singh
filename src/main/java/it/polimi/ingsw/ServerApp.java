@@ -18,6 +18,6 @@ public class ServerApp {
             registry.bind("server", stub);
             System.out.println("Server has started");
             System.out.println("Waiting for invocations from clients...");
-            server.run();
+            new Thread(server).start();
     }
 }
