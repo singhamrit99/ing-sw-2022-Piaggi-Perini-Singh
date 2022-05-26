@@ -2,17 +2,23 @@ package it.polimi.ingsw.model.cards.charactercard;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
+import it.polimi.ingsw.model.enumerations.Actions;
 
-public class ControlCharacter extends CharacterCard {
+import java.io.Serializable;
+
+/**
+ * @author Amrit
+ */
+public class ControlCharacter extends CharacterCard implements Serializable {
     public ControlCharacter(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) {
         super(imageName, startingPrice, description, type, ability, requirements);
     }
 
     @Override
     public void activate(Game game) throws ProfessorNotFoundException {
-        Ability.Actions action = this.getAbility().getAction();
+        Actions action = this.getAbility().getAction();
 
-        if (action.equals(Ability.Actions.TAKE_PROFESSORS)) {
+        if (action.equals(Actions.TAKE_PROFESSORS)) {
             game.checkAndPlaceProfessor();
         }
     }
