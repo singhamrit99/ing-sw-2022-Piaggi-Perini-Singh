@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
+import it.polimi.ingsw.model.enumerations.Types;
+
 import java.io.Serializable;
 
 public class Type implements Serializable {
