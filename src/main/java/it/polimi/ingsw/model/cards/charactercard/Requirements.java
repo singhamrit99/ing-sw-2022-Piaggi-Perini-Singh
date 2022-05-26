@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
+import it.polimi.ingsw.model.enumerations.Resources;
+
 import java.io.Serializable;
 
 public class Requirements implements Serializable {
@@ -14,10 +16,6 @@ public class Requirements implements Serializable {
     public Requirements(Resources resource, int value) {
         this.resource = resource;
         this.value = value;
-    }
-
-    public enum Resources {
-        COLORS, ISLANDS
     }
 
     public String getRequirements() {
