@@ -9,7 +9,6 @@ import it.polimi.ingsw.model.stripped.StrippedCharacter;
 import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.*;
-
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -36,11 +35,9 @@ public class ViewCLI {
         this.client = client;
     }
 
-    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException {
-
+    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException {
 
         System.out.println("Welcome to the lobby!\nWhat's your name?");
-
         while (true) {
             try {
                 nickName = in.nextLine();
@@ -50,13 +47,11 @@ public class ViewCLI {
                 System.out.println("That username is already in the game! Try another.\n");
             }
         }
-
         System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
                 "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby;\n " +
                 "LEAVE to leave current lobby;\n" +
                 "HELP to see this message again.\n" +
                 "When you're ready to go and everyone is in the lobby type START to start the game!\n");
-
         //Main room loop
         while (!client.isInGame()) {
 
@@ -101,7 +96,6 @@ public class ViewCLI {
             }
         }
         //Main game loop
-        
         while (client.isInGame()) {
             
             //My turn
@@ -117,9 +111,6 @@ public class ViewCLI {
             }*/
 
         }
-
-
-
     }
 
     private void startGame() throws RemoteException {
@@ -150,7 +141,6 @@ public class ViewCLI {
     }
 
     private void getLobbyInfo() throws RemoteException {
-
         if (clientRoom != null) {
             ArrayList<String> result = null;
             try {
@@ -184,7 +174,6 @@ public class ViewCLI {
     }
 
     public void setExpertMode() throws RemoteException, UserNotInRoomException, NotLeaderRoomException {
-
         boolean result = false;
         System.out.println("Do you want to play in expert mode? Y/N");
         String answer;
@@ -200,7 +189,6 @@ public class ViewCLI {
             }
             default:
                 System.out.println("Command not recognized\n");
-
         }
         try {
             client.setExpertMode(result);
@@ -213,12 +201,9 @@ public class ViewCLI {
             System.out.println("You're not in a room now!\n");
         } catch (NotLeaderRoomException e) {
             System.out.println("You're not this lobby's leader, you can't do that!\n");
-
         } catch (UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     public synchronized void requestRoomCreation() throws RemoteException {
@@ -291,7 +276,6 @@ public class ViewCLI {
     }
 
     public void playAssistantCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-
         System.out.println("It's your turn! Pick an assistant card to play. \n");
         printAssistantCards();
         int i = in.nextInt();
@@ -307,7 +291,6 @@ public class ViewCLI {
         } catch (UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
-
     }
 
 
@@ -318,17 +301,15 @@ public class ViewCLI {
             System.out.println("Card number " + i + a.getImageName().replaceAll("[^a-zA Z0-9]", "") + a.getMove());
             i++;
         }
-
     }
 
-    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
         do {
             printCommandHelp();
             System.out.println("Select an action: ");
             String s = in.nextLine();
             action = Integer.parseInt(s);
         } while (action < 1 || action > 7);
-
         switch (action) {
             case 1:
                 printPlayerBoards();
@@ -350,10 +331,10 @@ public class ViewCLI {
                 break;
             case 7:
                 playCharacterCard();
+                break;
             case 8:
                 printCommandHelp();
                 break;
-
             default:
                 //TODO: add exception
         }
@@ -369,7 +350,6 @@ public class ViewCLI {
             System.out.println("Price: " + c.getPrice() + ", description:  " + c.getDescription());
             i++;
         }
-
     }
 
     public void playCharacterCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
@@ -382,7 +362,6 @@ public class ViewCLI {
             i = in.nextInt();
         }
         tmp = client.getLocalModel().getCharacters().get(i);
-
         switch (tmp.getRequirements().getRequirements().toLowerCase(Locale.ROOT)) {
             //TODO: test if this actually works as intended
             case "islands":
@@ -399,9 +378,7 @@ public class ViewCLI {
                     //No resource used but input needed card
                     playCharacterD(i);
                 break;
-
         }
-
     }
 
     public void playCharacterA(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
@@ -428,7 +405,6 @@ public class ViewCLI {
         } catch (UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void playCharacterC(int id, StrippedCharacter card) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
@@ -475,7 +451,7 @@ public class ViewCLI {
         //We now have a valid move for Mother Nature
     }
 
-    public void moveStudents() {
+    public void moveStudents() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         StrippedBoard myBoard;
         int i = 0;
         while (!client.getLocalModel().getBoards().get(i).getOwner().equals(nickName)) {
@@ -545,11 +521,10 @@ public class ViewCLI {
                 } else
                     System.out.println("There is no such color as " + color + "! Try again. \n");
             } while (doItAgain && movedStudents < 3);
-
         }
         //End of dining room move segment
         moveStudentsOrder = new MoveStudents(nickName, strippedToDining(studentsToMove));
-
+        client.performGameAction(moveStudentsOrder);
         //Move students to the islands if the player has moved less than 3 students already
         if (movedStudents < 3) {
             do {
@@ -591,15 +566,11 @@ public class ViewCLI {
                         System.out.println("You don't have enough students of that color! Try again.\n");
                 } else
                     System.out.println("There is no such color as " + color + "! Try again. \n");
-
-
             } while (doItAgain);
-
-
+            moveStudentsOrder = new MoveStudents(nickName, strippedToDining(studentsToMove));
+            client.performGameAction(moveStudentsOrder);
         } else
             System.out.println("You already moved three students this turn\n");
-
-
     }
 
 //End of MoveStudents
