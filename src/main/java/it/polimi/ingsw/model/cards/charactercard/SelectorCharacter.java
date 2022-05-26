@@ -2,15 +2,18 @@ package it.polimi.ingsw.model.cards.charactercard;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.exceptions.NegativeValueException;
+import it.polimi.ingsw.model.enumerations.Actions;
 
-public class SelectorCharacter extends CharacterCard {
+import java.io.Serializable;
+
+public class SelectorCharacter extends CharacterCard implements Serializable {
     private int noTileNumber;
     private int choiceIndex;
 
     public SelectorCharacter(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) {
         super(imageName, startingPrice, description, type, ability, requirements);
 
-        if (this.getAbility().getAction().equals(Ability.Actions.NO_ENTRY_TILE)) {
+        if (this.getAbility().getAction().equals(Actions.NO_ENTRY_TILE)) {
             noTileNumber = 4;
         } else {
             noTileNumber = -1;
@@ -19,7 +22,7 @@ public class SelectorCharacter extends CharacterCard {
 
     @Override
     public void activate(Game game) throws NegativeValueException {
-        Ability.Actions action = this.getAbility().getAction();
+        Actions action = this.getAbility().getAction();
         switch (action) {
             case CALCULATE_INFLUENCE:
                 game.resolveMotherNature(choiceIndex);
