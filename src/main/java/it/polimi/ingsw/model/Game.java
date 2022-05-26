@@ -2,20 +2,15 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.exceptions.IncorrectPlayerException;
-import it.polimi.ingsw.exceptions.IncorrectStateException;
-import it.polimi.ingsw.exceptions.NegativeValueException;
-import it.polimi.ingsw.model.cards.charactercard.Ability;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCardFactory;
 import it.polimi.ingsw.model.deck.FileJSONPath;
 import it.polimi.ingsw.model.deck.characterdeck.CharacterCardDeck;
+import it.polimi.ingsw.model.enumerations.Actions;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.exceptions.ControllerExceptionsException;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.stripped.StrippedCharacter;
 import it.polimi.ingsw.model.stripped.StrippedCloud;
 import it.polimi.ingsw.model.stripped.StrippedIsland;
@@ -302,20 +297,20 @@ public class Game {
         if (state == State.PLANNINGPHASE) {
             if (nicknameCaller.equals(currentPlayer.getNickname()) && playerDrawnOut) {  //playerDrawnOut = player has drawn from bag
                 for (Player p : players) {
-                        if (p.hasPlayedAssistantInThisTurn()){
-                            if (p.getPlayedAssistantCard().getImageName().equals(nameCard)){
-                                throw new AssistantCardNotFoundException();
-                            }
+                    if (p.hasPlayedAssistantInThisTurn()) {
+                        if (p.getPlayedAssistantCard().getImageName().equals(nameCard)) {
+                            throw new AssistantCardNotFoundException();
                         }
+                    }
                 }
                 currentPlayer.playAssistantCard(nameCard); //notice that when a card is played, is removed from the deck of the player
                 //notify played AssistantCard
-                SourceEvent sourceMessagePlayedCard = new SourceEvent(nicknameCaller,"played assistant card");
-                PropertyChangeEvent assistantEvent = new PropertyChangeEvent(sourceMessagePlayedCard,"message",null,currentPlayer.getPlayedCharacterCard());
+                SourceEvent sourceMessagePlayedCard = new SourceEvent(nicknameCaller, "played assistant card");
+                PropertyChangeEvent assistantEvent = new PropertyChangeEvent(sourceMessagePlayedCard, "message", null, currentPlayer.getPlayedCharacterCard());
                 gameListener.propertyChange(assistantEvent);
                 //notify deck change
-                SourceEvent sourceDeck = new SourceEvent(nicknameCaller,nameCard);
-                PropertyChangeEvent assistantDeckUpdateEvent = new PropertyChangeEvent(sourceDeck,"assistant",null,currentPlayer.getAssistantCardDeck());
+                SourceEvent sourceDeck = new SourceEvent(nicknameCaller, nameCard);
+                PropertyChangeEvent assistantDeckUpdateEvent = new PropertyChangeEvent(sourceDeck, "assistant", null, currentPlayer.getAssistantCardDeck());
                 gameListener.propertyChange(assistantDeckUpdateEvent);
             } else {
                 throw new IncorrectPlayerException();
@@ -552,7 +547,7 @@ public class Game {
                 } else if (player.getNumOfStudent(studentColor) == max) {
                     CharacterCard cardPlayed = player.getPlayedCharacterCard();
                     if (cardPlayed != null) {
-                        if (cardPlayed.getAbility().getAction().equals(Ability.Actions.TAKE_PROFESSORS) && cardPlayed.getStatus() >= 1) {
+                        if (cardPlayed.getAbility().getAction().equals(Actions.TAKE_PROFESSORS) && cardPlayed.getStatus() >= 1) {
                             maxPlayer = currentPlayer;
                             currentPlayer.getPlayedCharacterCard().setStatus(2);
                         } else {
@@ -601,7 +596,7 @@ public class Game {
 
         for (Colors studentColor : Colors.values()) {
             if (cardPlayed != null) {
-                if (cardPlayed.getAbility().getAction().equals(Ability.Actions.AVOID_COLOR_INFLUENCE) && cardPlayed.getStatus() >= 1) {
+                if (cardPlayed.getAbility().getAction().equals(Actions.AVOID_COLOR_INFLUENCE) && cardPlayed.getStatus() >= 1) {
                     if (studentColor.getIndex() == cardPlayed.getAbility().getValue()) {
                         currentPlayer.getPlayedCharacterCard().setStatus(2);
                         continue;
@@ -616,11 +611,11 @@ public class Game {
                         influenceScores.replace(teamColor, influenceScores.get(teamColor) + students.get(studentColor));
 
                         if (cardPlayed != null) {
-                            if (cardPlayed.getAbility().getAction().equals(Ability.Actions.TOWER_INFLUENCE) && cardPlayed.getStatus() >= 1) {
+                            if (cardPlayed.getAbility().getAction().equals(Actions.TOWER_INFLUENCE) && cardPlayed.getStatus() >= 1) {
                                 currentPlayer.getPlayedCharacterCard().setStatus(2);
                                 influenceScores.replace(teamColor, influenceScores.get(teamColor));
                                 currentPlayer.getPlayedCharacterCard().setStatus(2);
-                            } else if (cardPlayed.getAbility().getAction().equals(Ability.Actions.ADD_POINTS) && cardPlayed.getStatus() >= 1) {
+                            } else if (cardPlayed.getAbility().getAction().equals(Actions.ADD_POINTS) && cardPlayed.getStatus() >= 1) {
                                 currentPlayer.getPlayedCharacterCard().setStatus(2);
                                 influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers() + cardPlayed.getAbility().getValue());
                             } else {
@@ -825,7 +820,7 @@ public class Game {
     public int getMaxMotherNatureMove() {
         CharacterCard cardPlayed = currentPlayer.getPlayedCharacterCard();
         if (cardPlayed != null) {
-            if (cardPlayed.getAbility().getAction().equals(Ability.Actions.MOVE_MOTHER_NATURE) && cardPlayed.getStatus() >= 1) {
+            if (cardPlayed.getAbility().getAction().equals(Actions.MOVE_MOTHER_NATURE) && cardPlayed.getStatus() >= 1) {
                 currentPlayer.getPlayedCharacterCard().setStatus(2);
                 return currentPlayer.getPlayedAssistantCard().getMove() + currentPlayer.getPlayedCharacterCard().getAbility().getValue();
             }
