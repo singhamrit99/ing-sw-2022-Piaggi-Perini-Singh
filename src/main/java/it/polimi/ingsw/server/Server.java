@@ -8,17 +8,19 @@ import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.String.valueOf;
+import static java.lang.Thread.*;
 import static java.util.stream.Collectors.toCollection;
 
-public class Server extends UnicastRemoteObject implements serverStub, Runnable{
+public class Server extends UnicastRemoteObject implements serverStub, Runnable {
     private HashMap<String, ClientConnection> users;
     private HashMap<String, Room> rooms;
-
     private boolean serverActive;
+
     public Server() throws RemoteException {
         users = new HashMap<>();
         rooms = new HashMap<>();
@@ -33,23 +35,18 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable{
         else throw new UserAlreadyExistsException();
         System.out.println("user '" + name + "' is registered in the server");
     }
+
     @Override
-    public synchronized void deregisterConnection(String username) throws RemoteException {
-        if(users.containsKey(username)){
-            if (rooms.containsKey(users.get(username).getRoom())){
-                try{
-                    leaveRoom(username);
-                }
-                catch(UserNotInRoomException e){
-                    System.out.println("Error during client "+ username + " deletion");
-                }
+    public synchronized void deregisterConnection(String username) throws RemoteException, UserNotRegisteredException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        if (users.get(username).getRoom() != null) {
+            try {
+                leaveRoom(username);
+            } catch (UserNotInRoomException | UserNotRegisteredException ignored) {
             }
-            users.remove(username);
-            System.out.println("De-registered "+ username + " because inactivity");
         }
-        else{
-            //TODO fare eccezione
-        }
+        users.remove(username);
+        System.out.println("De-registered " + username + " because inactivity");
     }
 
     @Override
@@ -62,69 +59,57 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable{
     }
 
     @Override
-    public synchronized void createRoom(String username, String roomName) throws RemoteException {
-        if (!rooms.containsKey(roomName) && users.containsKey(username)) {
-            ArrayList<ClientConnection> members = new ArrayList<>();
-            members.add(users.get(username));
-            Room newRoom = new Room(roomName, members);
-            rooms.put(roomName, newRoom);
-            users.get(username).setRoom(roomName);
+    public synchronized void createRoom(String username, String roomName) throws RemoteException, RoomAlreadyExistsException, UserNotRegisteredException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        if (rooms.containsKey(roomName)) throw new RoomAlreadyExistsException();
+        ArrayList<ClientConnection> members = new ArrayList<>();
+        Room newRoom = new Room(roomName, members);
+        rooms.put(roomName, newRoom);
+        try {
+            joinRoom(username, roomName);
+        } catch (RoomNotExistsException | UserInRoomException ignored) {
         }
     }
 
     @Override
-    public synchronized void joinRoom(String playerCaller, String roomName) throws RemoteException {
-        if (users.containsKey(playerCaller) && rooms.containsKey(roomName)) {
-            if (users.get(playerCaller).getRoom() == null) {
-                ClientConnection userClient = users.get(playerCaller);
-                Room desiredRoom = rooms.get(roomName);
-                if (!desiredRoom.isInGame()) {
-                    if (desiredRoom.getPlayers().size() < 3) {
-                        desiredRoom.addUser(userClient);
-                        userClient.setRoom(desiredRoom.getRoomName());
-                        System.out.println(playerCaller + " joined room " + roomName);
-                    }
-                }
+    public synchronized void joinRoom(String username, String roomName) throws RemoteException, UserNotRegisteredException, RoomNotExistsException, UserInRoomException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        if (!rooms.containsKey(roomName)) throw new RoomNotExistsException();
+        if (users.get(username).getRoom() != null) throw new UserInRoomException();
+        ClientConnection userClient = users.get(username);
+        Room desiredRoom = rooms.get(roomName);
+        if (!desiredRoom.isInGame()) {
+            if (desiredRoom.getPlayers().size() < 3) {
+                desiredRoom.addUser(userClient);
+                userClient.setRoom(desiredRoom.getRoomName());
+                System.out.println(username + " joined room " + roomName);
             }
         }
     }
 
     @Override
-    public synchronized void leaveRoom(String playerCaller) throws RemoteException, UserNotInRoomException {
-        if (users.containsKey(playerCaller)) {
-            if(users.get(playerCaller).getRoom()!=null){
-                String roomName = users.get(playerCaller).getRoom();
-                rooms.get(roomName).getPlayers().remove(users.get(playerCaller));
-                if(rooms.get(roomName).getPlayers().size()==0){
-                    rooms.remove(roomName);
-                    System.out.println("Room" + roomName + " deleted after"+ playerCaller + "left room");
-                }
-                else System.out.println("User " + playerCaller + " left room " + roomName);
-                users.get(playerCaller).setRoom(null);
-            }
-            else throw new UserNotInRoomException();
+    public synchronized void leaveRoom(String username) throws RemoteException, UserNotInRoomException, UserNotRegisteredException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        ClientConnection user = users.get(username);
+        if (user.getRoom() == null) throw new UserNotInRoomException();
+        String roomName = user.getRoom();
+        rooms.get(roomName).removeUser(user);
+        if (rooms.get(roomName).getPlayers().size() == 0) {
+            rooms.remove(roomName);
+            System.out.println("Room" + roomName + " deleted after " + username + " left room");
         }
+        user.setRoom(null);
     }
 
     @Override
-    public synchronized boolean getExpertModeRoom(String roomName) throws RemoteException {
-        if (rooms.containsKey(roomName)) {
-            return rooms.get(roomName).getExpertMode();
-        }
-        throw new RemoteException();
+    public synchronized ArrayList<String> getPlayers(String roomName) throws RemoteException, RoomNotExistsException {
+        if (!rooms.containsKey(roomName)) throw new RoomNotExistsException();
+        return rooms.get(roomName).getPlayers().stream().map(ClientConnection::getNickname).collect(toCollection(ArrayList::new));
     }
 
     @Override
-    public synchronized ArrayList<String> getPlayers(String roomName) throws RemoteException {
-
-        if (rooms.containsKey(roomName)) {
-            return rooms.get(roomName).getPlayers().stream().map(ClientConnection::getNickname).collect(toCollection(ArrayList::new));
-        } else
-            throw new RemoteException();
-    }
-
-    @Override
-    public synchronized ArrayList<String> getLobbyInfo(String roomName) throws RemoteException {
+    public synchronized ArrayList<String> getLobbyInfo(String roomName) throws RemoteException, RoomNotExistsException {
+        if (!rooms.containsKey(roomName)) throw new RoomNotExistsException();
         ArrayList<String> result = new ArrayList<>();
         result.add(roomName);
         result.add(getPlayers(roomName).get(0));
@@ -132,114 +117,99 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable{
         return result;
     }
 
-    @Override
-    public synchronized boolean isExpertMode(String roomName) throws RemoteException {
-        if (rooms.containsKey(roomName))
-            return rooms.get(roomName).getExpertMode();
-        else
-            throw new RemoteException();
+    private synchronized boolean isExpertMode(String roomName) { //only called by the server
+        return rooms.get(roomName).getExpertMode();
     }
 
     @Override
-    public synchronized void setExpertMode(String playerCaller, boolean expertMode) throws RemoteException, UserNotInRoomException,NotLeaderRoomException {
-        if (users.containsKey(playerCaller)) {
-            if(users.get(playerCaller).getRoom()!=null){
-                System.out.println("Toggle expert mode request: room found\n");
-                String roomName = users.get(playerCaller).getRoom();
-                Room targetRoom = rooms.get(roomName);
-                if (targetRoom.getPlayers().get(0).getNickname().equals(playerCaller)) {
-                    System.out.println("Expert mode changed \n");
-                    targetRoom.setExpertmode(expertMode);
-                }
-                else throw new NotLeaderRoomException();
-            }
-            else throw new UserNotInRoomException();
-        }
+    public synchronized void setExpertMode(String username, boolean expertMode) throws RemoteException, UserNotInRoomException, NotLeaderRoomException, UserNotRegisteredException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        if (users.get(username).getRoom() == null) throw new UserNotInRoomException();
+        System.out.println("Toggle expert mode request: room found\n");
+        String roomName = users.get(username).getRoom();
+        Room targetRoom = rooms.get(roomName);
+        if (targetRoom.getPlayers().get(0).getNickname().equals(username)) {
+            System.out.println("Expert mode changed \n");
+            targetRoom.setExpertmode(expertMode);
+        } else throw new NotLeaderRoomException();
     }
 
     @Override
-    public synchronized void startGame(String playerCaller) throws RemoteException, NotLeaderRoomException, UserNotInRoomException {
+    public synchronized void startGame(String username) throws RemoteException, NotLeaderRoomException, UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException {
         System.out.println("Start game request received\n");
-        if (users.containsKey(playerCaller)) {
-            System.out.println("Player " + playerCaller+ " found\n");
-            if(users.get(playerCaller).getRoom()!=null){
-                System.out.println("Player room found\n");
-                if (rooms.containsKey(users.get(playerCaller).getRoom())) {
-                    ClientConnection userClient = users.get(playerCaller);
-                    Room targetRoom = rooms.get(userClient.getRoom());
-                    if (targetRoom.getPlayers().get(0).getNickname().equals(playerCaller)){   //only leader of the Room (players.get(0) can start the game)
-                        try {
-                            targetRoom.startGame();
-                        } catch (NegativeValueException | IncorrectArgumentException e) {
-                            throw new RuntimeException(e);
-                        }
-                        for (ClientConnection player : targetRoom.getPlayers()) {
-                            player.setInGame(true);
-                        }
-                    }
-                    else{
-                        throw new NotLeaderRoomException();
-                    }
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        ClientConnection user = users.get(username);
+        if (user.getRoom() == null) throw new UserNotInRoomException();
+        if (!rooms.containsKey(user.getRoom())) throw new RoomNotExistsException();
+        Room targetRoom = rooms.get(user.getRoom());
+        if (targetRoom.getPlayers().get(0).getNickname().equals(username)) {   //only leader of the Room (players.get(0) can start the game)
+            try {
+                targetRoom.startGame();
+            } catch (NegativeValueException | IncorrectArgumentException e) {
+                throw new RuntimeException(e);
+            }
+            for (ClientConnection player : targetRoom.getPlayers()) {
+                player.setInGame(true);
+            }
+        } else {
+            throw new NotLeaderRoomException();
+        }
+    }
+
+    @Override
+    public synchronized boolean inGame(String username) throws RemoteException, UserNotRegisteredException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        return users.get(username).inGame();
+    }
+
+    @Override
+    public synchronized void performGameAction(String username, Command gameAction) throws RemoteException, MotherNatureLostException,
+            NegativeValueException, AssistantCardNotFoundException, IncorrectArgumentException, IncorrectPlayerException,
+            ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException, UserNotRegisteredException, UserNotInRoomException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        if (users.get(username).getRoom() == null) throw new UserNotInRoomException();
+        if (users.get(username).inGame()) {
+            rooms.get(users.get(gameAction.getCaller()).getRoom()).commandInvoker(gameAction);
+        }
+    }
+
+    @Override
+    public synchronized ArrayList<PropertyChangeEvent> getUpdates(String username) throws RemoteException, UserNotRegisteredException, UserNotInRoomException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        ClientConnection userCl = users.get(username);
+        if (!rooms.containsKey(userCl.getRoom())) throw new UserNotInRoomException();
+        if (!userCl.inGame()) return new ArrayList<>();
+        Room callerRoom = rooms.get(userCl.getRoom());
+        return callerRoom.getBuffer(userCl);
+    }
+
+    @Override
+    public synchronized void ping(String username) throws RemoteException, UserNotRegisteredException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        users.get(username).setUp();
+    }
+
+    private synchronized void findDisconnectedUsers() {
+        for (ClientConnection client : users.values()) {
+            if (!client.isUp()) {
+                try {
+                    deregisterConnection(client.getNickname());
+                } catch (RemoteException | UserNotRegisteredException ignored) {
                 }
-            }
-            else{
-                throw new UserNotInRoomException();
-            }
-        }
-    }
-
-    @Override
-    public boolean inGame(String username) throws RemoteException {
-        if (users.containsKey(username)) {
-            return users.get(username).inGame();
-        }
-        return false; //TODO exception
-    }
-
-    @Override
-    public synchronized void performGameAction(Command gameAction) throws RemoteException, MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, IncorrectArgumentException, IncorrectPlayerException, ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException { //TODO ControllerException
-        if (users.containsKey(gameAction.getCaller())) {
-            if (users.get(gameAction.getCaller()).inGame()) {
-                rooms.get(users.get(gameAction.getCaller()).getRoom()).commandInvoker(gameAction);
-            }
-        }
-    }
-
-    @Override
-    public synchronized ArrayList<PropertyChangeEvent> getUpdates(String playerCaller) throws RemoteException {
-        if (users.containsKey(playerCaller)) {
-            ClientConnection callerClientConnection = users.get(playerCaller);
-            if (callerClientConnection.inGame()) {
-                Room callerRoom = rooms.get(callerClientConnection.getRoom());
-                return callerRoom.getBuffer(callerClientConnection);
-            }
-        }
-        throw new RemoteException();
-    }
-
-    @Override
-    public synchronized void ping(String nickname) throws RemoteException{
-        if(users.containsKey(nickname)){
-            users.get(nickname).setUp();
-        }
-    }
-
-    private void findDisconnectedUsers() throws RemoteException{
-        for(ClientConnection client : users.values()){
-            if(!client.isUp()){
-                deregisterConnection(client.getNickname());
-            }
-            else client.setDown();
+            } else client.setDown();
         }
     }
 
     @Override
     public void run() {
-        while(serverActive){
+        while (serverActive) {
             try {
                 findDisconnectedUsers();
-                Thread.sleep(1000); //must be double client ping timeout
-            } catch (RemoteException | InterruptedException e) {
+            } catch (ConcurrentModificationException ignored) {
+            }
+            try {
+                sleep(1000); //must be double client ping timeout
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
