@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.cards.charactercard;
+package it.polimi.ingsw.model.enumerations;
 
 import java.io.Serializable;
 
