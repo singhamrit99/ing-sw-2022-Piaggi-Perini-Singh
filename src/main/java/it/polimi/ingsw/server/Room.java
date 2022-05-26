@@ -83,7 +83,9 @@ public class Room implements PropertyChangeListener {
         }
         //This should be able to provide strippedCharacters with the correct id for controller calls
         int i = 0;
+        System.out.println(charactersCard.get(0).getDescription());
         for (CharacterCard c : charactersCard) {
+            System.out.println("Building stripped character card\n");
             StrippedCharacter newStrippedCharCard = new StrippedCharacter(c);
             newStrippedCharCard.setCharacterID(i);
             strippedCharacters.add(newStrippedCharCard);

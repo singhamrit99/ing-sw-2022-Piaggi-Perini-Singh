@@ -18,7 +18,6 @@ public class ViewCLI {
     Client client;
     boolean hasGameStarted = false;
     String nickName;
-    StrippedModel localModel;
     int playerNumber;
     String clientRoom = null;
     int action;
@@ -37,14 +36,14 @@ public class ViewCLI {
         this.client = client;
     }
 
-    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException {
+    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException {
 
 
         System.out.println("Welcome to the lobby!\nWhat's your name?");
 
         while (true) {
             try {
-                 nickName = in.nextLine();
+                nickName = in.nextLine();
                 client.registerClient(nickName);
                 break;
             } catch (UserAlreadyExistsException e) {
@@ -54,14 +53,15 @@ public class ViewCLI {
 
         System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
                 "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby;\n " +
+                "LEAVE to leave current lobby;\n" +
                 "HELP to see this message again.\n" +
                 "When you're ready to go and everyone is in the lobby type START to start the game!\n");
 
-        //Main game loop with messages
-        while (!hasGameStarted) {
+        //Main room loop
+        while (!client.isInGame()) {
 
             //codice della lobby
-            String command = in.nextLine().toLowerCase(Locale.ROOT);
+            String command = in.nextLine().toLowerCase(Locale.ROOT).replaceAll("\\s+", "");
             switch (command) {
                 case "join":
                     requestRoomJoin(); //fatto
@@ -89,7 +89,9 @@ public class ViewCLI {
                     break;
                 case "help":
                     System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
-                            "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby;\n " +
+                            "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n " +
+                            "CHANGE to toggle expert mode for the current lobby;\n " +
+                            "LEAVE to leave current lobby;\n" +
                             "HELP to see this message again.\n" +
                             "When you're ready to go and everyone is in the lobby type START to start the game!\n");
                     break;
@@ -98,9 +100,29 @@ public class ViewCLI {
                     break;
             }
         }
+        //Main game loop
+        
+        while (client.isInGame()) {
+            
+            //My turn
+            while(true)
+            {
+                performActionInTurn();
+
+            }
+            //Not my turn
+           /* while(true)
+            {
+                System.out.println("Uhhhh print some stuff I suppose");
+            }*/
+
+        }
+
+
+
     }
 
-    private void startGame() throws  RemoteException  {
+    private void startGame() throws RemoteException {
         try {
             client.startGame();
         } catch (UserNotInRoomException e) {
@@ -129,28 +151,24 @@ public class ViewCLI {
 
     private void getLobbyInfo() throws RemoteException {
 
-        if (clientRoom != null)
-        {
+        if (clientRoom != null) {
             ArrayList<String> result = null;
             try {
                 result = client.requestLobbyInfo(clientRoom);
             } catch (RoomNotExistsException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println("Lobby name: "+ result.get(0));
-            System.out.println("Leader: "+ result.get(1));
-            System.out.println("Expert mode: "+ result.get(2));
-        }
-        else
+            System.out.println("Lobby name: " + result.get(0));
+            System.out.println("Leader: " + result.get(1));
+            System.out.println("Expert mode: " + result.get(2));
+        } else
             System.out.println("You're not in a room yet\n");
     }
 
     private void leaveRoom() throws RemoteException {
         try {
             client.leaveRoom();
-        }
-        catch (UserNotInRoomException e)
-        {
+        } catch (UserNotInRoomException e) {
             System.out.println("You're not in a room yet\n");
         } catch (UserNotRegisteredException e) {
             throw new RuntimeException(e);
@@ -159,47 +177,46 @@ public class ViewCLI {
 
     public void getRooms() throws RemoteException {
         ArrayList<String> response = client.getRooms();
-        sendArrayString(response);
+        if (response.isEmpty())
+            System.out.println("There are no rooms yet\n");
+        else
+            sendArrayString(response);
     }
 
     public void setExpertMode() throws RemoteException, UserNotInRoomException, NotLeaderRoomException {
 
-                boolean result = false;
-                System.out.println("Do you want to play in expert mode? Y/N");
-                String answer;
-                answer = in.nextLine().toLowerCase(Locale.ROOT);
-                switch (answer) {
-                    case "y": {
-                        result = true;
-                        break;
-                    }
-                    case "n": {
-                        result = false;
-                        break;
-                    }
-                    default:
-                        System.out.println("Command not recognized\n");
+        boolean result = false;
+        System.out.println("Do you want to play in expert mode? Y/N");
+        String answer;
+        answer = in.nextLine().toLowerCase(Locale.ROOT);
+        switch (answer) {
+            case "y": {
+                result = true;
+                break;
+            }
+            case "n": {
+                result = false;
+                break;
+            }
+            default:
+                System.out.println("Command not recognized\n");
 
-                }
-                try {
-                    client.setExpertMode(result);
-                    if (result)
-                        System.out.println("Expert mode enabled!\n");
-                    else
-                        System.out.println("Expert mode disabled|\n");
-                        //TODO exception
-                }
-                catch(UserNotInRoomException e)
-                {
-                    System.out.println("You're not in a room now!\n");
-                }
-                catch (NotLeaderRoomException e)
-                {
-                    System.out.println("You're not this lobby's leader, you can't do that!\n");
+        }
+        try {
+            client.setExpertMode(result);
+            if (result)
+                System.out.println("Expert mode enabled!\n");
+            else
+                System.out.println("Expert mode disabled|\n");
+            //TODO exception
+        } catch (UserNotInRoomException e) {
+            System.out.println("You're not in a room now!\n");
+        } catch (NotLeaderRoomException e) {
+            System.out.println("You're not this lobby's leader, you can't do that!\n");
 
-                } catch (UserNotRegisteredException e) {
-                    throw new RuntimeException(e);
-                }
+        } catch (UserNotRegisteredException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
@@ -228,10 +245,14 @@ public class ViewCLI {
         if (client.getRooms().isEmpty()) System.out.println("There are no rooms, you can only create a new one");
         else {
             sendArrayString(client.getRooms());
-            requestedRoom = in.nextLine();
+            requestedRoom = in.nextLine().replaceAll("\\s", "");
             while (!client.getRooms().contains(requestedRoom)) {
-                System.out.println("Ops, there are no rooms with that name: try again\n");
+                System.out.println("Ops, there are no rooms with that name: try again. If you want to exit instead type EXIT.\n");
                 requestedRoom = in.nextLine();
+                if (requestedRoom.toLowerCase(Locale.ROOT).replaceAll("\\s", "").equals("exit")) {
+                    System.out.println("Gotcha, leaving room join!\n");
+                    return;
+                }
             }
             if (requestedRoom.equals(clientRoom)) {
                 System.out.println("You're already in that room!\n");
@@ -273,13 +294,12 @@ public class ViewCLI {
 
         System.out.println("It's your turn! Pick an assistant card to play. \n");
         printAssistantCards();
-        int i= in.nextInt();
-        while(i<0||i>localModel.getAssistantDecks().size())
-        {
+        int i = in.nextInt();
+        while (i < 0 || i > client.getLocalModel().getAssistantDecks().size()) {
             System.out.println("Invalid number, try again\n");
-            i=in.nextInt();
+            i = in.nextInt();
         }
-        playAssistantCardOrder= new PlayAssistantCard(nickName,"Assistente("+i+")");
+        playAssistantCardOrder = new PlayAssistantCard(nickName, "Assistente(" + i + ")");
         try {
             client.performGameAction(playAssistantCardOrder);
         } catch (UserNotInRoomException e) {
@@ -292,15 +312,15 @@ public class ViewCLI {
 
 
     public void printAssistantCards() {
-        AssistantCardDeck myDeck =  localModel.getAssistantDecks().get(playerNumber);
-        int i=0;
-        for(AssistantCard a: myDeck.getDeck())
-        {
-            System.out.println("Card number "+i+ a.getImageName().replaceAll("[^a-zA Z0-9]", "") + a.getMove());
+        AssistantCardDeck myDeck = client.getLocalModel().getAssistantDecks().get(playerNumber);
+        int i = 0;
+        for (AssistantCard a : myDeck.getDeck()) {
+            System.out.println("Card number " + i + a.getImageName().replaceAll("[^a-zA Z0-9]", "") + a.getMove());
             i++;
         }
 
     }
+
     public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         do {
             printCommandHelp();
@@ -326,9 +346,11 @@ public class ViewCLI {
                 moveMN();
                 break;
             case 6:
-                playCharacterCard();
+                printCharacterCards();
                 break;
             case 7:
+                playCharacterCard();
+            case 8:
                 printCommandHelp();
                 break;
 
@@ -338,20 +360,28 @@ public class ViewCLI {
 
     }
 
-    public void playCharacterCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-        StrippedCharacter tmp;
-        System.out.println("Select the character you want to play! You currently have " + localModel.getBoards().get(playerNumber).getCoins() + " coins \n");
-        int i = 0;
-        for (StrippedCharacter c : localModel.getCharacters()) {
+    public void printCharacterCards()
+    {
+        int i=0;
+        ArrayList<StrippedCharacter> temp= client.getLocalModel().getCharacters();
+        for (StrippedCharacter c : temp) {
             System.out.println("Character " + i);
             System.out.println("Price: " + c.getPrice() + ", description:  " + c.getDescription());
+            i++;
         }
-        i = in.nextInt();
+
+    }
+
+    public void playCharacterCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+        StrippedCharacter tmp;
+        System.out.println("Select the character you want to play! You currently have " + client.getLocalModel().getBoards().get(playerNumber).getCoins() + " coins \n");
+        printCharacterCards();
+        int i = in.nextInt();
         while (i < 0 || i > 2) {
             System.out.println("That's not right! Try again\n");
             i = in.nextInt();
         }
-        tmp = localModel.getCharacters().get(i);
+        tmp = client.getLocalModel().getCharacters().get(i);
 
         switch (tmp.getRequirements().getRequirements().toLowerCase(Locale.ROOT)) {
             //TODO: test if this actually works as intended
@@ -389,8 +419,8 @@ public class ViewCLI {
     public void playCharacterB(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have chosen a student island card\n");
         int students = 0, island = 0;
-        System.out.println(localModel.getCharacters().get(id).getDescription());
-        playCharacterCardBOrder= new PlayCharacterCardB(nickName, id, students,island);
+        System.out.println(client.getLocalModel().getCharacters().get(id).getDescription());
+        playCharacterCardBOrder = new PlayCharacterCardB(nickName, id, students, island);
         try {
             client.performGameAction(playCharacterCardBOrder);
         } catch (UserNotInRoomException e) {
@@ -405,13 +435,13 @@ public class ViewCLI {
         System.out.println("You have chosen a card that requires two sets of students\n");
         System.out.println("These are the students on your card: \n");
 
-        EnumMap<Colors, Integer> students1=null, students2= null;
+        EnumMap<Colors, Integer> students1 = null, students2 = null;
         //TODO: add students on card implementation for StrippedCharacters
         for (Colors c : Colors.values()) {
 
 
         }
-        playCharacterCardCOrder= new PlayCharacterCardC(nickName,id,students1,students2);
+        playCharacterCardCOrder = new PlayCharacterCardC(nickName, id, students1, students2);
         try {
             client.performGameAction(playCharacterCardCOrder);
         } catch (UserNotInRoomException e) {
@@ -425,7 +455,7 @@ public class ViewCLI {
         System.out.println("You have to make a choice\n");
         //There are two cards that only need a color to work, and the effects then take place
         //Globally.
-        playCharacterCardDOrder= new PlayCharacterCardD(nickName, id,0);
+        playCharacterCardDOrder = new PlayCharacterCardD(nickName, id, 0);
         try {
             client.performGameAction(playAssistantCardOrder);
         } catch (UserNotInRoomException e) {
@@ -448,10 +478,10 @@ public class ViewCLI {
     public void moveStudents() {
         StrippedBoard myBoard;
         int i = 0;
-        while (!localModel.getBoards().get(i).getOwner().equals(nickName)) {
+        while (!client.getLocalModel().getBoards().get(i).getOwner().equals(nickName)) {
             i++;
         }
-        myBoard = localModel.getBoards().get(i);
+        myBoard = client.getLocalModel().getBoards().get(i);
         System.out.println("These are the students in your entrance: \n");
         System.out.println("\nEntrance configuration: ");
         for (Colors c : myBoard.getEntrance().keySet()) {
@@ -467,7 +497,7 @@ public class ViewCLI {
         boolean isValidInputYN = false;
         boolean doItAgain;
         EnumMap<Colors, Integer> studentsToMove = null;
-        ArrayList<StrippedIsland> myIslands = localModel.getIslands();
+        ArrayList<StrippedIsland> myIslands = client.getLocalModel().getIslands();
         System.out.println("Do you want to move students to the dining room? Y\\N\n");
         do {
             answer = in.nextLine();
@@ -536,7 +566,7 @@ public class ViewCLI {
 
                 if (isValidColor(color)) {
                     if (myBoard.getEntrance().get(stringToColor(color)) <= value) {
-                        if (island > 0 && island < localModel.getIslands().size()) {
+                        if (island > 0 && island < client.getLocalModel().getIslands().size()) {
 
                             studentsToMove.put(stringToColor(color), myIslands.get(island).getStudents().get(stringToColor(color)) + value);
                             movedStudents += value;
@@ -575,7 +605,7 @@ public class ViewCLI {
 //End of MoveStudents
 
     public void printPlayerBoards() {
-        ArrayList<StrippedBoard> boards = localModel.getBoards();
+        ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
         System.out.println("Player boards:\n");
         for (StrippedBoard s : boards) {
             System.out.println(s.getOwner() + "'s board: ");
@@ -597,13 +627,13 @@ public class ViewCLI {
     }
 
     public void printPlayerBoard(String playerNickname) {
-        ArrayList<StrippedBoard> boards = localModel.getBoards();
+        ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
 
         int i = 0;
-        while (!localModel.getBoards().get(i).getOwner().equals(playerNickname)) {
+        while (!client.getLocalModel().getBoards().get(i).getOwner().equals(playerNickname)) {
             i++;
         }
-        StrippedBoard s = localModel.getBoards().get(i);
+        StrippedBoard s = client.getLocalModel().getBoards().get(i);
         System.out.println(s.getOwner() + "'s board: ");
         System.out.println("Coins: " + s.getCoins());
         System.out.println("\nDining room configuration: ");
@@ -625,13 +655,13 @@ public class ViewCLI {
 
     public void printPlayerNames() {
 
-        for (StrippedBoard board : localModel.getBoards()) {
+        for (StrippedBoard board : client.getLocalModel().getBoards()) {
             System.out.println(board.getOwner() + "\n");
         }
     }
 
     public void printIslands() {
-        ArrayList<StrippedIsland> islands = localModel.getIslands();
+        ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
 
         for (StrippedIsland island : islands) {
             System.out.println("Island name: " + island.getName() + "\n");

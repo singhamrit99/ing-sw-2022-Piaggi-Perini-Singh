@@ -107,7 +107,7 @@ public class Client implements Runnable {
         while (userRegistered) {
             try {
                 if (inGame) {
-                    System.out.println("the room is playing and I'm in");
+                    //System.out.println("the room is playing and I'm in");
                     ArrayList<PropertyChangeEvent> newUpdates = server.getUpdates(nickname);
                     manageUpdates(newUpdates);
                 } else {
@@ -157,5 +157,12 @@ public class Client implements Runnable {
             IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException,
             UserNotInRoomException, UserNotRegisteredException {
         server.performGameAction(nickname, command);
+    }
+
+    public boolean isInGame() {
+        return inGame;
+    }
+    public StrippedModel getLocalModel() {
+        return localModel;
     }
 }

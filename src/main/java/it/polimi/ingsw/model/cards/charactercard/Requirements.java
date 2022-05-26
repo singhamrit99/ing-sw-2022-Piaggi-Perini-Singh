@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
-public class Requirements {
+import java.io.Serializable;
+
+public class Requirements implements Serializable {
     private Resources resource;
     private int value;
 

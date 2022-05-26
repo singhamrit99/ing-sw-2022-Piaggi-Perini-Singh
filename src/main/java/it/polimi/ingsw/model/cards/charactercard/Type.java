@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
-public class Type {
+import java.io.Serializable;
+
+public class Type implements Serializable {
     private Types name;
     private int value;
 
@@ -9,7 +11,7 @@ public class Type {
         this.value = value;
     }
 
-    public enum Types {
+    public enum Types implements Serializable {
         STUDENT, CONTROL, SELECTOR
     }
 
