@@ -1,0 +1,44 @@
+.error {
+    -fx-border-width: 3;
+    -fx-border-color: red;
+}
+
+.error-message {
+    -fx-background-color: red;
+}
+
+.title {
+    -fx-fill: #fff;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 60;
+    -fx-font-weight: bold;
+    -fx-stroke: #000;
+    -fx-stroke-width: 2;
+    /*-fx-underline: true;*/
+}
+
+.button.confirm-button, .button.cancel-button {
+    -fx-pref-height: 50;
+    -fx-pref-width: 200;
+    -fx-border-width: 3;
+    -fx-border-radius: 30;
+    -fx-background-radius: 30;
+}
+
+.confirm-button {
+    -fx-border-color: #1ce625;
+    -fx-background-color: #61f268;
+}
+
+.confirm-button:hover {
+    -fx-background-color: #05fc11;
+}
+
+.cancel-button {
+    -fx-border-color: #e64727;
+    -fx-background-color: #fa6446;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #fa2e05;
+}
