@@ -8,7 +8,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-
 public class ServerApp {
     public static void main(String[] args) throws RemoteException, AlreadyBoundException {
             Server server = new Server();
