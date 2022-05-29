@@ -55,7 +55,7 @@ public class GUILauncher extends Application implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ErrorManager.initializeElements(nicknameField);
+        //ErrorManager.initializeElements(nicknameField);
         initializeConfirmButton();
     }
 

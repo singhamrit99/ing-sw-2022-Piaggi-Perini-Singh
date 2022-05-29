@@ -13,6 +13,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 public class Client implements Runnable {
     final private String ip;
     final private int port;
@@ -126,10 +128,8 @@ public class Client implements Runnable {
                     }
                 }
                 Ping();
-                //should be half of server ping timeout
-            } catch (RemoteException |
-                    LocalModelNotLoadedException | UserNotInRoomException |
-                    UserNotRegisteredException e) {
+                Thread.sleep(500);
+            } catch (RemoteException | LocalModelNotLoadedException | UserNotInRoomException | UserNotRegisteredException | InterruptedException e) {
                 System.err.println("Client exception: " + e);
             }
         }
