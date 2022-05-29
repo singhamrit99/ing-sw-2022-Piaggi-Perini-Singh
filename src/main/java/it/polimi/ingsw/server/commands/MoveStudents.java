@@ -4,10 +4,11 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-public class MoveStudents implements Command {
+public class MoveStudents implements Command, Serializable {
     String playerCaller;
     EnumMap<Colors, ArrayList<String>> students;
 

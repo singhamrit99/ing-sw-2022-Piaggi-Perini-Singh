@@ -6,7 +6,9 @@ import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.exceptions.IncorrectStateException;
 
-public class PlayAssistantCard implements Command {
+import java.io.Serializable;
+
+public class PlayAssistantCard implements Command, Serializable {
     String playerCaller;
     String assistantCardName;
 

@@ -7,9 +7,10 @@ import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
 import it.polimi.ingsw.model.enumerations.Colors;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 
-public class PlayCharacterCardC implements Command {
+public class PlayCharacterCardC implements Command, Serializable {
     int characterCardID;
     EnumMap<Colors, Integer> students1;
     EnumMap<Colors, Integer> students2;

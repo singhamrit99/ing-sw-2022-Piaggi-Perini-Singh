@@ -30,13 +30,14 @@ public class ViewCLI {
     PlayCharacterCardB playCharacterCardBOrder;
     PlayCharacterCardC playCharacterCardCOrder;
     PlayCharacterCardD playCharacterCardDOrder;
+    DrawFromBagCommand drawFromBagOrder;
     private final Scanner in = new Scanner(System.in);
 
     public ViewCLI(Client client) {
         this.client = client;
     }
 
-    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException {
+    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException {
 
         System.out.println("Welcome to the lobby!\nWhat's your name?");
         while (true) {
@@ -97,26 +98,23 @@ public class ViewCLI {
             }
         }
         //Main game loop
+        System.out.println("Loading...");
+        Thread.sleep(1000);
+
         while (client.isInGame()) {
 
-            //First comes the assistant card thingie
-            System.out.println("These are your available assistant cards:\n");
-            printAssistantCards();
-            System.out.println("Wait for your turn then play one! Remember, you can't play a card that someone else this turn has already played.\n");
-
-            //Not my turn
-
-            //My turn
-            while(true)
+            //Assistant Card play phase
+            while(!client.isMyTurn())
             {
-                performActionInTurn();
-
+                //Wait for the other players to be done with their turn while I still output their moves...
             }
-            //Not my turn
-           /* while(true)
-            {
-                System.out.println("Uhhhh print some stuff I suppose");
-            }*/
+            //performActionInTurn();
+            drawFromBag();
+            playAssistantCard();
+
+            //Turn phase
+           waitForTurn();
+           performActionInTurn();
 
         }
     }
@@ -282,22 +280,29 @@ public class ViewCLI {
 
     //Game methods
 
+    public void drawFromBag() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+        drawFromBagOrder= new DrawFromBagCommand(client.getNickname());
+        System.out.println("Drawing from bag...\n");
+        client.performGameAction(drawFromBagOrder);
+    }
+
     public synchronized void playAssistantCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("It's your turn! Pick an assistant card to play. \n");
         printAssistantCards();
         int i = in.nextInt();
-        while (i < 0 || i > client.getLocalModel().getAssistantDecks().size()) {
+        while (i < 0 || i > client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size()) {
             System.out.println("Invalid number, try again\n");
             i = in.nextInt();
         }
-        playAssistantCardOrder = new PlayAssistantCard(nickName, "Assistente(" + i + ")");
+
+        playAssistantCardOrder = new PlayAssistantCard(nickName, "Assistente"+i);
         try {
             client.performGameAction(playAssistantCardOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
+        client.setMyTurn(false);
     }
-
 
     public void printAssistantCards() {
         AssistantCardDeck myDeck = client.getLocalModel().getAssistantDecks().get(playerNumber);
@@ -344,6 +349,14 @@ public class ViewCLI {
                 //TODO: add exception
         }
 
+    }
+
+    public synchronized void waitForTurn()
+    {
+        while (!client.isMyTurn())
+        {
+
+        }
     }
 
     public void printCharacterCards()

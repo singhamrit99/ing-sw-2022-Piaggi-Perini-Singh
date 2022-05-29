@@ -6,7 +6,9 @@ import it.polimi.ingsw.exceptions.IncorrectPlayerException;
 import it.polimi.ingsw.exceptions.IncorrectStateException;
 import it.polimi.ingsw.exceptions.NegativeValueException;
 
-public class PickCloud implements Command {
+import java.io.Serializable;
+
+public class PickCloud implements Command, Serializable {
     String playerCaller;
     int cloudTileID;
 

@@ -3,7 +3,9 @@ package it.polimi.ingsw.server.commands;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.exceptions.*;
 
-public class MoveMotherNature implements Command {
+import java.io.Serializable;
+
+public class MoveMotherNature implements Command, Serializable {
     String playerCaller;
     int distance;
     public MoveMotherNature(String playerCaller, int distance) {

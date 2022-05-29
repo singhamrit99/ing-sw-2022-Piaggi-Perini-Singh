@@ -26,6 +26,10 @@ public class Controller {
         game.moveMotherNature(playerCaller, distance);
     }
 
+    public void callDrawFromBag(String playerCaller) throws NegativeValueException, IncorrectPlayerException, IncorrectArgumentException {
+        game.drawFromBag(playerCaller);
+    }
+
     public void callMoveStudent(String playerCaller, EnumMap<Colors, ArrayList<String>> students) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, IncorrectStateException {
         game.moveStudents(playerCaller, students);
     }

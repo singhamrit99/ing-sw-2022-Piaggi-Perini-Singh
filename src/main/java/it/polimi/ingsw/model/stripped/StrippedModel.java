@@ -127,7 +127,14 @@ public class StrippedModel implements Serializable {
     }
 
     public void changeCloud(PropertyChangeEvent evt) {
-        StrippedCloud changedCloud = (StrippedCloud) evt.getOldValue();
+        StrippedCloud changedCloud;
+        if (evt.getOldValue()!=null) {
+             changedCloud = (StrippedCloud) evt.getOldValue();
+        }
+        else
+        {
+             changedCloud = (StrippedCloud) evt.getNewValue();
+        }
         Optional<StrippedCloud> cloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
         if (cloudFound.isPresent()) {
             clouds.remove(cloudFound);

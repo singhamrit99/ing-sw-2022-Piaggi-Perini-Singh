@@ -56,7 +56,7 @@ public class Room implements PropertyChangeListener {
         players.remove(user);
     }
 
-    public synchronized void startGame() throws NegativeValueException, IncorrectArgumentException {
+    public synchronized void startGame() throws NegativeValueException, IncorrectArgumentException, InterruptedException {
         ArrayList<String> nicknames = new ArrayList<>();
         eventsBuffer = new HashMap<>();
         for (ClientConnection cl : players) {
@@ -67,6 +67,7 @@ public class Room implements PropertyChangeListener {
         Game newGame = controller.initializeGame(this, expertMode, players.size(), nicknames);
         buildStrippedModel(newGame.getPlayers(), newGame.getCharacterCards(),
                 newGame.getClouds(), newGame.getIslands());
+        Thread.sleep(600);
     }
 
     private synchronized void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands) {

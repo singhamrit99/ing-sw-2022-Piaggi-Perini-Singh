@@ -2,6 +2,7 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.GUI.GUI;
 import it.polimi.ingsw.exceptions.*;
+import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.SourceEvent;
 import it.polimi.ingsw.server.commands.Command;
@@ -26,6 +27,9 @@ public class Client implements Runnable {
     private boolean inGame;
     private StrippedModel localModel;
     private boolean localModelLoaded;
+    private boolean isMyTurn;
+
+
     private boolean userRegistered;
     private GUI gui;
 
@@ -145,24 +149,30 @@ public class Client implements Runnable {
         for (PropertyChangeEvent evt : evtArray) {
             switch (evt.getPropertyName()) {
                 case "init":
-                    System.out.println("Received start event\n");
                     localModel = (StrippedModel) evt.getNewValue();
+                    System.out.println("Game ready! Press any key to continue.\n");
                     break;
                 case "message":
-                    System.out.println("Received message event\n");
-                    Object in = evt.getNewValue();
-                    SourceEvent truein= (SourceEvent) in;
-                    switch (truein.getWhat())
+                    System.out.println("New message received!\n");
+                    Object in = evt.getOldValue();
+                    SourceEvent source= (SourceEvent) in;
+                    switch (source.getWhat())
                     {
                         case "start turn":
                         {
-                            if(nickname.equals(truein.getWho()))
                                 //We're in CLI
                                 if (gui==null)
                                 {
-                                            //Do some epic code
+                                    System.out.println("The current player is " + source.getWho());
+                                    if(nickname.equals(source.getWho()))
+                                    {
+                                        System.out.println("It's your turn to play an assistant card!\n");
+                                        isMyTurn=true;
+
+                                    }
 
                                 }
+                            //We're in GUI
                             else
                                 {
 
@@ -171,11 +181,32 @@ public class Client implements Runnable {
                         }
                         case "played assistant card":
                         {
+                            if (gui==null)
+                            {
+                                AssistantCard assistantCard= (AssistantCard) evt.getNewValue();
+                                System.out.println("Assistant card played by "+source.getWho()+ ": " + assistantCard.getImageName());
+
+                            }
+                            //We're in GUI
+                            else
+                            {
+
+                            }
                             break;
                         }
                         case "gameOver":
                         {
-                            System.out.println(evt.getNewValue().toString() +" won! Congratulations and thanks for playing!\n");
+                            if (gui==null)
+                            {
+                                System.out.println(evt.getNewValue().toString() +" won! Congratulations and thanks for playing!\n");
+
+                            }
+                            //We're in GUI
+                            else
+                            {
+
+                            }
+
                         }
 
                     }
@@ -210,4 +241,17 @@ public class Client implements Runnable {
     public void setGUI(GUI gui) {
         this.gui = gui;
     }
+
+    public boolean isMyTurn() {
+        return isMyTurn;
+    }
+
+    public void setMyTurn(boolean myTurn) {
+        isMyTurn = myTurn;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
 }
+

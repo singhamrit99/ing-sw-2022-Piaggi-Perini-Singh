@@ -6,7 +6,9 @@ import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
 
-public class PlayCharacterCardA implements Command {
+import java.io.Serializable;
+
+public class PlayCharacterCardA implements Command, Serializable {
     int characterCardID;
     String  playerCaller;
     public PlayCharacterCardA(String playerCaller, int ID) {

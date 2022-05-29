@@ -179,7 +179,7 @@ public class Game {
         orderPlayers = new PriorityQueue<>(numOfPlayer);
         currentPlayer = players.get(playerPlanPhase);
         SourceEvent notifyCurrentPlayer = new SourceEvent(currentPlayer.getNickname(), "start turn");
-        PropertyChangeEvent changeCurrentPlayer = new PropertyChangeEvent(notifyCurrentPlayer, "message", null, notifyCurrentPlayer);
+        PropertyChangeEvent changeCurrentPlayer = new PropertyChangeEvent(notifyCurrentPlayer, "message", notifyCurrentPlayer, null);
         gameListener.propertyChange(changeCurrentPlayer);
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
@@ -278,6 +278,7 @@ public class Game {
      */
     public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         if (state == State.PLANNINGPHASE && !playerDrawnOut) {
+            System.out.println("Nicknamecaller: " + nicknameCaller + " currentplayer " + currentPlayer.getNickname());
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 for (Cloud cloud : clouds) {
                     cloud.addStudents(bag.drawStudents(numDrawnStudents));
@@ -309,7 +310,7 @@ public class Game {
                 currentPlayer.playAssistantCard(nameCard); //notice that when a card is played, is removed from the deck of the player
                 //notify played AssistantCard
                 SourceEvent sourceMessagePlayedCard = new SourceEvent(nicknameCaller, "played assistant card");
-                PropertyChangeEvent assistantEvent = new PropertyChangeEvent(sourceMessagePlayedCard, "message", null, currentPlayer.getPlayedCharacterCard());
+                PropertyChangeEvent assistantEvent = new PropertyChangeEvent(sourceMessagePlayedCard, "message", sourceMessagePlayedCard, currentPlayer.getPlayedAssistantCard());
                 gameListener.propertyChange(assistantEvent);
                 //notify deck change
                 SourceEvent sourceDeck = new SourceEvent(nicknameCaller, nameCard);
@@ -360,7 +361,7 @@ public class Game {
         }
 
         SourceEvent notifyCurrentPlayer = new SourceEvent(currentPlayer.getNickname(), "start turn");
-        PropertyChangeEvent changeCurrentPlayer = new PropertyChangeEvent(notifyCurrentPlayer, "message", null, null);
+        PropertyChangeEvent changeCurrentPlayer = new PropertyChangeEvent(notifyCurrentPlayer, "message", notifyCurrentPlayer, null);
         gameListener.propertyChange(changeCurrentPlayer);
     }
 
@@ -376,7 +377,7 @@ public class Game {
                 state = State.END;
                 ArrayList<Player> teamWinner = checkWinner();
                 SourceEvent gameOver = new SourceEvent("game", "gameOver");
-                PropertyChangeEvent gameOverEvt = new PropertyChangeEvent(gameOver, "message", null, teamWinner);
+                PropertyChangeEvent gameOverEvt = new PropertyChangeEvent(gameOver, "message", gameOver, teamWinner);
                 gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
