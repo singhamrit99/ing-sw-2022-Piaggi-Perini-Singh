@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.GUI;
 
 import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.GUI.controller.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -13,12 +14,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class GUILauncher extends Application implements Initializable {
 
     public static Client client = GUI.client;
+    public static WaitingWindowController waitingWindowController = null;
 
     public static final int MAIN_MENU_WIDTH = 740;
     public static final int MAIN_MENU_HEIGHT = 600;
@@ -52,7 +55,7 @@ public class GUILauncher extends Application implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //ErrorManager.initializeElements(nicknameField);
+        ErrorManager.initializeElements(nicknameField);
         initializeConfirmButton();
     }
 
@@ -62,6 +65,33 @@ public class GUILauncher extends Application implements Initializable {
     private void initializeConfirmButton() {
         startBtn.setOnAction((event) -> {
 
+            if (controlNickname()) {
+                final String nickname = nicknameField.getText();
+
+                try {
+                    client.registerClient(nickname);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (GUILauncher.waitingWindowController == null) {
+                    waitingWindowController = new WaitingWindowController();
+                    waitingWindowController.setMessage(WaitingMessages.CONNECTING);
+                    GUI.controller = waitingWindowController;
+
+                    String filePath = ResourcesPath.FXML_FILE_PATH + ResourcesPath.WAITING_WINDOW + ResourcesPath.FILE_EXTENSION;
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
+                    loader.setController(waitingWindowController);
+
+                    try {
+                        waitingWindowController.start(loader.load());
+                        Stage stage = (Stage) startBtn.getScene().getWindow();
+                        stage.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         });
     }
 
@@ -81,4 +111,3 @@ public class GUILauncher extends Application implements Initializable {
         return true;
     }
 }
-
