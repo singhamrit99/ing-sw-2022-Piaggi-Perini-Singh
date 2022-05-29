@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.GUI.GUI;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.Command;
@@ -23,6 +24,7 @@ public class Client implements Runnable {
     private StrippedModel localModel;
     private boolean localModelLoaded;
     private boolean userRegistered;
+    private GUI gui;
 
     public Client(String ip, int port) {
         this.ip = ip;
@@ -36,7 +38,9 @@ public class Client implements Runnable {
         try {
             Registry registry = LocateRegistry.getRegistry(ip, port);
             server = (serverStub) registry.lookup("server");
+
             System.out.println("connection done");
+
         } catch (Exception e) {
             System.err.println("Client exception: " + e);
             e.printStackTrace();
@@ -47,7 +51,9 @@ public class Client implements Runnable {
         server.registerUser(nickName);
         this.nickname = nickName;
         userRegistered = true;
+
         new Thread(this).start(); //it's important that the thread runs only after the correct registration!
+        gui.roomsAvailable(roomList);
     }
 
     public void deregisterClient() throws RemoteException, UserNotRegisteredException {
@@ -120,10 +126,10 @@ public class Client implements Runnable {
                     }
                 }
                 Ping();
-                Thread.sleep(500); //should be half of server ping timeout
-            } catch (RemoteException | InterruptedException |
-                     LocalModelNotLoadedException | UserNotInRoomException |
-                     UserNotRegisteredException e) {
+                //should be half of server ping timeout
+            } catch (RemoteException |
+                    LocalModelNotLoadedException | UserNotInRoomException |
+                    UserNotRegisteredException e) {
                 System.err.println("Client exception: " + e);
             }
         }
@@ -162,7 +168,12 @@ public class Client implements Runnable {
     public boolean isInGame() {
         return inGame;
     }
+
     public StrippedModel getLocalModel() {
         return localModel;
+    }
+
+    public void setGUI(GUI gui) {
+        this.gui = gui;
     }
 }
