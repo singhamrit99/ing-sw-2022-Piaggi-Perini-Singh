@@ -18,5 +18,4 @@ public class AssistantCard extends Card implements Serializable{
     public int getMove() {
         return move;
     }
-
 }
