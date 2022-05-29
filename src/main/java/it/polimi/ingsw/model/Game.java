@@ -178,7 +178,9 @@ public class Game {
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
         currentPlayer = players.get(playerPlanPhase);
-
+        SourceEvent notifyCurrentPlayer = new SourceEvent(currentPlayer.getNickname(), "start turn");
+        PropertyChangeEvent changeCurrentPlayer = new PropertyChangeEvent(notifyCurrentPlayer, "message", null, notifyCurrentPlayer);
+        gameListener.propertyChange(changeCurrentPlayer);
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
     }
@@ -282,6 +284,7 @@ public class Game {
                     SourceEvent cloudSrc = new SourceEvent(nicknameCaller, "draw from Bag to clouds");
                     StrippedCloud newCloud = new StrippedCloud(cloud);
                     PropertyChangeEvent evt = new PropertyChangeEvent(cloudSrc, "cloud", null, newCloud);
+                    gameListener.propertyChange(evt);
                 }
                 playerDrawnOut = true;
             } else throw new IncorrectPlayerException();

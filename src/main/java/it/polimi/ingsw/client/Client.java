@@ -3,6 +3,7 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.client.GUI.GUI;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.stripped.StrippedModel;
+import it.polimi.ingsw.server.SourceEvent;
 import it.polimi.ingsw.server.commands.Command;
 import it.polimi.ingsw.server.commands.PlayCharacterCardA;
 import it.polimi.ingsw.server.serverStub;
@@ -55,6 +56,7 @@ public class Client implements Runnable {
         userRegistered = true;
 
         new Thread(this).start(); //it's important that the thread runs only after the correct registration!
+        if (gui!=null)
         gui.roomsAvailable(roomList);
     }
 
@@ -71,7 +73,7 @@ public class Client implements Runnable {
         clientRoom = roomName;
     }
 
-    public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserInRoomException, UserNotRegisteredException {
+    public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserNotRegisteredException {
         server.joinRoom(nickname, roomName);
         clientRoom = roomName;
 
@@ -143,9 +145,41 @@ public class Client implements Runnable {
         for (PropertyChangeEvent evt : evtArray) {
             switch (evt.getPropertyName()) {
                 case "init":
+                    System.out.println("Received start event\n");
                     localModel = (StrippedModel) evt.getNewValue();
                     break;
                 case "message":
+                    System.out.println("Received message event\n");
+                    Object in = evt.getNewValue();
+                    SourceEvent truein= (SourceEvent) in;
+                    switch (truein.getWhat())
+                    {
+                        case "start turn":
+                        {
+                            if(nickname.equals(truein.getWho()))
+                                //We're in CLI
+                                if (gui==null)
+                                {
+                                            //Do some epic code
+
+                                }
+                            else
+                                {
+
+                                }
+                            break;
+                        }
+                        case "played assistant card":
+                        {
+                            break;
+                        }
+                        case "gameOver":
+                        {
+                            System.out.println(evt.getNewValue().toString() +" won! Congratulations and thanks for playing!\n");
+                        }
+
+                    }
+
                     //notify message to view TODO
                     break;
                 default:

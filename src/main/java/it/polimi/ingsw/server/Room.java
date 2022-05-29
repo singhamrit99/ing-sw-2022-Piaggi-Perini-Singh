@@ -83,7 +83,6 @@ public class Room implements PropertyChangeListener {
         }
         //This should be able to provide strippedCharacters with the correct id for controller calls
         int i = 0;
-        System.out.println(charactersCard.get(0).getDescription());
         for (CharacterCard c : charactersCard) {
             System.out.println("Building stripped character card\n");
             StrippedCharacter newStrippedCharCard = new StrippedCharacter(c);
@@ -106,6 +105,7 @@ public class Room implements PropertyChangeListener {
         SourceEvent modelInitSource = new SourceEvent(getRoomName(), "init");
         PropertyChangeEvent evtInitialGame = new PropertyChangeEvent(modelInitSource, "init", null, strippedModel);
         addEventToBuffer(evtInitialGame);
+
     }
 
     public synchronized void commandInvoker(Command command) throws MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NotEnoughCoinsException, IncorrectStateException {
@@ -115,6 +115,7 @@ public class Room implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         addEventToBuffer(evt);
+        System.out.println("Added event to buffer\n");
     }
     private void addEventToBuffer(PropertyChangeEvent event) {
         for (ClientConnection clientBufferEvents : players) {

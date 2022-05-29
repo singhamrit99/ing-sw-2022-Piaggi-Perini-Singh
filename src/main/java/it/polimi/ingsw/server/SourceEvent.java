@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server;
 
-public class SourceEvent {
+import java.io.Serializable;
+
+public class SourceEvent implements Serializable {
     final private String who;
     final private String what;
 

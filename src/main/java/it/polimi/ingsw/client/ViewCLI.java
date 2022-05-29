@@ -16,6 +16,7 @@ import java.util.*;
 public class ViewCLI {
     Client client;
     boolean hasGameStarted = false;
+    boolean isMyTurn;
     String nickName;
     int playerNumber;
     String clientRoom = null;
@@ -97,7 +98,14 @@ public class ViewCLI {
         }
         //Main game loop
         while (client.isInGame()) {
-            
+
+            //First comes the assistant card thingie
+            System.out.println("These are your available assistant cards:\n");
+            printAssistantCards();
+            System.out.println("Wait for your turn then play one! Remember, you can't play a card that someone else this turn has already played.\n");
+
+            //Not my turn
+
             //My turn
             while(true)
             {
@@ -113,6 +121,8 @@ public class ViewCLI {
         }
     }
 
+    //Room methods
+
     private void startGame() throws RemoteException {
         try {
             client.startGame();
@@ -120,16 +130,14 @@ public class ViewCLI {
             System.out.println("You're not in a room yet!\n");
         } catch (NotLeaderRoomException e) {
             System.out.println("You're not the leader of this room you can't start the game!\n");
-        } catch (RoomNotExistsException e) {
-            throw new RuntimeException(e);
-        } catch (UserNotRegisteredException e) {
+        } catch (RoomNotExistsException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void getPlayersInRoom() throws RemoteException {
         if (clientRoom != null) {
-            ArrayList<String> response = null;
+            ArrayList<String> response;
             try {
                 response = client.getNicknamesInRoom(clientRoom);
             } catch (RoomNotExistsException e) {
@@ -142,7 +150,7 @@ public class ViewCLI {
 
     private void getLobbyInfo() throws RemoteException {
         if (clientRoom != null) {
-            ArrayList<String> result = null;
+            ArrayList<String> result;
             try {
                 result = client.requestLobbyInfo(clientRoom);
             } catch (RoomNotExistsException e) {
@@ -216,9 +224,7 @@ public class ViewCLI {
         }
         try {
             client.createRoom(nameRoom);
-        } catch (UserNotRegisteredException e) {
-            throw new RuntimeException(e);
-        } catch (RoomAlreadyExistsException e) {
+        } catch (UserNotRegisteredException | RoomAlreadyExistsException e) {
             throw new RuntimeException(e);
         }
         clientRoom = nameRoom;
@@ -230,11 +236,11 @@ public class ViewCLI {
         if (client.getRooms().isEmpty()) System.out.println("There are no rooms, you can only create a new one");
         else {
             sendArrayString(client.getRooms());
-            requestedRoom = in.nextLine().replaceAll("\\s", "");
+            requestedRoom = in.nextLine().trim();
             while (!client.getRooms().contains(requestedRoom)) {
                 System.out.println("Ops, there are no rooms with that name: try again. If you want to exit instead type EXIT.\n");
                 requestedRoom = in.nextLine();
-                if (requestedRoom.toLowerCase(Locale.ROOT).replaceAll("\\s", "").equals("exit")) {
+                if (requestedRoom.toLowerCase(Locale.ROOT).trim().equals("exit")) {
                     System.out.println("Gotcha, leaving room join!\n");
                     return;
                 }
@@ -243,12 +249,11 @@ public class ViewCLI {
                 System.out.println("You're already in that room!\n");
             } else {
                 try {
+                    if (clientRoom==null)
+                        leaveRoom();
                     client.requestRoomJoin(requestedRoom);
-                } catch (RoomNotExistsException e) {
-                    throw new RuntimeException(e);
-                } catch (UserInRoomException e) {
-                    throw new RuntimeException(e);
-                } catch (UserNotRegisteredException e) {
+                    clientRoom=requestedRoom;
+                } catch (RoomNotExistsException | UserNotRegisteredException e) {
                     throw new RuntimeException(e);
                 }
                 clientRoom = requestedRoom;
@@ -275,7 +280,9 @@ public class ViewCLI {
                 "Press 8 to view this message again\n");
     }
 
-    public void playAssistantCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+    //Game methods
+
+    public synchronized void playAssistantCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("It's your turn! Pick an assistant card to play. \n");
         printAssistantCards();
         int i = in.nextInt();
@@ -286,9 +293,7 @@ public class ViewCLI {
         playAssistantCardOrder = new PlayAssistantCard(nickName, "Assistente(" + i + ")");
         try {
             client.performGameAction(playAssistantCardOrder);
-        } catch (UserNotInRoomException e) {
-            throw new RuntimeException(e);
-        } catch (UserNotRegisteredException e) {
+        } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
     }
@@ -298,7 +303,7 @@ public class ViewCLI {
         AssistantCardDeck myDeck = client.getLocalModel().getAssistantDecks().get(playerNumber);
         int i = 0;
         for (AssistantCard a : myDeck.getDeck()) {
-            System.out.println("Card number " + i + a.getImageName().replaceAll("[^a-zA Z0-9]", "") + a.getMove());
+            System.out.println("Card number " + i +" "+ a.getImageName().replaceAll("[^a-zA Z0-9]", "") +" " + a.getMove());
             i++;
         }
     }
@@ -386,9 +391,7 @@ public class ViewCLI {
         playCharacterCardAOrder = new PlayCharacterCardA(nickName, id);
         try {
             client.performGameAction(playCharacterCardAOrder);
-        } catch (UserNotInRoomException e) {
-            throw new RuntimeException(e);
-        } catch (UserNotRegisteredException e) {
+        } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
     }
@@ -400,9 +403,7 @@ public class ViewCLI {
         playCharacterCardBOrder = new PlayCharacterCardB(nickName, id, students, island);
         try {
             client.performGameAction(playCharacterCardBOrder);
-        } catch (UserNotInRoomException e) {
-            throw new RuntimeException(e);
-        } catch (UserNotRegisteredException e) {
+        } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
     }
@@ -420,9 +421,7 @@ public class ViewCLI {
         playCharacterCardCOrder = new PlayCharacterCardC(nickName, id, students1, students2);
         try {
             client.performGameAction(playCharacterCardCOrder);
-        } catch (UserNotInRoomException e) {
-            throw new RuntimeException(e);
-        } catch (UserNotRegisteredException e) {
+        } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
     }
@@ -434,9 +433,7 @@ public class ViewCLI {
         playCharacterCardDOrder = new PlayCharacterCardD(nickName, id, 0);
         try {
             client.performGameAction(playAssistantCardOrder);
-        } catch (UserNotInRoomException e) {
-            throw new RuntimeException(e);
-        } catch (UserNotRegisteredException e) {
+        } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
     }
