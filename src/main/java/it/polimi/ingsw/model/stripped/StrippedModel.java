@@ -13,7 +13,8 @@ public class StrippedModel implements Serializable {
     final private ArrayList<StrippedCharacter> characters;
     final private ArrayList<StrippedCloud> clouds;
     final private ArrayList<StrippedIsland> islands;
-
+    private String currentPlayer;
+    private String winnerTeam;
     public ArrayList<AssistantCardDeck> getAssistantDecks() {
         return assistantDecks;
     }
@@ -51,15 +52,19 @@ public class StrippedModel implements Serializable {
             case "assistant":
                 changeAssistantDeck(evt);
                 break;
+            case "current-player":
+                setCurrentPlayer((String) evt.getNewValue());
+            case "game-over":
+                winnerTeam=(String) evt.getNewValue();
+                break;
             default:
-                System.out.println("scrivere una exception sensata");
+                System.out.println("scrivere una exception sensata"); //TODO
                 break;
         }
     }
 
     private void changeAssistantDeck(PropertyChangeEvent evt){
-        SourceEvent source = (SourceEvent) evt.getSource();
-        String ownerDeck = source.getWho();
+        String ownerDeck = currentPlayer;
         Optional<AssistantCardDeck> deckToModify = assistantDecks.stream().filter(d ->  d.getOwner().equals(ownerDeck)).findFirst();
         if(deckToModify.isPresent()){
             assistantDecks.remove(deckToModify);
@@ -68,8 +73,7 @@ public class StrippedModel implements Serializable {
     }
 
     private void setBoard(PropertyChangeEvent evt) {
-        SourceEvent source = (SourceEvent) evt.getSource();
-        String ownerBoard = source.getWho();
+        String ownerBoard = (String) evt.getOldValue();
         Optional<StrippedBoard> boardToModify = boards.stream().filter(b -> ownerBoard.equals(b.getOwner())).findFirst();
         if (boardToModify.isPresent()) {
             switch (evt.getPropertyName()) {
@@ -79,17 +83,17 @@ public class StrippedModel implements Serializable {
                 case "dining":
                     boardToModify.get().setDining((EnumMap<Colors, Integer>) evt.getNewValue());
                     break;
+                case "towers":
+                    boardToModify.get().setNumberOfTowers((int)evt.getNewValue());
+                    break;
                 case "coins":
                     boardToModify.get().setCoins((int) evt.getNewValue());
                     break;
                 case "professorTable":
                     boardToModify.get().setProfessorsTable((ArrayList<Colors>) evt.getNewValue());
                     break;
-                case "towers":
-                    boardToModify.get().setNumberOfTowers((int)evt.getNewValue());
-                    break;
                 default:
-                    System.out.println("exception da fare setBoard");
+                    System.out.println("exception da fare setBoard"); //todo
                     break;
             }
         } else { //todo
@@ -131,7 +135,7 @@ public class StrippedModel implements Serializable {
         }
     }
 
-    public void changeCloud(PropertyChangeEvent evt) {
+    private void changeCloud(PropertyChangeEvent evt) {
         StrippedCloud changedCloud;
         if (evt.getOldValue()!=null) {
              changedCloud = (StrippedCloud) evt.getOldValue();
@@ -148,6 +152,11 @@ public class StrippedModel implements Serializable {
             System.out.println("Exception changeCloud , strippedModel"); //todo
         }
     }
+
+    private void setCurrentPlayer(String currentPlayer){
+        this.currentPlayer = currentPlayer;
+    }
+    
 
     public ArrayList<StrippedCharacter> getCharacters() {
         return characters;
