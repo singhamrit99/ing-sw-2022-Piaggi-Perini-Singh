@@ -18,8 +18,8 @@ public class StrippedModel implements Serializable {
     public ArrayList<AssistantCardDeck> getAssistantDecks() {
         return assistantDecks;
     }
-
     final private ArrayList<AssistantCardDeck> assistantDecks;
+
     public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters,
                          ArrayList<StrippedCloud> clouds, ArrayList<StrippedIsland> islands, ArrayList<AssistantCardDeck> assistantDecks) {
         this.boards = boards;
@@ -55,7 +55,7 @@ public class StrippedModel implements Serializable {
             case "current-player":
                 setCurrentPlayer((String) evt.getNewValue());
             case "game-over":
-                winnerTeam=(String) evt.getNewValue();
+                winnerTeam= (String)evt.getNewValue();
                 break;
             default:
                 System.out.println("scrivere una exception sensata"); //TODO
@@ -156,7 +156,10 @@ public class StrippedModel implements Serializable {
     private void setCurrentPlayer(String currentPlayer){
         this.currentPlayer = currentPlayer;
     }
-    
+
+    public String getCurrentPlayer(){
+        return currentPlayer;
+    }
 
     public ArrayList<StrippedCharacter> getCharacters() {
         return characters;
