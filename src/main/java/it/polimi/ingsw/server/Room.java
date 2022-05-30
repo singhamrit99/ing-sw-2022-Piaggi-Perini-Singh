@@ -103,7 +103,8 @@ public class Room implements PropertyChangeListener {
         //notify stripped Model
         StrippedModel strippedModel = new StrippedModel(strippedBoards, strippedCharacters, strippedClouds, strippedIslands, assistantCardDecks);
         PropertyChangeEvent evtInitialGame =
-                new PropertyChangeEvent(null, "init", null, strippedModel);
+                new PropertyChangeEvent(this, "init", null, strippedModel);
+        System.out.println("Adding strippedModel send to buffer\n");
         addEventToBuffer(evtInitialGame);
     }
 

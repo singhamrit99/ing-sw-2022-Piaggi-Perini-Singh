@@ -144,6 +144,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         Room targetRoom = rooms.get(user.getRoom());
         if (targetRoom.getPlayers().get(0).getNickname().equals(username)) {   //only leader of the Room (players.get(0) can start the game)
             try {
+                System.out.println("Game starting...");
                 targetRoom.startGame();
             } catch (NegativeValueException | IncorrectArgumentException | InterruptedException e) {
                 throw new RuntimeException(e);

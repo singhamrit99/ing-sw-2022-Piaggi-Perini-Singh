@@ -11,7 +11,7 @@ import javafx.application.Platform;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GUI implements UI {
+public class GUI{
     public static Client client;
     public static Controller controller;
 
@@ -20,7 +20,7 @@ public class GUI implements UI {
     public GUI(Client client) {
         this.isDoing = new AtomicBoolean(false);
         GUI.client = client;
-        GUI.client.setUI(this);
+        //GUI.client.setUI(this);
     }
 
     /**

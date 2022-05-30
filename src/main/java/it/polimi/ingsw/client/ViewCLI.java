@@ -9,15 +9,18 @@ import it.polimi.ingsw.model.stripped.StrippedCharacter;
 import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.*;
+
+import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.*;
 
 
-public class ViewCLI {
+public class ViewCLI implements UI{
     Client client;
     boolean hasGameStarted = false;
     boolean isMyTurn;
     String nickName;
+    String currentPlayer;
     int playerNumber;
     String clientRoom = null;
     int action;
@@ -35,6 +38,7 @@ public class ViewCLI {
 
     public ViewCLI(Client client) {
         this.client = client;
+        this.client.setUI(this);
     }
 
     public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException {
@@ -106,9 +110,11 @@ public class ViewCLI {
             //Assistant Card play phase
             while(!client.isMyTurn())
             {
-                //Wait for the other players to be done with their turn while I still output their moves...
+                in.nextLine();
+                //Wait for the other players to be done with their turn while I still output their moves...and no input of mine can cause trouble!
             }
             //performActionInTurn();
+            if(nickName.equals(currentPlayer))
             drawFromBag();
             playAssistantCard();
 
@@ -121,7 +127,8 @@ public class ViewCLI {
 
     //Room methods
 
-    private void startGame() throws RemoteException {
+    @Override
+    public void startGame() throws RemoteException {
         try {
             client.startGame();
         } catch (UserNotInRoomException e) {
@@ -131,6 +138,148 @@ public class ViewCLI {
         } catch (RoomNotExistsException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void currentPlayer(String s) {
+        currentPlayer=s;
+        System.out.println("It's now "+ s + "'s turn!\n");
+    }
+
+    @Override
+    public void notifyCloud(PropertyChangeEvent e) {
+
+    }
+
+    @Override
+    public void deckChange(String input) {
+
+    }
+
+    @Override
+    public void islandChange(PropertyChangeEvent e) {
+        StrippedIsland oldIsland, newIsland;
+        oldIsland=(StrippedIsland) e.getOldValue();
+        newIsland= (StrippedIsland) e.getNewValue();
+        System.out.println("Island number"+ oldIsland.getName() + " changed from");
+        printIsland(oldIsland);
+        System.out.println("to");
+        printIsland(newIsland);
+    }
+
+    @Override
+    public void islandMerged(PropertyChangeEvent e) {
+        StrippedIsland oldIsland, newIsland;
+        oldIsland=(StrippedIsland) e.getOldValue();
+        newIsland= (StrippedIsland) e.getNewValue();
+        System.out.println("Islands "+ oldIsland.getName()+ " and "+ newIsland.getName()+" merged!\n");
+    }
+
+    @Override
+    public void islandConquest(PropertyChangeEvent e)
+    {
+        StrippedIsland island= (StrippedIsland) e.getNewValue();
+        System.out.println(currentPlayer+ "conquered island "+ island.getName()+ "!\n");
+
+    }
+
+    @Override
+    public void diningChange(PropertyChangeEvent e) {
+        StrippedBoard oldBoard,newBoard;
+        oldBoard=(StrippedBoard) e.getOldValue();
+        newBoard=(StrippedBoard) e.getNewValue();
+        System.out.println(currentPlayer + "modified their dining room!");
+        System.out.println("From... ");
+        for (Colors c : oldBoard.getDining().keySet()) {
+            System.out.println(c + " students: " + oldBoard.getDining().get(c) + "\n");
+        }
+        System.out.println("to:");
+        for (Colors c : newBoard.getDining().keySet()) {
+            System.out.println(c + " students: " + newBoard.getDining().get(c) + "\n");
+
+        }
+    }
+
+    @Override
+    public void entranceChanged(PropertyChangeEvent e)
+    {
+        StrippedBoard oldBoard,newBoard;
+        oldBoard=(StrippedBoard) e.getOldValue();
+        newBoard=(StrippedBoard) e.getNewValue();
+        System.out.println(currentPlayer+ "'s entrance changed!\n");
+        System.out.println("From... ");
+        for (Colors c : oldBoard.getEntrance().keySet()) {
+            System.out.println(c + " students: " + oldBoard.getEntrance().get(c) + "\n");
+        }
+        System.out.println("to:");
+        for (Colors c : newBoard.getEntrance().keySet()) {
+            System.out.println(c + " students: " + newBoard.getEntrance().get(c) + "\n");
+        }
+
+    }
+    @Override
+    public void towersEvent(PropertyChangeEvent e) {
+
+        String player= (String) e.getNewValue();
+        int i= (int) e.getOldValue();
+        System.out.println("Player"+ player+ "now has "+ i+ " towers in their board!\n");
+
+    }
+
+    @Override
+    public void gameOver(String s) {
+
+        System.out.println("Game over! Team "+ s + "won! Congratulations!\n");
+        client.setInGame(false);
+        System.out.println("Do you want to play again? Y/N");
+        boolean validInput= false;
+        boolean result= false;
+        String answer;
+        answer = in.nextLine().toLowerCase(Locale.ROOT);
+
+        while(!validInput)
+        {
+            answer = in.nextLine().toLowerCase(Locale.ROOT);
+            switch (answer) {
+                case "y": {
+                    result = true;
+                    validInput=true;
+                    break;
+                }
+                case "n": {
+                    result = false;
+                    validInput=true;
+                    break;
+                }
+                default:
+                    System.out.println("Command not recognized\n");
+            }
+        }
+
+        if (result)
+        {
+            System.out.println("Cool\n");
+        }
+        else
+            System.out.println("Goodbye!\n");
+
+
+
+    }
+
+    @Override
+    public void coinsChanged(PropertyChangeEvent e) {
+
+    }
+
+    @Override
+    public void removedProfessors(PropertyChangeEvent e) {
+
+    }
+
+    @Override
+    public void roomsAvailable(ArrayList<String> rooms) {
+
     }
 
     private void getPlayersInRoom() throws RemoteException {
@@ -279,6 +428,8 @@ public class ViewCLI {
     }
 
     //Game methods
+
+
 
     public void drawFromBag() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         drawFromBagOrder= new DrawFromBagCommand(client.getNickname());
@@ -655,6 +806,17 @@ public class ViewCLI {
             System.out.println("Towers: " + island.getNumOfTowers() + island.getTowersColor() + "towers \n");
         }
     }
+
+    public void printIsland(StrippedIsland island)
+    {
+        System.out.println("Number of towers: " + island.getNumOfTowers() + "\n");
+        System.out.println("Has no entry tile: " + island.isHasNoEnterTile() + "\n");
+        System.out.println("Students on the island: ");
+        for (Colors c : island.getStudents().keySet()) {
+            System.out.println(c + " students: " + island.getStudents() + "\n");
+        }
+        System.out.println("Towers: " + island.getNumOfTowers() + island.getTowersColor() + "towers \n");
+         }
 
     public boolean isValidColor(String input) {
         input = input.toUpperCase(Locale.ROOT);

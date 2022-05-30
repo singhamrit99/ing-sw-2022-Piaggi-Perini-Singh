@@ -127,7 +127,7 @@ public class Client implements Runnable {
                     }
                 }
                 Ping();
-                Thread.sleep(500);
+                Thread.sleep(800);
             } catch (RemoteException | LocalModelNotLoadedException | UserNotInRoomException | UserNotRegisteredException | InterruptedException e) {
                 System.err.println("Client exception: " + e);
             }
@@ -140,55 +140,27 @@ public class Client implements Runnable {
 
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
         for (PropertyChangeEvent evt : evtArray) {
-            switch (evt.getPropertyName()) {
-                case "init":
-                    localModel = (StrippedModel) evt.getNewValue();
-                    localModel.setUI(ui);
-                    System.out.println("Game ready! Press any key to continue.\n");
-                    break;
-                case "message":
-                    System.out.println("New message received!\n");
-                    Object in = evt.getOldValue();
-                    /*SourceEvent source = (SourceEvent) in;
-                    switch (source.getWhat()) {
-                        case "start turn": {
-                            //We're in CLI
-
-                            System.out.println("The current player is " + source.getWho());
-                            if (nickname.equals(source.getWho())) {
-                                System.out.println("It's your turn to play an assistant card!\n");
-                                isMyTurn = true;
-
-                            }
-
-
-                            break;
-                        }
-                        case "played assistant card": {
-
-                            AssistantCard assistantCard = (AssistantCard) evt.getNewValue();
-                            //System.out.println("Assistant card played by " + source.getWho() + ": " + assistantCard.getImageName());
-
-                            break;
-                        }
-                        case "gameOver": {
-
-                            System.out.println(evt.getNewValue().toString() + " won! Congratulations and thanks for playing!\n");
-
-
-                        }
-
-                    }*/
-
-                    //notify message to view TODO
-                    break;
-                default:
+            System.out.println(evt.getPropertyName());
+            if(evt.getPropertyName().equals("first-player")) {
+                ui.currentPlayer((String) evt.getNewValue());
+                if(nickname.equals(evt.getNewValue()))
+                setMyTurn(true);
+            }
+            else if(evt.getPropertyName().equals("init")) {
+                System.out.println("Request for loading received\n");
+                localModel = (StrippedModel) evt.getNewValue();
+                localModelLoaded = true;
+                System.out.println("Local model loaded\n");
+                localModel.setUI(ui);
+                System.out.println("Game ready! Press any key to continue.\n");
+            }
+            else{
                     if (localModel != null) {
                         localModel.updateModel(evt);
                     } else {
                         throw new LocalModelNotLoadedException();
                     }
-                    break;
+
             }
         }
     }
@@ -221,6 +193,10 @@ public class Client implements Runnable {
 
     public void setUI(UI ui) {
         this.ui = ui;
+    }
+
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
     }
 }
 

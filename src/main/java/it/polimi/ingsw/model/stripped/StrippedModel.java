@@ -61,6 +61,7 @@ public class StrippedModel implements Serializable {
                 setCurrentPlayer((String) evt.getNewValue());
             case "game-over":
                 winnerTeam = (String) evt.getNewValue();
+                ui.gameOver(winnerTeam);
                 break;
             default:
                 System.out.println("scrivere una exception sensata"); //TODO
@@ -74,6 +75,7 @@ public class StrippedModel implements Serializable {
         if (deckToModify.isPresent()) {
             assistantDecks.remove(deckToModify);
             assistantDecks.add((AssistantCardDeck) evt.getNewValue());
+            ui.deckChange(currentPlayer);
         }
     }
 
@@ -84,15 +86,19 @@ public class StrippedModel implements Serializable {
             switch (evt.getPropertyName()) {
                 case "entrance":
                     boardToModify.get().setEntrance((EnumMap<Colors, Integer>) evt.getNewValue());
+                    ui.entranceChanged(evt);
                     break;
                 case "dining":
                     boardToModify.get().setDining((EnumMap<Colors, Integer>) evt.getNewValue());
+                    ui.diningChange(evt);
                     break;
                 case "towers":
                     boardToModify.get().setNumberOfTowers((int) evt.getNewValue());
+                    ui.towersEvent(evt);
                     break;
                 case "coins":
                     boardToModify.get().setCoins((int) evt.getNewValue());
+                    ui.coinsChanged(evt);
                     break;
                 case "professorTable":
                     boardToModify.get().setProfessorsTable((ArrayList<Colors>) evt.getNewValue());
@@ -134,6 +140,16 @@ public class StrippedModel implements Serializable {
             islands.remove(islandFound); //IslandEvent Deletion
             if (evt.getNewValue() != null) {
                 islands.add((StrippedIsland) evt.getNewValue());
+                if(evt.getPropertyName().equals("island"))
+                ui.islandChange(evt);
+                else if(evt.getPropertyName().equals("island-conquest"))
+                {
+                    ui.islandConquest(evt);
+                }
+                else if(evt.getPropertyName().equals("island-merged"))
+                {
+                    ui.islandMerged(evt);
+                }
             }
         } else {
             System.out.println("Exception changeIsland , strippedModel"); //todo
