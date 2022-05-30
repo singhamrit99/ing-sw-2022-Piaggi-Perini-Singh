@@ -19,6 +19,8 @@ public interface UI {
 
     void deckChange(String input);
 
+    void assistantCardPlayed(PropertyChangeEvent e);
+
     void islandChange(PropertyChangeEvent e);
 
     void islandMerged(PropertyChangeEvent e);

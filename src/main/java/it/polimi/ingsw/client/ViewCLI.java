@@ -106,21 +106,21 @@ public class ViewCLI implements UI{
         Thread.sleep(1000);
 
         while (client.isInGame()) {
-
-            //Assistant Card play phase
-            while(!client.isMyTurn())
-            {
-                in.nextLine();
-                //Wait for the other players to be done with their turn while I still output their moves...and no input of mine can cause trouble!
+            while(true) {
+                //Assistant Card play phase
+                while (!client.isMyTurn()) {
+                    in.nextLine();
+                    //Wait for the other players to be done with their turn while I still output their moves...and no input of mine can cause trouble!
+                }
+                //performActionInTurn();
+                if (nickName.equals(currentPlayer))
+                    drawFromBag();
+                playAssistantCard();
             }
-            //performActionInTurn();
-            if(nickName.equals(currentPlayer))
-            drawFromBag();
-            playAssistantCard();
 
             //Turn phase
-           waitForTurn();
-           performActionInTurn();
+          /* waitForTurn();
+           performActionInTurn();*/
 
         }
     }
@@ -152,9 +152,15 @@ public class ViewCLI implements UI{
     }
 
     @Override
-    public void deckChange(String input) {
+    public void deckChange(String assistantCard) {
+        System.out.println(currentPlayer+ " has played " + assistantCard);
+    }
+
+    @Override
+    public void assistantCardPlayed(PropertyChangeEvent e) {
 
     }
+
 
     @Override
     public void islandChange(PropertyChangeEvent e) {

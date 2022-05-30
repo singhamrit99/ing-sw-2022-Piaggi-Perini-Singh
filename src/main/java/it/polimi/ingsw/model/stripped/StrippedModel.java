@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.client.UI;
+import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 
@@ -75,7 +76,8 @@ public class StrippedModel implements Serializable {
         if (deckToModify.isPresent()) {
             assistantDecks.remove(deckToModify);
             assistantDecks.add((AssistantCardDeck) evt.getNewValue());
-            ui.deckChange(currentPlayer);
+            AssistantCard playedCard=(AssistantCard) evt.getOldValue();
+            ui.deckChange(playedCard.getImageName());
         }
     }
 

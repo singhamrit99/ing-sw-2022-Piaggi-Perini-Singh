@@ -317,7 +317,7 @@ public class Game {
                 currentPlayer.playAssistantCard(nameCard); //notice that when a card is played, is removed from the deck of the player
                 //notify deck change and assistant
                 PropertyChangeEvent assistantDeckUpdateEvent =
-                        new PropertyChangeEvent(this, "assistant", null, currentPlayer.getAssistantCardDeck());
+                        new PropertyChangeEvent(this, "assistant", nameCard, currentPlayer.getAssistantCardDeck());
                 gameListener.propertyChange(assistantDeckUpdateEvent);
             } else {
                 throw new IncorrectPlayerException();

@@ -140,7 +140,6 @@ public class Client implements Runnable {
 
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
         for (PropertyChangeEvent evt : evtArray) {
-            System.out.println(evt.getPropertyName());
             if(evt.getPropertyName().equals("first-player")) {
                 ui.currentPlayer((String) evt.getNewValue());
                 if(nickname.equals(evt.getNewValue()))
