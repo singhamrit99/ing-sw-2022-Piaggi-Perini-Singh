@@ -1,9 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.stripped.StrippedModel;
-import it.polimi.ingsw.server.SourceEvent;
 import it.polimi.ingsw.server.commands.Command;
 import it.polimi.ingsw.server.serverStub;
 
@@ -150,7 +148,7 @@ public class Client implements Runnable {
                 case "message":
                     System.out.println("New message received!\n");
                     Object in = evt.getOldValue();
-                    SourceEvent source = (SourceEvent) in;
+                    /*SourceEvent source = (SourceEvent) in;
                     switch (source.getWhat()) {
                         case "start turn": {
                             //We're in CLI
@@ -168,7 +166,7 @@ public class Client implements Runnable {
                         case "played assistant card": {
 
                             AssistantCard assistantCard = (AssistantCard) evt.getNewValue();
-                            System.out.println("Assistant card played by " + source.getWho() + ": " + assistantCard.getImageName());
+                            //System.out.println("Assistant card played by " + source.getWho() + ": " + assistantCard.getImageName());
 
                             break;
                         }
@@ -179,7 +177,7 @@ public class Client implements Runnable {
 
                         }
 
-                    }
+                    }*/
 
                     //notify message to view TODO
                     break;
