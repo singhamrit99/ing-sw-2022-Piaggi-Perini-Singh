@@ -143,6 +143,7 @@ public class Client implements Runnable {
             switch (evt.getPropertyName()) {
                 case "init":
                     localModel = (StrippedModel) evt.getNewValue();
+                    localModel.setUI(ui);
                     System.out.println("Game ready! Press any key to continue.\n");
                     break;
                 case "message":
