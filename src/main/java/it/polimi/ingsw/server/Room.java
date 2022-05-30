@@ -67,7 +67,6 @@ public class Room implements PropertyChangeListener {
         Game newGame = controller.initializeGame(this, expertMode, players.size(), nicknames);
         buildStrippedModel(newGame.getPlayers(), newGame.getCharacterCards(),
                 newGame.getClouds(), newGame.getIslands());
-        Thread.sleep(600);
     }
 
     private synchronized void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands) {
@@ -101,12 +100,11 @@ public class Room implements PropertyChangeListener {
             StrippedIsland newStrippedIsland = new StrippedIsland(s);
             strippedIslands.add(newStrippedIsland);
         }
-
+        //notify stripped Model
         StrippedModel strippedModel = new StrippedModel(strippedBoards, strippedCharacters, strippedClouds, strippedIslands, assistantCardDecks);
-        SourceEvent modelInitSource = new SourceEvent(getRoomName(), "init");
-        PropertyChangeEvent evtInitialGame = new PropertyChangeEvent(modelInitSource, "init", null, strippedModel);
+        PropertyChangeEvent evtInitialGame =
+                new PropertyChangeEvent(null, "init", null, strippedModel);
         addEventToBuffer(evtInitialGame);
-
     }
 
     public synchronized void commandInvoker(Command command) throws MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NotEnoughCoinsException, IncorrectStateException {
