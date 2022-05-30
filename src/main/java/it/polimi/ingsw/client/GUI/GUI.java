@@ -4,13 +4,14 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.GUI.controller.Controller;
 import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
 import it.polimi.ingsw.client.GUI.controller.RoomListController;
+import it.polimi.ingsw.client.UI;
 import javafx.application.Application;
 import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GUI {
+public class GUI implements UI {
     public static Client client;
     public static Controller controller;
 
@@ -19,7 +20,7 @@ public class GUI {
     public GUI(Client client) {
         this.isDoing = new AtomicBoolean(false);
         GUI.client = client;
-        GUI.client.setGUI(this);
+        GUI.client.setUI(this);
     }
 
     /**
