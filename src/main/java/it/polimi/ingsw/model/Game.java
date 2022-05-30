@@ -17,7 +17,6 @@ import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
 import it.polimi.ingsw.server.Room;
-import it.polimi.ingsw.server.SourceEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -45,7 +44,6 @@ public class Game {
     private ArrayList<String> importingClouds;
     private ArrayList<CharacterCard> characterCards;
     private String JSONContent;
-
     private PropertyChangeListener gameListener;
 
     /**
@@ -108,7 +106,13 @@ public class Game {
     private void increaseCharacterPrice(int index) throws NegativeValueException {
         CharacterCard updatedCard = characterCards.get(index);
         CharacterCard oldCard = new CharacterCard(updatedCard.getImageName(), updatedCard.getPrice(), updatedCard.getDescription());
-        currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
+        int coinsRemoved = currentPlayer.getPlayedCharacterCard().getPrice();
+        currentPlayer.removeCoins(coinsRemoved);
+        int coins = currentPlayer.getCoins();
+        //notify coins changed
+        PropertyChangeEvent coinsEvt =
+                new PropertyChangeEvent(null,"coins",currentPlayer.getNickname(),coins);
+        gameListener.propertyChange(coinsEvt);
         updatedCard.increasePrice();
         updatedCard.setStatus(0);
         currentPlayer.setPlayedCharacterCard(null);
@@ -117,8 +121,8 @@ public class Game {
 
     private void notifyCharacterEvent(CharacterCard oldCard, CharacterCard updatedCard) {
         StrippedCharacter strippedCard = new StrippedCharacter(updatedCard);
-        SourceEvent src = new SourceEvent(currentPlayer.getNickname(), "played character card");
-        PropertyChangeEvent cardEvent = new PropertyChangeEvent(src, "character", oldCard, updatedCard);
+        StrippedCharacter oldStrippedCard = new StrippedCharacter(oldCard);
+        PropertyChangeEvent cardEvent = new PropertyChangeEvent(null, "character", oldStrippedCard, strippedCard);
         gameListener.propertyChange(cardEvent);
     }
 
@@ -178,11 +182,13 @@ public class Game {
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
         currentPlayer = players.get(playerPlanPhase);
-        SourceEvent notifyCurrentPlayer = new SourceEvent(currentPlayer.getNickname(), "start turn");
-        PropertyChangeEvent changeCurrentPlayer = new PropertyChangeEvent(notifyCurrentPlayer, "message", notifyCurrentPlayer, null);
-        gameListener.propertyChange(changeCurrentPlayer);
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
+
+        //notify current player
+        PropertyChangeEvent changeCurrentPlayer =
+                new PropertyChangeEvent(null, "current-player", null,currentPlayer);
+        gameListener.propertyChange(changeCurrentPlayer);
     }
 
     private void initializationTilesBag() throws NegativeValueException {
@@ -282,9 +288,10 @@ public class Game {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 for (Cloud cloud : clouds) {
                     cloud.addStudents(bag.drawStudents(numDrawnStudents));
-                    SourceEvent cloudSrc = new SourceEvent(nicknameCaller, "draw from Bag to clouds");
+                    //notify cloud
                     StrippedCloud newCloud = new StrippedCloud(cloud);
-                    PropertyChangeEvent evt = new PropertyChangeEvent(cloudSrc, "cloud", null, newCloud);
+                    PropertyChangeEvent evt =
+                            new PropertyChangeEvent(null, "cloud", null, newCloud);
                     gameListener.propertyChange(evt);
                 }
                 playerDrawnOut = true;
@@ -308,13 +315,9 @@ public class Game {
                     }
                 }
                 currentPlayer.playAssistantCard(nameCard); //notice that when a card is played, is removed from the deck of the player
-                //notify played AssistantCard
-                SourceEvent sourceMessagePlayedCard = new SourceEvent(nicknameCaller, "played assistant card");
-                PropertyChangeEvent assistantEvent = new PropertyChangeEvent(sourceMessagePlayedCard, "message", sourceMessagePlayedCard, currentPlayer.getPlayedAssistantCard());
-                gameListener.propertyChange(assistantEvent);
-                //notify deck change
-                SourceEvent sourceDeck = new SourceEvent(nicknameCaller, nameCard);
-                PropertyChangeEvent assistantDeckUpdateEvent = new PropertyChangeEvent(sourceDeck, "assistant", null, currentPlayer.getAssistantCardDeck());
+                //notify deck change and assistant
+                PropertyChangeEvent assistantDeckUpdateEvent =
+                        new PropertyChangeEvent(null, "assistant", null, currentPlayer.getAssistantCardDeck());
                 gameListener.propertyChange(assistantDeckUpdateEvent);
             } else {
                 throw new IncorrectPlayerException();
@@ -360,8 +363,9 @@ public class Game {
             throw new IncorrectStateException();
         }
 
-        SourceEvent notifyCurrentPlayer = new SourceEvent(currentPlayer.getNickname(), "start turn");
-        PropertyChangeEvent changeCurrentPlayer = new PropertyChangeEvent(notifyCurrentPlayer, "message", notifyCurrentPlayer, null);
+        //notify current player
+        PropertyChangeEvent changeCurrentPlayer =
+                new PropertyChangeEvent(null, "current-player", null,currentPlayer);
         gameListener.propertyChange(changeCurrentPlayer);
     }
 
@@ -376,8 +380,9 @@ public class Game {
             if (isGameOver()) {
                 state = State.END;
                 ArrayList<Player> teamWinner = checkWinner();
-                SourceEvent gameOver = new SourceEvent("game", "gameOver");
-                PropertyChangeEvent gameOverEvt = new PropertyChangeEvent(gameOver, "message", gameOver, teamWinner);
+                //notify game-over
+                PropertyChangeEvent gameOverEvt =
+                        new PropertyChangeEvent(null, "game-over", null, teamWinner);
                 gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
@@ -441,8 +446,8 @@ public class Game {
                                         StrippedIsland oldIsland = new StrippedIsland(islandToChange);
                                         islandToChange.addStudents(tmp); //adding students
                                         StrippedIsland changedIsland = new StrippedIsland(islandToChange);
-                                        SourceEvent islandEvent = new SourceEvent(playerCaller, "add students to island");
-                                        PropertyChangeEvent evt = new PropertyChangeEvent(islandEvent, "island", oldIsland, changedIsland);
+                                        PropertyChangeEvent evt =
+                                                new PropertyChangeEvent(null, "island", oldIsland, changedIsland);
                                         gameListener.propertyChange(evt);
                                     }
                                 }
@@ -457,8 +462,8 @@ public class Game {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
                     //notify dining change
                     EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
-                    SourceEvent diningEvent = new SourceEvent(currentPlayer.getNickname(), "dining changed");
-                    PropertyChangeEvent evt = new PropertyChangeEvent(diningEvent, "dining", null, newDining);
+                    PropertyChangeEvent evt =
+                            new PropertyChangeEvent(null, "dining", currentPlayer.getNickname(), newDining);
                     gameListener.propertyChange(evt);
                 }
             } else throw new IncorrectStateException();
@@ -475,14 +480,15 @@ public class Game {
                 currentPlayer.addStudents(clouds.get(index).drawStudents());
                 //notify entrance
                 EnumMap<Colors, Integer> newEntrance = currentPlayer.getSchoolBoard().getEntrance();
-                SourceEvent entranceEvent = new SourceEvent(currentPlayer.getNickname(), "added students");
-                PropertyChangeEvent evt = new PropertyChangeEvent(entranceEvent, "entrance", null, newEntrance);
+                PropertyChangeEvent evt =
+                        new PropertyChangeEvent(null, "entrance", currentPlayer.getNickname(), newEntrance);
                 gameListener.propertyChange(evt);
                 //notify cloud change
                 StrippedCloud changedCloud = new StrippedCloud(clouds.get(index));
-                SourceEvent cloudEvent = new SourceEvent(currentPlayer.getNickname(), "drawedStudents");
-                evt = new PropertyChangeEvent(cloudEvent, "cloud", null, changedCloud);
-                gameListener.propertyChange(evt);
+                PropertyChangeEvent evtCloud =
+                        new PropertyChangeEvent(null, "cloud", null, changedCloud);
+                gameListener.propertyChange(evtCloud);
+
                 nextPlayer();
             } else throw new IncorrectPlayerException();
         } else {
@@ -505,16 +511,14 @@ public class Game {
                         StrippedIsland oldIsland = new StrippedIsland(islands.get(motherNaturePosition)); //saving oldIsland source
                         islands.get(motherNaturePosition).removeMotherNature();
                         StrippedIsland changedIsland = new StrippedIsland(islands.get(motherNaturePosition));
-                        SourceEvent islandSrc = new SourceEvent(playerCaller, "MN moved away");
-                        PropertyChangeEvent evt = new PropertyChangeEvent(islandSrc, "island", oldIsland, changedIsland);
+                        PropertyChangeEvent evt = new PropertyChangeEvent(null, "island", oldIsland, changedIsland);
                         gameListener.propertyChange(evt);
                         //notify destination island
                         StrippedIsland oldIslandDest = new StrippedIsland(islands.get(destinationMotherNature)); //saving oldIsland destination
                         islands.get(destinationMotherNature).moveMotherNature();
                         //notify new newIslandDest (changedIsland)
                         changedIsland = new StrippedIsland(islands.get(destinationMotherNature));
-                        SourceEvent destSrc = new SourceEvent(playerCaller, "MN moved here");
-                        PropertyChangeEvent evtDest = new PropertyChangeEvent(destSrc, "island", oldIslandDest, changedIsland);
+                        PropertyChangeEvent evtDest = new PropertyChangeEvent(null, "island", oldIslandDest, changedIsland);
                         gameListener.propertyChange(evtDest);
                         //ended notifications
                         motherNaturePosition = destinationMotherNature;
@@ -568,16 +572,16 @@ public class Game {
                         player.removeProfessor(studentColor);
                         //notify the removed professors
                         ArrayList<Colors> professors = player.getSchoolBoard().getProfessorsTable();
-                        SourceEvent profEvent = new SourceEvent(player.getNickname(), "prof deleted");
-                        PropertyChangeEvent evt = new PropertyChangeEvent(profEvent, "professorTable", null, professors);
+                        PropertyChangeEvent evt =
+                                new PropertyChangeEvent(null, "professorTable", player.getNickname(), professors);
                         gameListener.propertyChange(evt);
                     }
                 }
                 maxPlayer.addProfessor(studentColor);
                 //notify the added prof
                 ArrayList<Colors> professors = maxPlayer.getSchoolBoard().getProfessorsTable();
-                SourceEvent profEvent = new SourceEvent(maxPlayer.getNickname(), "prof added");
-                PropertyChangeEvent evt = new PropertyChangeEvent(profEvent, "professorTable", null, professors);
+                PropertyChangeEvent evt =
+                        new PropertyChangeEvent(null, "professorTable", maxPlayer.getNickname(), professors);
                 gameListener.propertyChange(evt);
             }
         }
@@ -657,11 +661,12 @@ public class Game {
                 moveTowersFromTeam(newTeam, -switchedTowers); //removing towers from new team player
                 ArrayList<Player> oldTeam = findPlayerFromTeam(island.getTowersColor()); //oldTeamOwnerShip
                 moveTowersFromTeam(oldTeam, switchedTowers); //adding towers to old team
+                StrippedIsland oldIsland = new StrippedIsland(island);
                 island.setTowersColor(newTeamOwner); //set ownership
                 //notify island change
-                StrippedIsland islandStripped = new StrippedIsland(island);
-                SourceEvent islandSrc = new SourceEvent(newTeamOwner.name(), "conquered");
-                PropertyChangeEvent evtConquest = new PropertyChangeEvent(islandSrc, "island", null, islandStripped);
+                StrippedIsland islandChangedStripped = new StrippedIsland(island);
+                PropertyChangeEvent evtConquest =
+                        new PropertyChangeEvent(null, "island-conquest", oldIsland, islandChangedStripped);
                 gameListener.propertyChange(evtConquest);
             }
         }
@@ -710,11 +715,12 @@ public class Game {
             }
         } else team.get(0).moveTowers(amount);
 
-        //notify boards changes
+
         for (Player teamMember : team) {
             int changedTowers = teamMember.getSchoolBoard().getTowers();
-            SourceEvent towersEventSrc = new SourceEvent(teamMember.getNickname(), "changed towers");
-            PropertyChangeEvent towersEvent = new PropertyChangeEvent(towersEventSrc, "towers", null, changedTowers);
+            //notify towers
+            PropertyChangeEvent towersEvent =
+                    new PropertyChangeEvent(null, "towers", teamMember.getNickname(), changedTowers);
             gameListener.propertyChange(towersEvent);
         }
     }
@@ -735,12 +741,12 @@ public class Game {
                 StrippedIsland mergedTile = new StrippedIsland(currentTile); //notify currentTile
                 StrippedIsland deletedTile = new StrippedIsland(nextTile); //notify tile to deleted
                 islands.remove(nextTile);
-                //notifications send
-                SourceEvent islandSrc = new SourceEvent(currentPlayer.getNickname(), "island merged");
-                PropertyChangeEvent islandMergeEvent = new PropertyChangeEvent(islandSrc, "island", mergedTile, mergedTile);
+                //notifications Island merged
+                PropertyChangeEvent islandMergeEvent =
+                        new PropertyChangeEvent(null, "island-merged", mergedTile, mergedTile);
                 gameListener.propertyChange(islandMergeEvent);
-                islandSrc = new SourceEvent(currentPlayer.getNickname(), "island deleted");
-                PropertyChangeEvent islandDeletedEvent = new PropertyChangeEvent(islandSrc, "island", deletedTile, null);
+                PropertyChangeEvent islandDeletedEvent =
+                        new PropertyChangeEvent(null, "island", deletedTile, null);
                 gameListener.propertyChange(islandDeletedEvent);
                 listChanged = true;
             }
@@ -832,11 +838,6 @@ public class Game {
         return currentPlayer.getPlayedAssistantCard().getMove();
     }
 
-    public void error(ControllerExceptionsException error) {
-        SourceEvent cloudEvent = new SourceEvent(currentPlayer.getNickname(), error.name());
-        PropertyChangeEvent evtError = new PropertyChangeEvent(cloudEvent, "error", null, null);
-        gameListener.propertyChange(evtError);
-    }
 
     public Island getIsland(int index) {
         return islands.get(index);
@@ -853,7 +854,6 @@ public class Game {
             player.getSchoolBoard().removeDiningStudents(enumMap);
         }
     }
-
 
     //getters necessary to build StrippedModel :
     public ArrayList<CharacterCard> getCharacterCards() {

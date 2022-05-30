@@ -2,12 +2,8 @@ package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.server.SourceEvent;
-
-import javax.xml.transform.Source;
 import java.beans.PropertyChangeEvent;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Optional;
@@ -17,12 +13,13 @@ public class StrippedModel implements Serializable {
     final private ArrayList<StrippedCharacter> characters;
     final private ArrayList<StrippedCloud> clouds;
     final private ArrayList<StrippedIsland> islands;
-
+    private String currentPlayer;
+    private String winnerTeam;
     public ArrayList<AssistantCardDeck> getAssistantDecks() {
         return assistantDecks;
     }
-
     final private ArrayList<AssistantCardDeck> assistantDecks;
+
     public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters,
                          ArrayList<StrippedCloud> clouds, ArrayList<StrippedIsland> islands, ArrayList<AssistantCardDeck> assistantDecks) {
         this.boards = boards;
@@ -34,13 +31,19 @@ public class StrippedModel implements Serializable {
 
     public void updateModel(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
-            case "board":
+            case "entrance":
+            case "dining":
+            case "coins":
+            case "professorTable":
+            case "towers":
                 setBoard(evt);
                 break;
             case "character":
                 changePriceCharacterCard(evt);
                 break;
             case "island":
+            case "island-conquest":
+            case "island-merged":
                 changeIsland(evt);
                 break;
             case "cloud":
@@ -49,15 +52,19 @@ public class StrippedModel implements Serializable {
             case "assistant":
                 changeAssistantDeck(evt);
                 break;
+            case "current-player":
+                setCurrentPlayer((String) evt.getNewValue());
+            case "game-over":
+                winnerTeam= (String)evt.getNewValue();
+                break;
             default:
-                System.out.println("scrivere una exception sensata");
+                System.out.println("scrivere una exception sensata"); //TODO
                 break;
         }
     }
 
     private void changeAssistantDeck(PropertyChangeEvent evt){
-        SourceEvent source = (SourceEvent) evt.getSource();
-        String ownerDeck = source.getWho();
+        String ownerDeck = currentPlayer;
         Optional<AssistantCardDeck> deckToModify = assistantDecks.stream().filter(d ->  d.getOwner().equals(ownerDeck)).findFirst();
         if(deckToModify.isPresent()){
             assistantDecks.remove(deckToModify);
@@ -66,8 +73,7 @@ public class StrippedModel implements Serializable {
     }
 
     private void setBoard(PropertyChangeEvent evt) {
-        SourceEvent source = (SourceEvent) evt.getSource();
-        String ownerBoard = source.getWho();
+        String ownerBoard = (String) evt.getOldValue();
         Optional<StrippedBoard> boardToModify = boards.stream().filter(b -> ownerBoard.equals(b.getOwner())).findFirst();
         if (boardToModify.isPresent()) {
             switch (evt.getPropertyName()) {
@@ -77,6 +83,9 @@ public class StrippedModel implements Serializable {
                 case "dining":
                     boardToModify.get().setDining((EnumMap<Colors, Integer>) evt.getNewValue());
                     break;
+                case "towers":
+                    boardToModify.get().setNumberOfTowers((int)evt.getNewValue());
+                    break;
                 case "coins":
                     boardToModify.get().setCoins((int) evt.getNewValue());
                     break;
@@ -84,7 +93,7 @@ public class StrippedModel implements Serializable {
                     boardToModify.get().setProfessorsTable((ArrayList<Colors>) evt.getNewValue());
                     break;
                 default:
-                    System.out.println("exception da fare setBoard");
+                    System.out.println("exception da fare setBoard"); //todo
                     break;
             }
         } else { //todo
@@ -126,7 +135,7 @@ public class StrippedModel implements Serializable {
         }
     }
 
-    public void changeCloud(PropertyChangeEvent evt) {
+    private void changeCloud(PropertyChangeEvent evt) {
         StrippedCloud changedCloud;
         if (evt.getOldValue()!=null) {
              changedCloud = (StrippedCloud) evt.getOldValue();
@@ -142,6 +151,14 @@ public class StrippedModel implements Serializable {
         } else {
             System.out.println("Exception changeCloud , strippedModel"); //todo
         }
+    }
+
+    private void setCurrentPlayer(String currentPlayer){
+        this.currentPlayer = currentPlayer;
+    }
+
+    public String getCurrentPlayer(){
+        return currentPlayer;
     }
 
     public ArrayList<StrippedCharacter> getCharacters() {
