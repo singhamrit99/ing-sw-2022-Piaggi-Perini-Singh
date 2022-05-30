@@ -106,7 +106,13 @@ public class Game {
     private void increaseCharacterPrice(int index) throws NegativeValueException {
         CharacterCard updatedCard = characterCards.get(index);
         CharacterCard oldCard = new CharacterCard(updatedCard.getImageName(), updatedCard.getPrice(), updatedCard.getDescription());
-        currentPlayer.removeCoins(currentPlayer.getPlayedCharacterCard().getPrice());
+        int coinsRemoved = currentPlayer.getPlayedCharacterCard().getPrice();
+        currentPlayer.removeCoins(coinsRemoved);
+        int coins = currentPlayer.getCoins();
+        //notify coins changed
+        PropertyChangeEvent coinsEvt =
+                new PropertyChangeEvent(null,"coins",currentPlayer.getNickname(),coins);
+        gameListener.propertyChange(coinsEvt);
         updatedCard.increasePrice();
         updatedCard.setStatus(0);
         currentPlayer.setPlayedCharacterCard(null);
@@ -457,7 +463,7 @@ public class Game {
                     //notify dining change
                     EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
                     PropertyChangeEvent evt =
-                            new PropertyChangeEvent(null, "dining", null, newDining);
+                            new PropertyChangeEvent(null, "dining", currentPlayer.getNickname(), newDining);
                     gameListener.propertyChange(evt);
                 }
             } else throw new IncorrectStateException();
@@ -475,7 +481,7 @@ public class Game {
                 //notify entrance
                 EnumMap<Colors, Integer> newEntrance = currentPlayer.getSchoolBoard().getEntrance();
                 PropertyChangeEvent evt =
-                        new PropertyChangeEvent(null, "entrance", null, newEntrance);
+                        new PropertyChangeEvent(null, "entrance", currentPlayer.getNickname(), newEntrance);
                 gameListener.propertyChange(evt);
                 //notify cloud change
                 StrippedCloud changedCloud = new StrippedCloud(clouds.get(index));
@@ -567,7 +573,7 @@ public class Game {
                         //notify the removed professors
                         ArrayList<Colors> professors = player.getSchoolBoard().getProfessorsTable();
                         PropertyChangeEvent evt =
-                                new PropertyChangeEvent(null, "professorTable", null, professors);
+                                new PropertyChangeEvent(null, "professorTable", player.getNickname(), professors);
                         gameListener.propertyChange(evt);
                     }
                 }
@@ -575,7 +581,7 @@ public class Game {
                 //notify the added prof
                 ArrayList<Colors> professors = maxPlayer.getSchoolBoard().getProfessorsTable();
                 PropertyChangeEvent evt =
-                        new PropertyChangeEvent(null, "professorTable", null, professors);
+                        new PropertyChangeEvent(null, "professorTable", maxPlayer.getNickname(), professors);
                 gameListener.propertyChange(evt);
             }
         }
@@ -709,11 +715,12 @@ public class Game {
             }
         } else team.get(0).moveTowers(amount);
 
-        //notify towers changes
+
         for (Player teamMember : team) {
             int changedTowers = teamMember.getSchoolBoard().getTowers();
+            //notify towers
             PropertyChangeEvent towersEvent =
-                    new PropertyChangeEvent(null, "towers", null, changedTowers);
+                    new PropertyChangeEvent(null, "towers", teamMember.getNickname(), changedTowers);
             gameListener.propertyChange(towersEvent);
         }
     }
