@@ -60,6 +60,7 @@ public class StrippedModel implements Serializable {
                 break;
             case "current-player":
                 setCurrentPlayer((String) evt.getNewValue());
+                break;
             case "game-over":
                 winnerTeam = (String) evt.getNewValue();
                 ui.gameOver(winnerTeam);
@@ -76,8 +77,8 @@ public class StrippedModel implements Serializable {
         if (deckToModify.isPresent()) {
             assistantDecks.remove(deckToModify);
             assistantDecks.add((AssistantCardDeck) evt.getNewValue());
-            AssistantCard playedCard=(AssistantCard) evt.getOldValue();
-            ui.deckChange(playedCard.getImageName());
+            String playedCard=(String) evt.getOldValue();
+            ui.deckChange(playedCard);
         }
     }
 

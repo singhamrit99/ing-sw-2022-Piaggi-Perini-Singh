@@ -140,25 +140,31 @@ public class Client implements Runnable {
 
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
         for (PropertyChangeEvent evt : evtArray) {
-            if(evt.getPropertyName().equals("first-player")) {
+            if (evt.getPropertyName().equals("first-player")) {
                 ui.currentPlayer((String) evt.getNewValue());
-                if(nickname.equals(evt.getNewValue()))
-                setMyTurn(true);
-            }
-            else if(evt.getPropertyName().equals("init")) {
+                if (nickname.equals(evt.getNewValue()))
+                    setMyTurn(true);
+            } else if (evt.getPropertyName().equals("init")) {
                 System.out.println("Request for loading received\n");
                 localModel = (StrippedModel) evt.getNewValue();
                 localModelLoaded = true;
                 System.out.println("Local model loaded\n");
                 localModel.setUI(ui);
                 System.out.println("Game ready! Press any key to continue.\n");
-            }
-            else{
-                    if (localModel != null) {
-                        localModel.updateModel(evt);
-                    } else {
-                        throw new LocalModelNotLoadedException();
-                    }
+            } else if (evt.getPropertyName().equals("current-player")) {
+                if (nickname.equals(evt.getNewValue()))
+                    isMyTurn = true;
+                if (localModel != null) {
+                    localModel.updateModel(evt);
+                } else {
+                    throw new LocalModelNotLoadedException();
+                }
+            } else {
+                if (localModel != null) {
+                    localModel.updateModel(evt);
+                } else {
+                    throw new LocalModelNotLoadedException();
+                }
 
             }
         }

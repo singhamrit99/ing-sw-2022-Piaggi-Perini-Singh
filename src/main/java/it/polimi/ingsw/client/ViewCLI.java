@@ -15,7 +15,7 @@ import java.rmi.RemoteException;
 import java.util.*;
 
 
-public class ViewCLI implements UI{
+public class ViewCLI implements UI {
     Client client;
     boolean hasGameStarted = false;
     boolean isMyTurn;
@@ -101,27 +101,26 @@ public class ViewCLI implements UI{
                     break;
             }
         }
-        //Main game loop
         System.out.println("Loading...");
         Thread.sleep(1000);
 
+
+        //Main game loop
         while (client.isInGame()) {
-            while(true) {
-                //Assistant Card play phase
-                while (!client.isMyTurn()) {
-                    in.nextLine();
-                    //Wait for the other players to be done with their turn while I still output their moves...and no input of mine can cause trouble!
-                }
-                //performActionInTurn();
-                if (nickName.equals(currentPlayer))
-                    drawFromBag();
-                playAssistantCard();
+
+            //Assistant Card play phase
+            while (!client.isMyTurn()) {
+
+                waitForTurn();
+                //Wait for the other players to be done with their turn while I still output their moves...and no input of mine can cause trouble!
             }
 
-            //Turn phase
-          /* waitForTurn();
-           performActionInTurn();*/
+            drawFromBag();
+            playAssistantCard();
 
+            //Turn phase
+
+            performActionInTurn();
         }
     }
 
@@ -142,8 +141,8 @@ public class ViewCLI implements UI{
 
     @Override
     public void currentPlayer(String s) {
-        currentPlayer=s;
-        System.out.println("It's now "+ s + "'s turn!\n");
+        currentPlayer = s;
+        System.out.println("It's now " + s + "'s turn!\n");
     }
 
     @Override
@@ -153,7 +152,7 @@ public class ViewCLI implements UI{
 
     @Override
     public void deckChange(String assistantCard) {
-        System.out.println(currentPlayer+ " has played " + assistantCard);
+        System.out.println(currentPlayer + " has played " + assistantCard);
     }
 
     @Override
@@ -165,9 +164,9 @@ public class ViewCLI implements UI{
     @Override
     public void islandChange(PropertyChangeEvent e) {
         StrippedIsland oldIsland, newIsland;
-        oldIsland=(StrippedIsland) e.getOldValue();
-        newIsland= (StrippedIsland) e.getNewValue();
-        System.out.println("Island number"+ oldIsland.getName() + " changed from");
+        oldIsland = (StrippedIsland) e.getOldValue();
+        newIsland = (StrippedIsland) e.getNewValue();
+        System.out.println("Island number" + oldIsland.getName() + " changed from");
         printIsland(oldIsland);
         System.out.println("to");
         printIsland(newIsland);
@@ -176,24 +175,23 @@ public class ViewCLI implements UI{
     @Override
     public void islandMerged(PropertyChangeEvent e) {
         StrippedIsland oldIsland, newIsland;
-        oldIsland=(StrippedIsland) e.getOldValue();
-        newIsland= (StrippedIsland) e.getNewValue();
-        System.out.println("Islands "+ oldIsland.getName()+ " and "+ newIsland.getName()+" merged!\n");
+        oldIsland = (StrippedIsland) e.getOldValue();
+        newIsland = (StrippedIsland) e.getNewValue();
+        System.out.println("Islands " + oldIsland.getName() + " and " + newIsland.getName() + " merged!\n");
     }
 
     @Override
-    public void islandConquest(PropertyChangeEvent e)
-    {
-        StrippedIsland island= (StrippedIsland) e.getNewValue();
-        System.out.println(currentPlayer+ "conquered island "+ island.getName()+ "!\n");
+    public void islandConquest(PropertyChangeEvent e) {
+        StrippedIsland island = (StrippedIsland) e.getNewValue();
+        System.out.println(currentPlayer + "conquered island " + island.getName() + "!\n");
 
     }
 
     @Override
     public void diningChange(PropertyChangeEvent e) {
-        StrippedBoard oldBoard,newBoard;
-        oldBoard=(StrippedBoard) e.getOldValue();
-        newBoard=(StrippedBoard) e.getNewValue();
+        StrippedBoard oldBoard, newBoard;
+        oldBoard = (StrippedBoard) e.getOldValue();
+        newBoard = (StrippedBoard) e.getNewValue();
         System.out.println(currentPlayer + "modified their dining room!");
         System.out.println("From... ");
         for (Colors c : oldBoard.getDining().keySet()) {
@@ -207,12 +205,11 @@ public class ViewCLI implements UI{
     }
 
     @Override
-    public void entranceChanged(PropertyChangeEvent e)
-    {
-        StrippedBoard oldBoard,newBoard;
-        oldBoard=(StrippedBoard) e.getOldValue();
-        newBoard=(StrippedBoard) e.getNewValue();
-        System.out.println(currentPlayer+ "'s entrance changed!\n");
+    public void entranceChanged(PropertyChangeEvent e) {
+        StrippedBoard oldBoard, newBoard;
+        oldBoard = (StrippedBoard) e.getOldValue();
+        newBoard = (StrippedBoard) e.getNewValue();
+        System.out.println(currentPlayer + "'s entrance changed!\n");
         System.out.println("From... ");
         for (Colors c : oldBoard.getEntrance().keySet()) {
             System.out.println(c + " students: " + oldBoard.getEntrance().get(c) + "\n");
@@ -223,38 +220,36 @@ public class ViewCLI implements UI{
         }
 
     }
+
     @Override
     public void towersEvent(PropertyChangeEvent e) {
 
-        String player= (String) e.getNewValue();
-        int i= (int) e.getOldValue();
-        System.out.println("Player"+ player+ "now has "+ i+ " towers in their board!\n");
+        String player = (String) e.getNewValue();
+        int i = (int) e.getOldValue();
+        System.out.println("Player" + player + "now has " + i + " towers in their board!\n");
 
     }
 
     @Override
     public void gameOver(String s) {
 
-        System.out.println("Game over! Team "+ s + "won! Congratulations!\n");
+        System.out.println("Game over! Team " + s + "won! Congratulations!\n");
         client.setInGame(false);
         System.out.println("Do you want to play again? Y/N");
-        boolean validInput= false;
-        boolean result= false;
+        boolean validInput = false;
+        boolean result = false;
         String answer;
-        answer = in.nextLine().toLowerCase(Locale.ROOT);
-
-        while(!validInput)
-        {
+        while (!validInput) {
             answer = in.nextLine().toLowerCase(Locale.ROOT);
             switch (answer) {
                 case "y": {
                     result = true;
-                    validInput=true;
+                    validInput = true;
                     break;
                 }
                 case "n": {
                     result = false;
-                    validInput=true;
+                    validInput = true;
                     break;
                 }
                 default:
@@ -262,13 +257,10 @@ public class ViewCLI implements UI{
             }
         }
 
-        if (result)
-        {
+        if (result) {
             System.out.println("Cool\n");
-        }
-        else
+        } else
             System.out.println("Goodbye!\n");
-
 
 
     }
@@ -402,10 +394,10 @@ public class ViewCLI implements UI{
                 System.out.println("You're already in that room!\n");
             } else {
                 try {
-                    if (clientRoom==null)
+                    if (clientRoom == null)
                         leaveRoom();
                     client.requestRoomJoin(requestedRoom);
-                    clientRoom=requestedRoom;
+                    clientRoom = requestedRoom;
                 } catch (RoomNotExistsException | UserNotRegisteredException e) {
                     throw new RuntimeException(e);
                 }
@@ -435,10 +427,8 @@ public class ViewCLI implements UI{
 
     //Game methods
 
-
-
     public void drawFromBag() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-        drawFromBagOrder= new DrawFromBagCommand(client.getNickname());
+        drawFromBagOrder = new DrawFromBagCommand(client.getNickname());
         System.out.println("Drawing from bag...\n");
         client.performGameAction(drawFromBagOrder);
     }
@@ -451,8 +441,8 @@ public class ViewCLI implements UI{
             System.out.println("Invalid number, try again\n");
             i = in.nextInt();
         }
-
-        playAssistantCardOrder = new PlayAssistantCard(nickName, "Assistente"+i);
+        i++;
+        playAssistantCardOrder = new PlayAssistantCard(this.nickName, "Assistente" + i);
         try {
             client.performGameAction(playAssistantCardOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
@@ -465,7 +455,7 @@ public class ViewCLI implements UI{
         AssistantCardDeck myDeck = client.getLocalModel().getAssistantDecks().get(playerNumber);
         int i = 0;
         for (AssistantCard a : myDeck.getDeck()) {
-            System.out.println("Card number " + i +" "+ a.getImageName().replaceAll("[^a-zA Z0-9]", "") +" " + a.getMove());
+            System.out.println("Card number " + i + " " + a.getImageName().replaceAll("[^a-zA Z0-9]", "") + " " + a.getMove());
             i++;
         }
     }
@@ -508,18 +498,23 @@ public class ViewCLI implements UI{
 
     }
 
-    public synchronized void waitForTurn()
-    {
-        while (!client.isMyTurn())
-        {
-
-        }
+    public synchronized void waitForTurn() throws InterruptedException {
+        System.out.println("Waiting for turn ...");
+        System.out.flush();
+        Thread.sleep(500);
+        System.out.println("Waiting for turn ..");
+        System.out.flush();
+        Thread.sleep(500);
+        System.out.println("Waiting for turn . .");
+        System.out.flush();
+        System.out.println("Waiting for turn .. ");
+        System.out.flush();
+        Thread.sleep(500);
     }
 
-    public void printCharacterCards()
-    {
-        int i=0;
-        ArrayList<StrippedCharacter> temp= client.getLocalModel().getCharacters();
+    public void printCharacterCards() {
+        int i = 0;
+        ArrayList<StrippedCharacter> temp = client.getLocalModel().getCharacters();
         for (StrippedCharacter c : temp) {
             System.out.println("Character " + i);
             System.out.println("Price: " + c.getPrice() + ", description:  " + c.getDescription());
@@ -813,8 +808,7 @@ public class ViewCLI implements UI{
         }
     }
 
-    public void printIsland(StrippedIsland island)
-    {
+    public void printIsland(StrippedIsland island) {
         System.out.println("Number of towers: " + island.getNumOfTowers() + "\n");
         System.out.println("Has no entry tile: " + island.isHasNoEnterTile() + "\n");
         System.out.println("Students on the island: ");
@@ -822,7 +816,7 @@ public class ViewCLI implements UI{
             System.out.println(c + " students: " + island.getStudents() + "\n");
         }
         System.out.println("Towers: " + island.getNumOfTowers() + island.getTowersColor() + "towers \n");
-         }
+    }
 
     public boolean isValidColor(String input) {
         input = input.toUpperCase(Locale.ROOT);

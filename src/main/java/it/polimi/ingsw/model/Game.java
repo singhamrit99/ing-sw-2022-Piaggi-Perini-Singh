@@ -327,6 +327,7 @@ public class Game {
         }
         orderPlayers.add(currentPlayer); //adding to priority queue the player in the correct order
         nextPlayer();
+        System.out.println("Next player is" + currentPlayer.getNickname());
     }
 
     /**
