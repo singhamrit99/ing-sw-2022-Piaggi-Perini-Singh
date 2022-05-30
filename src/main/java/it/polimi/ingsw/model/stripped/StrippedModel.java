@@ -2,12 +2,8 @@ package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.server.SourceEvent;
-
-import javax.xml.transform.Source;
 import java.beans.PropertyChangeEvent;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Optional;
@@ -34,13 +30,19 @@ public class StrippedModel implements Serializable {
 
     public void updateModel(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
-            case "board":
+            case "entrance":
+            case "dining":
+            case "coins":
+            case "professorTable":
+            case "towers":
                 setBoard(evt);
                 break;
             case "character":
                 changePriceCharacterCard(evt);
                 break;
             case "island":
+            case "island-conquest":
+            case "island-merged":
                 changeIsland(evt);
                 break;
             case "cloud":
@@ -82,6 +84,9 @@ public class StrippedModel implements Serializable {
                     break;
                 case "professorTable":
                     boardToModify.get().setProfessorsTable((ArrayList<Colors>) evt.getNewValue());
+                    break;
+                case "towers":
+                    boardToModify.get().setNumberOfTowers((int)evt.getNewValue());
                     break;
                 default:
                     System.out.println("exception da fare setBoard");
