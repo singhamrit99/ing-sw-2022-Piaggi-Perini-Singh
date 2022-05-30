@@ -1,12 +1,10 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.GUI.GUI;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.SourceEvent;
 import it.polimi.ingsw.server.commands.Command;
-import it.polimi.ingsw.server.commands.PlayCharacterCardA;
 import it.polimi.ingsw.server.serverStub;
 
 import java.beans.PropertyChangeEvent;
@@ -14,8 +12,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-
-import static java.lang.Thread.sleep;
 
 public class Client implements Runnable {
     final private String ip;
@@ -31,7 +27,7 @@ public class Client implements Runnable {
 
 
     private boolean userRegistered;
-    private GUI gui;
+    private UI ui;
 
     public Client(String ip, int port) {
         this.ip = ip;
@@ -60,8 +56,7 @@ public class Client implements Runnable {
         userRegistered = true;
 
         new Thread(this).start(); //it's important that the thread runs only after the correct registration!
-        if (gui!=null)
-        gui.roomsAvailable(roomList);
+        ui.roomsAvailable(roomList);
     }
 
     public void deregisterClient() throws RemoteException, UserNotRegisteredException {
@@ -155,57 +150,32 @@ public class Client implements Runnable {
                 case "message":
                     System.out.println("New message received!\n");
                     Object in = evt.getOldValue();
-                    SourceEvent source= (SourceEvent) in;
-                    switch (source.getWhat())
-                    {
-                        case "start turn":
-                        {
-                                //We're in CLI
-                                if (gui==null)
-                                {
-                                    System.out.println("The current player is " + source.getWho());
-                                    if(nickname.equals(source.getWho()))
-                                    {
-                                        System.out.println("It's your turn to play an assistant card!\n");
-                                        isMyTurn=true;
+                    SourceEvent source = (SourceEvent) in;
+                    switch (source.getWhat()) {
+                        case "start turn": {
+                            //We're in CLI
 
-                                    }
+                            System.out.println("The current player is " + source.getWho());
+                            if (nickname.equals(source.getWho())) {
+                                System.out.println("It's your turn to play an assistant card!\n");
+                                isMyTurn = true;
 
-                                }
-                            //We're in GUI
-                            else
-                                {
+                            }
 
-                                }
+
                             break;
                         }
-                        case "played assistant card":
-                        {
-                            if (gui==null)
-                            {
-                                AssistantCard assistantCard= (AssistantCard) evt.getNewValue();
-                                System.out.println("Assistant card played by "+source.getWho()+ ": " + assistantCard.getImageName());
+                        case "played assistant card": {
 
-                            }
-                            //We're in GUI
-                            else
-                            {
+                            AssistantCard assistantCard = (AssistantCard) evt.getNewValue();
+                            System.out.println("Assistant card played by " + source.getWho() + ": " + assistantCard.getImageName());
 
-                            }
                             break;
                         }
-                        case "gameOver":
-                        {
-                            if (gui==null)
-                            {
-                                System.out.println(evt.getNewValue().toString() +" won! Congratulations and thanks for playing!\n");
+                        case "gameOver": {
 
-                            }
-                            //We're in GUI
-                            else
-                            {
+                            System.out.println(evt.getNewValue().toString() + " won! Congratulations and thanks for playing!\n");
 
-                            }
 
                         }
 
@@ -238,10 +208,6 @@ public class Client implements Runnable {
         return localModel;
     }
 
-    public void setGUI(GUI gui) {
-        this.gui = gui;
-    }
-
     public boolean isMyTurn() {
         return isMyTurn;
     }
@@ -252,6 +218,10 @@ public class Client implements Runnable {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public void setUI(UI ui) {
+        this.ui = ui;
     }
 }
 
