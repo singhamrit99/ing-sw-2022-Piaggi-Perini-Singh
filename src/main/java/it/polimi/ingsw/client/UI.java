@@ -5,12 +5,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public interface UI {
-
-    /**
-     * Notifies that the rooms available have been updated
-     *
-     */
-
     void startGame() throws RemoteException;
 
     void currentPlayer(String s);
@@ -39,5 +33,8 @@ public interface UI {
 
     void removedProfessors(PropertyChangeEvent e);
 
+    /**
+     * Notifies that the rooms available have been updated
+     */
     void roomsAvailable(ArrayList<String> rooms);
 }
