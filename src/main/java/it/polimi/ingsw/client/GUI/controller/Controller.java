@@ -52,6 +52,7 @@ public interface Controller {
     static void startStage(String fxmlName, Controller controller) {
         try {
             Parent root = loadStage(fxmlName, controller);
+
             controller.start(root);
         } catch (IOException e) {
             e.printStackTrace();
