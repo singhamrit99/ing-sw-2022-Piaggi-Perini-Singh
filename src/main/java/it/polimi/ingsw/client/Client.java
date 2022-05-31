@@ -4,6 +4,7 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.Command;
 import it.polimi.ingsw.server.serverStub;
+
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -24,7 +25,7 @@ public class Client implements Runnable {
     private boolean userRegistered;
     private boolean drawnOut;
     private UI ui;
-    private int phase=0;
+    private int phase = 0;
 
     public Client(String ip, int port) {
         this.ip = ip;
@@ -53,7 +54,6 @@ public class Client implements Runnable {
         userRegistered = true;
 
         new Thread(this).start(); //it's important that the thread runs only after the correct registration!
-        ui.roomsAvailable(roomList);
     }
 
     public void deregisterClient() throws RemoteException, UserNotRegisteredException {
@@ -72,7 +72,6 @@ public class Client implements Runnable {
     public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserNotRegisteredException {
         server.joinRoom(nickname, roomName);
         clientRoom = roomName;
-
     }
 
     public ArrayList<String> requestLobbyInfo(String roomName) throws RemoteException, RoomNotExistsException {
@@ -110,6 +109,8 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
+        boolean sizeChanged = false;
+        int oldSize = 0;
         while (userRegistered) {
             try {
                 if (inGame) {
@@ -120,6 +121,10 @@ public class Client implements Runnable {
                     try {
                         inGame = server.inGame(nickname);
                         roomList = server.getRoomsList();
+                        if (roomList.size() != oldSize) {
+                            oldSize = roomList.size();
+                            ui.roomsAvailable(roomList);
+                        }
                     } catch (UserNotRegisteredException notRegisteredException) {
                         userRegistered = false;
                         break;
@@ -143,15 +148,14 @@ public class Client implements Runnable {
                 ui.currentPlayer((String) evt.getNewValue());
                 if (nickname.equals(evt.getNewValue()))
                     setMyTurn(true);
-            } else if (evt.getPropertyName().equals("change-phase"))
-            {
+            } else if (evt.getPropertyName().equals("change-phase")) {
                 System.out.println("Received change phase event\n");
                 phase++;
-                if (phase>4)
-                { phase=0;}
-                System.out.println("phase:"+ phase);
-            }
-            else if (evt.getPropertyName().equals("init")) {
+                if (phase > 4) {
+                    phase = 0;
+                }
+                System.out.println("phase:" + phase);
+            } else if (evt.getPropertyName().equals("init")) {
                 System.out.println("Request for loading received\n");
                 localModel = (StrippedModel) evt.getNewValue();
                 localModelLoaded = true;
@@ -221,6 +225,10 @@ public class Client implements Runnable {
 
     public void setDrawnOut(boolean drawnOut) {
         this.drawnOut = drawnOut;
+    }
+
+    public String getRoom(){
+        return clientRoom;
     }
 }
 

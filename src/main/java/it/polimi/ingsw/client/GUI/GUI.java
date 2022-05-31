@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.GUI;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.GUI.controller.Controller;
 import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
+import it.polimi.ingsw.client.GUI.controller.RoomController;
 import it.polimi.ingsw.client.GUI.controller.RoomListController;
 import it.polimi.ingsw.client.UI;
 import javafx.application.Application;
@@ -127,8 +128,16 @@ public class GUI implements UI{
         Platform.runLater(() -> {
             RoomListController roomListController = new RoomListController(this);
             roomListController.setRoomsList(rooms);
-
             Controller.startStage(ResourcesPath.ROOM_LIST, roomListController);
+            controller.closeStage();
+        });
+    }
+
+    public void roomJoin(ArrayList<String> players) {
+        Platform.runLater(() -> {
+            RoomController roomController = new RoomController(this);
+            roomController.setPlayersList(players);
+            Controller.startStage(ResourcesPath.ROOM_VIEW, roomController);
             controller.closeStage();
         });
     }

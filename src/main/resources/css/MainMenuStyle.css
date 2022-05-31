@@ -1,10 +1,3 @@
-.root {
-    -fx-background-image: url(../img/main-menu.jpg);
-    -fx-background-size: stretch;
-    -fx-background-repeat: no-repeat;
-    -fx-opacity: 1;
-}
-
 .error {
     -fx-border-width:2;
     -fx-border-color: red;

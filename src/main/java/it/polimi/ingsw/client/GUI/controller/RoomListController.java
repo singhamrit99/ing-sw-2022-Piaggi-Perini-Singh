@@ -1,15 +1,22 @@
 package it.polimi.ingsw.client.GUI.controller;
 
 import it.polimi.ingsw.client.GUI.GUI;
+import it.polimi.ingsw.exceptions.RoomNotExistsException;
+import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
@@ -21,7 +28,7 @@ public class RoomListController extends InitialStage implements Controller {
     private Stage stage = new Stage();
     private Scene scene;
 
-    private ArrayList<String> rooms = new ArrayList<>();
+    private ArrayList<String> rooms;
 
     @FXML
     private GridPane roomsList;
@@ -34,6 +41,7 @@ public class RoomListController extends InitialStage implements Controller {
 
     public RoomListController(GUI gui) {
         super(gui);
+        new ArrayList<>();
     }
 
     /**
@@ -95,5 +103,43 @@ public class RoomListController extends InitialStage implements Controller {
      */
     private void loadRoomsList() {
         System.out.println("loading rooms");
+
+        for (int i = 0, j = 1; i < rooms.size(); i++, j++) {
+            RowConstraints row = new RowConstraints();
+            row.setPrefHeight(40);
+            roomsList.getRowConstraints().add(row);
+
+            Text roomName = new Text();
+            roomName.setText(rooms.get(i));
+
+            Button joinRoom = new Button();
+            joinRoom.setText("Join");
+
+            joinRoom.setOnAction((event) -> {
+                try {
+                    GUI.client.requestRoomJoin(roomName.getText());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (RoomNotExistsException e) {
+                    e.printStackTrace();
+                } catch (UserNotRegisteredException e) {
+                    e.printStackTrace();
+                }
+
+                gui.stopAction();
+
+                WaitingWindowController waitingWindowController = new WaitingWindowController();
+                waitingWindowController.setMessage(WaitingMessages.CONNECTING);
+                Controller.startStage(ResourcesPath.WAITING_WINDOW, waitingWindowController);
+                GUI.controller = waitingWindowController;
+                stage.close();
+            });
+
+            roomsList.addRow(j, roomName, joinRoom);
+
+            roomsList.setHalignment(roomName, HPos.CENTER);
+            roomsList.setHalignment(joinRoom, HPos.CENTER);
+
+        }
     }
 }

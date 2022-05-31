@@ -10,6 +10,7 @@ public interface ResourcesPath {
     String MAIN_MENU = "MainMenu";
     String WAITING_WINDOW = "WaitingWindow";
     String ROOM_LIST = "RoomList";
+    String ROOM_VIEW = "RoomController";
 
     String IMAGES_PATH = "/img/";
     String IMAGES_EXTENSION = ".png";
