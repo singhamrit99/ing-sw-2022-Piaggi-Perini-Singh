@@ -455,6 +455,7 @@ public class ViewCLI implements UI {
         playAssistantCardOrder = new PlayAssistantCard(this.nickName, "Assistente" + i);
         try {
             client.performGameAction(playAssistantCardOrder);
+            turnMoves=i;
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
@@ -472,6 +473,7 @@ public class ViewCLI implements UI {
 
     public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
         do {
+            System.out.println("Press any key to continue\n");
             in.nextLine();
             printCommandHelp();
             System.out.println("Select an action: ");
@@ -605,22 +607,40 @@ public class ViewCLI implements UI {
     public void playCharacterD(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have to make a choice\n");
         //There are two cards that only need a color to work, and the effects then take place
-        //Globally.
-        playCharacterCardDOrder = new PlayCharacterCardD(nickName, id, 0);
+        //Globally. Both of them ask for colors
+        System.out.println(client.getLocalModel().getCharacters().get(id));
+        System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
+        int choice;
+        boolean invalidChoice = true;
+        do {
+             choice = in.nextInt();
+            if (choice<0||choice>4)
+            {
+                System.out.println("Invalid color! Try again.");
+                System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
+            }
+            else
+                invalidChoice=false;
+        }while(!invalidChoice);
+
+        playCharacterCardDOrder = new PlayCharacterCardD(nickName, id, choice);
         try {
-            client.performGameAction(playAssistantCardOrder);
+            client.performGameAction(playCharacterCardDOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void moveMN() {
+    public void moveMN() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("Input the number of steps you want Mother Nature to move!\n ");
         int input = in.nextInt();
         while (input < 0 || input > turnMoves) {
             System.out.println("That number is not right! Try again.\n");
             input = in.nextInt();
         }
+        moveMotherNatureOrder= new MoveMotherNature(nickName, input);
+        client.performGameAction(moveMotherNatureOrder);
+
         //We now have a valid move for Mother Nature
     }
 
@@ -636,7 +656,8 @@ public class ViewCLI implements UI {
         for (Colors c : myBoard.getEntrance().keySet()) {
             System.out.println(c + " students: " + myBoard.getEntrance().get(c) + "\n");
         }
-
+        EnumMap<Colors ,ArrayList<String>> studentsToGame = new EnumMap<>(Colors.class);
+        ArrayList<String> destinations= new ArrayList<>();
         String answer;
         String[] parts;
         String color;
@@ -656,7 +677,6 @@ public class ViewCLI implements UI {
             else
                 System.out.println("Whoops! That's not right. Try again: \n");
         } while (!isValidInputYN);
-
         //Move students to the dining room
         doItAgain = true;
         isValidInputYN = false;
@@ -674,7 +694,11 @@ public class ViewCLI implements UI {
                         studentsToMove = myBoard.getDining();
                         studentsToMove.put(stringToColor(color), studentsToMove.get(stringToColor(color)) + value);
                         movedStudents += value;
-
+                        for(int w=0;i<value;i++)
+                        {
+                            destinations.add("dining");
+                        }//Adding destinations to ArrayList structure to conform to Game logic
+                        studentsToGame= strippedToGame(studentsToMove,studentsToGame,destinations);
                         System.out.println("Do you want to move other students to the dining room?\n");
                         do {
                             answer = in.nextLine();
@@ -687,7 +711,6 @@ public class ViewCLI implements UI {
                         //Since a player can only move 3 students in a turn there needs to be a check here too
                         if (answer.equals(("n"))) {
                             doItAgain = false;
-                            myBoard.setDining(studentsToMove);
                         }
                     } else
                         System.out.println("You don't have enough students of that color! Try again.\n");
@@ -696,9 +719,9 @@ public class ViewCLI implements UI {
             } while (doItAgain && movedStudents < 3);
         }
         //End of dining room move segment
-        moveStudentsOrder = new MoveStudents(nickName, strippedToDining(studentsToMove));
-        client.performGameAction(moveStudentsOrder);
         //Move students to the islands if the player has moved less than 3 students already
+        destinations= new ArrayList<>();
+        //Resetting destinations array for students to island part
         if (movedStudents < 3) {
             do {
                 System.out.println("Type the students you want to move to the island as \"color, number, number of island\" (for example, \"RED, 1, 5)\"");
@@ -709,7 +732,6 @@ public class ViewCLI implements UI {
                 value = Integer.parseInt(parts[1]);
                 island = Integer.parseInt(parts[2]);
                 color = color.toUpperCase(Locale.ROOT);
-
                 studentsToMove = myIslands.get(island).getStudents();
 
                 if (isValidColor(color)) {
@@ -718,7 +740,12 @@ public class ViewCLI implements UI {
 
                             studentsToMove.put(stringToColor(color), myIslands.get(island).getStudents().get(stringToColor(color)) + value);
                             movedStudents += value;
-
+                            for(int w=0;i<value;i++)
+                            {
+                                destinations.add("island"+i);
+                            }
+                            //Adding destinations to ArrayList structure to conform to Game logic
+                            studentsToGame= strippedToGame(studentsToMove,studentsToGame,destinations);
                             System.out.println("Do you want to move other students to the islands?\n");
                             do {
                                 answer = in.nextLine();
@@ -740,7 +767,8 @@ public class ViewCLI implements UI {
                 } else
                     System.out.println("There is no such color as " + color + "! Try again. \n");
             } while (doItAgain);
-            moveStudentsOrder = new MoveStudents(nickName, strippedToDining(studentsToMove));
+            studentsToGame= strippedToGame(studentsToMove,studentsToGame,destinations);
+            moveStudentsOrder = new MoveStudents(nickName, studentsToGame);
             client.performGameAction(moveStudentsOrder);
         } else
             System.out.println("You already moved three students this turn\n");
@@ -852,21 +880,17 @@ public class ViewCLI implements UI {
         return Colors.BLUE;
     }
 
-    public EnumMap<Colors, ArrayList<String>> strippedToDining(EnumMap<Colors, Integer> students) {
-        EnumMap<Colors, ArrayList<String>> returnedStudents = null;
-        ArrayList<String> destinations = new ArrayList<>();
+    public EnumMap<Colors, ArrayList<String>> strippedToGame(EnumMap<Colors, Integer> students, EnumMap<Colors, ArrayList<String>> returnStudents, ArrayList<String> destination) {
+
         for (Colors c : students.keySet()) {
             //I have to count the number of students moved in the stripped class and build myself an enummap which Game can understand
-            int i = students.get(c);
-            while (i > 0) {
-                destinations.add("dining");
-                returnedStudents.put(c, destinations);
-                //TODO: this doesn't really work, have to come back to this
-            }
+
+                returnStudents.put(c, destination);
+
 
         }
 
-        return returnedStudents;
+        return returnStudents;
 
     }
 
