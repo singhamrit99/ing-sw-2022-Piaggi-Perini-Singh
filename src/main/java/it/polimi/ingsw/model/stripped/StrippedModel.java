@@ -163,8 +163,10 @@ public class StrippedModel implements Serializable {
         StrippedCloud changedCloud;
         if (evt.getOldValue() != null) {
             changedCloud = (StrippedCloud) evt.getOldValue();
+            ui.notifyCloud(evt);
         } else {
             changedCloud = (StrippedCloud) evt.getNewValue();
+            ui.notifyCloud(evt);
         }
         Optional<StrippedCloud> cloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
         if (cloudFound.isPresent()) {

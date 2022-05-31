@@ -306,7 +306,7 @@ public class Game {
      */
     public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFoundException {
         if (state == State.PLANNINGPHASE) {
-            if (nicknameCaller.equals(currentPlayer.getNickname()) && playerDrawnOut) {  //playerDrawnOut = player has drawn from bag
+            if (nicknameCaller.equals(currentPlayer.getNickname())) {  //playerDrawnOut = player has drawn from bag
                 for (Player p : players) {
                     if (p.hasPlayedAssistantInThisTurn()) {
                         if (p.getPlayedAssistantCard().getImageName().equals(nameCard)) {
@@ -349,6 +349,9 @@ public class Game {
                 for (Player p : players)
                     p.forgetAssistantCard(); //necessary to always play the AssistantCards that hasn't played by any other players during the SAME turn (for the Planning Phase)
                 state = State.ACTIONPHASE_1;
+                PropertyChangeEvent phaseChange=
+                        new PropertyChangeEvent(this, "change-phase", null,null);
+                gameListener.propertyChange(phaseChange);
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
                 currentPlayer = orderPlayers.poll(); //first player of Action Phase
             }
@@ -356,8 +359,14 @@ public class Game {
             if (!orderPlayers.isEmpty()) {
                 currentPlayer = orderPlayers.poll();
                 state = State.ACTIONPHASE_1;
+                PropertyChangeEvent phaseChange=
+                        new PropertyChangeEvent(this, "change-phase", null,null);
+                gameListener.propertyChange(phaseChange);
             } else {
                 state = State.ENDTURN;
+                PropertyChangeEvent phaseChange=
+                        new PropertyChangeEvent(this, "change-phase", null,null);
+                gameListener.propertyChange(phaseChange);
                 nextRound();
             }
         } else {
@@ -387,6 +396,9 @@ public class Game {
                 gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
+                PropertyChangeEvent phaseChange=
+                        new PropertyChangeEvent(this, "change-phase", null,null);
+                gameListener.propertyChange(phaseChange);
                 numRounds++;
                 currentPlayer = players.get(playerPlanPhase); //This is decided with the Assistant Card values and is assign in nextPlayer()
                 counterPlanningPhase = numOfPlayer - 1;
@@ -459,6 +471,9 @@ public class Game {
                 }
                 currentPlayer.moveStudents(studentsToDining, studentsToRemove);
                 state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
+                PropertyChangeEvent phaseChange=
+                        new PropertyChangeEvent(this, "change-phase", null,null);
+                gameListener.propertyChange(phaseChange);
                 if (isDiningChanged) {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
                     //notify dining change
@@ -525,6 +540,9 @@ public class Game {
                         motherNaturePosition = destinationMotherNature;
                         resolveMotherNature(destinationMotherNature);
                         state = State.ACTIONPHASE_3;
+                        PropertyChangeEvent phaseChange=
+                                new PropertyChangeEvent(this, "change-phase", null,null);
+                        gameListener.propertyChange(phaseChange);
                     } else {
                         throw new IncorrectArgumentException();
                     }

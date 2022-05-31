@@ -109,18 +109,27 @@ public class ViewCLI implements UI {
         while (client.isInGame()) {
 
             //Assistant Card play phase
-            while (!client.isMyTurn()) {
+            while (client.getPhase()==0) {
+                while (!client.isMyTurn()) {
 
-                waitForTurn();
-                //Wait for the other players to be done with their turn while I still output their moves...and no input of mine can cause trouble!
+                    //Wait for the other players to be done with their turn while I still output their moves...and no input of mine can cause trouble!
+                }
+                if (client.isMyTurn()&&!client.isDrawnOut()) {
+                    drawFromBag();}
+                if (client.isMyTurn()&&client.getPhase()==0)
+                    playAssistantCard();
+
+                Thread.sleep(400);
             }
 
-            drawFromBag();
-            playAssistantCard();
-
             //Turn phase
+            while (client.getPhase()<3) {
+                while(!client.isMyTurn())
+                {
 
-            performActionInTurn();
+                }
+                performActionInTurn();
+            }
         }
     }
 
@@ -148,6 +157,7 @@ public class ViewCLI implements UI {
     @Override
     public void notifyCloud(PropertyChangeEvent e) {
 
+        client.setDrawnOut(true);
     }
 
     @Override
@@ -462,6 +472,7 @@ public class ViewCLI implements UI {
 
     public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
         do {
+            in.nextLine();
             printCommandHelp();
             System.out.println("Select an action: ");
             String s = in.nextLine();
@@ -801,9 +812,7 @@ public class ViewCLI implements UI {
             System.out.println("Number of towers: " + island.getNumOfTowers() + "\n");
             System.out.println("Has no entry tile: " + island.isHasNoEnterTile() + "\n");
             System.out.println("Students on the island: ");
-            for (Colors c : island.getStudents().keySet()) {
-                System.out.println(c + " students: " + island.getStudents() + "\n");
-            }
+            System.out.println(" students: " + island.getStudents() + "\n");
             System.out.println("Towers: " + island.getNumOfTowers() + island.getTowersColor() + "towers \n");
         }
     }
@@ -812,9 +821,7 @@ public class ViewCLI implements UI {
         System.out.println("Number of towers: " + island.getNumOfTowers() + "\n");
         System.out.println("Has no entry tile: " + island.isHasNoEnterTile() + "\n");
         System.out.println("Students on the island: ");
-        for (Colors c : island.getStudents().keySet()) {
-            System.out.println(c + " students: " + island.getStudents() + "\n");
-        }
+        System.out.println(" students: " + island.getStudents() + "\n");
         System.out.println("Towers: " + island.getNumOfTowers() + island.getTowersColor() + "towers \n");
     }
 

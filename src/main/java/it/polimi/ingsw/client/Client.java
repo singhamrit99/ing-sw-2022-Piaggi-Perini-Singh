@@ -4,7 +4,6 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.Command;
 import it.polimi.ingsw.server.serverStub;
-
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -22,10 +21,10 @@ public class Client implements Runnable {
     private StrippedModel localModel;
     private boolean localModelLoaded;
     private boolean isMyTurn;
-
-
     private boolean userRegistered;
+    private boolean drawnOut;
     private UI ui;
+    private int phase=0;
 
     public Client(String ip, int port) {
         this.ip = ip;
@@ -127,7 +126,7 @@ public class Client implements Runnable {
                     }
                 }
                 Ping();
-                Thread.sleep(800);
+                Thread.sleep(200);
             } catch (RemoteException | LocalModelNotLoadedException | UserNotInRoomException | UserNotRegisteredException | InterruptedException e) {
                 System.err.println("Client exception: " + e);
             }
@@ -144,7 +143,15 @@ public class Client implements Runnable {
                 ui.currentPlayer((String) evt.getNewValue());
                 if (nickname.equals(evt.getNewValue()))
                     setMyTurn(true);
-            } else if (evt.getPropertyName().equals("init")) {
+            } else if (evt.getPropertyName().equals("change-phase"))
+            {
+                System.out.println("Received change phase event\n");
+                phase++;
+                if (phase>4)
+                { phase=0;}
+                System.out.println("phase:"+ phase);
+            }
+            else if (evt.getPropertyName().equals("init")) {
                 System.out.println("Request for loading received\n");
                 localModel = (StrippedModel) evt.getNewValue();
                 localModelLoaded = true;
@@ -202,6 +209,18 @@ public class Client implements Runnable {
 
     public void setInGame(boolean inGame) {
         this.inGame = inGame;
+    }
+
+    public int getPhase() {
+        return phase;
+    }
+
+    public boolean isDrawnOut() {
+        return drawnOut;
+    }
+
+    public void setDrawnOut(boolean drawnOut) {
+        this.drawnOut = drawnOut;
     }
 }
 
