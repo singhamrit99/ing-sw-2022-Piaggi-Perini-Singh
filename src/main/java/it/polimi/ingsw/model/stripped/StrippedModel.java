@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.client.UI;
-import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 
@@ -201,7 +200,7 @@ public class StrippedModel implements Serializable {
         return boards;
     }
 
-    public void setUI(UI ui){
+    public void setUI(UI ui) {
         this.ui = ui;
     }
 }
