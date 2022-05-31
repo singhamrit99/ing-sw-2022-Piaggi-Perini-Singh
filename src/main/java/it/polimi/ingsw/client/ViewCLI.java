@@ -17,8 +17,6 @@ import java.util.*;
 
 public class ViewCLI implements UI {
     Client client;
-    boolean hasGameStarted = false;
-    boolean isMyTurn;
     String nickName;
     String currentPlayer;
     int playerNumber;
@@ -287,6 +285,11 @@ public class ViewCLI implements UI {
 
     @Override
     public void roomsAvailable(ArrayList<String> rooms) {
+
+    }
+
+    @Override
+    public void roomJoin(ArrayList<String> players) {
 
     }
 
@@ -592,10 +595,6 @@ public class ViewCLI implements UI {
 
         EnumMap<Colors, Integer> students1 = null, students2 = null;
         //TODO: add students on card implementation for StrippedCharacters
-        for (Colors c : Colors.values()) {
-
-
-        }
         playCharacterCardCOrder = new PlayCharacterCardC(nickName, id, students1, students2);
         try {
             client.performGameAction(playCharacterCardCOrder);
@@ -684,7 +683,8 @@ public class ViewCLI implements UI {
             do {
                 System.out.println("Type the students you want to move to the dining room as \"color, number\"");
                 answer = in.nextLine();
-                parts = answer.split(" ");
+                answer.replaceAll("\\s+", "");
+                parts = answer.split(",");
                 color = parts[0];
                 color = color.replaceAll("[^a-zA Z0-9]", "");
                 value = Integer.parseInt(parts[1]);
