@@ -24,7 +24,7 @@ public class Client implements Runnable {
     private boolean isMyTurn;
     private boolean userRegistered;
     private boolean drawnOut;
-    private UI ui;
+    private View view;
     private int phase = 0;
 
     public Client(String ip, int port) {
@@ -72,6 +72,7 @@ public class Client implements Runnable {
     public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserNotRegisteredException {
         server.joinRoom(nickname, roomName);
         clientRoom = roomName;
+        view.roomJoin(getNicknamesInRoom(roomName));
     }
 
     public ArrayList<String> requestLobbyInfo(String roomName) throws RemoteException, RoomNotExistsException {
@@ -122,12 +123,12 @@ public class Client implements Runnable {
                         inGame = server.inGame(nickname);
                         roomList = server.getRoomsList();
                         if (first) {
-                            ui.roomsAvailable(roomList);
+                            view.roomsAvailable(roomList);
                             oldSize = roomList.size();
                             first = false;
                         } else if (roomList.size() != oldSize) {
                             oldSize = roomList.size();
-                            ui.roomsAvailable(roomList);
+                            view.roomsAvailable(roomList);
                         }
                     } catch (UserNotRegisteredException notRegisteredException) {
                         userRegistered = false;
@@ -149,7 +150,7 @@ public class Client implements Runnable {
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
         for (PropertyChangeEvent evt : evtArray) {
             if (evt.getPropertyName().equals("first-player")) {
-                ui.currentPlayer((String) evt.getNewValue());
+                view.currentPlayer((String) evt.getNewValue());
                 if (nickname.equals(evt.getNewValue()))
                     setMyTurn(true);
             } else if (evt.getPropertyName().equals("change-phase")) {
@@ -164,7 +165,7 @@ public class Client implements Runnable {
                 localModel = (StrippedModel) evt.getNewValue();
                 localModelLoaded = true;
                 System.out.println("Local model loaded\n");
-                localModel.setUI(ui);
+                localModel.setUI(view);
                 System.out.println("Game ready! Press any key to continue.\n");
             } else if (evt.getPropertyName().equals("current-player")) {
                 if (nickname.equals(evt.getNewValue()))
@@ -211,8 +212,8 @@ public class Client implements Runnable {
         return nickname;
     }
 
-    public void setUI(UI ui) {
-        this.ui = ui;
+    public void setUI(View view) {
+        this.view = view;
     }
 
     public void setInGame(boolean inGame) {

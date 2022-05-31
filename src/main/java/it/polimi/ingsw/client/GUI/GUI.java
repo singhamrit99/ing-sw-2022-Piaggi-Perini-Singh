@@ -5,7 +5,7 @@ import it.polimi.ingsw.client.GUI.controller.Controller;
 import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
 import it.polimi.ingsw.client.GUI.controller.RoomController;
 import it.polimi.ingsw.client.GUI.controller.RoomListController;
-import it.polimi.ingsw.client.UI;
+import it.polimi.ingsw.client.View;
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GUI implements UI {
+public class GUI implements View {
     public static Client client;
     public static Controller controller;
 
