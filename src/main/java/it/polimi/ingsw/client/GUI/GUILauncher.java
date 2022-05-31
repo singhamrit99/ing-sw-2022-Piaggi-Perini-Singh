@@ -31,7 +31,7 @@ public class GUILauncher extends Application implements Initializable {
     @FXML
     private TextField nicknameField;
     @FXML
-    private Button startBtn;
+    private Button startButton;
 
     @Override
     public void start(Stage menuStage) throws Exception {
@@ -56,14 +56,14 @@ public class GUILauncher extends Application implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //ErrorManager.initializeElements(nicknameField);
-        initializeConfirmButton();
+        startButtonEvent();
     }
 
     /**
-     * Sets the actions to do when confirm button is clicked
+     * Sets the actions to do when start button is clicked
      */
-    private void initializeConfirmButton() {
-        startBtn.setOnAction((event) -> {
+    private void startButtonEvent() {
+        startButton.setOnAction((event) -> {
 
             if (controlNickname()) {
                 final String nickname = nicknameField.getText();
@@ -85,7 +85,7 @@ public class GUILauncher extends Application implements Initializable {
 
                     try {
                         waitingWindowController.start(loader.load());
-                        Stage stage = (Stage) startBtn.getScene().getWindow();
+                        Stage stage = (Stage) startButton.getScene().getWindow();
                         stage.close();
                     } catch (IOException e) {
                         e.printStackTrace();
