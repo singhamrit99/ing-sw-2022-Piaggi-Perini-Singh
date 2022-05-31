@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.stripped.StrippedBoard;
 import it.polimi.ingsw.model.stripped.StrippedCharacter;
 import it.polimi.ingsw.model.stripped.StrippedIsland;
-import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.*;
 
 import java.beans.PropertyChangeEvent;
@@ -15,7 +14,7 @@ import java.rmi.RemoteException;
 import java.util.*;
 
 
-public class ViewCLI implements UI {
+public class ViewCLI implements View {
     Client client;
     boolean hasGameStarted = false;
     boolean isMyTurn;

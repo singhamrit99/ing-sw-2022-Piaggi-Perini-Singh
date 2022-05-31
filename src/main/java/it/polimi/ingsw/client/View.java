@@ -4,7 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public interface UI {
+public interface View {
     void startGame() throws RemoteException;
 
     void currentPlayer(String s);
