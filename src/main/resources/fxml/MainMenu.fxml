@@ -11,8 +11,16 @@
    <children>
       <ImageView pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
          <image>
-            <Image url="@../img/main-menu.jpg" />
+            <Image url="@../img/general/eriantys_banner_no_items.png" />
          </image></ImageView>
+      <ImageView layoutX="80.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5" scaleZ="0.5" StackPane.alignment="TOP_CENTER">
+         <image>
+            <Image url="@../img/general/eriantys_text_logo.png" />
+         </image>
+         <StackPane.margin>
+            <Insets />
+         </StackPane.margin>
+      </ImageView>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="429.0" spacing="10.0" StackPane.alignment="BOTTOM_CENTER">
          <children>
             <TextField fx:id="nicknameField" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="310.0" promptText="Insert nickname" VBox.vgrow="NEVER" />

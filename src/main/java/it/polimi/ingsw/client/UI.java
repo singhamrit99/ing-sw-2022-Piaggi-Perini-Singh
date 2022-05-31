@@ -37,4 +37,6 @@ public interface UI {
      * Notifies that the rooms available have been updated
      */
     void roomsAvailable(ArrayList<String> rooms);
+
+    void roomJoin(ArrayList<String> players);
 }
