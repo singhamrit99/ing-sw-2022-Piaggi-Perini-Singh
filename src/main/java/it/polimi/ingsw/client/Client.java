@@ -109,7 +109,7 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-        boolean sizeChanged = false;
+        boolean first = true;
         int oldSize = 0;
         while (userRegistered) {
             try {
@@ -121,7 +121,11 @@ public class Client implements Runnable {
                     try {
                         inGame = server.inGame(nickname);
                         roomList = server.getRoomsList();
-                        if (roomList.size() != oldSize) {
+                        if (first) {
+                            ui.roomsAvailable(roomList);
+                            oldSize = roomList.size();
+                            first = false;
+                        } else if (roomList.size() != oldSize) {
                             oldSize = roomList.size();
                             ui.roomsAvailable(roomList);
                         }
@@ -131,7 +135,7 @@ public class Client implements Runnable {
                     }
                 }
                 Ping();
-                Thread.sleep(200);
+                Thread.sleep(500);
             } catch (RemoteException | LocalModelNotLoadedException | UserNotInRoomException | UserNotRegisteredException | InterruptedException e) {
                 System.err.println("Client exception: " + e);
             }
@@ -227,7 +231,7 @@ public class Client implements Runnable {
         this.drawnOut = drawnOut;
     }
 
-    public String getRoom(){
+    public String getRoom() {
         return clientRoom;
     }
 }
