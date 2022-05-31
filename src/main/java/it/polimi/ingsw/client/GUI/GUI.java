@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GUI implements UI{
+public class GUI implements UI {
     public static Client client;
     public static Controller controller;
 
@@ -128,6 +128,7 @@ public class GUI implements UI{
         Platform.runLater(() -> {
             RoomListController roomListController = new RoomListController(this);
             roomListController.setRoomsList(rooms);
+
             Controller.startStage(ResourcesPath.ROOM_LIST, roomListController);
             controller.closeStage();
         });
