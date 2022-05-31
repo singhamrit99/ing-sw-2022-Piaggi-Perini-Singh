@@ -203,4 +203,6 @@ public class StrippedModel implements Serializable {
     public void setUI(UI ui) {
         this.ui = ui;
     }
+
+
 }
