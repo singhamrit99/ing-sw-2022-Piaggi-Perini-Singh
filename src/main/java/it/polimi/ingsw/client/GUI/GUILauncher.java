@@ -23,6 +23,7 @@ public class GUILauncher extends Application implements Initializable {
     public static Client client = GUI.client;
     public static WaitingWindowController waitingWindowController = null;
 
+
     public static final int MAIN_MENU_WIDTH = 1280;
     public static final int MAIN_MENU_HEIGHT = 720;
 
