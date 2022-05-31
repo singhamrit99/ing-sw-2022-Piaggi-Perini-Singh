@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.GUI.controller;
 
 import it.polimi.ingsw.client.GUI.GUI;
+import it.polimi.ingsw.exceptions.RoomNotExistsException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -11,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
@@ -45,7 +47,7 @@ public class RoomController extends InitialStage implements Controller {
      */
     @FXML
     public void initialize() {
-        loadRoomsList();
+        loadPlayersList();
        /* startGameButton.setOnAction((event) -> {
             CreateNewGameController createNewGameController = new CreateNewGameController(gui);
             createNewGameController.setRooms(rooms);
@@ -87,7 +89,11 @@ public class RoomController extends InitialStage implements Controller {
         this.players = players;
     }
 
-    private void loadRoomsList() {
-        System.out.println("loading players");
+    private void loadPlayersList() {
+        try {
+            players = GUI.client.getNicknamesInRoom(GUI.client.getRoom());
+        } catch (RemoteException | RoomNotExistsException e) {
+            e.printStackTrace();
+        }
     }
 }
