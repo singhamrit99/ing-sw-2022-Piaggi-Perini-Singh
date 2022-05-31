@@ -185,10 +185,7 @@ public class Game {
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
 
-        //notify current player
-        PropertyChangeEvent changeCurrentPlayer =
-                new PropertyChangeEvent(this, "first-player", null,currentPlayer.getNickname());
-        gameListener.propertyChange(changeCurrentPlayer);
+
     }
 
     private void initializationTilesBag() throws NegativeValueException {

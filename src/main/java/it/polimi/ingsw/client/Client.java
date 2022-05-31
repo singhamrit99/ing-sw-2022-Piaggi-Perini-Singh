@@ -153,6 +153,12 @@ public class Client implements Runnable {
                 view.currentPlayer((String) evt.getNewValue());
                 if (nickname.equals(evt.getNewValue()))
                     setMyTurn(true);
+                if (localModel != null) {
+                    localModel.updateModel(evt);
+                } else {
+                    throw new LocalModelNotLoadedException();
+                }
+
             } else if (evt.getPropertyName().equals("change-phase")) {
                 System.out.println("Received change phase event\n");
                 phase++;
@@ -164,6 +170,7 @@ public class Client implements Runnable {
                 System.out.println("Request for loading received\n");
                 localModel = (StrippedModel) evt.getNewValue();
                 localModelLoaded = true;
+
                 System.out.println("Local model loaded\n");
                 localModel.setUI(view);
                 System.out.println("Game ready! Press any key to continue.\n");

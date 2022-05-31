@@ -146,8 +146,7 @@ public class ViewCLI implements View {
     }
 
     @Override
-    public void currentPlayer(String s) {
-        currentPlayer = s;
+    public void currentPlayer(String s){
         System.out.println("It's now " + s + "'s turn!\n");
     }
 
@@ -159,7 +158,7 @@ public class ViewCLI implements View {
 
     @Override
     public void deckChange(String assistantCard) {
-        System.out.println(currentPlayer + " has played " + assistantCard);
+        System.out.println(client.getLocalModel().getCurrentPlayer() + " has played " + assistantCard);
     }
 
     @Override
@@ -637,7 +636,12 @@ public class ViewCLI implements View {
             input = in.nextInt();
         }
         moveMotherNatureOrder= new MoveMotherNature(nickName, input);
-        client.performGameAction(moveMotherNatureOrder);
+        try {
+            client.performGameAction(moveMotherNatureOrder);
+        }catch (IncorrectStateException e)
+        {
+            System.out.println("You can't do that yet!\n");
+        }
 
         //We now have a valid move for Mother Nature
     }
@@ -682,8 +686,7 @@ public class ViewCLI implements View {
             do {
                 System.out.println("Type the students you want to move to the dining room as \"color, number\"");
                 answer = in.nextLine();
-                answer.replaceAll("\\s+", "");
-                parts = answer.split(",");
+                parts = answer.split(" ");
                 color = parts[0];
                 color = color.replaceAll("[^a-zA Z0-9]", "");
                 value = Integer.parseInt(parts[1]);
@@ -728,6 +731,8 @@ public class ViewCLI implements View {
                 parts = answer.split(" ");
                 color = parts[0];
                 color = color.replaceAll("[^a-zA Z0-9]", "");
+                parts[1]=parts[1].replaceAll(", $", "");
+                parts[2]=parts[2].replaceAll("[^\\d]", "");
                 value = Integer.parseInt(parts[1]);
                 island = Integer.parseInt(parts[2]);
                 color = color.toUpperCase(Locale.ROOT);
@@ -863,6 +868,7 @@ public class ViewCLI implements View {
 
     public Colors stringToColor(String input) {
         input = input.toLowerCase(Locale.ROOT);
+        int a;
         switch (input) {
             case "red":
                 return Colors.RED;
@@ -875,8 +881,9 @@ public class ViewCLI implements View {
             case "pink":
                 return Colors.PINK;
             default:
+                return Colors.YELLOW;
         }
-        return Colors.BLUE;
+
     }
 
     public EnumMap<Colors, ArrayList<String>> strippedToGame(EnumMap<Colors, Integer> students, EnumMap<Colors, ArrayList<String>> returnStudents, ArrayList<String> destination) {
