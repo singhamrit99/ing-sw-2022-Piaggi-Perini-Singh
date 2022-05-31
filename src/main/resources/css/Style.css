@@ -8,13 +8,11 @@
 }
 
 .title {
-    -fx-fill: #fff;
-    -fx-font-family: "Courier New";
+    -fx-fill: #000;
+    -fx-font-family: "Rockwell Extra Bold";
     -fx-font-size: 60;
-    -fx-font-weight: bold;
     -fx-stroke: #000;
-    -fx-stroke-width: 2;
-    /*-fx-underline: true;*/
+    -fx-stroke-width: 0;
 }
 
 .button.confirm-button, .button.cancel-button {
