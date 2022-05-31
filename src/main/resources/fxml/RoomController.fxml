@@ -27,8 +27,8 @@
                 <RowConstraints minHeight="40.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Player Name" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <Text layoutX="36.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="NAME" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <Text layoutX="36.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TEAM" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
          </children>
