@@ -6,8 +6,10 @@ import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
 import it.polimi.ingsw.client.GUI.controller.RoomController;
 import it.polimi.ingsw.client.GUI.controller.RoomListController;
 import it.polimi.ingsw.client.View;
+import it.polimi.ingsw.server.Room;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
@@ -16,7 +18,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GUI implements View {
     public static Client client;
+
     public static Controller controller;
+    public RoomListController roomListController;
 
     private final AtomicBoolean isDoing;
 
@@ -31,6 +35,7 @@ public class GUI implements View {
      */
     public void start() {
         Application.launch(GUILauncher.class);
+        RoomListController roomListController = new RoomListController(this);
     }
 
     public void startAction() {
@@ -125,13 +130,19 @@ public class GUI implements View {
      * @param rooms list of rooms
      */
     public void roomsAvailable(ArrayList<String> rooms) {
-        Platform.runLater(() -> {
-            RoomListController roomListController = new RoomListController(this);
-            roomListController.setRoomsList(rooms);
+        if (RoomListController.isOpened()) {
+            Platform.runLater(() -> {
+                roomListController.update(rooms);
+            });
+        } else {
+            Platform.runLater(() -> {
+                roomListController = new RoomListController(this);
+                roomListController.setRoomsList(rooms);
 
-            Controller.startStage(ResourcesPath.ROOM_LIST, roomListController);
-            controller.closeStage();
-        });
+                Controller.startStage(ResourcesPath.ROOM_LIST, roomListController);
+                controller.closeStage();
+            });
+        }
     }
 
     public void roomJoin(ArrayList<String> players) {

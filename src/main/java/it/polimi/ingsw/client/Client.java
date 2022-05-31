@@ -4,6 +4,7 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.Command;
 import it.polimi.ingsw.server.serverStub;
+import javafx.collections.ObservableList;
 
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;

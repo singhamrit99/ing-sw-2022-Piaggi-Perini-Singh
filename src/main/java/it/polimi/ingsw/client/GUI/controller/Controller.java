@@ -58,4 +58,8 @@ public interface Controller {
             e.printStackTrace();
         }
     }
+
+    static void updateStage(){
+
+    }
 }

@@ -4,9 +4,9 @@ import it.polimi.ingsw.client.GUI.GUI;
 import it.polimi.ingsw.exceptions.RoomNotExistsException;
 import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Amrit
@@ -28,13 +29,15 @@ public class RoomListController extends InitialStage implements Controller {
     private Stage stage = new Stage();
     private Scene scene;
 
+    protected static AtomicBoolean opened = new AtomicBoolean(false);
+
     private ArrayList<String> rooms;
 
     @FXML
     private GridPane roomsList;
 
     @FXML
-    private Button newGameButton;
+    private Button createRoomButton;
 
     @FXML
     private Button exitButton;
@@ -50,7 +53,7 @@ public class RoomListController extends InitialStage implements Controller {
     @FXML
     public void initialize() {
         loadRoomsList();
-       /* newGameButton.setOnAction((event) -> {
+       /*createRoomButton.setOnAction((event) -> {
             CreateNewGameController createNewGameController = new CreateNewGameController(gui);
             createNewGameController.setRooms(rooms);
             Controller.startStage(ResourcesPath.CREATE_NEW_GAME_ACTION, createNewGameController);
@@ -59,7 +62,6 @@ public class RoomListController extends InitialStage implements Controller {
         });*/
 
         exitButton.setOnAction((event) -> {
-            //GUILauncher.observer.quit();
             stage.close();
             Platform.exit();
             System.exit(0);
@@ -71,6 +73,8 @@ public class RoomListController extends InitialStage implements Controller {
      */
     @Override
     public void start(Parent root) throws IOException {
+        opened.set(true);
+
         gui.startAction();
         stage.setTitle("Eryantis");
         stage.setResizable(false);
@@ -104,7 +108,9 @@ public class RoomListController extends InitialStage implements Controller {
     private void loadRoomsList() {
         System.out.println("loading rooms");
 
-        for (int i = 0, j = 1; i < rooms.size(); i++, j++) {
+        roomsList.getChildren().clear();
+
+        for (int i = 0; i < rooms.size(); i++) {
             RowConstraints row = new RowConstraints();
             row.setPrefHeight(40);
             roomsList.getRowConstraints().add(row);
@@ -135,11 +141,25 @@ public class RoomListController extends InitialStage implements Controller {
                 stage.close();
             });
 
-            roomsList.addRow(j, roomName, joinRoom);
+            roomsList.addRow(i + 1, roomName, joinRoom);
 
             roomsList.setHalignment(roomName, HPos.CENTER);
             roomsList.setHalignment(joinRoom, HPos.CENTER);
-
         }
+    }
+
+    /**
+     * @return true if the personal board window is opened
+     */
+    public static boolean isOpened() {
+        return opened.get();
+    }
+
+    /**
+     * Updates all the elements of personal board using the updated local model and local player
+     */
+    public void update(ArrayList<String> rooms) {
+        setRoomsList(rooms);
+        loadRoomsList();
     }
 }
