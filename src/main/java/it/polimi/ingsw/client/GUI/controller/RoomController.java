@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -25,6 +26,9 @@ public class RoomController extends InitialStage implements Controller {
 
     @FXML
     private GridPane playersList;
+
+    @FXML
+    private Text roomTitle;
 
     @FXML
     private Button startGameButton;
@@ -63,10 +67,10 @@ public class RoomController extends InitialStage implements Controller {
     @Override
     public void start(Parent root) throws IOException {
         gui.startAction();
-        //stage.setTitle("Eryantis"); room name
+        stage.setTitle("Eryantis");
         stage.setResizable(true);
         this.scene = new Scene(root);
-
+        roomTitle.setText(GUI.client.getRoom());
         stage.setScene(scene);
         stage.show();
     }

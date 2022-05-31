@@ -72,7 +72,6 @@ public class Client implements Runnable {
     public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserNotRegisteredException {
         server.joinRoom(nickname, roomName);
         clientRoom = roomName;
-
     }
 
     public ArrayList<String> requestLobbyInfo(String roomName) throws RemoteException, RoomNotExistsException {
@@ -226,6 +225,10 @@ public class Client implements Runnable {
 
     public void setDrawnOut(boolean drawnOut) {
         this.drawnOut = drawnOut;
+    }
+
+    public String getRoom(){
+        return clientRoom;
     }
 }
 
