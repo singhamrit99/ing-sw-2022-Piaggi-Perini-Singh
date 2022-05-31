@@ -1,23 +1,16 @@
 package it.polimi.ingsw.client.GUI.controller;
 
 import it.polimi.ingsw.client.GUI.GUI;
-import it.polimi.ingsw.client.GUI.GUILauncher;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * @author Amrit
@@ -37,7 +30,7 @@ public class RoomListController extends InitialStage implements Controller {
     private Button newGameButton;
 
     @FXML
-    private Button cancelButton;
+    private Button exitButton;
 
     public RoomListController(GUI gui) {
         super(gui);
@@ -57,7 +50,7 @@ public class RoomListController extends InitialStage implements Controller {
             closeStage();
         });*/
 
-        cancelButton.setOnAction((event) -> {
+        exitButton.setOnAction((event) -> {
             //GUILauncher.observer.quit();
             stage.close();
             Platform.exit();
@@ -71,7 +64,7 @@ public class RoomListController extends InitialStage implements Controller {
     @Override
     public void start(Parent root) throws IOException {
         gui.startAction();
-        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setTitle("Eryantis");
         stage.setResizable(false);
 
         this.scene = new Scene(root);
