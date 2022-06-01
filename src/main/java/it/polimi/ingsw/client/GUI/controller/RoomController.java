@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client.GUI.controller;
 
 import it.polimi.ingsw.client.GUI.GUI;
-import it.polimi.ingsw.exceptions.RoomNotExistsException;
-import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -19,7 +17,6 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
