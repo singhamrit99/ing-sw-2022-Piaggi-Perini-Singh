@@ -6,10 +6,8 @@ import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
 import it.polimi.ingsw.client.GUI.controller.RoomController;
 import it.polimi.ingsw.client.GUI.controller.RoomListController;
 import it.polimi.ingsw.client.View;
-import it.polimi.ingsw.server.Room;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
@@ -35,7 +33,6 @@ public class GUI implements View {
      */
     public void start() {
         Application.launch(GUILauncher.class);
-        RoomListController roomListController = new RoomListController(this);
     }
 
     public void startAction() {
