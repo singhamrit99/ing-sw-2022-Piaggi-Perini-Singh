@@ -7,39 +7,40 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="mainMenuStage" minHeight="-Infinity" prefHeight="600.0" prefWidth="740.0" styleClass="root" stylesheets="@../css/MainMenuStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.GUI.GUILauncher">
-   <children>
-      <ImageView pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
-         <image>
-            <Image url="@../img/general/eriantys_banner_no_items.png" />
-         </image></ImageView>
-      <ImageView layoutX="80.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5" scaleZ="0.5" StackPane.alignment="TOP_CENTER">
-         <image>
-            <Image url="@../img/general/eriantys_text_logo.png" />
-         </image>
-         <StackPane.margin>
-            <Insets />
-         </StackPane.margin>
-      </ImageView>
-      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="429.0" spacing="10.0" StackPane.alignment="BOTTOM_CENTER">
-         <children>
-            <TextField fx:id="nicknameField" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="310.0" promptText="Insert nickname" VBox.vgrow="NEVER" />
-            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="310.0">
-               <children>
-                  <Button fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="130.0" text="Start Game" textAlignment="CENTER" textFill="WHITE">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-               </children>
-            </StackPane>
-         </children>
-         <padding>
-            <Insets bottom="20.0" />
-         </padding>
-      </VBox>
-   </children>
+<StackPane fx:id="mainMenuStage" minHeight="-Infinity" prefHeight="600.0" prefWidth="740.0" styleClass="root" stylesheets="@../css/MainMenuStyle.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="it.polimi.ingsw.client.GUI.GUILauncher">
+    <children>
+        <ImageView pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+            <image>
+                <Image url="@../img/general/eriantys_banner_no_items.png"/>
+            </image>
+        </ImageView>
+        <ImageView layoutX="80.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5" scaleZ="0.5" StackPane.alignment="TOP_CENTER">
+            <image>
+                <Image url="@../img/general/eriantys_text_logo.png"/>
+            </image>
+            <StackPane.margin>
+                <Insets/>
+            </StackPane.margin>
+        </ImageView>
+        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="429.0" spacing="10.0" StackPane.alignment="BOTTOM_CENTER">
+            <children>
+                <TextField fx:id="nicknameField" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="310.0" promptText="Insert nickname" VBox.vgrow="NEVER"/>
+                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="310.0">
+                    <children>
+                        <Button fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="130.0" text="Start Game" textAlignment="CENTER" textFill="WHITE">
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                            <font>
+                                <Font size="18.0"/>
+                            </font>
+                        </Button>
+                    </children>
+                </StackPane>
+            </children>
+            <padding>
+                <Insets bottom="20.0"/>
+            </padding>
+        </VBox>
+    </children>
 </StackPane>
