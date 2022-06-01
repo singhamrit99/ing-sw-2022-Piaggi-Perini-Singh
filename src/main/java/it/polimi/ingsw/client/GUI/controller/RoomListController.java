@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.GUI.GUI;
 import it.polimi.ingsw.exceptions.RoomNotExistsException;
 import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.Parent;
@@ -53,13 +52,13 @@ public class RoomListController extends InitialStage implements Controller {
     @FXML
     public void initialize() {
         loadRoomsList();
-       /*createRoomButton.setOnAction((event) -> {
+        createRoomButton.setOnAction((event) -> {
             CreateNewGameController createNewGameController = new CreateNewGameController(gui);
             createNewGameController.setRooms(rooms);
-            Controller.startStage(ResourcesPath.CREATE_NEW_GAME_ACTION, createNewGameController);
+            Controller.startStage(ResourcesPath.CREATE_NEW_GAME, createNewGameController);
             gui.stopAction();
             closeStage();
-        });*/
+        });
 
         exitButton.setOnAction((event) -> {
             stage.close();
@@ -79,8 +78,7 @@ public class RoomListController extends InitialStage implements Controller {
         stage.setTitle("Eryantis");
         stage.setResizable(false);
 
-        this.scene = new Scene(root);
-
+        scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
@@ -106,10 +104,6 @@ public class RoomListController extends InitialStage implements Controller {
      * Loads the list of rooms available
      */
     private void loadRoomsList() {
-        System.out.println("loading rooms");
-
-        roomsList.getChildren().clear();
-
         for (int i = 0; i < rooms.size(); i++) {
             RowConstraints row = new RowConstraints();
             row.setPrefHeight(40);
@@ -156,9 +150,10 @@ public class RoomListController extends InitialStage implements Controller {
     }
 
     /**
-     * Updates all the elements of personal board using the updated local model and local player
+     * Updates all the elements of school board
      */
     public void update(ArrayList<String> rooms) {
+        roomsList.getChildren().remove(3, roomsList.getChildren().size());
         setRoomsList(rooms);
         loadRoomsList();
     }
