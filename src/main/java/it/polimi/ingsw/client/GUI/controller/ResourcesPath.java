@@ -11,7 +11,11 @@ public interface ResourcesPath {
     String WAITING_WINDOW = "WaitingWindow";
     String ROOM_LIST = "RoomList";
     String ROOM_VIEW = "RoomController";
+    String CREATE_NEW_GAME = "CreateNewGame";
 
     String IMAGES_PATH = "/img/";
     String IMAGES_EXTENSION = ".png";
+
+    String CSS_PATH = "/css/";
+    String CSS_EXTENSION = ".css";
 }

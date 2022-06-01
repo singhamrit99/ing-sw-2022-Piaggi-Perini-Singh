@@ -4,7 +4,6 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.Command;
 import it.polimi.ingsw.server.serverStub;
-import javafx.collections.ObservableList;
 
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
@@ -68,6 +67,11 @@ public class Client implements Runnable {
     public void createRoom(String roomName) throws RemoteException, UserNotRegisteredException, RoomAlreadyExistsException {
         server.createRoom(nickname, roomName);
         clientRoom = roomName;
+        try {
+            view.roomJoin(server.getPlayers(roomName));
+        } catch (RoomNotExistsException e) {
+            e.printStackTrace();
+        }
     }
 
     public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserNotRegisteredException {
