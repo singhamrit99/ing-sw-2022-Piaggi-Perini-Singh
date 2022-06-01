@@ -26,6 +26,7 @@ public class Client implements Runnable {
     private boolean drawnOut;
     private View view;
     private int phase = 0;
+    private boolean returnLobby;
 
     public Client(String ip, int port) {
         this.ip = ip;
@@ -102,6 +103,7 @@ public class Client implements Runnable {
         } else {
             server.leaveRoom(nickname);
             clientRoom = null;
+            view.roomsAvailable(roomList);
         }
     }
 
@@ -131,9 +133,10 @@ public class Client implements Runnable {
                             view.roomsAvailable(roomList);
                             oldSize = roomList.size();
                             first = false;
-                        } else if (roomList.size() != oldSize) {
+                        } else if (roomList.size() != oldSize || returnLobby) {
                             oldSize = roomList.size();
                             view.roomsAvailable(roomList);
+                            returnLobby = false;
                         }
                     } catch (UserNotRegisteredException notRegisteredException) {
                         userRegistered = false;

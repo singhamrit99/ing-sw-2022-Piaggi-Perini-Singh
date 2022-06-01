@@ -70,6 +70,7 @@ public class GUILauncher extends Application implements Initializable {
                 final String nickname = nicknameField.getText();
 
                 try {
+                    GUI.view = "lobby";
                     client.registerClient(nickname);
                 } catch (Exception e) {
                     e.printStackTrace();

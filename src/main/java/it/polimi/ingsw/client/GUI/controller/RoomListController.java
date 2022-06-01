@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Amrit
  * Class that shows all the game rooms availables to join
  */
-
 public class RoomListController extends InitialStage implements Controller {
     private Stage stage = new Stage();
     private Scene scene;
@@ -53,6 +52,7 @@ public class RoomListController extends InitialStage implements Controller {
     public void initialize() {
         loadRoomsList();
         createRoomButton.setOnAction((event) -> {
+            GUI.view = "new_room";
             CreateNewGameController createNewGameController = new CreateNewGameController(gui);
             createNewGameController.setRooms(rooms);
             Controller.startStage(ResourcesPath.CREATE_NEW_GAME, createNewGameController);
@@ -61,6 +61,7 @@ public class RoomListController extends InitialStage implements Controller {
         });
 
         exitButton.setOnAction((event) -> {
+            GUI.view = "";
             stage.close();
             Platform.exit();
             System.exit(0);
@@ -88,6 +89,7 @@ public class RoomListController extends InitialStage implements Controller {
      */
     @Override
     public void closeStage() {
+        opened.set(false);
         stage.close();
     }
 
@@ -117,6 +119,7 @@ public class RoomListController extends InitialStage implements Controller {
 
             joinRoom.setOnAction((event) -> {
                 try {
+                    GUI.view = "room";
                     GUI.client.requestRoomJoin(roomName.getText());
                 } catch (RemoteException e) {
                     e.printStackTrace();

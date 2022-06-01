@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.GUI.controller;
 
 import it.polimi.ingsw.client.GUI.GUI;
+import it.polimi.ingsw.exceptions.UserNotInRoomException;
+import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -17,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
@@ -57,7 +60,7 @@ public class RoomController extends InitialStage implements Controller {
      * {@inheritDoc}
      */
     @FXML
-    public void initialize()  {
+    public void initialize() {
         //Importing towers image
         try {
             blackTowerImage = new Image(new FileInputStream("src/main/resources/img/towers/black_tower.png"));
@@ -67,7 +70,6 @@ public class RoomController extends InitialStage implements Controller {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
 
         loadPlayersList();
        /* startGameButton.setOnAction((event) -> {
@@ -79,9 +81,20 @@ public class RoomController extends InitialStage implements Controller {
         });*/
 
         leaveButton.setOnAction((event) -> {
-            stage.close();
-            Platform.exit();
-            System.exit(0);
+            try {
+                System.out.println("OOOOOOOO");
+                GUI.view = "lobby";
+                GUI.client.leaveRoom();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (UserNotInRoomException e) {
+                e.printStackTrace();
+            } catch (UserNotRegisteredException e) {
+                e.printStackTrace();
+            }
+
+            gui.stopAction();
+            closeStage();
         });
     }
 
@@ -115,23 +128,28 @@ public class RoomController extends InitialStage implements Controller {
         ImageView blackTeam = new ImageView(blackTowerImage);
         ImageView whiteTeam = new ImageView(whiteTowerImage);
         ImageView greyTeam = new ImageView(greyTowerImage);
-        ImageView team = blackTeam;
+
         for (int i = 0; i < players.size(); i++) {
-            if(players.size()==3){
-                if(i==2)team = greyTeam;
-            }
-            else{
-                if(i%2==1)team = blackTeam;
+            ImageView team = blackTeam;
+            if (players.size() == 3) {
+                if (i == 2) team = greyTeam;
+            } else {
+                if (i % 2 == 1) team = blackTeam;
                 else team = whiteTeam;
             }
+
             team.setFitHeight(40);
             team.setFitWidth(40);
+
             RowConstraints row = new RowConstraints();
             row.setPrefHeight(40);
+
             playersList.getRowConstraints().add(row);
             Text playerName = new Text();
             playerName.setText(players.get(i));
-            playersList.addRow(i+1, playerName, team);
+
+            playersList.addRow(i + 1, playerName, team);
+
             playersList.setHalignment(playerName, HPos.CENTER);
             playersList.setHalignment(team, HPos.CENTER);
         }

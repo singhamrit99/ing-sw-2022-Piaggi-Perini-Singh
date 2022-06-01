@@ -51,6 +51,7 @@ public class CreateNewGameController extends InitialStage implements Controller 
      */
     private void initializeCancelButton() {
         cancelButton.setOnAction((event) -> {
+            GUI.view = "lobby";
             RoomListController roomListController = new RoomListController(gui);
             roomListController.setRoomsList(rooms);
             Controller.startStage(ResourcesPath.ROOM_LIST, roomListController);
@@ -64,8 +65,9 @@ public class CreateNewGameController extends InitialStage implements Controller 
      */
     private void initializeConfirmButton() {
         createNewGameButton.setOnAction((event) -> {
-            if (!roomName.getText().equals("")){
+            if (!roomName.getText().equals("")) {
                 try {
+                    GUI.view = "room";
                     GUI.client.createRoom(roomName.getText());
                 } catch (RemoteException e) {
                     e.printStackTrace();
