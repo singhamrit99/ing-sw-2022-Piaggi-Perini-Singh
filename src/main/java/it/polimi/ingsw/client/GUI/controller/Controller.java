@@ -1,65 +1,33 @@
 package it.polimi.ingsw.client.GUI.controller;
 
+import it.polimi.ingsw.client.GUI.GUILauncher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
 /**
  * @author Amrit
- * Interface that defines methods to control JavaFX window interactions
  */
 public interface Controller {
-    /**
-     * Open a new window on the same thread
-     * @param root content of FXML file loaded using FXMLoader
-     * @throws IOException
-     */
-    void start(Parent root) throws IOException;
 
-    /**
-     * Load and set up the window's elements
-     */
     @FXML
     void initialize();
 
-    /**
-     * Close the current window
-     */
-    void closeStage();
-
-    /**
-     * Load the content of FXML file and set up its controller
-     * @param fxmlName name of FXML file
-     * @param controller object that controls the window interactions
-     * @return the FXML file content
-     * @throws IOException
-     */
-    static Parent loadStage(String fxmlName, Controller controller) throws IOException {
-        String filePath = ResourcesPath.FXML_FILE_PATH + fxmlName + ResourcesPath.FILE_EXTENSION;
+    static void load(String sceneName, Controller controller) {
+        String filePath = ResourcesPath.FXML_FILE_PATH + sceneName + ResourcesPath.FILE_EXTENSION;
         FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
         loader.setController(controller);
 
-        return loader.load();
-    }
-
-    /**
-     * Load the content of FXML file, set up its controller and open a new window
-     * @param fxmlName name of FXML file
-     * @param controller object that controls the window interactions
-     */
-    static void startStage(String fxmlName, Controller controller) {
+        Stage mainWindow = GUILauncher.mainWindow;
         try {
-            Parent root = loadStage(fxmlName, controller);
-
-            controller.start(root);
+            Scene sceneRooms = new Scene(loader.load());
+            mainWindow.setScene(sceneRooms);
+            mainWindow.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-    }
-
-    static void updateStage(){
-
     }
 }
