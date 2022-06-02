@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.stripped;
 
-import it.polimi.ingsw.client.View;
+import it.polimi.ingsw.client.UI;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 
@@ -17,7 +17,7 @@ public class StrippedModel implements Serializable {
     final private ArrayList<StrippedIsland> islands;
     private String currentPlayer;
     private String winnerTeam;
-    private View view;
+    private UI UI;
 
     public ArrayList<AssistantCardDeck> getAssistantDecks() {
         return assistantDecks;
@@ -63,7 +63,7 @@ public class StrippedModel implements Serializable {
                 break;
             case "game-over":
                 winnerTeam = (String) evt.getNewValue();
-                view.gameOver(winnerTeam);
+                UI.gameOver(winnerTeam);
                 break;
             default:
                 System.out.println("scrivere una exception sensata"); //TODO
@@ -78,7 +78,7 @@ public class StrippedModel implements Serializable {
             assistantDecks.remove(deckToModify);
             assistantDecks.add((AssistantCardDeck) evt.getNewValue());
             String playedCard=(String) evt.getOldValue();
-            view.deckChange(playedCard);
+            UI.deckChange(playedCard);
         }
     }
 
@@ -89,19 +89,19 @@ public class StrippedModel implements Serializable {
             switch (evt.getPropertyName()) {
                 case "entrance":
                     boardToModify.get().setEntrance((EnumMap<Colors, Integer>) evt.getNewValue());
-                    view.entranceChanged(evt);
+                    UI.entranceChanged(evt);
                     break;
                 case "dining":
                     boardToModify.get().setDining((EnumMap<Colors, Integer>) evt.getNewValue());
-                    view.diningChange(evt);
+                    UI.diningChange(evt);
                     break;
                 case "towers":
                     boardToModify.get().setNumberOfTowers((int) evt.getNewValue());
-                    view.towersEvent(evt);
+                    UI.towersEvent(evt);
                     break;
                 case "coins":
                     boardToModify.get().setCoins((int) evt.getNewValue());
-                    view.coinsChanged(evt);
+                    UI.coinsChanged(evt);
                     break;
                 case "professorTable":
                     boardToModify.get().setProfessorsTable((ArrayList<Colors>) evt.getNewValue());
@@ -144,14 +144,14 @@ public class StrippedModel implements Serializable {
             if (evt.getNewValue() != null) {
                 islands.add((StrippedIsland) evt.getNewValue());
                 if(evt.getPropertyName().equals("island"))
-                view.islandChange(evt);
+                UI.islandChange(evt);
                 else if(evt.getPropertyName().equals("island-conquest"))
                 {
-                    view.islandConquest(evt);
+                    UI.islandConquest(evt);
                 }
                 else if(evt.getPropertyName().equals("island-merged"))
                 {
-                    view.islandMerged(evt);
+                    UI.islandMerged(evt);
                 }
             }
         } else {
@@ -163,10 +163,10 @@ public class StrippedModel implements Serializable {
         StrippedCloud changedCloud;
         if (evt.getOldValue() != null) {
             changedCloud = (StrippedCloud) evt.getOldValue();
-            view.notifyCloud(evt);
+            UI.notifyCloud(evt);
         } else {
             changedCloud = (StrippedCloud) evt.getNewValue();
-            view.notifyCloud(evt);
+            UI.notifyCloud(evt);
         }
         Optional<StrippedCloud> cloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
         if (cloudFound.isPresent()) {
@@ -201,8 +201,8 @@ public class StrippedModel implements Serializable {
         return boards;
     }
 
-    public void setUI(View view) {
-        this.view = view;
+    public void setUI(UI UI) {
+        this.UI = UI;
     }
 
 
