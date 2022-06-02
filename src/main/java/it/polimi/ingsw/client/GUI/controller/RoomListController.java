@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class RoomListController extends InitialStage implements Controller {
     protected static AtomicBoolean opened = new AtomicBoolean(false);
-
     private ArrayList<String> rooms;
 
     @FXML
