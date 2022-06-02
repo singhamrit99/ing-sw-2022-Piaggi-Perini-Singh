@@ -1,16 +1,15 @@
 package it.polimi.ingsw.client.GUI;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.GUI.controller.*;
+import it.polimi.ingsw.client.GUI.controller.Controller;
+import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
+import it.polimi.ingsw.client.GUI.controller.RoomController;
+import it.polimi.ingsw.client.GUI.controller.RoomListController;
 import it.polimi.ingsw.client.View;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 import java.beans.PropertyChangeEvent;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -34,6 +33,32 @@ public class GUI implements View {
      */
     public void start() {
         Application.launch(GUILauncher.class);
+    }
+
+    public void roomsAvailable(ArrayList<String> rooms) {
+        if (view.equals("lobby")) {
+            if (RoomListController.isOpened()) {
+                Platform.runLater(() -> {
+                    roomListController.update(rooms);
+                });
+            } else {
+                Platform.runLater(() -> {
+                    roomListController = new RoomListController(this);
+                    roomListController.setRoomsList(rooms);
+                    Controller.load(ResourcesPath.ROOM_LIST, roomListController);
+                });
+            }
+        }
+    }
+
+    public void roomJoin(ArrayList<String> players) {
+        if (view.equals("room")) {
+            Platform.runLater(() -> {
+                RoomController roomController = new RoomController(this);
+                roomController.setPlayersList(players);
+                Controller.load(ResourcesPath.ROOM_VIEW, roomController);
+            });
+        }
     }
 
     public void startAction() {
@@ -122,44 +147,5 @@ public class GUI implements View {
 
     }
 
-    /**
-     * Starts the window that shows the list of rooms available
-     *
-     * @param rooms list of rooms
-     */
-    public void roomsAvailable(ArrayList<String> rooms) {
-        if (view.equals("lobby")) {
-            if (RoomListController.isOpened()) {
-                Platform.runLater(() -> {
-                    roomListController.update(rooms);
-                });
-            } else {
-                Platform.runLater(() -> {
-                    roomListController = new RoomListController(this);
-                    roomListController.setRoomsList(rooms);
-                    String filePath = ResourcesPath.FXML_FILE_PATH + ResourcesPath.ROOM_LIST + ResourcesPath.FILE_EXTENSION;
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
-                    Stage mainWindow = GUILauncher.mainWindow;
-                    try {
-                        Scene sceneRooms = new Scene(loader.load());
-                        mainWindow.setScene(sceneRooms);
-                        mainWindow.show();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            }
-        }
-    }
 
-    public void roomJoin(ArrayList<String> players) {
-        if (view.equals("room")) {
-            Platform.runLater(() -> {
-                RoomController roomController = new RoomController(this);
-                roomController.setPlayersList(players);
-                Controller.startStage(ResourcesPath.ROOM_VIEW, roomController);
-                controller.closeStage();
-            });
-        }
-    }
 }

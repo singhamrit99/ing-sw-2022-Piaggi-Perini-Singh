@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.GUI;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.GUI.controller.*;
+import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -15,18 +15,14 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class GUILauncher extends Application implements Initializable {
-
     public static Client client = GUI.client;
-    public static WaitingWindowController waitingWindowController = null;
-
     public static Stage mainWindow;
+
     public static final int MAIN_MENU_WIDTH = 1280;
     public static final int MAIN_MENU_HEIGHT = 720;
 
@@ -58,7 +54,6 @@ public class GUILauncher extends Application implements Initializable {
         Scene scene = new Scene(root);
         menuStage.setScene(scene);
         menuStage.show();
-
     }
 
     @Override
@@ -72,7 +67,6 @@ public class GUILauncher extends Application implements Initializable {
      */
     private void startButtonEvent() {
         startButton.setOnAction((event) -> {
-
             if (controlNickname()) {
                 final String nickname = nicknameField.getText();
 
@@ -98,7 +92,6 @@ public class GUILauncher extends Application implements Initializable {
             //ErrorManager.setError(nicknameField);
             return false;
         }
-
         return true;
     }
 }

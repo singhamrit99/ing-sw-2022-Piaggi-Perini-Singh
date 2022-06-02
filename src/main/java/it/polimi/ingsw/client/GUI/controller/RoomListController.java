@@ -6,15 +6,11 @@ import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,9 +20,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Class that shows all the game rooms availables to join
  */
 public class RoomListController extends InitialStage implements Controller {
-    private Stage stage = new Stage();
-    private Scene scene;
-
     protected static AtomicBoolean opened = new AtomicBoolean(false);
 
     private ArrayList<String> rooms;
@@ -45,66 +38,45 @@ public class RoomListController extends InitialStage implements Controller {
         new ArrayList<>();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @FXML
     public void initialize() {
+        opened.set(true);
+        gui.startAction();
         loadRoomsList();
         createRoomButton.setOnAction((event) -> {
             GUI.view = "new_room";
+            opened.set(false);
+            gui.stopAction();
             CreateNewGameController createNewGameController = new CreateNewGameController(gui);
             createNewGameController.setRooms(rooms);
-            Controller.startStage(ResourcesPath.CREATE_NEW_GAME, createNewGameController);
-            gui.stopAction();
-            closeStage();
+            Controller.load(ResourcesPath.CREATE_NEW_GAME, createNewGameController);
+
+            /*String filePath = ResourcesPath.FXML_FILE_PATH + ResourcesPath.CREATE_NEW_GAME + ResourcesPath.FILE_EXTENSION;
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
+            loader.setController(createNewGameController);
+
+            Stage mainWindow = GUILauncher.mainWindow;
+            try {
+                Scene sceneRooms = new Scene(loader.load());
+                mainWindow.setScene(sceneRooms);
+                mainWindow.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }*/
         });
 
         exitButton.setOnAction((event) -> {
+            opened.set(false);
             GUI.view = "";
-            stage.close();
             Platform.exit();
             System.exit(0);
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void start(Parent root) throws IOException {
-        opened.set(true);
-
-        gui.startAction();
-        stage.setTitle("Eryantis");
-        stage.setResizable(false);
-
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void closeStage() {
-        opened.set(false);
-        stage.close();
-    }
-
-    /**
-     * Sets the list of rooms available
-     *
-     * @param rooms available
-     */
     public void setRoomsList(ArrayList<String> rooms) {
         this.rooms = rooms;
     }
 
-    /**
-     * Loads the list of rooms available
-     */
     private void loadRoomsList() {
         for (int i = 0; i < rooms.size(); i++) {
             RowConstraints row = new RowConstraints();
@@ -120,6 +92,8 @@ public class RoomListController extends InitialStage implements Controller {
             joinRoom.setOnAction((event) -> {
                 try {
                     GUI.view = "room";
+                    opened.set(false);
+                    gui.stopAction();
                     GUI.client.requestRoomJoin(roomName.getText());
                 } catch (RemoteException e) {
                     e.printStackTrace();
@@ -128,14 +102,6 @@ public class RoomListController extends InitialStage implements Controller {
                 } catch (UserNotRegisteredException e) {
                     e.printStackTrace();
                 }
-
-                gui.stopAction();
-
-                WaitingWindowController waitingWindowController = new WaitingWindowController();
-                waitingWindowController.setMessage(WaitingMessages.CONNECTING);
-                Controller.startStage(ResourcesPath.WAITING_WINDOW, waitingWindowController);
-                GUI.controller = waitingWindowController;
-                stage.close();
             });
 
             roomsList.addRow(i + 1, roomName, joinRoom);
@@ -145,16 +111,10 @@ public class RoomListController extends InitialStage implements Controller {
         }
     }
 
-    /**
-     * @return true if the personal board window is opened
-     */
     public static boolean isOpened() {
         return opened.get();
     }
 
-    /**
-     * Updates all the elements of school board
-     */
     public void update(ArrayList<String> rooms) {
         roomsList.getChildren().remove(3, roomsList.getChildren().size());
         setRoomsList(rooms);

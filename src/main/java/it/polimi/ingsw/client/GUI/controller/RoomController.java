@@ -3,22 +3,17 @@ package it.polimi.ingsw.client.GUI.controller;
 import it.polimi.ingsw.client.GUI.GUI;
 import it.polimi.ingsw.exceptions.UserNotInRoomException;
 import it.polimi.ingsw.exceptions.UserNotRegisteredException;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -26,11 +21,7 @@ import java.util.ArrayList;
  * @author Amrit
  * Class that shows all the game rooms availables to join
  */
-
 public class RoomController extends InitialStage implements Controller {
-    private Stage stage = new Stage();
-    private Scene scene;
-
     private ArrayList<String> players = new ArrayList<>();
 
     @FXML
@@ -41,8 +32,10 @@ public class RoomController extends InitialStage implements Controller {
 
     @FXML
     private Image blackTowerImage;
+
     @FXML
     private Image whiteTowerImage;
+
     @FXML
     private Image greyTowerImage;
 
@@ -56,17 +49,16 @@ public class RoomController extends InitialStage implements Controller {
         super(gui);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @FXML
     public void initialize() {
+        gui.startAction();
+        roomTitle.setText(GUI.client.getRoom());
+
         //Importing towers image
         try {
             blackTowerImage = new Image(new FileInputStream("src/main/resources/img/towers/black_tower.png"));
             whiteTowerImage = new Image(new FileInputStream("src/main/resources/img/towers/white_tower.png"));
             greyTowerImage = new Image(new FileInputStream("src/main/resources/img/towers/grey_tower.png"));
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -82,8 +74,8 @@ public class RoomController extends InitialStage implements Controller {
 
         leaveButton.setOnAction((event) -> {
             try {
-                System.out.println("OOOOOOOO");
                 GUI.view = "lobby";
+                gui.stopAction();
                 GUI.client.leaveRoom();
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -92,32 +84,7 @@ public class RoomController extends InitialStage implements Controller {
             } catch (UserNotRegisteredException e) {
                 e.printStackTrace();
             }
-
-            gui.stopAction();
-            closeStage();
         });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void start(Parent root) throws IOException {
-        gui.startAction();
-        stage.setTitle("Eryantis");
-        stage.setResizable(true);
-        this.scene = new Scene(root);
-        roomTitle.setText(GUI.client.getRoom());
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void closeStage() {
-        stage.close();
     }
 
     public void setPlayersList(ArrayList<String> players) {
