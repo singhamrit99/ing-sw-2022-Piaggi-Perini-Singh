@@ -16,8 +16,6 @@ public class Client implements Runnable {
     final private int port;
     private serverStub server;
     private UI ui;
-
-
     private String nickname;
     private String clientRoom = null;
     public String view;
@@ -146,7 +144,6 @@ public class Client implements Runnable {
                     try {
                         inGame = server.inGame(nickname);
                         roomList = server.getRoomsList();
-
                         //display and refresh of room list
                         if (view.equals(StringNames.LOBBY)) {
                             if (first) {

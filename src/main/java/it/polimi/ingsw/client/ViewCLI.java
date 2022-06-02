@@ -15,7 +15,7 @@ import java.rmi.RemoteException;
 import java.util.*;
 
 
-public class ViewCLI implements View {
+public class ViewCLI implements UI {
     public static String view;
     Client client;
     String nickName;
@@ -37,9 +37,8 @@ public class ViewCLI implements View {
 
     public ViewCLI(Client client) {
         this.client = client;
-        this.client.setUI(this);
-        view= "launcher";
-
+        this.client.setUi(this);
+        this.client.view= StringNames.LAUNCHER;
     }
 
     public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException {
@@ -49,7 +48,7 @@ public class ViewCLI implements View {
             try {
                 nickName = in.nextLine();
                 client.registerClient(nickName);
-                view="lobby";
+                view=StringNames.LOBBY;
                 break;
             } catch (UserAlreadyExistsException e) {
                 System.out.println("That username is already in the game! Try another.\n");
@@ -422,7 +421,7 @@ public class ViewCLI implements View {
                 } catch (RoomNotExistsException | UserNotRegisteredException e) {
                     throw new RuntimeException(e);
                 }
-                view="room";
+                view=StringNames.ROOM;
                 clientRoom = requestedRoom;
                 System.out.println("You entered room " + clientRoom + " successfully \n");
                 System.out.println("Players in this room:");
