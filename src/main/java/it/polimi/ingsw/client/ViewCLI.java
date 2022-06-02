@@ -16,6 +16,7 @@ import java.util.*;
 
 
 public class ViewCLI implements View {
+    public static String view;
     Client client;
     String nickName;
     String currentPlayer;
@@ -37,6 +38,8 @@ public class ViewCLI implements View {
     public ViewCLI(Client client) {
         this.client = client;
         this.client.setUI(this);
+        view= "launcher";
+
     }
 
     public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException {
@@ -46,6 +49,7 @@ public class ViewCLI implements View {
             try {
                 nickName = in.nextLine();
                 client.registerClient(nickName);
+                view="lobby";
                 break;
             } catch (UserAlreadyExistsException e) {
                 System.out.println("That username is already in the game! Try another.\n");
@@ -276,11 +280,23 @@ public class ViewCLI implements View {
 
     @Override
     public void roomsAvailable(ArrayList<String> rooms) {
+        try {
+            getRooms();
+        }catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
-    public void roomJoin(ArrayList<String> players) {
+    public void roomJoin(ArrayList<String> players){
+       try{
+           getPlayersInRoom();
+       }catch (RemoteException e)
+       {
+           e.printStackTrace();
+       }
 
     }
 
@@ -293,8 +309,8 @@ public class ViewCLI implements View {
                 throw new RuntimeException(e);
             }
             sendArrayString(response);
-        } else
-            System.out.println("You're not in a room, so there are no players to show\n");
+        }
+           // System.out.println("You're not in a room, so there are no players to show\n");
     }
 
     private void getLobbyInfo() throws RemoteException {
@@ -323,6 +339,7 @@ public class ViewCLI implements View {
     }
 
     public void getRooms() throws RemoteException {
+        System.out.println("Rooms on the server: ");
         ArrayList<String> response = client.getRooms();
         if (response.isEmpty())
             System.out.println("There are no rooms yet\n");
@@ -405,11 +422,13 @@ public class ViewCLI implements View {
                 } catch (RoomNotExistsException | UserNotRegisteredException e) {
                     throw new RuntimeException(e);
                 }
+                view="room";
                 clientRoom = requestedRoom;
                 System.out.println("You entered room " + clientRoom + " successfully \n");
                 System.out.println("Players in this room:");
                 try {
                     sendArrayString(client.getNicknamesInRoom(clientRoom));
+
                 } catch (RoomNotExistsException e) {
                     throw new RuntimeException(e);
                 }
@@ -573,7 +592,7 @@ public class ViewCLI implements View {
 
     public void printClouds()
     {
-        EnumMap<Colors, Integer> students= new EnumMap<>(Colors.class);
+        EnumMap<Colors, Integer> students;
         for (StrippedCloud cloud: client.getLocalModel().getClouds())
         {
             students= cloud.getStudents();

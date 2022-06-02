@@ -143,25 +143,50 @@ public class Client implements Runnable {
                     try {
                         inGame = server.inGame(nickname);
                         roomList = server.getRoomsList();
-
-                        //display and refresh of room list
-                        if (GUI.view.equals("lobby")) {
-                            if (first) {
-                                roomListShow();
-                                oldSize = roomList.size();
-                                first = false;
-                            } else if (roomList.size() != oldSize) {
-                                oldSize = roomList.size();
-                                roomListShow();
-                            }
-                        } else if (GUI.view.equals("room")) {
-                            //refresh playerList if in room
-                            if (clientRoom != null) {
-                                if (!getNicknamesInRoom(clientRoom).equals(playersList)) {
-                                    playersList = getNicknamesInRoom(clientRoom);
-                                    view.roomJoin(playersList);
+                        if (GUI.view!=null) {
+                            //display and refresh of room list
+                            if (GUI.view.equals("lobby")) {
+                                if (first) {
+                                    roomListShow();
+                                    oldSize = roomList.size();
+                                    first = false;
+                                } else if (roomList.size() != oldSize) {
+                                    oldSize = roomList.size();
+                                    roomListShow();
+                                }
+                            } else if (GUI.view.equals("room")) {
+                                //refresh playerList if in room
+                                if (clientRoom != null) {
+                                    if (!getNicknamesInRoom(clientRoom).equals(playersList)) {
+                                        playersList = getNicknamesInRoom(clientRoom);
+                                        view.roomJoin(playersList);
+                                    }
                                 }
                             }
+                        }
+                        else//We're in CLI
+                        {
+                            if (ViewCLI.view.equals("lobby")) {
+                                if (first) {
+                                    roomListShow();
+                                    oldSize = roomList.size();
+                                    first = false;
+                                } else if (roomList.size() != oldSize) {
+                                    oldSize = roomList.size();
+                                    roomListShow();
+                                }
+                            }
+                            else if(ViewCLI.view.equals("room"))
+                            {
+                                if (clientRoom != null) {
+                                    if (!getNicknamesInRoom(clientRoom).equals(playersList)) {
+                                        playersList = getNicknamesInRoom(clientRoom);
+                                        view.roomJoin(playersList);
+                                    }
+                                }
+                            }
+
+
                         }
                     } catch (UserNotRegisteredException notRegisteredException) {
                         userRegistered = false;
@@ -220,7 +245,6 @@ public class Client implements Runnable {
                     System.out.println("Request for loading received\n");
                     localModel = (StrippedModel) evt.getNewValue();
                     localModelLoaded = true;
-
                     System.out.println("Local model loaded\n");
                     localModel.setUI(view);
                     System.out.println("Game ready! Press any key to continue.\n");
