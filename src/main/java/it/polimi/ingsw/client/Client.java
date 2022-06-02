@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.GUI.GUI;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.Command;
@@ -15,18 +14,21 @@ import java.util.ArrayList;
 public class Client implements Runnable {
     final private String ip;
     final private int port;
+    private serverStub server;
+    private UI ui;
+
+
     private String nickname;
     private String clientRoom = null;
+    public String view;
     private ArrayList<String> roomList;
     private ArrayList<String> playersList;
-    private serverStub server;
-    private boolean inGame;
     private StrippedModel localModel;
+    private boolean inGame;
     private boolean localModelLoaded;
     private boolean isMyTurn;
     private boolean userRegistered;
     private boolean drawnOut;
-    private View view;
     private int phase = 0;
 
     public Client(String ip, int port) {
@@ -68,9 +70,10 @@ public class Client implements Runnable {
     public void createRoom(String roomName) throws RemoteException, UserNotRegisteredException, RoomAlreadyExistsException {
         server.createRoom(nickname, roomName);
         clientRoom = roomName;
+
         try {
             playersList = server.getPlayers(clientRoom);
-            view.roomJoin(playersList);
+            ui.roomJoin(playersList);
         } catch (RoomNotExistsException e) {
             e.printStackTrace();
         }
@@ -80,7 +83,7 @@ public class Client implements Runnable {
         server.joinRoom(nickname, roomName);
         clientRoom = roomName;
         playersList = getNicknamesInRoom(clientRoom);
-        view.roomJoin(playersList);
+        ui.roomJoin(playersList);
     }
 
     public ArrayList<String> requestLobbyInfo(String roomName) throws RemoteException, RoomNotExistsException {
@@ -106,7 +109,7 @@ public class Client implements Runnable {
             server.leaveRoom(nickname);
             clientRoom = null;
             roomList = getRooms();
-            view.roomsAvailable(roomList);
+            ui.roomsAvailable(roomList);
         }
     }
 
@@ -116,7 +119,7 @@ public class Client implements Runnable {
 
     public void startGame() throws RemoteException, NotLeaderRoomException, UserNotInRoomException, RoomNotExistsException, UserNotRegisteredException {
         server.startGame(nickname);
-        view.startGame();
+        ui.startGame();
     }
 
     public void roomListShow() {
@@ -125,7 +128,7 @@ public class Client implements Runnable {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        view.roomsAvailable(roomList);
+        ui.roomsAvailable(roomList);
     }
 
     @Override
@@ -143,50 +146,25 @@ public class Client implements Runnable {
                     try {
                         inGame = server.inGame(nickname);
                         roomList = server.getRoomsList();
-                        if (GUI.view!=null) {
-                            //display and refresh of room list
-                            if (GUI.view.equals("lobby")) {
-                                if (first) {
-                                    roomListShow();
-                                    oldSize = roomList.size();
-                                    first = false;
-                                } else if (roomList.size() != oldSize) {
-                                    oldSize = roomList.size();
-                                    roomListShow();
-                                }
-                            } else if (GUI.view.equals("room")) {
-                                //refresh playerList if in room
-                                if (clientRoom != null) {
-                                    if (!getNicknamesInRoom(clientRoom).equals(playersList)) {
-                                        playersList = getNicknamesInRoom(clientRoom);
-                                        view.roomJoin(playersList);
-                                    }
-                                }
-                            }
-                        }
-                        else//We're in CLI
-                        {
-                            if (ViewCLI.view.equals("lobby")) {
-                                if (first) {
-                                    roomListShow();
-                                    oldSize = roomList.size();
-                                    first = false;
-                                } else if (roomList.size() != oldSize) {
-                                    oldSize = roomList.size();
-                                    roomListShow();
-                                }
-                            }
-                            else if(ViewCLI.view.equals("room"))
-                            {
-                                if (clientRoom != null) {
-                                    if (!getNicknamesInRoom(clientRoom).equals(playersList)) {
-                                        playersList = getNicknamesInRoom(clientRoom);
-                                        view.roomJoin(playersList);
-                                    }
-                                }
-                            }
 
-
+                        //display and refresh of room list
+                        if (view.equals(StringNames.LOBBY)) {
+                            if (first) {
+                                roomListShow();
+                                oldSize = roomList.size();
+                                first = false;
+                            } else if (roomList.size() != oldSize) {
+                                oldSize = roomList.size();
+                                roomListShow();
+                            }
+                        } else if (view.equals(StringNames.ROOM)) {
+                            //refresh playerList if in room
+                            if (clientRoom != null) {
+                                if (!getNicknamesInRoom(clientRoom).equals(playersList)) {
+                                    playersList = getNicknamesInRoom(clientRoom);
+                                    ui.roomJoin(playersList);
+                                }
+                            }
                         }
                     } catch (UserNotRegisteredException notRegisteredException) {
                         userRegistered = false;
@@ -197,7 +175,8 @@ public class Client implements Runnable {
                 }
                 Ping();
                 Thread.sleep(500);
-            } catch (RemoteException | LocalModelNotLoadedException | UserNotInRoomException | UserNotRegisteredException | InterruptedException e) {
+            } catch (RemoteException | LocalModelNotLoadedException | UserNotInRoomException | UserNotRegisteredException |
+                    InterruptedException e) {
                 System.err.println("Client exception: " + e);
             }
         }
@@ -211,7 +190,7 @@ public class Client implements Runnable {
         for (PropertyChangeEvent evt : evtArray) {
             switch (evt.getPropertyName()) {
                 case "first-player":
-                    view.currentPlayer((String) evt.getNewValue());
+                    ui.currentPlayer((String) evt.getNewValue());
                     if (nickname.equals(evt.getNewValue()))
                         setMyTurn(true);
                     if (localModel != null) {
@@ -221,23 +200,19 @@ public class Client implements Runnable {
                     }
                     break;
                 case "change-phase":
-                   // System.out.println("Received change phase event\n");
+                    // System.out.println("Received change phase event\n");
                     phase++;
                     if (phase > 4) {
                         phase = 0;
                     }
                     System.out.println("phase:" + phase);
-                    if (phase==1)
-                    {
-                        if(nickname.equals((String) evt.getNewValue()))
-                        {
+                    if (phase == 1) {
+                        if (nickname.equals((String) evt.getNewValue())) {
                             System.out.println("It is my turn according to the assistant card I played.");
-                            isMyTurn=true;
-                        }
-                        else
-                        {
+                            isMyTurn = true;
+                        } else {
                             System.out.println("It is not my turn according to the assistant card I played.");
-                            isMyTurn=false;
+                            isMyTurn = false;
                         }
                     }
                     break;
@@ -246,7 +221,7 @@ public class Client implements Runnable {
                     localModel = (StrippedModel) evt.getNewValue();
                     localModelLoaded = true;
                     System.out.println("Local model loaded\n");
-                    localModel.setUI(view);
+                    localModel.setUI(ui);
                     System.out.println("Game ready! Press any key to continue.\n");
                     break;
                 case "current-player":
@@ -296,8 +271,8 @@ public class Client implements Runnable {
         return nickname;
     }
 
-    public void setUI(View view) {
-        this.view = view;
+    public void setUi(UI ui) {
+        this.ui = ui;
     }
 
     public void setInGame(boolean inGame) {
