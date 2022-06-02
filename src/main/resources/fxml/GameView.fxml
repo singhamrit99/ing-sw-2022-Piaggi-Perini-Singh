@@ -1,20 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/GameViewStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <StackPane maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1280.0">
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="Options">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Leave game" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="View">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Player1" />
+              </items>
+            </Menu>
+            <Menu fx:id="currentPLayer" mnemonicParsing="false" text="Current player: " />
+        </menus>
+      </MenuBar>
+      <StackPane prefHeight="403.0" prefWidth="1280.0" styleClass="body" stylesheets="@../css/GameViewStyle.css" />
+      <StackPane alignment="BOTTOM_CENTER" maxWidth="1.7976931348623157E308" prefHeight="16.0" prefWidth="1280.0" styleClass="body">
          <children>
-            <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+            <ImageView fitHeight="555.0" fitWidth="1076.0" pickOnBounds="true" preserveRatio="true" styleClass="body" StackPane.alignment="BOTTOM_CENTER">
                <image>
                   <Image url="@../img/board/Plancia_DEF2.png" />
                </image>
                <viewport>
                   <Rectangle2D />
                </viewport></ImageView>
+            <ImageView fitHeight="50.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
+               <image>
+                  <Image url="@../img/professors/teacher_blue.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="55.0" left="495.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="50.0" fitWidth="100.0" layoutX="873.0" layoutY="372.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
+               <image>
+                  <Image url="@../img/professors/teacher_green.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="361.0" left="495.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="50.0" fitWidth="100.0" layoutX="625.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
+               <image>
+                  <Image url="@../img/professors/teacher_pink.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="130.0" left="495.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="50.0" fitWidth="100.0" layoutX="625.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
+               <image>
+                  <Image url="@../img/professors/teacher_red.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="130.0" left="495.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="50.0" fitWidth="100.0" layoutX="625.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
+               <image>
+                  <Image url="@../img/professors/teacher_yellow.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="130.0" left="495.0" />
+               </StackPane.margin>
+            </ImageView>
          </children>
       </StackPane>
    </children>

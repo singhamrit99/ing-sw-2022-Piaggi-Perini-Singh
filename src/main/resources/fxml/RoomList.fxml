@@ -5,11 +5,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <StackPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1280.0">
             <children>
-                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="Lobby" textAlignment="JUSTIFY">
+                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="Lobby" textAlignment="CENTER">
                     <font>
                         <Font name="Rockwell Extra Bold" size="40.0" />
                     </font>
