@@ -36,7 +36,7 @@ public class GUILauncher extends Application implements Initializable {
     @Override
     public void start(Stage menuStage) throws Exception {
         menuStage.setTitle("Eriantys");
-        menuStage.setResizable(true);
+        menuStage.setResizable(false);
         menuStage.setWidth(MAIN_MENU_WIDTH);
         menuStage.setHeight(MAIN_MENU_HEIGHT);
         mainWindow = menuStage;
