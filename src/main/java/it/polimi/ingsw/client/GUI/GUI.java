@@ -5,19 +5,21 @@ import it.polimi.ingsw.client.GUI.controller.*;
 import it.polimi.ingsw.client.View;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.beans.PropertyChangeEvent;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GUI implements View {
     public static Client client;
-
     public static Controller controller;
     public static String view;
     public RoomListController roomListController;
-
     private final AtomicBoolean isDoing;
 
     public GUI(Client client) {
@@ -135,9 +137,16 @@ public class GUI implements View {
                 Platform.runLater(() -> {
                     roomListController = new RoomListController(this);
                     roomListController.setRoomsList(rooms);
-
-                    Controller.startStage(ResourcesPath.ROOM_LIST, roomListController);
-                    controller.closeStage();
+                    String filePath = ResourcesPath.FXML_FILE_PATH + ResourcesPath.ROOM_LIST + ResourcesPath.FILE_EXTENSION;
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
+                    Stage mainWindow = GUILauncher.mainWindow;
+                    try {
+                        Scene sceneRooms = new Scene(loader.load());
+                        mainWindow.setScene(sceneRooms);
+                        mainWindow.show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 });
             }
         }
