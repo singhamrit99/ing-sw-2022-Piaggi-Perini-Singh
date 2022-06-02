@@ -26,7 +26,6 @@ public class Client implements Runnable {
     private boolean drawnOut;
     private View view;
     private int phase = 0;
-    private boolean returnLobby;
 
     public Client(String ip, int port) {
         this.ip = ip;
@@ -42,7 +41,6 @@ public class Client implements Runnable {
             server = (serverStub) registry.lookup("server");
 
             System.out.println("connection done");
-
         } catch (Exception e) {
             System.err.println("Client exception: " + e);
             e.printStackTrace();
@@ -133,10 +131,9 @@ public class Client implements Runnable {
                             view.roomsAvailable(roomList);
                             oldSize = roomList.size();
                             first = false;
-                        } else if (roomList.size() != oldSize || returnLobby) {
+                        } else if (roomList.size() != oldSize) {
                             oldSize = roomList.size();
                             view.roomsAvailable(roomList);
-                            returnLobby = false;
                         }
                     } catch (UserNotRegisteredException notRegisteredException) {
                         userRegistered = false;
@@ -157,46 +154,51 @@ public class Client implements Runnable {
 
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
         for (PropertyChangeEvent evt : evtArray) {
-            if (evt.getPropertyName().equals("first-player")) {
-                view.currentPlayer((String) evt.getNewValue());
-                if (nickname.equals(evt.getNewValue()))
-                    setMyTurn(true);
-                if (localModel != null) {
-                    localModel.updateModel(evt);
-                } else {
-                    throw new LocalModelNotLoadedException();
-                }
+            switch (evt.getPropertyName()) {
+                case "first-player":
+                    view.currentPlayer((String) evt.getNewValue());
+                    if (nickname.equals(evt.getNewValue()))
+                        setMyTurn(true);
+                    if (localModel != null) {
+                        localModel.updateModel(evt);
+                    } else {
+                        throw new LocalModelNotLoadedException();
+                    }
+                    break;
+                case "change-phase":
+                    System.out.println("Received change phase event\n");
+                    phase++;
+                    if (phase > 4) {
+                        phase = 0;
+                    }
+                    System.out.println("phase:" + phase);
+                    break;
+                case "init":
+                    System.out.println("Request for loading received\n");
+                    localModel = (StrippedModel) evt.getNewValue();
+                    localModelLoaded = true;
 
-            } else if (evt.getPropertyName().equals("change-phase")) {
-                System.out.println("Received change phase event\n");
-                phase++;
-                if (phase > 4) {
-                    phase = 0;
-                }
-                System.out.println("phase:" + phase);
-            } else if (evt.getPropertyName().equals("init")) {
-                System.out.println("Request for loading received\n");
-                localModel = (StrippedModel) evt.getNewValue();
-                localModelLoaded = true;
+                    System.out.println("Local model loaded\n");
+                    localModel.setUI(view);
+                    System.out.println("Game ready! Press any key to continue.\n");
+                    break;
+                case "current-player":
+                    if (nickname.equals(evt.getNewValue()))
+                        isMyTurn = true;
+                    if (localModel != null) {
+                        localModel.updateModel(evt);
+                    } else {
+                        throw new LocalModelNotLoadedException();
+                    }
+                    break;
+                default:
+                    if (localModel != null) {
+                        localModel.updateModel(evt);
+                    } else {
+                        throw new LocalModelNotLoadedException();
+                    }
 
-                System.out.println("Local model loaded\n");
-                localModel.setUI(view);
-                System.out.println("Game ready! Press any key to continue.\n");
-            } else if (evt.getPropertyName().equals("current-player")) {
-                if (nickname.equals(evt.getNewValue()))
-                    isMyTurn = true;
-                if (localModel != null) {
-                    localModel.updateModel(evt);
-                } else {
-                    throw new LocalModelNotLoadedException();
-                }
-            } else {
-                if (localModel != null) {
-                    localModel.updateModel(evt);
-                } else {
-                    throw new LocalModelNotLoadedException();
-                }
-
+                    break;
             }
         }
     }
