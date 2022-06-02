@@ -1,11 +1,10 @@
 .body{
-    -fx-background-image: url(../img/general/eriantys_banner_no_items.png);
+    -fx-background-color: #80ceff;
     -fx-background-size: contain;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-background-size: 100% ;
 }
-
 
 .error {
     -fx-border-width:2;
