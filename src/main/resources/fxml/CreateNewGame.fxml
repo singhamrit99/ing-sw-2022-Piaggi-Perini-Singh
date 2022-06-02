@@ -1,41 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<VBox fx:id="container" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0"
-      stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="container" alignment="CENTER" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                   prefHeight="100.0" prefWidth="600.0">
+        <StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1280.0">
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="New Room">
                     <font>
-                        <Font size="35.0"/>
+                        <Font size="35.0" />
                     </font>
                 </Text>
             </children>
         </StackPane>
-        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                   prefHeight="100.0" prefWidth="600.0">
+        <StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="600.0">
             <children>
-                <TextField fx:id="roomName" focusTraversable="false" maxWidth="-Infinity" minWidth="-Infinity"
-                           prefWidth="300.0" promptText="Insert room name"/>
+                <TextField fx:id="roomName" focusTraversable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0" promptText="Insert room name" />
             </children>
         </StackPane>
-        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-              prefHeight="100.0" prefWidth="600.0" spacing="20.0">
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="600.0" spacing="20.0">
             <children>
-                <Button fx:id="createNewGameButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                        minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0"
-                        styleClass="confirm-button" text="Create new game"/>
-                <Button fx:id="cancelButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                        minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0"
-                        styleClass="cancel-button" text="Cancel"/>
+                <Button fx:id="createNewGameButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" styleClass="confirm-button" text="Create new game" />
+                <Button fx:id="cancelButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" styleClass="cancel-button" text="Cancel" />
             </children>
         </HBox>
     </children>
