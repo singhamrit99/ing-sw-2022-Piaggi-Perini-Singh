@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.GUI.controller;
 
 import it.polimi.ingsw.client.GUI.GUI;
+import it.polimi.ingsw.client.StringNames;
 import it.polimi.ingsw.exceptions.NotLeaderRoomException;
 import it.polimi.ingsw.exceptions.RoomNotExistsException;
 import it.polimi.ingsw.exceptions.UserNotInRoomException;
@@ -23,7 +24,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Amrit
- * Class that shows all the game rooms availables to join
  */
 public class RoomController extends InitialStage implements Controller {
     private ArrayList<String> players = new ArrayList<>();
@@ -31,25 +31,18 @@ public class RoomController extends InitialStage implements Controller {
 
     @FXML
     private GridPane playersList;
-
     @FXML
     private Text roomTitle;
-
     @FXML
     private Image blackTowerImage;
-
     @FXML
     private Image whiteTowerImage;
-
     @FXML
     private Image greyTowerImage;
-
     @FXML
     private Button startGameButton;
-
     @FXML
     private Button leaveButton;
-
     @FXML
     private ToggleButton setExpertMode;
 
@@ -59,15 +52,13 @@ public class RoomController extends InitialStage implements Controller {
 
     @FXML
     public void initialize() {
-        gui.startAction();
         opened.set(true);
         roomTitle.setText(GUI.client.getRoom());
 
-        //Importing towers image
         try {
-            blackTowerImage = new Image(new FileInputStream("src/main/resources/img/towers/black_tower.png"));
-            whiteTowerImage = new Image(new FileInputStream("src/main/resources/img/towers/white_tower.png"));
-            greyTowerImage = new Image(new FileInputStream("src/main/resources/img/towers/grey_tower.png"));
+            blackTowerImage = new Image(new FileInputStream(ResourcesPath.BLACK_TOWER));
+            whiteTowerImage = new Image(new FileInputStream(ResourcesPath.WHITE_TOWER));
+            greyTowerImage = new Image(new FileInputStream(ResourcesPath.GREY_TOWER));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -77,48 +68,46 @@ public class RoomController extends InitialStage implements Controller {
             try {
                 GUI.client.setExpertMode(setExpertMode.selectedProperty().get());
             } catch (RemoteException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             } catch (NotLeaderRoomException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.NO_LEADER);
             } catch (UserNotInRoomException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
             } catch (UserNotRegisteredException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             }
         });
 
         loadPlayersList();
         startGameButton.setOnAction((event) -> {
             opened.set(false);
-            GUI.view = "board";
-            gui.stopAction();
+            GUI.client.view = StringNames.BOARD;
             try {
                 GUI.client.startGame();
             } catch (RemoteException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             } catch (NotLeaderRoomException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.NO_LEADER);
             } catch (UserNotInRoomException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
             } catch (RoomNotExistsException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
             } catch (UserNotRegisteredException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             }
         });
 
         leaveButton.setOnAction((event) -> {
             try {
                 opened.set(false);
-                GUI.view = "lobby";
-                gui.stopAction();
+                GUI.client.view = StringNames.LOBBY;
                 GUI.client.leaveRoom();
             } catch (RemoteException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             } catch (UserNotInRoomException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
             } catch (UserNotRegisteredException e) {
-                e.printStackTrace();
+                Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             }
         });
     }
@@ -140,7 +129,6 @@ public class RoomController extends InitialStage implements Controller {
                 if (i % 2 == 1) team = blackTeam;
                 else team = whiteTeam;
             }
-
             team.setFitHeight(40);
             team.setFitWidth(40);
 
@@ -153,8 +141,8 @@ public class RoomController extends InitialStage implements Controller {
 
             playersList.addRow(i + 1, playerName, team);
 
-            playersList.setHalignment(playerName, HPos.CENTER);
-            playersList.setHalignment(team, HPos.CENTER);
+            GridPane.setHalignment(playerName, HPos.CENTER);
+            GridPane.setHalignment(team, HPos.CENTER);
         }
     }
 
