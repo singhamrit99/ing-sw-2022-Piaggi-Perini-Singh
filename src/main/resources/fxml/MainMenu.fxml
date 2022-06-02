@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="mainMenuStage" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1280.0" styleClass="root" stylesheets="@../css/MainMenuStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.GUI.GUILauncher">
+<StackPane fx:id="mainMenuStage" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1280.0" styleClass="root" stylesheets="@../css/MainMenuStyle.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="it.polimi.ingsw.client.GUI.GUILauncher">
     <children>
         <ImageView pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
             <image>
