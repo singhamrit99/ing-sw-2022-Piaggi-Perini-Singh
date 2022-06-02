@@ -346,11 +346,11 @@ public class Game {
                 for (Player p : players)
                     p.forgetAssistantCard(); //necessary to always play the AssistantCards that hasn't played by any other players during the SAME turn (for the Planning Phase)
                 state = State.ACTIONPHASE_1;
-                PropertyChangeEvent phaseChange=
-                        new PropertyChangeEvent(this, "change-phase", null,null);
-                gameListener.propertyChange(phaseChange);
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
                 currentPlayer = orderPlayers.poll(); //first player of Action Phase
+                PropertyChangeEvent phaseChange=
+                        new PropertyChangeEvent(this, "change-phase", null,currentPlayer.getNickname());
+                gameListener.propertyChange(phaseChange);
             }
         } else if (state == State.ACTIONPHASE_3) { //Last player did the 3 step of Action Phase
             if (!orderPlayers.isEmpty()) {
