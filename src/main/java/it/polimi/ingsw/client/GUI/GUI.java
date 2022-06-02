@@ -2,65 +2,60 @@ package it.polimi.ingsw.client.GUI;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.GUI.controller.*;
-import it.polimi.ingsw.client.View;
+import it.polimi.ingsw.client.StringNames;
+import it.polimi.ingsw.client.UI;
 import javafx.application.Application;
 import javafx.application.Platform;
 
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GUI implements View {
+/**
+ * @author Amrit
+ */
+public class GUI implements UI {
     public static Client client;
     public static Controller controller;
-    public RoomListController roomListController;
+    public LobbyController lobbyController;
     public RoomController roomController;
 
-    public static String view;
-    private final AtomicBoolean isDoing;
+    //private final AtomicBoolean isDoing;
 
     public GUI(Client client) {
-        this.isDoing = new AtomicBoolean(false);
+        //this.isDoing = new AtomicBoolean(false);
         GUI.client = client;
-        GUI.client.setUI(this);
-        view = "launcher";
+        GUI.client.setUi(this);
+        GUI.client.view = StringNames.LAUNCHER;
     }
 
-    /**
-     * Starts the GUI
-     */
     public void start() {
         Application.launch(GUILauncher.class);
     }
 
     public void roomsAvailable(ArrayList<String> rooms) {
-        if (view.equals("lobby")) {
-            if (RoomListController.isOpened()) {
-                Platform.runLater(() -> {
-                    roomListController.update(rooms);
-                });
+        if (GUI.client.view.equals(StringNames.LOBBY)) {
+            if (LobbyController.isOpened()) {
+                Platform.runLater(() -> lobbyController.update(rooms));
             } else {
                 Platform.runLater(() -> {
-                    roomListController = new RoomListController(this);
-                    roomListController.setRoomsList(rooms);
-                    Controller.load(ResourcesPath.ROOM_LIST, roomListController);
+                    lobbyController = new LobbyController(this);
+                    lobbyController.setRoomsList(rooms);
+                    Controller.load(ResourcesPath.LOBBY, lobbyController);
                 });
             }
         }
     }
 
     public void roomJoin(ArrayList<String> players) {
-        if (view.equals("room")) {
+        if (GUI.client.view.equals(StringNames.ROOM)) {
             if (RoomController.isOpened()) {
-                Platform.runLater(() -> {
-                    roomController.update(players);
-                });
+                Platform.runLater(() -> roomController.update(players));
             } else {
                 Platform.runLater(() -> {
                     roomController = new RoomController(this);
                     roomController.setPlayersList(players);
-                    Controller.load(ResourcesPath.ROOM_VIEW, roomController);
+                    Controller.load(ResourcesPath.ROOM, roomController);
                 });
             }
         }
@@ -68,7 +63,7 @@ public class GUI implements View {
 
     @Override
     public void startGame() throws RemoteException {
-        if (view.equals("board")) {
+        if (GUI.client.view.equals(StringNames.BOARD)) {
             Platform.runLater(() -> {
                 SchoolBoardController schoolBoardController = new SchoolBoardController(this);
                 Controller.load(ResourcesPath.GAME_VIEW, schoolBoardController);
@@ -76,7 +71,7 @@ public class GUI implements View {
         }
     }
 
-    public void startAction() {
+    /*public void startAction() {
         if (!isDoing.get()) {
             isDoing.set(true);
         }
@@ -90,7 +85,7 @@ public class GUI implements View {
 
     public boolean isDoing() {
         return this.isDoing.get();
-    }
+    }*/
 
     @Override
     public void currentPlayer(String s) {
