@@ -39,10 +39,7 @@ public class CreateNewGameController extends InitialStage implements Controller 
     private void initializeCancelButton() {
         cancelButton.setOnAction((event) -> {
             GUI.view = "lobby";
-            RoomListController roomListController = new RoomListController(gui);
-            roomListController.setRoomsList(rooms);
-            Controller.load(ResourcesPath.ROOM_LIST, roomListController);
-
+            GUI.client.roomListShow();
             /*String filePath = ResourcesPath.FXML_FILE_PATH + ResourcesPath.ROOM_LIST + ResourcesPath.FILE_EXTENSION;
             FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
             loader.setController(roomListController);
@@ -60,6 +57,7 @@ public class CreateNewGameController extends InitialStage implements Controller 
 
     private void initializeConfirmButton() {
         createNewGameButton.setOnAction((event) -> {
+            gui.stopAction();
             if (!roomName.getText().equals("")) {
                 try {
                     GUI.view = "room";

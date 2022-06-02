@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.GUI.GUI;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.stripped.StrippedModel;
 import it.polimi.ingsw.server.commands.Command;
@@ -17,6 +18,7 @@ public class Client implements Runnable {
     private String nickname;
     private String clientRoom = null;
     private ArrayList<String> roomList;
+    private ArrayList<String> playersList;
     private serverStub server;
     private boolean inGame;
     private StrippedModel localModel;
@@ -67,7 +69,8 @@ public class Client implements Runnable {
         server.createRoom(nickname, roomName);
         clientRoom = roomName;
         try {
-            view.roomJoin(server.getPlayers(roomName));
+            playersList = server.getPlayers(clientRoom);
+            view.roomJoin(playersList);
         } catch (RoomNotExistsException e) {
             e.printStackTrace();
         }
@@ -76,7 +79,8 @@ public class Client implements Runnable {
     public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserNotRegisteredException {
         server.joinRoom(nickname, roomName);
         clientRoom = roomName;
-        view.roomJoin(getNicknamesInRoom(roomName));
+        playersList = getNicknamesInRoom(clientRoom);
+        view.roomJoin(playersList);
     }
 
     public ArrayList<String> requestLobbyInfo(String roomName) throws RemoteException, RoomNotExistsException {
@@ -101,6 +105,7 @@ public class Client implements Runnable {
         } else {
             server.leaveRoom(nickname);
             clientRoom = null;
+            roomList = getRooms();
             view.roomsAvailable(roomList);
         }
     }
@@ -111,12 +116,23 @@ public class Client implements Runnable {
 
     public void startGame() throws RemoteException, NotLeaderRoomException, UserNotInRoomException, RoomNotExistsException, UserNotRegisteredException {
         server.startGame(nickname);
+        view.startGame();
+    }
+
+    public void roomListShow() {
+        try {
+            roomList = server.getRoomsList();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        view.roomsAvailable(roomList);
     }
 
     @Override
     public void run() {
         boolean first = true;
         int oldSize = 0;
+
         while (userRegistered) {
             try {
                 if (inGame) {
@@ -127,17 +143,31 @@ public class Client implements Runnable {
                     try {
                         inGame = server.inGame(nickname);
                         roomList = server.getRoomsList();
-                        if (first) {
-                            view.roomsAvailable(roomList);
-                            oldSize = roomList.size();
-                            first = false;
-                        } else if (roomList.size() != oldSize) {
-                            oldSize = roomList.size();
-                            view.roomsAvailable(roomList);
+
+                        //display and refresh of room list
+                        if (GUI.view.equals("lobby")) {
+                            if (first) {
+                                roomListShow();
+                                oldSize = roomList.size();
+                                first = false;
+                            } else if (roomList.size() != oldSize) {
+                                oldSize = roomList.size();
+                                roomListShow();
+                            }
+                        } else if (GUI.view.equals("room")) {
+                            //refresh playerList if in room
+                            if (clientRoom != null) {
+                                if (!getNicknamesInRoom(clientRoom).equals(playersList)) {
+                                    playersList = getNicknamesInRoom(clientRoom);
+                                    view.roomJoin(playersList);
+                                }
+                            }
                         }
                     } catch (UserNotRegisteredException notRegisteredException) {
                         userRegistered = false;
                         break;
+                    } catch (RoomNotExistsException e) {
+                        e.printStackTrace();
                     }
                 }
                 Ping();

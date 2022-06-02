@@ -74,7 +74,7 @@ public class Player implements Comparable<Player> {
 
     @Override
     public int compareTo(Player otherPlayer) {
-        return Integer.compare(otherPlayer.getPlayedAssistantCard().getMove(), playedAssistantCard.getMove());
+        return Integer.compare(playedAssistantCard.getMove(),otherPlayer.getPlayedAssistantCard().getMove());
     }
 
     public SchoolBoard getSchoolBoard() {
