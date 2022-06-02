@@ -68,8 +68,8 @@ public class GUI implements View {
 
     @Override
     public void startGame() throws RemoteException {
-        if (view.equals("board")){
-            Platform.runLater(()->{
+        if (view.equals("board")) {
+            Platform.runLater(() -> {
                 SchoolBoardController schoolBoardController = new SchoolBoardController(this);
                 Controller.load(ResourcesPath.GAME_VIEW, schoolBoardController);
             });
