@@ -11,9 +11,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,7 +26,7 @@ public class GUILauncher extends Application implements Initializable {
     public static Client client = GUI.client;
     public static WaitingWindowController waitingWindowController = null;
 
-
+    public static Stage mainWindow;
     public static final int MAIN_MENU_WIDTH = 1280;
     public static final int MAIN_MENU_HEIGHT = 720;
 
@@ -40,6 +43,10 @@ public class GUILauncher extends Application implements Initializable {
         menuStage.setResizable(true);
         menuStage.setWidth(MAIN_MENU_WIDTH);
         menuStage.setHeight(MAIN_MENU_HEIGHT);
+        mainWindow = menuStage;
+
+        javafx.scene.image.Image icon = new Image(new FileInputStream("src/main/resources/img/professors/teacher_blue.png"));
+        mainWindow.getIcons().add(icon);
 
         menuStage.setOnCloseRequest((event) -> {
             Platform.exit();
@@ -49,9 +56,9 @@ public class GUILauncher extends Application implements Initializable {
         String path = ResourcesPath.FXML_FILE_PATH + ResourcesPath.MAIN_MENU + ResourcesPath.FILE_EXTENSION;
         Parent root = FXMLLoader.load(getClass().getResource(path));
         Scene scene = new Scene(root);
-
         menuStage.setScene(scene);
         menuStage.show();
+
     }
 
     @Override
@@ -74,24 +81,6 @@ public class GUILauncher extends Application implements Initializable {
                     client.registerClient(nickname);
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
-
-                if (GUILauncher.waitingWindowController == null) {
-                    waitingWindowController = new WaitingWindowController();
-                    waitingWindowController.setMessage(WaitingMessages.CONNECTING);
-                    GUI.controller = waitingWindowController;
-
-                    String filePath = ResourcesPath.FXML_FILE_PATH + ResourcesPath.WAITING_WINDOW + ResourcesPath.FILE_EXTENSION;
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
-                    loader.setController(waitingWindowController);
-
-                    try {
-                        waitingWindowController.start(loader.load());
-                        Stage stage = (Stage) startButton.getScene().getWindow();
-                        stage.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         });
