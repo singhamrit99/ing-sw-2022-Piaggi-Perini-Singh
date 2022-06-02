@@ -1,12 +1,10 @@
 package it.polimi.ingsw.client;
 
-import javafx.collections.ObservableList;
-
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public interface View {
+public interface UI {
     void startGame() throws RemoteException;
 
     void currentPlayer(String s);
@@ -35,11 +33,7 @@ public interface View {
 
     void removedProfessors(PropertyChangeEvent e);
 
-    /**
-     * Notifies that the rooms available have been updated
-     */
     void roomsAvailable(ArrayList<String> rooms);
 
     void roomJoin(ArrayList<String> players);
-
 }
