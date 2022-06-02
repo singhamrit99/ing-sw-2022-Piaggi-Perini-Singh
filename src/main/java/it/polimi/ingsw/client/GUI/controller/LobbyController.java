@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.GUI.controller;
 
 import it.polimi.ingsw.client.GUI.GUI;
+import it.polimi.ingsw.client.StringNames;
 import it.polimi.ingsw.exceptions.RoomNotExistsException;
 import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import javafx.application.Platform;
@@ -17,22 +18,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Amrit
- * Class that shows all the game rooms availables to join
  */
-public class RoomListController extends InitialStage implements Controller {
+public class LobbyController extends InitialStage implements Controller {
     protected static AtomicBoolean opened = new AtomicBoolean(false);
     private ArrayList<String> rooms;
 
     @FXML
     private GridPane roomsList;
-
     @FXML
     private Button createRoomButton;
-
     @FXML
     private Button exitButton;
 
-    public RoomListController(GUI gui) {
+    public LobbyController(GUI gui) {
         super(gui);
         new ArrayList<>();
     }
@@ -40,33 +38,17 @@ public class RoomListController extends InitialStage implements Controller {
     @FXML
     public void initialize() {
         opened.set(true);
-        gui.startAction();
         loadRoomsList();
         createRoomButton.setOnAction((event) -> {
-            GUI.view = "new_room";
+            GUI.client.view = StringNames.CREATE_NEW_ROOM;
             opened.set(false);
-            gui.stopAction();
-            CreateNewGameController createNewGameController = new CreateNewGameController(gui);
-            createNewGameController.setRooms(rooms);
-            Controller.load(ResourcesPath.CREATE_NEW_GAME, createNewGameController);
-
-            /*String filePath = ResourcesPath.FXML_FILE_PATH + ResourcesPath.CREATE_NEW_GAME + ResourcesPath.FILE_EXTENSION;
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(filePath));
-            loader.setController(createNewGameController);
-
-            Stage mainWindow = GUILauncher.mainWindow;
-            try {
-                Scene sceneRooms = new Scene(loader.load());
-                mainWindow.setScene(sceneRooms);
-                mainWindow.show();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }*/
+            NewRoomController newRoomController = new NewRoomController(gui);
+            Controller.load(ResourcesPath.NEW_ROOM, newRoomController);
         });
 
         exitButton.setOnAction((event) -> {
             opened.set(false);
-            GUI.view = "";
+            GUI.client.view = "";
             Platform.exit();
             System.exit(0);
         });
@@ -86,27 +68,25 @@ public class RoomListController extends InitialStage implements Controller {
             roomName.setText(rooms.get(i));
 
             Button joinRoom = new Button();
-            joinRoom.setText("Join");
+            joinRoom.setText(StringNames.JOIN);
 
             joinRoom.setOnAction((event) -> {
                 try {
-                    GUI.view = "room";
+                    GUI.client.view = StringNames.ROOM;
                     opened.set(false);
-                    gui.stopAction();
                     GUI.client.requestRoomJoin(roomName.getText());
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
                 } catch (RoomNotExistsException e) {
-                    e.printStackTrace();
+                    Utility.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
                 } catch (UserNotRegisteredException e) {
-                    e.printStackTrace();
+                    Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                 }
             });
-
             roomsList.addRow(i + 1, roomName, joinRoom);
 
-            roomsList.setHalignment(roomName, HPos.CENTER);
-            roomsList.setHalignment(joinRoom, HPos.CENTER);
+            GridPane.setHalignment(roomName, HPos.CENTER);
+            GridPane.setHalignment(joinRoom, HPos.CENTER);
         }
     }
 
