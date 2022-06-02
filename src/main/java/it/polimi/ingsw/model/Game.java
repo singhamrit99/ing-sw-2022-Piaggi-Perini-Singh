@@ -357,14 +357,14 @@ public class Game {
                 currentPlayer = orderPlayers.poll();
                 state = State.ACTIONPHASE_1;
                 PropertyChangeEvent phaseChange=
-                        new PropertyChangeEvent(this, "change-phase", null,null);
+                        new PropertyChangeEvent(this, "change-phase", null,currentPlayer.getNickname());
                 gameListener.propertyChange(phaseChange);
             } else {
                 state = State.ENDTURN;
-                PropertyChangeEvent phaseChange=
-                        new PropertyChangeEvent(this, "change-phase", null,null);
-                gameListener.propertyChange(phaseChange);
                 nextRound();
+                PropertyChangeEvent phaseChange=
+                        new PropertyChangeEvent(this, "change-phase", null,currentPlayer.getNickname());
+                gameListener.propertyChange(phaseChange);
             }
         } else {
             throw new IncorrectStateException();
