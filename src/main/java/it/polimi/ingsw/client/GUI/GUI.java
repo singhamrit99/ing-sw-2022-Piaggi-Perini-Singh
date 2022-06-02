@@ -1,10 +1,7 @@
 package it.polimi.ingsw.client.GUI;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.GUI.controller.Controller;
-import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
-import it.polimi.ingsw.client.GUI.controller.RoomController;
-import it.polimi.ingsw.client.GUI.controller.RoomListController;
+import it.polimi.ingsw.client.GUI.controller.*;
 import it.polimi.ingsw.client.View;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -17,8 +14,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GUI implements View {
     public static Client client;
     public static Controller controller;
-    public static String view;
     public RoomListController roomListController;
+    public RoomController roomController;
+
+    public static String view;
     private final AtomicBoolean isDoing;
 
     public GUI(Client client) {
@@ -53,10 +52,26 @@ public class GUI implements View {
 
     public void roomJoin(ArrayList<String> players) {
         if (view.equals("room")) {
-            Platform.runLater(() -> {
-                RoomController roomController = new RoomController(this);
-                roomController.setPlayersList(players);
-                Controller.load(ResourcesPath.ROOM_VIEW, roomController);
+            if (RoomController.isOpened()) {
+                Platform.runLater(() -> {
+                    roomController.update(players);
+                });
+            } else {
+                Platform.runLater(() -> {
+                    roomController = new RoomController(this);
+                    roomController.setPlayersList(players);
+                    Controller.load(ResourcesPath.ROOM_VIEW, roomController);
+                });
+            }
+        }
+    }
+
+    @Override
+    public void startGame() throws RemoteException {
+        if (view.equals("board")){
+            Platform.runLater(()->{
+                SchoolBoardController schoolBoardController = new SchoolBoardController(this);
+                Controller.load(ResourcesPath.GAME_VIEW, schoolBoardController);
             });
         }
     }
@@ -75,11 +90,6 @@ public class GUI implements View {
 
     public boolean isDoing() {
         return this.isDoing.get();
-    }
-
-    @Override
-    public void startGame() throws RemoteException {
-
     }
 
     @Override
