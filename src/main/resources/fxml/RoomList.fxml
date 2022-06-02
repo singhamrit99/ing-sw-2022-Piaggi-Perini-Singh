@@ -5,11 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-      prefWidth="600.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/11.0.1"
-      xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="600.0">
+        <StackPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1280.0">
             <children>
                 <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="Lobby" textAlignment="JUSTIFY">
                     <font>
@@ -18,9 +16,9 @@
                 </Text>
             </children>
         </StackPane>
-        <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefViewportHeight="100.0" prefViewportWidth="800.0" prefWidth="600.0">
+        <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefViewportHeight="100.0" prefViewportWidth="800.0" prefWidth="1280.0">
             <content>
-                <FlowPane alignment="TOP_CENTER" prefHeight="402.0" prefWidth="600.0">
+                <FlowPane alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="402.0" prefWidth="1280.0">
                     <children>
                         <GridPane fx:id="roomsList" alignment="CENTER" gridLinesVisible="true" prefHeight="40.0" prefWidth="200.0">
                             <columnConstraints>
@@ -42,7 +40,7 @@
                 </FlowPane>
             </content>
         </ScrollPane>
-        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="600.0" spacing="20.0">
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1280.0" spacing="20.0">
             <children>
                 <Button fx:id="createRoomButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="confirm-button" text="Create Room" textFill="WHITE">
                     <font>
