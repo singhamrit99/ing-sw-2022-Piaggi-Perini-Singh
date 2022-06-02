@@ -1,11 +1,14 @@
 package it.polimi.ingsw.client.GUI.controller;
 
 import it.polimi.ingsw.client.GUI.GUI;
+import it.polimi.ingsw.exceptions.NotLeaderRoomException;
+import it.polimi.ingsw.exceptions.RoomNotExistsException;
 import it.polimi.ingsw.exceptions.UserNotInRoomException;
 import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -16,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Amrit
@@ -23,6 +27,7 @@ import java.util.ArrayList;
  */
 public class RoomController extends InitialStage implements Controller {
     private ArrayList<String> players = new ArrayList<>();
+    protected static AtomicBoolean opened = new AtomicBoolean(false);
 
     @FXML
     private GridPane playersList;
@@ -45,6 +50,9 @@ public class RoomController extends InitialStage implements Controller {
     @FXML
     private Button leaveButton;
 
+    @FXML
+    private ToggleButton setExpertMode;
+
     public RoomController(GUI gui) {
         super(gui);
     }
@@ -52,6 +60,7 @@ public class RoomController extends InitialStage implements Controller {
     @FXML
     public void initialize() {
         gui.startAction();
+        opened.set(true);
         roomTitle.setText(GUI.client.getRoom());
 
         //Importing towers image
@@ -63,17 +72,44 @@ public class RoomController extends InitialStage implements Controller {
             e.printStackTrace();
         }
 
+        setExpertMode = new ToggleButton();
+        setExpertMode.setOnAction((event) -> {
+            try {
+                GUI.client.setExpertMode(setExpertMode.selectedProperty().get());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (NotLeaderRoomException e) {
+                e.printStackTrace();
+            } catch (UserNotInRoomException e) {
+                e.printStackTrace();
+            } catch (UserNotRegisteredException e) {
+                e.printStackTrace();
+            }
+        });
+
         loadPlayersList();
-       /* startGameButton.setOnAction((event) -> {
-            CreateNewGameController createNewGameController = new CreateNewGameController(gui);
-            createNewGameController.setRooms(rooms);
-            Controller.startStage(ResourcesPath.CREATE_NEW_GAME_ACTION, createNewGameController);
+        startGameButton.setOnAction((event) -> {
+            opened.set(false);
+            GUI.view = "board";
             gui.stopAction();
-            closeStage();
-        });*/
+            try {
+                GUI.client.startGame();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (NotLeaderRoomException e) {
+                e.printStackTrace();
+            } catch (UserNotInRoomException e) {
+                e.printStackTrace();
+            } catch (RoomNotExistsException e) {
+                e.printStackTrace();
+            } catch (UserNotRegisteredException e) {
+                e.printStackTrace();
+            }
+        });
 
         leaveButton.setOnAction((event) -> {
             try {
+                opened.set(false);
                 GUI.view = "lobby";
                 gui.stopAction();
                 GUI.client.leaveRoom();
@@ -120,5 +156,15 @@ public class RoomController extends InitialStage implements Controller {
             playersList.setHalignment(playerName, HPos.CENTER);
             playersList.setHalignment(team, HPos.CENTER);
         }
+    }
+
+    public static boolean isOpened() {
+        return opened.get();
+    }
+
+    public void update(ArrayList<String> players) {
+        playersList.getChildren().remove(3, playersList.getChildren().size());
+        setPlayersList(players);
+        loadPlayersList();
     }
 }
