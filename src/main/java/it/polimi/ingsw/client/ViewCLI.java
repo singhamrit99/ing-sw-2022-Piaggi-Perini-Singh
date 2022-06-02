@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.stripped.StrippedBoard;
 import it.polimi.ingsw.model.stripped.StrippedCharacter;
+import it.polimi.ingsw.model.stripped.StrippedCloud;
 import it.polimi.ingsw.model.stripped.StrippedIsland;
 import it.polimi.ingsw.server.commands.*;
 
@@ -93,14 +94,14 @@ public class ViewCLI implements View {
                             "HELP to see this message again.\n" +
                             "When you're ready to go and everyone is in the lobby type START to start the game!\n");
                     break;
+                case "\n":
+                    break;
                 default:
                     System.out.println("Command not recognized");
                     break;
             }
         }
         System.out.println("Loading...");
-        Thread.sleep(1000);
-
 
         //Main game loop
         while (client.isInGame()) {
@@ -127,6 +128,7 @@ public class ViewCLI implements View {
                 }
                 performActionInTurn();
             }
+            pickCloud();
         }
     }
 
@@ -195,19 +197,13 @@ public class ViewCLI implements View {
 
     @Override
     public void diningChange(PropertyChangeEvent e) {
-        StrippedBoard oldBoard, newBoard;
-        oldBoard = (StrippedBoard) e.getOldValue();
-        newBoard = (StrippedBoard) e.getNewValue();
-        System.out.println(currentPlayer + "modified their dining room!");
-        System.out.println("From... ");
-        for (Colors c : oldBoard.getDining().keySet()) {
-            System.out.println(c + " students: " + oldBoard.getDining().get(c) + "\n");
+        EnumMap<Colors, Integer> newDining;
+        newDining = (EnumMap<Colors, Integer>) e.getNewValue();
+        System.out.println(e.getOldValue() + " modified their dining room! Here's the new configuration...");
+        for (Colors c : newDining.keySet()) {
+            System.out.println(c + " students: "+ newDining.get(c));
         }
-        System.out.println("to:");
-        for (Colors c : newBoard.getDining().keySet()) {
-            System.out.println(c + " students: " + newBoard.getDining().get(c) + "\n");
-
-        }
+        printCommandHelp();
     }
 
     @Override
@@ -224,7 +220,6 @@ public class ViewCLI implements View {
         for (Colors c : newBoard.getEntrance().keySet()) {
             System.out.println(c + " students: " + newBoard.getEntrance().get(c) + "\n");
         }
-
     }
 
     @Override
@@ -267,8 +262,6 @@ public class ViewCLI implements View {
             System.out.println("Cool\n");
         } else
             System.out.println("Goodbye!\n");
-
-
     }
 
     @Override
@@ -565,6 +558,34 @@ public class ViewCLI implements View {
         }
     }
 
+    public void pickCloud() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+        System.out.println("Almost at the end of your turn! Pick a cloud to refill your entrance.\n");
+        printClouds();
+        int i=0;
+        i = in.nextInt();
+    while (i<0||i>client.getLocalModel().getClouds().size()) {
+        System.out.println("Invalid cloud number! Try again.\n");
+        i = in.nextInt();
+    }
+    pickCloudOrder= new PickCloud(nickName, i);
+    client.performGameAction(pickCloudOrder);
+    }
+
+    public void printClouds()
+    {
+        EnumMap<Colors, Integer> students= new EnumMap<>(Colors.class);
+        for (StrippedCloud cloud: client.getLocalModel().getClouds())
+        {
+            students= cloud.getStudents();
+            System.out.println(("Cloud name:" +cloud.getName()));
+            System.out.println("Number of students: ");
+            for(Colors c: Colors.values())
+            {
+                System.out.println(c +" "+students.get(c));
+            }
+        }
+    }
+
     public void playCharacterA(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have chosen a no parameter character! Buckle up, the effects are on the way!\n");
         playCharacterCardAOrder = new PlayCharacterCardA(nickName, id);
@@ -647,19 +668,24 @@ public class ViewCLI implements View {
     }
 
     public void moveStudents() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-        StrippedBoard myBoard;
+        StrippedBoard myBoard= null;
+        ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
         int i = 0;
-        while (!client.getLocalModel().getBoards().get(i).getOwner().equals(nickName)) {
-            i++;
+         for (StrippedBoard b : boards) {
+            if (b.getOwner().equals(nickName))
+                myBoard=b;
         }
-        myBoard = client.getLocalModel().getBoards().get(i);
+         System.out.println("Board owner:"+ myBoard.getOwner());
         System.out.println("These are the students in your entrance: \n");
         System.out.println("\nEntrance configuration: ");
         for (Colors c : myBoard.getEntrance().keySet()) {
             System.out.println(c + " students: " + myBoard.getEntrance().get(c) + "\n");
         }
         EnumMap<Colors ,ArrayList<String>> studentsToGame = new EnumMap<>(Colors.class);
-        ArrayList<String> destinations= new ArrayList<>();
+        for (Colors c: Colors.values())
+        {
+            studentsToGame.put(c, new ArrayList<String>());
+        }
         String answer;
         String[] parts;
         String color;
@@ -668,7 +694,7 @@ public class ViewCLI implements View {
         int movedStudents = 0;
         boolean isValidInputYN = false;
         boolean doItAgain;
-        EnumMap<Colors, Integer> studentsToMove = null;
+        EnumMap<Colors, Integer> studentsToMove = new EnumMap<Colors, Integer>(Colors.class);
         ArrayList<StrippedIsland> myIslands = client.getLocalModel().getIslands();
         System.out.println("Do you want to move students to the dining room? Y\\N\n");
         do {
@@ -686,21 +712,21 @@ public class ViewCLI implements View {
             do {
                 System.out.println("Type the students you want to move to the dining room as \"color, number\"");
                 answer = in.nextLine();
-                parts = answer.split(" ");
+                parts = answer.split(",|, | ,");
                 color = parts[0];
                 color = color.replaceAll("[^a-zA Z0-9]", "");
+                parts[1]=parts[1].trim();
                 value = Integer.parseInt(parts[1]);
                 color = color.toUpperCase(Locale.ROOT);
+                System.out.println("The color you chose was "+ color + " the number you picked was "+ value);
                 if (isValidColor(color)) {
-                    if (myBoard.getEntrance().get(stringToColor(color)) <= value) {
-                        studentsToMove = myBoard.getDining();
+                    System.out.println("StringToColor output: "+ stringToColor(color));
+                    System.out.println("The number of students of that color in your entrance is "+ myBoard.getEntrance().get(stringToColor(color)));
+                    if (value<=myBoard.getEntrance().get(stringToColor(color))) {
+                        studentsToMove =initializeMove(studentsToMove);
                         studentsToMove.put(stringToColor(color), studentsToMove.get(stringToColor(color)) + value);
                         movedStudents += value;
-                        for(int w=0;i<value;i++)
-                        {
-                            destinations.add("dining");
-                        }//Adding destinations to ArrayList structure to conform to Game logic
-                        studentsToGame= strippedToGame(studentsToMove,studentsToGame,destinations);
+                        studentsToGame= strippedToGame(studentsToMove,studentsToGame,"dining");
                         System.out.println("Do you want to move other students to the dining room?\n");
                         do {
                             answer = in.nextLine();
@@ -722,34 +748,29 @@ public class ViewCLI implements View {
         }
         //End of dining room move segment
         //Move students to the islands if the player has moved less than 3 students already
-        destinations= new ArrayList<>();
         //Resetting destinations array for students to island part
         if (movedStudents < 3) {
             do {
-                System.out.println("Type the students you want to move to the island as \"color, number, number of island\" (for example, \"RED, 1, 5)\"");
+                System.out.println("Type the students you want to move to the island as \"color, number\", then input the island number");
                 answer = in.nextLine();
-                parts = answer.split(" ");
+                parts = answer.split(",|, | ,");
                 color = parts[0];
                 color = color.replaceAll("[^a-zA Z0-9]", "");
-                parts[1]=parts[1].replaceAll(", $", "");
-                parts[2]=parts[2].replaceAll("[^\\d]", "");
+                parts[1]=parts[1].trim();
                 value = Integer.parseInt(parts[1]);
-                island = Integer.parseInt(parts[2]);
+                island = in.nextInt();
                 color = color.toUpperCase(Locale.ROOT);
-                studentsToMove = myIslands.get(island).getStudents();
-
+                studentsToMove = initializeMove(studentsToMove);
+                System.out.println("The color you chose was "+ color + "the number you picked was "+ value);
                 if (isValidColor(color)) {
-                    if (myBoard.getEntrance().get(stringToColor(color)) <= value) {
+                    System.out.println("The color you chose was "+ color);
+                    System.out.println("The number of students of that color in your entrance is "+ myBoard.getEntrance().get(stringToColor(color)));
+                    if (value<=myBoard.getEntrance().get(stringToColor(color)))  {
                         if (island > 0 && island < client.getLocalModel().getIslands().size()) {
 
-                            studentsToMove.put(stringToColor(color), myIslands.get(island).getStudents().get(stringToColor(color)) + value);
+                            studentsToMove.put(stringToColor(color), value);
                             movedStudents += value;
-                            for(int w=0;i<value;i++)
-                            {
-                                destinations.add("island"+i);
-                            }
-                            //Adding destinations to ArrayList structure to conform to Game logic
-                            studentsToGame= strippedToGame(studentsToMove,studentsToGame,destinations);
+                            studentsToGame= strippedToGame(studentsToMove,studentsToGame,"island"+island);
                             System.out.println("Do you want to move other students to the islands?\n");
                             do {
                                 answer = in.nextLine();
@@ -771,7 +792,6 @@ public class ViewCLI implements View {
                 } else
                     System.out.println("There is no such color as " + color + "! Try again. \n");
             } while (doItAgain);
-            studentsToGame= strippedToGame(studentsToMove,studentsToGame,destinations);
             moveStudentsOrder = new MoveStudents(nickName, studentsToGame);
             client.performGameAction(moveStudentsOrder);
         } else
@@ -779,7 +799,14 @@ public class ViewCLI implements View {
     }
 
 //End of MoveStudents
-
+public EnumMap<Colors, Integer> initializeMove(EnumMap<Colors, Integer> move)
+{
+    for (Colors c: Colors.values())
+    {
+        move.put(c, 0);
+    }
+    return move;
+}
     public void printPlayerBoards() {
         ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
         System.out.println("Player boards:\n");
@@ -886,14 +913,23 @@ public class ViewCLI implements View {
 
     }
 
-    public EnumMap<Colors, ArrayList<String>> strippedToGame(EnumMap<Colors, Integer> students, EnumMap<Colors, ArrayList<String>> returnStudents, ArrayList<String> destination) {
-
+    public EnumMap<Colors, ArrayList<String>> strippedToGame(EnumMap<Colors, Integer> students, EnumMap<Colors, ArrayList<String>> returnStudents, String destination) {
+        EnumMap<Colors, Integer> tmp= students;
         for (Colors c : students.keySet()) {
             //I have to count the number of students moved in the stripped class and build myself an enummap which Game can understand
+                while(tmp.get(c)>0) {
+                    returnStudents.get(c).add(destination);
+                    System.out.println("Adding " + destination);
+                    tmp.put(c,students.get(c)-1);
+                }
 
-                returnStudents.put(c, destination);
-
-
+        }
+        System.out.println("Students to game: ");
+        for (Colors c : returnStudents.keySet())
+        {
+            System.out.println("Color "+ c);
+            for (String s : returnStudents.get(c))
+                System.out.println(s);
         }
 
         return returnStudents;

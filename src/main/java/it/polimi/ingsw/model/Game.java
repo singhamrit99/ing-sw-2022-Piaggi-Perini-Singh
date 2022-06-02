@@ -425,9 +425,10 @@ public class Game {
                         }
                     }
                 }
-                if (numOfStudents != 0) throw new IncorrectArgumentException("Numbers of students is wrong");
+                if (numOfStudents != 0) throw new IncorrectArgumentException("Number of students is wrong: should be 0, instead is " +numOfStudents);
 
-                //initialization of the two EnumMap, one for a destination
+                //initialization of the two EnumMap, one for a destination and previous Dining Room
+                EnumMap<Colors, Integer> oldDining = currentPlayer.getSchoolBoard().getDining();
                 EnumMap<Colors, Integer> studentsToDining = new EnumMap<>(Colors.class);
                 EnumMap<Colors, Integer> studentsToRemove = new EnumMap<>(Colors.class);
                 for (Colors c : Colors.values()) {
@@ -471,6 +472,7 @@ public class Game {
                 PropertyChangeEvent phaseChange=
                         new PropertyChangeEvent(this, "change-phase", null,null);
                 gameListener.propertyChange(phaseChange);
+                System.out.println("Send property change event for dining room\n");
                 if (isDiningChanged) {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
                     //notify dining change
