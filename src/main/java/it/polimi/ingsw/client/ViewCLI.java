@@ -49,7 +49,7 @@ public class ViewCLI implements UI {
             try {
                 nickName = in.nextLine();
                 client.registerClient(nickName);
-                view=StringNames.LOBBY;
+                client.view=StringNames.LOBBY;
                 break;
             } catch (UserAlreadyExistsException e) {
                 System.out.println("That username is already in the game! Try another.\n");
@@ -425,7 +425,7 @@ public class ViewCLI implements UI {
                 } catch (RoomNotExistsException | UserNotRegisteredException e) {
                     throw new RuntimeException(e);
                 }
-                view=StringNames.ROOM;
+                client.view=StringNames.ROOM;
                 clientRoom = requestedRoom;
                 System.out.println("You entered room " + clientRoom + " successfully \n");
                 System.out.println("Players in this room:");
@@ -515,8 +515,17 @@ public class ViewCLI implements UI {
             in.nextLine();
             printCommandHelp();
             System.out.println("Select an action: ");
-            String s = in.nextLine();
-            action = Integer.parseInt(s);
+            String input;
+            while (true) {
+                input=in.next();
+                try{
+                    action= Integer.parseInt(input);
+                    break;
+                }catch(NumberFormatException e)
+                {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
         } while (action < 1 || action > 7);
         switch (action) {
             case 1:
@@ -683,6 +692,18 @@ public class ViewCLI implements UI {
         System.out.println("You have chosen a student island card\n");
         int students = 0, island = 0;
         System.out.println(client.getLocalModel().getCharacters().get(id).getDescription());
+        System.out.println();
+        String input;
+        while (true) {
+            input=in.next();
+            try{
+                island= Integer.parseInt(input);
+                break;
+            }catch(NumberFormatException e)
+            {
+                System.out.println("That's not a number! Try again.\n");
+            }
+        }
         playCharacterCardBOrder = new PlayCharacterCardB(nickName, id, students, island);
         try {
             client.performGameAction(playCharacterCardBOrder);
@@ -1047,10 +1068,10 @@ public EnumMap<Colors, Integer> initializeMove(EnumMap<Colors, Integer> move)
                 }
 
         }
-        System.out.println("Students to game: ");
+       // System.out.println("Students to game: ");
         for (Colors c : returnStudents.keySet())
         {
-            System.out.println("Color "+ c);
+          //  System.out.println("Color "+ c);
             for (String s : returnStudents.get(c))
                 System.out.println(s);
         }

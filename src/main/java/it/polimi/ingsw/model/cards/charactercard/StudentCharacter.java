@@ -29,7 +29,6 @@ public class StudentCharacter extends CharacterCard implements Serializable {
         islandIndex = -1;
         students1 = new EnumMap<>(Colors.class);
         students2 = new EnumMap<>(Colors.class);
-
         students = new EnumMap<>(Colors.class);
         for (Colors color : Colors.values()) {
             students.put(color, 0);

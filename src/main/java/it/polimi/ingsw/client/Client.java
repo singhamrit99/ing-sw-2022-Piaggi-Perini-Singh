@@ -202,7 +202,7 @@ public class Client implements Runnable {
                     if (phase > 4) {
                         phase = 0;
                     }
-                    System.out.println("phase:" + phase);
+                   // System.out.println("phase:" + phase);
                     if (phase == 1) {
                         if (nickname.equals((String) evt.getNewValue())) {
                             System.out.println("It is my turn according to the assistant card I played.");
