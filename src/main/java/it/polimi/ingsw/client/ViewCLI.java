@@ -20,6 +20,7 @@ public class ViewCLI implements UI {
     Client client;
     String nickName;
     String currentPlayer;
+    boolean isANumber;
     int playerNumber;
     String clientRoom = null;
     int action;
@@ -87,7 +88,7 @@ public class ViewCLI implements UI {
                     leaveRoom();//fatto
                     break;
                 case "start":
-                    startGame();
+                    startGameRequest();
                     break;
                 case "help":
                     System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
@@ -136,9 +137,8 @@ public class ViewCLI implements UI {
     }
 
     //Room methods
-
-    @Override
-    public void startGame() throws RemoteException {
+    public void startGameRequest() throws RemoteException
+    {
         try {
             client.startGame();
         } catch (UserNotInRoomException e) {
@@ -148,6 +148,10 @@ public class ViewCLI implements UI {
         } catch (RoomNotExistsException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
+    }
+    @Override
+    public void startGame() throws RemoteException {
+
     }
 
     @Override
@@ -458,12 +462,34 @@ public class ViewCLI implements UI {
     public synchronized void playAssistantCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("It's your turn! Pick an assistant card to play. \n");
         printAssistantCards();
-        int i = in.nextInt();
+        int i;
+        String input;
+            while (true) {
+                input=in.next();
+                try{
+                    i= Integer.parseInt(input);
+                    break;
+                }catch(NumberFormatException e)
+                {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
         while (i < 0 || i > client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size()) {
             System.out.println("Invalid number, try again\n");
-            i = in.nextInt();
+            while (true) {
+                input=in.next();
+                try{
+                    i= Integer.parseInt(input);
+                    break;
+                }catch(NumberFormatException e)
+                {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
         }
+        //I now have a valid assistant card
         i++;
+        System.out.println("Card played: " +i);
         playAssistantCardOrder = new PlayAssistantCard(this.nickName, "Assistente" + i);
         try {
             client.performGameAction(playAssistantCardOrder);
@@ -551,10 +577,30 @@ public class ViewCLI implements UI {
         StrippedCharacter tmp;
         System.out.println("Select the character you want to play! You currently have " + client.getLocalModel().getBoards().get(playerNumber).getCoins() + " coins \n");
         printCharacterCards();
-        int i = in.nextInt();
+        int i;
+        String input;
+        while (true) {
+            input=in.next();
+            try{
+                i= Integer.parseInt(input);
+                break;
+            }catch(NumberFormatException e)
+            {
+                System.out.println("That's not a number! Try again.\n");
+            }
+        }
         while (i < 0 || i > 2) {
             System.out.println("That's not right! Try again\n");
-            i = in.nextInt();
+            while (true) {
+                input=in.next();
+                try{
+                    i= Integer.parseInt(input);
+                    break;
+                }catch(NumberFormatException e)
+                {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
         }
         tmp = client.getLocalModel().getCharacters().get(i);
         switch (tmp.getRequirements().getRequirements().toLowerCase(Locale.ROOT)) {
@@ -580,10 +626,29 @@ public class ViewCLI implements UI {
         System.out.println("Almost at the end of your turn! Pick a cloud to refill your entrance.\n");
         printClouds();
         int i=0;
-        i = in.nextInt();
+        String input;
+        while (true) {
+            input=in.next();
+            try{
+                i= Integer.parseInt(input);
+                break;
+            }catch(NumberFormatException e)
+            {
+                System.out.println("That's not a number! Try again.\n");
+            }
+        }
     while (i<0||i>client.getLocalModel().getClouds().size()) {
         System.out.println("Invalid cloud number! Try again.\n");
-        i = in.nextInt();
+        while (true) {
+            input=in.next();
+            try{
+                i= Integer.parseInt(input);
+                break;
+            }catch(NumberFormatException e)
+            {
+                System.out.println("That's not a number! Try again.\n");
+            }
+        }
     }
     pickCloudOrder= new PickCloud(nickName, i);
     client.performGameAction(pickCloudOrder);
@@ -647,9 +712,19 @@ public class ViewCLI implements UI {
         System.out.println(client.getLocalModel().getCharacters().get(id));
         System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
         int choice;
+        String input;
         boolean invalidChoice = true;
         do {
-             choice = in.nextInt();
+            while (true) {
+                input=in.next();
+                try{
+                    choice= Integer.parseInt(input);
+                    break;
+                }catch(NumberFormatException e)
+                {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
             if (choice<0||choice>4)
             {
                 System.out.println("Invalid color! Try again.");
@@ -669,12 +744,32 @@ public class ViewCLI implements UI {
 
     public void moveMN() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("Input the number of steps you want Mother Nature to move!\n ");
-        int input = in.nextInt();
-        while (input < 0 || input > turnMoves) {
-            System.out.println("That number is not right! Try again.\n");
-            input = in.nextInt();
+        String input;
+        int i;
+        while (true) {
+            input=in.next();
+            try{
+                i= Integer.parseInt(input);
+                break;
+            }catch(NumberFormatException e)
+            {
+                System.out.println("That's not a number! Try again.\n");
+            }
         }
-        moveMotherNatureOrder= new MoveMotherNature(nickName, input);
+        while (i < 0 || i > turnMoves) {
+            System.out.println("That number is not right! Try again.\n");
+            while (true) {
+                input=in.next();
+                try{
+                    i= Integer.parseInt(input);
+                    break;
+                }catch(NumberFormatException e)
+                {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
+        }
+        moveMotherNatureOrder= new MoveMotherNature(nickName, i);
         try {
             client.performGameAction(moveMotherNatureOrder);
         }catch (IncorrectStateException e)
@@ -776,7 +871,17 @@ public class ViewCLI implements UI {
                 color = color.replaceAll("[^a-zA Z0-9]", "");
                 parts[1]=parts[1].trim();
                 value = Integer.parseInt(parts[1]);
-                island = in.nextInt();
+                String input;
+                while (true) {
+                    input=in.next();
+                    try{
+                        island= Integer.parseInt(input);
+                        break;
+                    }catch(NumberFormatException e)
+                    {
+                        System.out.println("That's not a number! Try again.\n");
+                    }
+                }
                 color = color.toUpperCase(Locale.ROOT);
                 studentsToMove = initializeMove(studentsToMove);
                 System.out.println("The color you chose was "+ color + "the number you picked was "+ value);
