@@ -5,7 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/GameViewStyle.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/GameViewStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar>
         <menus>
@@ -14,9 +14,12 @@
               <MenuItem mnemonicParsing="false" text="Leave game" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="View">
+            <Menu fx:id="changeView" mnemonicParsing="false" text="View">
               <items>
                 <MenuItem mnemonicParsing="false" text="Player1" />
+                  <MenuItem mnemonicParsing="false" text="Player2" />
+                  <MenuItem mnemonicParsing="false" text="Player3" />
+                  <MenuItem mnemonicParsing="false" text="Player4" />
               </items>
             </Menu>
             <Menu fx:id="currentPLayer" mnemonicParsing="false" text="Current player: " />
@@ -32,44 +35,108 @@
                <viewport>
                   <Rectangle2D />
                </viewport></ImageView>
-            <ImageView fitHeight="50.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
+            <ImageView fitHeight="52.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
                <image>
                   <Image url="@../img/professors/teacher_blue.png" />
                </image>
                <StackPane.margin>
-                  <Insets bottom="55.0" left="495.0" />
+                  <Insets bottom="54.8" left="494.5" />
                </StackPane.margin>
             </ImageView>
-            <ImageView fitHeight="50.0" fitWidth="100.0" layoutX="873.0" layoutY="372.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
+            <ImageView fitHeight="52.0" layoutX="873.0" layoutY="372.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
                <image>
                   <Image url="@../img/professors/teacher_green.png" />
                </image>
                <StackPane.margin>
-                  <Insets bottom="361.0" left="495.0" />
+                  <Insets bottom="360.0" left="495.0" />
                </StackPane.margin>
             </ImageView>
-            <ImageView fitHeight="50.0" fitWidth="100.0" layoutX="625.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
+            <ImageView fitHeight="52.0" layoutX="625.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
                <image>
                   <Image url="@../img/professors/teacher_pink.png" />
                </image>
                <StackPane.margin>
-                  <Insets bottom="130.0" left="495.0" />
+                  <Insets bottom="131.0" left="494.5" />
                </StackPane.margin>
             </ImageView>
-            <ImageView fitHeight="50.0" fitWidth="100.0" layoutX="625.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
-               <image>
-                  <Image url="@../img/professors/teacher_red.png" />
-               </image>
-               <StackPane.margin>
-                  <Insets bottom="130.0" left="495.0" />
-               </StackPane.margin>
-            </ImageView>
-            <ImageView fitHeight="50.0" fitWidth="100.0" layoutX="625.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
+            <ImageView fitHeight="52.0" layoutX="625.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
                <image>
                   <Image url="@../img/professors/teacher_yellow.png" />
                </image>
                <StackPane.margin>
-                  <Insets bottom="130.0" left="495.0" />
+                  <Insets bottom="207.0" left="495.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="75.0" layoutX="872.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
+               <image>
+                  <Image url="@../img/towers/white_tower.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="87.0" right="240.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="75.0" layoutX="975.0" layoutY="313.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
+               <image>
+                  <Image url="@../img/towers/white_tower.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="165.0" right="240.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="75.0" layoutX="975.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
+               <image>
+                  <Image url="@../img/towers/white_tower.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="240.0" right="240.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="75.0" layoutX="975.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
+               <image>
+                  <Image url="@../img/towers/white_tower.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="318.0" right="240.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="75.0" layoutX="975.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
+               <image>
+                  <Image url="@../img/towers/white_tower.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="87.0" right="157.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="75.0" layoutX="1058.0" layoutY="315.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
+               <image>
+                  <Image url="@../img/towers/white_tower.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="318.0" right="157.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="75.0" layoutX="1058.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
+               <image>
+                  <Image url="@../img/towers/white_tower.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="240.0" right="157.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="75.0" layoutX="1058.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
+               <image>
+                  <Image url="@../img/towers/white_tower.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="165.0" right="157.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="52.0" layoutX="625.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_CENTER">
+               <image>
+                  <Image url="@../img/professors/teacher_red.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets bottom="283.5" left="494.0" />
                </StackPane.margin>
             </ImageView>
          </children>
