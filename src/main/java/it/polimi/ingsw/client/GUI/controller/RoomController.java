@@ -106,7 +106,6 @@ public class RoomController extends InitialStage implements Controller {
 
                 startGameButton.setOnAction((event) -> {
                     opened.set(false);
-                    GUI.client.view = StringNames.BOARD;
                     try {
                         GUI.client.startGame();
                     } catch (RemoteException e) {
