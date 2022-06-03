@@ -77,7 +77,7 @@ public class Client implements Runnable {
         }
     }
 
-    public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserNotRegisteredException {
+    public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserNotRegisteredException, RoomFullException {
         server.joinRoom(nickname, roomName);
         clientRoom = roomName;
         try {

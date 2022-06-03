@@ -18,7 +18,7 @@ public interface serverStub extends Remote {
 
     void createRoom(String username, String roomName) throws RemoteException, RoomAlreadyExistsException, UserNotRegisteredException;
 
-    void joinRoom(String username, String roomName) throws RemoteException, UserNotRegisteredException, RoomNotExistsException;
+    void joinRoom(String username, String roomName) throws RemoteException, UserNotRegisteredException, RoomNotExistsException, RoomFullException;
 
     void leaveRoom(String username) throws RemoteException, UserNotInRoomException, UserNotRegisteredException;
 

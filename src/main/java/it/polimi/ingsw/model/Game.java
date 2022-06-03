@@ -428,7 +428,6 @@ public class Game {
                 if (numOfStudents != 0) throw new IncorrectArgumentException("Number of students is wrong: should be 0, instead is " +numOfStudents);
 
                 //initialization of the two EnumMap, one for a destination and previous Dining Room
-                EnumMap<Colors, Integer> oldDining = currentPlayer.getSchoolBoard().getDining();
                 EnumMap<Colors, Integer> studentsToDining = new EnumMap<>(Colors.class);
                 EnumMap<Colors, Integer> studentsToRemove = new EnumMap<>(Colors.class);
                 for (Colors c : Colors.values()) {
@@ -475,8 +474,11 @@ public class Game {
                 System.out.println("Send property change event for dining room\n");
                 if (isDiningChanged) {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
-                    //notify dining change
+                    //notify dining AND entrance change
                     EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
+                    PropertyChangeEvent event=
+                            new PropertyChangeEvent(this,"entrance",currentPlayer.getNickname(),currentPlayer.getSchoolBoard().getEntrance());
+                    gameListener.propertyChange(event);
                     PropertyChangeEvent evt =
                             new PropertyChangeEvent(this, "dining", currentPlayer.getNickname(), newDining);
                     gameListener.propertyChange(evt);
