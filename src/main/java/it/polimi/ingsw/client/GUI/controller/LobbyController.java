@@ -82,8 +82,9 @@ public class LobbyController extends InitialStage implements Controller {
                     Utility.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
                 } catch (UserNotRegisteredException e) {
                     Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
-                }catch(RoomFullException e)
-                {Utility.showErrorDialogBox(e.getMessage());}
+                } catch (RoomFullException e) {
+                    Utility.showErrorDialogBox(e.getMessage());
+                }
             });
             roomsList.addRow(i + 1, roomName, joinRoom);
 
