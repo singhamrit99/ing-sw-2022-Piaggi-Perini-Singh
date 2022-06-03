@@ -49,6 +49,7 @@ public class RoomController extends InitialStage implements Controller {
     public RoomController(GUI gui) {
         super(gui);
     }
+
     @FXML
     public void initialize() {
         opened.set(true);
@@ -88,6 +89,7 @@ public class RoomController extends InitialStage implements Controller {
         try {
             if (GUI.client.isLeader()) {
                 startGameButton.setVisible(true);
+
                 setExpertMode.setOnAction((event) -> {
                     try {
                         GUI.client.setExpertMode(setExpertMode.selectedProperty().get());
@@ -130,17 +132,16 @@ public class RoomController extends InitialStage implements Controller {
             Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
         }
 
-        ImageView blackTeam = new ImageView(blackTowerImage);
-        ImageView whiteTeam = new ImageView(whiteTowerImage);
-        ImageView greyTeam = new ImageView(greyTowerImage);
-
         for (int i = 0; i < players.size(); i++) {
-            ImageView team = blackTeam;
+            ImageView team = new ImageView();
             if (players.size() == 3) {
-                if (i == 2) team = greyTeam;
+                //TODO do randomly selected
+                if (i == 0) team = new ImageView(blackTowerImage);
+                if (i == 1) team = new ImageView(whiteTowerImage);
+                if (i == 2) team = new ImageView(greyTowerImage);
             } else {
-                if (i % 2 == 1) team = blackTeam;
-                else team = whiteTeam;
+                if (i % 2 == 1) team = new ImageView(blackTowerImage);
+                else team = new ImageView(whiteTowerImage);
             }
             team.setFitHeight(40);
             team.setFitWidth(40);
