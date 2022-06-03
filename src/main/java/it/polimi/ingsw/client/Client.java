@@ -68,9 +68,8 @@ public class Client implements Runnable {
     public void createRoom(String roomName) throws RemoteException, UserNotRegisteredException, RoomAlreadyExistsException {
         server.createRoom(nickname, roomName);
         clientRoom = roomName;
-
         try {
-            playersList = server.getPlayers(clientRoom);
+            playersList = server.getPlayers(clientRoom); //ui purposes
             ui.roomJoin(playersList);
         } catch (RoomNotExistsException e) {
             e.printStackTrace();
@@ -300,6 +299,10 @@ public class Client implements Runnable {
 
     public String getRoom() {
         return clientRoom;
+    }
+
+    public ArrayList<String> getLocalPlayerList(){
+        return playersList;
     }
 }
 
