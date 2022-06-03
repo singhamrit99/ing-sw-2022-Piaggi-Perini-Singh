@@ -80,7 +80,9 @@ public class Client implements Runnable {
     public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserNotRegisteredException {
         server.joinRoom(nickname, roomName);
         clientRoom = roomName;
-        playersList = getNicknamesInRoom(clientRoom);
+        try {
+            playersList = getNicknamesInRoom();
+        } catch (UserNotInRoomException ignored) {} //just joined a Room that exists because checked by the server
         ui.roomJoin(playersList);
     }
 
@@ -92,8 +94,9 @@ public class Client implements Runnable {
         return server.getRoomsList();
     }
 
-    public ArrayList<String> getNicknamesInRoom(String roomName) throws RemoteException, RoomNotExistsException {
-        return server.getPlayers(roomName);
+    public ArrayList<String> getNicknamesInRoom() throws RemoteException, RoomNotExistsException, UserNotInRoomException {
+        if(clientRoom==null)throw new UserNotInRoomException();
+        return server.getPlayers(clientRoom);
     }
 
     public void setExpertMode(boolean value) throws RemoteException, NotLeaderRoomException, UserNotInRoomException, UserNotRegisteredException {
@@ -111,8 +114,8 @@ public class Client implements Runnable {
         }
     }
 
-    public boolean isLeader() throws RemoteException, RoomNotExistsException {
-        return getNicknamesInRoom(clientRoom).get(0).equals(nickname);
+    public boolean isLeader() throws RemoteException, RoomNotExistsException, UserNotInRoomException {
+        return getNicknamesInRoom().get(0).equals(nickname);
     }
 
     public void startGame() throws RemoteException, NotLeaderRoomException, UserNotInRoomException, RoomNotExistsException, UserNotRegisteredException {
@@ -157,8 +160,8 @@ public class Client implements Runnable {
                         } else if (view.equals(StringNames.ROOM)) {
                             //refresh playerList if in room
                             if (clientRoom != null) {
-                                if (!getNicknamesInRoom(clientRoom).equals(playersList)) {
-                                    playersList = getNicknamesInRoom(clientRoom);
+                                if (!getNicknamesInRoom().equals(playersList)) {
+                                    playersList = getNicknamesInRoom();
                                     ui.roomJoin(playersList);
                                 }
                             }

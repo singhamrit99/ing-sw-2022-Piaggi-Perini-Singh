@@ -16,12 +16,12 @@ public interface StringNames {
     String CREATE_NEW_ROOM = "CreateRoom";
 
     //used for alerts
-    String NICKNAME_ALREADY_EXISTS = "Sorry! Nickname is already taken";
-    String CONNECTION_ERROR = "Sorry! There is an issue with the connection";
+    String NICKNAME_ALREADY_EXISTS = "Nickname is already taken";
+    String CONNECTION_ERROR = "There is an issue with the connection";
     String NICKNAME_FIELD_NULL = "Nickname field is not filled";
     String NO_SUCH_ROOM = "No such room found";
     String USER_NOT_REGISTERED = "User is not registered in the server";
     String NO_LEADER = "You don't have permission to perform this action";
     String NOT_IN_ROOM = "You are not in the room";
-    String ROOM_EXISTS = "Sorry! Room name already taken";
+    String ROOM_EXISTS = "Room name already taken";
 }

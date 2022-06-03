@@ -49,7 +49,6 @@ public class RoomController extends InitialStage implements Controller {
     public RoomController(GUI gui) {
         super(gui);
     }
-
     @FXML
     public void initialize() {
         opened.set(true);
@@ -89,7 +88,6 @@ public class RoomController extends InitialStage implements Controller {
         try {
             if (GUI.client.isLeader()) {
                 startGameButton.setVisible(true);
-
                 setExpertMode.setOnAction((event) -> {
                     try {
                         GUI.client.setExpertMode(setExpertMode.selectedProperty().get());
@@ -128,6 +126,8 @@ public class RoomController extends InitialStage implements Controller {
             Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
         } catch (RoomNotExistsException e) {
             Utility.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
+        } catch (UserNotInRoomException e) {
+            Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
         }
 
         ImageView blackTeam = new ImageView(blackTowerImage);
