@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.GUI.controller;
 public interface ResourcesPath {
     String FXML_FILE_PATH = "/fxml/"; // Equivalent to src/main/resources/fxml
     String FILE_EXTENSION = ".fxml";
-
     String LAUNCHER = "Launcher";
     String LOBBY = "Lobby";
     String ROOM = "Room";
