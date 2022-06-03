@@ -4,6 +4,8 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.GUI.controller.*;
 import it.polimi.ingsw.client.StringNames;
 import it.polimi.ingsw.client.UI;
+import it.polimi.ingsw.exceptions.RoomNotExistsException;
+import it.polimi.ingsw.exceptions.UserNotInRoomException;
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -62,11 +64,18 @@ public class GUI implements UI {
     }
 
     @Override
-    public void startGame() throws RemoteException {
+    public void startGame() {
         if (GUI.client.view.equals(StringNames.BOARD)) {
             Platform.runLater(() -> {
-                SchoolBoardController schoolBoardController = new SchoolBoardController(this);
-                Controller.load(ResourcesPath.GAME_VIEW, schoolBoardController);
+                GameViewController gameController = new GameViewController(this);
+                Controller.load(ResourcesPath.GAME_VIEW, gameController);
+/*
+                try {
+                    gameController.setPlayersViewMenu(GUI.client.getNicknamesInRoom());
+                } catch (RemoteException | RoomNotExistsException | UserNotInRoomException e) {
+                    throw new RuntimeException(e);
+                }
+    */
             });
         }
     }
