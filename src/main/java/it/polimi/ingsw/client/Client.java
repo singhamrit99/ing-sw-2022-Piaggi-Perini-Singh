@@ -82,7 +82,8 @@ public class Client implements Runnable {
         clientRoom = roomName;
         try {
             playersList = getNicknamesInRoom();
-        } catch (UserNotInRoomException ignored) {} //just joined a Room that exists because checked by the server
+        } catch (UserNotInRoomException ignored) {
+        } //just joined a Room that exists because checked by the server
         ui.roomJoin(playersList);
     }
 
@@ -95,7 +96,7 @@ public class Client implements Runnable {
     }
 
     public ArrayList<String> getNicknamesInRoom() throws RemoteException, RoomNotExistsException, UserNotInRoomException {
-        if(clientRoom==null)throw new UserNotInRoomException();
+        if (clientRoom == null) throw new UserNotInRoomException();
         return server.getPlayers(clientRoom);
     }
 
@@ -120,7 +121,6 @@ public class Client implements Runnable {
 
     public void startGame() throws RemoteException, NotLeaderRoomException, UserNotInRoomException, RoomNotExistsException, UserNotRegisteredException {
         server.startGame(nickname);
-        ui.startGame();
     }
 
     public void roomListShow() {
@@ -187,6 +187,7 @@ public class Client implements Runnable {
     }
 
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
+        //TODO for Lore: all the System.out.println have to go into the cli
         for (PropertyChangeEvent evt : evtArray) {
             switch (evt.getPropertyName()) {
                 case "first-player":
@@ -205,7 +206,7 @@ public class Client implements Runnable {
                     if (phase > 4) {
                         phase = 0;
                     }
-                   // System.out.println("phase:" + phase);
+                    // System.out.println("phase:" + phase);
                     if (phase == 1) {
                         if (nickname.equals((String) evt.getNewValue())) {
                             System.out.println("It is my turn according to the assistant card I played.");
@@ -217,12 +218,18 @@ public class Client implements Runnable {
                     }
                     break;
                 case "init":
-                    System.out.println("Request for loading received\n");
+                    //System.out.println("Request for loading received\n");
                     localModel = (StrippedModel) evt.getNewValue();
                     localModelLoaded = true;
-                    System.out.println("Local model loaded\n");
-                    localModel.setUI(ui);
-                    System.out.println("Game ready! Press any key to continue.\n");
+                    //System.out.println("Local model loaded\n");
+                    localModel.setUi(ui);
+                    //System.out.println("Game ready! Press any key to continue.\n");
+                    try {
+                        view = StringNames.BOARD;
+                        ui.startGame();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "current-player":
                     if (nickname.equals(evt.getNewValue()))
