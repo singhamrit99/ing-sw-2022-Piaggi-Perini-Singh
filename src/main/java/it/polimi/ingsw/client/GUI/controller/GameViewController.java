@@ -37,6 +37,8 @@ public class GameViewController extends InitialStage implements Controller {
     private Menu changeView;
 
     @FXML
+    private Menu currentPlayer;
+    @FXML
     private Image blackTowerImage;
     @FXML
     private Image whiteTowerImage;
@@ -69,8 +71,12 @@ public class GameViewController extends InitialStage implements Controller {
                 indexItem++;
             }else{
                 items.get(indexItem).setText(players.get(indexItem));
+                indexItem++;
             }
         }}
 
+    public void setCurrentPlayer(String currentPlayer){
+        this.currentPlayer.setText("Current player: "+ currentPlayer);
+    }
 
 }
