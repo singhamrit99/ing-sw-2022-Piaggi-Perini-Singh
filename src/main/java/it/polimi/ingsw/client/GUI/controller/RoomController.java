@@ -54,6 +54,7 @@ public class RoomController extends InitialStage implements Controller {
     public void initialize() {
         opened.set(true);
         roomTitle.setText(GUI.client.getRoom());
+        setExpertMode = new ToggleButton();
 
         try {
             blackTowerImage = new Image(new FileInputStream(ResourcesPath.BLACK_TOWER));
@@ -63,39 +64,7 @@ public class RoomController extends InitialStage implements Controller {
             e.printStackTrace();
         }
 
-        setExpertMode = new ToggleButton();
-        setExpertMode.setOnAction((event) -> {
-            try {
-                GUI.client.setExpertMode(setExpertMode.selectedProperty().get());
-            } catch (RemoteException e) {
-                Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
-            } catch (NotLeaderRoomException e) {
-                Utility.showErrorDialogBox(StringNames.NO_LEADER);
-            } catch (UserNotInRoomException e) {
-                Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
-            } catch (UserNotRegisteredException e) {
-                Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
-            }
-        });
-
         loadPlayersList();
-        startGameButton.setOnAction((event) -> {
-            opened.set(false);
-            GUI.client.view = StringNames.BOARD;
-            try {
-                GUI.client.startGame();
-            } catch (RemoteException e) {
-                Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
-            } catch (NotLeaderRoomException e) {
-                Utility.showErrorDialogBox(StringNames.NO_LEADER);
-            } catch (UserNotInRoomException e) {
-                Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
-            } catch (RoomNotExistsException e) {
-                Utility.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
-            } catch (UserNotRegisteredException e) {
-                Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
-            }
-        });
 
         leaveButton.setOnAction((event) -> {
             try {
@@ -117,6 +86,50 @@ public class RoomController extends InitialStage implements Controller {
     }
 
     private void loadPlayersList() {
+        try {
+            if (GUI.client.isLeader()) {
+                startGameButton.setVisible(true);
+
+                setExpertMode.setOnAction((event) -> {
+                    try {
+                        GUI.client.setExpertMode(setExpertMode.selectedProperty().get());
+                    } catch (RemoteException e) {
+                        Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                    } catch (NotLeaderRoomException e) {
+                        Utility.showErrorDialogBox(StringNames.NO_LEADER);
+                    } catch (UserNotInRoomException e) {
+                        Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                    } catch (UserNotRegisteredException e) {
+                        Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                    }
+                });
+
+                startGameButton.setOnAction((event) -> {
+                    opened.set(false);
+                    GUI.client.view = StringNames.BOARD;
+                    try {
+                        GUI.client.startGame();
+                    } catch (RemoteException e) {
+                        Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                    } catch (NotLeaderRoomException e) {
+                        Utility.showErrorDialogBox(StringNames.NO_LEADER);
+                    } catch (UserNotInRoomException e) {
+                        Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                    } catch (RoomNotExistsException e) {
+                        Utility.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
+                    } catch (UserNotRegisteredException e) {
+                        Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                    }
+                });
+            } else {
+                startGameButton.setVisible(false);
+            }
+        } catch (RemoteException e) {
+            Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+        } catch (RoomNotExistsException e) {
+            Utility.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
+        }
+
         ImageView blackTeam = new ImageView(blackTowerImage);
         ImageView whiteTeam = new ImageView(whiteTowerImage);
         ImageView greyTeam = new ImageView(greyTowerImage);
