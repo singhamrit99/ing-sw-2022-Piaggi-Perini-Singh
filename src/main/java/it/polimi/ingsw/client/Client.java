@@ -191,7 +191,6 @@ public class Client implements Runnable {
         for (PropertyChangeEvent evt : evtArray) {
             switch (evt.getPropertyName()) {
                 case "first-player":
-                    ui.currentPlayer((String) evt.getNewValue());
                     if (nickname.equals(evt.getNewValue()))
                         setMyTurn(true);
                     if (localModel != null) {
@@ -201,12 +200,10 @@ public class Client implements Runnable {
                     }
                     break;
                 case "change-phase":
-                    // System.out.println("Received change phase event\n");
                     phase++;
                     if (phase > 4) {
                         phase = 0;
                     }
-                    // System.out.println("phase:" + phase);
                     if (phase == 1) {
                         if (nickname.equals((String) evt.getNewValue())) {
                             System.out.println("It is my turn according to the assistant card I played.");
@@ -218,12 +215,9 @@ public class Client implements Runnable {
                     }
                     break;
                 case "init":
-                    //System.out.println("Request for loading received\n");
                     localModel = (StrippedModel) evt.getNewValue();
                     localModelLoaded = true;
-                    //System.out.println("Local model loaded\n");
                     localModel.setUi(ui);
-                    //System.out.println("Game ready! Press any key to continue.\n");
                     try {
                         view = StringNames.INGAME;
                         ui.startGame();
@@ -246,7 +240,6 @@ public class Client implements Runnable {
                     } else {
                         throw new LocalModelNotLoadedException();
                     }
-
                     break;
             }
         }
