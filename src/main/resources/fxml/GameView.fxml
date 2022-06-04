@@ -9,7 +9,7 @@
     <children>
       <MenuBar layoutX="10.0" layoutY="10.0">
          <menus>
-            <Menu fx:id="currentViewPlayer" mnemonicParsing="false" text="Current player:  " />
+            <Menu fx:id="currentViewPlayer" mnemonicParsing="false" text="Current player:  adasdasdas" />
             <Menu fx:id="changeViewBoard" mnemonicParsing="false" text="Change View Board">
                <items>
                   <MenuItem mnemonicParsing="false" text="Player1" />
@@ -153,7 +153,7 @@
                 </StackPane>
                 <StackPane prefHeight="150.0" prefWidth="200.0">
                     <children>
-                        <ImageView fitHeight="52.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
+                        <ImageView fx:id="studentEntrance1" fitHeight="52.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
                             <image>
                                 <Image url="@../img/students/student_blue.png" />
                             </image>
@@ -161,7 +161,7 @@
                                 <Insets bottom="260.0" left="28.0" />
                             </StackPane.margin>
                         </ImageView>
-                        <ImageView fitHeight="52.0" layoutX="38.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
+                        <ImageView fx:id="studentEntrance3" fitHeight="52.0" layoutX="38.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
                             <image>
                                 <Image url="@../img/students/student_blue.png" />
                             </image>
@@ -169,7 +169,7 @@
                                 <Insets bottom="118.0" left="28.0" />
                             </StackPane.margin>
                         </ImageView>
-                        <ImageView fitHeight="52.0" layoutX="484.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
+                        <ImageView fx:id="studentEntrance4" fitHeight="52.0" layoutX="484.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
                             <image>
                                 <Image url="@../img/students/student_blue.png" />
                             </image>
@@ -177,7 +177,7 @@
                                 <Insets bottom="50.0" left="28.0" />
                             </StackPane.margin>
                         </ImageView>
-                        <ImageView fitHeight="52.0" layoutX="484.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
+                        <ImageView fx:id="studentEntrance2" fitHeight="52.0" layoutX="484.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
                             <image>
                                 <Image url="@../img/students/student_blue.png" />
                             </image>
@@ -185,7 +185,7 @@
                                 <Insets bottom="190.0" left="28.0" />
                             </StackPane.margin>
                         </ImageView>
-                        <ImageView fitHeight="52.0" layoutX="38.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
+                        <ImageView fx:id="studentEntrance8" fitHeight="52.0" layoutX="38.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
                             <image>
                                 <Image url="@../img/students/student_blue.png" />
                             </image>
@@ -193,7 +193,7 @@
                                 <Insets bottom="260.0" left="85.0" />
                             </StackPane.margin>
                         </ImageView>
-                        <ImageView fitHeight="52.0" layoutX="38.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
+                        <ImageView fx:id="studentEntrance6" fitHeight="52.0" layoutX="38.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
                             <image>
                                 <Image url="@../img/students/student_blue.png" />
                             </image>
@@ -201,7 +201,7 @@
                                 <Insets bottom="118.0" left="85.0" />
                             </StackPane.margin>
                         </ImageView>
-                        <ImageView fitHeight="52.0" layoutX="38.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
+                        <ImageView fx:id="studentEntrance5" fitHeight="52.0" layoutX="38.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
                             <image>
                                 <Image url="@../img/students/student_blue.png" />
                             </image>
@@ -209,7 +209,7 @@
                                 <Insets bottom="50.0" left="85.0" />
                             </StackPane.margin>
                         </ImageView>
-                        <ImageView fitHeight="52.0" layoutX="38.0" layoutY="202.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
+                        <ImageView fx:id="studentEntrance9" fitHeight="52.0" layoutX="38.0" layoutY="202.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
                             <image>
                                 <Image url="@../img/students/student_blue.png" />
                             </image>
@@ -217,7 +217,7 @@
                                 <Insets bottom="333.0" left="86.0" />
                             </StackPane.margin>
                         </ImageView>
-                        <ImageView fitHeight="52.0" layoutX="95.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
+                        <ImageView fx:id="studentEntrance7" fitHeight="52.0" layoutX="95.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
                             <image>
                                 <Image url="@../img/students/student_blue.png" />
                             </image>
