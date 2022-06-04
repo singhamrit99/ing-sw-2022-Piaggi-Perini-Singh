@@ -118,7 +118,8 @@ public class Client implements Runnable {
         return getNicknamesInRoom().get(0).equals(nickname);
     }
 
-    public void startGame() throws RemoteException, NotLeaderRoomException, UserNotInRoomException, RoomNotExistsException, UserNotRegisteredException {
+    public void startGame() throws RemoteException, NotLeaderRoomException, UserNotInRoomException,
+            RoomNotExistsException,NotEnoughPlayersException, UserNotRegisteredException {
         server.startGame(nickname);
     }
 
@@ -224,7 +225,7 @@ public class Client implements Runnable {
                     localModel.setUi(ui);
                     //System.out.println("Game ready! Press any key to continue.\n");
                     try {
-                        view = StringNames.BOARD;
+                        view = StringNames.INGAME;
                         ui.startGame();
                     } catch (RemoteException e) {
                         e.printStackTrace();
