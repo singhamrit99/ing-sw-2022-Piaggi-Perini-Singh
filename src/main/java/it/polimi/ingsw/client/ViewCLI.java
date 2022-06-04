@@ -145,7 +145,10 @@ public class ViewCLI implements UI {
     {
         try {
             client.startGame();
-        } catch (UserNotInRoomException e) {
+        }catch(NotEnoughPlayersException e){
+            System.out.println(StringNames.ALONE_IN_ROOM); //todo TINO to LORE: Lore usa 'StringNames' per i messaggi, aggiungi i tuoi messaggi, cosí il usiamo anche noi .
+        }
+        catch (UserNotInRoomException e) {
             System.out.println("You're not in a room yet!\n");
         } catch (NotLeaderRoomException e) {
             System.out.println("You're not the leader of this room you can't start the game!\n");
