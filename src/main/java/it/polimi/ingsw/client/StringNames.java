@@ -12,7 +12,9 @@ public interface StringNames {
     String LOBBY = "Lobby";
     String LAUNCHER = "Launcher";
     String ROOM = "Room";
-    String BOARD = "Board";
+    String BOARD = "Board"; //todo remove?
+
+    String INGAME = "InGame";
     String CREATE_NEW_ROOM = "CreateRoom";
 
     //used for alerts
@@ -24,4 +26,6 @@ public interface StringNames {
     String NO_LEADER = "You don't have permission to perform this action";
     String NOT_IN_ROOM = "You are not in the room";
     String ROOM_EXISTS = "Room name already taken";
+
+    String ALONE_IN_ROOM = "You are alone in this room. You must be at least 2 players to play Eryantis";
 }
