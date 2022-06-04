@@ -2,10 +2,7 @@ package it.polimi.ingsw.client.GUI.controller;
 
 import it.polimi.ingsw.client.GUI.GUI;
 import it.polimi.ingsw.client.StringNames;
-import it.polimi.ingsw.exceptions.NotLeaderRoomException;
-import it.polimi.ingsw.exceptions.RoomNotExistsException;
-import it.polimi.ingsw.exceptions.UserNotInRoomException;
-import it.polimi.ingsw.exceptions.UserNotRegisteredException;
+import it.polimi.ingsw.exceptions.*;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
@@ -28,17 +25,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class RoomController extends InitialStage implements Controller {
     private ArrayList<String> players = new ArrayList<>();
     protected static AtomicBoolean opened = new AtomicBoolean(false);
-
     @FXML
     private GridPane playersList;
     @FXML
     private Text roomTitle;
-    @FXML
-    private Image blackTowerImage;
-    @FXML
-    private Image whiteTowerImage;
-    @FXML
-    private Image greyTowerImage;
+
     @FXML
     private Button startGameButton;
     @FXML
@@ -46,10 +37,13 @@ public class RoomController extends InitialStage implements Controller {
     @FXML
     private ToggleButton setExpertMode;
 
+
+    private Image blackTowerImage;
+    private Image whiteTowerImage;
+    private Image greyTowerImage;
     public RoomController(GUI gui) {
         super(gui);
     }
-
     @FXML
     public void initialize() {
         opened.set(true);
@@ -118,6 +112,8 @@ public class RoomController extends InitialStage implements Controller {
                         Utility.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
                     } catch (UserNotRegisteredException e) {
                         Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                    } catch (NotEnoughPlayersException e) {
+                        Utility.showErrorDialogBox(StringNames.ALONE_IN_ROOM);
                     }
                 });
             } else {
@@ -134,7 +130,8 @@ public class RoomController extends InitialStage implements Controller {
         for (int i = 0; i < players.size(); i++) {
             ImageView team = new ImageView();
             if (players.size() == 3) {
-                //TODO do randomly selected
+                //TODO AMRIT: do randomly selected ;
+                // todo TINO: nah, we would have to change the model at serverSide
                 if (i == 0) team = new ImageView(blackTowerImage);
                 if (i == 1) team = new ImageView(whiteTowerImage);
                 if (i == 2) team = new ImageView(greyTowerImage);
