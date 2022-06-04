@@ -194,7 +194,7 @@ public class Game {
         //Initialization clouds
         clouds = new ArrayList<>();
         for (int i = 0; i < numOfPlayer; i++) {
-            Cloud cloud = new Cloud(importingClouds.get(i)); //LORE:
+            Cloud cloud = new Cloud(importingClouds.get(i));
             clouds.add(cloud);
         }
 
