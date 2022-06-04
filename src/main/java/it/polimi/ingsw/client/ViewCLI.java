@@ -447,13 +447,13 @@ public class ViewCLI implements UI {
 
     public void printCommandHelp() {
         System.out.println("The commands available are the following:\n" +
-                "Press 1 to view everyone's boards\n" +
-                "Press 2 to view every player's name\n" +
-                "Press 3 to view all the islands\n" +
+                "Press 1 to view everyone's boards\t" +
+                "Press 2 to view every player's name\t" +
+                "Press 3 to view all the islands\t" +
                 "Press 4 to move students across the islands and the dining room\n" +
-                "Press 5 to move mother nature. This will end your turn\n" +
-                "Press 6 to see the character cards in the game\n" +
-                "Press 7 to play a character card\n" +
+                "Press 5 to move mother nature. This will end your turn\t" +
+                "Press 6 to see the character cards in the game\t" +
+                "Press 7 to play a character card\t" +
                 "Press 8 to view this message again\n");
     }
 
@@ -1076,8 +1076,6 @@ public class ViewCLI implements UI {
         // System.out.println("Students to game: ");
         for (Colors c : returnStudents.keySet()) {
             //  System.out.println("Color "+ c);
-            for (String s : returnStudents.get(c))
-                System.out.println(s);
         }
 
         return returnStudents;

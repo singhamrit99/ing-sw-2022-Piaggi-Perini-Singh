@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.client.UI;
+import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 
@@ -74,8 +75,9 @@ public class StrippedModel implements Serializable {
 
     private void changeAssistantDeck(PropertyChangeEvent evt) {
         String ownerDeck = currentPlayer;
-        Optional<AssistantCardDeck> deckToModify = assistantDecks.stream().filter(d -> d.getOwner().equals(ownerDeck)).findFirst();
-        if (deckToModify.isPresent()) {
+        Optional<AssistantCardDeck> optionalDeckToModify = assistantDecks.stream().filter(d -> d.getOwner().equals(ownerDeck)).findFirst();
+        AssistantCardDeck deckToModify= optionalDeckToModify.get();
+        if (optionalDeckToModify.isPresent()) {
             assistantDecks.remove(deckToModify);
             assistantDecks.add((AssistantCardDeck) evt.getNewValue());
             String playedCard=(String) evt.getOldValue();
@@ -139,8 +141,9 @@ public class StrippedModel implements Serializable {
 
     private void changeIsland(PropertyChangeEvent evt) {
         StrippedIsland changedIsland = (StrippedIsland) evt.getOldValue();
-        Optional<StrippedIsland> islandFound = islands.stream().filter(x -> x.getName().equals(changedIsland.getName())).findFirst();
-        if (islandFound.isPresent()) {
+        Optional<StrippedIsland> optionalIslandFound = islands.stream().filter(x -> x.getName().equals(changedIsland.getName())).findFirst();
+        StrippedIsland islandFound= optionalIslandFound.get();
+        if (optionalIslandFound.isPresent()) {
             islands.remove(islandFound); //IslandEvent Deletion
             if (evt.getNewValue() != null) {
                 islands.add((StrippedIsland) evt.getNewValue());
@@ -169,13 +172,10 @@ public class StrippedModel implements Serializable {
             changedCloud = (StrippedCloud) evt.getNewValue();
             ui.notifyCloud(evt);
         }
-        Optional<StrippedCloud> cloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
-        if (cloudFound.isPresent()) {
-            clouds.remove(cloudFound);
-            clouds.add(changedCloud);
-        } else {
-            System.out.println("Exception changeCloud , strippedModel"); //todo
-        }
+        Optional<StrippedCloud> optionalCloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
+        StrippedCloud cloudFound= optionalCloudFound.get();
+        clouds.remove(cloudFound);
+        clouds.add(changedCloud);
     }
 
     private void setCurrentPlayer(String currentPlayer) {

@@ -500,11 +500,14 @@ public class Game {
                 PropertyChangeEvent evt =
                         new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), newEntrance);
                 gameListener.propertyChange(evt);
-                //notify cloud change
+                //notify cloud change and entrance change
                 StrippedCloud changedCloud = new StrippedCloud(clouds.get(index));
                 PropertyChangeEvent evtCloud =
                         new PropertyChangeEvent(this, "cloud", null, changedCloud);
                 gameListener.propertyChange(evtCloud);
+                PropertyChangeEvent event=
+                        new PropertyChangeEvent(this,"entrance",currentPlayer.getNickname(),currentPlayer.getSchoolBoard().getEntrance());
+                gameListener.propertyChange(event);
 
                 nextPlayer();
             } else throw new IncorrectPlayerException();
