@@ -18,9 +18,10 @@ import java.util.ArrayList;
  */
 public class GUI implements UI {
     public static Client client;
-    public static Controller controller;
     public LobbyController lobbyController;
     public RoomController roomController;
+
+    public GameViewController gameController;
 
     //private final AtomicBoolean isDoing;
 
@@ -29,6 +30,10 @@ public class GUI implements UI {
         GUI.client = client;
         GUI.client.setUi(this);
         GUI.client.view = StringNames.LAUNCHER;
+        //controllers
+        lobbyController = new LobbyController(this);
+        roomController = new RoomController(this);
+        gameController = new GameViewController(this);
     }
 
     public void start() {
@@ -41,7 +46,6 @@ public class GUI implements UI {
                 Platform.runLater(() -> lobbyController.update(rooms));
             } else {
                 Platform.runLater(() -> {
-                    lobbyController = new LobbyController(this);
                     lobbyController.setRoomsList(rooms);
                     Controller.load(ResourcesPath.LOBBY, lobbyController);
                 });
@@ -55,7 +59,6 @@ public class GUI implements UI {
                 Platform.runLater(() -> roomController.update(players));
             } else {
                 Platform.runLater(() -> {
-                    roomController = new RoomController(this);
                     roomController.setPlayersList(players);
                     Controller.load(ResourcesPath.ROOM, roomController);
                 });
@@ -65,10 +68,8 @@ public class GUI implements UI {
 
     @Override
     public void startGame() throws RemoteException{
-        if (GUI.client.view.equals(StringNames.BOARD)) {
+        if (GUI.client.view.equals(StringNames.INGAME)) {
             Platform.runLater(() -> {
-                GameViewController gameController = new GameViewController(this);
-                controller = gameController;
                 Controller.load(ResourcesPath.GAME_VIEW, gameController);
                 gameController.setPlayersViewMenu(GUI.client.getLocalPlayerList());
             });
@@ -76,8 +77,12 @@ public class GUI implements UI {
     }
 
     @Override
-    public void currentPlayer(String s) {
-
+    public void currentPlayer(String currentPlayer) {
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> gameController.setCurrentPlayer(currentPlayer));
+            }
+        }
     }
 
     @Override
