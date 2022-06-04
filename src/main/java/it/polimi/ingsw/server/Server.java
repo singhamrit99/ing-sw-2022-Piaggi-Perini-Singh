@@ -136,13 +136,15 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     }
 
     @Override
-    public synchronized void startGame(String username) throws RemoteException, NotLeaderRoomException, UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException {
+    public synchronized void startGame(String username) throws RemoteException, NotLeaderRoomException,
+            UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException , NotEnoughPlayersException{
         System.out.println("Start game request received\n");
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         ClientConnection user = users.get(username);
         if (user.getRoom() == null) throw new UserNotInRoomException();
         if (!rooms.containsKey(user.getRoom())) throw new RoomNotExistsException();
         Room targetRoom = rooms.get(user.getRoom());
+        if(targetRoom.getPlayers().size()<2) throw new NotEnoughPlayersException();
         if (targetRoom.getPlayers().get(0).getNickname().equals(username)) {   //only leader of the Room (players.get(0) can start the game)
             try {
                 System.out.println("Game starting...");

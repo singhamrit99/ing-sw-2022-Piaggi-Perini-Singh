@@ -28,7 +28,8 @@ public interface serverStub extends Remote {
 
     void setExpertMode(String username, boolean expertMode) throws RemoteException, UserNotInRoomException, NotLeaderRoomException, UserNotRegisteredException;
 
-    void startGame(String username) throws RemoteException, NotLeaderRoomException, UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException;
+    void startGame(String username) throws RemoteException, NotLeaderRoomException,
+            UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException,NotEnoughPlayersException;
 
     boolean inGame(String username) throws RemoteException, UserNotRegisteredException;
 
