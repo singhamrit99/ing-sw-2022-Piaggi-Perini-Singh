@@ -118,7 +118,6 @@ public class Room implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         addEventToBuffer(evt);
-        System.out.println("Added event to buffer\n");
     }
     private void addEventToBuffer(PropertyChangeEvent event) {
         for (ClientConnection clientBufferEvents : players) {
