@@ -34,6 +34,7 @@ public class LobbyController extends InitialStage implements Controller {
     public LobbyController(GUI gui) {
         super(gui);
         new ArrayList<>();
+        opened.set(false);
     }
 
     @FXML
