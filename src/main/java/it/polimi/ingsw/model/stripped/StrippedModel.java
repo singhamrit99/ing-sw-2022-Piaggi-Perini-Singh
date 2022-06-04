@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.stripped;
 
 import it.polimi.ingsw.client.UI;
+import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
@@ -200,6 +201,13 @@ public class StrippedModel implements Serializable {
 
     public ArrayList<StrippedBoard> getBoards() {
         return boards;
+    }
+
+    public StrippedBoard getBoardOf(String owner) throws LocalModelNotLoadedException {
+        for (StrippedBoard b : boards){
+            if(b.getOwner().equals(owner))return b;
+        }
+        throw new LocalModelNotLoadedException(); //todo change the name of this exception with something more specific
     }
 
     public void setUi(UI ui) {
