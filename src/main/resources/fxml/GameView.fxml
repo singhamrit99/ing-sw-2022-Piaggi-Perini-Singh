@@ -5,30 +5,33 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="body" stylesheets="@../css/GameViewStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="body" stylesheets="@../css/GameViewStyle.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <children>
-        <MenuBar>
-            <menus>
-                <Menu fx:id="changeView" mnemonicParsing="false" text="View Board">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Player1" />
-                        <MenuItem mnemonicParsing="false" text="Player2" />
-                        <MenuItem mnemonicParsing="false" text="Player3" />
-                        <MenuItem mnemonicParsing="false" text="Player4" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Options">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Leave game" />
-                    </items>
-                </Menu>
-                <Menu fx:id="currentPLayer" mnemonicParsing="false" text="Current player:  " />
-            </menus>
-        </MenuBar>
+      <MenuBar layoutX="10.0" layoutY="10.0">
+         <menus>
+            <Menu fx:id="currentViewPlayer" mnemonicParsing="false" text="Current player:  " />
+            <Menu fx:id="changeViewBoard" mnemonicParsing="false" text="Change View Board">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Player1" />
+                  <MenuItem mnemonicParsing="false" text="Player2" />
+                  <MenuItem mnemonicParsing="false" text="Player3" />
+                  <MenuItem mnemonicParsing="false" text="Player4" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Options">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Leave game" />
+               </items>
+            </Menu>
+         </menus>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </MenuBar>
         <StackPane prefHeight="300.0" prefWidth="1280.0" stylesheets="@../css/GameViewStyle.css" />
-        <StackPane alignment="BOTTOM_CENTER" maxWidth="-Infinity" prefHeight="16.0" prefWidth="1000.0" styleClass="button">
+        <StackPane alignment="BOTTOM_CENTER" maxWidth="-Infinity" prefHeight="16.0" prefWidth="1000.0">
             <children>
-                <ImageView fitHeight="555.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true" styleClass="body" StackPane.alignment="BOTTOM_CENTER">
+                <ImageView fitHeight="555.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
                     <image>
                         <Image url="@../img/board/Plancia_DEF2.png" />
                     </image>

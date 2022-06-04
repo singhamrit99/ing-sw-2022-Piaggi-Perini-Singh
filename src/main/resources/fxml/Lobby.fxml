@@ -5,66 +5,51 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0"
-      prefWidth="1280.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="background2" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <children>
-        <StackPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0"
-                   prefWidth="1280.0">
+        <StackPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="1280.0">
             <children>
-                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0"
-                      styleClass="title" text="Lobby" textAlignment="CENTER">
+                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="Lobby" textAlignment="CENTER">
                     <font>
-                        <Font name="Rockwell Extra Bold" size="40.0"/>
+                        <Font name="Rockwell Extra Bold" size="40.0" />
                     </font>
                 </Text>
             </children>
         </StackPane>
-        <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                    minWidth="-Infinity" prefHeight="400.0" prefViewportHeight="100.0" prefViewportWidth="800.0"
-                    prefWidth="1280.0">
+        <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefViewportHeight="100.0" prefViewportWidth="800.0" prefWidth="1280.0" stylesheets="@../css/Style.css">
             <content>
-                <FlowPane alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="420.0"
-                          prefWidth="1280.0">
+                <FlowPane alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="420.0" prefWidth="1280.0" stylesheets="@../css/Style.css">
                     <children>
-                        <GridPane fx:id="roomsList" alignment="CENTER" gridLinesVisible="true" prefHeight="40.0"
-                                  prefWidth="200.0">
+                        <GridPane fx:id="roomsList" alignment="CENTER" gridLinesVisible="true" prefHeight="40.0" prefWidth="200.0">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0"/>
-                                <ColumnConstraints minWidth="120.0" prefWidth="120.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0" />
+                                <ColumnConstraints minWidth="120.0" prefWidth="120.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="40.0" prefHeight="40.0" valignment="CENTER"
-                                                vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="40.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" GridPane.halignment="CENTER"
-                                      GridPane.valignment="CENTER"/>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Action" GridPane.columnIndex="1"
-                                      GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Action" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                             </children>
                         </GridPane>
                     </children>
                     <padding>
-                        <Insets bottom="40.0" top="40.0"/>
+                        <Insets bottom="40.0" top="40.0" />
                     </padding>
                 </FlowPane>
             </content>
         </ScrollPane>
-        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="150.0" prefWidth="1280.0" spacing="20.0">
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="1280.0" spacing="20.0">
             <children>
-                <Button fx:id="createRoomButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                        minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
-                        styleClass="confirm-button" text="Create Room" textFill="WHITE">
+                <Button fx:id="createRoomButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="confirm-button" text="Create Room" textFill="WHITE">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </Button>
-                <Button fx:id="exitButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                        minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
-                        styleClass="cancel-button" text="Exit" textFill="WHITE">
+                <Button fx:id="exitButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="cancel-button" text="Exit" textFill="WHITE">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </Button>
             </children>
