@@ -71,7 +71,6 @@ public class GUI implements UI {
         if (GUI.client.view.equals(StringNames.INGAME)) {
             Platform.runLater(() -> {
                 Controller.load(ResourcesPath.GAME_VIEW, gameController);
-                gameController.setPlayersViewMenu(GUI.client.getLocalPlayerList());
             });
         }
     }
