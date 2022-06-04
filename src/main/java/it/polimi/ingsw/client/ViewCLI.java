@@ -41,7 +41,7 @@ public class ViewCLI implements UI {
     public ViewCLI(Client client) {
         this.client = client;
         this.client.setUi(this);
-        this.client.view= StringNames.LAUNCHER;
+        this.client.view = StringNames.LAUNCHER;
     }
 
     public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException {
@@ -51,7 +51,7 @@ public class ViewCLI implements UI {
             try {
                 nickName = in.nextLine();
                 client.registerClient(nickName);
-                client.view=StringNames.LOBBY;
+                client.view = StringNames.LOBBY;
                 break;
             } catch (UserAlreadyExistsException e) {
                 System.out.println("That username is already in the game! Try another.\n");
@@ -111,26 +111,26 @@ public class ViewCLI implements UI {
 
         //Main game loop
         while (client.isInGame()) {
-            if (playedThisTurn==null)
-            playedThisTurn=new ArrayList<>();
+            if (playedThisTurn == null)
+                playedThisTurn = new ArrayList<>();
             //Assistant Card play phase
-            while (client.getPhase()==0) {
+            while (client.getPhase() == 0) {
                 while (!client.isMyTurn()) {
 
                     //Wait for the other players to be done with their turn while I still output their moves...
                 }
-                if (client.isMyTurn()&&!client.isDrawnOut()) {
-                    drawFromBag();}
-                if (client.isMyTurn()&&client.getPhase()==0)
+                if (client.isMyTurn() && !client.isDrawnOut()) {
+                    drawFromBag();
+                }
+                if (client.isMyTurn() && client.getPhase() == 0)
                     playAssistantCard();
 
                 Thread.sleep(400);
             }
 
             //Turn phase
-            while (client.getPhase()<3) {
-                while(!client.isMyTurn())
-                {
+            while (client.getPhase() < 3) {
+                while (!client.isMyTurn()) {
 
                 }
                 performActionInTurn();
@@ -141,14 +141,12 @@ public class ViewCLI implements UI {
     }
 
     //Room methods
-    public void startGameRequest() throws RemoteException
-    {
+    public void startGameRequest() throws RemoteException {
         try {
             client.startGame();
-        }catch(NotEnoughPlayersException e){
+        } catch (NotEnoughPlayersException e) {
             System.out.println(StringNames.ALONE_IN_ROOM); //todo TINO to LORE: Lore usa 'StringNames' per i messaggi, aggiungi i tuoi messaggi, cosí il usiamo anche noi .
-        }
-        catch (UserNotInRoomException e) {
+        } catch (UserNotInRoomException e) {
             System.out.println("You're not in a room yet!\n");
         } catch (NotLeaderRoomException e) {
             System.out.println("You're not the leader of this room you can't start the game!\n");
@@ -156,13 +154,14 @@ public class ViewCLI implements UI {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public void startGame() throws RemoteException {
 
     }
 
     @Override
-    public void currentPlayer(String s){
+    public void currentPlayer(String s) {
         System.out.println("It's now " + s + "'s turn!\n");
     }
 
@@ -176,10 +175,10 @@ public class ViewCLI implements UI {
     public void deckChange(String assistantCard) {
         String tmp;
         System.out.println(client.getLocalModel().getCurrentPlayer() + " has played " + assistantCard);
-       tmp= assistantCard.replaceAll("[^\\d.]", "");
-       if (playedThisTurn==null)
-           playedThisTurn= new ArrayList<>();
-       playedThisTurn.add(Integer.parseInt(tmp));
+        tmp = assistantCard.replaceAll("[^\\d.]", "");
+        if (playedThisTurn == null)
+            playedThisTurn = new ArrayList<>();
+        playedThisTurn.add(Integer.parseInt(tmp));
     }
 
     @Override
@@ -193,7 +192,7 @@ public class ViewCLI implements UI {
         StrippedIsland oldIsland, newIsland;
         oldIsland = (StrippedIsland) e.getOldValue();
         newIsland = (StrippedIsland) e.getNewValue();
-        System.out.println("Island number" + oldIsland.getName() + " changed from");
+        System.out.println(oldIsland.getName() + " changed from");
         printIsland(oldIsland);
         System.out.println("to");
         printIsland(newIsland);
@@ -220,20 +219,20 @@ public class ViewCLI implements UI {
         newDining = (EnumMap<Colors, Integer>) e.getNewValue();
         System.out.println(e.getOldValue() + " modified their dining room! Here's the new configuration...");
         for (Colors c : newDining.keySet()) {
-            System.out.println(c + " students: "+ newDining.get(c));
+            System.out.println(c + " students: " + newDining.get(c));
         }
     }
 
     @Override
     public void entranceChanged(PropertyChangeEvent e) {
-        EnumMap<Colors,Integer> newBoard;
+        EnumMap<Colors, Integer> newBoard;
         String player;
-        player= (String) e.getOldValue();
+        player = (String) e.getOldValue();
         newBoard = (EnumMap<Colors, Integer>) e.getNewValue();
         System.out.println(player + "'s entrance changed to \n");
         System.out.println("to:");
         for (Colors c : newBoard.keySet()) {
-            System.out.println(c + " students: "+ newBoard.get(c));
+            System.out.println(c + " students: " + newBoard.get(c));
         }
     }
 
@@ -293,21 +292,19 @@ public class ViewCLI implements UI {
     public void roomsAvailable(ArrayList<String> rooms) {
         try {
             getRooms();
-        }catch (RemoteException e)
-        {
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
 
     }
 
     @Override
-    public void roomJoin(ArrayList<String> players){
-       try{
-           getPlayersInRoom();
-       }catch (RemoteException e)
-       {
-           e.printStackTrace();
-       }
+    public void roomJoin(ArrayList<String> players) {
+        try {
+            getPlayersInRoom();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -321,7 +318,7 @@ public class ViewCLI implements UI {
             }
             sendArrayString(response);
         }
-           // System.out.println("You're not in a room, so there are no players to show\n");
+        // System.out.println("You're not in a room, so there are no players to show\n");
     }
 
     private void getLobbyInfo() throws RemoteException {
@@ -431,11 +428,10 @@ public class ViewCLI implements UI {
                     client.requestRoomJoin(requestedRoom);
                 } catch (RoomNotExistsException | UserNotRegisteredException e) {
                     throw new RuntimeException(e);
-                }catch(RoomFullException e)
-                {
+                } catch (RoomFullException e) {
                     System.out.println(e.getMessage());
                 }
-                client.view=StringNames.ROOM;
+                client.view = StringNames.ROOM;
                 clientRoom = requestedRoom;
                 System.out.println("You entered room " + clientRoom + " successfully \n");
                 System.out.println("Players in this room:");
@@ -474,41 +470,38 @@ public class ViewCLI implements UI {
         printAssistantCards();
         int i;
         String input;
-            while (true) {
-                input=in.next();
-                try{
-                    i= Integer.parseInt(input);
-                    break;
-                }catch(NumberFormatException e)
-                {
-                    System.out.println("That's not a number! Try again.\n");
-                }
+        while (true) {
+            input = in.next();
+            try {
+                i = Integer.parseInt(input);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("That's not a number! Try again.\n");
             }
-        while (i < 1 || i >= client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size()&&playedThisTurn.contains(i)) {
+        }
+        while (i < 1 || i >= client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size() && playedThisTurn.contains(i)) {
             System.out.println("Invalid number, try again\n");
             while (true) {
-                input=in.next();
-                try{
-                    i= Integer.parseInt(input);
+                input = in.next();
+                try {
+                    i = Integer.parseInt(input);
                     break;
-                }catch(NumberFormatException e)
-                {
+                } catch (NumberFormatException e) {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
         }
 
         //I now have a valid assistant card
-        System.out.println("Card played: " +i);
-        turnMoves=client.getLocalModel().getAssistantDecks().get(playerNumber).get("Assistente"+i).getMove();
+        System.out.println("Card played: " + i);
+        turnMoves = client.getLocalModel().getAssistantDecks().get(playerNumber).get("Assistente" + i).getMove();
         playAssistantCardOrder = new PlayAssistantCard(this.nickName, "Assistente" + i);
         try {
             client.performGameAction(playAssistantCardOrder);
-            turnMoves=i;
+            turnMoves = i;
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
-        }catch(AssistantCardNotFoundException e)
-        {
+        } catch (AssistantCardNotFoundException e) {
             System.out.println("Looks like someone has already played that card this turn! Try again.");
             playAssistantCard();
         }
@@ -519,7 +512,7 @@ public class ViewCLI implements UI {
         AssistantCardDeck myDeck = client.getLocalModel().getAssistantDecks().get(playerNumber);
         int i = 0;
         for (AssistantCard a : myDeck.getDeck()) {
-            System.out.println("Card number " + (i+1) + " " + a.getImageName().replaceAll("[^a-zA Z0-9]", "") + " " + a.getMove());
+            System.out.println("Card number " + (i + 1) + " " + a.getImageName().replaceAll("[^a-zA Z0-9]", "") + " " + a.getMove());
             i++;
         }
     }
@@ -532,12 +525,11 @@ public class ViewCLI implements UI {
             System.out.println("Select an action: ");
             String input;
             while (true) {
-                input=in.next();
-                try{
-                    action= Integer.parseInt(input);
+                input = in.next();
+                try {
+                    action = Integer.parseInt(input);
                     break;
-                }catch(NumberFormatException e)
-                {
+                } catch (NumberFormatException e) {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
@@ -604,24 +596,22 @@ public class ViewCLI implements UI {
         int i;
         String input;
         while (true) {
-            input=in.next();
-            try{
-                i= Integer.parseInt(input);
+            input = in.next();
+            try {
+                i = Integer.parseInt(input);
                 break;
-            }catch(NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 System.out.println("That's not a number! Try again.\n");
             }
         }
         while (i < 0 || i > 2) {
             System.out.println("That's not right! Try again\n");
             while (true) {
-                input=in.next();
-                try{
-                    i= Integer.parseInt(input);
+                input = in.next();
+                try {
+                    i = Integer.parseInt(input);
                     break;
-                }catch(NumberFormatException e)
-                {
+                } catch (NumberFormatException e) {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
@@ -652,43 +642,38 @@ public class ViewCLI implements UI {
         int i;
         String input;
         while (true) {
-            input=in.next();
-            try{
-                i= Integer.parseInt(input);
+            input = in.next();
+            try {
+                i = Integer.parseInt(input);
                 break;
-            }catch(NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 System.out.println("That's not a number! Try again.\n");
             }
         }
-    while (i<0||i>client.getLocalModel().getClouds().size()) {
-        System.out.println("Invalid cloud number! Try again.\n");
-        while (true) {
-            input=in.next();
-            try{
-                i= Integer.parseInt(input);
-                break;
-            }catch(NumberFormatException e)
-            {
-                System.out.println("That's not a number! Try again.\n");
+        while (i < 0 || i > client.getLocalModel().getClouds().size()) {
+            System.out.println("Invalid cloud number! Try again.\n");
+            while (true) {
+                input = in.next();
+                try {
+                    i = Integer.parseInt(input);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("That's not a number! Try again.\n");
+                }
             }
         }
-    }
-    pickCloudOrder= new PickCloud(nickName, i);
-    client.performGameAction(pickCloudOrder);
+        pickCloudOrder = new PickCloud(nickName, i);
+        client.performGameAction(pickCloudOrder);
     }
 
-    public void printClouds()
-    {
+    public void printClouds() {
         EnumMap<Colors, Integer> students;
-        for (StrippedCloud cloud: client.getLocalModel().getClouds())
-        {
-            students= cloud.getStudents();
-            System.out.println(("Cloud name:" +cloud.getName()));
+        for (StrippedCloud cloud : client.getLocalModel().getClouds()) {
+            students = cloud.getStudents();
+            System.out.println(("Cloud name:" + cloud.getName()));
             System.out.println("Number of students: ");
-            for(Colors c: Colors.values())
-            {
-                System.out.println(c +" "+students.get(c));
+            for (Colors c : Colors.values()) {
+                System.out.println(c + " " + students.get(c));
             }
         }
     }
@@ -710,12 +695,11 @@ public class ViewCLI implements UI {
         System.out.println();
         String input;
         while (true) {
-            input=in.next();
-            try{
-                island= Integer.parseInt(input);
+            input = in.next();
+            try {
+                island = Integer.parseInt(input);
                 break;
-            }catch(NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 System.out.println("That's not a number! Try again.\n");
             }
         }
@@ -752,23 +736,20 @@ public class ViewCLI implements UI {
         boolean invalidChoice = true;
         do {
             while (true) {
-                input=in.next();
-                try{
-                    choice= Integer.parseInt(input);
+                input = in.next();
+                try {
+                    choice = Integer.parseInt(input);
                     break;
-                }catch(NumberFormatException e)
-                {
+                } catch (NumberFormatException e) {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
-            if (choice<0||choice>4)
-            {
+            if (choice < 0 || choice > 4) {
                 System.out.println("Invalid color! Try again.");
                 System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
-            }
-            else
-                invalidChoice=false;
-        }while(!invalidChoice);
+            } else
+                invalidChoice = false;
+        } while (!invalidChoice);
 
         playCharacterCardDOrder = new PlayCharacterCardD(nickName, id, choice);
         try {
@@ -783,37 +764,32 @@ public class ViewCLI implements UI {
         String input;
         int i;
         while (true) {
-            input=in.next();
-            try{
-                i= Integer.parseInt(input);
+            input = in.next();
+            try {
+                i = Integer.parseInt(input);
                 break;
-            }catch(NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 System.out.println("That's not a number! Try again.\n");
             }
         }
         while (i < 0 || i > turnMoves) {
             System.out.println("That number is not right! Try again.\n");
             while (true) {
-                input=in.next();
-                try{
-                    i= Integer.parseInt(input);
+                input = in.next();
+                try {
+                    i = Integer.parseInt(input);
                     break;
-                }catch(NumberFormatException e)
-                {
+                } catch (NumberFormatException e) {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
         }
-        moveMotherNatureOrder= new MoveMotherNature(nickName, i);
+        moveMotherNatureOrder = new MoveMotherNature(nickName, i);
         try {
             client.performGameAction(moveMotherNatureOrder);
-        }catch (IncorrectStateException e)
-        {
+        } catch (IncorrectStateException e) {
             System.out.println("You can't do that yet!\n");
-        }
-        catch(IncorrectArgumentException e)
-        {
+        } catch (IncorrectArgumentException e) {
             System.out.println("That's not right, try again!\n");
             moveMN();
         }
@@ -822,22 +798,21 @@ public class ViewCLI implements UI {
     }
 
     public void moveStudents() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-        StrippedBoard myBoard= null;
+        StrippedBoard myBoard = null;
         ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
         int i = 0;
-         for (StrippedBoard b : boards) {
+        for (StrippedBoard b : boards) {
             if (b.getOwner().equals(nickName))
-                myBoard=b;
+                myBoard = b;
         }
-         System.out.println("Board owner:"+ myBoard.getOwner());
+        // System.out.println("Board owner:"+ myBoard.getOwner());
         System.out.println("These are the students in your entrance: \n");
         System.out.println("\nEntrance configuration: ");
         for (Colors c : myBoard.getEntrance().keySet()) {
             System.out.println(c + " students: " + myBoard.getEntrance().get(c) + "\n");
         }
-        EnumMap<Colors ,ArrayList<String>> studentsToGame = new EnumMap<>(Colors.class);
-        for (Colors c: Colors.values())
-        {
+        EnumMap<Colors, ArrayList<String>> studentsToGame = new EnumMap<>(Colors.class);
+        for (Colors c : Colors.values()) {
             studentsToGame.put(c, new ArrayList<>());
         }
         String answer;
@@ -849,17 +824,15 @@ public class ViewCLI implements UI {
         boolean isValidInputYN = false;
         boolean doItAgain;
         EnumMap<Colors, Integer> studentsToMove = new EnumMap<>(Colors.class);
-        ArrayList<StrippedIsland> myIslands = client.getLocalModel().getIslands();
         System.out.println("Do you want to move students to the dining room? Y\\N\n");
         do {
             answer = in.nextLine();
             answer = answer.toLowerCase(Locale.ROOT);
             if (answer.equals("y") || answer.equals("n"))
                 isValidInputYN = true;
-            else if (answer.equals("\n"))
-            {}
-            else
-            System.out.println("Whoops! That's not right. Try again: \n");
+            else if (answer.equals("\n")) {
+            } else
+                System.out.println("Whoops! That's not right. Try again: \n");
         } while (!isValidInputYN);
         //Move students to the dining room
         doItAgain = true;
@@ -871,19 +844,19 @@ public class ViewCLI implements UI {
                 parts = answer.split(",|, | ,");
                 color = parts[0];
                 color = color.replaceAll("[^a-zA Z0-9]", "");
-                parts[1]=parts[1].trim();
+                parts[1] = parts[1].trim();
                 value = Integer.parseInt(parts[1]);
                 color = color.toUpperCase(Locale.ROOT);
-                System.out.println("The color you chose was "+ color + " the number you picked was "+ value);
+                //  System.out.println("The color you chose was "+ color + " the number you picked was "+ value);
                 if (isValidColor(color)) {
-                    System.out.println("StringToColor output: "+ stringToColor(color));
-                    System.out.println("The number of students of that color in your entrance is "+ myBoard.getEntrance().get(stringToColor(color)));
-                    if (value<=myBoard.getEntrance().get(stringToColor(color))) {
-                        studentsToMove =initializeMove(studentsToMove);
+                    // System.out.println("StringToColor output: "+ stringToColor(color));
+                    //  System.out.println("The number of students of that color in your entrance is "+ myBoard.getEntrance().get(stringToColor(color)));
+                    if (value <= myBoard.getEntrance().get(stringToColor(color))) {
+                        studentsToMove = initializeMove(studentsToMove);
                         studentsToMove.put(stringToColor(color), studentsToMove.get(stringToColor(color)) + value);
                         movedStudents += value;
-                        studentsToGame= strippedToGame(studentsToMove,studentsToGame,"dining");
-                        if(movedStudents<3) {
+                        studentsToGame = strippedToGame(studentsToMove, studentsToGame, "dining");
+                        if (movedStudents < 3) {
                             System.out.println("Do you want to move other students to the dining room?\n");
                             do {
                                 answer = in.nextLine();
@@ -914,33 +887,32 @@ public class ViewCLI implements UI {
                 parts = answer.split(",|, | ,");
                 color = parts[0];
                 color = color.replaceAll("[^a-zA Z0-9]", "");
-                parts[1]=parts[1].trim();
+                parts[1] = parts[1].trim();
                 value = Integer.parseInt(parts[1]);
                 String input;
                 while (true) {
-                    input=in.next();
-                    try{
-                        island= Integer.parseInt(input);
+                    input = in.next();
+                    try {
+                        island = Integer.parseInt(input);
                         break;
-                    }catch(NumberFormatException e)
-                    {
+                    } catch (NumberFormatException e) {
                         System.out.println("That's not a number! Try again.\n");
                     }
                 }
-                doItAgain=true;
+                doItAgain = true;
                 color = color.toUpperCase(Locale.ROOT);
                 studentsToMove = initializeMove(studentsToMove);
-                System.out.println("The color you chose was "+ color + "the number you picked was "+ value);
+                System.out.println("The color you chose was " + color + "the number you picked was " + value);
                 if (isValidColor(color)) {
-                    System.out.println("The color you chose was "+ color);
-                    System.out.println("The number of students of that color in your entrance is "+ myBoard.getEntrance().get(stringToColor(color)));
-                    if (value<=myBoard.getEntrance().get(stringToColor(color)))  {
-                        System.out.println("Number of islands" +client.getLocalModel().getIslands().size());
+                    System.out.println("The color you chose was " + color);
+                    System.out.println("The number of students of that color in your entrance is " + myBoard.getEntrance().get(stringToColor(color)));
+                    if (value <= myBoard.getEntrance().get(stringToColor(color))) {
+                        System.out.println("Number of islands" + client.getLocalModel().getIslands().size());
                         if (island > 0 && island <= client.getLocalModel().getIslands().size()) {
 
                             studentsToMove.put(stringToColor(color), value);
                             movedStudents += value;
-                            studentsToGame= strippedToGame(studentsToMove,studentsToGame,"island"+island);
+                            studentsToGame = strippedToGame(studentsToMove, studentsToGame, "island" + island);
                             System.out.println("Do you want to move other students to the islands?\n");
                             do {
                                 answer = in.nextLine();
@@ -968,15 +940,14 @@ public class ViewCLI implements UI {
             System.out.println("You already moved three students this turn\n");
     }
 
-//End of MoveStudents
-public EnumMap<Colors, Integer> initializeMove(EnumMap<Colors, Integer> move)
-{
-    for (Colors c: Colors.values())
-    {
-        move.put(c, 0);
+    //End of MoveStudents
+    public EnumMap<Colors, Integer> initializeMove(EnumMap<Colors, Integer> move) {
+        for (Colors c : Colors.values()) {
+            move.put(c, 0);
+        }
+        return move;
     }
-    return move;
-}
+
     public void printPlayerBoards() {
         ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
         System.out.println("Player boards:\n");
@@ -1035,25 +1006,22 @@ public EnumMap<Colors, Integer> initializeMove(EnumMap<Colors, Integer> move)
 
     public void printIslands() {
         ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
-        int i=0, motherNature=0;
+        int i = 0, motherNature = 0;
         for (StrippedIsland island : islands) {
             if (island.hasMotherNature)
-                motherNature=i;
+                motherNature = i;
             System.out.println("Island name: " + island.getName() + "\n");
             System.out.println("Number of towers: " + island.getNumOfTowers() + "\t");
-            if (island.isHasNoEnterTile())
-            {
+            if (island.isHasNoEnterTile()) {
                 System.out.println("There's a \"no entry\" tile on this island\n");
-            }
-            else
-            {
+            } else {
                 System.out.println("There is no \"no entry\" tile on this island\n");
             }
             System.out.println("Students on the island: " + island.getStudents() + "\n");
             System.out.println("Towers: " + island.getTowersColor() + " towers \n");
             i++;
         }
-        System.out.println("Mother Nature is on isle number "+ (motherNature+1)+"!");
+        System.out.println("Mother Nature is on isle number " + (motherNature + 1) + "!");
 
     }
 
@@ -1095,20 +1063,19 @@ public EnumMap<Colors, Integer> initializeMove(EnumMap<Colors, Integer> move)
     }
 
     public EnumMap<Colors, ArrayList<String>> strippedToGame(EnumMap<Colors, Integer> students, EnumMap<Colors, ArrayList<String>> returnStudents, String destination) {
-        EnumMap<Colors, Integer> tmp= students;
+        EnumMap<Colors, Integer> tmp = students;
         for (Colors c : students.keySet()) {
             //I have to count the number of students moved in the stripped class and build myself an enummap which Game can understand
-                while(tmp.get(c)>0) {
-                    returnStudents.get(c).add(destination);
-                    System.out.println("Adding " + destination);
-                    tmp.put(c,students.get(c)-1);
-                }
+            while (tmp.get(c) > 0) {
+                returnStudents.get(c).add(destination);
+                // System.out.println("Adding " + destination);
+                tmp.put(c, students.get(c) - 1);
+            }
 
         }
-       // System.out.println("Students to game: ");
-        for (Colors c : returnStudents.keySet())
-        {
-          //  System.out.println("Color "+ c);
+        // System.out.println("Students to game: ");
+        for (Colors c : returnStudents.keySet()) {
+            //  System.out.println("Color "+ c);
             for (String s : returnStudents.get(c))
                 System.out.println(s);
         }
