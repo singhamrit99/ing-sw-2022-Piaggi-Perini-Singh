@@ -5,6 +5,8 @@ import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
 import it.polimi.ingsw.client.StringNames;
 import it.polimi.ingsw.client.GUI.controller.Utility;
 import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -15,8 +17,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.net.URL;
@@ -39,6 +43,9 @@ public class GUILauncher extends Application implements Initializable {
     private TextField nicknameField;
     @FXML
     private Button startButton;
+
+    @FXML
+    private ImageView title;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -66,6 +73,17 @@ public class GUILauncher extends Application implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         startButtonEvent();
+
+
+        TranslateTransition floatingTitle = new TranslateTransition();
+        floatingTitle.setNode(title);
+        floatingTitle.setDuration(Duration.millis(9000));
+        floatingTitle.setCycleCount(TranslateTransition.INDEFINITE);
+        floatingTitle.setByY(50);
+        floatingTitle.setAutoReverse(true);
+        floatingTitle.setInterpolator(Interpolator.EASE_BOTH);
+        floatingTitle.play();
+
     }
 
     private void startButtonEvent() {
