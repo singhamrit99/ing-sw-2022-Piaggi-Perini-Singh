@@ -23,14 +23,11 @@ public class GUI implements UI {
 
     public GameViewController gameController;
 
-    //private final AtomicBoolean isDoing;
-
     public GUI(Client client) {
-        //this.isDoing = new AtomicBoolean(false);
         GUI.client = client;
         GUI.client.setUi(this);
         GUI.client.view = StringNames.LAUNCHER;
-        //controllers
+
         lobbyController = new LobbyController(this);
         roomController = new RoomController(this);
         gameController = new GameViewController(this);
@@ -67,11 +64,9 @@ public class GUI implements UI {
     }
 
     @Override
-    public void startGame() throws RemoteException{
+    public void startGame() throws RemoteException {
         if (GUI.client.view.equals(StringNames.INGAME)) {
-            Platform.runLater(() -> {
-                Controller.load(ResourcesPath.GAME_VIEW, gameController);
-            });
+            Platform.runLater(() -> Controller.load(ResourcesPath.GAME_VIEW, gameController));
         }
     }
 
@@ -143,6 +138,4 @@ public class GUI implements UI {
     public void removedProfessors(PropertyChangeEvent e) {
 
     }
-
-
 }
