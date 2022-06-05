@@ -19,6 +19,9 @@ public class Requirements implements Serializable {
     }
 
     public String getRequirements() {
+        if (resource == null) {
+            return null;
+        }
         return resource.toString();
     }
 
