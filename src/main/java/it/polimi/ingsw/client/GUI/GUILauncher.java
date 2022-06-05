@@ -1,9 +1,9 @@
 package it.polimi.ingsw.client.GUI;
 
 import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.GUI.controller.Controller;
 import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
 import it.polimi.ingsw.client.StringNames;
-import it.polimi.ingsw.client.GUI.controller.Utility;
 import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
@@ -72,8 +72,14 @@ public class GUILauncher extends Application implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        nicknameField.textProperty().addListener((event) -> {
+            int maxLength = 15;
+            if (nicknameField.getText().length() > maxLength) {
+                String set = nicknameField.getText().substring(0, maxLength);
+                nicknameField.setText(set);
+            }
+        });
         startButtonEvent();
-
 
         TranslateTransition floatingTitle = new TranslateTransition();
         floatingTitle.setNode(title);
@@ -83,7 +89,6 @@ public class GUILauncher extends Application implements Initializable {
         floatingTitle.setAutoReverse(true);
         floatingTitle.setInterpolator(Interpolator.EASE_BOTH);
         floatingTitle.play();
-
     }
 
     private void startButtonEvent() {
@@ -95,9 +100,9 @@ public class GUILauncher extends Application implements Initializable {
                     GUI.client.view = StringNames.LOBBY;
                     client.registerClient(nickname);
                 } catch (UserAlreadyExistsException e) {
-                    Utility.showErrorDialogBox(StringNames.NICKNAME_ALREADY_EXISTS);
+                    Controller.showErrorDialogBox(StringNames.NICKNAME_ALREADY_EXISTS);
                 } catch (RemoteException e) {
-                    Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
                 }
             }
         });
@@ -107,7 +112,7 @@ public class GUILauncher extends Application implements Initializable {
         final String nickname = nicknameField.getText();
 
         if (nickname.length() == 0) {
-            Utility.showErrorDialogBox(StringNames.NICKNAME_FIELD_NULL);
+            Controller.showErrorDialogBox(StringNames.NICKNAME_FIELD_NULL);
             return false;
         }
         return true;
