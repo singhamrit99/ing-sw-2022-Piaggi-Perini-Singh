@@ -63,13 +63,15 @@ public class SchoolBoard {
             throw new NegativeValueException();
         }
 
-        for (Map.Entry<Colors, Integer> set : getDining().entrySet()) {
-            if (set.getValue() >= 3) {
-                //se lo è controllo che il valore di coins sia stato messo già a 1, 2, 3
-                if (coins.get(set.getKey()) != set.getValue() / 3) {
-                    //se è già fatto non faccio nulla altrimenti lo incremento
-                    coins.put(set.getKey(), set.getValue() / 3);
-                    count++;
+        for (int i = 0; i < 3; i++) {
+            for (Map.Entry<Colors, Integer> set : getDining().entrySet()) {
+                if (set.getValue() >= 3) {
+                    //se lo è controllo che il valore di coins sia stato messo già a 1, 2, 3
+                    if (coins.get(set.getKey()) != set.getValue() / 3) {
+                        //se è già fatto non faccio nulla altrimenti lo incremento
+                        coins.put(set.getKey(), coins.get(set.getKey()) + 1);
+                        count++;
+                    }
                 }
             }
         }
