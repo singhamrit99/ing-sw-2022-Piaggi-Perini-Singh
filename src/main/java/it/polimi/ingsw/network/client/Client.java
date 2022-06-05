@@ -1,9 +1,11 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.StringNames;
+import it.polimi.ingsw.view.UI;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.stripped.StrippedModel;
-import it.polimi.ingsw.server.commands.Command;
-import it.polimi.ingsw.server.serverStub;
+import it.polimi.ingsw.network.server.stripped.StrippedModel;
+import it.polimi.ingsw.network.server.commands.Command;
+import it.polimi.ingsw.network.server.serverStub;
 
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
