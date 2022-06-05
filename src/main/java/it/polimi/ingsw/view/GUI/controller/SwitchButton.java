@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.GUI.controller;
+package it.polimi.ingsw.view.GUI.controller;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
