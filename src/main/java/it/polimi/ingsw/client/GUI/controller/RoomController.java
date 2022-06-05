@@ -79,11 +79,11 @@ public class RoomController extends InitialStage implements Controller {
                 GUI.client.view = StringNames.LOBBY;
                 GUI.client.leaveRoom();
             } catch (RemoteException e) {
-                Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             } catch (UserNotInRoomException e) {
-                Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
             } catch (UserNotRegisteredException e) {
-                Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             }
         });
     }
@@ -105,32 +105,32 @@ public class RoomController extends InitialStage implements Controller {
                     try {
                         GUI.client.startGame();
                     } catch (RemoteException e) {
-                        Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                        Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
                     } catch (NotLeaderRoomException e) {
-                        Utility.showErrorDialogBox(StringNames.NO_LEADER);
+                        Controller.showErrorDialogBox(StringNames.NO_LEADER);
                     } catch (UserNotInRoomException e) {
-                        Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                        Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
                     } catch (RoomNotExistsException e) {
-                        Utility.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
+                        Controller.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
                     } catch (UserNotRegisteredException e) {
-                        Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                        Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                     } catch (NotEnoughPlayersException e) {
-                        Utility.showErrorDialogBox(StringNames.ALONE_IN_ROOM);
+                        Controller.showErrorDialogBox(StringNames.ALONE_IN_ROOM);
                     }
                 });
 
-                setExpertMode.setOnMouseClicked(mouseEvent -> {
+                setExpertMode.setOnMouseClicked((event) -> {
                     try {
                         setExpertMode.changeState(!setExpertMode.getState());
                         GUI.client.setExpertMode(setExpertMode.getState());
                     } catch (RemoteException e) {
-                        Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                        Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
                     } catch (NotLeaderRoomException e) {
-                        Utility.showErrorDialogBox(StringNames.NO_LEADER);
+                        Controller.showErrorDialogBox(StringNames.NO_LEADER);
                     } catch (UserNotInRoomException e) {
-                        Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                        Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
                     } catch (UserNotRegisteredException e) {
-                        Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                        Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                     }
                 });
             } else {
@@ -143,11 +143,11 @@ public class RoomController extends InitialStage implements Controller {
                 }
             }
         } catch (RemoteException e) {
-            Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+            Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
         } catch (RoomNotExistsException e) {
-            Utility.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
+            Controller.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
         } catch (UserNotInRoomException e) {
-            Utility.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+            Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
         }
 
         for (int i = 0; i < players.size(); i++) {
