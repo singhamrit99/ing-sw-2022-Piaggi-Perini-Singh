@@ -16,8 +16,7 @@ public class ControlCharacter extends CharacterCard implements Serializable {
 
     @Override
     public void activate(Game game) throws ProfessorNotFoundException {
-        Actions action = this.getAbility().getAction();
-
+        Actions action = super.getAbility().getAction();
         if (action.equals(Actions.TAKE_PROFESSORS)) {
             game.checkAndPlaceProfessor();
         }
