@@ -1,11 +1,9 @@
-package it.polimi.ingsw.client.GUI;
+package it.polimi.ingsw.view.GUI;
 
-import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.GUI.controller.*;
-import it.polimi.ingsw.client.StringNames;
-import it.polimi.ingsw.client.UI;
-import it.polimi.ingsw.exceptions.RoomNotExistsException;
-import it.polimi.ingsw.exceptions.UserNotInRoomException;
+import it.polimi.ingsw.network.client.Client;
+import it.polimi.ingsw.view.GUI.controller.*;
+import it.polimi.ingsw.StringNames;
+import it.polimi.ingsw.view.UI;
 import javafx.application.Application;
 import javafx.application.Platform;
 
