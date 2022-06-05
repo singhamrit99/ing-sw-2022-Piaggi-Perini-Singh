@@ -7,13 +7,14 @@ public interface StringNames {
     //used for various type of display displaying
     String TITLE = "Eryantis";
     String JOIN = "Join";
+    String EXPERT_MODE = "Expert Mode";
+    String EXPERT_MODE_ON = "Expert Mode On";
+    String EXPERT_MODE_OFF = "Expert Mode Off";
 
     //used for view definition
     String LOBBY = "Lobby";
     String LAUNCHER = "Launcher";
     String ROOM = "Room";
-    String BOARD = "Board"; //todo remove?
-
     String INGAME = "InGame";
     String CREATE_NEW_ROOM = "CreateRoom";
 
@@ -26,7 +27,7 @@ public interface StringNames {
     String NO_LEADER = "You don't have permission to perform this action";
     String NOT_IN_ROOM = "You are not in the room";
     String ROOM_EXISTS = "Room name already taken";
-
     String ERROR_LOCALMODEL = "Critical bug with local model";
     String ALONE_IN_ROOM = "You are alone in this room. You must be at least 2 players to play Eryantis";
+
 }
