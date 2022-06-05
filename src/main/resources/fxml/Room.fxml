@@ -5,17 +5,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/Style.css"
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0"
+      stylesheets="@../css/Style.css"
       xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <children>
-        <StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
+        <StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                   minWidth="-Infinity"
                    prefHeight="100.0" prefWidth="1280.0">
             <children>
-                <ToggleButton mnemonicParsing="false" text="ExpertMode" StackPane.alignment="CENTER_RIGHT">
-                    <StackPane.margin>
-                        <Insets right="300.0"/>
-                    </StackPane.margin>
-                </ToggleButton>
                 <Text fx:id="roomTitle" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0"
                       strokeWidth="0.0" styleClass="title" text="name" textAlignment="JUSTIFY"
                       StackPane.alignment="CENTER">
@@ -28,7 +25,8 @@
                 <Insets/>
             </VBox.margin>
         </StackPane>
-        <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="402.0" prefWidth="600.0">
+        <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="402.0"
+                  prefWidth="600.0">
             <children>
                 <GridPane fx:id="playersList" alignment="CENTER" gridLinesVisible="true" prefHeight="40.0"
                           prefWidth="115.0">
@@ -52,6 +50,10 @@
                 <Insets bottom="40.0" top="40.0"/>
             </padding>
         </FlowPane>
+        <HBox fx:id="expertBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308"
+              minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1280.0" spacing="20.0">
+
+        </HBox>
         <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
               minWidth="-Infinity" prefHeight="100.0" prefWidth="1280.0" spacing="20.0">
             <children>
