@@ -1,11 +1,11 @@
-package it.polimi.ingsw.server;
+package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
-import it.polimi.ingsw.model.stripped.*;
+import it.polimi.ingsw.network.server.stripped.*;
 import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.server.commands.Command;
+import it.polimi.ingsw.network.server.commands.Command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.tiles.Cloud;
