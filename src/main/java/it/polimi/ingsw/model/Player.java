@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.AssistantCardNotFoundException;
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
@@ -46,6 +47,7 @@ public class Player implements Comparable<Player> {
     public boolean hasPlayedAssistantInThisTurn(){
         return assistantCardPlayedInThisTurn;
     }
+
     public void addStudents(EnumMap<Colors, Integer> students) throws NegativeValueException {
         schoolBoard.addStudents(students);
     }
@@ -57,8 +59,10 @@ public class Player implements Comparable<Player> {
         }
 
         if (schoolBoard.hasEnoughStudents(total)) {
+            System.out.println("Coins before: " + coins);
             if (move.size() != 0) coins += schoolBoard.moveStudents(move);
             if (remove.size() != 0) schoolBoard.removeStudents(remove);
+            System.out.println("Coins after: " + coins);
         } else {
             throw new IllegalArgumentException("EnumMap is incorrect");
         }
@@ -113,7 +117,11 @@ public class Player implements Comparable<Player> {
         return nickname;
     }
 
-    public void removeCoins(int value) throws NegativeValueException {
+    public void removeCoins(int value) throws NegativeValueException, IncorrectArgumentException {
+        if (value > coins){
+            throw new IncorrectArgumentException();
+        }
+
         if (value >= 0) {
             coins -= value;
         } else {
