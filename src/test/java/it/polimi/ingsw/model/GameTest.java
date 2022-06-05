@@ -7,8 +7,8 @@ import it.polimi.ingsw.model.deck.characterdeck.CharacterCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.server.ClientConnection;
-import it.polimi.ingsw.server.Room;
+import it.polimi.ingsw.network.server.ClientConnection;
+import it.polimi.ingsw.network.server.Room;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
