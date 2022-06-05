@@ -3,6 +3,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.SchoolBoard;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.Towers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public class StrippedBoard implements Serializable {
     private int coins;
     private int numberOfTowers;
 
+    private Towers colorsTowers;
+
     public StrippedBoard(Player boardOwner) {
         this.owner = boardOwner.getNickname();
         SchoolBoard tmpBoard = boardOwner.getSchoolBoard();
@@ -24,6 +27,7 @@ public class StrippedBoard implements Serializable {
         this.professorsTable = tmpBoard.getProfessorsTable();
         this.coins = boardOwner.getCoins();
         this.numberOfTowers = tmpBoard.getTowers();
+        this.colorsTowers = boardOwner.getTowerColor();
         ArrayList<AssistantCard> temp= boardOwner.getAssistantCardDeck().getAllCards();
         AssistantCard add = null;
         int i=0;
@@ -72,5 +76,9 @@ public class StrippedBoard implements Serializable {
 
     public void setNumberOfTowers(int numberOfTowers) {
         this.numberOfTowers = numberOfTowers;
+    }
+
+    public Towers getColorsTowers(){
+        return colorsTowers;
     }
 }
