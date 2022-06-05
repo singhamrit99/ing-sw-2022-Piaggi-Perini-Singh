@@ -11,12 +11,12 @@ import it.polimi.ingsw.model.enumerations.Actions;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.model.stripped.StrippedCharacter;
-import it.polimi.ingsw.model.stripped.StrippedCloud;
-import it.polimi.ingsw.model.stripped.StrippedIsland;
+import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
+import it.polimi.ingsw.network.server.stripped.StrippedCloud;
+import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
-import it.polimi.ingsw.server.Room;
+import it.polimi.ingsw.network.server.Room;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
