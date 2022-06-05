@@ -1,6 +1,6 @@
-package it.polimi.ingsw.client.GUI.controller;
+package it.polimi.ingsw.view.GUI.controller;
 
-import it.polimi.ingsw.client.GUI.GUI;
+import it.polimi.ingsw.view.GUI.GUI;
 
 /**
  * @author Amrit
