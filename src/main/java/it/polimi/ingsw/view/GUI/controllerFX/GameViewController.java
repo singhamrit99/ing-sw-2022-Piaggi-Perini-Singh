@@ -1,9 +1,12 @@
-package it.polimi.ingsw.view.GUI.controller;
+package it.polimi.ingsw.view.GUI.controllerFX;
 
-import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.network.server.stripped.StrippedBoard;
+import it.polimi.ingsw.view.GUI.GUI;
+import it.polimi.ingsw.view.GUI.controllerFX.Controller;
+import it.polimi.ingsw.view.GUI.controllerFX.InitialStage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -50,31 +53,13 @@ public class GameViewController extends InitialStage implements Controller {
     private Image redProfImg;
     private Image yellowProfImg;
 
-    // assets on screen
-    @FXML
-    private ArrayList<ImageView> entranceStudentsImgs;
-    @FXML
-    private ImageView studentEntrance1;
-    @FXML
-    private ImageView studentEntrance2;
-    @FXML
-    private ImageView studentEntrance3;
-    @FXML
-    private ImageView studentEntrance4;
-    @FXML
-    private ImageView studentEntrance5;
-    @FXML
-    private ImageView studentEntrance6;
-    @FXML
-    private ImageView studentEntrance7;
-    @FXML
-    private ImageView studentEntrance8;
-    @FXML
-    private ImageView studentEntrance9;
+
+
 
     public GameViewController(GUI gui) {
         super(gui);
         opened.set(false);
+        //importing all assets from resource folder
         try {
             blackTowerImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.BLACK_TOWER)));
             whiteTowerImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.WHITE_TOWER)));
@@ -96,13 +81,11 @@ public class GameViewController extends InitialStage implements Controller {
 
     @FXML
     public void initialize() {
-        if (!opened.get()) { //first openining
+        if (!opened.get()) { //first opening
             opened.set(true);
             setPlayersViewMenu(GUI.client.getLocalPlayerList());
             firstRefreshBoard();
         }
-
-        setCurrentPlayer(GUI.client.getLocalModel().getCurrentPlayer()); //todo before I could refresh the current player from the client/local model ... now there is a bug to find
 
         if (itemBoardViewArray.size() > 0) {
             for (MenuItem boardView : itemBoardViewArray) {
@@ -117,6 +100,30 @@ public class GameViewController extends InitialStage implements Controller {
             currentBoardView = viewOwnerTarget;
             reloadEntrance();
         }
+    }
+    private Image studentImgFromColor(Colors c) {
+        if (c.equals(Colors.BLUE)) return blueStudentImg;
+        else if (c.equals(Colors.YELLOW)) return yellowStudentImg;
+        else if (c.equals(Colors.PINK)) return pinkStudentImg;
+        else if (c.equals(Colors.GREEN)) return greenStudentImg;
+        else return redStudentImg;
+    }
+
+    public void setCurrentPlayer(String currentPlayer) {
+        this.currentViewPlayer.setText("Current player: " + currentPlayer);
+    }
+
+    public boolean isOpened() {
+        return opened.get();
+    }
+
+    private void firstRefreshBoard() {
+        initializeImagesEntrance();
+        currentBoardView = GUI.client.getNickname();
+        reloadEntrance();
+        initializeImagesTowers();
+        reloadTowers();
+        reloadProfs();
     }
 
     private void reloadEntrance() {
@@ -145,26 +152,87 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
-    private Image studentImgFromColor(Colors c) {
-        if (c.equals(Colors.BLUE)) return blueStudentImg;
-        else if (c.equals(Colors.YELLOW)) return yellowStudentImg;
-        else if (c.equals(Colors.PINK)) return pinkStudentImg;
-        else if (c.equals(Colors.GREEN)) return greenStudentImg;
-        else return redStudentImg;
-    }
-    public void setCurrentPlayer(String currentPlayer) {
-        this.currentViewPlayer.setText("Current player: " + currentPlayer);
+    private void reloadTowers() {
+        try {
+            StrippedBoard  b = GUI.client.getLocalModel().getBoardOf(currentBoardView);
+            int numberOfTowers = b.getNumberOfTowers();
+            int i = 0;
+            Image towerColor;
+            switch (b.getColorsTowers()){
+                case WHITE:
+                    towerColor = whiteTowerImg;
+                    break;
+                case GREY:
+                    towerColor = greyTowerImg;
+                    break;
+                    default:
+                        towerColor = blackTowerImg;
+                    break;
+            }
+            for(ImageView t : towersImgs){
+                if(i<numberOfTowers){
+                    towersImgs.get(i).setVisible(true);
+                    towersImgs.get(i).setImage(towerColor);
+                }else{
+                    towersImgs.get(i).setVisible(false);
+                }
+                i++;
+            }
+        } catch (LocalModelNotLoadedException e) {
+            Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
+        }
     }
 
-    public boolean isOpened() {
-        return opened.get();
+    private void reloadProfs() {
+        try {
+            ArrayList<Colors> table = GUI.client.getLocalModel().getBoardOf(currentBoardView).getProfessorsTable();
+            blueProf.setVisible(false);
+            redProf.setVisible(false);
+            pinkProf.setVisible(false);
+            yellowProf.setVisible(false);
+            greenProf.setVisible(false);
+            for (Colors c : table) {
+                if(c.equals(Colors.BLUE))blueProf.setVisible(true);
+                if(c.equals(Colors.RED))redProf.setVisible(true);
+                if(c.equals(Colors.PINK))pinkProf.setVisible(true);
+                if(c.equals(Colors.YELLOW))yellowProf.setVisible(true);
+                if(c.equals(Colors.GREEN))greenProf.setVisible(true);
+            }
+        } catch (LocalModelNotLoadedException e) {
+            Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
+        }
     }
 
-    private void firstRefreshBoard() {
-        initializeImagesEntrance();
-        currentBoardView = GUI.client.getNickname();
-        reloadEntrance();
+    /*
+    private void reloadDining(){
+        try {
+            EnumMap<Colors, Integer> entrance = GUI.client.getLocalModel().getBoardOf(currentBoardView).getDining();
+
+            for (Colors c : entrance.keySet()) {
+                int indexDining = 0;
+                if (entrance.get(c) != 0) {
+                    int i = 0;
+                    Image rightColor = studentImgFromColor(c);
+                    while (i < entrance.get(c)) {
+                        entranceStudentsImgs.get(indexEntranceAssets).setVisible(true);
+                        entranceStudentsImgs.get(indexEntranceAssets).setImage(rightColor);
+                        i++;
+                        indexEntranceAssets++;
+                    }
+                }
+                //hiding others position if there aren't
+                while (indexEntranceAssets < entranceStudentsImgs.size()) {
+                    entranceStudentsImgs.get(indexEntranceAssets).setVisible(false);
+                    indexEntranceAssets++;
+                }
+            }
+
+        } catch (LocalModelNotLoadedException e) {
+            Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
+        }
     }
+    */
+
 
     private void initializeImagesEntrance() {
         entranceStudentsImgs = new ArrayList<>();
@@ -177,6 +245,18 @@ public class GameViewController extends InitialStage implements Controller {
         entranceStudentsImgs.add(studentEntrance7);
         entranceStudentsImgs.add(studentEntrance8);
         entranceStudentsImgs.add(studentEntrance9);
+    }
+
+    private void initializeImagesTowers(){
+        towersImgs = new ArrayList<>();
+        towersImgs.add(tower1);
+        towersImgs.add(tower2);
+        towersImgs.add(tower3);
+        towersImgs.add(tower4);
+        towersImgs.add(tower5);
+        towersImgs.add(tower6);
+        towersImgs.add(tower7);
+        towersImgs.add(tower8);
     }
 
     private void setPlayersViewMenu(ArrayList<String> players) {
@@ -192,5 +272,36 @@ public class GameViewController extends InitialStage implements Controller {
         }
         itemBoardViewArray = items;
     }
+
+
+    // assets on screen
+    @FXML
+    private ArrayList<ImageView> entranceStudentsImgs;
+    @FXML
+    private ImageView studentEntrance1, studentEntrance2,
+            studentEntrance3, studentEntrance4;
+    @FXML
+    private ImageView studentEntrance5, studentEntrance6,
+            studentEntrance7, studentEntrance8, studentEntrance9;
+
+    private ArrayList<ImageView> towersImgs;
+    @FXML
+    private ImageView tower1,tower2,tower3m,tower4,
+            tower5,tower6,tower7,tower8;
+
+    @FXML
+    private ImageView redProf, yellowProf,
+            greenProf, pinkProf,blueProf;
+
+    @FXML
+    private ImageView blueDining0,blueDining1,blueDining2,blueDining3,
+            blueDining4,blueDining5,blueDining6,blueDining7,blueDining8,blueDining9;
+    @FXML
+    private ImageView pinkDining0,pinkDining1,pinkDining2,pinkDining3,
+            pinkDining4,pinkDining5,pinkDining6,pinkDining7,pinkDining8,pinkDining9;
+    @FXML
+    private ImageView greenDining0,greenDining1,greenDining2,greenDining3,getGreenDining4,
+    greenDining5,greenDining6,greenDining7,greenDining8, greenDining9;
+
 
 }
