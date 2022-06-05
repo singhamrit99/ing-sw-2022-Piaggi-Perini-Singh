@@ -430,6 +430,75 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getPlayedAssistantCard().getMove() + 1);
     }
 
+    @Test
+    void testBuyCharacterCards6() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente4");
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 5;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0);
+
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+    }
+
+    @Test
+    void testBuyCharacterCards8() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente4");
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 7;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0);
+
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+    }
+
+
    /* @Test
     void testBuyCharacterCards1() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
         prepareForCards();
