@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUI.controller;
+package it.polimi.ingsw.view.GUI.controllerFX;
 
 import it.polimi.ingsw.view.GUI.GUI;
 
