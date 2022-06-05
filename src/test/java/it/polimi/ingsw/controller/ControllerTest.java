@@ -4,8 +4,8 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.server.ClientConnection;
-import it.polimi.ingsw.server.Room;
+import it.polimi.ingsw.network.server.ClientConnection;
+import it.polimi.ingsw.network.server.Room;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
