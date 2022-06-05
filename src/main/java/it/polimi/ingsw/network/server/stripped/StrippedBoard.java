@@ -1,8 +1,7 @@
-package it.polimi.ingsw.model.stripped;
+package it.polimi.ingsw.network.server.stripped;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.SchoolBoard;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
-import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 
 import java.io.Serializable;
