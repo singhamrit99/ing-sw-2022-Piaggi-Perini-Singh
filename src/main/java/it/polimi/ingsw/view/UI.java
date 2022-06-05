@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.view;
 
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
