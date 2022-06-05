@@ -29,5 +29,4 @@ public interface StringNames {
     String ROOM_EXISTS = "Room name already taken";
     String ERROR_LOCALMODEL = "Critical bug with local model";
     String ALONE_IN_ROOM = "You are alone in this room. You must be at least 2 players to play Eryantis";
-    String NICKNAME_TOO_LONG = "Please insert a shorter nickname (max 15 characters)";
 }
