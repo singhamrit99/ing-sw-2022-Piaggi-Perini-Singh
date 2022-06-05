@@ -25,7 +25,7 @@
       "value": 0
     },
     "ability": {
-      "action": "TAKEPROFESSORS",
+      "action": "TAKE_PROFESSORS",
       "value": 0
     },
     "requirements": {
