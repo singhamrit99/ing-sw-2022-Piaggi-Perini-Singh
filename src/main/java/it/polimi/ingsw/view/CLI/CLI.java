@@ -1,22 +1,23 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.view.CLI;
 
+import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.stripped.StrippedBoard;
-import it.polimi.ingsw.model.stripped.StrippedCharacter;
-import it.polimi.ingsw.model.stripped.StrippedCloud;
-import it.polimi.ingsw.model.stripped.StrippedIsland;
-import it.polimi.ingsw.server.commands.*;
+import it.polimi.ingsw.network.client.Client;
+import it.polimi.ingsw.network.server.stripped.StrippedBoard;
+import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
+import it.polimi.ingsw.network.server.stripped.StrippedCloud;
+import it.polimi.ingsw.network.server.stripped.StrippedIsland;
+import it.polimi.ingsw.network.server.commands.*;
+import it.polimi.ingsw.view.UI;
 
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.*;
 
-
-public class ViewCLI implements UI {
+public class CLI implements UI {
     public static String view;
     Client client;
     String nickName;
@@ -38,7 +39,7 @@ public class ViewCLI implements UI {
     DrawFromBagCommand drawFromBagOrder;
     private final Scanner in = new Scanner(System.in);
 
-    public ViewCLI(Client client) {
+    public CLI(Client client) {
         this.client = client;
         this.client.setUi(this);
         this.client.view = StringNames.LAUNCHER;
@@ -877,6 +878,7 @@ public class ViewCLI implements UI {
                     System.out.println("There is no such color as " + color + "! Try again. \n");
             } while (doItAgain && movedStudents < 3);
         }
+
         //End of dining room move segment
         //Move students to the islands if the player has moved less than 3 students already
         //Resetting destinations array for students to island part
@@ -998,7 +1000,6 @@ public class ViewCLI implements UI {
     }
 
     public void printPlayerNames() {
-
         for (StrippedBoard board : client.getLocalModel().getBoards()) {
             System.out.println(board.getOwner() + "\n");
         }
