@@ -4,7 +4,9 @@ import it.polimi.ingsw.client.GUI.GUILauncher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -12,7 +14,6 @@ import java.io.IOException;
  * @author Amrit
  */
 public interface Controller {
-
     @FXML
     void initialize();
 
@@ -31,5 +32,13 @@ public interface Controller {
         }
     }
 
+    static void showErrorDialogBox(String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initStyle(StageStyle.DECORATED);
+        alert.setTitle(null);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
 
+        alert.showAndWait();
+    }
 }
