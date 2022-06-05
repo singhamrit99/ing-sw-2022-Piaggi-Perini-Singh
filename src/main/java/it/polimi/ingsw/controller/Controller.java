@@ -3,7 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.server.Room;
+import it.polimi.ingsw.network.server.Room;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
