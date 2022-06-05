@@ -1,11 +1,10 @@
-package it.polimi.ingsw.model.stripped;
+package it.polimi.ingsw.network.server.stripped;
 
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.Requirements;
 import it.polimi.ingsw.model.cards.charactercard.Type;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class StrippedCharacter implements Serializable {
     private int price;
