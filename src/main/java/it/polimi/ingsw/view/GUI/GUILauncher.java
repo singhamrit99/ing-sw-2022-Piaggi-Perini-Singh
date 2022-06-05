@@ -1,9 +1,9 @@
-package it.polimi.ingsw.client.GUI;
+package it.polimi.ingsw.view.GUI;
 
-import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.GUI.controller.Controller;
-import it.polimi.ingsw.client.GUI.controller.ResourcesPath;
-import it.polimi.ingsw.client.StringNames;
+import it.polimi.ingsw.network.client.Client;
+import it.polimi.ingsw.view.GUI.controller.Controller;
+import it.polimi.ingsw.view.GUI.controller.ResourcesPath;
+import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
