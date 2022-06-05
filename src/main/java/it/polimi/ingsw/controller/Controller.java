@@ -58,7 +58,7 @@ public class Controller {
     }
 
     public void callPlayCharacterCard(int index, int choice) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException {
-        game.activateCharacterCharacter(index, choice);
+        game.activateCharacterCard(index, choice);
     }
 }
 
