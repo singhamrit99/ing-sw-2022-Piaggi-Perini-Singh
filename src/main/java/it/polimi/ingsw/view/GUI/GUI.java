@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.network.client.Client;
-import it.polimi.ingsw.view.GUI.controller.*;
+import it.polimi.ingsw.view.GUI.controllerFX.*;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.view.UI;
 import javafx.application.Application;
