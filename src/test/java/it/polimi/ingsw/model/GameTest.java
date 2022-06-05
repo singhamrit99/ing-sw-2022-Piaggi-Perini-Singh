@@ -1,9 +1,12 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.*;
+import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
+import it.polimi.ingsw.model.cards.charactercard.CharacterCardFactory;
+import it.polimi.ingsw.model.deck.characterdeck.CharacterCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.server.ClientConnection;
 import it.polimi.ingsw.server.Room;
 import org.junit.jupiter.api.Test;
@@ -14,6 +17,14 @@ import java.util.EnumMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
+
+    Game game;
+    EnumMap<Colors, Integer> enumMap;
+    EnumMap<Colors, ArrayList<java.lang.String>> enumToMove;
+
+    GameTest() throws AssistantCardNotFoundException, NegativeValueException, IncorrectArgumentException, IncorrectPlayerException, IncorrectStateException {
+    }
+
     @Test
     public void testPlayersInit() throws IncorrectArgumentException, NegativeValueException {
         ArrayList<String> nicknames = new ArrayList<>();
@@ -22,8 +33,8 @@ class GameTest {
         nicknames.add("Tino");
         nicknames.add("Tony Stark");
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
-        Room roomTest = new Room("testRoom",emptyClientListsTest);
-        Game game = new Game(roomTest,false, 4, nicknames);
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
+        Game game = new Game(roomTest, false, 4, nicknames);
         ArrayList<Player> players = game.getPlayers();
         assertTrue(nicknames.contains(game.getCurrentPlayer().getNickname()));
         assertEquals(game.getCurrentState(), State.PLANNINGPHASE);
@@ -48,8 +59,8 @@ class GameTest {
         nicknames.add("Luke Skywalker");
         nicknames.add("Dark Fener");
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
-        Room roomTest = new Room("testRoom",emptyClientListsTest);
-        return new Game(roomTest,true, 2, nicknames);
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
+        return new Game(roomTest, true, 2, nicknames);
     }
 
     public Game initGame3players() throws IncorrectArgumentException, NegativeValueException {
@@ -58,8 +69,8 @@ class GameTest {
         nicknames.add("Joker");
         nicknames.add("Bane");
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
-        Room roomTest = new Room("testRoom",emptyClientListsTest);
-        return new Game(roomTest,false, 3, nicknames);
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
+        return new Game(roomTest, false, 3, nicknames);
     }
 
     public Game initGame4players() throws IncorrectArgumentException, NegativeValueException {
@@ -69,8 +80,8 @@ class GameTest {
         nicknames.add("Donatello");
         nicknames.add("Leonardo");
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
-        Room roomTest = new Room("testRoom",emptyClientListsTest);
-        return new Game(roomTest,true, 4, nicknames);
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
+        return new Game(roomTest, true, 4, nicknames);
     }
 
     @Test
@@ -121,7 +132,7 @@ class GameTest {
         for (int i = 0; i < 4; i++) {
             oldPlayer = game.getCurrentPlayer().getNickname();
             game.drawFromBag(oldPlayer);
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente"+ (i + 1));
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente" + (i + 1));
             String newPlayer = game.getCurrentPlayer().getNickname();
             assertNotEquals(oldPlayer, newPlayer);
         }
@@ -142,7 +153,7 @@ class GameTest {
     }
 
     @Test
-    void testMoveStudents() throws IncorrectArgumentException, AssistantCardNotFoundException,IncorrectPlayerException, IncorrectStateException, NegativeValueException, ProfessorNotFoundException {
+    void testMoveStudents() throws IncorrectArgumentException, AssistantCardNotFoundException, IncorrectPlayerException, IncorrectStateException, NegativeValueException, ProfessorNotFoundException {
         Game g = planningPhaseComplete();
         assertEquals(g.getCurrentState(), State.ACTIONPHASE_1);
         EnumMap<Colors, Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
@@ -166,7 +177,7 @@ class GameTest {
     }
 
     @Test
-    void moveMotherNature() throws IncorrectArgumentException, AssistantCardNotFoundException,IncorrectStateException, IncorrectPlayerException, MotherNatureLostException, NegativeValueException, ProfessorNotFoundException {
+    void moveMotherNature() throws IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, IncorrectPlayerException, MotherNatureLostException, NegativeValueException, ProfessorNotFoundException {
         Game g = planningPhaseComplete();
         EnumMap<Colors, Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
@@ -293,10 +304,146 @@ class GameTest {
         assertNull(game.checkWinner());
     }
 
-
     @Test
     void testIsGameOver3players() throws IncorrectArgumentException, NegativeValueException {
         Game game = initGame3players();
         assertFalse(game.isGameOver());
     }
+
+    void prepareForCards() throws NegativeValueException, IncorrectPlayerException, IncorrectArgumentException, ProfessorNotFoundException, IncorrectStateException, AssistantCardNotFoundException {
+        game = initGame2players();
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente2");
+
+        enumMap = StudentManager.createEmptyStudentsEnum();
+        enumMap.put(Colors.BLUE, 9);
+        enumMap.put(Colors.YELLOW, 6);
+        enumMap.put(Colors.PINK, 6);
+        enumMap.put(Colors.RED, 6);
+        enumMap.put(Colors.GREEN, 6);
+        game.getCurrentPlayer().addStudents(enumMap);
+
+        enumToMove = new EnumMap<>(Colors.class);
+        ArrayList<java.lang.String> strings = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            strings.add("dining");
+        }
+
+        enumToMove.put(Colors.BLUE, strings);
+        enumToMove.put(Colors.YELLOW, new ArrayList<>());
+        enumToMove.put(Colors.PINK, new ArrayList<>());
+        enumToMove.put(Colors.GREEN, new ArrayList<>());
+        enumToMove.put(Colors.RED, new ArrayList<>());
+    }
+
+    @Test
+    void testBuyCharacterCards2() throws NegativeValueException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, IncorrectPlayerException, NotEnoughCoinsException, ProfessorNotFoundException, MotherNatureLostException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        System.out.println("PROFESSORE " + game.getCurrentPlayer().getSchoolBoard().getProfessorsTable().get(0) + game.getCurrentPlayer().getNickname() + " ");
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 1;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+        assertEquals(0, game.getCurrentPlayer().getSchoolBoard().getProfessorsTable().size());
+
+        game.activateCharacterCard(0);
+        System.out.println("PROFESSORE " + game.getCurrentPlayer().getSchoolBoard().getProfessorsTable().get(0) + game.getCurrentPlayer().getNickname() + " ");
+    }
+
+    @Test
+    void testBuyCharacterCards3() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, NotEnoughCoinsException, MotherNatureLostException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        System.out.println(game.getCurrentState());
+
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente4");
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 2;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0, 2);
+        System.out.println(game.getCurrentPlayer().getCoins());
+    }
+
+    @Test
+    void testBuyCharacterCards4() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 3;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0);
+
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getPlayedAssistantCard().getMove() + 1);
+    }
+
+   /* @Test
+    void testBuyCharacterCards1() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
+        prepareForCards();
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 0;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        game.activateCharacterCard();
+
+    }*/
 }
