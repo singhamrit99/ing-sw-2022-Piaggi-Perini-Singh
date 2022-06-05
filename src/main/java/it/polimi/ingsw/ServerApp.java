@@ -1,7 +1,7 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.server.Server;
-import it.polimi.ingsw.server.serverStub;
+import it.polimi.ingsw.network.server.Server;
+import it.polimi.ingsw.network.server.serverStub;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
