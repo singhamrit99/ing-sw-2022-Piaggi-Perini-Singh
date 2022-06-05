@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUI.controller;
+package it.polimi.ingsw.view.GUI.controllerFX;
 
 public interface ResourcesPath {
     String FXML_FILE_PATH = "/fxml/";
