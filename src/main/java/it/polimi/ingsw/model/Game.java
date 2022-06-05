@@ -85,12 +85,13 @@ public class Game {
     }
 
     private boolean buyCharacterCard(int index) {
-        if ((getCurrentState().equals(State.ACTIONPHASE_1) || getCurrentState().equals(State.ACTIONPHASE_2) || getCurrentState().equals(State.ACTIONPHASE_3)) && expertMode) //TODO ACTIONPHASE CE NE SONO TRE, CHIEDERE A TINO
+        if ((getCurrentState().equals(State.ACTIONPHASE_1) || getCurrentState().equals(State.ACTIONPHASE_2) || getCurrentState().equals(State.ACTIONPHASE_3)) && expertMode) {
             if (characterCards.get(index).getPrice() <= currentPlayer.getCoins()) {
                 characterCards.get(index).setStatus(1);
                 currentPlayer.setPlayedCharacterCard(characterCards.get(index));
                 return true;
             }
+        }
         return false;
     }
 
@@ -103,15 +104,16 @@ public class Game {
         if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
     }
 
-    private void increaseCharacterPrice(int index) throws NegativeValueException {
+    private void increaseCharacterPrice(int index) throws NegativeValueException, IncorrectArgumentException {
         CharacterCard updatedCard = characterCards.get(index);
         CharacterCard oldCard = new CharacterCard(updatedCard.getImageName(), updatedCard.getPrice(), updatedCard.getDescription());
         int coinsRemoved = currentPlayer.getPlayedCharacterCard().getPrice();
         currentPlayer.removeCoins(coinsRemoved);
         int coins = currentPlayer.getCoins();
+
         //notify coins changed
         PropertyChangeEvent coinsEvt =
-                new PropertyChangeEvent(this,"coins",currentPlayer.getNickname(),coins);
+                new PropertyChangeEvent(this, "coins", currentPlayer.getNickname(), coins);
         gameListener.propertyChange(coinsEvt);
         updatedCard.increasePrice();
         updatedCard.setStatus(0);
@@ -126,7 +128,7 @@ public class Game {
         gameListener.propertyChange(cardEvent);
     }
 
-    public void activateCharacterCharacter(int index, int choice) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
+    public void activateCharacterCard(int index, int choice) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
         if (buyCharacterCard(index) && expertMode) {
             currentPlayer.getPlayedCharacterCard().setChoiceIndex(choice);
             currentPlayer.getPlayedCharacterCard().activate(this);
@@ -348,22 +350,22 @@ public class Game {
                 state = State.ACTIONPHASE_1;
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
                 currentPlayer = orderPlayers.poll(); //first player of Action Phase
-                PropertyChangeEvent phaseChange=
-                        new PropertyChangeEvent(this, "change-phase", null,currentPlayer.getNickname());
+                PropertyChangeEvent phaseChange =
+                        new PropertyChangeEvent(this, "change-phase", null, currentPlayer.getNickname());
                 gameListener.propertyChange(phaseChange);
             }
         } else if (state == State.ACTIONPHASE_3) { //Last player did the 3 step of Action Phase
             if (!orderPlayers.isEmpty()) {
                 currentPlayer = orderPlayers.poll();
                 state = State.ACTIONPHASE_1;
-                PropertyChangeEvent phaseChange=
-                        new PropertyChangeEvent(this, "change-phase", null,currentPlayer.getNickname());
+                PropertyChangeEvent phaseChange =
+                        new PropertyChangeEvent(this, "change-phase", null, currentPlayer.getNickname());
                 gameListener.propertyChange(phaseChange);
             } else {
                 state = State.ENDTURN;
                 nextRound();
-                PropertyChangeEvent phaseChange=
-                        new PropertyChangeEvent(this, "change-phase", null,currentPlayer.getNickname());
+                PropertyChangeEvent phaseChange =
+                        new PropertyChangeEvent(this, "change-phase", null, currentPlayer.getNickname());
                 gameListener.propertyChange(phaseChange);
             }
         } else {
@@ -372,7 +374,7 @@ public class Game {
 
         //notify current player
         PropertyChangeEvent changeCurrentPlayer =
-                new PropertyChangeEvent(this, "current-player", null,currentPlayer.getNickname());
+                new PropertyChangeEvent(this, "current-player", null, currentPlayer.getNickname());
         gameListener.propertyChange(changeCurrentPlayer);
     }
 
@@ -393,8 +395,8 @@ public class Game {
                 gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
-                PropertyChangeEvent phaseChange=
-                        new PropertyChangeEvent(this, "change-phase", null,null);
+                PropertyChangeEvent phaseChange =
+                        new PropertyChangeEvent(this, "change-phase", null, null);
                 gameListener.propertyChange(phaseChange);
                 numRounds++;
                 currentPlayer = players.get(playerPlanPhase); //This is decided with the Assistant Card values and is assign in nextPlayer()
@@ -425,7 +427,8 @@ public class Game {
                         }
                     }
                 }
-                if (numOfStudents != 0) throw new IncorrectArgumentException("Number of students is wrong: should be 0, instead is " +numOfStudents);
+                if (numOfStudents != 0)
+                    throw new IncorrectArgumentException("Number of students is wrong: should be 0, instead is " + numOfStudents);
 
                 //initialization of the two EnumMap, one for a destination and previous Dining Room
                 EnumMap<Colors, Integer> studentsToDining = new EnumMap<>(Colors.class);
@@ -468,16 +471,16 @@ public class Game {
                 }
                 currentPlayer.moveStudents(studentsToDining, studentsToRemove);
                 state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
-                PropertyChangeEvent phaseChange=
-                        new PropertyChangeEvent(this, "change-phase", null,null);
+                PropertyChangeEvent phaseChange =
+                        new PropertyChangeEvent(this, "change-phase", null, null);
                 gameListener.propertyChange(phaseChange);
                 System.out.println("Send property change event for dining room\n");
                 if (isDiningChanged) {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
                     //notify dining AND entrance change
                     EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
-                    PropertyChangeEvent event=
-                            new PropertyChangeEvent(this,"entrance",currentPlayer.getNickname(),currentPlayer.getSchoolBoard().getEntrance());
+                    PropertyChangeEvent event =
+                            new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), currentPlayer.getSchoolBoard().getEntrance());
                     gameListener.propertyChange(event);
                     PropertyChangeEvent evt =
                             new PropertyChangeEvent(this, "dining", currentPlayer.getNickname(), newDining);
@@ -505,8 +508,8 @@ public class Game {
                 PropertyChangeEvent evtCloud =
                         new PropertyChangeEvent(this, "cloud", null, changedCloud);
                 gameListener.propertyChange(evtCloud);
-                PropertyChangeEvent event=
-                        new PropertyChangeEvent(this,"entrance",currentPlayer.getNickname(),currentPlayer.getSchoolBoard().getEntrance());
+                PropertyChangeEvent event =
+                        new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), currentPlayer.getSchoolBoard().getEntrance());
                 gameListener.propertyChange(event);
 
                 nextPlayer();
@@ -544,8 +547,8 @@ public class Game {
                         motherNaturePosition = destinationMotherNature;
                         resolveMotherNature(destinationMotherNature);
                         state = State.ACTIONPHASE_3;
-                        PropertyChangeEvent phaseChange=
-                                new PropertyChangeEvent(this, "change-phase", null,null);
+                        PropertyChangeEvent phaseChange =
+                                new PropertyChangeEvent(this, "change-phase", null, null);
                         gameListener.propertyChange(phaseChange);
                     } else {
                         throw new IncorrectArgumentException();
@@ -738,7 +741,6 @@ public class Game {
             }
         } else team.get(0).moveTowers(amount);
 
-
         for (Player teamMember : team) {
             int changedTowers = teamMember.getSchoolBoard().getTowers();
             //notify towers
@@ -891,4 +893,7 @@ public class Game {
         return islands;
     }
 
+    protected void setCharacterCards(int index, CharacterCard characterCard) {
+        characterCards.set(index, characterCard);
+    }
 }
