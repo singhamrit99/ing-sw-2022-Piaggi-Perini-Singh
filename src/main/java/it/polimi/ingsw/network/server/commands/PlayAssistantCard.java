@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.commands;
+package it.polimi.ingsw.network.server.commands;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.exceptions.AssistantCardNotFoundException;
