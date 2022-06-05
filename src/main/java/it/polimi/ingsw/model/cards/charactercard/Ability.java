@@ -15,6 +15,9 @@ public class Ability {
     }
 
     public Actions getAction() {
+        if (action == null) {
+            return null;
+        }
         return action;
     }
 
