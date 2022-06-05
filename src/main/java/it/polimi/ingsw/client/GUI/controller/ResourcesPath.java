@@ -1,11 +1,7 @@
 package it.polimi.ingsw.client.GUI.controller;
 
-import javafx.scene.image.Image;
-
-import java.io.FileInputStream;
-
 public interface ResourcesPath {
-    String FXML_FILE_PATH = "/fxml/"; // Equivalent to src/main/resources/fxml
+    String FXML_FILE_PATH = "/fxml/";
     String FILE_EXTENSION = ".fxml";
     String LAUNCHER = "Launcher";
     String LOBBY = "Lobby";
@@ -13,19 +9,13 @@ public interface ResourcesPath {
     String NEW_ROOM = "NewRoom";
     String GAME_VIEW = "GameView";
 
-
-
-
     // ----   GRAPHICS IMG IN GAME -----
-
     //towers
     String BLACK_TOWER = "src/main/resources/img/towers/black_tower.png";
     String GREY_TOWER = "src/main/resources/img/towers/grey_tower.png";
     String WHITE_TOWER = "src/main/resources/img/towers/white_tower.png";
 
-
     //students
-
     String BLUE_STUDENT = "src/main/resources/img/students/student_blue.png";
     String GREEN_STUDENT = "src/main/resources/img/students/student_green.png";
     String PINK_STUDENT = "src/main/resources/img/students/student_pink.png";
@@ -33,7 +23,6 @@ public interface ResourcesPath {
     String YELLOW_STUDENT = "src/main/resources/img/students/student_yellow.png";
 
     //professors
-
     String BLUE_PROF = "src/main/resources/img/professors/teacher_blue.png";
     String GREEN_PROF = "src/main/resources/img/professors/teacher_green.png";
     String PINK_PROF = "src/main/resources/img/professors/teacher_pink.png";
