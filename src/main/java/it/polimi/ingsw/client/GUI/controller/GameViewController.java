@@ -50,7 +50,6 @@ public class GameViewController extends InitialStage implements Controller {
     private Image redProfImg;
     private Image yellowProfImg;
 
-
     // assets on screen
     @FXML
     private ArrayList<ImageView> entranceStudentsImgs;
@@ -107,9 +106,7 @@ public class GameViewController extends InitialStage implements Controller {
 
         if (itemBoardViewArray.size() > 0) {
             for (MenuItem boardView : itemBoardViewArray) {
-                boardView.setOnAction((event) -> {
-                    changeViewBoard(boardView.getText());
-                });
+                boardView.setOnAction((event) -> changeViewBoard(boardView.getText()));
             }
         }
 
@@ -144,7 +141,7 @@ public class GameViewController extends InitialStage implements Controller {
                 indexEntranceAssets++;
             }
         } catch (LocalModelNotLoadedException e) {
-            Utility.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
+            Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
         }
     }
 
@@ -182,18 +179,16 @@ public class GameViewController extends InitialStage implements Controller {
         entranceStudentsImgs.add(studentEntrance9);
     }
 
-
     private void setPlayersViewMenu(ArrayList<String> players) {
         List<MenuItem> items = changeViewBoard.getItems();
         int indexItem = 0;
         while (indexItem < 4) {
             if (indexItem > players.size() - 1) {
                 items.get(indexItem).setVisible(false);
-                indexItem++;
             } else {
                 items.get(indexItem).setText(players.get(indexItem));
-                indexItem++;
             }
+            indexItem++;
         }
         itemBoardViewArray = items;
     }
