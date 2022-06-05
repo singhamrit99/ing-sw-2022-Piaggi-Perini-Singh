@@ -1,7 +1,7 @@
-package it.polimi.ingsw.client.GUI.controller;
+package it.polimi.ingsw.view.GUI.controller;
 
-import it.polimi.ingsw.client.GUI.GUI;
-import it.polimi.ingsw.client.StringNames;
+import it.polimi.ingsw.view.GUI.GUI;
+import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.RoomAlreadyExistsException;
 import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import javafx.fxml.FXML;
