@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.stripped;
+package it.polimi.ingsw.network.server.stripped;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.model.tiles.Island;
