@@ -1,8 +1,7 @@
-package it.polimi.ingsw.model.stripped;
+package it.polimi.ingsw.network.server.stripped;
 
-import it.polimi.ingsw.client.UI;
+import it.polimi.ingsw.view.UI;
 import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
-import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 
