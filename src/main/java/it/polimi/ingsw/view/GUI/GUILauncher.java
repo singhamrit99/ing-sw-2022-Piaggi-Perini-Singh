@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.network.client.Client;
-import it.polimi.ingsw.view.GUI.controller.Controller;
-import it.polimi.ingsw.view.GUI.controller.ResourcesPath;
+import it.polimi.ingsw.view.GUI.controllerFX.Controller;
+import it.polimi.ingsw.view.GUI.controllerFX.ResourcesPath;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import javafx.animation.Interpolator;
@@ -50,7 +50,9 @@ public class GUILauncher extends Application implements Initializable {
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle(StringNames.TITLE);
-        stage.setResizable(false);
+        stage.setResizable(true);
+        stage.setMinHeight(480);
+        stage.setMinWidth(720);
         stage.setWidth(MAIN_MENU_WIDTH);
         stage.setHeight(MAIN_MENU_HEIGHT);
         mainWindow = stage;
