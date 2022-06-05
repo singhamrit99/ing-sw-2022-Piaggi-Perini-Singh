@@ -30,6 +30,13 @@ public class NewRoomController extends InitialStage implements Controller {
 
     @FXML
     public void initialize() {
+        roomName.textProperty().addListener((event) -> {
+            int maxLength = 15;
+            if (roomName.getText().length() > maxLength) {
+                String set = roomName.getText().substring(0, maxLength);
+                roomName.setText(set);
+            }
+        });
         initializeConfirmButton();
         initializeCancelButton();
     }
@@ -48,11 +55,11 @@ public class NewRoomController extends InitialStage implements Controller {
                     GUI.client.view = StringNames.ROOM;
                     GUI.client.createRoom(roomName.getText());
                 } catch (RemoteException e) {
-                    Utility.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
                 } catch (UserNotRegisteredException e) {
-                    Utility.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                    Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                 } catch (RoomAlreadyExistsException e) {
-                    Utility.showErrorDialogBox(StringNames.ROOM_EXISTS);
+                    Controller.showErrorDialogBox(StringNames.ROOM_EXISTS);
                 }
             }
         });
