@@ -28,6 +28,7 @@ public class Client implements Runnable {
     private boolean userRegistered;
     private boolean drawnOut;
     private int phase = 0;
+    private boolean roomExpertMode = false;
 
     public Client(String ip, int port) {
         this.ip = ip;
@@ -119,7 +120,7 @@ public class Client implements Runnable {
     }
 
     public void startGame() throws RemoteException, NotLeaderRoomException, UserNotInRoomException,
-            RoomNotExistsException,NotEnoughPlayersException, UserNotRegisteredException {
+            RoomNotExistsException, NotEnoughPlayersException, UserNotRegisteredException {
         server.startGame(nickname);
     }
 
@@ -158,10 +159,11 @@ public class Client implements Runnable {
                                 roomListShow();
                             }
                         } else if (view.equals(StringNames.ROOM)) {
-                            //refresh playerList if in room
+                            //display and refresh playerList if in room
                             if (clientRoom != null) {
-                                if (!getNicknamesInRoom().equals(playersList)) {
+                                if (!getNicknamesInRoom().equals(playersList) || roomExpertMode != getExpertMode()) {
                                     playersList = getNicknamesInRoom();
+                                    roomExpertMode = getExpertMode();
                                     ui.roomJoin(playersList);
                                 }
                             }
@@ -295,8 +297,12 @@ public class Client implements Runnable {
         return clientRoom;
     }
 
-    public ArrayList<String> getLocalPlayerList(){
+    public ArrayList<String> getLocalPlayerList() {
         return playersList;
+    }
+
+    public boolean getExpertMode() throws RemoteException, RoomNotExistsException {
+        return Boolean.parseBoolean(server.getLobbyInfo(clientRoom).get(2));
     }
 }
 
