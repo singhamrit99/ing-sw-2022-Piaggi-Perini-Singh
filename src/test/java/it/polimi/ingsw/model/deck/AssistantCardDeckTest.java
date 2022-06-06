@@ -35,7 +35,7 @@ class AssistantCardDeckTest {
     @Test
     void testDiscardCard() throws AssistantCardNotFoundException {
         ASSISTANT_CARD_DECK.fillDeck();
-        ASSISTANT_CARD_DECK.get("Assistente1");
+        ASSISTANT_CARD_DECK.get("1");
         assertEquals(NUM_OF_ASSISTANT_CARDS-1 , ASSISTANT_CARD_DECK.getAllCards().size());
     }
 }
