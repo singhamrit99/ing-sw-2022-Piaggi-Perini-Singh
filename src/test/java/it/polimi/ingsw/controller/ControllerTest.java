@@ -37,7 +37,7 @@ class ControllerTest {
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente"+(i+1));
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 1));
         }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
@@ -75,7 +75,7 @@ class ControllerTest {
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente"+(i+1));
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 1));
         }
         assertEquals(game.getCurrentState(), State.ACTIONPHASE_1);
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
@@ -111,7 +111,7 @@ class ControllerTest {
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         for (int i = 0; i < 4; i++) {
             game.drawFromBag(game.getCurrentPlayer().getNickname());
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente"+(i+4));
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 4));
         }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
@@ -150,7 +150,7 @@ class ControllerTest {
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldplayer = game.getCurrentPlayer().getNickname();
-        controller.callPlayAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
+        controller.callPlayAssistantCard(game.getCurrentPlayer().getNickname(), "1");
         assertNotEquals(oldplayer, game.getCurrentPlayer().getNickname());
     }
 }
