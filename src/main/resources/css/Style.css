@@ -40,3 +40,16 @@
 .cancel-button:hover {
     -fx-background-color: #fa2e05;
 }
+
+.background{
+    -fx-background-image: url(../img/custom/background_clouds.png);
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% ;
+}
+
+.WhiteBackground{
+    -fx-border-color: rgba(255, 255, 255, 0.495);
+    -fx-background-color: rgba(255, 255, 255, 0.495);
+}
