@@ -1,42 +1,42 @@
 [
   {
-    "imageName": "Assistente1",
+    "imageName": "1",
     "move": 1
   },
   {
-    "imageName": "Assistente2",
+    "imageName": "2",
     "move": 1
   },
   {
-    "imageName": "Assistente3",
+    "imageName": "3",
     "move": 2
   },
   {
-    "imageName": "Assistente4",
+    "imageName": "4",
     "move": 2
   },
   {
-    "imageName": "Assistente5",
+    "imageName": "5",
     "move": 3
   },
   {
-    "imageName": "Assistente6",
+    "imageName": "6",
     "move": 3
   },
   {
-    "imageName": "Assistente7",
+    "imageName": "7",
     "move": 4
   },
   {
-    "imageName": "Assistente8",
+    "imageName": "8",
     "move": 4
   },
   {
-    "imageName": "Assistente9",
+    "imageName": "9",
     "move": 5
   },
   {
-    "imageName": "Assistente10",
+    "imageName": "10",
     "move": 5
   }
 ]
