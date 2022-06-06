@@ -121,7 +121,7 @@ class GameTest {
         Game game = initGame4players();
         game.drawFromBag(game.getCurrentPlayer().getNickname());
         String oldPlayer = game.getCurrentPlayer().getNickname();
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "1");
         assertNotEquals(oldPlayer, game.getCurrentPlayer().getNickname());
     }
 
@@ -132,7 +132,7 @@ class GameTest {
         for (int i = 0; i < 4; i++) {
             oldPlayer = game.getCurrentPlayer().getNickname();
             game.drawFromBag(oldPlayer);
-            game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente" + (i + 1));
+            game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 1));
             String newPlayer = game.getCurrentPlayer().getNickname();
             assertNotEquals(oldPlayer, newPlayer);
         }
@@ -142,13 +142,13 @@ class GameTest {
     Game planningPhaseComplete() throws IncorrectArgumentException, AssistantCardNotFoundException, IncorrectPlayerException, IncorrectStateException, NegativeValueException {
         Game game = initGame4players();
         game.drawFromBag(game.getCurrentPlayer().getNickname());
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "1");
         game.drawFromBag(game.getCurrentPlayer().getNickname());
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente2");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "2");
         game.drawFromBag(game.getCurrentPlayer().getNickname());
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente9");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "9");
         game.drawFromBag(game.getCurrentPlayer().getNickname());
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente10");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "10");
         return game;
     }
 
@@ -313,9 +313,9 @@ class GameTest {
     void prepareForCards() throws NegativeValueException, IncorrectPlayerException, IncorrectArgumentException, ProfessorNotFoundException, IncorrectStateException, AssistantCardNotFoundException {
         game = initGame2players();
         game.drawFromBag(game.getCurrentPlayer().getNickname());
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente1");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "1");
         game.drawFromBag(game.getCurrentPlayer().getNickname());
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente2");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "2");
 
         enumMap = StudentManager.createEmptyStudentsEnum();
         enumMap.put(Colors.BLUE, 9);
@@ -380,8 +380,8 @@ class GameTest {
 
         System.out.println(game.getCurrentState());
 
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente3");
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente4");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -443,8 +443,8 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
 
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente3");
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente4");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -477,8 +477,8 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
 
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente3");
-        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "Assistente4");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -497,6 +497,7 @@ class GameTest {
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
     }
+
 
 
    /* @Test
