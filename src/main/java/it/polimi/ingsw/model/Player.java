@@ -40,11 +40,11 @@ public class Player implements Comparable<Player> {
         assistantCardPlayedInThisTurn = true;
     }
 
-    public void forgetAssistantCard(){ //necessary to check if others players play the same assistantCard in THIS turn (it s necessary to 'reset' at the end of any planning phase)
+    public void forgetAssistantCard() { //necessary to check if others players play the same assistantCard in THIS turn (it s necessary to 'reset' at the end of any planning phase)
         assistantCardPlayedInThisTurn = false;
     }
 
-    public boolean hasPlayedAssistantInThisTurn(){
+    public boolean hasPlayedAssistantInThisTurn() {
         return assistantCardPlayedInThisTurn;
     }
 
@@ -78,7 +78,7 @@ public class Player implements Comparable<Player> {
 
     @Override
     public int compareTo(Player otherPlayer) {
-        return Integer.compare(playedAssistantCard.getMove(),otherPlayer.getPlayedAssistantCard().getMove());
+        return Integer.compare(Integer.parseInt(playedAssistantCard.getImageName()), otherPlayer.getPlayedAssistantCard().getMove());
     }
 
     public SchoolBoard getSchoolBoard() {
@@ -118,7 +118,7 @@ public class Player implements Comparable<Player> {
     }
 
     public void removeCoins(int value) throws NegativeValueException, IncorrectArgumentException {
-        if (value > coins){
+        if (value > coins) {
             throw new IncorrectArgumentException();
         }
 
