@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="body" stylesheets="@../css/GameViewStyle.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <children>
       <MenuBar layoutX="10.0" layoutY="10.0">
          <menus>
@@ -34,7 +28,7 @@
             <Insets />
          </VBox.margin>
       </MenuBar>
-        <StackPane maxWidth="1000.0" minHeight="300.0" minWidth="1000.0" prefHeight="500.0" prefWidth="1000.0" stylesheets="@../css/GameViewStyle.css">
+        <StackPane maxWidth="1000.0" minHeight="300.0" minWidth="1000.0" prefHeight="500.0" prefWidth="1000.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -131,32 +125,44 @@
          </children></StackPane>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0">
+            <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/custom/bag.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER" prefHeight="400.0" prefWidth="300.0">
                <children>
-                  <ImageView fitHeight="100.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
+                     <image>
+                        <Image url="@../img/clouds/cloud_card_1.png" />
+                     </image>
                   </ImageView>
-                  <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="10.0" layoutY="160.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
+                     <image>
+                        <Image url="@../img/clouds/cloud_card_2.png" />
+                     </image>
                   </ImageView>
-                  <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="10.0" layoutY="160.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="10.0" layoutY="310.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
+                     <image>
+                        <Image url="@../img/clouds/cloud_card_3.png" />
+                     </image>
                   </ImageView>
-                  <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="10.0" layoutY="310.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="10.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
-                  </ImageView>
-                  <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="10.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
+                     <image>
+                        <Image url="@../img/clouds/cloud_card_4.png" />
+                     </image>
                   </ImageView>
                </children>
                <HBox.margin>
@@ -801,29 +807,14 @@
                       <Insets />
                   </opaqueInsets>
               </StackPane>
-            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="300.0">
+            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="500.0">
                <children>
-                  <ImageView fitHeight="100.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
                   </ImageView>
-                  <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </ImageView>
-                  <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="10.0" layoutY="160.0" pickOnBounds="true" preserveRatio="true">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </ImageView>
-                  <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="10.0" layoutY="310.0" pickOnBounds="true" preserveRatio="true">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </ImageView>
-                  <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="10.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="200.0" fitWidth="300.0" layoutX="10.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
