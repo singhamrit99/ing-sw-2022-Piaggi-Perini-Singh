@@ -44,7 +44,7 @@ public class Client implements Runnable {
         try {
             Registry registry = LocateRegistry.getRegistry(ip, port);
             server = (serverStub) registry.lookup("server");
-            System.out.println("connection done");
+            //System.out.println("connection done");
         } catch (Exception e) {
             System.err.println("Client exception: " + e);
             e.printStackTrace();

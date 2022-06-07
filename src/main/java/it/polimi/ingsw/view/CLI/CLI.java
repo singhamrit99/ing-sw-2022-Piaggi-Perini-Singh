@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.CLI;
 
+
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
@@ -46,7 +47,14 @@ public class CLI implements UI {
     }
 
     public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException {
-
+        System.out.println("Welcome to...");
+        System.out.println("      ########## #########  ###########     ###     ####    ### ########### ###   ###  ######## \n" +
+                "     #+#        #+#    #+#     #+#       #+# #+#   #+#+#   #+#     #+#     #+#   #+# #+#    #+# \n" +
+                "    +#+        +#+    +#+     +#+      +#+   +#+  #+#+#+  +#+     +#+      +#+ +#+  +#+         \n" +
+                "   +#++#++#   +#++#++##      +#+     +#++#++#++# +#+ +#+ +#+     +#+       +#++#   +#++#++#++   \n" +
+                "  +#+        +#+    +#+     +#+     +#+     +#+ +#+  +#+#+#     +#+        +#+           +#+    \n" +
+                " #+#        #+#    #+#     #+#     #+#     #+# #+#   #+#+#     #+#        #+#    #+#    #+#     \n" +
+                "########## ###    ### ########### ###     ### ###    ####     ###        ###     ########     ");
         System.out.println("Welcome to the lobby!\nWhat's your name?");
         while (true) {
             try {
@@ -58,11 +66,13 @@ public class CLI implements UI {
                 System.out.println("That username is already in the game! Try another.\n");
             }
         }
-        System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
-                "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n CHANGE to toggle expert mode for the current lobby;\n " +
-                "LEAVE to leave current lobby;\n" +
-                "HELP to see this message again.\n" +
-                "When you're ready to go and everyone is in the lobby type START to start the game!\n");
+        System.out.println("O----------------------------------------------------------------------------------------O\n" +
+                "|Possible options: JOIN to join a room; CREATE to create a new room; ROOMS to list rooms;|\n" +
+                "|PLAYERS to list players in current lobby; INFO to view your current room's information; |\n" +
+                "|CHANGE to toggle expert mode for the current lobby; LEAVE to leave current lobby;       |\n" +
+                "|HELP to see this message again.                                                         |\n" +
+                "|When you're ready to go and everyone is in the lobby type START to start the game!      |\n" +
+                "O----------------------------------------------------------------------------------------O");
         //Main room loop
         while (!client.isInGame()) {
 
@@ -102,8 +112,10 @@ public class CLI implements UI {
                             "When you're ready to go and everyone is in the lobby type START to start the game!\n");
                     break;
                 case "\n":
+                    System.out.println(command);
                     break;
                 default:
+
                     System.out.println("Command not recognized");
                     break;
             }
@@ -134,8 +146,8 @@ public class CLI implements UI {
                 while (!client.isMyTurn()) {
 
                 }
-                performActionInTurn();
                 printCommandHelp();
+                performActionInTurn();
             }
             pickCloud();
         }
@@ -148,9 +160,9 @@ public class CLI implements UI {
         } catch (NotEnoughPlayersException e) {
             System.out.println(StringNames.ALONE_IN_ROOM); //todo TINO to LORE: Lore usa 'StringNames' per i messaggi, aggiungi i tuoi messaggi, cosí il usiamo anche noi .
         } catch (UserNotInRoomException e) {
-            System.out.println("You're not in a room yet!\n");
+            System.out.println(StringNames.NOT_IN_A_ROOM);
         } catch (NotLeaderRoomException e) {
-            System.out.println("You're not the leader of this room you can't start the game!\n");
+            System.out.println(StringNames.NO_LEADER);
         } catch (RoomNotExistsException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         }
@@ -447,15 +459,17 @@ public class CLI implements UI {
     }
 
     public void printCommandHelp() {
-        System.out.println("The commands available are the following:\n" +
-                "Press 1 to view everyone's boards\t" +
-                "Press 2 to view every player's name\t" +
-                "Press 3 to view all the islands\t" +
-                "Press 4 to move students across the islands and the dining room\n" +
-                "Press 5 to move mother nature. This will end your turn\t" +
-                "Press 6 to see the character cards in the game\t" +
-                "Press 7 to play a character card\t" +
-                "Press 8 to view this message again\n");
+        System.out.println("O-----------------------------------------------------------------------O\n" +
+                "|              The commands available are the following:                |\n" +
+                "|\"Press 1 to view everyone's boards                                    |\n" +
+                "|\"Press 2 to view every player's name                                  |\n" +
+                "|\"Press 3 to view all the islands                                      |\n" +
+                "|\"Press 4 to move students across the islands and the dining room      |\n" +
+                "|\"Press 5 to move mother nature. This will end your turn               |\n" +
+                "|\"Press 6 to see the character cards in the game                       |\n" +
+                "|\"Press 7 to play a character card                                     |\n" +
+                "|\"Press 8 to view this message again                                   |\n" +
+                "O-----------------------------------------------------------------------O");
     }
 
     //Game methods
@@ -520,9 +534,9 @@ public class CLI implements UI {
 
     public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
         do {
-            System.out.println("Press any key to continue\n");
+         //   System.out.println("Press any key to continue\n");
             in.nextLine();
-            printCommandHelp();
+           // printCommandHelp();
             System.out.println("Select an action: ");
             String input;
             while (true) {
@@ -954,21 +968,25 @@ public class CLI implements UI {
         ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
         System.out.println("Player boards:\n");
         for (StrippedBoard s : boards) {
+            System.out.println("O----------------------O");
             System.out.println(s.getOwner() + "'s board: ");
             System.out.println("Coins: " + s.getCoins());
             System.out.println("\nDining room configuration: ");
+            System.out.println("----------------------╗");
             for (Colors c : s.getDining().keySet()) {
                 System.out.println(c + " students: " + s.getDining().get(c));
             }
+            System.out.println("----------------------╝");
             System.out.println("\nEntrance configuration: ");
             for (Colors c : s.getEntrance().keySet()) {
-                System.out.println(c + " students: " + s.getEntrance().get(c) + "\n");
+                System.out.println(c + " students: " + s.getEntrance().get(c));
             }
             System.out.println("\nNumber of towers: " + s.getNumberOfTowers());
             System.out.println("\nProfessors table: ");
             for (Colors c : s.getProfessorsTable()) {
                 System.out.println(c + "\n");
             }
+            System.out.println("O----------------------O");
         }
     }
 
