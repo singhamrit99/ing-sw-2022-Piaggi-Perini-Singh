@@ -7,10 +7,11 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="body" stylesheets="@../css/GameViewStyle.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
     <children>
       <MenuBar layoutX="10.0" layoutY="10.0">
          <menus>
@@ -33,8 +34,305 @@
             <Insets />
          </VBox.margin>
       </MenuBar>
-        <StackPane prefHeight="300.0" prefWidth="1280.0" stylesheets="@../css/GameViewStyle.css" />
-        <StackPane alignment="BOTTOM_CENTER" maxWidth="-Infinity" prefHeight="16.0" prefWidth="1000.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/custom/bag.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" HBox.hgrow="NEVER">
+               <children>
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
+                     <children>
+                        <ImageView fx:id="cloud1" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/clouds/2_4players/cloud_2_4p_v1.png" />
+                           </image>
+                        </ImageView>
+                        <StackPane prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
+                           <children>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets bottom="10.0" left="-70.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets right="-20.0" top="70.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets bottom="50.0" left="50.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                           </children>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </StackPane>
+                     </children>
+                  </StackPane>
+                  <StackPane layoutX="10.0" layoutY="230.0" prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="cloud111" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/clouds/3players/cloud_3p_v1.png" />
+                           </image>
+                        </ImageView>
+                        <StackPane prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
+                           <children>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets bottom="25.0" left="-75.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets right="40.0" top="70.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets bottom="60.0" left="45.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="60.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets left="55.0" top="40.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                           </children>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </StackPane>
+                     </children>
+                  </StackPane>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+            <VBox alignment="CENTER" layoutX="147.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="300.0">
+               <children>
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
+                     <children>
+                        <ImageView fx:id="cloud11" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/clouds/2_4players/cloud_2_4p_v1.png" />
+                           </image>
+                        </ImageView>
+                        <StackPane prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
+                           <children>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets bottom="10.0" left="-75.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets right="-20.0" top="70.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets bottom="50.0" left="50.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                           </children>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </StackPane>
+                     </children>
+                  </StackPane>
+                  <StackPane layoutX="10.0" layoutY="230.0" prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="cloud1111" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/clouds/2_4players/cloud_2_4p_v1.png" />
+                           </image>
+                        </ImageView>
+                        <StackPane prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
+                           <children>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets bottom="10.0" left="-75.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets right="-20.0" top="70.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/students/student_blue.png" />
+                                 </image>
+                                 <StackPane.margin>
+                                    <Insets bottom="50.0" left="50.0" />
+                                 </StackPane.margin>
+                              </ImageView>
+                           </children>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </StackPane>
+                     </children>
+                  </StackPane>
+               </children>
+            </VBox>
+              <StackPane maxWidth="1000.0" minHeight="300.0" minWidth="1000.0" prefHeight="500.0" prefWidth="1000.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="895.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets right="300.0" />
+                     </StackPane.margin>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="645.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets right="-300.0" />
+                     </StackPane.margin>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1045.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets right="-600.0" />
+                     </StackPane.margin>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1195.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="895.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets right="-600.0" />
+                     </StackPane.margin>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="745.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1045.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets right="300.0" />
+                     </StackPane.margin>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1195.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets right="-300.0" />
+                     </StackPane.margin>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1045.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets right="600.0" />
+                     </StackPane.margin>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="595.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets right="600.0" />
+                     </StackPane.margin>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="595.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="895.0" layoutY="185.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
+                     <image>
+                        <Image url="@../img/islands%20and%20MN/island0.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <VBox alignment="CENTER" prefHeight="300.0" prefWidth="500.0">
+               <children>
+                  <ImageView fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ImageView>
+                  <ImageView fitHeight="200.0" fitWidth="300.0" layoutX="10.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ImageView>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+        <StackPane alignment="BOTTOM_CENTER" maxWidth="-Infinity" prefHeight="16.0" prefWidth="1000.0" VBox.vgrow="NEVER">
             <children>
                 <ImageView fitHeight="555.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
                     <image>
@@ -671,9 +969,9 @@
             <opaqueInsets>
                 <Insets />
             </opaqueInsets>
-            <VBox.margin>
-                <Insets bottom="20.0" />
-            </VBox.margin>
+         <VBox.margin>
+            <Insets top="100.0" />
+         </VBox.margin>
         </StackPane>
     </children>
 </VBox>

@@ -51,8 +51,8 @@ public class GUILauncher extends Application implements Initializable {
     public void start(Stage stage) throws Exception {
         stage.setTitle(StringNames.TITLE);
         stage.setResizable(true);
-        stage.setMinHeight(480);
-        stage.setMinWidth(720);
+        stage.setMinHeight(1080);
+        stage.setMinWidth(1920);
         stage.setWidth(MAIN_MENU_WIDTH);
         stage.setHeight(MAIN_MENU_HEIGHT);
         mainWindow = stage;
@@ -87,7 +87,7 @@ public class GUILauncher extends Application implements Initializable {
         floatingTitle.setNode(title);
         floatingTitle.setDuration(Duration.millis(9000));
         floatingTitle.setCycleCount(TranslateTransition.INDEFINITE);
-        floatingTitle.setByY(50);
+        floatingTitle.setByY(25);
         floatingTitle.setAutoReverse(true);
         floatingTitle.setInterpolator(Interpolator.EASE_BOTH);
         floatingTitle.play();
