@@ -61,6 +61,7 @@ public class Bag {
             }
         }
         removeStudents(studentsDrawn);
+
         return studentsDrawn;
     }
 
