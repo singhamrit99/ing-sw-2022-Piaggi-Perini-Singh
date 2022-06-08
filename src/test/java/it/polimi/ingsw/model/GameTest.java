@@ -339,6 +339,40 @@ class GameTest {
     }
 
     @Test
+    void testBuyCharacterCards1() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 0;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0, 0, 0);
+
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+    }
+
+    @Test
     void testBuyCharacterCards2() throws NegativeValueException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, IncorrectPlayerException, NotEnoughCoinsException, ProfessorNotFoundException, MotherNatureLostException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
@@ -431,6 +465,40 @@ class GameTest {
     }
 
     @Test
+    void testBuyCharacterCards5() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 4;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0);
+
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+    }
+
+    @Test
     void testBuyCharacterCards6() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
@@ -460,6 +528,68 @@ class GameTest {
 
         System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0);
+
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+    }
+
+    @Test
+    void testBuyCharacterCards7() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 6;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        EnumMap<Colors, Integer> swap1, swap2;
+        swap1 = StudentManager.createEmptyStudentsEnum();
+        swap2 = StudentManager.createEmptyStudentsEnum();
+
+        for (int i = 0, j = 0; i < 3; j++) {
+            if (game.getCurrentPlayer().getNumOfStudent(Colors.getStudent(j)) > 0) {
+                swap2.put(Colors.getStudent(j), Math.min(game.getCurrentPlayer().getNumOfStudent(Colors.getStudent(j)), 3 - i));
+                i += Math.min(game.getCurrentPlayer().getNumOfStudent(Colors.getStudent(j)), 3 - i);
+            }
+        }
+
+        System.out.println("SWAP2");
+        for (Colors color : Colors.values()) {
+            System.out.println(color + " " + swap2.get(color));
+        }
+
+        for (int i = 0, j = 0; i < 3; j++) {
+            if (game.getCharacterCards().get(0).getStudents().get(Colors.getStudent(j)) > 0) {
+                swap1.put(Colors.getStudent(j), Math.min(game.getCharacterCards().get(0).getStudents().get(Colors.getStudent(j)), 3 - i));
+                i += Math.min(game.getCharacterCards().get(0).getStudents().get(Colors.getStudent(j)), 3 - i);
+            }
+        }
+
+        System.out.println("SWAP1");
+        for (Colors color : Colors.values()) {
+            System.out.println(color + " " + swap1.get(color));
+        }
+
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0, swap1, swap2);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
     }
@@ -498,22 +628,172 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
     }
 
-
-
-   /* @Test
-    void testBuyCharacterCards1() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException {
+    @Test
+    void testBuyCharacterCards9() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
         prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
         CharacterCardFactory factory = new CharacterCardFactory();
         int index;
 
-        index = 0;
+        index = 8;
         CharacterCard card = characterCardDeck.get(index);
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
 
-        game.activateCharacterCard();
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0, 0);
 
-    }*/
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+    }
+
+    @Test
+    void testBuyCharacterCards10() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 9;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        EnumMap enumMap = StudentManager.createEmptyStudentsEnum();
+        enumMap.put(Colors.BLUE, 4);
+        game.getCurrentPlayer().getSchoolBoard().addStudents(enumMap);
+        EnumMap<Colors, Integer> swap1, swap2;
+        swap1 = StudentManager.createEmptyStudentsEnum();
+        swap2 = StudentManager.createEmptyStudentsEnum();
+
+
+        for (int i = 0, j = 0; i < 2; j++) {
+            if (game.getCurrentPlayer().getSchoolBoard().getDining().get(Colors.getStudent(j)) > 0) {
+                swap2.put(Colors.getStudent(j), Math.min(game.getCurrentPlayer().getSchoolBoard().getDining().get(Colors.getStudent(j)), 2 - i));
+                i += Math.min(game.getCurrentPlayer().getNumOfStudent(Colors.getStudent(j)), 2 - i);
+            }
+        }
+
+        System.out.println("SWAP2");
+        for (Colors color : Colors.values()) {
+            System.out.println(color + " " + swap2.get(color));
+        }
+
+        for (int i = 0, j = 0; i < 2; j++) {
+            if (game.getCurrentPlayer().getSchoolBoard().getEntrance().get(Colors.getStudent(j)) > 0) {
+                swap1.put(Colors.getStudent(j), Math.min(game.getCurrentPlayer().getSchoolBoard().getEntrance().get(Colors.getStudent(j)), 2 - i));
+                i += Math.min(game.getCurrentPlayer().getSchoolBoard().getEntrance().get(Colors.getStudent(j)), 2 - i);
+                System.out.println("IIIIIIIIIIIIIIIIIIIIIIIIIII" + i);
+            }
+        }
+
+        System.out.println("SWAP1");
+        for (Colors color : Colors.values()) {
+            System.out.println(color + " " + swap1.get(color));
+        }
+
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0, swap1, swap2);
+
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+    }
+
+    @Test
+    void testBuyCharacterCards11() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 10;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0, 0);
+
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+    }
+
+    @Test
+    void testBuyCharacterCards12() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException {
+        prepareForCards();
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
+        game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
+
+        game.getCurrentPlayer().addStudents(enumMap);
+        game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
+
+        CharacterCardDeck characterCardDeck = new CharacterCardDeck();
+        characterCardDeck.fillDeck();
+        CharacterCardFactory factory = new CharacterCardFactory();
+        int index;
+
+        index = 11;
+        CharacterCard card = characterCardDeck.get(index);
+        game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
+
+        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        game.activateCharacterCard(0, 0);
+
+        game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
+    }
 }
