@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.CLI;
 
-
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
@@ -75,7 +74,6 @@ public class CLI implements UI {
                 "O----------------------------------------------------------------------------------------O");
         //Main room loop
         while (!client.isInGame()) {
-
             //codice della lobby
             String command = in.nextLine().toLowerCase(Locale.ROOT).replaceAll("\\s+", "");
             switch (command) {
@@ -115,7 +113,6 @@ public class CLI implements UI {
                     System.out.println(command);
                     break;
                 default:
-
                     System.out.println("Command not recognized");
                     break;
             }
@@ -129,7 +126,6 @@ public class CLI implements UI {
             //Assistant Card play phase
             while (client.getPhase() == 0) {
                 while (!client.isMyTurn()) {
-
                     //Wait for the other players to be done with their turn while I still output their moves...
                 }
                 if (client.isMyTurn() && !client.isDrawnOut()) {
@@ -160,7 +156,7 @@ public class CLI implements UI {
         } catch (NotEnoughPlayersException e) {
             System.out.println(StringNames.ALONE_IN_ROOM); //todo TINO to LORE: Lore usa 'StringNames' per i messaggi, aggiungi i tuoi messaggi, cosí il usiamo anche noi .
         } catch (UserNotInRoomException e) {
-            System.out.println(StringNames.NOT_IN_A_ROOM);
+            System.out.println(StringNames.NOT_IN_ROOM);
         } catch (NotLeaderRoomException e) {
             System.out.println(StringNames.NO_LEADER);
         } catch (RoomNotExistsException | UserNotRegisteredException e) {
@@ -170,7 +166,7 @@ public class CLI implements UI {
 
     @Override
     public void startGame() throws RemoteException {
-
+        //TODO: usa questo metodo quando il gioco viene avviato
     }
 
     @Override
@@ -180,7 +176,6 @@ public class CLI implements UI {
 
     @Override
     public void notifyCloud(PropertyChangeEvent e) {
-
         client.setDrawnOut(true);
     }
 
@@ -534,9 +529,9 @@ public class CLI implements UI {
 
     public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
         do {
-         //   System.out.println("Press any key to continue\n");
+            //   System.out.println("Press any key to continue\n");
             in.nextLine();
-           // printCommandHelp();
+            // printCommandHelp();
             System.out.println("Select an action: ");
             String input;
             while (true) {
@@ -1078,7 +1073,6 @@ public class CLI implements UI {
             default:
                 return Colors.YELLOW;
         }
-
     }
 
     public EnumMap<Colors, ArrayList<String>> strippedToGame(EnumMap<Colors, Integer> students, EnumMap<Colors, ArrayList<String>> returnStudents, String destination) {
@@ -1098,10 +1092,12 @@ public class CLI implements UI {
         }
 
         return returnStudents;
-
     }
 
     private synchronized void sendArrayString(ArrayList<String> messageArray) {
         for (String message : messageArray) System.out.println(message);
     }
 }
+
+
+//TODO: watch all the \n that you print since sometimes they tend to separate things
