@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
+import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.model.enumerations.Actions;
@@ -21,15 +22,18 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
     }
 
     @Override
-    public void activate(Game game) throws NegativeValueException {
+    public void activate(Game game) throws NegativeValueException, ProfessorNotFoundException {
         Actions action = this.getAbility().getAction();
         switch (action) {
             case CALCULATE_INFLUENCE:
                 game.resolveMotherNature(choiceIndex);
                 break;
             case NO_ENTRY_TILE:
-                game.getIsland(choiceIndex).setHasNoEntryTile(true);
-                setStatus(2);
+                if (!game.getIsland(choiceIndex).hasNoEntryTile()) {
+                    game.getIsland(choiceIndex).setHasNoEntryTile(true);
+                    setStatus(2);
+                }
+                setStatus(0);
                 break;
             case RETURN_STUDENT:
                 game.returnStudentsEffect(choiceIndex);
