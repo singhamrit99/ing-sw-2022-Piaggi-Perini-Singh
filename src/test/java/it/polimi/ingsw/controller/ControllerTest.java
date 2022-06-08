@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.StudentManager;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.exceptions.*;
@@ -152,5 +153,80 @@ class ControllerTest {
         String oldplayer = game.getCurrentPlayer().getNickname();
         controller.callPlayAssistantCard(game.getCurrentPlayer().getNickname(), "1");
         assertNotEquals(oldplayer, game.getCurrentPlayer().getNickname());
+    }
+
+    @Test
+    void testCallDrawFromBag() throws NegativeValueException, IncorrectArgumentException, IncorrectPlayerException {
+        Controller controller = new Controller();
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Michelangelo");
+        nicknames.add("Raffaello");
+        nicknames.add("Donatello");
+        nicknames.add("Leonardo");
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
+        Game game = controller.initializeGame(roomTest, true, 4, nicknames);
+        controller.callDrawFromBag(game.getCurrentPlayer().getNickname());
+    }
+
+    @Test
+    void testCallPlayCharacterA() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException, AssistantCardNotFoundException, IncorrectStateException, ProfessorNotFoundException, NotEnoughCoinsException {
+        Controller controller = new Controller();
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Michelangelo");
+        nicknames.add("Raffaello");
+        nicknames.add("Donatello");
+        nicknames.add("Leonardo");
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
+        Game game = controller.initializeGame(roomTest, true, 4, nicknames);
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        assertThrows(NotEnoughCoinsException.class, () -> controller.callPlayCharacterCard(0));
+    }
+
+    @Test
+    void testCallPlayCharacterB() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException, AssistantCardNotFoundException, IncorrectStateException, ProfessorNotFoundException, NotEnoughCoinsException {
+        Controller controller = new Controller();
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Michelangelo");
+        nicknames.add("Raffaello");
+        nicknames.add("Donatello");
+        nicknames.add("Leonardo");
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
+        Game game = controller.initializeGame(roomTest, true, 4, nicknames);
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        assertThrows(NotEnoughCoinsException.class, () -> controller.callPlayCharacterCard(0, 0));
+    }
+
+    @Test
+    void testCallPlayCharacterC() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException, AssistantCardNotFoundException, IncorrectStateException {
+        Controller controller = new Controller();
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Michelangelo");
+        nicknames.add("Raffaello");
+        nicknames.add("Donatello");
+        nicknames.add("Leonardo");
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
+        Game game = controller.initializeGame(roomTest, true, 4, nicknames);
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        assertThrows(NotEnoughCoinsException.class, () -> controller.callPlayCharacterCard(0, 0, 0));
+
+    }
+
+    @Test
+    void testCallPlayCharacterD() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException, AssistantCardNotFoundException, IncorrectStateException {
+        Controller controller = new Controller();
+        ArrayList<String> nicknames = new ArrayList<>();
+        nicknames.add("Michelangelo");
+        nicknames.add("Raffaello");
+        nicknames.add("Donatello");
+        nicknames.add("Leonardo");
+        ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
+        Room roomTest = new Room("testRoom", emptyClientListsTest);
+        Game game = controller.initializeGame(roomTest, true, 4, nicknames);
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
+        assertThrows(NotEnoughCoinsException.class, () -> controller.callPlayCharacterCard(0, StudentManager.createEmptyStudentsEnum(), StudentManager.createEmptyStudentsEnum()));
     }
 }
