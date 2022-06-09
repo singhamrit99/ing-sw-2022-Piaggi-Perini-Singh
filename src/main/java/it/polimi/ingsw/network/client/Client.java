@@ -237,6 +237,8 @@ public class Client implements Runnable {
                         throw new LocalModelNotLoadedException();
                     }
                     break;
+                case "leave-game": //todo
+                    break;
                 default:
                     if (localModel != null) {
                         localModel.updateModel(evt);
