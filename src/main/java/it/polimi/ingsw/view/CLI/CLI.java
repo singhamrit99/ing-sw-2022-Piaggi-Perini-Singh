@@ -866,7 +866,6 @@ public class CLI implements UI {
             System.out.println("That's not right, try again!\n");
             moveMN();
         }
-
         //We now have a valid move for Mother Nature
     }
 
@@ -882,7 +881,7 @@ public class CLI implements UI {
         System.out.println("These are the students in your entrance: \n");
         System.out.println("\nEntrance configuration: ");
         for (Colors c : myBoard.getEntrance().keySet()) {
-            System.out.println(c + " students: " + myBoard.getEntrance().get(c) + "\n");
+            System.out.println(c + " students: " + myBoard.getEntrance().get(c));
         }
         EnumMap<Colors, ArrayList<String>> studentsToGame = new EnumMap<>(Colors.class);
         for (Colors c : Colors.values()) {
@@ -898,6 +897,7 @@ public class CLI implements UI {
         boolean doItAgain;
         EnumMap<Colors, Integer> studentsToMove = new EnumMap<>(Colors.class);
         System.out.println("Do you want to move students to the dining room? Y\\N\n");
+        in.nextLine();
         do {
             answer = in.nextLine();
             answer = answer.toLowerCase(Locale.ROOT);
@@ -1149,10 +1149,10 @@ public class CLI implements UI {
             }
 
         }
-        // System.out.println("Students to game: ");
-        //for (Colors c : returnStudents.keySet()) {
-            //  System.out.println("Color "+ c);
-       // }
+       /* System.out.println("Students to game: ");
+        for (Colors c : returnStudents.keySet()) {
+              System.out.println("Color "+ c);
+        }*/
 
         return returnStudents;
     }
