@@ -40,13 +40,13 @@ public class GUILauncher extends Application implements Initializable {
     private TextField nicknameField;
     @FXML
     private Button startButton;
-
     @FXML
     private ImageView title;
 
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle(StringNames.TITLE);
+        stage.setResizable(false);
         mainWindow = stage;
 
         javafx.scene.image.Image icon = new Image(new FileInputStream("src/main/resources/img/professors/teacher_blue.png"));
@@ -92,6 +92,7 @@ public class GUILauncher extends Application implements Initializable {
 
                 try {
                     GUI.client.view = StringNames.LOBBY;
+
                     client.registerClient(nickname);
                 } catch (UserAlreadyExistsException e) {
                     Controller.showErrorDialogBox(StringNames.NICKNAME_ALREADY_EXISTS);
