@@ -5,24 +5,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="background"
-      stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-                   prefHeight="100.0" prefWidth="1280.0" styleClass="title">
-            <children>
-                <Text fx:id="roomTitle" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0"
-                      strokeWidth="0.0" styleClass="title" text="name" textAlignment="JUSTIFY"
-                      StackPane.alignment="CENTER">
-                    <font>
-                        <Font name="Rockwell Extra Bold" size="40.0"/>
-                    </font>
-                </Text>
-            </children>
-            <VBox.margin>
-                <Insets/>
-            </VBox.margin>
-        </StackPane>
+
+<BorderPane prefHeight="720.0" prefWidth="1280.0" styleClass="background" stylesheets="@../css/Style.css"
+            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
         <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="402.0" prefWidth="600.0"
                   styleClass="WhiteBackground">
             <children>
@@ -48,6 +34,9 @@
                 <Insets bottom="40.0" top="40.0"/>
             </padding>
         </FlowPane>
+
+    </center>
+    <bottom>
         <HBox fx:id="expertBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308"
               minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1280.0" spacing="20.0">
 
@@ -71,5 +60,23 @@
                 </Button>
             </children>
         </HBox>
-    </children>
-</VBox>
+    </bottom>
+    <top>
+        <StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                   minWidth="-Infinity"
+                   prefHeight="100.0" prefWidth="1280.0" styleClass="title">
+            <children>
+                <Text fx:id="roomTitle" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0"
+                      strokeWidth="0.0" styleClass="title" text="name" textAlignment="JUSTIFY"
+                      StackPane.alignment="CENTER">
+                    <font>
+                        <Font name="Rockwell Extra Bold" size="40.0"/>
+                    </font>
+                </Text>
+            </children>
+            <VBox.margin>
+                <Insets/>
+            </VBox.margin>
+        </StackPane>
+    </top>
+</BorderPane>
