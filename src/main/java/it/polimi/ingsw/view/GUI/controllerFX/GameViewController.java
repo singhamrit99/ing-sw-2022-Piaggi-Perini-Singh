@@ -253,7 +253,6 @@ public class GameViewController extends InitialStage implements Controller {
             Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
         }
     }
-
     private void reloadDining() {
         try {
             EnumMap<Colors, Integer> dining = GUI.client.getLocalModel().getBoardOf(currentBoardView).getDining();
@@ -295,24 +294,24 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
+    @FXML
+    StackPane entrance;
     private void initializeImagesEntrance() {
         entranceStudentsImgs = new ArrayList<>();
-        entranceStudentsImgs.add(studentEntrance1);
-        entranceStudentsImgs.add(studentEntrance2);
-        entranceStudentsImgs.add(studentEntrance3);
-        entranceStudentsImgs.add(studentEntrance4);
-        entranceStudentsImgs.add(studentEntrance5);
-        entranceStudentsImgs.add(studentEntrance6);
-        entranceStudentsImgs.add(studentEntrance7);
-        entranceStudentsImgs.add(studentEntrance8);
-        entranceStudentsImgs.add(studentEntrance9);
+        for(Node student : entrance.getChildren()){
+            entranceStudentsImgs.add((ImageView)student);
+        }
     }
-
-
-
+    
     private void initializeClouds() {
-        
         int numOfPlayers = GUI.client.getLocalPlayerList().size();
+        studentsCloud1v3 = new ArrayList<>();
+        studentsCloud1v4 = new ArrayList<>();
+        studentsCloud2v3 = new ArrayList<>();
+        studentsCloud2v4 = new ArrayList<>();
+        studentsCloud3v3 = new ArrayList<>();
+        studentsCloud3v4 = new ArrayList<>();
+
         if (numOfPlayers == 3) {
             try {
                 cloud1.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CLOUD_1))));
@@ -327,81 +326,65 @@ public class GameViewController extends InitialStage implements Controller {
             cloud4.setVisible(false);
         }
         //cloud 1 students
-        studentsCloud1v3 = new ArrayList<>();
-        studentsCloud1v4 = new ArrayList<>();
-        studentsCloud1v3.add(student1Cloud1v3);
-        studentsCloud1v3.add(student2Cloud1v3);
-        studentsCloud1v3.add(student3Cloud1v3);
-        studentsCloud1v3.add(student4Cloud1v3);
-
-
-        studentsCloud1v4.add(student1Cloud1v4);
-        studentsCloud1v4.add(student2Cloud1v4);
-        studentsCloud1v4.add(student3Cloud1v4);
+        for(Node s : cloud1v3.getChildren()){
+            studentsCloud1v3.add((ImageView)s);
+        }
+        for(Node s : cloud1v4.getChildren()){
+            studentsCloud1v4.add((ImageView)s);
+        }
 
         //cloud 2 students
-        studentsCloud2v3 = new ArrayList<>();
-        studentsCloud2v4 = new ArrayList<>();
-        studentsCloud2v3.add(student1Cloud2v3);
-        studentsCloud2v3.add(student2Cloud2v3);
-        studentsCloud2v3.add(student3Cloud2v3);
-        studentsCloud2v3.add(student4Cloud2v3);
-
-        studentsCloud2v4.add(student1Cloud2v4);
-        studentsCloud2v4.add(student2Cloud2v4);
-        studentsCloud2v4.add(student3Cloud2v4);
+        for(Node s : cloud2v3.getChildren()){
+            studentsCloud2v3.add((ImageView)s);
+        }
+        for(Node s : cloud2v4.getChildren()){
+            studentsCloud2v4.add((ImageView)s);
+        }
 
         //cloud 3 students
-        studentsCloud3v3 = new ArrayList<>();
-        studentsCloud3v4 = new ArrayList<>();
-        studentsCloud3v3.add(student1Cloud3v3);
-        studentsCloud3v3.add(student2Cloud3v3);
-        studentsCloud3v3.add(student3Cloud3v3);
-        studentsCloud3v3.add(student4Cloud3v3);
+        for(Node s : cloud3v3.getChildren()){
+            studentsCloud3v3.add((ImageView)s);
+        }
+        for(Node s : cloud3v4.getChildren()){
+            studentsCloud3v4.add((ImageView)s);
+        }
 
-        studentsCloud3v4.add(student1Cloud3v4);
-        studentsCloud3v4.add(student2Cloud3v4);
-        studentsCloud3v4.add(student3Cloud3v4);
         //cloud 4 students
         studentsCloud4v4 = new ArrayList<>();
-        studentsCloud4v4.add(student1Cloud4v4);
-        studentsCloud4v4.add(student2Cloud4v4);
-        studentsCloud4v4.add(student3Cloud4v4);
-
-        if (numOfPlayers == 3) {
-            for (ImageView i : studentsCloud1v4) {
-                i.setVisible(false);
-            }
-            for (ImageView i : studentsCloud2v4) {
-                i.setVisible(false);
-            }
-            for (ImageView i : studentsCloud3v4) {
-                i.setVisible(false);
-            }
-            for (ImageView i : studentsCloud4v4) {
-                i.setVisible(false);
-            }
-        } else {
-            for (ImageView i : studentsCloud1v3) {
-                i.setVisible(false);
-            }
-            for (ImageView i : studentsCloud2v3) {
-                i.setVisible(false);
-            }
-            for (ImageView i : studentsCloud3v3) {
-                i.setVisible(false);
-            }
+        for(Node s : cloud4v4.getChildren()){
+            studentsCloud4v4.add((ImageView)s);
         }
 
-        if (numOfPlayers == 2) {
-            for (ImageView i : studentsCloud3v4) {
-                i.setVisible(false);
-            }
-            for (ImageView i : studentsCloud4v4) {
-                i.setVisible(false);
+        hideStudentsClouds(numOfPlayers);
+    }
+
+    private void hideStudentsClouds(int numOfPlayers){
+        ArrayList<ArrayList<ImageView>> studentsToHide = new ArrayList<>();
+        switch (numOfPlayers){
+            case 3:
+                studentsToHide.add(studentsCloud1v4);
+                studentsToHide.add(studentsCloud2v4);
+                studentsToHide.add(studentsCloud3v4);
+                studentsToHide.add(studentsCloud4v4);
+                break;
+            case 4:
+                studentsToHide.add(studentsCloud1v3);
+                studentsToHide.add(studentsCloud2v3);
+                studentsToHide.add(studentsCloud3v3);
+                break;
+            case 2:
+                studentsToHide.add(studentsCloud1v3);
+                studentsToHide.add(studentsCloud2v3);
+                studentsToHide.add(studentsCloud3v3);
+                studentsToHide.add(studentsCloud3v4);
+                studentsToHide.add(studentsCloud4v4);
+                break;
+        }
+        for(ArrayList<ImageView> array : studentsToHide){
+            for(ImageView student : array){
+                student.setVisible(false);
             }
         }
-
     }
 
     private void initializeImagesTowers() {
@@ -533,19 +516,8 @@ public class GameViewController extends InitialStage implements Controller {
     private ImageView cloud1, cloud2, cloud3, cloud4;
 
     @FXML
-    private ImageView student1Cloud1v3, student2Cloud1v3, student3Cloud1v3, student4Cloud1v3,
-            student1Cloud1v4, student2Cloud1v4, student3Cloud1v4;
-
-    @FXML
-    private ImageView student1Cloud2v3, student2Cloud2v3, student3Cloud2v3, student4Cloud2v3,
-            student1Cloud2v4, student2Cloud2v4, student3Cloud2v4;
-
-    @FXML
-    private ImageView student1Cloud3v3, student2Cloud3v3, student3Cloud3v3, student4Cloud3v3,
-            student1Cloud3v4, student2Cloud3v4, student3Cloud3v4;
-
-    @FXML
-    private ImageView student1Cloud4v4, student2Cloud4v4, student3Cloud4v4;
+    private StackPane cloud1v3 , cloud1v4 , cloud2v3 ,
+            cloud2v4, cloud3v3, cloud3v4, cloud4v4;
 
 
 }
