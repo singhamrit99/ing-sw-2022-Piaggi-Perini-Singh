@@ -62,17 +62,16 @@ public class GameViewController extends InitialStage implements Controller {
             }
         }
 
-
         leaveGame.setOnAction((event) -> { //leaving game
             try {
                 GUI.client.leaveRoom();
                 Platform.exit();
                 System.exit(0);
-            }catch (RemoteException | UserNotInRoomException | UserNotRegisteredException ignored) {}
+            } catch (RemoteException | UserNotInRoomException | UserNotRegisteredException ignored) {
+            }
         });
 
     }
-
 
     public void changeViewBoard(String viewOwnerTarget) {
         if (GUI.client.getLocalPlayerList().contains(viewOwnerTarget)) {
