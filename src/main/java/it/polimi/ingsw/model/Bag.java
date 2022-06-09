@@ -5,6 +5,7 @@ import it.polimi.ingsw.exceptions.NegativeValueException;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author Amrit
@@ -44,23 +45,19 @@ public class Bag {
         int type, quantity;
         int studentType = 5;
 
-        EnumMap<Colors, Integer> studentsDrawn = new EnumMap<>(Colors.class);
-        for (Colors color : Colors.values()) {
-            studentsDrawn.put(color, 0);
-        }
+        EnumMap<Colors, Integer> studentsDrawn = StudentManager.createEmptyStudentsEnum();
+        Random random = new Random();
 
         for (int i = 0; i < numberOfStudents; ) {
-            type = (int) Math.floor(Math.random() * studentType);
-            quantity = (int) Math.floor(Math.random() * ((numberOfStudents - i) - 1) + 1);
+            type = random.nextInt(5);
 
             if (getStudents().containsKey(Colors.getStudent(type))) {
-                if (getStudents().get(Colors.getStudent(type)) >= quantity) {
-                    studentsDrawn.put(Colors.getStudent(type), studentsDrawn.get(Colors.getStudent(type)) + quantity);
-                    i += quantity;
-                }
+                studentsDrawn.put(Colors.getStudent(type), studentsDrawn.get(Colors.getStudent(type)) + 1);
+                i++;
             }
         }
         removeStudents(studentsDrawn);
+
         return studentsDrawn;
     }
 

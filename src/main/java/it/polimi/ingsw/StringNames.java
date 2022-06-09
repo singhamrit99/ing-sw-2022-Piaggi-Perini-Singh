@@ -29,6 +29,4 @@ public interface StringNames {
     String ROOM_EXISTS = "Room name already taken";
     String ERROR_LOCALMODEL = "Critical bug with local model";
     String ALONE_IN_ROOM = "You are alone in this room. There must be at least 2 players to play Eryantis";
-    String NOT_IN_A_ROOM= "You're not in a room yet!\n";
-
 }

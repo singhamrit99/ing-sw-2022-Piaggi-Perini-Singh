@@ -85,4 +85,8 @@ public class CharacterCard extends Card {
 
     public void setChoices(int student, int island) {
     }
+
+    public EnumMap<Colors, Integer> getStudents() {
+        return null;
+    }
 }

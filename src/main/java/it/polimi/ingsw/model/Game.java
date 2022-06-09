@@ -242,6 +242,9 @@ public class Game {
         //Insertion in each SchoolBoard 7 students drawn from Bag
         for (Player p : players) {
             p.addStudents(bag.drawStudents(7));
+            for (Map.Entry<Colors, Integer> entry : p.getSchoolBoard().getEntrance().entrySet()) {
+                System.out.println(entry.getKey().toString() + " " + entry.getValue().toString());
+            }
         }
     }
 
@@ -561,8 +564,12 @@ public class Game {
     }
 
     public void resolveMotherNature(int island) throws NegativeValueException {
-        checkAndPlaceTower(islands.get(island));
-        checkUnificationIslands();
+        if (islands.get(island).hasNoEntryTile()) {
+            islands.get(island).setHasNoEntryTile(false);
+        } else {
+            checkAndPlaceTower(islands.get(island));
+            checkUnificationIslands();
+        }
     }
 
     /**
@@ -868,7 +875,7 @@ public class Game {
         return islands.get(index);
     }
 
-    public void returnStudentsEffect(int choiceIndex) throws NegativeValueException {
+    public void returnStudentsEffect(int choiceIndex) throws NegativeValueException, ProfessorNotFoundException {
         EnumMap<Colors, Integer> enumMap = new EnumMap<>(Colors.class);
         for (Player player : players) {
             if (player.getSchoolBoard().getStudentsByColor(Colors.getStudent(choiceIndex)) < 3) {
@@ -878,6 +885,16 @@ public class Game {
             }
             player.getSchoolBoard().removeDiningStudents(enumMap);
         }
+
+        checkAndPlaceProfessor(); //check and eventually modifies and notifies
+        //notify dining AND entrance change
+        EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
+        PropertyChangeEvent event =
+                new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), currentPlayer.getSchoolBoard().getEntrance());
+        gameListener.propertyChange(event);
+        PropertyChangeEvent evt =
+                new PropertyChangeEvent(this, "dining", currentPlayer.getNickname(), newDining);
+        gameListener.propertyChange(evt);
     }
 
     //getters necessary to build StrippedModel :
@@ -895,5 +912,15 @@ public class Game {
 
     protected void setCharacterCards(int index, CharacterCard characterCard) {
         characterCards.set(index, characterCard);
+    }
+
+    public void notifyIsland(Island islandToChange, EnumMap<Colors, Integer> studentsToAdd) throws NegativeValueException {
+        //notify island change and modify
+        StrippedIsland oldIsland = new StrippedIsland(islandToChange);
+        islandToChange.addStudents(studentsToAdd); //adding students
+        StrippedIsland changedIsland = new StrippedIsland(islandToChange);
+        PropertyChangeEvent evt =
+                new PropertyChangeEvent(this, "island", oldIsland, changedIsland);
+        gameListener.propertyChange(evt);
     }
 }
