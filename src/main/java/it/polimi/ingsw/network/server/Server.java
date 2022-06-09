@@ -94,12 +94,18 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         if (user.getRoom() == null) throw new UserNotInRoomException();
         String roomName = user.getRoom();
         rooms.get(roomName).removeUser(user);
+
+        if(rooms.get(roomName).isInGame()){
+            rooms.get(roomName).kickOut();
+        }
+
         if (rooms.get(roomName).getPlayers().size() == 0) {
             rooms.remove(roomName);
             System.out.println("Room" + roomName + " deleted after " + username + " left room");
         }
         user.setRoom(null);
     }
+
 
     @Override
     public synchronized ArrayList<String> getPlayers(String roomName) throws RemoteException, RoomNotExistsException {
