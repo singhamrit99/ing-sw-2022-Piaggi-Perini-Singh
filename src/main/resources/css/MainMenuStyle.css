@@ -6,7 +6,6 @@
     -fx-background-size: 100% ;
 }
 
-
 .error {
     -fx-border-width:2;
     -fx-border-color: red;
