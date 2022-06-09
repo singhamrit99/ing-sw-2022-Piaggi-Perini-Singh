@@ -33,6 +33,8 @@ import java.util.ResourceBundle;
 public class GUILauncher extends Application implements Initializable {
     public static Client client = GUI.client;
     public static Stage mainWindow;
+    public static final int MAIN_MENU_WIDTH = 1920;
+    public static final int MAIN_MENU_HEIGHT = 1080;
 
     @FXML
     private StackPane mainMenuStage;
@@ -47,10 +49,14 @@ public class GUILauncher extends Application implements Initializable {
     public void start(Stage stage) throws Exception {
         stage.setTitle(StringNames.TITLE);
         stage.setResizable(false);
-        mainWindow = stage;
+        stage.setWidth(MAIN_MENU_WIDTH);
+        stage.setHeight(MAIN_MENU_HEIGHT);
 
+        mainWindow = stage;
         javafx.scene.image.Image icon = new Image(new FileInputStream("src/main/resources/img/professors/teacher_blue.png"));
         mainWindow.getIcons().add(icon);
+
+
 
         stage.setOnCloseRequest((event) -> {
             Platform.exit();
@@ -89,10 +95,8 @@ public class GUILauncher extends Application implements Initializable {
         startButton.setOnAction((event) -> {
             if (controlNickname()) {
                 final String nickname = nicknameField.getText();
-
                 try {
                     GUI.client.view = StringNames.LOBBY;
-
                     client.registerClient(nickname);
                 } catch (UserAlreadyExistsException e) {
                     Controller.showErrorDialogBox(StringNames.NICKNAME_ALREADY_EXISTS);
