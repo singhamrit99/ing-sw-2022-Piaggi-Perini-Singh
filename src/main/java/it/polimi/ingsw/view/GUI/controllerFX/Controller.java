@@ -23,8 +23,11 @@ public interface Controller {
         loader.setController(controller);
 
         Stage mainWindow = GUILauncher.mainWindow;
+        mainWindow.setMinHeight(720);
+        mainWindow.setMinWidth(1280);
+
         try {
-            Scene sceneRooms = new Scene(loader.load());
+            Scene sceneRooms = new Scene(loader.load(), mainWindow.getScene().getWidth(), mainWindow.getScene().getHeight());
             mainWindow.setScene(sceneRooms);
             mainWindow.show();
         } catch (IOException e) {
