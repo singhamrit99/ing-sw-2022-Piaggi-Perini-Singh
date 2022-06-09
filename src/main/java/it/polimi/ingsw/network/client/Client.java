@@ -237,7 +237,7 @@ public class Client implements Runnable {
                         throw new LocalModelNotLoadedException();
                     }
                     break;
-                case "leave-game": //todo
+                case "leave-game": //TODO
                     break;
                 default:
                     if (localModel != null) {
