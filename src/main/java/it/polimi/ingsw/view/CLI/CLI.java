@@ -509,8 +509,8 @@ public class CLI implements UI {
 
         //I now have a valid assistant card
         System.out.println("Card played: " + i);
-        turnMoves = client.getLocalModel().getAssistantDecks().get(playerNumber).get("Assistente" + i).getMove();
-        playAssistantCardOrder = new PlayAssistantCard(this.nickName, "Assistente" + i);
+        turnMoves = client.getLocalModel().getAssistantDecks().get(playerNumber).get(input).getMove();
+        playAssistantCardOrder = new PlayAssistantCard(this.nickName, input);
         try {
             client.performGameAction(playAssistantCardOrder);
             turnMoves = i;
@@ -527,7 +527,7 @@ public class CLI implements UI {
         AssistantCardDeck myDeck = client.getLocalModel().getAssistantDecks().get(playerNumber);
         int i = 0;
         for (AssistantCard a : myDeck.getDeck()) {
-            System.out.println("Card number " + (i + 1) + " " + a.getImageName().replaceAll("[^a-zA Z0-9]", "") + " " + a.getMove());
+            System.out.println("Card number "+ a.getImageName());
             i++;
         }
     }
