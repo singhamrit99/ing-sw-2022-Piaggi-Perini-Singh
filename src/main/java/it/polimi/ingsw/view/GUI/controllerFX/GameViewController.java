@@ -127,6 +127,7 @@ public class GameViewController extends InitialStage implements Controller {
 
     @FXML
     StackPane prova;
+
     private void firstRefreshBoard() {
         initializeImagesEntrance();
         currentBoardView = GUI.client.getNickname();
@@ -177,23 +178,23 @@ public class GameViewController extends InitialStage implements Controller {
             clouds3p.add(studentsCloud1v3);
             clouds3p.add(studentsCloud2v3);
             clouds3p.add(studentsCloud3v3);
-        }else{
+        } else {
             clouds4p.add(studentsCloud1v3);
             clouds4p.add(studentsCloud2v3);
-            if(numPlayers==4){
+            if (numPlayers == 4) {
                 clouds4p.add(studentsCloud3v3);
                 clouds4p.add(studentsCloud3v3);
             }
         }
 
-        for(int cloudIndex=0; cloudIndex<numPlayers;cloudIndex++){
+        for (int cloudIndex = 0; cloudIndex < numPlayers; cloudIndex++) {
             int indexStudentsAssets = 0;
             EnumMap<Colors, Integer> students = clouds.get(cloudIndex).getStudents();
-            if(numPlayers==3)rightArray = clouds3p.get(cloudIndex);
+            if (numPlayers == 3) rightArray = clouds3p.get(cloudIndex);
             else rightArray = clouds4p.get(cloudIndex);
             for (Colors c : students.keySet()) {
                 Image rightColor = studentImgFromColor(c);
-                if (students.get(c) != 0){
+                if (students.get(c) != 0) {
                     rightArray.get(indexStudentsAssets).setImage(rightColor);
                     rightArray.get(indexStudentsAssets).setVisible(true);
                     indexStudentsAssets++;
@@ -253,38 +254,30 @@ public class GameViewController extends InitialStage implements Controller {
             Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
         }
     }
+
     private void reloadDining() {
         try {
             EnumMap<Colors, Integer> dining = GUI.client.getLocalModel().getBoardOf(currentBoardView).getDining();
             for (Colors c : dining.keySet()) {
                 int i = 0;
                 while (i < 10) {
-                    if (i < dining.get(c)) {
-                        switch (c) {
-                            case BLUE:
-                                blueDiningImgs.get(i).setVisible(true);
-                            case PINK:
-                                pinkDiningImgs.get(i).setVisible(true);
-                            case YELLOW:
-                                yellowDiningImgs.get(i).setVisible(true);
-                            case GREEN:
-                                greenDiningImgs.get(i).setVisible(true);
-                            case RED:
-                                redDiningImgs.get(i).setVisible(true);
-                        }
-                    } else {
-                        switch (c) {
-                            case BLUE:
-                                blueDiningImgs.get(i).setVisible(false);
-                            case PINK:
-                                pinkDiningImgs.get(i).setVisible(false);
-                            case YELLOW:
-                                yellowDiningImgs.get(i).setVisible(false);
-                            case GREEN:
-                                greenDiningImgs.get(i).setVisible(false);
-                            case RED:
-                                redDiningImgs.get(i).setVisible(false);
-                        }
+                    boolean visible = i < dining.get(c);
+                    switch (c) {
+                        case BLUE:
+                            blueDiningImgs.get(i).setVisible(visible);
+                            break;
+                        case PINK:
+                            pinkDiningImgs.get(i).setVisible(visible);
+                            break;
+                        case YELLOW:
+                            yellowDiningImgs.get(i).setVisible(visible);
+                            break;
+                        case GREEN:
+                            greenDiningImgs.get(i).setVisible(visible);
+                            break;
+                        case RED:
+                            redDiningImgs.get(i).setVisible(visible);
+                            break;
                     }
                     i++;
                 }
@@ -296,10 +289,11 @@ public class GameViewController extends InitialStage implements Controller {
 
     @FXML
     StackPane entrance;
+
     private void initializeImagesEntrance() {
         entranceStudentsImgs = new ArrayList<>();
-        for(Node student : entrance.getChildren()){
-            entranceStudentsImgs.add((ImageView)student);
+        for (Node student : entrance.getChildren()) {
+            entranceStudentsImgs.add((ImageView) student);
         }
     }
 
@@ -326,41 +320,41 @@ public class GameViewController extends InitialStage implements Controller {
             cloud4.setVisible(false);
         }
         //cloud 1 students
-        for(Node s : cloud1v3.getChildren()){
-            studentsCloud1v3.add((ImageView)s);
+        for (Node s : cloud1v3.getChildren()) {
+            studentsCloud1v3.add((ImageView) s);
         }
-        for(Node s : cloud1v4.getChildren()){
-            studentsCloud1v4.add((ImageView)s);
+        for (Node s : cloud1v4.getChildren()) {
+            studentsCloud1v4.add((ImageView) s);
         }
 
         //cloud 2 students
-        for(Node s : cloud2v3.getChildren()){
-            studentsCloud2v3.add((ImageView)s);
+        for (Node s : cloud2v3.getChildren()) {
+            studentsCloud2v3.add((ImageView) s);
         }
-        for(Node s : cloud2v4.getChildren()){
-            studentsCloud2v4.add((ImageView)s);
+        for (Node s : cloud2v4.getChildren()) {
+            studentsCloud2v4.add((ImageView) s);
         }
 
         //cloud 3 students
-        for(Node s : cloud3v3.getChildren()){
-            studentsCloud3v3.add((ImageView)s);
+        for (Node s : cloud3v3.getChildren()) {
+            studentsCloud3v3.add((ImageView) s);
         }
-        for(Node s : cloud3v4.getChildren()){
-            studentsCloud3v4.add((ImageView)s);
+        for (Node s : cloud3v4.getChildren()) {
+            studentsCloud3v4.add((ImageView) s);
         }
 
         //cloud 4 students
         studentsCloud4v4 = new ArrayList<>();
-        for(Node s : cloud4v4.getChildren()){
-            studentsCloud4v4.add((ImageView)s);
+        for (Node s : cloud4v4.getChildren()) {
+            studentsCloud4v4.add((ImageView) s);
         }
 
         hideStudentsClouds(numOfPlayers);
     }
 
-    private void hideStudentsClouds(int numOfPlayers){
+    private void hideStudentsClouds(int numOfPlayers) {
         ArrayList<ArrayList<ImageView>> studentsToHide = new ArrayList<>();
-        switch (numOfPlayers){
+        switch (numOfPlayers) {
             case 3:
                 studentsToHide.add(studentsCloud1v4);
                 studentsToHide.add(studentsCloud2v4);
@@ -380,8 +374,8 @@ public class GameViewController extends InitialStage implements Controller {
                 studentsToHide.add(studentsCloud4v4);
                 break;
         }
-        for(ArrayList<ImageView> array : studentsToHide){
-            for(ImageView student : array){
+        for (ArrayList<ImageView> array : studentsToHide) {
+            for (ImageView student : array) {
                 student.setVisible(false);
             }
         }
@@ -389,40 +383,42 @@ public class GameViewController extends InitialStage implements Controller {
 
     @FXML
     StackPane towers;
+
     private void initializeImagesTowers() {
         towersImgs = new ArrayList<>();
-        for(Node tower : towers.getChildren()){
-            towersImgs.add((ImageView)tower);
+        for (Node tower : towers.getChildren()) {
+            towersImgs.add((ImageView) tower);
         }
     }
 
     @FXML
     StackPane yellowDining, redDining, greenDining,
-    blueDining, pinkDining;
+            blueDining, pinkDining;
+
     private void initializeImagesDining() {
         blueDiningImgs = new ArrayList<>();
-        for(Node s : blueDining.getChildren()){
-            blueDiningImgs.add((ImageView)s);
+        for (Node s : blueDining.getChildren()) {
+            blueDiningImgs.add((ImageView) s);
         }
 
         pinkDiningImgs = new ArrayList<>();
-        for(Node s : pinkDining.getChildren()){
-            pinkDiningImgs.add((ImageView)s);
+        for (Node s : pinkDining.getChildren()) {
+            pinkDiningImgs.add((ImageView) s);
         }
 
         greenDiningImgs = new ArrayList<>();
-        for(Node s : greenDining.getChildren()){
-            greenDiningImgs.add((ImageView)s);
+        for (Node s : greenDining.getChildren()) {
+            greenDiningImgs.add((ImageView) s);
         }
 
         yellowDiningImgs = new ArrayList<>();
-        for(Node s : yellowDining.getChildren()){
-            yellowDiningImgs.add((ImageView)s);
+        for (Node s : yellowDining.getChildren()) {
+            yellowDiningImgs.add((ImageView) s);
         }
 
         redDiningImgs = new ArrayList<>();
-        for(Node s : redDining.getChildren()){
-            redDiningImgs.add((ImageView)s);
+        for (Node s : redDining.getChildren()) {
+            redDiningImgs.add((ImageView) s);
         }
     }
 
@@ -451,7 +447,7 @@ public class GameViewController extends InitialStage implements Controller {
     private ImageView cloud1, cloud2, cloud3, cloud4;
 
     @FXML
-    private StackPane cloud1v3 , cloud1v4 , cloud2v3 ,
+    private StackPane cloud1v3, cloud1v4, cloud2v3,
             cloud2v4, cloud3v3, cloud3v4, cloud4v4;
 
 
