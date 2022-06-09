@@ -7,7 +7,7 @@
 
 <BorderPane prefHeight="720.0" prefWidth="1280.0" styleClass="background" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-          <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="500.0" styleClass="WhiteBackground" BorderPane.alignment="CENTER">
+          <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="500.0" styleClass="WhiteBackground" BorderPane.alignment="CENTER">
               <children>
                   <GridPane fx:id="roomsList" alignment="CENTER" gridLinesVisible="true" prefHeight="40.0" prefWidth="115.0">
                       <columnConstraints>
