@@ -225,9 +225,8 @@ public class Client implements Runnable {
                     localModel.setUi(ui);
                     try {
                         view = StringNames.INGAME;
-                        if (!isLeader())
-                            ui.startGame();
-                    } catch (RemoteException | UserNotInRoomException | RoomNotExistsException e) {
+                        ui.startGame();
+                    } catch (RemoteException e) {
                         e.printStackTrace();
                     }
                     break;
