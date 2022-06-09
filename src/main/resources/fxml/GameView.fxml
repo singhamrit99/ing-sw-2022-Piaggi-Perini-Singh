@@ -27,7 +27,7 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Options">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Leave game" />
+                  <MenuItem fx:id="leaveGame" mnemonicParsing="false" text="leaveGame" />
                </items>
             </Menu>
          </menus>
