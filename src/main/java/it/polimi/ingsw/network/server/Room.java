@@ -19,7 +19,7 @@ import java.util.LinkedList;
 
 public class Room implements PropertyChangeListener {
     private final String roomName;
-    private final ArrayList<ClientConnection> players;
+    private ArrayList<ClientConnection> players;
     private boolean expertMode;
     final private Controller controller;
     private boolean inGame;
@@ -56,6 +56,16 @@ public class Room implements PropertyChangeListener {
         players.remove(user);
     }
 
+    public synchronized void kickOut(){
+        if(this.isInGame()){
+            PropertyChangeEvent gameFinished=
+                    new PropertyChangeEvent(this,"leave-game",null,null);
+            addEventToBuffer(gameFinished);
+
+            players = new ArrayList<>(); //the players array is reset, the room will be deleted by the server
+            System.out.println("Room kicked out every players after a player leaves the game.");
+        }
+    }
     public synchronized void startGame() throws NegativeValueException, IncorrectArgumentException, InterruptedException {
         ArrayList<String> nicknames = new ArrayList<>();
         eventsBuffer = new HashMap<>();
@@ -70,6 +80,7 @@ public class Room implements PropertyChangeListener {
         PropertyChangeEvent firstPlayerEvt=
                 new PropertyChangeEvent(this,"first-player",null,newGame.getCurrentPlayer().getNickname());
         addEventToBuffer(firstPlayerEvt);
+        setInGame(true);
     }
 
     private synchronized void buildStrippedModel(ArrayList<Player> players, ArrayList<CharacterCard> charactersCard, ArrayList<Cloud> clouds, LinkedList<Island> islands) {

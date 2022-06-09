@@ -2,13 +2,13 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
+import it.polimi.ingsw.exceptions.UserNotInRoomException;
+import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
 import it.polimi.ingsw.view.GUI.GUI;
-import it.polimi.ingsw.view.GUI.controllerFX.Controller;
-import it.polimi.ingsw.view.GUI.controllerFX.InitialStage;
-import javafx.collections.ObservableArray;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
@@ -16,53 +16,19 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 
-import java.awt.*;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * @author Amrit
- */
 public class GameViewController extends InitialStage implements Controller {
-    @FXML
-    private Menu changeViewBoard;
-    @FXML
-    private Menu currentViewPlayer;
-
-    //image assets import
-    private Image blackTowerImg;
-    private Image whiteTowerImg;
-    private Image greyTowerImg;
-    private Image blueStudentImg;
-    private Image greenStudentImg;
-    private Image pinkStudentImg;
-    private Image redStudentImg;
-    private Image yellowStudentImg;
-    private ArrayList<ImageView> blueDiningImgs;
-    private ArrayList<ImageView> redDiningImgs;
-    private ArrayList<ImageView> yellowDiningImgs;
-    private ArrayList<ImageView> greenDiningImgs;
-    private ArrayList<ImageView> pinkDiningImgs;
-    private ArrayList<ImageView> studentsCloud1v3;
-    private ArrayList<ImageView> studentsCloud1v4;
-    private ArrayList<ImageView> studentsCloud2v3;
-    private ArrayList<ImageView> studentsCloud2v4;
-    private ArrayList<ImageView> studentsCloud3v3;
-    private ArrayList<ImageView> studentsCloud3v4;
-    private ArrayList<ImageView> studentsCloud4v4;
-    private List<MenuItem> itemBoardViewArray; //the menu items necessary to change the view
     protected static AtomicBoolean opened = new AtomicBoolean(false);
-
     private String currentBoardView; //the owner of the board current visible on the screen
-
 
     public GameViewController(GUI gui) {
         super(gui);
@@ -86,7 +52,7 @@ public class GameViewController extends InitialStage implements Controller {
     public void initialize() {
         if (!opened.get()) { //first opening
             opened.set(true);
-            setPlayersViewMenu(GUI.client.getLocalPlayerList());
+            initializePlayersViewMenu(GUI.client.getLocalPlayerList());
             firstRefreshBoard();
         }
 
@@ -96,7 +62,18 @@ public class GameViewController extends InitialStage implements Controller {
             }
         }
 
+
+        leaveGame.setOnAction((event) -> { //leaving game
+            try {
+                GUI.client.leaveRoom();
+                Platform.exit();
+                System.exit(0);
+            }catch (RemoteException | UserNotInRoomException | UserNotRegisteredException ignored) {}
+        });
+
     }
+
+
     public void changeViewBoard(String viewOwnerTarget) {
         if (GUI.client.getLocalPlayerList().contains(viewOwnerTarget)) {
             currentBoardView = viewOwnerTarget;
@@ -118,8 +95,23 @@ public class GameViewController extends InitialStage implements Controller {
     public void setCurrentPlayer(String currentPlayer) {
         this.currentViewPlayer.setText("Current player: " + currentPlayer);
     }
+
     public boolean isOpened() {
         return opened.get();
+    }
+
+    private void initializePlayersViewMenu(ArrayList<String> players) {
+        List<MenuItem> items = changeViewBoard.getItems();
+        int indexItem = 0;
+        while (indexItem < 4) {
+            if (indexItem > players.size() - 1) {
+                items.get(indexItem).setVisible(false);
+            } else {
+                items.get(indexItem).setText(players.get(indexItem));
+            }
+            indexItem++;
+        }
+        itemBoardViewArray = items;
     }
 
     private void firstRefreshBoard() {
@@ -194,7 +186,7 @@ public class GameViewController extends InitialStage implements Controller {
             //hides remaining students
             int studentsForEachCloud = 3;
             if (numPlayers == 3) studentsForEachCloud = 4;
-            while (indexStudentsAssets < studentsForEachCloud ) {
+            while (indexStudentsAssets < studentsForEachCloud) {
                 switch (cloudIndex) {
                     case 0:
                         if (numPlayers == 3) studentsCloud1v3.get(indexStudentsAssets).setVisible(false);
@@ -425,23 +417,33 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
-    private void setPlayersViewMenu(ArrayList<String> players) {
-        List<MenuItem> items = changeViewBoard.getItems();
-        int indexItem = 0;
-        while (indexItem < 4) {
-            if (indexItem > players.size() - 1) {
-                items.get(indexItem).setVisible(false);
-            } else {
-                items.get(indexItem).setText(players.get(indexItem));
-            }
-            indexItem++;
-        }
-        itemBoardViewArray = items;
-    }
 
-    // assets on screen
+    private List<MenuItem> itemBoardViewArray; //the menu items necessary to change the view
+
     private ArrayList<ImageView> entranceStudentsImgs;
     private ArrayList<ImageView> towersImgs;
+
+    //image assets import
+    private Image blackTowerImg, whiteTowerImg, greyTowerImg;
+
+    private Image blueStudentImg, greenStudentImg, pinkStudentImg,
+            redStudentImg, yellowStudentImg;
+
+    private ArrayList<ImageView> blueDiningImgs, redDiningImgs, yellowDiningImgs,
+            greenDiningImgs, pinkDiningImgs;
+
+    private ArrayList<ImageView> studentsCloud1v3, studentsCloud1v4,
+            studentsCloud2v3, studentsCloud2v4, studentsCloud3v3,
+            studentsCloud3v4, studentsCloud4v4;
+
+    // assets on screen
+    @FXML
+    private Menu changeViewBoard;
+    @FXML
+    private Menu currentViewPlayer;
+
+    @FXML
+    private MenuItem leaveGame;
     @FXML
     private ImageView redProf, yellowProf,
             greenProf, pinkProf, blueProf;
