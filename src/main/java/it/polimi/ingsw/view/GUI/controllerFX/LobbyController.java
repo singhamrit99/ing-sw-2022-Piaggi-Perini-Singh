@@ -1,15 +1,17 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
-import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.RoomFullException;
 import it.polimi.ingsw.exceptions.RoomNotExistsException;
 import it.polimi.ingsw.exceptions.UserNotRegisteredException;
+import it.polimi.ingsw.view.GUI.GUI;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 import java.rmi.RemoteException;
