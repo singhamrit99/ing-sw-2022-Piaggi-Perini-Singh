@@ -137,7 +137,7 @@ public class GameViewController extends InitialStage implements Controller {
         initializeImagesDining();
         reloadDining();
         initializeClouds();
-        reloadClouds();
+        //reloadClouds();
     }
 
     private void reloadEntrance() {
@@ -302,7 +302,7 @@ public class GameViewController extends InitialStage implements Controller {
             entranceStudentsImgs.add((ImageView)student);
         }
     }
-    
+
     private void initializeClouds() {
         int numOfPlayers = GUI.client.getLocalPlayerList().size();
         studentsCloud1v3 = new ArrayList<>();
@@ -387,78 +387,43 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
+    @FXML
+    StackPane towers;
     private void initializeImagesTowers() {
         towersImgs = new ArrayList<>();
-        towersImgs.add(tower1);
-        towersImgs.add(tower2);
-        towersImgs.add(tower3);
-        towersImgs.add(tower4);
-        towersImgs.add(tower5);
-        towersImgs.add(tower6);
-        towersImgs.add(tower7);
-        towersImgs.add(tower8);
+        for(Node tower : towers.getChildren()){
+            towersImgs.add((ImageView)tower);
+        }
     }
 
+    @FXML
+    StackPane yellowDining, redDining, greenDining,
+    blueDining, pinkDining;
     private void initializeImagesDining() {
         blueDiningImgs = new ArrayList<>();
-        blueDiningImgs.add(blueDining0);
-        blueDiningImgs.add(blueDining1);
-        blueDiningImgs.add(blueDining2);
-        blueDiningImgs.add(blueDining3);
-        blueDiningImgs.add(blueDining4);
-        blueDiningImgs.add(blueDining5);
-        blueDiningImgs.add(blueDining6);
-        blueDiningImgs.add(blueDining7);
-        blueDiningImgs.add(blueDining8);
-        blueDiningImgs.add(blueDining9);
+        for(Node s : blueDining.getChildren()){
+            blueDiningImgs.add((ImageView)s);
+        }
 
         pinkDiningImgs = new ArrayList<>();
-        pinkDiningImgs.add(pinkDining0);
-        pinkDiningImgs.add(pinkDining1);
-        pinkDiningImgs.add(pinkDining2);
-        pinkDiningImgs.add(pinkDining3);
-        pinkDiningImgs.add(pinkDining4);
-        pinkDiningImgs.add(pinkDining5);
-        pinkDiningImgs.add(pinkDining6);
-        pinkDiningImgs.add(pinkDining7);
-        pinkDiningImgs.add(pinkDining8);
-        pinkDiningImgs.add(pinkDining9);
+        for(Node s : pinkDining.getChildren()){
+            pinkDiningImgs.add((ImageView)s);
+        }
 
         greenDiningImgs = new ArrayList<>();
-        greenDiningImgs.add(greenDining0);
-        greenDiningImgs.add(greenDining1);
-        greenDiningImgs.add(greenDining2);
-        greenDiningImgs.add(greenDining3);
-        greenDiningImgs.add(greenDining4);
-        greenDiningImgs.add(greenDining5);
-        greenDiningImgs.add(greenDining6);
-        greenDiningImgs.add(greenDining7);
-        greenDiningImgs.add(greenDining8);
-        greenDiningImgs.add(greenDining9);
+        for(Node s : greenDining.getChildren()){
+            greenDiningImgs.add((ImageView)s);
+        }
 
         yellowDiningImgs = new ArrayList<>();
-        yellowDiningImgs.add(yellowDining0);
-        yellowDiningImgs.add(yellowDining1);
-        yellowDiningImgs.add(yellowDining2);
-        yellowDiningImgs.add(yellowDining3);
-        yellowDiningImgs.add(yellowDining4);
-        yellowDiningImgs.add(yellowDining5);
-        yellowDiningImgs.add(yellowDining6);
-        yellowDiningImgs.add(yellowDining7);
-        yellowDiningImgs.add(yellowDining8);
-        yellowDiningImgs.add(yellowDining9);
+        for(Node s : yellowDining.getChildren()){
+            yellowDiningImgs.add((ImageView)s);
+        }
 
         redDiningImgs = new ArrayList<>();
-        redDiningImgs.add(redDining0);
-        redDiningImgs.add(redDining1);
-        redDiningImgs.add(redDining2);
-        redDiningImgs.add(redDining3);
-        redDiningImgs.add(redDining4);
-        redDiningImgs.add(redDining5);
-        redDiningImgs.add(redDining6);
-        redDiningImgs.add(redDining7);
-        redDiningImgs.add(redDining8);
-        redDiningImgs.add(redDining9);
+        for(Node s : redDining.getChildren()){
+            redDiningImgs.add((ImageView)s);
+        }
     }
 
     private void setPlayersViewMenu(ArrayList<String> players) {
@@ -476,41 +441,11 @@ public class GameViewController extends InitialStage implements Controller {
     }
 
     // assets on screen
-    @FXML
     private ArrayList<ImageView> entranceStudentsImgs;
-    @FXML
-    private ImageView studentEntrance1, studentEntrance2,
-            studentEntrance3, studentEntrance4;
-    @FXML
-    private ImageView studentEntrance5, studentEntrance6,
-            studentEntrance7, studentEntrance8, studentEntrance9;
-
     private ArrayList<ImageView> towersImgs;
-    @FXML
-    private ImageView tower1, tower2, tower3, tower4,
-            tower5, tower6, tower7, tower8;
-
     @FXML
     private ImageView redProf, yellowProf,
             greenProf, pinkProf, blueProf;
-
-    @FXML
-    private ImageView blueDining0, blueDining1, blueDining2, blueDining3,
-            blueDining4, blueDining5, blueDining6, blueDining7, blueDining8, blueDining9;
-    @FXML
-    private ImageView pinkDining0, pinkDining1, pinkDining2, pinkDining3,
-            pinkDining4, pinkDining5, pinkDining6, pinkDining7, pinkDining8, pinkDining9;
-    @FXML
-    private ImageView greenDining0, greenDining1, greenDining2, greenDining3, greenDining4,
-            greenDining5, greenDining6, greenDining7, greenDining8, greenDining9;
-
-    @FXML
-    private ImageView yellowDining0, yellowDining1, yellowDining2, yellowDining3, yellowDining4,
-            yellowDining5, yellowDining6, yellowDining7, yellowDining8, yellowDining9;
-
-    @FXML
-    private ImageView redDining0, redDining1, redDining2, redDining3, redDining4,
-            redDining5, redDining6, redDining7, redDining8, redDining9;
 
     @FXML
     private ImageView cloud1, cloud2, cloud3, cloud4;
