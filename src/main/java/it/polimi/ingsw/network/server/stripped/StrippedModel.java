@@ -60,10 +60,8 @@ public class StrippedModel implements Serializable {
                 changeAssistantDeck(evt);
                 break;
             case "current-player":
-                break;
-            case "first-player":
+                setCurrentPlayer((String) evt.getNewValue());
                 ui.currentPlayer((String) evt.getNewValue());
-                setCurrentPlayer((String) evt.getNewValue()); //todo remove
                 break;
             case "game-over":
                 winnerTeam = (String) evt.getNewValue();

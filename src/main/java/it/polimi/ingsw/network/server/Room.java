@@ -78,8 +78,9 @@ public class Room implements PropertyChangeListener {
         buildStrippedModel(newGame.getPlayers(), newGame.getCharacterCards(),
                 newGame.getClouds(), newGame.getIslands());
         PropertyChangeEvent firstPlayerEvt=
-                new PropertyChangeEvent(this,"first-player",null,newGame.getCurrentPlayer().getNickname());
+                new PropertyChangeEvent(this,"current-player",null,newGame.getCurrentPlayer().getNickname());
         addEventToBuffer(firstPlayerEvt);
+        //System.out.println("Sent first player event\n");
         setInGame(true);
     }
 
