@@ -46,7 +46,6 @@ public class GameViewController extends InitialStage implements Controller {
     private Image pinkStudentImg;
     private Image redStudentImg;
     private Image yellowStudentImg;
-
     private ArrayList<ImageView> blueDiningImgs;
     private ArrayList<ImageView> redDiningImgs;
     private ArrayList<ImageView> yellowDiningImgs;
@@ -59,7 +58,6 @@ public class GameViewController extends InitialStage implements Controller {
     private ArrayList<ImageView> studentsCloud3v3;
     private ArrayList<ImageView> studentsCloud3v4;
     private ArrayList<ImageView> studentsCloud4v4;
-
     private List<MenuItem> itemBoardViewArray; //the menu items necessary to change the view
     protected static AtomicBoolean opened = new AtomicBoolean(false);
 
@@ -99,7 +97,6 @@ public class GameViewController extends InitialStage implements Controller {
         }
 
     }
-
     public void changeViewBoard(String viewOwnerTarget) {
         if (GUI.client.getLocalPlayerList().contains(viewOwnerTarget)) {
             currentBoardView = viewOwnerTarget;
@@ -121,13 +118,9 @@ public class GameViewController extends InitialStage implements Controller {
     public void setCurrentPlayer(String currentPlayer) {
         this.currentViewPlayer.setText("Current player: " + currentPlayer);
     }
-
     public boolean isOpened() {
         return opened.get();
     }
-
-    @FXML
-    StackPane prova;
 
     private void firstRefreshBoard() {
         initializeImagesEntrance();
@@ -169,43 +162,56 @@ public class GameViewController extends InitialStage implements Controller {
     }
 
     private void reloadClouds() {
-        ArrayList<StrippedCloud> clouds = GUI.client.getLocalModel().getClouds();
         int numPlayers = GUI.client.getLocalPlayerList().size();
-        ArrayList<ArrayList<ImageView>> clouds3p = new ArrayList<>();
-        ArrayList<ArrayList<ImageView>> clouds4p = new ArrayList<>();
-        if (numPlayers == 3) {
-            clouds3p.add(studentsCloud1v3);
-            clouds3p.add(studentsCloud2v3);
-            clouds3p.add(studentsCloud3v3);
-        } else {
-            clouds4p.add(studentsCloud1v3);
-            clouds4p.add(studentsCloud2v3);
-            if (numPlayers == 4) {
-                clouds4p.add(studentsCloud3v3);
-                clouds4p.add(studentsCloud3v3);
-            }
-        }
+        ArrayList<StrippedCloud> clouds = GUI.client.getLocalModel().getClouds();
 
         for (int cloudIndex = 0; cloudIndex < numPlayers; cloudIndex++) {
             int indexStudentsAssets = 0;
             EnumMap<Colors, Integer> students = clouds.get(cloudIndex).getStudents();
             for (Colors c : students.keySet()) {
                 Image rightColor = studentImgFromColor(c);
-                if (students.get(c) != 0){
-                    if (numPlayers == 3) clouds3p.get(cloudIndex).get(indexStudentsAssets).setImage(rightColor);
-                    else
-                        clouds4p.get(cloudIndex).get(indexStudentsAssets).setImage(rightColor);
+                if (students.get(c) != 0) {
+                    switch (cloudIndex) {
+                        case 0:
+                            if (numPlayers == 3) studentsCloud1v3.get(indexStudentsAssets).setImage(rightColor);
+                            else studentsCloud1v4.get(indexStudentsAssets).setImage(rightColor);
+                            break;
+                        case 1:
+                            if (numPlayers == 3) studentsCloud2v3.get(indexStudentsAssets).setImage(rightColor);
+                            else studentsCloud2v4.get(indexStudentsAssets).setImage(rightColor);
+                            break;
+                        case 2:
+                            if (numPlayers == 3) studentsCloud3v3.get(indexStudentsAssets).setImage(rightColor);
+                            else studentsCloud3v4.get(indexStudentsAssets).setImage(rightColor);
+                            break;
+                        case 3:
+                            studentsCloud4v4.get(indexStudentsAssets).setImage(rightColor);
+                            break;
+                    }
                     indexStudentsAssets++;
                 }
             }
-
             //hides remaining students
             int studentsForEachCloud = 3;
-            if(numPlayers==3)studentsForEachCloud=4;
-            while(indexStudentsAssets<studentsForEachCloud-1){
-                if (numPlayers == 3) clouds3p.get(cloudIndex).get(indexStudentsAssets).setVisible(false);
-                else
-                    clouds4p.get(cloudIndex).get(indexStudentsAssets).setVisible(false);
+            if (numPlayers == 3) studentsForEachCloud = 4;
+            while (indexStudentsAssets < studentsForEachCloud ) {
+                switch (cloudIndex) {
+                    case 0:
+                        if (numPlayers == 3) studentsCloud1v3.get(indexStudentsAssets).setVisible(false);
+                        else studentsCloud1v4.get(indexStudentsAssets).setVisible(false);
+                        break;
+                    case 1:
+                        if (numPlayers == 3) studentsCloud2v3.get(indexStudentsAssets).setVisible(false);
+                        else studentsCloud2v4.get(indexStudentsAssets).setVisible(false);
+                        break;
+                    case 2:
+                        if (numPlayers == 3) studentsCloud3v3.get(indexStudentsAssets).setVisible(false);
+                        else studentsCloud3v4.get(indexStudentsAssets).setVisible(false);
+                        break;
+                    case 3:
+                        studentsCloud4v4.get(indexStudentsAssets).setVisible(false);
+                        break;
+                }
                 indexStudentsAssets++;
             }
         }
