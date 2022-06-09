@@ -49,21 +49,12 @@ public class Bag {
         Random random = new Random();
 
         for (int i = 0; i < numberOfStudents; ) {
-            //type = (int) Math.floor(Math.random() * studentType);
-            //quantity = (int) Math.floor(Math.random() * ((numberOfStudents - i) - 1) + 1);
             type = random.nextInt(5);
-            //quantity = random.nextInt(numberOfStudents - i + 1);
 
             if (getStudents().containsKey(Colors.getStudent(type))) {
                 studentsDrawn.put(Colors.getStudent(type), studentsDrawn.get(Colors.getStudent(type)) + 1);
                 i++;
             }
-            /*if (getStudents().containsKey(Colors.getStudent(type))) {
-                if (getStudents().get(Colors.getStudent(type)) >= quantity) {
-                    studentsDrawn.put(Colors.getStudent(type), studentsDrawn.get(Colors.getStudent(type)) + quantity);
-                    i += quantity;
-                }
-            }*/
         }
         removeStudents(studentsDrawn);
 
