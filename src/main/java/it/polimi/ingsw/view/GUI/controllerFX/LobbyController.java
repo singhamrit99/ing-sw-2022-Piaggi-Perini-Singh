@@ -9,8 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.rmi.RemoteException;
@@ -24,6 +23,8 @@ public class LobbyController extends InitialStage implements Controller {
     protected static AtomicBoolean opened = new AtomicBoolean(false);
     private ArrayList<String> rooms;
 
+    @FXML
+    StackPane titlePane;
     @FXML
     private GridPane roomsList;
     @FXML
@@ -41,6 +42,7 @@ public class LobbyController extends InitialStage implements Controller {
     public void initialize() {
         opened.set(true);
         loadRoomsList();
+
         createRoomButton.setOnAction((event) -> {
             GUI.client.view = StringNames.CREATE_NEW_ROOM;
             opened.set(false);
