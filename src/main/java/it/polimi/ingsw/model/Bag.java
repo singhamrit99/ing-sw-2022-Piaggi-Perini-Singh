@@ -42,14 +42,14 @@ public class Bag {
     }
 
     public EnumMap<Colors, Integer> drawStudents(int numberOfStudents) throws NegativeValueException {
-        int type, quantity;
+        int type;
         int studentType = 5;
 
         EnumMap<Colors, Integer> studentsDrawn = StudentManager.createEmptyStudentsEnum();
         Random random = new Random();
 
         for (int i = 0; i < numberOfStudents; ) {
-            type = random.nextInt(5);
+            type = random.nextInt(studentType);
 
             if (getStudents().containsKey(Colors.getStudent(type))) {
                 studentsDrawn.put(Colors.getStudent(type), studentsDrawn.get(Colors.getStudent(type)) + 1);
