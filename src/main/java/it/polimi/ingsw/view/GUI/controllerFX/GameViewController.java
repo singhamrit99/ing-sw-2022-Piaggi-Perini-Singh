@@ -4,17 +4,22 @@ import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
+import it.polimi.ingsw.network.server.stripped.StrippedCloud;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.GUI.controllerFX.Controller;
 import it.polimi.ingsw.view.GUI.controllerFX.InitialStage;
+import javafx.collections.ObservableArray;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -46,6 +51,13 @@ public class GameViewController extends InitialStage implements Controller {
     private ArrayList<ImageView> yellowDiningImgs;
     private ArrayList<ImageView> greenDiningImgs;
     private ArrayList<ImageView> pinkDiningImgs;
+    private ArrayList<ImageView> studentsCloud1v3;
+    private ArrayList<ImageView> studentsCloud1v4;
+    private ArrayList<ImageView> studentsCloud2v3;
+    private ArrayList<ImageView> studentsCloud2v4;
+    private ArrayList<ImageView> studentsCloud3v3;
+    private ArrayList<ImageView> studentsCloud3v4;
+    private ArrayList<ImageView> studentsCloud4v4;
 
     private List<MenuItem> itemBoardViewArray; //the menu items necessary to change the view
     protected static AtomicBoolean opened = new AtomicBoolean(false);
@@ -113,6 +125,8 @@ public class GameViewController extends InitialStage implements Controller {
         return opened.get();
     }
 
+    @FXML
+    StackPane prova;
     private void firstRefreshBoard() {
         initializeImagesEntrance();
         currentBoardView = GUI.client.getNickname();
@@ -122,6 +136,8 @@ public class GameViewController extends InitialStage implements Controller {
         reloadProfs();
         initializeImagesDining();
         reloadDining();
+        initializeClouds();
+        reloadClouds();
     }
 
     private void reloadEntrance() {
@@ -148,6 +164,43 @@ public class GameViewController extends InitialStage implements Controller {
         } catch (LocalModelNotLoadedException e) {
             Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
         }
+    }
+
+
+    private void reloadClouds() {
+        ArrayList<StrippedCloud> clouds = GUI.client.getLocalModel().getClouds();
+        int numPlayers = GUI.client.getLocalPlayerList().size();
+        ArrayList<ArrayList<ImageView>> clouds3p = new ArrayList<>();
+        ArrayList<ArrayList<ImageView>> clouds4p = new ArrayList<>();
+        ArrayList<ImageView> rightArray;
+        if (numPlayers == 3) {
+            clouds3p.add(studentsCloud1v3);
+            clouds3p.add(studentsCloud2v3);
+            clouds3p.add(studentsCloud3v3);
+        }else{
+            clouds4p.add(studentsCloud1v3);
+            clouds4p.add(studentsCloud2v3);
+            if(numPlayers==4){
+                clouds4p.add(studentsCloud3v3);
+                clouds4p.add(studentsCloud3v3);
+            }
+        }
+
+        for(int cloudIndex=0; cloudIndex<numPlayers;cloudIndex++){
+            int indexStudentsAssets = 0;
+            EnumMap<Colors, Integer> students = clouds.get(cloudIndex).getStudents();
+            if(numPlayers==3)rightArray = clouds3p.get(cloudIndex);
+            else rightArray = clouds4p.get(cloudIndex);
+            for (Colors c : students.keySet()) {
+                Image rightColor = studentImgFromColor(c);
+                if (students.get(c) != 0){
+                    rightArray.get(indexStudentsAssets).setImage(rightColor);
+                    rightArray.get(indexStudentsAssets).setVisible(true);
+                    indexStudentsAssets++;
+                }
+            }
+        }
+
     }
 
     private void reloadTowers() {
@@ -201,14 +254,14 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
-    private void reloadDining(){
+    private void reloadDining() {
         try {
             EnumMap<Colors, Integer> dining = GUI.client.getLocalModel().getBoardOf(currentBoardView).getDining();
             for (Colors c : dining.keySet()) {
                 int i = 0;
                 while (i < 10) {
                     if (i < dining.get(c)) {
-                        switch(c){
+                        switch (c) {
                             case BLUE:
                                 blueDiningImgs.get(i).setVisible(true);
                             case PINK:
@@ -253,6 +306,102 @@ public class GameViewController extends InitialStage implements Controller {
         entranceStudentsImgs.add(studentEntrance7);
         entranceStudentsImgs.add(studentEntrance8);
         entranceStudentsImgs.add(studentEntrance9);
+    }
+
+
+
+    private void initializeClouds() {
+        
+        int numOfPlayers = GUI.client.getLocalPlayerList().size();
+        if (numOfPlayers == 3) {
+            try {
+                cloud1.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CLOUD_1))));
+                cloud2.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CLOUD_2))));
+                cloud3.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CLOUD_3))));
+            } catch (IOException e) {
+                throw new RuntimeException(e); //todo
+            }
+            cloud4.setVisible(false);
+        } else if (numOfPlayers == 2) {
+            cloud3.setVisible(false);
+            cloud4.setVisible(false);
+        }
+        //cloud 1 students
+        studentsCloud1v3 = new ArrayList<>();
+        studentsCloud1v4 = new ArrayList<>();
+        studentsCloud1v3.add(student1Cloud1v3);
+        studentsCloud1v3.add(student2Cloud1v3);
+        studentsCloud1v3.add(student3Cloud1v3);
+        studentsCloud1v3.add(student4Cloud1v3);
+
+
+        studentsCloud1v4.add(student1Cloud1v4);
+        studentsCloud1v4.add(student2Cloud1v4);
+        studentsCloud1v4.add(student3Cloud1v4);
+
+        //cloud 2 students
+        studentsCloud2v3 = new ArrayList<>();
+        studentsCloud2v4 = new ArrayList<>();
+        studentsCloud2v3.add(student1Cloud2v3);
+        studentsCloud2v3.add(student2Cloud2v3);
+        studentsCloud2v3.add(student3Cloud2v3);
+        studentsCloud2v3.add(student4Cloud2v3);
+
+        studentsCloud2v4.add(student1Cloud2v4);
+        studentsCloud2v4.add(student2Cloud2v4);
+        studentsCloud2v4.add(student3Cloud2v4);
+
+        //cloud 3 students
+        studentsCloud3v3 = new ArrayList<>();
+        studentsCloud3v4 = new ArrayList<>();
+        studentsCloud3v3.add(student1Cloud3v3);
+        studentsCloud3v3.add(student2Cloud3v3);
+        studentsCloud3v3.add(student3Cloud3v3);
+        studentsCloud3v3.add(student4Cloud3v3);
+
+        studentsCloud3v4.add(student1Cloud3v4);
+        studentsCloud3v4.add(student2Cloud3v4);
+        studentsCloud3v4.add(student3Cloud3v4);
+        //cloud 4 students
+        studentsCloud4v4 = new ArrayList<>();
+        studentsCloud4v4.add(student1Cloud4v4);
+        studentsCloud4v4.add(student2Cloud4v4);
+        studentsCloud4v4.add(student3Cloud4v4);
+
+        if (numOfPlayers == 3) {
+            for (ImageView i : studentsCloud1v4) {
+                i.setVisible(false);
+            }
+            for (ImageView i : studentsCloud2v4) {
+                i.setVisible(false);
+            }
+            for (ImageView i : studentsCloud3v4) {
+                i.setVisible(false);
+            }
+            for (ImageView i : studentsCloud4v4) {
+                i.setVisible(false);
+            }
+        } else {
+            for (ImageView i : studentsCloud1v3) {
+                i.setVisible(false);
+            }
+            for (ImageView i : studentsCloud2v3) {
+                i.setVisible(false);
+            }
+            for (ImageView i : studentsCloud3v3) {
+                i.setVisible(false);
+            }
+        }
+
+        if (numOfPlayers == 2) {
+            for (ImageView i : studentsCloud3v4) {
+                i.setVisible(false);
+            }
+            for (ImageView i : studentsCloud4v4) {
+                i.setVisible(false);
+            }
+        }
+
     }
 
     private void initializeImagesTowers() {
@@ -328,6 +477,7 @@ public class GameViewController extends InitialStage implements Controller {
         redDiningImgs.add(redDining8);
         redDiningImgs.add(redDining9);
     }
+
     private void setPlayersViewMenu(ArrayList<String> players) {
         List<MenuItem> items = changeViewBoard.getItems();
         int indexItem = 0;
@@ -378,5 +528,24 @@ public class GameViewController extends InitialStage implements Controller {
     @FXML
     private ImageView redDining0, redDining1, redDining2, redDining3, redDining4,
             redDining5, redDining6, redDining7, redDining8, redDining9;
+
+    @FXML
+    private ImageView cloud1, cloud2, cloud3, cloud4;
+
+    @FXML
+    private ImageView student1Cloud1v3, student2Cloud1v3, student3Cloud1v3, student4Cloud1v3,
+            student1Cloud1v4, student2Cloud1v4, student3Cloud1v4;
+
+    @FXML
+    private ImageView student1Cloud2v3, student2Cloud2v3, student3Cloud2v3, student4Cloud2v3,
+            student1Cloud2v4, student2Cloud2v4, student3Cloud2v4;
+
+    @FXML
+    private ImageView student1Cloud3v3, student2Cloud3v3, student3Cloud3v3, student4Cloud3v3,
+            student1Cloud3v4, student2Cloud3v4, student3Cloud3v4;
+
+    @FXML
+    private ImageView student1Cloud4v4, student2Cloud4v4, student3Cloud4v4;
+
 
 }
