@@ -1,10 +1,10 @@
 package it.polimi.ingsw.view.GUI;
 
+import it.polimi.ingsw.StringNames;
+import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.view.GUI.controllerFX.Controller;
 import it.polimi.ingsw.view.GUI.controllerFX.ResourcesPath;
-import it.polimi.ingsw.StringNames;
-import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -34,9 +34,6 @@ public class GUILauncher extends Application implements Initializable {
     public static Client client = GUI.client;
     public static Stage mainWindow;
 
-    public static final int MAIN_MENU_WIDTH = 1280;
-    public static final int MAIN_MENU_HEIGHT = 720;
-
     @FXML
     private StackPane mainMenuStage;
     @FXML
@@ -50,11 +47,6 @@ public class GUILauncher extends Application implements Initializable {
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle(StringNames.TITLE);
-        stage.setResizable(true);
-        stage.setMinHeight(1080);
-        stage.setMinWidth(1920);
-        stage.setWidth(MAIN_MENU_WIDTH);
-        stage.setHeight(MAIN_MENU_HEIGHT);
         mainWindow = stage;
 
         javafx.scene.image.Image icon = new Image(new FileInputStream("src/main/resources/img/professors/teacher_blue.png"));
