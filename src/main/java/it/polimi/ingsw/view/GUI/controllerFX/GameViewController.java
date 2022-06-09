@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.nio.file.Files;
@@ -138,7 +139,7 @@ public class GameViewController extends InitialStage implements Controller {
         initializeImagesDining();
         reloadDining();
         initializeClouds();
-        //reloadClouds();
+        reloadClouds();
     }
 
     private void reloadEntrance() {
@@ -167,13 +168,11 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
-
     private void reloadClouds() {
         ArrayList<StrippedCloud> clouds = GUI.client.getLocalModel().getClouds();
         int numPlayers = GUI.client.getLocalPlayerList().size();
         ArrayList<ArrayList<ImageView>> clouds3p = new ArrayList<>();
         ArrayList<ArrayList<ImageView>> clouds4p = new ArrayList<>();
-        ArrayList<ImageView> rightArray;
         if (numPlayers == 3) {
             clouds3p.add(studentsCloud1v3);
             clouds3p.add(studentsCloud2v3);
@@ -190,18 +189,26 @@ public class GameViewController extends InitialStage implements Controller {
         for (int cloudIndex = 0; cloudIndex < numPlayers; cloudIndex++) {
             int indexStudentsAssets = 0;
             EnumMap<Colors, Integer> students = clouds.get(cloudIndex).getStudents();
-            if (numPlayers == 3) rightArray = clouds3p.get(cloudIndex);
-            else rightArray = clouds4p.get(cloudIndex);
             for (Colors c : students.keySet()) {
                 Image rightColor = studentImgFromColor(c);
-                if (students.get(c) != 0) {
-                    rightArray.get(indexStudentsAssets).setImage(rightColor);
-                    rightArray.get(indexStudentsAssets).setVisible(true);
+                if (students.get(c) != 0){
+                    if (numPlayers == 3) clouds3p.get(cloudIndex).get(indexStudentsAssets).setImage(rightColor);
+                    else
+                        clouds4p.get(cloudIndex).get(indexStudentsAssets).setImage(rightColor);
                     indexStudentsAssets++;
                 }
             }
-        }
 
+            //hides remaining students
+            int studentsForEachCloud = 3;
+            if(numPlayers==3)studentsForEachCloud=4;
+            while(indexStudentsAssets<studentsForEachCloud-1){
+                if (numPlayers == 3) clouds3p.get(cloudIndex).get(indexStudentsAssets).setVisible(false);
+                else
+                    clouds4p.get(cloudIndex).get(indexStudentsAssets).setVisible(false);
+                indexStudentsAssets++;
+            }
+        }
     }
 
     private void reloadTowers() {
@@ -286,9 +293,6 @@ public class GameViewController extends InitialStage implements Controller {
             Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
         }
     }
-
-    @FXML
-    StackPane entrance;
 
     private void initializeImagesEntrance() {
         entranceStudentsImgs = new ArrayList<>();
@@ -381,19 +385,12 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
-    @FXML
-    StackPane towers;
-
     private void initializeImagesTowers() {
         towersImgs = new ArrayList<>();
         for (Node tower : towers.getChildren()) {
             towersImgs.add((ImageView) tower);
         }
     }
-
-    @FXML
-    StackPane yellowDining, redDining, greenDining,
-            blueDining, pinkDining;
 
     private void initializeImagesDining() {
         blueDiningImgs = new ArrayList<>();
@@ -450,5 +447,14 @@ public class GameViewController extends InitialStage implements Controller {
     private StackPane cloud1v3, cloud1v4, cloud2v3,
             cloud2v4, cloud3v3, cloud3v4, cloud4v4;
 
+    @FXML
+    StackPane entrance;
+
+    @FXML
+    StackPane towers;
+
+    @FXML
+    StackPane yellowDining, redDining, greenDining,
+            blueDining, pinkDining;
 
 }
