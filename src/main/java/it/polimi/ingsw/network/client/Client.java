@@ -231,6 +231,7 @@ public class Client implements Runnable {
                     }
                     break;
                 case "current-player":
+                    setInGame(true);
                     System.out.println("Changed current player");
                     if (nickname.equals(evt.getNewValue()))
                         isMyTurn = true;

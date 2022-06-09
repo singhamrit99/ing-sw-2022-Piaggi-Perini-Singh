@@ -163,18 +163,22 @@ public class CLI implements UI {
 
     @Override
     public void startGame() throws RemoteException {
-        try {
-            client.view = StringNames.INGAME;
-            client.startGame();
-        } catch (NotEnoughPlayersException e) {
-            System.out.println(StringNames.ALONE_IN_ROOM);
-        } catch (UserNotInRoomException e) {
-            System.out.println(StringNames.NOT_IN_ROOM);
-        } catch (NotLeaderRoomException e) {
-            System.out.println(StringNames.NO_LEADER);
-        } catch (RoomNotExistsException | UserNotRegisteredException e) {
-            throw new RuntimeException(e);
+        if (!client.isInGame()) {
+            try {
+                client.view = StringNames.INGAME;
+                client.startGame();
+                client.setInGame(true);
+            } catch (NotEnoughPlayersException e) {
+                System.out.println(StringNames.ALONE_IN_ROOM);
+            } catch (UserNotInRoomException e) {
+                System.out.println(StringNames.NOT_IN_ROOM);
+            } catch (NotLeaderRoomException e) {
+                System.out.println(StringNames.NO_LEADER);
+            } catch (RoomNotExistsException | UserNotRegisteredException e) {
+                throw new RuntimeException(e);
+            }
         }
+
     }
 
     @Override
