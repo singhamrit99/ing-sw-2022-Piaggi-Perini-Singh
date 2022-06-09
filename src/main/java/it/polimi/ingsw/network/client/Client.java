@@ -208,7 +208,7 @@ public class Client implements Runnable {
                         phase = 0;
                     }
                     if (phase == 1) {
-                        if (nickname.equals((String) evt.getNewValue())) {
+                        if (nickname.equals(evt.getNewValue())) {
                             System.out.println("It is my turn according to the assistant card I played.");
                             isMyTurn = true;
                         } else {
@@ -223,8 +223,9 @@ public class Client implements Runnable {
                     localModel.setUi(ui);
                     try {
                         view = StringNames.INGAME;
+                        if(!isLeader())
                         ui.startGame();
-                    } catch (RemoteException e) {
+                    } catch (RemoteException | UserNotInRoomException | RoomNotExistsException e) {
                         e.printStackTrace();
                     }
                     break;

@@ -45,7 +45,7 @@ public class CLI implements UI {
         this.client.view = StringNames.LAUNCHER;
     }
 
-    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException {
+    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException, RoomNotExistsException {
         System.out.println("Welcome to...");
         System.out.println("      ########## #########  ###########     ###     ####    ### ########### ###   ###  ######## \n" +
                 "     #+#        #+#    #+#     #+#       #+# #+#   #+#+#   #+#     #+#     #+#   #+# #+#    #+# \n" +
@@ -99,7 +99,7 @@ public class CLI implements UI {
                     leaveRoom();//fatto
                     break;
                 case "start":
-                    startGameRequest();
+                    startGame();
                     break;
                 case "help":
                     System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
@@ -138,23 +138,37 @@ public class CLI implements UI {
             }
 
             //Turn phase
-            while (client.getPhase() < 3) {
-                while (!client.isMyTurn()) {
+            if (client.getExpertMode()) {
+                while (client.getPhase() < 3) {
+                    while (!client.isMyTurn()) {
 
+                    }
+                    expertprintCommandHelp();
+                    performActionInTurnExpert();
                 }
-                printCommandHelp();
-                performActionInTurn();
+                pickCloud();
             }
-            pickCloud();
-        }
-    }
+            else{
+                while (client.getPhase() < 3) {
+                    while (!client.isMyTurn()) {
 
-    //Room methods
-    public void startGameRequest() throws RemoteException {
+                    }
+                    printCommandHelp();
+                    performActionInTurn();
+                }
+                pickCloud();
+            }
+        }
+
+        }
+
+    @Override
+    public void startGame() throws RemoteException {
         try {
+            client.view=StringNames.INGAME;
             client.startGame();
         } catch (NotEnoughPlayersException e) {
-            System.out.println(StringNames.ALONE_IN_ROOM); //todo TINO to LORE: Lore usa 'StringNames' per i messaggi, aggiungi i tuoi messaggi, cosí il usiamo anche noi .
+            System.out.println(StringNames.ALONE_IN_ROOM);
         } catch (UserNotInRoomException e) {
             System.out.println(StringNames.NOT_IN_ROOM);
         } catch (NotLeaderRoomException e) {
@@ -165,12 +179,8 @@ public class CLI implements UI {
     }
 
     @Override
-    public void startGame() throws RemoteException {
-        //TODO: usa questo metodo quando il gioco viene avviato
-    }
-
-    @Override
     public void currentPlayer(String s) {
+        client.view=StringNames.INGAME;
         System.out.println("It's now " + s + "'s turn!\n");
     }
 
@@ -386,9 +396,8 @@ public class CLI implements UI {
                 System.out.println("Expert mode enabled!\n");
             else
                 System.out.println("Expert mode disabled|\n");
-            //TODO exception
         } catch (UserNotInRoomException e) {
-            System.out.println("You're not in a room now!\n");
+            System.out.println(StringNames.NOT_IN_ROOM);
         } catch (NotLeaderRoomException e) {
             System.out.println("You're not this lobby's leader, you can't do that!\n");
         } catch (UserNotRegisteredException e) {
@@ -461,6 +470,17 @@ public class CLI implements UI {
                 "|\"Press 3 to view all the islands                                      |\n" +
                 "|\"Press 4 to move students across the islands and the dining room      |\n" +
                 "|\"Press 5 to move mother nature. This will end your turn               |\n" +
+                "|\"Press 6 to view this message again                                   |\n" +
+                "O-----------------------------------------------------------------------O");
+    }
+    public void expertprintCommandHelp() {
+        System.out.println("O-----------------------------------------------------------------------O\n" +
+                "|              The commands available are the following:                |\n" +
+                "|\"Press 1 to view everyone's boards                                    |\n" +
+                "|\"Press 2 to view every player's name                                  |\n" +
+                "|\"Press 3 to view all the islands                                      |\n" +
+                "|\"Press 4 to move students across the islands and the dining room      |\n" +
+                "|\"Press 5 to move mother nature. This will end your turn               |\n" +
                 "|\"Press 6 to see the character cards in the game                       |\n" +
                 "|\"Press 7 to play a character card                                     |\n" +
                 "|\"Press 8 to view this message again                                   |\n" +
@@ -522,12 +542,54 @@ public class CLI implements UI {
         AssistantCardDeck myDeck = client.getLocalModel().getAssistantDecks().get(playerNumber);
         int i = 0;
         for (AssistantCard a : myDeck.getDeck()) {
-            System.out.println("Card number "+ a.getImageName());
+            System.out.println("Card number "+ a.getImageName() + "Moves: " + a.getMove());
             i++;
         }
     }
 
     public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
+        do {
+            //   System.out.println("Press any key to continue\n");
+            in.nextLine();
+            // printCommandHelp();
+            System.out.println("Select an action: ");
+            String input;
+            while (true) {
+                input = in.next();
+                try {
+                    action = Integer.parseInt(input);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
+        } while (action < 1 || action > 6);
+        switch (action) {
+            case 1:
+                printPlayerBoards();
+                break;
+            case 2:
+                printPlayerNames();
+                break;
+            case 3:
+                printIslands();
+                break;
+            case 4:
+                moveStudents();
+                break;
+            case 5:
+                moveMN();
+                break;
+            case 6:
+                printCommandHelp();
+                break;
+            default:
+               System.out.println("Invalid input, try again\n");
+        }
+
+    }
+
+    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
         do {
             //   System.out.println("Press any key to continue\n");
             in.nextLine();
@@ -574,6 +636,7 @@ public class CLI implements UI {
         }
 
     }
+
 
     public synchronized void waitForTurn() throws InterruptedException {
         System.out.println("Waiting for turn ...");
@@ -841,6 +904,7 @@ public class CLI implements UI {
             if (answer.equals("y") || answer.equals("n"))
                 isValidInputYN = true;
             else if (answer.equals("\n")) {
+                System.out.println("yolo\n");
             } else
                 System.out.println("Whoops! That's not right. Try again: \n");
         } while (!isValidInputYN);
@@ -1058,7 +1122,6 @@ public class CLI implements UI {
 
     public Colors stringToColor(String input) {
         input = input.toLowerCase(Locale.ROOT);
-        int a;
         switch (input) {
             case "red":
                 return Colors.RED;
@@ -1087,9 +1150,9 @@ public class CLI implements UI {
 
         }
         // System.out.println("Students to game: ");
-        for (Colors c : returnStudents.keySet()) {
+        //for (Colors c : returnStudents.keySet()) {
             //  System.out.println("Color "+ c);
-        }
+       // }
 
         return returnStudents;
     }
