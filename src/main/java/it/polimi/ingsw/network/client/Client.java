@@ -203,17 +203,19 @@ public class Client implements Runnable {
                     }
                     break;
                 case "change-phase":
-                    phase++;
-                    if (phase > 4) {
-                        phase = 0;
-                    }
-                    if (phase == 1) {
-                        if (nickname.equals(evt.getNewValue())) {
-                            System.out.println("It is my turn according to the assistant card I played.");
-                            isMyTurn = true;
-                        } else {
-                            System.out.println("It is not my turn according to the assistant card I played.");
-                            isMyTurn = false;
+                    //If the change phase event is about me:
+                    if (nickname.equals(evt.getNewValue())) {
+                        phase = (Integer) evt.getOldValue();
+                        System.out.println("Phase: " + phase);
+                        if (phase == 1) {
+                            if (nickname.equals(evt.getNewValue())) {
+                                System.out.println("It is my turn according to the assistant card I played.");
+                                this.phase = 1;
+                                isMyTurn = true;
+                            } else {
+                                System.out.println("It is not my turn according to the assistant card I played.");
+                                isMyTurn = false;
+                            }
                         }
                     }
                     break;
@@ -223,13 +225,14 @@ public class Client implements Runnable {
                     localModel.setUi(ui);
                     try {
                         view = StringNames.INGAME;
-                        if(!isLeader())
-                        ui.startGame();
+                        if (!isLeader())
+                            ui.startGame();
                     } catch (RemoteException | UserNotInRoomException | RoomNotExistsException e) {
                         e.printStackTrace();
                     }
                     break;
                 case "current-player":
+                    System.out.println("Changed current player");
                     if (nickname.equals(evt.getNewValue()))
                         isMyTurn = true;
                     if (localModel != null) {

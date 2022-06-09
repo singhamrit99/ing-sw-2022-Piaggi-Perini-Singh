@@ -124,22 +124,22 @@ public class CLI implements UI {
             if (playedThisTurn == null)
                 playedThisTurn = new ArrayList<>();
             //Assistant Card play phase
-            while (client.getPhase() == 0) {
-                while (!client.isMyTurn()) {
-                    //Wait for the other players to be done with their turn while I still output their moves...
-                }
-                if (client.isMyTurn() && !client.isDrawnOut()) {
-                    drawFromBag();
-                }
-                if (client.isMyTurn() && client.getPhase() == 0)
-                    playAssistantCard();
 
-                Thread.sleep(400);
+            while (!client.isMyTurn()) {
+                //Wait for the other players to be done with their turn while I still output their moves...
             }
+            if (client.isMyTurn() && !client.isDrawnOut()) {
+                drawFromBag();
+            }
+            if (client.isMyTurn() && client.getPhase() == 0)
+                playAssistantCard();
+
+            Thread.sleep(400);
+
 
             //Turn phase
             if (client.getExpertMode()) {
-                while (client.getPhase() < 3) {
+                while (client.getPhase() != 3) {
                     while (!client.isMyTurn()) {
 
                     }
@@ -147,8 +147,7 @@ public class CLI implements UI {
                     performActionInTurnExpert();
                 }
                 pickCloud();
-            }
-            else{
+            } else {
                 while (client.getPhase() < 3) {
                     while (!client.isMyTurn()) {
 
@@ -160,12 +159,12 @@ public class CLI implements UI {
             }
         }
 
-        }
+    }
 
     @Override
     public void startGame() throws RemoteException {
         try {
-            client.view=StringNames.INGAME;
+            client.view = StringNames.INGAME;
             client.startGame();
         } catch (NotEnoughPlayersException e) {
             System.out.println(StringNames.ALONE_IN_ROOM);
@@ -180,7 +179,7 @@ public class CLI implements UI {
 
     @Override
     public void currentPlayer(String s) {
-        client.view=StringNames.INGAME;
+        client.view = StringNames.INGAME;
         System.out.println("It's now " + s + "'s turn!\n");
     }
 
@@ -192,7 +191,8 @@ public class CLI implements UI {
     @Override
     public void deckChange(String assistantCard) {
         String tmp;
-        System.out.println(client.getLocalModel().getCurrentPlayer() + " has played " + assistantCard);
+        if (!client.getLocalModel().getCurrentPlayer().equals(client.getNickname()))
+            System.out.println(client.getLocalModel().getCurrentPlayer() + " has played " + assistantCard);
         tmp = assistantCard.replaceAll("[^\\d.]", "");
         if (playedThisTurn == null)
             playedThisTurn = new ArrayList<>();
@@ -207,13 +207,12 @@ public class CLI implements UI {
 
     @Override
     public void islandChange(PropertyChangeEvent e) {
-        StrippedIsland oldIsland, newIsland;
-        oldIsland = (StrippedIsland) e.getOldValue();
-        newIsland = (StrippedIsland) e.getNewValue();
-        System.out.println(oldIsland.getName() + " changed from");
-        printIsland(oldIsland);
-        System.out.println("to");
-        printIsland(newIsland);
+        if (!client.getLocalModel().getCurrentPlayer().equals(client.getNickname())) {
+            StrippedIsland newIsland;
+            newIsland = (StrippedIsland) e.getNewValue();
+            System.out.println(newIsland.getName() + " changed to");
+            printIsland(newIsland);
+        }
     }
 
     @Override
@@ -227,17 +226,22 @@ public class CLI implements UI {
     @Override
     public void islandConquest(PropertyChangeEvent e) {
         StrippedIsland island = (StrippedIsland) e.getNewValue();
-        System.out.println(currentPlayer + "conquered island " + island.getName() + "!\n");
+        System.out.println(currentPlayer + " conquered island " + island.getName() + "!\n");
 
     }
 
     @Override
     public void diningChange(PropertyChangeEvent e) {
-        EnumMap<Colors, Integer> newDining;
-        newDining = (EnumMap<Colors, Integer>) e.getNewValue();
-        System.out.println(e.getOldValue() + " modified their dining room! Here's the new configuration...");
-        for (Colors c : newDining.keySet()) {
-            System.out.println(c + " students: " + newDining.get(c));
+        String player = (String) e.getOldValue();
+        if (!player.equals(client.getNickname())) {
+            EnumMap<Colors, Integer> newDining;
+            newDining = (EnumMap<Colors, Integer>) e.getNewValue();
+            System.out.println("O----------------------------------O");
+            System.out.println(e.getOldValue() + " modified their dining room! Here's the new configuration...");
+            for (Colors c : newDining.keySet()) {
+                System.out.println(c + " students: " + newDining.get(c));
+            }
+            System.out.println("O----------------------------------O");
         }
     }
 
@@ -246,20 +250,26 @@ public class CLI implements UI {
         EnumMap<Colors, Integer> newBoard;
         String player;
         player = (String) e.getOldValue();
-        newBoard = (EnumMap<Colors, Integer>) e.getNewValue();
-        System.out.println(player + "'s entrance changed to \n");
-        System.out.println("to:");
-        for (Colors c : newBoard.keySet()) {
-            System.out.println(c + " students: " + newBoard.get(c));
+        if (!player.equals(client.getNickname())) {
+            newBoard = (EnumMap<Colors, Integer>) e.getNewValue();
+            System.out.println("O----------------------------------O");
+            System.out.println(player + "'s entrance changed to \n");
+            System.out.println("to:");
+            for (Colors c : newBoard.keySet()) {
+                System.out.println(c + " students: " + newBoard.get(c));
+            }
+            System.out.println("O----------------------------------O");
         }
     }
 
     @Override
     public void towersEvent(PropertyChangeEvent e) {
 
-        String player = (String) e.getNewValue();
-        int i = (int) e.getOldValue();
-        System.out.println("Player" + player + "now has " + i + " towers in their board!\n");
+        String player = (String) e.getOldValue();
+        int i = (int) e.getNewValue();
+        System.out.println("O--------------------------------------------------------------O");
+        System.out.println("Player " + player + "now has " + i + " towers in their board!\n");
+        System.out.println("O--------------------------------------------------------------O");
 
     }
 
@@ -468,22 +478,25 @@ public class CLI implements UI {
                 "|\"Press 1 to view everyone's boards                                    |\n" +
                 "|\"Press 2 to view every player's name                                  |\n" +
                 "|\"Press 3 to view all the islands                                      |\n" +
-                "|\"Press 4 to move students across the islands and the dining room      |\n" +
-                "|\"Press 5 to move mother nature. This will end your turn               |\n" +
-                "|\"Press 6 to view this message again                                   |\n" +
+                "|\"Press 4 to view all the clouds                                       |\n" +
+                "|\"Press 5 to move students across the islands and the dining room      |\n" +
+                "|\"Press 6 to move mother nature. This will end your turn               |\n" +
+                "|\"Press 7 to view this message again                                   |\n" +
                 "O-----------------------------------------------------------------------O");
     }
+
     public void expertprintCommandHelp() {
         System.out.println("O-----------------------------------------------------------------------O\n" +
                 "|              The commands available are the following:                |\n" +
                 "|\"Press 1 to view everyone's boards                                    |\n" +
                 "|\"Press 2 to view every player's name                                  |\n" +
                 "|\"Press 3 to view all the islands                                      |\n" +
-                "|\"Press 4 to move students across the islands and the dining room      |\n" +
-                "|\"Press 5 to move mother nature. This will end your turn               |\n" +
-                "|\"Press 6 to see the character cards in the game                       |\n" +
-                "|\"Press 7 to play a character card                                     |\n" +
-                "|\"Press 8 to view this message again                                   |\n" +
+                "|\"Press 4 to view all the clouds                                       |\n" +
+                "|\"Press 5 to move students across the islands and the dining room      |\n" +
+                "|\"Press 6 to move mother nature. This will end your turn               |\n" +
+                "|\"Press 7 to see the character cards in the game                       |\n" +
+                "|\"Press 8 to play a character card                                     |\n" +
+                "|\"Press 9 to view this message again                                   |\n" +
                 "O-----------------------------------------------------------------------O");
     }
 
@@ -542,54 +555,12 @@ public class CLI implements UI {
         AssistantCardDeck myDeck = client.getLocalModel().getAssistantDecks().get(playerNumber);
         int i = 0;
         for (AssistantCard a : myDeck.getDeck()) {
-            System.out.println("Card number "+ a.getImageName() + "Moves: " + a.getMove());
+            System.out.println("Card number " + a.getImageName() + " Moves: " + a.getMove());
             i++;
         }
     }
 
     public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
-        do {
-            //   System.out.println("Press any key to continue\n");
-            in.nextLine();
-            // printCommandHelp();
-            System.out.println("Select an action: ");
-            String input;
-            while (true) {
-                input = in.next();
-                try {
-                    action = Integer.parseInt(input);
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("That's not a number! Try again.\n");
-                }
-            }
-        } while (action < 1 || action > 6);
-        switch (action) {
-            case 1:
-                printPlayerBoards();
-                break;
-            case 2:
-                printPlayerNames();
-                break;
-            case 3:
-                printIslands();
-                break;
-            case 4:
-                moveStudents();
-                break;
-            case 5:
-                moveMN();
-                break;
-            case 6:
-                printCommandHelp();
-                break;
-            default:
-               System.out.println("Invalid input, try again\n");
-        }
-
-    }
-
-    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
         do {
             //   System.out.println("Press any key to continue\n");
             in.nextLine();
@@ -617,19 +588,67 @@ public class CLI implements UI {
                 printIslands();
                 break;
             case 4:
-                moveStudents();
+                printClouds();
                 break;
             case 5:
-                moveMN();
+                moveStudents();
                 break;
             case 6:
-                printCharacterCards();
+                moveMN();
                 break;
             case 7:
-                playCharacterCard();
+                printCommandHelp();
+                break;
+            default:
+                System.out.println("Invalid input, try again\n");
+        }
+
+    }
+
+    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
+        do {
+            //   System.out.println("Press any key to continue\n");
+            in.nextLine();
+            // printCommandHelp();
+            System.out.println("Select an action: ");
+            String input;
+            while (true) {
+                input = in.next();
+                try {
+                    action = Integer.parseInt(input);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
+        } while (action < 1 || action > 9);
+        switch (action) {
+            case 1:
+                printPlayerBoards();
+                break;
+            case 2:
+                printPlayerNames();
+                break;
+            case 3:
+                printExperIslands();
+                break;
+            case 4:
+                printClouds();
+                break;
+            case 5:
+                moveStudents();
+                break;
+            case 6:
+                moveMN();
+                break;
+            case 7:
+                printCharacterCards();
                 break;
             case 8:
-                printCommandHelp();
+                playCharacterCard();
+                break;
+            case 9:
+                expertprintCommandHelp();
                 break;
             default:
                 //TODO: add exception
@@ -737,6 +756,7 @@ public class CLI implements UI {
         }
         pickCloudOrder = new PickCloud(nickName, i);
         client.performGameAction(pickCloudOrder);
+        client.setMyTurn(false);
     }
 
     public void printClouds() {
@@ -833,20 +853,10 @@ public class CLI implements UI {
     }
 
     public void moveMN() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-        System.out.println("Input the number of steps you want Mother Nature to move! The maximum steps according to the card you played are \n " + turnMoves);
-        String input;
-        int i;
-        while (true) {
-            input = in.next();
-            try {
-                i = Integer.parseInt(input);
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("That's not a number! Try again.\n");
-            }
-        }
-        while (i < 0 || i > turnMoves) {
-            System.out.println("That number is not right! Try again.\n");
+        if (client.getLocalModel().isCanPlayMN()) {
+            System.out.println("Input the number of steps you want Mother Nature to move! The maximum steps according to the card you played are \n " + turnMoves);
+            String input;
+            int i;
             while (true) {
                 input = in.next();
                 try {
@@ -856,163 +866,185 @@ public class CLI implements UI {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
-        }
-        moveMotherNatureOrder = new MoveMotherNature(nickName, i);
-        try {
-            client.performGameAction(moveMotherNatureOrder);
-        } catch (IncorrectStateException e) {
-            System.out.println("You can't do that yet!\n");
-        } catch (IncorrectArgumentException e) {
-            System.out.println("That's not right, try again!\n");
-            moveMN();
-        }
-        //We now have a valid move for Mother Nature
-    }
-
-    public void moveStudents() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-        StrippedBoard myBoard = null;
-        ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
-        int i = 0;
-        for (StrippedBoard b : boards) {
-            if (b.getOwner().equals(nickName))
-                myBoard = b;
-        }
-        // System.out.println("Board owner:"+ myBoard.getOwner());
-        System.out.println("These are the students in your entrance: \n");
-        System.out.println("\nEntrance configuration: ");
-        for (Colors c : myBoard.getEntrance().keySet()) {
-            System.out.println(c + " students: " + myBoard.getEntrance().get(c));
-        }
-        EnumMap<Colors, ArrayList<String>> studentsToGame = new EnumMap<>(Colors.class);
-        for (Colors c : Colors.values()) {
-            studentsToGame.put(c, new ArrayList<>());
-        }
-        String answer;
-        String[] parts;
-        String color;
-        int value;
-        int island;
-        int movedStudents = 0;
-        boolean isValidInputYN = false;
-        boolean doItAgain;
-        EnumMap<Colors, Integer> studentsToMove = new EnumMap<>(Colors.class);
-        System.out.println("Do you want to move students to the dining room? Y\\N\n");
-        in.nextLine();
-        do {
-            answer = in.nextLine();
-            answer = answer.toLowerCase(Locale.ROOT);
-            if (answer.equals("y") || answer.equals("n"))
-                isValidInputYN = true;
-            else if (answer.equals("\n")) {
-                System.out.println("yolo\n");
-            } else
-                System.out.println("Whoops! That's not right. Try again: \n");
-        } while (!isValidInputYN);
-        //Move students to the dining room
-        doItAgain = true;
-        isValidInputYN = false;
-        if (answer.equals("y")) {
-            do {
-                System.out.println("Type the students you want to move to the dining room as \"color, number\"");
-                answer = in.nextLine();
-                parts = answer.split(",|, | ,");
-                color = parts[0];
-                color = color.replaceAll("[^a-zA Z0-9]", "");
-                parts[1] = parts[1].trim();
-                value = Integer.parseInt(parts[1]);
-                color = color.toUpperCase(Locale.ROOT);
-                //  System.out.println("The color you chose was "+ color + " the number you picked was "+ value);
-                if (isValidColor(color)) {
-                    // System.out.println("StringToColor output: "+ stringToColor(color));
-                    //  System.out.println("The number of students of that color in your entrance is "+ myBoard.getEntrance().get(stringToColor(color)));
-                    if (value <= myBoard.getEntrance().get(stringToColor(color))) {
-                        studentsToMove = initializeMove(studentsToMove);
-                        studentsToMove.put(stringToColor(color), studentsToMove.get(stringToColor(color)) + value);
-                        movedStudents += value;
-                        studentsToGame = strippedToGame(studentsToMove, studentsToGame, "dining");
-                        if (movedStudents < 3) {
-                            System.out.println("Do you want to move other students to the dining room?\n");
-                            do {
-                                answer = in.nextLine();
-                                answer = answer.toLowerCase(Locale.ROOT);
-                                if (answer.equals("y") || answer.equals("n"))
-                                    isValidInputYN = true;
-                                else
-                                    System.out.println("Whoops! That's not right. Try again: \n");
-                            } while (!isValidInputYN);
-                        }
-                        //Since a player can only move 3 students in a turn there needs to be a check here too
-                        if (answer.equals(("n"))) {
-                            doItAgain = false;
-                        }
-                    } else
-                        System.out.println("You don't have enough students of that color! Try again.\n");
-                } else
-                    System.out.println("There is no such color as " + color + "! Try again. \n");
-            } while (doItAgain && movedStudents < 3);
-        }
-
-        //End of dining room move segment
-        //Move students to the islands if the player has moved less than 3 students already
-        //Resetting destinations array for students to island part
-        if (movedStudents < 3) {
-            do {
-                System.out.println("Type the students you want to move to the island as \"color, number\", then input the island number");
-                answer = in.nextLine();
-                parts = answer.split(",|, | ,");
-                color = parts[0];
-                color = color.replaceAll("[^a-zA Z0-9]", "");
-                parts[1] = parts[1].trim();
-                value = Integer.parseInt(parts[1]);
-                String input;
+            while (i < 0 || i > turnMoves) {
+                System.out.println("That number is not right! Try again.\n");
                 while (true) {
                     input = in.next();
                     try {
-                        island = Integer.parseInt(input);
+                        i = Integer.parseInt(input);
                         break;
                     } catch (NumberFormatException e) {
                         System.out.println("That's not a number! Try again.\n");
                     }
                 }
-                doItAgain = true;
-                color = color.toUpperCase(Locale.ROOT);
-                studentsToMove = initializeMove(studentsToMove);
-                System.out.println("The color you chose was " + color + "the number you picked was " + value);
-                if (isValidColor(color)) {
-                    System.out.println("The color you chose was " + color);
-                    System.out.println("The number of students of that color in your entrance is " + myBoard.getEntrance().get(stringToColor(color)));
-                    if (value <= myBoard.getEntrance().get(stringToColor(color))) {
-                        System.out.println("Number of islands" + client.getLocalModel().getIslands().size());
-                        if (island > 0 && island <= client.getLocalModel().getIslands().size()) {
+            }
+            moveMotherNatureOrder = new MoveMotherNature(nickName, i);
+            try {
+                client.performGameAction(moveMotherNatureOrder);
+            } catch (IncorrectStateException e) {
+                System.out.println("You can't do that yet! Current state:" + e.getMessage());
+            } catch (IncorrectArgumentException e) {
+                System.out.println("That's not right, try again!\n");
+                moveMN();
+            }
+            //After my turn is over I set the Mother Nature flag to false for the next turn
+            client.getLocalModel().setCanPlayMN(false);
+        } else System.out.println("You can't move Mother Nature yet! First things first: move three students!");
+    }
 
-                            studentsToMove.put(stringToColor(color), value);
-                            movedStudents += value;
-                            studentsToGame = strippedToGame(studentsToMove, studentsToGame, "island" + island);
-                            System.out.println("Do you want to move other students to the islands?\n");
-                            do {
-                                answer = in.nextLine();
-                                answer = answer.toLowerCase(Locale.ROOT);
-                                if (answer.equals("y") || answer.equals("n"))
-                                    isValidInputYN = true;
-                                else
-                                    System.out.println("Whoops! That's not right. Try again: \n");
-                            } while (!isValidInputYN && movedStudents < 3);
-                            if (answer.equals("n") || movedStudents == 3) {
-                                doItAgain = false;
-                            } else
-                                System.out.println("You still have " + (3 - movedStudents) + " students to move!\n");
-
-                        } else
-                            System.out.println("Invalid island number! Try again.\n");
-                    } else
-                        System.out.println("You don't have enough students of that color! Try again.\n");
+    public void moveStudents() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+        if (!client.getLocalModel().isCanPlayMN()) {
+            StrippedBoard myBoard = null;
+            ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
+            int i = 0;
+            for (StrippedBoard b : boards) {
+                if (b.getOwner().equals(nickName))
+                    myBoard = b;
+            }
+            // System.out.println("Board owner:"+ myBoard.getOwner());
+            System.out.println("These are the students in your entrance: \n");
+            System.out.println("\nEntrance configuration: ");
+            for (Colors c : myBoard.getEntrance().keySet()) {
+                System.out.println(c + " students: " + myBoard.getEntrance().get(c));
+            }
+            EnumMap<Colors, ArrayList<String>> studentsToGame = new EnumMap<>(Colors.class);
+            for (Colors c : Colors.values()) {
+                studentsToGame.put(c, new ArrayList<>());
+            }
+            String answer;
+            String[] parts;
+            String color;
+            int value;
+            int island;
+            int movedStudents = 0;
+            boolean isValidInputYN = false;
+            boolean doItAgain;
+            EnumMap<Colors, Integer> studentsToMove = new EnumMap<>(Colors.class);
+            System.out.println("Do you want to move students to the dining room? Y\\N\n");
+            in.nextLine();
+            do {
+                answer = in.nextLine();
+                answer = answer.toLowerCase(Locale.ROOT);
+                if (answer.equals("y") || answer.equals("n"))
+                    isValidInputYN = true;
+                else if (answer.equals("\n")) {
+                    System.out.println("yolo\n");
                 } else
-                    System.out.println("There is no such color as " + color + "! Try again. \n");
-            } while (doItAgain);
+                    System.out.println("Whoops! That's not right. Try again: \n");
+            } while (!isValidInputYN);
+            //Move students to the dining room
+            doItAgain = true;
+            isValidInputYN = false;
+            if (answer.equals("y")) {
+                do {
+                    System.out.println("Type the students you want to move to the dining room as \"color, number\"");
+                    answer = in.nextLine();
+                    parts = answer.split(",|, | ,");
+                    color = parts[0];
+                    color = color.replaceAll("[^a-zA Z0-9]", "");
+                    parts[1] = parts[1].trim();
+                    value = Integer.parseInt(parts[1]);
+                    color = color.toUpperCase(Locale.ROOT);
+                    //  System.out.println("The color you chose was "+ color + " the number you picked was "+ value);
+                    if (isValidColor(color)) {
+                        // System.out.println("StringToColor output: "+ stringToColor(color));
+                        //  System.out.println("The number of students of that color in your entrance is "+ myBoard.getEntrance().get(stringToColor(color)));
+                        if (value <= myBoard.getEntrance().get(stringToColor(color))) {
+                            studentsToMove = initializeMove(studentsToMove);
+                            studentsToMove.put(stringToColor(color), studentsToMove.get(stringToColor(color)) + value);
+                            movedStudents += value;
+                            studentsToGame = strippedToGame(studentsToMove, studentsToGame, "dining");
+                            if (movedStudents < 3) {
+                                System.out.println("Do you want to move other students to the dining room?\n");
+                                do {
+                                    answer = in.nextLine();
+                                    answer = answer.toLowerCase(Locale.ROOT);
+                                    if (answer.equals("y") || answer.equals("n"))
+                                        isValidInputYN = true;
+                                    else
+                                        System.out.println("Whoops! That's not right. Try again: \n");
+                                } while (!isValidInputYN);
+                            }
+                            //Since a player can only move 3 students in a turn there needs to be a check here too
+                            if (answer.equals(("n"))) {
+                                doItAgain = false;
+                            }
+                        } else
+                            System.out.println("You don't have enough students of that color! Try again.\n");
+                    } else
+                        System.out.println("There is no such color as " + color + "! Try again. \n");
+                } while (doItAgain && movedStudents < 3);
+            }
+
+            //End of dining room move segment
+            //Move students to the islands if the player has moved less than 3 students already
+            //Resetting destinations array for students to island part
+            if (movedStudents < 3) {
+                do {
+                    System.out.println("Type the students you want to move to the island as \"color, number\", then input the island number");
+                    answer = in.nextLine();
+                    parts = answer.split(",|, | ,");
+                    color = parts[0];
+                    color = color.replaceAll("[^a-zA Z0-9]", "");
+                    parts[1] = parts[1].trim();
+                    value = Integer.parseInt(parts[1]);
+                    String input;
+                    while (true) {
+                        input = in.next();
+                        try {
+                            island = Integer.parseInt(input);
+                            break;
+                        } catch (NumberFormatException e) {
+                            System.out.println("That's not a number! Try again.\n");
+                        }
+                    }
+                    doItAgain = true;
+                    color = color.toUpperCase(Locale.ROOT);
+                    studentsToMove = initializeMove(studentsToMove);
+                    //  System.out.println("The color you chose was " + color + "the number you picked was " + value);
+                    if (isValidColor(color)) {
+                        //    System.out.println("The color you chose was " + color);
+                        //  System.out.println("The number of students of that color in your entrance is " + myBoard.getEntrance().get(stringToColor(color)));
+                        if (value <= myBoard.getEntrance().get(stringToColor(color))) {
+                            System.out.println("Number of islands" + client.getLocalModel().getIslands().size());
+                            if (island > 0 && island <= client.getLocalModel().getIslands().size()) {
+
+                                studentsToMove.put(stringToColor(color), value);
+                                movedStudents += value;
+                                studentsToGame = strippedToGame(studentsToMove, studentsToGame, "island" + island);
+                                if (movedStudents < 3) {
+                                    System.out.println("Do you want to move other students to the islands?\n");
+                                    do {
+                                        answer = in.nextLine();
+                                        answer = answer.toLowerCase(Locale.ROOT);
+                                        if (answer.equals("y") || answer.equals("n"))
+                                            isValidInputYN = true;
+                                        else
+                                            System.out.println("Whoops! That's not right. Try again: \n");
+                                    } while (!isValidInputYN && movedStudents < 3);
+                                }
+                                if (answer.equals("n") || movedStudents == 3) {
+                                    doItAgain = false;
+                                } else
+                                    System.out.println("You still have " + (3 - movedStudents) + " students to move!\n");
+
+                            } else
+                                System.out.println("Invalid island number! Try again.\n");
+                        } else
+                            System.out.println("You don't have enough students of that color! Try again.\n");
+                    } else
+                        System.out.println("There is no such color as " + color + "! Try again. \n");
+                } while (doItAgain);
+
+            } else
+                System.out.println("You already moved three students this turn\n");
+
             moveStudentsOrder = new MoveStudents(nickName, studentsToGame);
             client.performGameAction(moveStudentsOrder);
+            client.getLocalModel().setCanPlayMN(true);
         } else
-            System.out.println("You already moved three students this turn\n");
+            System.out.println("You already moved students this turn, you can't do that anymore!\n");
+
     }
 
     //End of MoveStudents
@@ -1086,29 +1118,52 @@ public class CLI implements UI {
         ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
         int i = 0, motherNature = 0;
         for (StrippedIsland island : islands) {
-            if (island.hasMotherNature)
-                motherNature = i;
-            System.out.println("Island name: " + island.getName() + "\n");
-            System.out.println("Number of towers: " + island.getNumOfTowers() + "\t");
-            if (island.isHasNoEnterTile()) {
-                System.out.println("There's a \"no entry\" tile on this island\n");
-            } else {
-                System.out.println("There is no \"no entry\" tile on this island\n");
-            }
-            System.out.println("Students on the island: " + island.getStudents() + "\n");
-            System.out.println("Towers: " + island.getTowersColor() + " towers \n");
-            i++;
+            printIsland(island);
         }
+
+        System.out.println("Mother Nature is on isle number " + (motherNature + 1) + "!");
+
+    }
+
+    public void printExperIslands() {
+        ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
+        int i = 0, motherNature = 0;
+        for (StrippedIsland island : islands) {
+            printexpertIsland(island);
+        }
+
         System.out.println("Mother Nature is on isle number " + (motherNature + 1) + "!");
 
     }
 
     public void printIsland(StrippedIsland island) {
-        System.out.println("Number of towers: " + island.getNumOfTowers() + "\n");
-        System.out.println("Has no entry tile: " + island.isHasNoEnterTile() + "\n");
+        System.out.println("Island: " + island.getName());
         System.out.println("Students on the island: ");
         System.out.println(" students: " + island.getStudents() + "\n");
-        System.out.println("Towers: " + island.getNumOfTowers() + island.getTowersColor() + "towers \n");
+        if (island.getNumOfTowers() == 0)
+            System.out.println("There are no towers yet on this island!\n");
+        else
+            System.out.println("Towers: " + island.getNumOfTowers() + " " + island.getTowersColor() + "towers \n");
+        if (island.hasMotherNature)
+            System.out.println("Mother Nature is on this island!");
+        else
+            System.out.println("Mother Nature is not on this island!");
+    }
+
+    public void printexpertIsland(StrippedIsland island) {
+        System.out.println("Island: " + island.getName());
+        if (island.isHasNoEnterTile())
+            System.out.println("This island has a \"No entry\" tile on it!");
+        System.out.println("Students on the island: ");
+        System.out.println(" students: " + island.getStudents() + "\n");
+        if (island.getNumOfTowers() == 0)
+            System.out.println("There are no towers yet on this island!\n");
+        else
+            System.out.println("Towers: " + island.getNumOfTowers() + island.getTowersColor() + "towers \n");
+        if (island.hasMotherNature)
+            System.out.println("Mother Nature is on this island!");
+        else
+            System.out.println("Mother Nature is not on this island!");
     }
 
     public boolean isValidColor(String input) {

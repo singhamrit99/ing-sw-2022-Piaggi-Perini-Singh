@@ -19,6 +19,7 @@ public class StrippedModel implements Serializable {
     private String currentPlayer;
     private String winnerTeam;
     private UI ui;
+    private boolean canPlayMN;
 
     public ArrayList<AssistantCardDeck> getAssistantDecks() {
         return assistantDecks;
@@ -212,4 +213,13 @@ public class StrippedModel implements Serializable {
     public void setUi(UI ui) {
         this.ui = ui;
     }
+
+    public boolean isCanPlayMN() {
+        return canPlayMN;
+    }
+
+    public void setCanPlayMN(boolean canPlayMN) {
+        this.canPlayMN = canPlayMN;
+    }
+
 }
