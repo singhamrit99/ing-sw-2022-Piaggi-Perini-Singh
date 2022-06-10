@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
 import it.polimi.ingsw.view.GUI.GUI;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -17,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,11 +28,13 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameViewController extends InitialStage implements Controller {
     protected static AtomicBoolean opened = new AtomicBoolean(false);
     private String currentBoardView; //the owner of the board current visible on the screen
+    ArrayList<Pane> islandsPanes;
 
     public GameViewController(GUI gui) {
         super(gui);
@@ -77,7 +82,19 @@ public class GameViewController extends InitialStage implements Controller {
 
 
         //animations
-
+        if(islandsPanes.size()!=0){
+            for(Pane island : islandsPanes){
+                TranslateTransition floatingTitle = new TranslateTransition();
+                floatingTitle.setNode(island);
+                floatingTitle.setDelay(Duration.millis(Math.random()));
+                floatingTitle.setDuration(Duration.millis(4000));
+                floatingTitle.setCycleCount(TranslateTransition.INDEFINITE);
+                floatingTitle.setByY(10);
+                floatingTitle.setAutoReverse(true);
+                floatingTitle.setInterpolator(Interpolator.EASE_BOTH);
+                floatingTitle.play();
+            }
+        }
     }
 
     public void changeViewBoard(String viewOwnerTarget) {
@@ -134,18 +151,24 @@ public class GameViewController extends InitialStage implements Controller {
         reloadIslands();
     }
 
-    ArrayList<Pane> islandsPanes;
+
 
     public void reloadIslands() {
+        islandsPanes = new ArrayList<>();
         IslandsBox.getChildren().clear();
         GridPane Islands = new GridPane();
         IslandsBox.getChildren().add(Islands);
         RowConstraints row = new RowConstraints();
-        row.setPrefHeight(150);
+        row.setPrefHeight(200);
         ColumnConstraints column = new ColumnConstraints();
-        column.setPrefWidth(150);
+        column.setPrefWidth(200);
         Islands.getRowConstraints().add(row);
         Islands.getColumnConstraints().add(column);
+
+        ArrayList<Image> islandsImgs = new ArrayList<>();
+        islandsImgs.add(island0);
+        islandsImgs.add(island1);
+        islandsImgs.add(island2);
 
 
         for (int i = 0; i < 6; i++) {
@@ -153,13 +176,13 @@ public class GameViewController extends InitialStage implements Controller {
                 Islands.addRow(0,new Text(""));
             }
             else{
-                Pane test = new Pane();
-                islandsPanes.add(test);
-                ImageView testImg = new ImageView(island0);
-                testImg.setFitWidth(150);
-                testImg.setFitHeight(150);
-                test.getChildren().add(testImg);
-                Islands.addRow(0, test);
+                Pane island = new Pane();
+                islandsPanes.add(island);
+                ImageView islandImg = new ImageView(islandsImgs.get(i%3));
+                islandImg.setFitWidth(150);
+                islandImg.setFitHeight(150);
+                island.getChildren().add(islandImg);
+                Islands.addRow(0, island);
             }
         }
 
@@ -168,13 +191,13 @@ public class GameViewController extends InitialStage implements Controller {
                 Islands.addRow(1,new Text(""));
             }
             else{
-                Pane test = new Pane();
-                islandsPanes.add(test);
-                ImageView testImg = new ImageView(island0);
-                testImg.setFitWidth(150);
-                testImg.setFitHeight(150);
-                test.getChildren().add(testImg);
-                Islands.addRow(1, test);
+                Pane island = new Pane();
+                islandsPanes.add(island);
+                ImageView islandImg = new ImageView(islandsImgs.get(1+i%2));
+                islandImg.setFitWidth(150);
+                islandImg.setFitHeight(150);
+                island.getChildren().add(islandImg);
+                Islands.addRow(1, island);
             }
         }
 
@@ -183,13 +206,13 @@ public class GameViewController extends InitialStage implements Controller {
                 Islands.addRow(2,new Text(""));
             }
             else{
-                Pane test = new Pane();
-                islandsPanes.add(test);
-                ImageView testImg = new ImageView(island0);
-                testImg.setFitWidth(150);
-                testImg.setFitHeight(150);
-                test.getChildren().add(testImg);
-                Islands.addRow(2, test);
+                Pane island = new Pane();
+                islandsPanes.add(island);
+                ImageView islandImg = new ImageView(islandsImgs.get(2-i%2));
+                islandImg.setFitWidth(150);
+                islandImg.setFitHeight(150);
+                island.getChildren().add(islandImg);
+                Islands.addRow(2, island);
             }
         }
 
@@ -198,17 +221,19 @@ public class GameViewController extends InitialStage implements Controller {
                 Islands.addRow(3,new Text(""));
             }
             else{
-                Pane test = new Pane();
-                islandsPanes.add(test);
-                ImageView testImg = new ImageView(island0);
-                testImg.setFitWidth(150);
-                testImg.setFitHeight(150);
-                test.getChildren().add(testImg);
-                Islands.addRow(3, test);
+                Pane island = new Pane();
+                islandsPanes.add(island);
+                ImageView islandImg = new ImageView(islandsImgs.get(i%3));
+                islandImg.setFitWidth(150);
+                islandImg.setFitHeight(150);
+                island.getChildren().add(islandImg);
+                Islands.addRow(3, island);
             }
         }
         Islands.getRowConstraints().add(row);
         Islands.getColumnConstraints().add(column);
+
+        System.out.println(islandsPanes.size());
     }
 
     private void reloadEntrance() {
