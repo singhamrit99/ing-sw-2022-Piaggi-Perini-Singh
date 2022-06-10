@@ -22,8 +22,13 @@ public interface ResourcesPath {
     String RED_STUDENT = "src/main/resources/img/students/student_red.png";
     String YELLOW_STUDENT = "src/main/resources/img/students/student_yellow.png";
 
-    //clouds 3players
+    //clouds only for 3players
     String CLOUD_1= "src/main/resources/img/clouds/3players/cloud_3p_v1.png";
     String CLOUD_2= "src/main/resources/img/clouds/3players/cloud_3p_v2.png";
     String CLOUD_3= "src/main/resources/img/clouds/3players/cloud_3p_v3.png";
+
+    //islands
+    String ISLAND_0= "src/main/resources/img/islands/v0.png";
+    String ISLAND_1= "src/main/resources/img/islands/v1.png";
+    String ISLAND_2= "src/main/resources/img/islands/v2.png";
 }
