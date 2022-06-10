@@ -46,6 +46,12 @@ public class LobbyController extends InitialStage implements Controller {
         opened.set(true);
         loadRoomsList();
 
+        String toastMsg = "some text...";
+        int toastMsgTime = 3500; //3.5 seconds
+        int fadeInTime = 500; //0.5 seconds
+        int fadeOutTime = 500; //0.5 seconds
+        Toast.makeText(GUILauncher.mainWindow, toastMsg, toastMsgTime, fadeInTime, fadeOutTime);
+
         createRoomButton.setOnAction((event) -> {
             GUI.client.view = StringNames.CREATE_NEW_ROOM;
             opened.set(false);
