@@ -3,20 +3,23 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.State;
+import it.polimi.ingsw.network.server.commands.DrawFromBagCommand;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
 import it.polimi.ingsw.view.GUI.GUI;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,6 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GameViewController extends InitialStage implements Controller {
     protected static AtomicBoolean opened = new AtomicBoolean(false);
     private String currentBoardView; //the owner of the board current visible on the screen
+    ArrayList<Pane> islandsPanes;
 
     public GameViewController(GUI gui) {
         super(gui);
@@ -75,6 +79,21 @@ public class GameViewController extends InitialStage implements Controller {
             }
         });
 
+
+        //animations
+        if (islandsPanes.size() != 0) {
+            for (Pane island : islandsPanes) {
+                TranslateTransition floatingTitle = new TranslateTransition();
+                floatingTitle.setNode(island);
+                floatingTitle.setDelay(Duration.millis(Math.random()));
+                floatingTitle.setDuration(Duration.millis(4000));
+                floatingTitle.setCycleCount(TranslateTransition.INDEFINITE);
+                floatingTitle.setByY(10);
+                floatingTitle.setAutoReverse(true);
+                floatingTitle.setInterpolator(Interpolator.EASE_BOTH);
+                floatingTitle.play();
+            }
+        }
     }
 
     public void changeViewBoard(String viewOwnerTarget) {
@@ -129,35 +148,125 @@ public class GameViewController extends InitialStage implements Controller {
         initializeClouds();
         reloadClouds();
         reloadIslands();
+        reloadBag();
     }
 
+    private void reloadBag() {
+        bag.setOnMouseClicked(mouseEvent -> {
+            //se la fase è giusta
+            //se sono il primo giocatore
+            //se è il mio turno
+            if (GUI.client.getLocalModel().getState().equals(State.PLANNINGPHASE) && GUI.client.getLocalModel().getFirstPlayer().toString().equals(GUI.client.getNickname()) && GUI.client.isMyTurn()) {
+                DrawFromBagCommand drawFromBagOrder = new DrawFromBagCommand(GUI.client.getNickname());
+                System.out.println("Drawing from bag...\n");
+
+                try {
+                    GUI.client.performGameAction(drawFromBagOrder);
+                } catch (NotEnoughCoinsException e) {
+                    Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
+                } catch (AssistantCardNotFoundException e) {
+                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
+                } catch (NegativeValueException e) {
+                    Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
+                } catch (IncorrectStateException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
+                } catch (MotherNatureLostException e) {
+                    Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
+                } catch (ProfessorNotFoundException e) {
+                    Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
+                } catch (IncorrectPlayerException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
+                } catch (RemoteException e) {
+                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                } catch (IncorrectArgumentException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                } catch (UserNotInRoomException e) {
+                    Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                } catch (UserNotRegisteredException e) {
+                    Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                }
+            }
+        });
+    }
+
+
     public void reloadIslands() {
+        islandsPanes = new ArrayList<>();
+        IslandsBox.getChildren().clear();
+        GridPane Islands = new GridPane();
+        IslandsBox.getChildren().add(Islands);
         RowConstraints row = new RowConstraints();
-        row.setPrefHeight(150);
+        row.setPrefHeight(200);
         ColumnConstraints column = new ColumnConstraints();
-        row.setPrefHeight(150);
-
-
-        for (int i = 0; i < 6; i++) {
-            Pane test = new Pane();
-            ImageView testImg = new ImageView(island0);
-            testImg.setFitWidth(150);
-            testImg.setFitHeight(150);
-            test.getChildren().add(testImg);
-            Islands.addRow(0, test);
-        }
-        for (int i = 0; i < 6; i++) {
-            Pane test = new Pane();
-            ImageView testImg = new ImageView(island1);
-            testImg.setFitWidth(150);
-            testImg.setFitHeight(150);
-            test.getChildren().add(testImg);
-            Islands.addRow(1, test);
-        }
-
+        column.setPrefWidth(200);
         Islands.getRowConstraints().add(row);
         Islands.getColumnConstraints().add(column);
 
+        ArrayList<Image> islandsImgs = new ArrayList<>();
+        islandsImgs.add(island0);
+        islandsImgs.add(island1);
+        islandsImgs.add(island2);
+
+
+        for (int i = 0; i < 6; i++) {
+            if (i == 0 || i == 5) { //empty cell
+                Islands.addRow(0, new Text(""));
+            } else {
+                Pane island = new Pane();
+                islandsPanes.add(island);
+                ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
+                islandImg.setFitWidth(150);
+                islandImg.setFitHeight(150);
+                island.getChildren().add(islandImg);
+                Islands.addRow(0, island);
+            }
+        }
+
+        for (int i = 0; i < 6; i++) {
+            if (i != 0 && i != 5) { //empty cell
+                Islands.addRow(1, new Text(""));
+            } else {
+                Pane island = new Pane();
+                islandsPanes.add(island);
+                ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
+                islandImg.setFitWidth(150);
+                islandImg.setFitHeight(150);
+                island.getChildren().add(islandImg);
+                Islands.addRow(1, island);
+            }
+        }
+
+        for (int i = 0; i < 6; i++) {
+            if (i != 0 && i != 5) { //empty cell
+                Islands.addRow(2, new Text(""));
+            } else {
+                Pane island = new Pane();
+                islandsPanes.add(island);
+                ImageView islandImg = new ImageView(islandsImgs.get(2 - i % 2));
+                islandImg.setFitWidth(150);
+                islandImg.setFitHeight(150);
+                island.getChildren().add(islandImg);
+                Islands.addRow(2, island);
+            }
+        }
+
+        for (int i = 0; i < 6; i++) {
+            if (i == 0 || i == 5) { //empty cell
+                Islands.addRow(3, new Text(""));
+            } else {
+                Pane island = new Pane();
+                islandsPanes.add(island);
+                ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
+                islandImg.setFitWidth(150);
+                islandImg.setFitHeight(150);
+                island.getChildren().add(islandImg);
+                Islands.addRow(3, island);
+            }
+        }
+        Islands.getRowConstraints().add(row);
+        Islands.getColumnConstraints().add(column);
+
+        System.out.println(islandsPanes.size());
     }
 
     private void reloadEntrance() {
@@ -501,6 +610,9 @@ public class GameViewController extends InitialStage implements Controller {
             blueDining, pinkDining;
 
     @FXML
-    private GridPane Islands;
+    private HBox IslandsBox;
+
+    @FXML
+    private StackPane bag;
 
 }

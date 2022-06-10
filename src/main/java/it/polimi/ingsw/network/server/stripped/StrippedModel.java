@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.server.stripped;
 
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.view.UI;
 import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
@@ -22,6 +23,7 @@ public class StrippedModel implements Serializable {
     private UI ui;
     private boolean canPlayMN;
     private State state;
+    private Player firstPlayer;
 
     public ArrayList<AssistantCardDeck> getAssistantDecks() {
         return assistantDecks;
@@ -37,6 +39,7 @@ public class StrippedModel implements Serializable {
         this.islands = islands;
         this.assistantDecks = assistantDecks;
         this.state = State.PLANNINGPHASE;
+        firstPlayer = null;
     }
 
     public void updateModel(PropertyChangeEvent evt) {
@@ -73,10 +76,17 @@ public class StrippedModel implements Serializable {
             case "change-phase":
                 setState(evt);
                 break;
+            case "first-player-change":
+                setFirstPlayer(evt);
+                break;
             default:
                 System.out.println("scrivere una exception sensata"); //TODO
                 break;
         }
+    }
+
+    private void setFirstPlayer(PropertyChangeEvent evt) {
+        firstPlayer = (Player) evt.getOldValue();
     }
 
     private void setState(PropertyChangeEvent evt) {
@@ -230,5 +240,9 @@ public class StrippedModel implements Serializable {
 
     public State getState() {
         return state;
+    }
+
+    public Player getFirstPlayer() {
+        return firstPlayer;
     }
 }

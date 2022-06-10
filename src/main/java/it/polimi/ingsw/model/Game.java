@@ -45,6 +45,7 @@ public class Game {
     private ArrayList<CharacterCard> characterCards;
     private String JSONContent;
     private PropertyChangeListener gameListener;
+    private Player firstPlayer;
 
     /**
      * Constructor it initializes everything following the rules of the game. It finishes initialize the first (random)
@@ -185,6 +186,11 @@ public class Game {
         state = State.PLANNINGPHASE;
         orderPlayers = new PriorityQueue<>(numOfPlayer);
         currentPlayer = players.get(playerPlanPhase);
+        firstPlayer = currentPlayer;
+        PropertyChangeEvent firstPlayerChange =
+                new PropertyChangeEvent(this, "first-player-change", firstPlayer, null);
+        gameListener.propertyChange(firstPlayerChange);
+
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
     }
@@ -401,6 +407,12 @@ public class Game {
                         new PropertyChangeEvent(this, "change-phase", state, null);
                 gameListener.propertyChange(phaseChange);
                 numRounds++;
+                firstPlayer = players.get(playerPlanPhase);
+
+                PropertyChangeEvent firstPlayerChange =
+                        new PropertyChangeEvent(this, "first-player-change", firstPlayer, null);
+                gameListener.propertyChange(firstPlayerChange);
+
                 currentPlayer = players.get(playerPlanPhase); //This is decided with the Assistant Card values and is assign in nextPlayer()
                 counterPlanningPhase = numOfPlayer - 1;
             }
