@@ -29,7 +29,6 @@ public class Client implements Runnable {
     private boolean isMyTurn;
     private boolean userRegistered;
     private boolean drawnOut;
-    private int phase = 0;
     private boolean roomExpertMode = false;
 
     public Client(String ip, int port) {
@@ -202,23 +201,6 @@ public class Client implements Runnable {
                         throw new LocalModelNotLoadedException();
                     }
                     break;
-                case "change-phase":
-                    //If the change phase event is about me:
-                    if (nickname.equals(evt.getNewValue())) {
-                        phase = (Integer) evt.getOldValue();
-                        System.out.println("Phase: " + phase);
-                        if (phase == 1) {
-                            if (nickname.equals(evt.getNewValue())) {
-                                System.out.println("It is my turn according to the assistant card I played.");
-                                this.phase = 1;
-                                isMyTurn = true;
-                            } else {
-                                System.out.println("It is not my turn according to the assistant card I played.");
-                                isMyTurn = false;
-                            }
-                        }
-                    }
-                    break;
                 case "init":
                     localModel = (StrippedModel) evt.getNewValue();
                     localModelLoaded = true;
@@ -286,10 +268,6 @@ public class Client implements Runnable {
 
     public void setInGame(boolean inGame) {
         this.inGame = inGame;
-    }
-
-    public int getPhase() {
-        return phase;
     }
 
     public boolean isDrawnOut() {
