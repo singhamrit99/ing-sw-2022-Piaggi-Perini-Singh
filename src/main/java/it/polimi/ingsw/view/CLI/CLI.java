@@ -1084,8 +1084,8 @@ public class CLI implements UI {
 
     public void printPlayerBoard(StrippedBoard board) {
         Integer i;
-        int rows=0, printColumns=0;
-        Color color;
+        int rows=0, printColumns;
+        Ansi.Color color;
         System.out.println("O----------------------O");
         System.out.println(board.getOwner() + "'s board: ");
         System.out.println("Coins: " + board.getCoins());
@@ -1093,36 +1093,60 @@ public class CLI implements UI {
         System.out.println("----------------------╗");
         for (Colors c : board.getDining().keySet()) {
             i=board.getDining().get(c);
-          //  System.out.println("I: "+i);
+            //  System.out.println("I: "+i);
             color= colorsToColor(c);
+            printColumns=0;
             while(i>0)
-            {   if (printColumns<columns) {
-                System.out.println(ansi().eraseScreen().fg(color).a("*\t").reset());
+            {   if (printColumns==0) {
+                System.out.print("|");
+                System.out.print(ansi().fg(color).a("*\t").reset());
                 printColumns++;
             }
             else
-            {   printColumns=3;
-                System.out.println("\n");
-                System.out.println("\t");
-                System.out.println(ansi().eraseScreen().fg(color).a("*\t").reset());
+            {
+                System.out.print(ansi().fg(color).a("*\t").reset());
+                printColumns++;
             }
                 i--;
+
             }
-           // System.out.println(c + " students: " + board.getDining().get(c));
+            System.out.println();
         }
-        System.out.println("----------------------╝");
+        System.out.println("O----------------------O");
+        for (Colors c : board.getDining().keySet()) {
+            System.out.println(c + " students: " + board.getDining().get(c));
+        }
+        System.out.println("O----------------------O");
         System.out.println("\nEntrance configuration: ");
+        System.out.println("O-----O");
         for (Colors c : board.getEntrance().keySet()) {
-            System.out.println(c + " students: " + board.getEntrance().get(c));
+            //System.out.println(c + " students: " + board.getEntrance().get(c));
             i=board.getEntrance().get(c);
-           // System.out.println("I secondo: "+i);
+            // System.out.println("I secondo: "+i);
             color= colorsToColor(c);
             while(i>0)
+            {   if ((rows%3)<2) {
+                if (rows!=6) {
+                    System.out.print(ansi().fg(color).a("* ").reset());
+                    rows++;
+                }
+                else
+                    System.out.print(ansi().fg(color).a("  *\n").reset());
+            }
+            else
             {
-                System.out.println(ansi().eraseScreen().fg(color).a("*").reset());
+                System.out.print(ansi().fg(color).a("*\n").reset());
+                rows ++;
+
+
+            }
                 i--;
             }
 
+        }
+        System.out.println("O------O");
+        for (Colors c : board.getEntrance().keySet()) {
+            System.out.println(c + " students: " + board.getEntrance().get(c));
         }
         System.out.println("\nNumber of towers: " + board.getNumberOfTowers());
         System.out.println("\nProfessors table: ");
