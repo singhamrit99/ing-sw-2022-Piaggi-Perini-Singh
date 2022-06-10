@@ -5,6 +5,7 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
@@ -12,10 +13,14 @@ import it.polimi.ingsw.network.server.stripped.StrippedCloud;
 import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import it.polimi.ingsw.network.server.commands.*;
 import it.polimi.ingsw.view.UI;
-
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.*;
+import static org.fusesource.jansi.Ansi.*;
+import static org.fusesource.jansi.Ansi.Color.*;
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class CLI implements UI {
     public static String view;
@@ -28,6 +33,10 @@ public class CLI implements UI {
     String clientRoom = null;
     int action;
     int turnMoves;
+    private final int columns=5;
+    private final int studentRows=2;
+    private final int diningRows=10;
+    private final int professorRow=1;
     MoveMotherNature moveMotherNatureOrder;
     MoveStudents moveStudentsOrder;
     PickCloud pickCloudOrder;
@@ -38,7 +47,8 @@ public class CLI implements UI {
     PlayCharacterCardD playCharacterCardDOrder;
     DrawFromBagCommand drawFromBagOrder;
     private final Scanner in = new Scanner(System.in);
-
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_RESET = "\u001B[0m";
     public CLI(Client client) {
         this.client = client;
         this.client.setUi(this);
@@ -46,8 +56,11 @@ public class CLI implements UI {
     }
 
     public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException, RoomNotExistsException {
+
+        AnsiConsole.systemInstall();
         System.out.println("Welcome to...");
-        System.out.println("      ########## #########  ###########     ###     ####    ### ########### ###   ###  ######## \n" +
+
+        System.out.println(("      ########## #########  ###########     ###     ####    ### ########### ###   ###  ######## \n") +
                 "     #+#        #+#    #+#     #+#       #+# #+#   #+#+#   #+#     #+#     #+#   #+# #+#    #+# \n" +
                 "    +#+        +#+    +#+     +#+      +#+   +#+  #+#+#+  +#+     +#+      +#+ +#+  +#+         \n" +
                 "   +#++#++#   +#++#++##      +#+     +#++#++#++# +#+ +#+ +#+     +#+       +#++#   +#++#++#++   \n" +
@@ -118,7 +131,7 @@ public class CLI implements UI {
             }
         }
         System.out.println("Loading...");
-
+        Thread.sleep(500);
         //Main game loop
         while (client.isInGame()) {
             if (playedThisTurn == null)
@@ -127,11 +140,12 @@ public class CLI implements UI {
 
             while (!client.isMyTurn()) {
                 //Wait for the other players to be done with their turn while I still output their moves...
+
             }
             if (client.isMyTurn() && !client.isDrawnOut()) {
                 drawFromBag();
             }
-            if (client.isMyTurn() && client.getPhase() == 0)
+            if (client.isMyTurn() && client.getLocalModel().getState().equals(State.PLANNINGPHASE))
                 playAssistantCard();
 
             Thread.sleep(400);
@@ -139,7 +153,7 @@ public class CLI implements UI {
 
             //Turn phase
             if (client.getExpertMode()) {
-                while (client.getPhase() != 3) {
+                while (!client.getLocalModel().getState().equals(State.ENDTURN)) {
                     while (!client.isMyTurn()) {
 
                     }
@@ -148,7 +162,7 @@ public class CLI implements UI {
                 }
                 pickCloud();
             } else {
-                while (client.getPhase() < 3) {
+                while (!client.getLocalModel().getState().equals(State.ENDTURN)) {
                     while (!client.isMyTurn()) {
 
                     }
@@ -1063,54 +1077,61 @@ public class CLI implements UI {
         ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
         System.out.println("Player boards:\n");
         for (StrippedBoard s : boards) {
-            System.out.println("O----------------------O");
-            System.out.println(s.getOwner() + "'s board: ");
-            System.out.println("Coins: " + s.getCoins());
-            System.out.println("\nDining room configuration: ");
-            System.out.println("----------------------╗");
-            for (Colors c : s.getDining().keySet()) {
-                System.out.println(c + " students: " + s.getDining().get(c));
-            }
-            System.out.println("----------------------╝");
-            System.out.println("\nEntrance configuration: ");
-            for (Colors c : s.getEntrance().keySet()) {
-                System.out.println(c + " students: " + s.getEntrance().get(c));
-            }
-            System.out.println("\nNumber of towers: " + s.getNumberOfTowers());
-            System.out.println("\nProfessors table: ");
-            for (Colors c : s.getProfessorsTable()) {
-                System.out.println(c + "\n");
-            }
-            System.out.println("O----------------------O");
+
+            printPlayerBoard(s);
         }
     }
 
-    public void printPlayerBoard(String playerNickname) {
-        ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
-
-        int i = 0;
-        while (!client.getLocalModel().getBoards().get(i).getOwner().equals(playerNickname)) {
-            i++;
-        }
-        StrippedBoard s = client.getLocalModel().getBoards().get(i);
-        System.out.println(s.getOwner() + "'s board: ");
-        System.out.println("Coins: " + s.getCoins());
+    public void printPlayerBoard(StrippedBoard board) {
+        Integer i;
+        int rows=0, printColumns=0;
+        Color color;
+        System.out.println("O----------------------O");
+        System.out.println(board.getOwner() + "'s board: ");
+        System.out.println("Coins: " + board.getCoins());
         System.out.println("\nDining room configuration: ");
-        for (Colors c : s.getDining().keySet()) {
-            System.out.println(c + " students: " + s.getDining().get(c));
+        System.out.println("----------------------╗");
+        for (Colors c : board.getDining().keySet()) {
+            i=board.getDining().get(c);
+          //  System.out.println("I: "+i);
+            color= colorsToColor(c);
+            while(i>0)
+            {   if (printColumns<columns) {
+                System.out.println(ansi().eraseScreen().fg(color).a("*\t").reset());
+                printColumns++;
+            }
+            else
+            {   printColumns=3;
+                System.out.println("\n");
+                System.out.println("\t");
+                System.out.println(ansi().eraseScreen().fg(color).a("*\t").reset());
+            }
+                i--;
+            }
+           // System.out.println(c + " students: " + board.getDining().get(c));
         }
+        System.out.println("----------------------╝");
         System.out.println("\nEntrance configuration: ");
-        for (Colors c : s.getEntrance().keySet()) {
-            System.out.println(c + " students: " + s.getEntrance().get(c) + "\n");
+        for (Colors c : board.getEntrance().keySet()) {
+            System.out.println(c + " students: " + board.getEntrance().get(c));
+            i=board.getEntrance().get(c);
+           // System.out.println("I secondo: "+i);
+            color= colorsToColor(c);
+            while(i>0)
+            {
+                System.out.println(ansi().eraseScreen().fg(color).a("*").reset());
+                i--;
+            }
+
         }
-        System.out.println("\nNumber of towers: " + s.getNumberOfTowers());
+        System.out.println("\nNumber of towers: " + board.getNumberOfTowers());
         System.out.println("\nProfessors table: ");
-        for (Colors c : s.getProfessorsTable()) {
+        for (Colors c : board.getProfessorsTable()) {
             System.out.println(c + "\n");
         }
-
-        System.out.println("Player boards:\n");
+        System.out.println("O----------------------O");
     }
+
 
     public void printPlayerNames() {
         for (StrippedBoard board : client.getLocalModel().getBoards()) {
@@ -1196,6 +1217,28 @@ public class CLI implements UI {
                 return Colors.YELLOW;
         }
     }
+public Color colorsToColor(Colors color)
+{
+    Color colorToReturn= null;
+    switch (color) {
+        case RED:
+            colorToReturn= Ansi.Color.RED;
+            break;
+        case YELLOW:
+            colorToReturn= Ansi.Color.YELLOW;
+            break;
+        case BLUE:
+            colorToReturn= Ansi.Color.CYAN;
+            break;
+        case GREEN:
+            colorToReturn= Ansi.Color.GREEN;
+            break;
+        case PINK:
+            colorToReturn= Ansi.Color.MAGENTA;
+            break;
+    }
+    return colorToReturn;
+}
 
     public EnumMap<Colors, ArrayList<String>> strippedToGame(EnumMap<Colors, Integer> students, EnumMap<Colors, ArrayList<String>> returnStudents, String destination) {
         EnumMap<Colors, Integer> tmp = students;
