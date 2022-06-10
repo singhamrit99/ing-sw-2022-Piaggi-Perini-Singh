@@ -28,7 +28,7 @@
 
     </top>
     <bottom>
-        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" spacing="20.0">
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="121.0" prefWidth="1920.0" spacing="20.0">
             <children>
                 <Button fx:id="createRoomButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="confirm-button" text="Create Room" textFill="WHITE">
                     <font>
@@ -46,9 +46,9 @@
    <center>
           <FlowPane alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="840.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/Style.css" BorderPane.alignment="CENTER">
               <children>
-            <ScrollPane prefHeight="840.0" prefWidth="1920.0">
+            <ScrollPane prefHeight="820.0" prefWidth="1920.0">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="840.0" prefWidth="1920.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="821.0" prefWidth="1920.0">
                      <children>
                               <GridPane fx:id="roomsList" alignment="CENTER" gridLinesVisible="true" layoutX="840.0" layoutY="71.0" prefHeight="40.0" prefWidth="200.0">
                                   <columnConstraints>
