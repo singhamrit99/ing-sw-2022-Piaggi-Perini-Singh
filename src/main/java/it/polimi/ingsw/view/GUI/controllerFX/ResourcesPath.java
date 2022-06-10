@@ -31,4 +31,7 @@ public interface ResourcesPath {
     String ISLAND_0= "src/main/resources/img/islands/v0.png";
     String ISLAND_1= "src/main/resources/img/islands/v1.png";
     String ISLAND_2= "src/main/resources/img/islands/v2.png";
+
+    //MotherNature
+    String MN = "src/main/resources/img/islands/mn.png";
 }

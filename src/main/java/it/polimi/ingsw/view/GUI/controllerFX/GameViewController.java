@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.network.server.commands.DrawFromBagCommand;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
+import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
@@ -22,6 +23,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
@@ -51,6 +53,7 @@ public class GameViewController extends InitialStage implements Controller {
             island0 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_0)));
             island1 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_1)));
             island2 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_2)));
+            MotherNature = new Image(Files.newInputStream(Paths.get(ResourcesPath.MN)));
         } catch (IOException io) {
             System.out.println("Error importing img assets in GameViewController");
         }
@@ -207,7 +210,10 @@ public class GameViewController extends InitialStage implements Controller {
         islandsImgs.add(island1);
         islandsImgs.add(island2);
 
+        ArrayList<StrippedIsland> islandsBackEnd = GUI.client.getLocalModel().getIslands();
 
+        int numOfIslands = islandsBackEnd.size();
+        int countIslands = 0;
         for (int i = 0; i < 6; i++) {
             if (i == 0 || i == 5) { //empty cell
                 Islands.addRow(0, new Text(""));
@@ -219,6 +225,7 @@ public class GameViewController extends InitialStage implements Controller {
                 islandImg.setFitHeight(150);
                 island.getChildren().add(islandImg);
                 Islands.addRow(0, island);
+                countIslands++;
             }
         }
 
@@ -233,6 +240,7 @@ public class GameViewController extends InitialStage implements Controller {
                 islandImg.setFitHeight(150);
                 island.getChildren().add(islandImg);
                 Islands.addRow(1, island);
+                countIslands++;
             }
         }
 
@@ -247,6 +255,7 @@ public class GameViewController extends InitialStage implements Controller {
                 islandImg.setFitHeight(150);
                 island.getChildren().add(islandImg);
                 Islands.addRow(2, island);
+                countIslands++;
             }
         }
 
@@ -261,11 +270,11 @@ public class GameViewController extends InitialStage implements Controller {
                 islandImg.setFitHeight(150);
                 island.getChildren().add(islandImg);
                 Islands.addRow(3, island);
+                countIslands++;
             }
         }
         Islands.getRowConstraints().add(row);
         Islands.getColumnConstraints().add(column);
-
         System.out.println(islandsPanes.size());
     }
 
@@ -579,6 +588,8 @@ public class GameViewController extends InitialStage implements Controller {
             studentsCloud3v4, studentsCloud4v4;
 
     private Image island0, island1, island2;
+
+    private Image MotherNature;
 
     // assets on screen
     @FXML
