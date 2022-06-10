@@ -89,6 +89,7 @@ public class Game {
             if (characterCards.get(index).getPrice() <= currentPlayer.getCoins()) {
                 characterCards.get(index).setStatus(1);
                 currentPlayer.setPlayedCharacterCard(characterCards.get(index));
+
                 return true;
             }
         }
@@ -186,8 +187,6 @@ public class Game {
         currentPlayer = players.get(playerPlanPhase);
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
-
-
     }
 
     private void initializationTilesBag() throws NegativeValueException {
@@ -354,7 +353,7 @@ public class Game {
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
                 currentPlayer = orderPlayers.poll(); //first player of Action Phase
                 PropertyChangeEvent phaseChange =
-                        new PropertyChangeEvent(this, "change-phase", 1, currentPlayer.getNickname());
+                        new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
                 gameListener.propertyChange(phaseChange);
             }
         } else if (state == State.ACTIONPHASE_3) { //Last player did the 3 step of Action Phase
@@ -362,13 +361,13 @@ public class Game {
                 currentPlayer = orderPlayers.poll();
                 state = State.ACTIONPHASE_1;
                 PropertyChangeEvent phaseChange =
-                        new PropertyChangeEvent(this, "change-phase", 1, currentPlayer.getNickname());
+                        new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
                 gameListener.propertyChange(phaseChange);
             } else {
                 state = State.ENDTURN;
                 nextRound();
                 PropertyChangeEvent phaseChange =
-                        new PropertyChangeEvent(this, "change-phase", 4, currentPlayer.getNickname());
+                        new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
                 gameListener.propertyChange(phaseChange);
             }
         } else {
@@ -399,7 +398,7 @@ public class Game {
             } else {
                 state = State.PLANNINGPHASE;
                 PropertyChangeEvent phaseChange =
-                        new PropertyChangeEvent(this, "change-phase", 0, null);
+                        new PropertyChangeEvent(this, "change-phase", state, null);
                 gameListener.propertyChange(phaseChange);
                 numRounds++;
                 currentPlayer = players.get(playerPlanPhase); //This is decided with the Assistant Card values and is assign in nextPlayer()
@@ -475,7 +474,7 @@ public class Game {
                 currentPlayer.moveStudents(studentsToDining, studentsToRemove);
                 state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
                 PropertyChangeEvent phaseChange =
-                        new PropertyChangeEvent(this, "change-phase", 2, currentPlayer.getNickname());
+                        new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
                 gameListener.propertyChange(phaseChange);
                 System.out.println("Send property change event for dining room\n");
                 if (isDiningChanged) {
@@ -551,7 +550,7 @@ public class Game {
                         resolveMotherNature(destinationMotherNature);
                         state = State.ACTIONPHASE_3;
                         PropertyChangeEvent phaseChange =
-                                new PropertyChangeEvent(this, "change-phase", 3, currentPlayer.getNickname());
+                                new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
                         gameListener.propertyChange(phaseChange);
                     } else {
                         throw new IncorrectArgumentException();
@@ -733,7 +732,7 @@ public class Game {
         if (amount < 0) oneTowerSigned = -1;
         else oneTowerSigned = 1;
 
-        if (team.size()==2) { //It means we are 4 players game
+        if (team.size() == 2) { //It means we are 4 players game
             while (numbersOfIterations > 0) {
                 if (oneTowerSigned > 0) { //this so that I always add/remove from the correct player
                     if (team.get(0).getPlayerTowers() <= team.get(1).getPlayerTowers())
