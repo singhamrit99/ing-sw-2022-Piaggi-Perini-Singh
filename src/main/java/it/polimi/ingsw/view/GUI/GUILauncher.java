@@ -49,14 +49,13 @@ public class GUILauncher extends Application implements Initializable {
     public void start(Stage stage) throws Exception {
         stage.setTitle(StringNames.TITLE);
         stage.setResizable(false);
-        stage.setWidth(MAIN_MENU_WIDTH);
-        stage.setHeight(MAIN_MENU_HEIGHT);
+        //stage.setWidth(MAIN_MENU_WIDTH);
+        //stage.setHeight(MAIN_MENU_HEIGHT);
+        stage.setMaximized(true);
 
         mainWindow = stage;
         javafx.scene.image.Image icon = new Image(new FileInputStream("src/main/resources/img/professors/teacher_blue.png"));
         mainWindow.getIcons().add(icon);
-
-
 
         stage.setOnCloseRequest((event) -> {
             Platform.exit();
