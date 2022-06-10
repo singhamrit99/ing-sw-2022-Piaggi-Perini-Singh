@@ -23,7 +23,7 @@ public class StrippedModel implements Serializable {
     private UI ui;
     private boolean canPlayMN;
     private State state;
-    private Player firstPlayer;
+    private String firstPlayer;
 
     public ArrayList<AssistantCardDeck> getAssistantDecks() {
         return assistantDecks;
@@ -39,7 +39,7 @@ public class StrippedModel implements Serializable {
         this.islands = islands;
         this.assistantDecks = assistantDecks;
         this.state = State.PLANNINGPHASE;
-        firstPlayer = null;
+        firstPlayer = "";
     }
 
     public void updateModel(PropertyChangeEvent evt) {
@@ -86,7 +86,7 @@ public class StrippedModel implements Serializable {
     }
 
     private void setFirstPlayer(PropertyChangeEvent evt) {
-        firstPlayer = (Player) evt.getOldValue();
+        firstPlayer = (String) evt.getOldValue();
     }
 
     private void setState(PropertyChangeEvent evt) {
@@ -242,7 +242,7 @@ public class StrippedModel implements Serializable {
         return state;
     }
 
-    public Player getFirstPlayer() {
+    public String getFirstPlayer() {
         return firstPlayer;
     }
 }
