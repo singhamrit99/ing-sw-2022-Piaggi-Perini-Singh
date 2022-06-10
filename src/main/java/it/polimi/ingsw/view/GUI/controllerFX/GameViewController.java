@@ -75,6 +75,9 @@ public class GameViewController extends InitialStage implements Controller {
             }
         });
 
+
+        //animations
+
     }
 
     public void changeViewBoard(String viewOwnerTarget) {
@@ -131,33 +134,81 @@ public class GameViewController extends InitialStage implements Controller {
         reloadIslands();
     }
 
+    ArrayList<Pane> islandsPanes;
+
     public void reloadIslands() {
+        IslandsBox.getChildren().clear();
+        GridPane Islands = new GridPane();
+        IslandsBox.getChildren().add(Islands);
         RowConstraints row = new RowConstraints();
         row.setPrefHeight(150);
         ColumnConstraints column = new ColumnConstraints();
-        row.setPrefHeight(150);
-
-
-        for (int i = 0; i < 6; i++) {
-            Pane test = new Pane();
-            ImageView testImg = new ImageView(island0);
-            testImg.setFitWidth(150);
-            testImg.setFitHeight(150);
-            test.getChildren().add(testImg);
-            Islands.addRow(0, test);
-        }
-        for (int i = 0; i < 6; i++) {
-            Pane test = new Pane();
-            ImageView testImg = new ImageView(island1);
-            testImg.setFitWidth(150);
-            testImg.setFitHeight(150);
-            test.getChildren().add(testImg);
-            Islands.addRow(1, test);
-        }
-
+        column.setPrefWidth(150);
         Islands.getRowConstraints().add(row);
         Islands.getColumnConstraints().add(column);
 
+
+        for (int i = 0; i < 6; i++) {
+            if(i==0||i==5){ //empty cell
+                Islands.addRow(0,new Text(""));
+            }
+            else{
+                Pane test = new Pane();
+                islandsPanes.add(test);
+                ImageView testImg = new ImageView(island0);
+                testImg.setFitWidth(150);
+                testImg.setFitHeight(150);
+                test.getChildren().add(testImg);
+                Islands.addRow(0, test);
+            }
+        }
+
+        for (int i = 0; i < 6; i++) {
+            if(i!=0&&i!=5){ //empty cell
+                Islands.addRow(1,new Text(""));
+            }
+            else{
+                Pane test = new Pane();
+                islandsPanes.add(test);
+                ImageView testImg = new ImageView(island0);
+                testImg.setFitWidth(150);
+                testImg.setFitHeight(150);
+                test.getChildren().add(testImg);
+                Islands.addRow(1, test);
+            }
+        }
+
+        for (int i = 0; i < 6; i++) {
+            if(i!=0&&i!=5){ //empty cell
+                Islands.addRow(2,new Text(""));
+            }
+            else{
+                Pane test = new Pane();
+                islandsPanes.add(test);
+                ImageView testImg = new ImageView(island0);
+                testImg.setFitWidth(150);
+                testImg.setFitHeight(150);
+                test.getChildren().add(testImg);
+                Islands.addRow(2, test);
+            }
+        }
+
+        for (int i = 0; i < 6; i++) {
+            if(i==0||i==5){ //empty cell
+                Islands.addRow(3,new Text(""));
+            }
+            else{
+                Pane test = new Pane();
+                islandsPanes.add(test);
+                ImageView testImg = new ImageView(island0);
+                testImg.setFitWidth(150);
+                testImg.setFitHeight(150);
+                test.getChildren().add(testImg);
+                Islands.addRow(3, test);
+            }
+        }
+        Islands.getRowConstraints().add(row);
+        Islands.getColumnConstraints().add(column);
     }
 
     private void reloadEntrance() {
@@ -501,6 +552,6 @@ public class GameViewController extends InitialStage implements Controller {
             blueDining, pinkDining;
 
     @FXML
-    private GridPane Islands;
+    private HBox IslandsBox;
 
 }
