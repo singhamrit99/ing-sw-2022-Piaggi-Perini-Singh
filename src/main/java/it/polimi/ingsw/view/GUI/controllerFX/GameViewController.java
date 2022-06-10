@@ -23,7 +23,6 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
@@ -193,6 +192,31 @@ public class GameViewController extends InitialStage implements Controller {
     }
 
 
+    private ArrayList<ImageView> spawnImgsForIsland(StrippedIsland island) {
+        ArrayList<ImageView> imagesToReturn = new ArrayList<>();
+        EnumMap<Colors, Integer> students = island.getStudents();
+        for (Colors c : students.keySet()) {
+            if (students.get(c) != 0) {
+                int i = 0;
+                Image rightColor = studentImgFromColor(c);
+                while (i < students.get(c)) {
+                    ImageView student = new ImageView(rightColor);
+                    imagesToReturn.add(student);
+                    i++;
+                }
+            }
+        }
+
+        if (island.hasMotherNature) {
+            ImageView mn = new ImageView(MotherNature);
+            imagesToReturn.add(mn);
+        }
+
+        //todo entry tiles and towers
+
+        return imagesToReturn;
+    }
+
     public void reloadIslands() {
         islandsPanes = new ArrayList<>();
         IslandsBox.getChildren().clear();
@@ -218,9 +242,13 @@ public class GameViewController extends InitialStage implements Controller {
             if (i == 0 || i == 5) { //empty cell
                 Islands.addRow(0, new Text(""));
             } else {
+                if (countIslands == numOfIslands) return;
                 Pane island = new Pane();
                 islandsPanes.add(island);
                 ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
+                for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(countIslands))) {
+                    island.getChildren().add(img);
+                }
                 islandImg.setFitWidth(150);
                 islandImg.setFitHeight(150);
                 island.getChildren().add(islandImg);
@@ -229,13 +257,18 @@ public class GameViewController extends InitialStage implements Controller {
             }
         }
 
+
         for (int i = 0; i < 6; i++) {
             if (i != 0 && i != 5) { //empty cell
                 Islands.addRow(1, new Text(""));
             } else {
+                if (countIslands == numOfIslands) return;
                 Pane island = new Pane();
                 islandsPanes.add(island);
                 ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
+                for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(countIslands))) {
+                    island.getChildren().add(img);
+                }
                 islandImg.setFitWidth(150);
                 islandImg.setFitHeight(150);
                 island.getChildren().add(islandImg);
@@ -248,9 +281,13 @@ public class GameViewController extends InitialStage implements Controller {
             if (i != 0 && i != 5) { //empty cell
                 Islands.addRow(2, new Text(""));
             } else {
+                if (countIslands == numOfIslands) return;
                 Pane island = new Pane();
                 islandsPanes.add(island);
                 ImageView islandImg = new ImageView(islandsImgs.get(2 - i % 2));
+                for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(countIslands))) {
+                    island.getChildren().add(img);
+                }
                 islandImg.setFitWidth(150);
                 islandImg.setFitHeight(150);
                 island.getChildren().add(islandImg);
@@ -263,9 +300,13 @@ public class GameViewController extends InitialStage implements Controller {
             if (i == 0 || i == 5) { //empty cell
                 Islands.addRow(3, new Text(""));
             } else {
+                if (countIslands == numOfIslands) return;
                 Pane island = new Pane();
                 islandsPanes.add(island);
                 ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
+                for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(countIslands))) {
+                    island.getChildren().add(img);
+                }
                 islandImg.setFitWidth(150);
                 islandImg.setFitHeight(150);
                 island.getChildren().add(islandImg);
@@ -277,6 +318,7 @@ public class GameViewController extends InitialStage implements Controller {
         Islands.getColumnConstraints().add(column);
         System.out.println(islandsPanes.size());
     }
+
 
     private void reloadEntrance() {
         try {
@@ -379,12 +421,11 @@ public class GameViewController extends InitialStage implements Controller {
             }
             for (ImageView t : towersImgs) {
                 if (i < numberOfTowers) {
-                    towersImgs.get(i).setVisible(true);
-                    towersImgs.get(i).setImage(towerColor);
+                    t.setVisible(true);
+                    t.setImage(towerColor);
                 } else {
-                    towersImgs.get(i).setVisible(false);
+                    t.setVisible(false);
                 }
-                i++;
             }
         } catch (LocalModelNotLoadedException e) {
             Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
