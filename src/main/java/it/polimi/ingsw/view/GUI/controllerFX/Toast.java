@@ -28,8 +28,7 @@ public final class Toast {
         text.setFill(Color.RED);
 
         BorderPane root = new BorderPane();
-        root.getChildren().add(text);
-        BorderPane.setAlignment(text, Pos.BOTTOM_CENTER);
+        root.setBottom(text);
         root.setStyle("-fx-background-radius: 20; -fx-background-color: rgba(0, 0, 0, 0.2);");
         root.setOpacity(0);
         root.setPadding(new Insets(10));
