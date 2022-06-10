@@ -1,15 +1,15 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
-import it.polimi.ingsw.network.server.stripped.*;
-import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.network.server.commands.Command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
+import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
+import it.polimi.ingsw.network.server.commands.Command;
+import it.polimi.ingsw.network.server.stripped.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -56,16 +56,17 @@ public class Room implements PropertyChangeListener {
         players.remove(user);
     }
 
-    public synchronized void kickOut(){
-        if(this.isInGame()){
-            PropertyChangeEvent gameFinished=
-                    new PropertyChangeEvent(this,"leave-game",null,null);
+    public synchronized void kickOut() {
+        if (this.isInGame()) {
+            PropertyChangeEvent gameFinished =
+                    new PropertyChangeEvent(this, "leave-game", null, null);
             addEventToBuffer(gameFinished);
 
             players = new ArrayList<>(); //the players array is reset, the room will be deleted by the server
             System.out.println("Room kicked out every players after a player leaves the game.");
         }
     }
+
     public synchronized void startGame() throws NegativeValueException, IncorrectArgumentException, InterruptedException {
         ArrayList<String> nicknames = new ArrayList<>();
         eventsBuffer = new HashMap<>();
@@ -77,8 +78,8 @@ public class Room implements PropertyChangeListener {
         Game newGame = controller.initializeGame(this, expertMode, players.size(), nicknames);
         buildStrippedModel(newGame.getPlayers(), newGame.getCharacterCards(),
                 newGame.getClouds(), newGame.getIslands());
-        PropertyChangeEvent firstPlayerEvt=
-                new PropertyChangeEvent(this,"current-player",null,newGame.getCurrentPlayer().getNickname());
+        PropertyChangeEvent firstPlayerEvt =
+                new PropertyChangeEvent(this, "current-player", null, newGame.getCurrentPlayer().getNickname());
         addEventToBuffer(firstPlayerEvt);
         //System.out.println("Sent first player event\n");
         setInGame(true);
@@ -131,6 +132,7 @@ public class Room implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         addEventToBuffer(evt);
     }
+
     private void addEventToBuffer(PropertyChangeEvent event) {
         for (ClientConnection clientBufferEvents : players) {
             ArrayList<PropertyChangeEvent> eventsQueue = eventsBuffer.get(clientBufferEvents);
@@ -138,17 +140,20 @@ public class Room implements PropertyChangeListener {
             eventsBuffer.replace(clientBufferEvents, eventsQueue);
         }
     }
-    public synchronized ArrayList<PropertyChangeEvent> getBuffer(ClientConnection asker){
+
+    public synchronized ArrayList<PropertyChangeEvent> getBuffer(ClientConnection asker) {
         ArrayList<PropertyChangeEvent> buffer = new ArrayList<>();
-        for (PropertyChangeEvent event: eventsBuffer.get(asker)){
+        for (PropertyChangeEvent event : eventsBuffer.get(asker)) {
             buffer.add(event);
         }
-        eventsBuffer.replace(asker,new ArrayList<>()); //flushing the buffer of Events on Server side
+        eventsBuffer.replace(asker, new ArrayList<>()); //flushing the buffer of Events on Server side
         return buffer;
     }
+
     public synchronized void setInGame(boolean inGame) {
         this.inGame = inGame;
     }
+
     public synchronized boolean isInGame() {
         return inGame;
     }
