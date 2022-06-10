@@ -187,9 +187,6 @@ public class Game {
         orderPlayers = new PriorityQueue<>(numOfPlayer);
         currentPlayer = players.get(playerPlanPhase);
         firstPlayer = currentPlayer.getNickname();
-        PropertyChangeEvent firstPlayerChange =
-                new PropertyChangeEvent(this, "first-player-change", firstPlayer, null);
-        gameListener.propertyChange(firstPlayerChange);
 
         if (numOfPlayer == 3) numDrawnStudents = 4;
         else numDrawnStudents = 3;
@@ -933,5 +930,9 @@ public class Game {
         PropertyChangeEvent evt =
                 new PropertyChangeEvent(this, "island", oldIsland, changedIsland);
         gameListener.propertyChange(evt);
+    }
+
+    public String getFirstPlayer() {
+        return firstPlayer;
     }
 }

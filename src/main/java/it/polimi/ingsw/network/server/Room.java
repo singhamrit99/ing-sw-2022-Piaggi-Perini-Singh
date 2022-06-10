@@ -78,6 +78,11 @@ public class Room implements PropertyChangeListener {
         Game newGame = controller.initializeGame(this, expertMode, players.size(), nicknames);
         buildStrippedModel(newGame.getPlayers(), newGame.getCharacterCards(),
                 newGame.getClouds(), newGame.getIslands());
+
+        PropertyChangeEvent firstPlayerChange =
+                new PropertyChangeEvent(this, "first-player-change", newGame.getFirstPlayer(), null);
+        addEventToBuffer(firstPlayerChange);
+
         PropertyChangeEvent firstPlayerEvt =
                 new PropertyChangeEvent(this, "current-player", null, newGame.getCurrentPlayer().getNickname());
         addEventToBuffer(firstPlayerEvt);
