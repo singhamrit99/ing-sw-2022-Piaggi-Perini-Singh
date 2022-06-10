@@ -7,8 +7,10 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -316,102 +318,17 @@
                   </StackPane>
                </children>
             </VBox>
-            <StackPane maxWidth="1000.0" minHeight="300.0" minWidth="1000.0" prefHeight="500.0" prefWidth="1000.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1000.0">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="895.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                     <StackPane.margin>
-                        <Insets right="300.0" />
-                     </StackPane.margin>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="645.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                     <StackPane.margin>
-                        <Insets right="-300.0" />
-                     </StackPane.margin>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1045.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                     <StackPane.margin>
-                        <Insets right="-600.0" />
-                     </StackPane.margin>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1195.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="895.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                     <StackPane.margin>
-                        <Insets right="-600.0" />
-                     </StackPane.margin>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="745.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1045.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                     <StackPane.margin>
-                        <Insets right="300.0" />
-                     </StackPane.margin>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1195.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                     <StackPane.margin>
-                        <Insets right="-300.0" />
-                     </StackPane.margin>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1045.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                     <StackPane.margin>
-                        <Insets right="600.0" />
-                     </StackPane.margin>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="595.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                     <StackPane.margin>
-                        <Insets right="600.0" />
-                     </StackPane.margin>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="595.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="895.0" layoutY="185.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_RIGHT">
-                     <image>
-                        <Image url="@../img/islands%20and%20MN/island0.png" />
-                     </image>
-                  </ImageView>
+                  <GridPane fx:id="Islands" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
                </children>
-            </StackPane>
+            </Pane>
             <VBox alignment="CENTER" prefHeight="300.0" prefWidth="500.0">
                <children>
                   <ImageView fx:id="character1" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
