@@ -1,21 +1,22 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
 import it.polimi.ingsw.StringNames;
-import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
-import it.polimi.ingsw.exceptions.UserNotInRoomException;
-import it.polimi.ingsw.exceptions.UserNotRegisteredException;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,6 +44,9 @@ public class GameViewController extends InitialStage implements Controller {
             pinkStudentImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.PINK_STUDENT)));
             redStudentImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.RED_STUDENT)));
             yellowStudentImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.YELLOW_STUDENT)));
+            island0 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_0)));
+            island1 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_1)));
+            island2 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_2)));
         } catch (IOException io) {
             System.out.println("Error importing img assets in GameViewController");
         }
@@ -124,6 +128,36 @@ public class GameViewController extends InitialStage implements Controller {
         reloadDining();
         initializeClouds();
         reloadClouds();
+        reloadIslands();
+    }
+
+    public void reloadIslands() {
+        RowConstraints row = new RowConstraints();
+        row.setPrefHeight(150);
+        ColumnConstraints column = new ColumnConstraints();
+        row.setPrefHeight(150);
+
+
+        for (int i = 0; i < 6; i++) {
+            Pane test = new Pane();
+            ImageView testImg = new ImageView(island0);
+            testImg.setFitWidth(150);
+            testImg.setFitHeight(150);
+            test.getChildren().add(testImg);
+            Islands.addRow(0, test);
+        }
+        for (int i = 0; i < 6; i++) {
+            Pane test = new Pane();
+            ImageView testImg = new ImageView(island1);
+            testImg.setFitWidth(150);
+            testImg.setFitHeight(150);
+            test.getChildren().add(testImg);
+            Islands.addRow(1, test);
+        }
+
+        Islands.getRowConstraints().add(row);
+        Islands.getColumnConstraints().add(column);
+
     }
 
     private void reloadEntrance() {
@@ -435,6 +469,8 @@ public class GameViewController extends InitialStage implements Controller {
             studentsCloud2v3, studentsCloud2v4, studentsCloud3v3,
             studentsCloud3v4, studentsCloud4v4;
 
+    private Image island0, island1, island2;
+
     // assets on screen
     @FXML
     private Menu changeViewBoard;
@@ -463,5 +499,8 @@ public class GameViewController extends InitialStage implements Controller {
     @FXML
     StackPane yellowDining, redDining, greenDining,
             blueDining, pinkDining;
+
+    @FXML
+    private GridPane Islands;
 
 }
