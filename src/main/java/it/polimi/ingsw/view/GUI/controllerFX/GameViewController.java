@@ -207,7 +207,7 @@ public class GameViewController extends InitialStage implements Controller {
             }
         }
 
-        if (island.hasMotherNature) {
+        if (island.hasMotherNature()) {
             ImageView mn = new ImageView(MotherNature);
             imagesToReturn.add(mn);
         }
