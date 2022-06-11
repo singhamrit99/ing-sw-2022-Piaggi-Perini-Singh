@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.network.server.commands.DrawFromBagCommand;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
@@ -24,6 +23,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -160,40 +160,35 @@ public class GameViewController extends InitialStage implements Controller {
 
     private void reloadBag() {
         bag.setOnMouseClicked(mouseEvent -> {
-            if (GUI.client.getLocalModel().getState().equals(State.PLANNINGPHASE) && GUI.client.getLocalModel().getFirstPlayer().equals(GUI.client.getNickname()) && GUI.client.isMyTurn()) {
-                DrawFromBagCommand drawFromBagOrder = new DrawFromBagCommand(GUI.client.getNickname());
-                System.out.println("Drawing from bag...\n");
+            DrawFromBagCommand drawFromBagOrder = new DrawFromBagCommand(GUI.client.getNickname());
 
-                try {
-                    GUI.client.performGameAction(drawFromBagOrder);
-
-                } catch (NotEnoughCoinsException e) {
-                    Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
-                } catch (AssistantCardNotFoundException e) {
-                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
-                } catch (NegativeValueException e) {
-                    Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
-                } catch (IncorrectStateException e) {
-                    Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
-                } catch (MotherNatureLostException e) {
-                    Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
-                } catch (ProfessorNotFoundException e) {
-                    Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
-                } catch (IncorrectPlayerException e) {
-                    Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
-                } catch (RemoteException e) {
-                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
-                } catch (IncorrectArgumentException e) {
-                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
-                } catch (UserNotInRoomException e) {
-                    Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
-                } catch (UserNotRegisteredException e) {
-                    Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
-                }
+            try {
+                GUI.client.performGameAction(drawFromBagOrder);
+            } catch (NotEnoughCoinsException e) {
+                Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
+            } catch (AssistantCardNotFoundException e) {
+                Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
+            } catch (NegativeValueException e) {
+                Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
+            } catch (IncorrectStateException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
+            } catch (MotherNatureLostException e) {
+                Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
+            } catch (ProfessorNotFoundException e) {
+                Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
+            } catch (IncorrectPlayerException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
+            } catch (RemoteException e) {
+                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+            } catch (UserNotInRoomException e) {
+                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+            } catch (IncorrectArgumentException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+            } catch (UserNotRegisteredException e) {
+                Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             }
         });
     }
-
 
     private ArrayList<ImageView> spawnImgsForIsland(StrippedIsland island) {
         ArrayList<ImageView> imagesToReturn = new ArrayList<>();
@@ -663,9 +658,11 @@ public class GameViewController extends InitialStage implements Controller {
 
                 scene = new Scene(loader.load());
                 Stage stage = new Stage();
-                stage.setTitle("Eryantis");
-                stage.setScene(scene);
+                stage.setTitle(StringNames.TITLE);
+                stage.setResizable(false);
+                stage.initStyle(StageStyle.UNDECORATED);
                 stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
                 stage.showAndWait();
             } catch (IOException e) {
                 e.printStackTrace();
