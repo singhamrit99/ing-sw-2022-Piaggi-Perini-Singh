@@ -23,12 +23,12 @@ public class StrippedModel implements Serializable {
     private boolean canPlayMN;
     private State state;
     private String firstPlayer;
-
+    final private ArrayList<AssistantCardDeck> assistantDecks;
     public ArrayList<AssistantCardDeck> getAssistantDecks() {
         return assistantDecks;
     }
 
-    final private ArrayList<AssistantCardDeck> assistantDecks;
+
 
     public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters,
                          ArrayList<StrippedCloud> clouds, ArrayList<StrippedIsland> islands, ArrayList<AssistantCardDeck> assistantDecks) {

@@ -47,15 +47,13 @@ public class CLI implements UI {
     PlayCharacterCardD playCharacterCardDOrder;
     DrawFromBagCommand drawFromBagOrder;
     private final Scanner in = new Scanner(System.in);
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_RESET = "\u001B[0m";
     public CLI(Client client) {
         this.client = client;
         this.client.setUi(this);
         this.client.view = StringNames.LAUNCHER;
     }
 
-    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException, RoomNotExistsException {
+    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException, RoomNotExistsException, LocalModelNotLoadedException {
 
         AnsiConsole.systemInstall();
         System.out.println("Welcome to...");
@@ -157,8 +155,10 @@ public class CLI implements UI {
                     while (!client.isMyTurn()) {
 
                     }
-                    expertprintCommandHelp();
-                    performActionInTurnExpert();
+                    if (client.getLocalModel().isCanPlayMN()) {
+                        expertprintCommandHelp();
+                        performActionInTurnExpert();
+                    }
                 }
                 pickCloud();
             } else {
@@ -166,8 +166,11 @@ public class CLI implements UI {
                     while (!client.isMyTurn()) {
 
                     }
-                    printCommandHelp();
-                    performActionInTurn();
+                    if (!client.getLocalModel().isCanPlayMN()) {
+                        printCommandHelp();
+                        performActionInTurn();
+                    }
+
                 }
                 pickCloud();
             }
@@ -526,7 +529,7 @@ public class CLI implements UI {
         client.performGameAction(drawFromBagOrder);
     }
 
-    public synchronized void playAssistantCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+    public synchronized void playAssistantCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
         System.out.println("It's your turn! Pick an assistant card to play. \n");
         printAssistantCards();
         int i;
@@ -559,7 +562,6 @@ public class CLI implements UI {
         playAssistantCardOrder = new PlayAssistantCard(this.nickName, input);
         try {
             client.performGameAction(playAssistantCardOrder);
-            turnMoves = i;
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
         } catch (AssistantCardNotFoundException e) {
@@ -569,8 +571,8 @@ public class CLI implements UI {
         client.setMyTurn(false);
     }
 
-    public void printAssistantCards() {
-        AssistantCardDeck myDeck = client.getLocalModel().getAssistantDecks().get(playerNumber);
+    public void printAssistantCards() throws LocalModelNotLoadedException {
+        AssistantCardDeck myDeck = client.getLocalModel().getBoardOf(nickName).getDeck();
         int i = 0;
         for (AssistantCard a : myDeck.getDeck()) {
             System.out.println("Card number " + a.getImageName() + " Moves: " + a.getMove());
@@ -779,9 +781,41 @@ public class CLI implements UI {
 
     public void printClouds() {
         EnumMap<Colors, Integer> students;
+        int i;
+        Color color;
+        int rows=0;
         for (StrippedCloud cloud : client.getLocalModel().getClouds()) {
             students = cloud.getStudents();
             System.out.println(("Cloud name:" + cloud.getName()));
+            System.out.println(" 00000000000000000000");
+            System.out.println("0                    0");
+            for (Colors c : cloud.getStudents().keySet()) {
+                //System.out.println(c + " students: " + board.getEntrance().get(c));
+                i=cloud.getStudents().get(c);
+                // System.out.println("I secondo: "+i);
+                color= colorsToColor(c);
+                while(i>0)
+                {   if ((rows%3)<2) {
+                    if (rows!=6) {
+                        System.out.print(ansi().fg(color).a("\t* ").reset());
+                        rows++;
+                    }
+                    else
+                        System.out.print(ansi().fg(color).a("  *\n").reset());
+                }
+                else
+                {
+                    System.out.print(ansi().fg(color).a("*\n").reset());
+                    rows ++;
+
+                }
+                    i--;
+                }
+
+            }
+            System.out.println();
+            System.out.println("0                    0");
+            System.out.println(" 00000000000000000000");
             System.out.println("Number of students: ");
             for (Colors c : Colors.values()) {
                 System.out.println(c + " " + students.get(c));
@@ -1221,7 +1255,7 @@ public class CLI implements UI {
     public void printIsland(StrippedIsland island) {
         int i;
         Color color;
-        int rows=0, printColumns;
+        int rows=0;
         System.out.println("Island: " + island.getName());
         System.out.println("Students on the island: ");
         if(island.hasMotherNature())
