@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
+import java.net.URI;
+
 public interface ResourcesPath {
     String FXML_FILE_PATH = "/fxml/";
     String FILE_EXTENSION = ".fxml";
@@ -34,4 +36,8 @@ public interface ResourcesPath {
 
     //MotherNature
     String MN = "src/main/resources/img/islands/mn.png";
+
+    //Assistants
+    String ASSISTANT_CARDS = "src/main/resources/img/assistants/";
+    String IMAGE_EXTENSION = ".png";
 }
