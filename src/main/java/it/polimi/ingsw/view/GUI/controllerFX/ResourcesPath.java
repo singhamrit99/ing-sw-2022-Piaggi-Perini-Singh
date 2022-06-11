@@ -40,4 +40,7 @@ public interface ResourcesPath {
     //Assistants
     String ASSISTANT_CARDS = "src/main/resources/img/assistants/";
     String IMAGE_EXTENSION = ".png";
+
+    //css
+    String TEST_CSS = "src/main/resources/css/MainMenuStyle.css";
 }
