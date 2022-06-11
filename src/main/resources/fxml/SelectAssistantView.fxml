@@ -26,14 +26,14 @@
             <children>
                 <Button fx:id="confirmButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                         minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
-                        styleClass="confirm-button" text="Start Game" textFill="WHITE">
+                        styleClass="confirm-button" text="Confirm" textFill="WHITE">
                     <font>
                         <Font size="18.0"/>
                     </font>
                 </Button>
                 <Button fx:id="cancelButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                         minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
-                        styleClass="cancel-button" text="Leave Room" textFill="WHITE">
+                        styleClass="cancel-button" text="Leave" textFill="WHITE">
                     <font>
                         <Font size="18.0"/>
                     </font>
