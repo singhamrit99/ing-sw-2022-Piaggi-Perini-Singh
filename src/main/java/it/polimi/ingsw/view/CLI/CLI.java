@@ -1193,7 +1193,7 @@ public class CLI implements UI {
             System.out.println("There are no towers yet on this island!\n");
         else
             System.out.println("Towers: " + island.getNumOfTowers() + " " + island.getTowersColor() + "towers \n");
-        if (island.hasMotherNature)
+        if (island.hasMotherNature())
             System.out.println("Mother Nature is on this island!");
         else
             System.out.println("Mother Nature is not on this island!");
@@ -1201,7 +1201,7 @@ public class CLI implements UI {
 
     public void printexpertIsland(StrippedIsland island) {
         System.out.println("Island: " + island.getName());
-        if (island.isHasNoEnterTile())
+        if (island.hasNoEnterTile())
             System.out.println("This island has a \"No entry\" tile on it!");
         System.out.println("Students on the island: ");
         System.out.println(" students: " + island.getStudents() + "\n");
@@ -1209,7 +1209,7 @@ public class CLI implements UI {
             System.out.println("There are no towers yet on this island!\n");
         else
             System.out.println("Towers: " + island.getNumOfTowers() + island.getTowersColor() + "towers \n");
-        if (island.hasMotherNature)
+        if (island.hasMotherNature())
             System.out.println("Mother Nature is on this island!");
         else
             System.out.println("Mother Nature is not on this island!");

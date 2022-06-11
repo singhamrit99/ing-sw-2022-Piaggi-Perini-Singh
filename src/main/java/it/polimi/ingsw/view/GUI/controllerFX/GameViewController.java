@@ -235,88 +235,137 @@ public class GameViewController extends InitialStage implements Controller {
         islandsImgs.add(island2);
 
         ArrayList<StrippedIsland> islandsBackEnd = GUI.client.getLocalModel().getIslands();
+        int indexIsland = 0;
 
-        int numOfIslands = islandsBackEnd.size();
-        int countIslands = 0;
+        //FIRST LINE OF ISLANDS
         for (int i = 0; i < 6; i++) {
-            if (i == 0 || i == 5) { //empty cell
-                Islands.addRow(0, new Text(""));
+            if (i == 0 || i == 5) {
+                Islands.addRow(0, new Text("")); //empty cell alignment
             } else {
-                if (countIslands == numOfIslands) return;
-                Pane island = new Pane();
-                islandsPanes.add(island);
-                ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
-                for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(countIslands))) {
-                    island.getChildren().add(img);
+                if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")){
+                    Islands.addRow(0, new Text("")); //empty cell alignment
                 }
-                islandImg.setFitWidth(150);
-                islandImg.setFitHeight(150);
-                island.getChildren().add(islandImg);
-                Islands.addRow(0, island);
-                countIslands++;
+                else{
+                    Pane island = new Pane();
+                    islandsPanes.add(island);
+                    ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(indexIsland))) {
+                        island.getChildren().add(img);
+                    }
+                    islandImg.setFitWidth(150);
+                    islandImg.setFitHeight(150);
+                    island.getChildren().add(islandImg);
+                    Islands.addRow(0, island);
+                }
+            }
+            indexIsland++;
+        }
+
+        //SECOND LINE
+        for (int i = 0; i < 6; i++) {
+            if (i != 0 && i != 5) {
+                Islands.addRow(1, new Text("")); //empty cell
+            } else if (i==0){
+                if (islandsBackEnd.get(11).getName().equals("EMPTY")){
+                    Islands.addRow(1, new Text("")); //empty cell alignment
+                }
+                else{
+                    Pane island = new Pane();
+                    islandsPanes.add(island);
+                    ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(11))) {
+                        island.getChildren().add(img);
+                    }
+                    islandImg.setFitWidth(150);
+                    islandImg.setFitHeight(150);
+                    island.getChildren().add(islandImg);
+                    Islands.addRow(1, island);
+                }
+            }
+            else if(i==5){ //second island of the FIRST line with the HOLE of the circle inside
+                if (islandsBackEnd.get(4).getName().equals("EMPTY")){
+                    Islands.addRow(1, new Text("")); //empty cell alignment
+                }
+                else{
+                    Pane island = new Pane();
+                    island.
+                    islandsPanes.add(island);
+                    ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(4))) {
+                        island.getChildren().add(img);
+                    }
+                    islandImg.setFitWidth(150);
+                    islandImg.setFitHeight(150);
+                    //island.getChildren().add(islandImg);
+                    Islands.addRow(1, island);
+                }
+            }
+        }
+        //THIRD LINE
+        for (int i = 0; i < 6; i++) {
+            if (i != 0 && i != 5) {
+                Islands.addRow(2, new Text("")); //empty cell
+            } else if (i==0){
+                if (islandsBackEnd.get(10).getName().equals("EMPTY")){
+                    Islands.addRow(2, new Text("")); //empty cell alignment
+                }
+                else{
+                    Pane island = new Pane();
+                    islandsPanes.add(island);
+                    ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(10))) {
+                        island.getChildren().add(img);
+                    }
+                    islandImg.setFitWidth(150);
+                    islandImg.setFitHeight(150);
+                    island.getChildren().add(islandImg);
+                    Islands.addRow(2, island);
+                }
+            }
+            else if(i==5){ //second island of the SECOND line with the HOLE of the circle inside
+                if (islandsBackEnd.get(4).getName().equals("EMPTY")){
+                    Islands.addRow(2, new Text("")); //empty cell alignment
+                }
+                else{
+                    Pane island = new Pane();
+                    islandsPanes.add(island);
+                    ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(4))) {
+                        island.getChildren().add(img);
+                    }
+                    islandImg.setFitWidth(150);
+                    islandImg.setFitHeight(150);
+                    island.getChildren().add(islandImg);
+                    Islands.addRow(2, island);
+                }
             }
         }
 
-
+        //LAST ISLANDS
+        indexIsland=9;
         for (int i = 0; i < 6; i++) {
-            if (i != 0 && i != 5) { //empty cell
-                Islands.addRow(1, new Text(""));
+            if (i == 0 || i == 5) {
+                Islands.addRow(3, new Text("")); //empty cell
             } else {
-                if (countIslands == numOfIslands) return;
-                Pane island = new Pane();
-                islandsPanes.add(island);
-                ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
-                for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(countIslands))) {
-                    island.getChildren().add(img);
+                if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")){
+                    Islands.addRow(0, new Text("")); //empty cell alignment
+                }else{
+                    Pane island = new Pane();
+                    islandsPanes.add(island);
+                    ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(indexIsland))) {
+                        island.getChildren().add(img);
+                    }
+                    islandImg.setFitWidth(150);
+                    islandImg.setFitHeight(150);
+                    island.getChildren().add(islandImg);
+                    Islands.addRow(3, island);
                 }
-                islandImg.setFitWidth(150);
-                islandImg.setFitHeight(150);
-                island.getChildren().add(islandImg);
-                Islands.addRow(1, island);
-                countIslands++;
-            }
-        }
-
-        for (int i = 0; i < 6; i++) {
-            if (i != 0 && i != 5) { //empty cell
-                Islands.addRow(2, new Text(""));
-            } else {
-                if (countIslands == numOfIslands) return;
-                Pane island = new Pane();
-                islandsPanes.add(island);
-                ImageView islandImg = new ImageView(islandsImgs.get(2 - i % 2));
-                for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(countIslands))) {
-                    island.getChildren().add(img);
-                }
-                islandImg.setFitWidth(150);
-                islandImg.setFitHeight(150);
-                island.getChildren().add(islandImg);
-                Islands.addRow(2, island);
-                countIslands++;
-            }
-        }
-
-        for (int i = 0; i < 6; i++) {
-            if (i == 0 || i == 5) { //empty cell
-                Islands.addRow(3, new Text(""));
-            } else {
-                if (countIslands == numOfIslands) return;
-                Pane island = new Pane();
-                islandsPanes.add(island);
-                ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
-                for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(countIslands))) {
-                    island.getChildren().add(img);
-                }
-                islandImg.setFitWidth(150);
-                islandImg.setFitHeight(150);
-                island.getChildren().add(islandImg);
-                Islands.addRow(3, island);
-                countIslands++;
+                indexIsland--; //out from the if !!
             }
         }
         Islands.getRowConstraints().add(row);
         Islands.getColumnConstraints().add(column);
-        System.out.println(islandsPanes.size());
     }
 
 
