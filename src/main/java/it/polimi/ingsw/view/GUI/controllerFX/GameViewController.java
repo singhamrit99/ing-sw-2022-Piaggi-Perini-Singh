@@ -13,13 +13,17 @@ import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -151,19 +155,18 @@ public class GameViewController extends InitialStage implements Controller {
         reloadClouds();
         reloadIslands();
         reloadBag();
+        loadAssistantDeck();
     }
 
     private void reloadBag() {
         bag.setOnMouseClicked(mouseEvent -> {
-            //se la fase è giusta
-            //se sono il primo giocatore
-            //se è il mio turno
-            if (GUI.client.getLocalModel().getState().equals(State.PLANNINGPHASE) && GUI.client.getLocalModel().getFirstPlayer().toString().equals(GUI.client.getNickname()) && GUI.client.isMyTurn()) {
+            if (GUI.client.getLocalModel().getState().equals(State.PLANNINGPHASE) && GUI.client.getLocalModel().getFirstPlayer().equals(GUI.client.getNickname()) && GUI.client.isMyTurn()) {
                 DrawFromBagCommand drawFromBagOrder = new DrawFromBagCommand(GUI.client.getNickname());
                 System.out.println("Drawing from bag...\n");
 
                 try {
                     GUI.client.performGameAction(drawFromBagOrder);
+
                 } catch (NotEnoughCoinsException e) {
                     Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
                 } catch (AssistantCardNotFoundException e) {
@@ -242,10 +245,9 @@ public class GameViewController extends InitialStage implements Controller {
             if (i == 0 || i == 5) {
                 Islands.addRow(0, new Text("")); //empty cell alignment
             } else {
-                if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")){
+                if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")) {
                     Islands.addRow(0, new Text("")); //empty cell alignment
-                }
-                else{
+                } else {
                     Pane island = new Pane();
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
@@ -265,11 +267,10 @@ public class GameViewController extends InitialStage implements Controller {
         for (int i = 0; i < 6; i++) {
             if (i != 0 && i != 5) {
                 Islands.addRow(1, new Text("")); //empty cell
-            } else if (i==0){
-                if (islandsBackEnd.get(11).getName().equals("EMPTY")){
+            } else if (i == 0) {
+                if (islandsBackEnd.get(11).getName().equals("EMPTY")) {
                     Islands.addRow(1, new Text("")); //empty cell alignment
-                }
-                else{
+                } else {
                     Pane island = new Pane();
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
@@ -281,12 +282,10 @@ public class GameViewController extends InitialStage implements Controller {
                     island.getChildren().add(islandImg);
                     Islands.addRow(1, island);
                 }
-            }
-            else if(i==5){ //second island of the FIRST line with the HOLE of the circle inside
-                if (islandsBackEnd.get(4).getName().equals("EMPTY")){
+            } else if (i == 5) { //second island of the FIRST line with the HOLE of the circle inside
+                if (islandsBackEnd.get(4).getName().equals("EMPTY")) {
                     Islands.addRow(1, new Text("")); //empty cell alignment
-                }
-                else{
+                } else {
                     Pane island = new Pane();
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
@@ -304,11 +303,10 @@ public class GameViewController extends InitialStage implements Controller {
         for (int i = 0; i < 6; i++) {
             if (i != 0 && i != 5) {
                 Islands.addRow(2, new Text("")); //empty cell
-            } else if (i==0){
-                if (islandsBackEnd.get(10).getName().equals("EMPTY")){
+            } else if (i == 0) {
+                if (islandsBackEnd.get(10).getName().equals("EMPTY")) {
                     Islands.addRow(2, new Text("")); //empty cell alignment
-                }
-                else{
+                } else {
                     Pane island = new Pane();
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
@@ -320,12 +318,10 @@ public class GameViewController extends InitialStage implements Controller {
                     island.getChildren().add(islandImg);
                     Islands.addRow(2, island);
                 }
-            }
-            else if(i==5){ //second island of the SECOND line with the HOLE of the circle inside
-                if (islandsBackEnd.get(4).getName().equals("EMPTY")){
+            } else if (i == 5) { //second island of the SECOND line with the HOLE of the circle inside
+                if (islandsBackEnd.get(4).getName().equals("EMPTY")) {
                     Islands.addRow(2, new Text("")); //empty cell alignment
-                }
-                else{
+                } else {
                     Pane island = new Pane();
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
@@ -341,14 +337,14 @@ public class GameViewController extends InitialStage implements Controller {
         }
 
         //LAST ISLANDS
-        indexIsland=9;
+        indexIsland = 9;
         for (int i = 0; i < 6; i++) {
             if (i == 0 || i == 5) {
                 Islands.addRow(3, new Text("")); //empty cell
             } else {
-                if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")){
+                if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")) {
                     Islands.addRow(0, new Text("")); //empty cell alignment
-                }else{
+                } else {
                     Pane island = new Pane();
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
@@ -394,7 +390,7 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
-    private void reloadClouds() {
+    public void reloadClouds() {
         int numPlayers = GUI.client.getLocalPlayerList().size();
         ArrayList<StrippedCloud> clouds = GUI.client.getLocalModel().getClouds();
 
@@ -657,10 +653,30 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
+    private void loadAssistantDeck() {
+        assistantDeck.setOnMouseClicked(mouseEvent -> {
+            Scene scene;
+            try {
+                String filePath = ResourcesPath.FXML_FILE_PATH + "SelectAssistantView" + ResourcesPath.FILE_EXTENSION;
+                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+                loader.setController(new AssistantCardController(gui));
+
+                scene = new Scene(loader.load());
+                Stage stage = new Stage();
+                stage.setTitle("Eryantis");
+                stage.setScene(scene);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
     private List<MenuItem> itemBoardViewArray; //the menu items necessary to change the view
 
     private ArrayList<ImageView> entranceStudentsImgs;
+
     private ArrayList<ImageView> towersImgs;
 
     //image assets import
@@ -715,4 +731,6 @@ public class GameViewController extends InitialStage implements Controller {
     @FXML
     private StackPane bag;
 
+    @FXML
+    private ImageView assistantDeck;
 }

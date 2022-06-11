@@ -79,7 +79,11 @@ public class GUI implements UI {
 
     @Override
     public void notifyCloud(PropertyChangeEvent e) {
-
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> gameController.reloadClouds());
+            }
+        }
     }
 
     @Override
