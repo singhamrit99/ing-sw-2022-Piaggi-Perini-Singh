@@ -288,7 +288,6 @@ public class GameViewController extends InitialStage implements Controller {
                 }
                 else{
                     Pane island = new Pane();
-                    island.
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
                     for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(4))) {
