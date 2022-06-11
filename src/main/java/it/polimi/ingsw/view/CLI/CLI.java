@@ -15,9 +15,11 @@ import it.polimi.ingsw.network.server.commands.*;
 import it.polimi.ingsw.view.UI;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
+
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.*;
+
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
 import static org.fusesource.jansi.Ansi.ansi;
@@ -33,10 +35,10 @@ public class CLI implements UI {
     String clientRoom = null;
     int action;
     int turnMoves;
-    private final int columns=5;
-    private final int studentRows=2;
-    private final int diningRows=10;
-    private final int professorRow=1;
+    private final int columns = 5;
+    private final int studentRows = 2;
+    private final int diningRows = 10;
+    private final int professorRow = 1;
     MoveMotherNature moveMotherNatureOrder;
     MoveStudents moveStudentsOrder;
     PickCloud pickCloudOrder;
@@ -47,6 +49,7 @@ public class CLI implements UI {
     PlayCharacterCardD playCharacterCardDOrder;
     DrawFromBagCommand drawFromBagOrder;
     private final Scanner in = new Scanner(System.in);
+
     public CLI(Client client) {
         this.client = client;
         this.client.setUi(this);
@@ -87,46 +90,47 @@ public class CLI implements UI {
         while (!client.isInGame()) {
             //codice della lobby
             String command = in.nextLine().toLowerCase(Locale.ROOT).replaceAll("\\s+", "");
-            switch (command) {
-                case "join":
-                    requestRoomJoin(); //fatto
-                    break;
-                case "create":
-                    requestRoomCreation(); //fatto
-                    break;
-                case "players":
-                    getPlayersInRoom();//fatto
-                    break;
-                case "rooms":
-                    getRooms();//fatto
-                    break;
-                case "info":
-                    getLobbyInfo();//fatto
-                    break;
-                case "change":
-                    setExpertMode();// TODO exception
-                    break;
-                case "leave":
-                    leaveRoom();//fatto
-                    break;
-                case "start":
-                    startGame();
-                    break;
-                case "help":
-                    System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
-                            "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n " +
-                            "CHANGE to toggle expert mode for the current lobby;\n " +
-                            "LEAVE to leave current lobby;\n" +
-                            "HELP to see this message again.\n" +
-                            "When you're ready to go and everyone is in the lobby type START to start the game!\n");
-                    break;
-                case "\n":
-                    System.out.println(command);
-                    break;
-                default:
-                    System.out.println("Command not recognized");
-                    break;
-            }
+            if (!client.isInGame())
+                switch (command) {
+                    case "join":
+                        requestRoomJoin(); //fatto
+                        break;
+                    case "create":
+                        requestRoomCreation(); //fatto
+                        break;
+                    case "players":
+                        getPlayersInRoom();//fatto
+                        break;
+                    case "rooms":
+                        getRooms();//fatto
+                        break;
+                    case "info":
+                        getLobbyInfo();//fatto
+                        break;
+                    case "change":
+                        setExpertMode();// TODO exception
+                        break;
+                    case "leave":
+                        leaveRoom();//fatto
+                        break;
+                    case "start":
+                        startGame();
+                        break;
+                    case "help":
+                        System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
+                                "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n " +
+                                "CHANGE to toggle expert mode for the current lobby;\n " +
+                                "LEAVE to leave current lobby;\n" +
+                                "HELP to see this message again.\n" +
+                                "When you're ready to go and everyone is in the lobby type START to start the game!\n");
+                        break;
+                    case "\n":
+                        System.out.println(command);
+                        break;
+                    default:
+                        System.out.println("Command not recognized");
+                        break;
+                }
         }
         System.out.println("Loading...");
         Thread.sleep(500);
@@ -151,26 +155,24 @@ public class CLI implements UI {
 
             //Turn phase
             if (client.getExpertMode()) {
-                while (!client.getLocalModel().getState().equals(State.ENDTURN)) {
+                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) {
                     while (!client.isMyTurn()) {
 
                     }
-                    if (client.getLocalModel().isCanPlayMN()) {
-                        expertprintCommandHelp();
-                        performActionInTurnExpert();
-                    }
+                    expertprintCommandHelp();
+                    performActionInTurnExpert();
+
                 }
                 pickCloud();
             } else {
-                while (!client.getLocalModel().getState().equals(State.ENDTURN)) {
+                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) {
                     while (!client.isMyTurn()) {
 
                     }
-                    if (!client.getLocalModel().isCanPlayMN()) {
-                        printCommandHelp();
-                        performActionInTurn();
-                    }
 
+                    printCommandHelp();
+                    performActionInTurn();
+                    //System.out.println(client.getLocalModel().getState());
                 }
                 pickCloud();
             }
@@ -783,7 +785,7 @@ public class CLI implements UI {
         EnumMap<Colors, Integer> students;
         int i;
         Color color;
-        int rows=0;
+        int rows = 0;
         for (StrippedCloud cloud : client.getLocalModel().getClouds()) {
             students = cloud.getStudents();
             System.out.println(("Cloud name:" + cloud.getName()));
@@ -791,24 +793,21 @@ public class CLI implements UI {
             System.out.println("0                    0");
             for (Colors c : cloud.getStudents().keySet()) {
                 //System.out.println(c + " students: " + board.getEntrance().get(c));
-                i=cloud.getStudents().get(c);
+                i = cloud.getStudents().get(c);
                 // System.out.println("I secondo: "+i);
-                color= colorsToColor(c);
-                while(i>0)
-                {   if ((rows%3)<2) {
-                    if (rows!=6) {
-                        System.out.print(ansi().fg(color).a("\t* ").reset());
+                color = colorsToColor(c);
+                while (i > 0) {
+                    if ((rows % 3) < 2) {
+                        if (rows != 6) {
+                            System.out.print(ansi().fg(color).a("\t* ").reset());
+                            rows++;
+                        } else
+                            System.out.print(ansi().fg(color).a("  *\n").reset());
+                    } else {
+                        System.out.print(ansi().fg(color).a("*\n").reset());
                         rows++;
-                    }
-                    else
-                        System.out.print(ansi().fg(color).a("  *\n").reset());
-                }
-                else
-                {
-                    System.out.print(ansi().fg(color).a("*\n").reset());
-                    rows ++;
 
-                }
+                    }
                     i--;
                 }
 
@@ -992,25 +991,24 @@ public class CLI implements UI {
                     while (true) {
                         System.out.println("Type the students you want to move to the dining room as \"color, number\"");
                         answer = in.nextLine();
-                       // System.out.println("answer "+ answer);
+                        // System.out.println("answer "+ answer);
                         parts = answer.split(",|, | ,");
                         color = parts[0];
                         color = color.replaceAll("[^a-zA Z0-9]", "");
-                       try {
-                           parts[1] = parts[1].trim();
-                           try {
-                               value = Integer.parseInt(parts[1]);
-                               color = color.toUpperCase(Locale.ROOT);
-                               break;
-                           }catch(NumberFormatException | ArrayIndexOutOfBoundsException e)
-                           {
-                               System.out.println("Something went wrong with your input, try again!");
-                               //in.nextLine();
-                           }
-                       }catch(ArrayIndexOutOfBoundsException e)
-                       {System.out.println("Something went wrong with your input, try again!");
-                       //in.nextLine();
-                       }
+                        try {
+                            parts[1] = parts[1].trim();
+                            try {
+                                value = Integer.parseInt(parts[1]);
+                                color = color.toUpperCase(Locale.ROOT);
+                                break;
+                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                                System.out.println("Something went wrong with your input, try again!");
+                                //in.nextLine();
+                            }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Something went wrong with your input, try again!");
+                            //in.nextLine();
+                        }
 
                     }
                     //  System.out.println("The color you chose was "+ color + " the number you picked was "+ value);
@@ -1062,13 +1060,12 @@ public class CLI implements UI {
                                 value = Integer.parseInt(parts[1]);
                                 color = color.toUpperCase(Locale.ROOT);
                                 break;
-                            }catch(NumberFormatException | ArrayIndexOutOfBoundsException e)
-                            {
+                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                                 System.out.println("Something went wrong with your input, try again!");
                                 //in.nextLine();
                             }
-                        }catch(ArrayIndexOutOfBoundsException e)
-                        {System.out.println("Something went wrong with your input, try again!");
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Something went wrong with your input, try again!");
                             //in.nextLine();
                         }
                     }
@@ -1150,7 +1147,7 @@ public class CLI implements UI {
 
     public void printPlayerBoard(StrippedBoard board) {
         Integer i;
-        int rows=0, printColumns;
+        int rows = 0, printColumns;
         Ansi.Color color;
         System.out.println("O----------------------O");
         System.out.println(board.getOwner() + "'s board: ");
@@ -1158,21 +1155,19 @@ public class CLI implements UI {
         System.out.println("\nDining room configuration: ");
         System.out.println("----------------------╗");
         for (Colors c : board.getDining().keySet()) {
-            i=board.getDining().get(c);
+            i = board.getDining().get(c);
             //  System.out.println("I: "+i);
-            color= colorsToColor(c);
-            printColumns=0;
-            while(i>0)
-            {   if (printColumns==0) {
-                System.out.print("|");
-                System.out.print(ansi().fg(color).a("*\t").reset());
-                printColumns++;
-            }
-            else
-            {
-                System.out.print(ansi().fg(color).a("*\t").reset());
-                printColumns++;
-            }
+            color = colorsToColor(c);
+            printColumns = 0;
+            while (i > 0) {
+                if (printColumns == 0) {
+                    System.out.print("|");
+                    System.out.print(ansi().fg(color).a("*\t").reset());
+                    printColumns++;
+                } else {
+                    System.out.print(ansi().fg(color).a("*\t").reset());
+                    printColumns++;
+                }
                 i--;
 
             }
@@ -1187,25 +1182,22 @@ public class CLI implements UI {
         System.out.println("O-----O");
         for (Colors c : board.getEntrance().keySet()) {
             //System.out.println(c + " students: " + board.getEntrance().get(c));
-            i=board.getEntrance().get(c);
+            i = board.getEntrance().get(c);
             // System.out.println("I secondo: "+i);
-            color= colorsToColor(c);
-            while(i>0)
-            {   if ((rows%3)<2) {
-                if (rows!=6) {
-                    System.out.print(ansi().fg(color).a("* ").reset());
+            color = colorsToColor(c);
+            while (i > 0) {
+                if ((rows % 3) < 2) {
+                    if (rows != 6) {
+                        System.out.print(ansi().fg(color).a("* ").reset());
+                        rows++;
+                    } else
+                        System.out.print(ansi().fg(color).a("  *\n").reset());
+                } else {
+                    System.out.print(ansi().fg(color).a("*\n").reset());
                     rows++;
+
+
                 }
-                else
-                    System.out.print(ansi().fg(color).a("  *\n").reset());
-            }
-            else
-            {
-                System.out.print(ansi().fg(color).a("*\n").reset());
-                rows ++;
-
-
-            }
                 i--;
             }
 
@@ -1214,7 +1206,17 @@ public class CLI implements UI {
         for (Colors c : board.getEntrance().keySet()) {
             System.out.println(c + " students: " + board.getEntrance().get(c));
         }
-        System.out.println("\nNumber of towers: " + board.getNumberOfTowers());
+        System.out.println();
+        i = 0;
+        while (i < board.getNumberOfTowers()) {
+            i++;
+            if (i != 5)
+                System.out.print(" * ");
+            else
+                System.out.print("\n * ");
+
+        }
+        System.out.println("Number of towers: " + board.getNumberOfTowers());
         System.out.println("\nProfessors table: ");
         for (Colors c : board.getProfessorsTable()) {
             System.out.println(c + "\n");
@@ -1234,7 +1236,7 @@ public class CLI implements UI {
         int i = 0, motherNature = 0;
         for (StrippedIsland island : islands) {
             if (!island.getName().equals("EMPTY"))
-            printIsland(island);
+                printIsland(island);
         }
 
         System.out.println("Mother Nature is on isle number " + (motherNature + 1) + "!");
@@ -1255,34 +1257,31 @@ public class CLI implements UI {
     public void printIsland(StrippedIsland island) {
         int i;
         Color color;
-        int rows=0;
+        int rows = 0;
         System.out.println("Island: " + island.getName());
         System.out.println("Students on the island: ");
-        if(island.hasMotherNature())
-        System.out.println(ansi().fg(CYAN).a("* Mother Nature's here!  *").reset());
+        if (island.hasMotherNature())
+            System.out.println(ansi().fg(CYAN).a("* Mother Nature's here!  *").reset());
         System.out.println(" ____________________");
         System.out.println("/                    \\");
         for (Colors c : island.getStudents().keySet()) {
             //System.out.println(c + " students: " + board.getEntrance().get(c));
-            i=island.getStudents().get(c);
+            i = island.getStudents().get(c);
             // System.out.println("I secondo: "+i);
-            color= colorsToColor(c);
-            while(i>0)
-            {   if ((rows%3)<2) {
-                if (rows!=6) {
-                    System.out.print(ansi().fg(color).a("\t* ").reset());
+            color = colorsToColor(c);
+            while (i > 0) {
+                if ((rows % 3) < 2) {
+                    if (rows != 6) {
+                        System.out.print(ansi().fg(color).a("\t* ").reset());
+                        rows++;
+                    } else
+                        System.out.print(ansi().fg(color).a("  *\n").reset());
+                } else {
+                    System.out.print(ansi().fg(color).a("*\n").reset());
                     rows++;
+
+
                 }
-                else
-                    System.out.print(ansi().fg(color).a("  *\n").reset());
-            }
-            else
-            {
-                System.out.print(ansi().fg(color).a("*\n").reset());
-                rows ++;
-
-
-            }
                 i--;
             }
 
@@ -1290,13 +1289,12 @@ public class CLI implements UI {
         System.out.println();
         System.out.println("\\                    /");
         System.out.println(" ____________________");
-        int w=0;
+        int w = 0;
         for (Colors c : island.getStudents().keySet()) {
-            if(w%3==0) {
+            if (w % 3 == 0) {
                 System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
                 w++;
-            }
-            else
+            } else
                 System.out.print(c + " students: " + island.getStudents().get(c) + "\n");
         }
 
@@ -1304,7 +1302,6 @@ public class CLI implements UI {
             System.out.println("There are no towers yet on this island!\n");
         else
             System.out.println("Towers: " + island.getNumOfTowers() + " " + island.getTowersColor() + "towers \n");
-
 
 
         if (island.hasMotherNature())
@@ -1355,28 +1352,28 @@ public class CLI implements UI {
                 return Colors.YELLOW;
         }
     }
-public Color colorsToColor(Colors color)
-{
-    Color colorToReturn= null;
-    switch (color) {
-        case RED:
-            colorToReturn= Ansi.Color.RED;
-            break;
-        case YELLOW:
-            colorToReturn= Ansi.Color.YELLOW;
-            break;
-        case BLUE:
-            colorToReturn= Ansi.Color.CYAN;
-            break;
-        case GREEN:
-            colorToReturn= Ansi.Color.GREEN;
-            break;
-        case PINK:
-            colorToReturn= Ansi.Color.MAGENTA;
-            break;
+
+    public Color colorsToColor(Colors color) {
+        Color colorToReturn = null;
+        switch (color) {
+            case RED:
+                colorToReturn = Ansi.Color.RED;
+                break;
+            case YELLOW:
+                colorToReturn = Ansi.Color.YELLOW;
+                break;
+            case BLUE:
+                colorToReturn = Ansi.Color.CYAN;
+                break;
+            case GREEN:
+                colorToReturn = Ansi.Color.GREEN;
+                break;
+            case PINK:
+                colorToReturn = Ansi.Color.MAGENTA;
+                break;
+        }
+        return colorToReturn;
     }
-    return colorToReturn;
-}
 
     public EnumMap<Colors, ArrayList<String>> strippedToGame(EnumMap<Colors, Integer> students, EnumMap<Colors, ArrayList<String>> returnStudents, String destination) {
         EnumMap<Colors, Integer> tmp = students;
