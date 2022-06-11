@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0"
-            prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+            prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/Style.css">
     <center>
         <StackPane prefHeight="650.0" prefWidth="450.0" BorderPane.alignment="CENTER">
             <children>
@@ -44,8 +44,7 @@
     <top>
         <StackPane maxWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" BorderPane.alignment="CENTER">
             <children>
-                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0"
-                      styleClass="title" text="Select Assistant Card" textAlignment="JUSTIFY"
+                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" text="Select Assistant Card" textAlignment="JUSTIFY"
                       StackPane.alignment="CENTER">
                     <font>
                         <Font name="Rockwell Extra Bold" size="25.0"/>
