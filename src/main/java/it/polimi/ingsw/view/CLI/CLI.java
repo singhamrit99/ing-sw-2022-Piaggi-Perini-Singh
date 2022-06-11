@@ -648,7 +648,7 @@ public class CLI implements UI {
                 printPlayerNames();
                 break;
             case 3:
-                printExperIslands();
+                printExpertIslands();
                 break;
             case 4:
                 printClouds();
@@ -955,14 +955,30 @@ public class CLI implements UI {
             isValidInputYN = false;
             if (answer.equals("y")) {
                 do {
-                    System.out.println("Type the students you want to move to the dining room as \"color, number\"");
-                    answer = in.nextLine();
-                    parts = answer.split(",|, | ,");
-                    color = parts[0];
-                    color = color.replaceAll("[^a-zA Z0-9]", "");
-                    parts[1] = parts[1].trim();
-                    value = Integer.parseInt(parts[1]);
-                    color = color.toUpperCase(Locale.ROOT);
+                    while (true) {
+                        System.out.println("Type the students you want to move to the dining room as \"color, number\"");
+                        answer = in.nextLine();
+                       // System.out.println("answer "+ answer);
+                        parts = answer.split(",|, | ,");
+                        color = parts[0];
+                        color = color.replaceAll("[^a-zA Z0-9]", "");
+                       try {
+                           parts[1] = parts[1].trim();
+                           try {
+                               value = Integer.parseInt(parts[1]);
+                               color = color.toUpperCase(Locale.ROOT);
+                               break;
+                           }catch(NumberFormatException | ArrayIndexOutOfBoundsException e)
+                           {
+                               System.out.println("Something went wrong with your input, try again!");
+                               //in.nextLine();
+                           }
+                       }catch(ArrayIndexOutOfBoundsException e)
+                       {System.out.println("Something went wrong with your input, try again!");
+                       //in.nextLine();
+                       }
+
+                    }
                     //  System.out.println("The color you chose was "+ color + " the number you picked was "+ value);
                     if (isValidColor(color)) {
                         // System.out.println("StringToColor output: "+ stringToColor(color));
@@ -999,13 +1015,29 @@ public class CLI implements UI {
             //Resetting destinations array for students to island part
             if (movedStudents < 3) {
                 do {
-                    System.out.println("Type the students you want to move to the island as \"color, number\", then input the island number");
-                    answer = in.nextLine();
-                    parts = answer.split(",|, | ,");
-                    color = parts[0];
-                    color = color.replaceAll("[^a-zA Z0-9]", "");
-                    parts[1] = parts[1].trim();
-                    value = Integer.parseInt(parts[1]);
+                    while (true) {
+                        System.out.println("Type the students you want to move to the dining room as \"color, number\"");
+                        answer = in.nextLine();
+                        // System.out.println("answer "+ answer);
+                        parts = answer.split(",|, | ,");
+                        color = parts[0];
+                        color = color.replaceAll("[^a-zA Z0-9]", "");
+                        try {
+                            parts[1] = parts[1].trim();
+                            try {
+                                value = Integer.parseInt(parts[1]);
+                                color = color.toUpperCase(Locale.ROOT);
+                                break;
+                            }catch(NumberFormatException | ArrayIndexOutOfBoundsException e)
+                            {
+                                System.out.println("Something went wrong with your input, try again!");
+                                //in.nextLine();
+                            }
+                        }catch(ArrayIndexOutOfBoundsException e)
+                        {System.out.println("Something went wrong with your input, try again!");
+                            //in.nextLine();
+                        }
+                    }
                     String input;
                     while (true) {
                         input = in.next();
@@ -1167,6 +1199,7 @@ public class CLI implements UI {
         ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
         int i = 0, motherNature = 0;
         for (StrippedIsland island : islands) {
+            if (!island.getName().equals("EMPTY"))
             printIsland(island);
         }
 
@@ -1174,7 +1207,7 @@ public class CLI implements UI {
 
     }
 
-    public void printExperIslands() {
+    public void printExpertIslands() {
         ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
         int i = 0, motherNature = 0;
         for (StrippedIsland island : islands) {
@@ -1186,13 +1219,60 @@ public class CLI implements UI {
     }
 
     public void printIsland(StrippedIsland island) {
+        int i;
+        Color color;
+        int rows=0, printColumns;
         System.out.println("Island: " + island.getName());
         System.out.println("Students on the island: ");
-        System.out.println(" students: " + island.getStudents() + "\n");
+        if(island.hasMotherNature())
+        System.out.println(ansi().fg(CYAN).a("* Mother Nature's here!  *").reset());
+        System.out.println(" ____________________");
+        System.out.println("/                    \\");
+        for (Colors c : island.getStudents().keySet()) {
+            //System.out.println(c + " students: " + board.getEntrance().get(c));
+            i=island.getStudents().get(c);
+            // System.out.println("I secondo: "+i);
+            color= colorsToColor(c);
+            while(i>0)
+            {   if ((rows%3)<2) {
+                if (rows!=6) {
+                    System.out.print(ansi().fg(color).a("\t* ").reset());
+                    rows++;
+                }
+                else
+                    System.out.print(ansi().fg(color).a("  *\n").reset());
+            }
+            else
+            {
+                System.out.print(ansi().fg(color).a("*\n").reset());
+                rows ++;
+
+
+            }
+                i--;
+            }
+
+        }
+        System.out.println();
+        System.out.println("\\                    /");
+        System.out.println(" ____________________");
+        int w=0;
+        for (Colors c : island.getStudents().keySet()) {
+            if(w%3==0) {
+                System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
+                w++;
+            }
+            else
+                System.out.print(c + " students: " + island.getStudents().get(c) + "\n");
+        }
+
         if (island.getNumOfTowers() == 0)
             System.out.println("There are no towers yet on this island!\n");
         else
             System.out.println("Towers: " + island.getNumOfTowers() + " " + island.getTowersColor() + "towers \n");
+
+
+
         if (island.hasMotherNature())
             System.out.println("Mother Nature is on this island!");
         else
