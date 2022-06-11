@@ -7,12 +7,12 @@ import java.io.Serializable;
 import java.util.EnumMap;
 
 public class StrippedIsland implements Serializable {
-    final private String name;
-    final private EnumMap<Colors, Integer> students;
-    final int numberOfTowers;
-    final private Towers towersColor;
-    final boolean hasNoEnterTile;
-    public boolean hasMotherNature;
+    private String name;
+    private EnumMap<Colors, Integer> students;
+    private int numberOfTowers;
+    private Towers towersColor;
+    private boolean hasNoEnterTile;
+    private boolean hasMotherNature;
 
     public StrippedIsland(Island island) {
         name = island.getName();
@@ -34,15 +34,33 @@ public class StrippedIsland implements Serializable {
     public int getNumOfTowers() {
         return numberOfTowers;
     }
-    public boolean isHasNoEnterTile(){
+    public boolean hasNoEnterTile(){
         return hasNoEnterTile;
     }
-
     public boolean hasMotherNature() {
         return hasMotherNature;
     }
-
     public void setHasMotherNature(boolean hasMotherNature) {
         this.hasMotherNature = hasMotherNature;
+    }
+
+    public void setStudents(EnumMap<Colors, Integer> students){
+        this.students = students;
+    }
+
+    public void setNumberOfTowers(int numberOfTowers) {
+        this.numberOfTowers = numberOfTowers;
+    }
+
+    public void setTowersColor(Towers towersColor) {
+        this.towersColor = towersColor;
+    }
+
+    public void setHasNoEnterTile(boolean hasNoEnterTile) {
+        this.hasNoEnterTile = hasNoEnterTile;
+    }
+
+    public void setDestroyed(){
+        name="";
     }
 }
