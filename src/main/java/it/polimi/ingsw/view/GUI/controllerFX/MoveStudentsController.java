@@ -159,7 +159,7 @@ public class MoveStudentsController extends InitialStage implements Controller {
                 }
 
                 if (islandNumber.getSelectionModel().getSelectedIndex() != 0 && islandsComboBoxes.get(i).getSelectionModel().getSelectedItem() != null) {
-                    value = (int) islandsComboBoxes.get(i).getSelectionModel().getSelectedItem();
+                    value = Integer.parseInt((String) islandsComboBoxes.get(i).getSelectionModel().getSelectedItem());
                     for (int j = 0; j < value; j++) {
                         destinations.add(GUI.client.getLocalModel().getIslands().get(value).getName());
                     }
