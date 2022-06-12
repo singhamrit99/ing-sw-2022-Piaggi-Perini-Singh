@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
-import it.polimi.ingsw.network.server.commands.DrawFromBagCommand;
 import it.polimi.ingsw.network.server.commands.PlayAssistantCard;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
@@ -30,7 +29,7 @@ public class AssistantCardController extends InitialStage implements Controller 
     private Button confirmButton;
 
     @FXML
-    private ChoiceBox choiceBox;
+    private ChoiceBox<String> choiceBox;
 
     @FXML
     private ImageView image;
