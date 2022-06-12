@@ -42,6 +42,7 @@ public class GameViewController extends InitialStage implements Controller {
     ArrayList<StackPane> islandsPanes;
 
     String css;
+
     public GameViewController(GUI gui) {
         super(gui);
         opened.set(false);
@@ -86,7 +87,6 @@ public class GameViewController extends InitialStage implements Controller {
             } catch (RemoteException | UserNotInRoomException | UserNotRegisteredException ignored) {
             }
         });
-
 
         //animations
         if (islandsPanes.size() != 0) {
@@ -162,7 +162,6 @@ public class GameViewController extends InitialStage implements Controller {
     private void reloadBag() {
         bag.setOnMouseClicked(mouseEvent -> {
             DrawFromBagCommand drawFromBagOrder = new DrawFromBagCommand(GUI.client.getNickname());
-
             try {
                 GUI.client.performGameAction(drawFromBagOrder);
             } catch (NotEnoughCoinsException e) {
@@ -237,7 +236,6 @@ public class GameViewController extends InitialStage implements Controller {
         Islands.getColumnConstraints().add(column);
         Islands.setAlignment(Pos.TOP_CENTER);
 
-
         islandsImgs = new ArrayList<>();
         islandsImgs.add(island0);
         islandsImgs.add(island1);
@@ -288,20 +286,20 @@ public class GameViewController extends InitialStage implements Controller {
                 } else {
                     StackPane island = initIsland(1 + i % 2);
                     HBox islandHbox = new HBox();
-                    GridPane studentsPane = initGridPaneIsland(island,islandHbox);
-                    ArrayList<ImageView> imgStudents =  spawnImgsForIsland(islandsBackEnd.get(4));
-                    for(int j=0;j<4;j++){ //imgStudents.size()
+                    GridPane studentsPane = initGridPaneIsland(island, islandHbox);
+                    ArrayList<ImageView> imgStudents = spawnImgsForIsland(islandsBackEnd.get(4));
+                    for (int j = 0; j < 4; j++) { //imgStudents.size()
                         ImageView img = new ImageView(blueStudentImg);   //imgStudents.get(j);
                         img.setFitWidth(20);
                         img.setFitHeight(20);
-                        studentsPane.addRow(j/2,img);
+                        studentsPane.addRow(j / 2, img);
                     }
-                    GridPane towersPane = initGridPaneIsland(island,islandHbox);
-                    for(int j =0;j<4;j++){
+                    GridPane towersPane = initGridPaneIsland(island, islandHbox);
+                    for (int j = 0; j < 4; j++) {
                         ImageView test = new ImageView(blackTowerImg);
                         test.setFitHeight(25);
                         test.setFitWidth(25);
-                        towersPane.addRow(j/2,test);
+                        towersPane.addRow(j / 2, test);
                     }
                     spawnMN(towersPane);
                     Islands.addRow(1, island);
@@ -365,7 +363,7 @@ public class GameViewController extends InitialStage implements Controller {
 
     }
 
-    private StackPane initIsland(int index){
+    private StackPane initIsland(int index) {
         StackPane island = new StackPane();
         island.maxHeight(100);
         island.maxWidth(100);
@@ -378,11 +376,11 @@ public class GameViewController extends InitialStage implements Controller {
         return island;
     }
 
-    private GridPane initGridPaneIsland(StackPane island, HBox islandHBox){
+    private GridPane initGridPaneIsland(StackPane island, HBox islandHBox) {
         islandHBox.maxWidth(150);
         islandHBox.maxHeight(150);
-        if(!island.getChildren().contains(islandHBox))
-        island.getChildren().add(islandHBox);
+        if (!island.getChildren().contains(islandHBox))
+            island.getChildren().add(islandHBox);
         GridPane grid = new GridPane();
         RowConstraints row = new RowConstraints();
         row.setPrefHeight(75);
@@ -397,17 +395,36 @@ public class GameViewController extends InitialStage implements Controller {
         return grid;
     }
 
-    private void spawnMN(GridPane pane){
+    private void spawnMN(GridPane pane) {
         ImageView mn = new ImageView(MotherNature);
         mn.setFitHeight(40);
         mn.setFitWidth(40);
         mn.maxWidth(40);
         mn.maxHeight(40);
-        pane.addRow(0,mn);
+        pane.addRow(0, mn);
     }
 
-
     private void reloadEntrance() {
+        board.setOnMouseClicked((event) -> {
+            Scene scene;
+            try {
+                String filePath = ResourcesPath.FXML_FILE_PATH + "MoveStudentsView" + ResourcesPath.FILE_EXTENSION;
+                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+                loader.setController(new MoveStudentsController(gui));
+
+                scene = new Scene(loader.load());
+                Stage stage = new Stage();
+                stage.setTitle(StringNames.TITLE);
+                stage.setResizable(false);
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
+                stage.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
         try {
             EnumMap<Colors, Integer> entrance = GUI.client.getLocalModel().getBoardOf(currentBoardView).getEntrance();
             int indexEntranceAssets = 0;
@@ -445,31 +462,28 @@ public class GameViewController extends InitialStage implements Controller {
                 if (students.get(c) != 0) {
                     switch (cloudIndex) {
                         case 0:
-                            if (numPlayers == 3){
+                            if (numPlayers == 3) {
                                 studentsCloud1v3.get(indexStudentsAssets).setImage(rightColor);
                                 studentsCloud1v3.get(indexStudentsAssets).setVisible(true);
-                            }
-                            else{
+                            } else {
                                 studentsCloud1v4.get(indexStudentsAssets).setImage(rightColor);
                                 studentsCloud1v4.get(indexStudentsAssets).setVisible(true);
                             }
                             break;
                         case 1:
-                            if (numPlayers == 3){
+                            if (numPlayers == 3) {
                                 studentsCloud2v3.get(indexStudentsAssets).setImage(rightColor);
                                 studentsCloud2v3.get(indexStudentsAssets).setVisible(true);
-                            }
-                            else{
+                            } else {
                                 studentsCloud2v4.get(indexStudentsAssets).setImage(rightColor);
                                 studentsCloud2v4.get(indexStudentsAssets).setVisible(true);
                             }
                             break;
                         case 2:
-                            if (numPlayers == 3){
+                            if (numPlayers == 3) {
                                 studentsCloud3v3.get(indexStudentsAssets).setImage(rightColor);
                                 studentsCloud3v3.get(indexStudentsAssets).setVisible(true);
-                            }
-                            else{
+                            } else {
                                 studentsCloud3v4.get(indexStudentsAssets).setImage(rightColor);
                                 studentsCloud3v4.get(indexStudentsAssets).setVisible(true);
                             }
@@ -558,7 +572,7 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
-    private void reloadDining() {
+    public void reloadDining() {
         try {
             EnumMap<Colors, Integer> dining = GUI.client.getLocalModel().getBoardOf(currentBoardView).getDining();
             for (Colors c : dining.keySet()) {
@@ -780,13 +794,16 @@ public class GameViewController extends InitialStage implements Controller {
             cloud2v4, cloud3v3, cloud3v4, cloud4v4;
 
     @FXML
-    StackPane entrance;
+    private StackPane board;
 
     @FXML
-    StackPane towers;
+    private StackPane entrance;
 
     @FXML
-    StackPane yellowDining, redDining, greenDining,
+    private StackPane towers;
+
+    @FXML
+    private StackPane yellowDining, redDining, greenDining,
             blueDining, pinkDining;
 
     @FXML
