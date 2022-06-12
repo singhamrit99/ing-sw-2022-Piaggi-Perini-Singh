@@ -26,12 +26,13 @@ public class Cloud {
     }
 
     public EnumMap<Colors, Integer> drawStudents() {
-        EnumMap<Colors, Integer> returnedStudents = students;
-        for (Map.Entry<Colors, Integer> studentType : students.entrySet()) {
-            if (studentType.getValue() > 0) {
-                studentType.setValue(0);
-            }
+        EnumMap<Colors, Integer> returnedStudents = StudentManager.createEmptyStudentsEnum();
+
+        for (Colors color: Colors.values()){
+            returnedStudents.put(color, students.get(color));
         }
+
+        setStudents(StudentManager.createEmptyStudentsEnum());
         return returnedStudents;
     }
 
