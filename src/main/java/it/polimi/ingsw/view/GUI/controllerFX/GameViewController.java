@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.network.server.commands.DrawFromBagCommand;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
@@ -230,7 +231,7 @@ public class GameViewController extends InitialStage implements Controller {
 
         return towersToReturn;
     }
-    
+
     ArrayList<Image> islandsImgs;
 
     public void reloadIslands() {
@@ -287,7 +288,7 @@ public class GameViewController extends InitialStage implements Controller {
                         img.setFitHeight(20);
                         studentsPane.addRow(j / 3, img);
                     }
-                    if(islandsBackEnd.get(indexIsland).hasMotherNature())spawnMN(towersPane);
+                    if(islandsBackEnd.get(indexIsland).hasMotherNature())spawnMN(studentsPane);
                     Islands.addRow(0, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -321,6 +322,7 @@ public class GameViewController extends InitialStage implements Controller {
                         img.setFitHeight(20);
                         studentsPane.addRow(j / 2, img);
                     }
+                    if(islandsBackEnd.get(11).hasMotherNature())spawnMN(studentsPane);
                     Islands.addRow(1, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -349,7 +351,7 @@ public class GameViewController extends InitialStage implements Controller {
                         studentsPane.addRow(im / 2, img);
                         im++;
                     }
-                    if(islandsBackEnd.get(4).hasMotherNature())spawnMN(towersPane);
+                    if(islandsBackEnd.get(4).hasMotherNature())spawnMN(studentsPane);
                     Islands.addRow(1, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
