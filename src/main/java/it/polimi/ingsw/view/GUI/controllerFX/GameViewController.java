@@ -457,19 +457,38 @@ public class GameViewController extends InitialStage implements Controller {
                 if (students.get(c) != 0) {
                     switch (cloudIndex) {
                         case 0:
-                            if (numPlayers == 3) studentsCloud1v3.get(indexStudentsAssets).setImage(rightColor);
-                            else studentsCloud1v4.get(indexStudentsAssets).setImage(rightColor);
+                            if (numPlayers == 3){
+                                studentsCloud1v3.get(indexStudentsAssets).setImage(rightColor);
+                                studentsCloud1v3.get(indexStudentsAssets).setVisible(true);
+                            }
+                            else{
+                                studentsCloud1v4.get(indexStudentsAssets).setImage(rightColor);
+                                studentsCloud1v4.get(indexStudentsAssets).setVisible(true);
+                            }
                             break;
                         case 1:
-                            if (numPlayers == 3) studentsCloud2v3.get(indexStudentsAssets).setImage(rightColor);
-                            else studentsCloud2v4.get(indexStudentsAssets).setImage(rightColor);
+                            if (numPlayers == 3){
+                                studentsCloud2v3.get(indexStudentsAssets).setImage(rightColor);
+                                studentsCloud2v3.get(indexStudentsAssets).setVisible(true);
+                            }
+                            else{
+                                studentsCloud2v4.get(indexStudentsAssets).setImage(rightColor);
+                                studentsCloud2v4.get(indexStudentsAssets).setVisible(true);
+                            }
                             break;
                         case 2:
-                            if (numPlayers == 3) studentsCloud3v3.get(indexStudentsAssets).setImage(rightColor);
-                            else studentsCloud3v4.get(indexStudentsAssets).setImage(rightColor);
+                            if (numPlayers == 3){
+                                studentsCloud3v3.get(indexStudentsAssets).setImage(rightColor);
+                                studentsCloud3v3.get(indexStudentsAssets).setVisible(true);
+                            }
+                            else{
+                                studentsCloud3v4.get(indexStudentsAssets).setImage(rightColor);
+                                studentsCloud3v4.get(indexStudentsAssets).setVisible(true);
+                            }
                             break;
                         case 3:
                             studentsCloud4v4.get(indexStudentsAssets).setImage(rightColor);
+                            studentsCloud4v4.get(indexStudentsAssets).setVisible(true);
                             break;
                     }
                     indexStudentsAssets++;
