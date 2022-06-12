@@ -93,10 +93,9 @@ public class GameViewController extends InitialStage implements Controller {
             for (Pane island : islandsPanes) {
                 TranslateTransition floatingTitle = new TranslateTransition();
                 floatingTitle.setNode(island);
-                floatingTitle.setDelay(Duration.millis(Math.random()));
                 floatingTitle.setDuration(Duration.millis(4000));
                 floatingTitle.setCycleCount(TranslateTransition.INDEFINITE);
-                floatingTitle.setByY(10);
+                floatingTitle.setByX(10);
                 floatingTitle.setAutoReverse(true);
                 floatingTitle.setInterpolator(Interpolator.EASE_BOTH);
                 floatingTitle.play();
@@ -217,24 +216,29 @@ public class GameViewController extends InitialStage implements Controller {
         return imagesToReturn;
     }
 
+    ArrayList<Image> islandsImgs;
+
     public void reloadIslands() {
         islandsPanes = new ArrayList<>();
-        IslandsBox.getChildren().clear();
-        IslandsBox.maxHeight(400);
-        IslandsBox.maxWidth(1000);
-        IslandsBox.setAlignment(Pos.CENTER);
+        IslandsPane.getChildren().clear();
+        IslandsPane.maxHeight(450);
+        IslandsPane.maxWidth(1000);
+        IslandsPane.setAlignment(Pos.TOP_CENTER);
         GridPane Islands = new GridPane();
-        IslandsBox.getChildren().add(Islands);
+        Islands.setGridLinesVisible(false);
+        IslandsPane.getChildren().add(Islands);
         RowConstraints row = new RowConstraints();
-        row.setPrefHeight(130);
-        row.setMaxHeight(130);
+        row.setPrefHeight(150);
+        row.setMaxHeight(150);
         ColumnConstraints column = new ColumnConstraints();
-        column.setPrefWidth(150);
-        column.setMaxWidth(150);
+        column.setPrefWidth(200);
+        column.setMaxWidth(200);
         Islands.getRowConstraints().add(row);
         Islands.getColumnConstraints().add(column);
+        Islands.setAlignment(Pos.TOP_CENTER);
 
-        ArrayList<Image> islandsImgs = new ArrayList<>();
+
+        islandsImgs = new ArrayList<>();
         islandsImgs.add(island0);
         islandsImgs.add(island1);
         islandsImgs.add(island2);
@@ -250,14 +254,7 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")) {
                     Islands.addRow(0, new Text("")); //empty cell alignment
                 } else {
-                    StackPane island = new StackPane();
-                    island.maxHeight(100);
-                    island.maxWidth(100);
-                    islandsPanes.add(island);
-                    ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
-                    islandImg.setFitWidth(150);
-                    islandImg.setFitHeight(150);
-                    island.getChildren().add(islandImg);
+                    StackPane island = initIsland(i % 3);
                     for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(indexIsland))) {
                         island.getChildren().add(img);
                     }
@@ -277,14 +274,7 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(11).getName().equals("EMPTY")) {
                     Islands.addRow(1, new Text("")); //empty cell alignment
                 } else {
-                    StackPane island = new StackPane();
-                    island.maxHeight(100);
-                    island.maxWidth(100);
-                    islandsPanes.add(island);
-                    ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
-                    islandImg.setFitWidth(150);
-                    islandImg.setFitHeight(150);
-                    island.getChildren().add(islandImg);
+                    StackPane island = initIsland(1 + i % 2);
                     for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(11))) {
                         island.getChildren().add(img);
                     }
@@ -296,54 +286,31 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(4).getName().equals("EMPTY")) {
                     Islands.addRow(1, new Text("")); //empty cell alignment
                 } else {
-                    StackPane island = new StackPane();
-                    island.maxHeight(100);
-                    island.maxWidth(100);
-                    islandsPanes.add(island);
-                    ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
-                    islandImg.setFitWidth(150);
-                    islandImg.setFitHeight(150);
-                    island.getChildren().add(islandImg);
-                    HBox prova = new HBox();
-                    prova.maxWidth(150);
-                    prova.maxHeight(150);
-                    island.getChildren().add(prova);
-                    GridPane studentsPane = new GridPane();
-                    RowConstraints rowStudents = new RowConstraints();
-                    rowStudents.setPrefHeight(75);
-                    rowStudents.setMaxHeight(75);
-                    ColumnConstraints columnStudents = new ColumnConstraints();
-                    columnStudents.setPrefWidth(75);
-                    columnStudents.setMaxWidth(75);
-                    prova.getChildren().add(studentsPane);
+                    StackPane island = initIsland(1 + i % 2);
+                    HBox islandHbox = new HBox();
+                    GridPane studentsPane = initGridPaneIsland(island,islandHbox);
                     ArrayList<ImageView> imgStudents =  spawnImgsForIsland(islandsBackEnd.get(4));
-                    for(int j=0;j<imgStudents.size();j++){
-                        ImageView img = imgStudents.get(j);
+                    for(int j=0;j<4;j++){ //imgStudents.size()
+                        ImageView img = new ImageView(blueStudentImg);   //imgStudents.get(j);
                         img.setFitWidth(20);
                         img.setFitHeight(20);
                         studentsPane.addRow(j/2,img);
-                        studentsPane.getRowConstraints().add(rowStudents);
-                        studentsPane.getColumnConstraints().add(columnStudents);
                     }
-                    /*
-                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(4))) {
-                        prova.getChildren().add(img);
-                    }
-                    */
-                    GridPane towersPane = new GridPane();
-                    prova.getChildren().add(towersPane);
-                    for(int j =0;j<10;j++){
+                    GridPane towersPane = initGridPaneIsland(island,islandHbox);
+                    for(int j =0;j<4;j++){
                         ImageView test = new ImageView(blackTowerImg);
                         test.setFitHeight(25);
                         test.setFitWidth(25);
-                        towersPane.addRow(j/3,test);
+                        towersPane.addRow(j/2,test);
                     }
+                    spawnMN(towersPane);
                     Islands.addRow(1, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
                 }
             }
         }
+
         //THIRD LINE
         for (int i = 0; i < 6; i++) {
             if (i != 0 && i != 5) {
@@ -352,14 +319,7 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(10).getName().equals("EMPTY")) {
                     Islands.addRow(2, new Text("")); //empty cell alignment
                 } else {
-                    StackPane island = new StackPane();
-                    island.maxHeight(100);
-                    island.maxWidth(100);
-                    islandsPanes.add(island);
-                    ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
-                    islandImg.setFitWidth(150);
-                    islandImg.setFitHeight(150);
-                    island.getChildren().add(islandImg);
+                    StackPane island = initIsland(1 + i % 2);
                     for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(10))) {
                         island.getChildren().add(img);
                     }
@@ -371,14 +331,7 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(4).getName().equals("EMPTY")) {
                     Islands.addRow(2, new Text("")); //empty cell alignment
                 } else {
-                    StackPane island = new StackPane();
-                    island.maxHeight(100);
-                    island.maxWidth(100);
-                    islandsPanes.add(island);
-                    ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
-                    islandImg.setFitWidth(150);
-                    islandImg.setFitHeight(150);
-                    island.getChildren().add(islandImg);
+                    StackPane island = initIsland(1 + i % 2);
                     for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(4))) {
                         island.getChildren().add(img);
                     }
@@ -398,14 +351,7 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")) {
                     Islands.addRow(0, new Text("")); //empty cell alignment
                 } else {
-                    StackPane island = new StackPane();
-                    island.maxHeight(100);
-                    island.maxWidth(100);
-                    islandsPanes.add(island);
-                    ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
-                    islandImg.setFitWidth(150);
-                    islandImg.setFitHeight(150);
-                    island.getChildren().add(islandImg);
+                    StackPane island = initIsland(i % 3);
                     for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(indexIsland))) {
                         island.getChildren().add(img);
                     }
@@ -416,6 +362,48 @@ public class GameViewController extends InitialStage implements Controller {
                 indexIsland--; //out from the if !!
             }
         }
+
+    }
+
+    private StackPane initIsland(int index){
+        StackPane island = new StackPane();
+        island.maxHeight(100);
+        island.maxWidth(100);
+        islandsPanes.add(island);
+        ImageView islandImg = new ImageView(islandsImgs.get(index));
+        islandImg.setFitWidth(200);
+        islandImg.setFitHeight(200);
+        island.getChildren().add(islandImg);
+        island.setAlignment(Pos.CENTER);
+        return island;
+    }
+
+    private GridPane initGridPaneIsland(StackPane island, HBox islandHBox){
+        islandHBox.maxWidth(150);
+        islandHBox.maxHeight(150);
+        if(!island.getChildren().contains(islandHBox))
+        island.getChildren().add(islandHBox);
+        GridPane grid = new GridPane();
+        RowConstraints row = new RowConstraints();
+        row.setPrefHeight(75);
+        row.setMaxHeight(75);
+        ColumnConstraints column = new ColumnConstraints();
+        column.setPrefWidth(75);
+        column.setMaxWidth(75);
+        islandHBox.getChildren().add(grid);
+        island.setAlignment(Pos.CENTER);
+        islandHBox.setAlignment(Pos.CENTER);
+        grid.setAlignment(Pos.CENTER);
+        return grid;
+    }
+
+    private void spawnMN(GridPane pane){
+        ImageView mn = new ImageView(MotherNature);
+        mn.setFitHeight(40);
+        mn.setFitWidth(40);
+        mn.maxWidth(40);
+        mn.maxHeight(40);
+        pane.addRow(0,mn);
     }
 
 
@@ -802,7 +790,7 @@ public class GameViewController extends InitialStage implements Controller {
             blueDining, pinkDining;
 
     @FXML
-    private HBox IslandsBox;
+    private StackPane IslandsPane;
 
     @FXML
     private StackPane bag;
