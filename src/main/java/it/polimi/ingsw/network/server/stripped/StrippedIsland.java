@@ -61,6 +61,6 @@ public class StrippedIsland implements Serializable {
     }
 
     public void setDestroyed(){
-        name="";
+        name="EMPTY";
     }
 }
