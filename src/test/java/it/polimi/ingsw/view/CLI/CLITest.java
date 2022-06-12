@@ -76,32 +76,33 @@ class CLITest {
         System.out.println("O----------------------O");
         System.out.println("\nEntrance configuration: ");
         System.out.println("O-----O");
+        System.out.print("|");
         for (Colors c : board.getEntrance().keySet()) {
-            //System.out.println(c + " students: " + board.getEntrance().get(c));
             i=board.getEntrance().get(c);
-            // System.out.println("I secondo: "+i);
             color= colorsToColor(c);
-            while(i>0)
-            {   if ((rows%3)<2) {
-                    if (rows!=6) {
+
+            while (i > 0) {
+                if ((rows % 3) < 2) {
+                    if (rows != 6) {
                         System.out.print(ansi().fg(color).a("* ").reset());
                         rows++;
+                    } else {
+                        System.out.print(ansi().fg(color).a("  *  ").reset());
+                        System.out.print("|");
                     }
-                    else
-                        System.out.print(ansi().fg(color).a("  *\n").reset());
-            }
-            else
-            {
-                    System.out.print(ansi().fg(color).a("*\n").reset());
-                    rows ++;
-
-
-            }
+                } else {
+                    System.out.print(ansi().fg(color).a("*").reset());
+                    System.out.print("|");
+                    System.out.print("\n");
+                   System.out.print("|");
+                    rows++;
+                }
                 i--;
             }
 
         }
-        System.out.println("O------O");
+        System.out.println();
+        System.out.println("O-----O");
         for (Colors c : board.getEntrance().keySet()) {
             System.out.println(c + " students: " + board.getEntrance().get(c));
         }

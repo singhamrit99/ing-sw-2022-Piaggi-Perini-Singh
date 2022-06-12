@@ -28,17 +28,11 @@ public class CLI implements UI {
     public static String view;
     Client client;
     String nickName;
-    String currentPlayer;
-    boolean isANumber;
     ArrayList<Integer> playedThisTurn;
     int playerNumber;
     String clientRoom = null;
     int action;
     int turnMoves;
-    private final int columns = 5;
-    private final int studentRows = 2;
-    private final int diningRows = 10;
-    private final int professorRow = 1;
     MoveMotherNature moveMotherNatureOrder;
     MoveStudents moveStudentsOrder;
     PickCloud pickCloudOrder;
@@ -165,14 +159,16 @@ public class CLI implements UI {
                 }
                 pickCloud();
             } else {
-                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) {
+                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_2)) {
                     while (!client.isMyTurn()) {
 
                     }
-
-                    printCommandHelp();
-                    performActionInTurn();
-                    //System.out.println(client.getLocalModel().getState());
+                    if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_2))
+                    {
+                        printCommandHelp();
+                        performActionInTurn();
+                    }
+                    System.out.println(client.getLocalModel().getState());
                 }
                 pickCloud();
             }
@@ -203,7 +199,7 @@ public class CLI implements UI {
     @Override
     public void currentPlayer(String s) {
         client.view = StringNames.INGAME;
-        System.out.println("It's now " + s + "'s turn!\n");
+        System.out.println("It's now " + s + "'s turn!");
     }
 
     @Override
@@ -249,7 +245,7 @@ public class CLI implements UI {
     @Override
     public void islandConquest(PropertyChangeEvent e) {
         StrippedIsland island = (StrippedIsland) e.getNewValue();
-        System.out.println(currentPlayer + " conquered island " + island.getName() + "!\n");
+        System.out.println(client.getLocalModel().getCurrentPlayer() + " conquered island " + island.getName() + "!\n");
 
     }
 
@@ -290,10 +286,11 @@ public class CLI implements UI {
 
         String player = (String) e.getOldValue();
         int i = (int) e.getNewValue();
-        System.out.println("O--------------------------------------------------------------O");
-        System.out.println("Player " + player + "now has " + i + " towers in their board!\n");
-        System.out.println("O--------------------------------------------------------------O");
-
+        if (!player.equals(client.getNickname())) {
+            System.out.println("O--------------------------------------------------------------O");
+            System.out.println("Player " + player + " now has " + i + " towers in their board!\n");
+            System.out.println("O--------------------------------------------------------------O");
+        }
     }
 
     @Override
@@ -561,7 +558,7 @@ public class CLI implements UI {
         //I now have a valid assistant card
         System.out.println("Card played: " + i);
         turnMoves = client.getLocalModel().getAssistantDecks().get(playerNumber).get(input).getMove();
-        playAssistantCardOrder = new PlayAssistantCard(this.nickName, input);
+        playAssistantCardOrder = new PlayAssistantCard(client.getNickname(), input);
         try {
             client.performGameAction(playAssistantCardOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
@@ -574,7 +571,7 @@ public class CLI implements UI {
     }
 
     public void printAssistantCards() throws LocalModelNotLoadedException {
-        AssistantCardDeck myDeck = client.getLocalModel().getBoardOf(nickName).getDeck();
+        AssistantCardDeck myDeck = client.getLocalModel().getBoardOf(client.getNickname()).getDeck();
         int i = 0;
         for (AssistantCard a : myDeck.getDeck()) {
             System.out.println("Card number " + a.getImageName() + " Moves: " + a.getMove());
@@ -776,7 +773,7 @@ public class CLI implements UI {
                 }
             }
         }
-        pickCloudOrder = new PickCloud(nickName, i);
+        pickCloudOrder = new PickCloud(client.getNickname(), i);
         client.performGameAction(pickCloudOrder);
         client.setMyTurn(false);
     }
@@ -824,7 +821,7 @@ public class CLI implements UI {
 
     public void playCharacterA(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have chosen a no parameter character! Buckle up, the effects are on the way!\n");
-        playCharacterCardAOrder = new PlayCharacterCardA(nickName, id);
+        playCharacterCardAOrder = new PlayCharacterCardA(client.getNickname(), id);
         try {
             client.performGameAction(playCharacterCardAOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
@@ -847,7 +844,7 @@ public class CLI implements UI {
                 System.out.println("That's not a number! Try again.\n");
             }
         }
-        playCharacterCardBOrder = new PlayCharacterCardB(nickName, id, students, island);
+        playCharacterCardBOrder = new PlayCharacterCardB(client.getNickname(), id, students, island);
         try {
             client.performGameAction(playCharacterCardBOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
@@ -861,7 +858,7 @@ public class CLI implements UI {
 
         EnumMap<Colors, Integer> students1 = null, students2 = null;
         //TODO: add students on card implementation for StrippedCharacters
-        playCharacterCardCOrder = new PlayCharacterCardC(nickName, id, students1, students2);
+        playCharacterCardCOrder = new PlayCharacterCardC(client.getNickname(), id, students1, students2);
         try {
             client.performGameAction(playCharacterCardCOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
@@ -895,7 +892,7 @@ public class CLI implements UI {
                 invalidChoice = false;
         } while (!invalidChoice);
 
-        playCharacterCardDOrder = new PlayCharacterCardD(nickName, id, choice);
+        playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, choice);
         try {
             client.performGameAction(playCharacterCardDOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
@@ -929,7 +926,7 @@ public class CLI implements UI {
                     }
                 }
             }
-            moveMotherNatureOrder = new MoveMotherNature(nickName, i);
+            moveMotherNatureOrder = new MoveMotherNature(client.getNickname(), i);
             try {
                 client.performGameAction(moveMotherNatureOrder);
             } catch (IncorrectStateException e) {
@@ -947,9 +944,8 @@ public class CLI implements UI {
         if (!client.getLocalModel().isCanPlayMN()) {
             StrippedBoard myBoard = null;
             ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
-            int i = 0;
             for (StrippedBoard b : boards) {
-                if (b.getOwner().equals(nickName))
+                if (b.getOwner().equals(client.getNickname()))
                     myBoard = b;
             }
             // System.out.println("Board owner:"+ myBoard.getOwner());
@@ -1048,7 +1044,7 @@ public class CLI implements UI {
             if (movedStudents < 3) {
                 do {
                     while (true) {
-                        System.out.println("Type the students you want to move to the dining room as \"color, number\"");
+                        System.out.println("Type the students you want to move to the island as \"color, number\", then input the island number!");
                         answer = in.nextLine();
                         // System.out.println("answer "+ answer);
                         parts = answer.split(",|, | ,");
@@ -1087,7 +1083,7 @@ public class CLI implements UI {
                         //    System.out.println("The color you chose was " + color);
                         //  System.out.println("The number of students of that color in your entrance is " + myBoard.getEntrance().get(stringToColor(color)));
                         if (value <= myBoard.getEntrance().get(stringToColor(color))) {
-                            System.out.println("Number of islands" + client.getLocalModel().getIslands().size());
+                          //  System.out.println("Number of islands" + client.getLocalModel().getIslands().size());
                             if (island > 0 && island <= client.getLocalModel().getIslands().size()) {
 
                                 studentsToMove.put(stringToColor(color), value);
@@ -1120,7 +1116,7 @@ public class CLI implements UI {
             } else
                 System.out.println("You already moved three students this turn\n");
 
-            moveStudentsOrder = new MoveStudents(nickName, studentsToGame);
+            moveStudentsOrder = new MoveStudents(client.getNickname(), studentsToGame);
             client.performGameAction(moveStudentsOrder);
             client.getLocalModel().setCanPlayMN(true);
         } else
@@ -1147,7 +1143,7 @@ public class CLI implements UI {
 
     public void printPlayerBoard(StrippedBoard board) {
         Integer i;
-        int rows = 0, printColumns;
+        int rows=0, printColumns;
         Ansi.Color color;
         System.out.println("O----------------------O");
         System.out.println(board.getOwner() + "'s board: ");
@@ -1155,19 +1151,21 @@ public class CLI implements UI {
         System.out.println("\nDining room configuration: ");
         System.out.println("----------------------╗");
         for (Colors c : board.getDining().keySet()) {
-            i = board.getDining().get(c);
+            i=board.getDining().get(c);
             //  System.out.println("I: "+i);
-            color = colorsToColor(c);
-            printColumns = 0;
-            while (i > 0) {
-                if (printColumns == 0) {
-                    System.out.print("|");
-                    System.out.print(ansi().fg(color).a("*\t").reset());
-                    printColumns++;
-                } else {
-                    System.out.print(ansi().fg(color).a("*\t").reset());
-                    printColumns++;
-                }
+            color= colorsToColor(c);
+            printColumns=0;
+            while(i>0)
+            {   if (printColumns==0) {
+                System.out.print("|");
+                System.out.print(ansi().fg(color).a("*\t").reset());
+                printColumns++;
+            }
+            else
+            {
+                System.out.print(ansi().fg(color).a("*\t").reset());
+                printColumns++;
+            }
                 i--;
 
             }
@@ -1180,43 +1178,36 @@ public class CLI implements UI {
         System.out.println("O----------------------O");
         System.out.println("\nEntrance configuration: ");
         System.out.println("O-----O");
+        System.out.print("|");
         for (Colors c : board.getEntrance().keySet()) {
-            //System.out.println(c + " students: " + board.getEntrance().get(c));
-            i = board.getEntrance().get(c);
-            // System.out.println("I secondo: "+i);
-            color = colorsToColor(c);
+            i=board.getEntrance().get(c);
+            color= colorsToColor(c);
+
             while (i > 0) {
                 if ((rows % 3) < 2) {
                     if (rows != 6) {
                         System.out.print(ansi().fg(color).a("* ").reset());
                         rows++;
-                    } else
-                        System.out.print(ansi().fg(color).a("  *\n").reset());
+                    } else {
+                        System.out.print(ansi().fg(color).a("  *  ").reset());
+                        System.out.print("|");
+                    }
                 } else {
-                    System.out.print(ansi().fg(color).a("*\n").reset());
+                    System.out.print(ansi().fg(color).a("*").reset());
+                    System.out.print("|");
+                    System.out.print("\n");
+                    System.out.print("|");
                     rows++;
-
-
                 }
                 i--;
             }
-
         }
-        System.out.println("O------O");
+        System.out.println();
+        System.out.println("O-----O");
         for (Colors c : board.getEntrance().keySet()) {
             System.out.println(c + " students: " + board.getEntrance().get(c));
         }
-        System.out.println();
-        i = 0;
-        while (i < board.getNumberOfTowers()) {
-            i++;
-            if (i != 5)
-                System.out.print(" * ");
-            else
-                System.out.print("\n * ");
-
-        }
-        System.out.println("Number of towers: " + board.getNumberOfTowers());
+        System.out.println("\nNumber of towers: " + board.getNumberOfTowers());
         System.out.println("\nProfessors table: ");
         for (Colors c : board.getProfessorsTable()) {
             System.out.println(c + "\n");
