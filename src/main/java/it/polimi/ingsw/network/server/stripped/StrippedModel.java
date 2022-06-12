@@ -41,7 +41,7 @@ public class StrippedModel implements Serializable {
         firstPlayer = "";
     }
 
-    public void updateModel(PropertyChangeEvent evt) {
+    public void updateModel(PropertyChangeEvent evt) throws LocalModelNotLoadedException {
         switch (evt.getPropertyName()) {
             case "entrance":
             case "dining":
@@ -92,17 +92,13 @@ public class StrippedModel implements Serializable {
         state = (State) evt.getOldValue();
     }
 
-    private void changeAssistantDeck(PropertyChangeEvent evt) {
+    private void changeAssistantDeck(PropertyChangeEvent evt) throws LocalModelNotLoadedException {
         String ownerDeck = currentPlayer;
-        Optional<AssistantCardDeck> optionalDeckToModify = assistantDecks.stream().filter(d -> d.getOwner().equals(ownerDeck)).findFirst();
-        AssistantCardDeck deckToModify = optionalDeckToModify.get();
-        if (optionalDeckToModify.isPresent()) {
-            assistantDecks.remove(deckToModify);
-            assistantDecks.add((AssistantCardDeck) evt.getNewValue());
+        StrippedBoard board=getBoardOf(ownerDeck);
+            board.setDeck((AssistantCardDeck) evt.getNewValue());
             String playedCard = (String) evt.getOldValue();
             ui.deckChange(playedCard);
         }
-    }
 
     private void setBoard(PropertyChangeEvent evt) {
         String ownerBoard = (String) evt.getOldValue();

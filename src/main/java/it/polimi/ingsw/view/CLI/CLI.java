@@ -15,11 +15,9 @@ import it.polimi.ingsw.network.server.commands.*;
 import it.polimi.ingsw.view.UI;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
-
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.*;
-
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
 import static org.fusesource.jansi.Ansi.ansi;
@@ -161,7 +159,7 @@ public class CLI implements UI {
             } else {
                 while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_2)) {
                     while (!client.isMyTurn()) {
-
+                        waitForTurn();
                     }
                     if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_2))
                     {
@@ -678,15 +676,16 @@ public class CLI implements UI {
 
     public synchronized void waitForTurn() throws InterruptedException {
         System.out.println("Waiting for turn ...");
-        System.out.flush();
+        System.out.println(ansi().eraseScreen());
         Thread.sleep(500);
         System.out.println("Waiting for turn ..");
-        System.out.flush();
+        System.out.println(ansi().eraseScreen());
         Thread.sleep(500);
         System.out.println("Waiting for turn . .");
-        System.out.flush();
+        System.out.println(ansi().eraseScreen());
+        Thread.sleep(500);
         System.out.println("Waiting for turn .. ");
-        System.out.flush();
+        System.out.println(ansi().eraseScreen());
         Thread.sleep(500);
     }
 
@@ -773,7 +772,8 @@ public class CLI implements UI {
                 }
             }
         }
-        pickCloudOrder = new PickCloud(client.getNickname(), i);
+        pickCloudOrder = new PickCloud(client.getNickname(), i-1);
+        System.out.println(client.getLocalModel().getState());
         client.performGameAction(pickCloudOrder);
         client.setMyTurn(false);
     }
