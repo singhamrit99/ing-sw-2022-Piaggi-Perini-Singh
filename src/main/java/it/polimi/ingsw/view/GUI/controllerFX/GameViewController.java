@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.network.server.commands.DrawFromBagCommand;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
@@ -14,6 +13,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -24,6 +24,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -38,8 +39,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GameViewController extends InitialStage implements Controller {
     protected static AtomicBoolean opened = new AtomicBoolean(false);
     private String currentBoardView; //the owner of the board current visible on the screen
-    ArrayList<Pane> islandsPanes;
+    ArrayList<StackPane> islandsPanes;
 
+    String css;
     public GameViewController(GUI gui) {
         super(gui);
         opened.set(false);
@@ -160,40 +162,35 @@ public class GameViewController extends InitialStage implements Controller {
 
     private void reloadBag() {
         bag.setOnMouseClicked(mouseEvent -> {
-            if (GUI.client.getLocalModel().getState().equals(State.PLANNINGPHASE) && GUI.client.getLocalModel().getFirstPlayer().equals(GUI.client.getNickname()) && GUI.client.isMyTurn()) {
-                DrawFromBagCommand drawFromBagOrder = new DrawFromBagCommand(GUI.client.getNickname());
-                System.out.println("Drawing from bag...\n");
+            DrawFromBagCommand drawFromBagOrder = new DrawFromBagCommand(GUI.client.getNickname());
 
-                try {
-                    GUI.client.performGameAction(drawFromBagOrder);
-
-                } catch (NotEnoughCoinsException e) {
-                    Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
-                } catch (AssistantCardNotFoundException e) {
-                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
-                } catch (NegativeValueException e) {
-                    Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
-                } catch (IncorrectStateException e) {
-                    Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
-                } catch (MotherNatureLostException e) {
-                    Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
-                } catch (ProfessorNotFoundException e) {
-                    Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
-                } catch (IncorrectPlayerException e) {
-                    Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
-                } catch (RemoteException e) {
-                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
-                } catch (IncorrectArgumentException e) {
-                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
-                } catch (UserNotInRoomException e) {
-                    Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
-                } catch (UserNotRegisteredException e) {
-                    Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
-                }
+            try {
+                GUI.client.performGameAction(drawFromBagOrder);
+            } catch (NotEnoughCoinsException e) {
+                Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
+            } catch (AssistantCardNotFoundException e) {
+                Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
+            } catch (NegativeValueException e) {
+                Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
+            } catch (IncorrectStateException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
+            } catch (MotherNatureLostException e) {
+                Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
+            } catch (ProfessorNotFoundException e) {
+                Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
+            } catch (IncorrectPlayerException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
+            } catch (RemoteException e) {
+                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+            } catch (UserNotInRoomException e) {
+                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+            } catch (IncorrectArgumentException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+            } catch (UserNotRegisteredException e) {
+                Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             }
         });
     }
-
 
     private ArrayList<ImageView> spawnImgsForIsland(StrippedIsland island) {
         ArrayList<ImageView> imagesToReturn = new ArrayList<>();
@@ -223,12 +220,17 @@ public class GameViewController extends InitialStage implements Controller {
     public void reloadIslands() {
         islandsPanes = new ArrayList<>();
         IslandsBox.getChildren().clear();
+        IslandsBox.maxHeight(400);
+        IslandsBox.maxWidth(1000);
+        IslandsBox.setAlignment(Pos.CENTER);
         GridPane Islands = new GridPane();
         IslandsBox.getChildren().add(Islands);
         RowConstraints row = new RowConstraints();
-        row.setPrefHeight(200);
+        row.setPrefHeight(130);
+        row.setMaxHeight(130);
         ColumnConstraints column = new ColumnConstraints();
-        column.setPrefWidth(200);
+        column.setPrefWidth(150);
+        column.setMaxWidth(150);
         Islands.getRowConstraints().add(row);
         Islands.getColumnConstraints().add(column);
 
@@ -248,16 +250,20 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")) {
                     Islands.addRow(0, new Text("")); //empty cell alignment
                 } else {
-                    Pane island = new Pane();
+                    StackPane island = new StackPane();
+                    island.maxHeight(100);
+                    island.maxWidth(100);
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
-                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(indexIsland))) {
-                        island.getChildren().add(img);
-                    }
                     islandImg.setFitWidth(150);
                     islandImg.setFitHeight(150);
                     island.getChildren().add(islandImg);
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(indexIsland))) {
+                        island.getChildren().add(img);
+                    }
                     Islands.addRow(0, island);
+                    Islands.getRowConstraints().add(row);
+                    Islands.getColumnConstraints().add(column);
                 }
             }
             indexIsland++;
@@ -271,31 +277,70 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(11).getName().equals("EMPTY")) {
                     Islands.addRow(1, new Text("")); //empty cell alignment
                 } else {
-                    Pane island = new Pane();
+                    StackPane island = new StackPane();
+                    island.maxHeight(100);
+                    island.maxWidth(100);
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
-                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(11))) {
-                        island.getChildren().add(img);
-                    }
                     islandImg.setFitWidth(150);
                     islandImg.setFitHeight(150);
                     island.getChildren().add(islandImg);
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(11))) {
+                        island.getChildren().add(img);
+                    }
                     Islands.addRow(1, island);
+                    Islands.getRowConstraints().add(row);
+                    Islands.getColumnConstraints().add(column);
                 }
             } else if (i == 5) { //second island of the FIRST line with the HOLE of the circle inside
                 if (islandsBackEnd.get(4).getName().equals("EMPTY")) {
                     Islands.addRow(1, new Text("")); //empty cell alignment
                 } else {
-                    Pane island = new Pane();
+                    StackPane island = new StackPane();
+                    island.maxHeight(100);
+                    island.maxWidth(100);
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
-                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(4))) {
-                        island.getChildren().add(img);
-                    }
                     islandImg.setFitWidth(150);
                     islandImg.setFitHeight(150);
-                    //island.getChildren().add(islandImg);
+                    island.getChildren().add(islandImg);
+                    HBox prova = new HBox();
+                    prova.maxWidth(150);
+                    prova.maxHeight(150);
+                    island.getChildren().add(prova);
+                    GridPane studentsPane = new GridPane();
+                    RowConstraints rowStudents = new RowConstraints();
+                    rowStudents.setPrefHeight(75);
+                    rowStudents.setMaxHeight(75);
+                    ColumnConstraints columnStudents = new ColumnConstraints();
+                    columnStudents.setPrefWidth(75);
+                    columnStudents.setMaxWidth(75);
+                    prova.getChildren().add(studentsPane);
+                    ArrayList<ImageView> imgStudents =  spawnImgsForIsland(islandsBackEnd.get(4));
+                    for(int j=0;j<imgStudents.size();j++){
+                        ImageView img = imgStudents.get(j);
+                        img.setFitWidth(20);
+                        img.setFitHeight(20);
+                        studentsPane.addRow(j/2,img);
+                        studentsPane.getRowConstraints().add(rowStudents);
+                        studentsPane.getColumnConstraints().add(columnStudents);
+                    }
+                    /*
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(4))) {
+                        prova.getChildren().add(img);
+                    }
+                    */
+                    GridPane towersPane = new GridPane();
+                    prova.getChildren().add(towersPane);
+                    for(int j =0;j<10;j++){
+                        ImageView test = new ImageView(blackTowerImg);
+                        test.setFitHeight(25);
+                        test.setFitWidth(25);
+                        towersPane.addRow(j/3,test);
+                    }
                     Islands.addRow(1, island);
+                    Islands.getRowConstraints().add(row);
+                    Islands.getColumnConstraints().add(column);
                 }
             }
         }
@@ -307,31 +352,39 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(10).getName().equals("EMPTY")) {
                     Islands.addRow(2, new Text("")); //empty cell alignment
                 } else {
-                    Pane island = new Pane();
+                    StackPane island = new StackPane();
+                    island.maxHeight(100);
+                    island.maxWidth(100);
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
-                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(10))) {
-                        island.getChildren().add(img);
-                    }
                     islandImg.setFitWidth(150);
                     islandImg.setFitHeight(150);
                     island.getChildren().add(islandImg);
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(10))) {
+                        island.getChildren().add(img);
+                    }
                     Islands.addRow(2, island);
+                    Islands.getRowConstraints().add(row);
+                    Islands.getColumnConstraints().add(column);
                 }
             } else if (i == 5) { //second island of the SECOND line with the HOLE of the circle inside
                 if (islandsBackEnd.get(4).getName().equals("EMPTY")) {
                     Islands.addRow(2, new Text("")); //empty cell alignment
                 } else {
-                    Pane island = new Pane();
+                    StackPane island = new StackPane();
+                    island.maxHeight(100);
+                    island.maxWidth(100);
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(1 + i % 2));
-                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(4))) {
-                        island.getChildren().add(img);
-                    }
                     islandImg.setFitWidth(150);
                     islandImg.setFitHeight(150);
                     island.getChildren().add(islandImg);
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(4))) {
+                        island.getChildren().add(img);
+                    }
                     Islands.addRow(2, island);
+                    Islands.getRowConstraints().add(row);
+                    Islands.getColumnConstraints().add(column);
                 }
             }
         }
@@ -345,22 +398,24 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")) {
                     Islands.addRow(0, new Text("")); //empty cell alignment
                 } else {
-                    Pane island = new Pane();
+                    StackPane island = new StackPane();
+                    island.maxHeight(100);
+                    island.maxWidth(100);
                     islandsPanes.add(island);
                     ImageView islandImg = new ImageView(islandsImgs.get(i % 3));
-                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(indexIsland))) {
-                        island.getChildren().add(img);
-                    }
                     islandImg.setFitWidth(150);
                     islandImg.setFitHeight(150);
                     island.getChildren().add(islandImg);
+                    for (ImageView img : spawnImgsForIsland(islandsBackEnd.get(indexIsland))) {
+                        island.getChildren().add(img);
+                    }
                     Islands.addRow(3, island);
+                    Islands.getRowConstraints().add(row);
+                    Islands.getColumnConstraints().add(column);
                 }
                 indexIsland--; //out from the if !!
             }
         }
-        Islands.getRowConstraints().add(row);
-        Islands.getColumnConstraints().add(column);
     }
 
 
@@ -663,9 +718,11 @@ public class GameViewController extends InitialStage implements Controller {
 
                 scene = new Scene(loader.load());
                 Stage stage = new Stage();
-                stage.setTitle("Eryantis");
-                stage.setScene(scene);
+                stage.setTitle(StringNames.TITLE);
+                stage.setResizable(false);
+                stage.initStyle(StageStyle.UNDECORATED);
                 stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
                 stage.showAndWait();
             } catch (IOException e) {
                 e.printStackTrace();
