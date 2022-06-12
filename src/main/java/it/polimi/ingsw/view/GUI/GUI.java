@@ -81,8 +81,16 @@ public class GUI implements UI {
     public void notifyCloud(PropertyChangeEvent e) {
         if (GUI.client.view.equals(StringNames.INGAME)) {
             if (gameController.isOpened()) {
-                System.out.println("Clouds changed");
                 Platform.runLater(() -> gameController.reloadClouds());
+            }
+        }
+    }
+
+    @Override
+    public void diningChange(PropertyChangeEvent e) {
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> gameController.reloadDining());
             }
         }
     }
@@ -109,11 +117,6 @@ public class GUI implements UI {
 
     @Override
     public void islandConquest(PropertyChangeEvent e) {
-
-    }
-
-    @Override
-    public void diningChange(PropertyChangeEvent e) {
 
     }
 
