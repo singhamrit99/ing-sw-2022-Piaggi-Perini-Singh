@@ -115,7 +115,7 @@
                         </StackPane>
                      </children>
                   </StackPane>
-                  <StackPane layoutX="10.0" layoutY="230.0" prefHeight="150.0" prefWidth="200.0">
+                  <StackPane layoutX="10.0" layoutY="230.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
                      <children>
                         <ImageView fx:id="cloud2" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -161,7 +161,7 @@
                               <Insets />
                            </StackPane.margin>
                         </StackPane>
-                        <StackPane fx:id="cloud2v4" prefHeight="100.0" prefWidth="100.0">
+                        <StackPane fx:id="cloud2v4" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="100.0">
                            <children>
                               <ImageView fx:id="student1Cloud2v4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
                                  <image>
@@ -201,35 +201,7 @@
                   <Insets />
                </HBox.margin>
             </StackPane>
-            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0">
-               <children>
-                  <ImageView fx:id="character1" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                     <VBox.margin>
-                        <Insets top="100.0" />
-                     </VBox.margin>
-                     <image>
-                        <Image url="@../img/characters/character.jpg" />
-                     </image>
-                  </ImageView>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="300.0">
-                     <children>
-                        <ImageView fx:id="character2" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/characters/character2.jpg" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="character3" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets left="100.0" />
-                           </HBox.margin>
-                           <image>
-                              <Image url="@../img/characters/character4.jpg" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
+            <VBox alignment="CENTER_LEFT" layoutX="270.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0" />
          </children>
          <opaqueInsets>
             <Insets />
@@ -1010,18 +982,47 @@
                   <Insets />
                </opaqueInsets>
             </StackPane>
-            <StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
+            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0">
                <children>
-                  <ImageView fx:id="assistantDeck" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../img/custom/assistantDeck.png" />
-                     </image>
-                  </ImageView>
+                  <StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <children>
+                        <ImageView fx:id="assistantDeck" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/custom/assistantDeck.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </StackPane>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="400.0">
+                     <children>
+                        <ImageView fx:id="character1" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/characters/character.jpg" />
+                           </image>
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <ImageView fx:id="character2" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/characters/character2.jpg" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="character3" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <image>
+                              <Image url="@../img/characters/character4.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
                </children>
-            </StackPane>
+            </VBox>
          </children>
          <opaqueInsets>
             <Insets />

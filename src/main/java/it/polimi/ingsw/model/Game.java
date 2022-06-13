@@ -210,7 +210,7 @@ public class Game {
         }
 
         // place MotherNature on a random island
-        motherNaturePosition = (int) (Math.random() * numOfPlayer);
+        motherNaturePosition = (int)(Math.random()*12.99999f);
         islands.get(motherNaturePosition).moveMotherNature();
 
         // create Bag and students
