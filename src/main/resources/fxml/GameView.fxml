@@ -115,7 +115,7 @@
                         </StackPane>
                      </children>
                   </StackPane>
-                  <StackPane layoutX="10.0" layoutY="230.0" prefHeight="150.0" prefWidth="200.0">
+                  <StackPane layoutX="10.0" layoutY="230.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
                      <children>
                         <ImageView fx:id="cloud2" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
                            <image>
