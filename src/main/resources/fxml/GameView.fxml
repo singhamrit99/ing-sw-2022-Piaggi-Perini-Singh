@@ -15,19 +15,17 @@
    <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
+          <Menu fx:id="changeViewBoard" mnemonicParsing="false" text="Change View Board">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Player1" />
+                  <MenuItem mnemonicParsing="false" text="Player2" />
+                  <MenuItem mnemonicParsing="false" text="Player3" />
+                  <MenuItem mnemonicParsing="false" text="Player4" />
+               </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
+          <Menu mnemonicParsing="false" text="Options">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="leaveGame" mnemonicParsing="false" text="Leave Game" />
             </items>
           </Menu>
         </menus>
@@ -35,19 +33,6 @@
       <MenuBar layoutX="10.0" layoutY="10.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT">
          <menus>
             <Menu fx:id="currentViewPlayer" mnemonicParsing="false" text="Current player:  adasdasdas" />
-            <Menu fx:id="changeViewBoard" mnemonicParsing="false" text="Change View Board">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Player1" />
-                  <MenuItem mnemonicParsing="false" text="Player2" />
-                  <MenuItem mnemonicParsing="false" text="Player3" />
-                  <MenuItem mnemonicParsing="false" text="Player4" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Options">
-               <items>
-                  <MenuItem fx:id="leaveGame" mnemonicParsing="false" text="leaveGame" />
-               </items>
-            </Menu>
          </menus>
          <VBox.margin>
             <Insets />
