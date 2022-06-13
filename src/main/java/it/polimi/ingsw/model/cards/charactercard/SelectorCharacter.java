@@ -46,4 +46,8 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
     public void setChoiceIndex(int choiceIndex) {
         this.choiceIndex = choiceIndex;
     }
+
+    public int getNoTileNumber() {
+        return noTileNumber;
+    }
 }

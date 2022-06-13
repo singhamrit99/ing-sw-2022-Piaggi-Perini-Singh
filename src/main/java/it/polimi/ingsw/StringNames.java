@@ -29,12 +29,12 @@ public interface StringNames {
     String ROOM_EXISTS = "Room name already taken";
     String ERROR_LOCALMODEL = "Critical bug with local model";
     String ALONE_IN_ROOM = "You are alone in this room. There must be at least 2 players to play Eryantis";
-    String NOT_ENOUGH_COINS = "You have not enough coins";
+    String NOT_ENOUGH_COINS = "You don't have enough coins";
     String ASSISTANT_CARD_NOT_FOUND = "There is no such card";
     String NEGATIVE_VALUE = "Negative value";
     String INCORRECT_STATE = "You are not in the correct state in the game";
     String MOTHER_NATURE_LOST = "Mother nature error";
     String PROFESSOR_NOT_FOUND = "Professor not found";
-    String INCORRECT_PLAYER = "Icorrect player";
+    String INCORRECT_PLAYER = "Incorrect player";
     String INCORRECT_ARGUMENT = "Given parameters are not correct";
 }

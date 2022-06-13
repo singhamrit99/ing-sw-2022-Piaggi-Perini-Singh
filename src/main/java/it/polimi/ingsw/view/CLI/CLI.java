@@ -700,7 +700,7 @@ public class CLI implements UI {
         }
     }
 
-    public void playCharacterCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+    public void playCharacterCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
         StrippedCharacter tmp;
         System.out.println("Select the character you want to play! You currently have " + client.getLocalModel().getBoards().get(playerNumber).getCoins() + " coins \n");
         printCharacterCards();
@@ -731,7 +731,7 @@ public class CLI implements UI {
         switch (tmp.getRequirements().getRequirements().toLowerCase(Locale.ROOT)) {
             //TODO: test if this actually works as intended
             case "islands":
-                playCharacterB(i);
+                playCharacterB(i, tmp);
                 break;
             case "colors,islands":
                 playCharacterC(i, tmp);
@@ -827,14 +827,23 @@ public class CLI implements UI {
             client.performGameAction(playCharacterCardAOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
-        }
+        } catch (NotEnoughCoinsException e)
+    {
+        System.out.println(StringNames.NOT_ENOUGH_COINS);
     }
 
-    public void playCharacterB(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+    }
+
+    public void playCharacterB(int id, StrippedCharacter character) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have chosen a student island card\n");
-        int students = 0, island;
+        int student = 0, island;
+        EnumMap<Colors, Integer> students= character.getStudents();
         System.out.println(client.getLocalModel().getCharacters().get(id).getDescription());
         System.out.println();
+        printExpertIslands();
+        for (Colors c : students.keySet()) {
+            System.out.println(c + " students: " + students.get(c));
+        }
         String input;
         while (true) {
             input = in.next();
@@ -845,25 +854,129 @@ public class CLI implements UI {
                 System.out.println("That's not a number! Try again.\n");
             }
         }
-        playCharacterCardBOrder = new PlayCharacterCardB(client.getNickname(), id, students, island);
+
+
+        playCharacterCardBOrder = new PlayCharacterCardB(client.getNickname(), id, student, island);
         try {
             client.performGameAction(playCharacterCardBOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
+        }catch (NotEnoughCoinsException e)
+        {
+            System.out.println(StringNames.NOT_ENOUGH_COINS);
         }
     }
 
-    public void playCharacterC(int id, StrippedCharacter card) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+    public void playCharacterC(int id, StrippedCharacter card) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
         System.out.println("You have chosen a card that requires two sets of students\n");
+
+        String answer;
+        String[] parts;
+        String color;
+        int value;
+        int movedStudents = 0;
+        boolean isValidInputYN = false;
+        boolean doItAgain;
         System.out.println("These are the students on your card: \n");
 
-        EnumMap<Colors, Integer> students1 = null, students2 = null;
-        //TODO: add students on card implementation for StrippedCharacters
+        EnumMap<Colors, Integer> students1, students2 = null;
+
+        //There's gonna be two cases here
+        StrippedBoard myBoard= client.getLocalModel().getBoardOf(client.getNickname());
+        if (card.getDescription().equals("Swap 3 of the students on this card with 3 from your Entrance!")) {
+            students1 = card.getStudents();
+            for (Colors c : myBoard.getEntrance().keySet()) {
+                System.out.println(c + " students: " + myBoard.getEntrance().get(c));
+            }
+            //Students input code
+
+            do {
+                answer = in.nextLine();
+                answer = answer.toLowerCase(Locale.ROOT);
+                if (answer.equals("y") || answer.equals("n"))
+                    isValidInputYN = true;
+                else if (answer.equals("\n")) {
+
+                } else
+                    System.out.println("Whoops! That's not right. Try again: \n");
+            } while (!isValidInputYN);
+            //Move students to the dining room
+            doItAgain = true;
+            isValidInputYN = false;
+            if (answer.equals("y")) {
+                do {
+                    while (true) {
+                        System.out.println("Type the students you want to move as \"color, number\"");
+                        answer = in.nextLine();
+                        // System.out.println("answer "+ answer);
+                        parts = answer.split(",|, | ,");
+                        color = parts[0];
+                        color = color.replaceAll("[^a-zA Z0-9]", "");
+                        try {
+                            parts[1] = parts[1].trim();
+                            try {
+                                value = Integer.parseInt(parts[1]);
+                                color = color.toUpperCase(Locale.ROOT);
+                                break;
+                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                                System.out.println("Something went wrong with your input, try again!");
+                                //in.nextLine();
+                            }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Something went wrong with your input, try again!");
+                            //in.nextLine();
+                        }
+
+                    }
+
+                    if (isValidColor(color)) {
+                        if (value <= myBoard.getEntrance().get(stringToColor(color))) {
+                            students2 = initializeMove(students2);
+                            students2.put(stringToColor(color), students2.get(stringToColor(color)) + value);
+                            movedStudents += value;
+                            if (movedStudents < 3) {
+                                System.out.println("Do you want to move other students?\n");
+                                do {
+                                    answer = in.nextLine();
+                                    answer = answer.toLowerCase(Locale.ROOT);
+                                    if (answer.equals("y") || answer.equals("n"))
+                                        isValidInputYN = true;
+                                    else
+                                        System.out.println("Whoops! That's not right. Try again: \n");
+                                } while (!isValidInputYN);
+                            }
+                            //Since a player can only move 3 students in a turn there needs to be a check here too
+                            if (answer.equals(("n"))) {
+                                doItAgain = false;
+                            }
+                        } else
+                            System.out.println("You don't have enough students of that color! Try again.\n");
+                    } else
+                        System.out.println("There is no such color as " + color + "! Try again. \n");
+                } while (doItAgain && movedStudents < 3);
+            }
+            //Once I get here I should have a valid enummap comprised of 3 students. Which means...
+            //...I can just call the order right?
+
+        }
+            else
+        {
+            //TODO: finish character card activation and lots of testing
+            students1=card.getStudents();
+            for (Colors c : students1.keySet()) {
+                System.out.println(c + " students: " + students1.get(c));
+            }
+
+        }
+
         playCharacterCardCOrder = new PlayCharacterCardC(client.getNickname(), id, students1, students2);
         try {
             client.performGameAction(playCharacterCardCOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
+        }catch (NotEnoughCoinsException e)
+        {
+            System.out.println(StringNames.NOT_ENOUGH_COINS);
         }
     }
 
@@ -898,6 +1011,9 @@ public class CLI implements UI {
             client.performGameAction(playCharacterCardDOrder);
         } catch (UserNotInRoomException | UserNotRegisteredException e) {
             throw new RuntimeException(e);
+        }catch (NotEnoughCoinsException e)
+        {
+            System.out.println(StringNames.NOT_ENOUGH_COINS);
         }
     }
 

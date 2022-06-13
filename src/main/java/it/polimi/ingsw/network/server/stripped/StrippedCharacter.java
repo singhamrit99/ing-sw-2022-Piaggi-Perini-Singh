@@ -3,8 +3,10 @@ package it.polimi.ingsw.network.server.stripped;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.Requirements;
 import it.polimi.ingsw.model.cards.charactercard.Type;
+import it.polimi.ingsw.model.enumerations.Colors;
 
 import java.io.Serializable;
+import java.util.EnumMap;
 
 public class StrippedCharacter implements Serializable {
     private int price;
@@ -12,6 +14,8 @@ public class StrippedCharacter implements Serializable {
     final private Type type;
     final private Requirements requirements;
     private int characterID;
+    private int noEntryTiles;
+    private EnumMap<Colors, Integer> students;
     public StrippedCharacter(CharacterCard card) {
         this.price = card.getPrice();
         this.description = card.getDescription();
@@ -53,4 +57,19 @@ public class StrippedCharacter implements Serializable {
                 && requirements.equals(other.getRequirements());
     }
 
+    public int getNoEntryTiles() {
+        return noEntryTiles;
+    }
+
+    public void setNoEntryTiles(int noEntryTiles) {
+        this.noEntryTiles = noEntryTiles;
+    }
+
+    public EnumMap<Colors, Integer> getStudents() {
+        return students;
+    }
+
+    public void setStudents(EnumMap<Colors, Integer> students) {
+        this.students = students;
+    }
 }
