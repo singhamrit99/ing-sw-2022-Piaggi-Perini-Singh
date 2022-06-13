@@ -80,13 +80,12 @@ public class Room implements PropertyChangeListener {
                 newGame.getClouds(), newGame.getIslands());
 
         PropertyChangeEvent firstPlayerChange =
-                new PropertyChangeEvent(this, "first-player-change", newGame.getFirstPlayer(), null);
+                new PropertyChangeEvent(this, "first-player-change", null, newGame.getFirstPlayer());
         addEventToBuffer(firstPlayerChange);
 
         PropertyChangeEvent firstPlayerEvt =
                 new PropertyChangeEvent(this, "current-player", null, newGame.getCurrentPlayer().getNickname());
         addEventToBuffer(firstPlayerEvt);
-        //System.out.println("Sent first player event\n");
         setInGame(true);
     }
 

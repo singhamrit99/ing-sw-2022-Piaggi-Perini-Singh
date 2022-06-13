@@ -177,7 +177,8 @@ public class Client implements Runnable {
                 }
                 Ping();
                 Thread.sleep(500);
-            } catch (RemoteException | LocalModelNotLoadedException | UserNotInRoomException | UserNotRegisteredException |
+            } catch (RemoteException | LocalModelNotLoadedException | BadFormattedLocalModelEvent |
+                    UserNotInRoomException | UserNotRegisteredException |
                     InterruptedException e) {
                 System.err.println("Client exception: " + e);
             }
@@ -188,7 +189,7 @@ public class Client implements Runnable {
         server.ping(nickname);
     }
 
-    private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
+    private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException, BadFormattedLocalModelEvent {
         //TODO for Lore: all the System.out.println have to go into the cli
         for (PropertyChangeEvent evt : evtArray) {
             switch (evt.getPropertyName()) {

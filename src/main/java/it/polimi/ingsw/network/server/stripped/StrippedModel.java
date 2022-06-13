@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.server.stripped;
 
+import it.polimi.ingsw.exceptions.BadFormattedLocalModelEvent;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.view.UI;
 import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
@@ -41,7 +42,7 @@ public class StrippedModel implements Serializable {
         firstPlayer = "";
     }
 
-    public void updateModel(PropertyChangeEvent evt) throws LocalModelNotLoadedException {
+    public void updateModel(PropertyChangeEvent evt) throws LocalModelNotLoadedException, BadFormattedLocalModelEvent {
         switch (evt.getPropertyName()) {
             case "entrance":
             case "dining":
@@ -77,15 +78,15 @@ public class StrippedModel implements Serializable {
                 break;
             case "first-player-change":
                 setFirstPlayer(evt);
+                ui.currentPlayer((String) evt.getNewValue());
                 break;
             default:
-                System.out.println("scrivere una exception sensata"); //TODO
-                break;
+                throw new BadFormattedLocalModelEvent();
         }
     }
 
     private void setFirstPlayer(PropertyChangeEvent evt) {
-        firstPlayer = (String) evt.getOldValue();
+        firstPlayer = (String) evt.getNewValue();
     }
 
     private void setState(PropertyChangeEvent evt) {
