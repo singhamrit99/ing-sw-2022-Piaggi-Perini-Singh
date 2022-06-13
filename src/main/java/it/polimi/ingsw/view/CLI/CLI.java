@@ -30,7 +30,6 @@ public class CLI implements UI {
     int playerNumber;
     String clientRoom = null;
     int action;
-    int turnMoves;
     MoveMotherNature moveMotherNatureOrder;
     MoveStudents moveStudentsOrder;
     PickCloud pickCloudOrder;
@@ -166,7 +165,7 @@ public class CLI implements UI {
                         printCommandHelp();
                         performActionInTurn();
                     }
-                    System.out.println(client.getLocalModel().getState());
+                    //System.out.println(client.getLocalModel().getState());
                 }
                 pickCloud();
             }
@@ -555,7 +554,7 @@ public class CLI implements UI {
 
         //I now have a valid assistant card
         System.out.println("Card played: " + i);
-        turnMoves = client.getLocalModel().getAssistantDecks().get(playerNumber).get(input).getMove();
+        client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getDeck().get(input).getMove());
         playAssistantCardOrder = new PlayAssistantCard(client.getNickname(), input);
         try {
             client.performGameAction(playAssistantCardOrder);
@@ -577,7 +576,7 @@ public class CLI implements UI {
         }
     }
 
-    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
+    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException {
         do {
             //   System.out.println("Press any key to continue\n");
             in.nextLine();
@@ -622,7 +621,7 @@ public class CLI implements UI {
 
     }
 
-    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException {
+    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException {
         do {
             //   System.out.println("Press any key to continue\n");
             in.nextLine();
@@ -675,6 +674,8 @@ public class CLI implements UI {
 
 
     public synchronized void waitForTurn() throws InterruptedException {
+        if(!client.isMyTurn())
+        {
         System.out.println("Waiting for turn ...");
         System.out.println(ansi().eraseScreen());
         Thread.sleep(500);
@@ -686,7 +687,7 @@ public class CLI implements UI {
         Thread.sleep(500);
         System.out.println("Waiting for turn .. ");
         System.out.println(ansi().eraseScreen());
-        Thread.sleep(500);
+        Thread.sleep(500);}
     }
 
     public void printCharacterCards() {
@@ -900,9 +901,9 @@ public class CLI implements UI {
         }
     }
 
-    public void moveMN() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+    public void moveMN() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
         if (client.getLocalModel().isCanPlayMN()) {
-            System.out.println("Input the number of steps you want Mother Nature to move! The maximum steps according to the card you played are \n " + turnMoves);
+            System.out.println("Input the number of steps you want Mother Nature to move! The maximum steps according to the card you played are \n " + client.getLocalModel().getBoardOf(client.getNickname()).getMoves());
             String input;
             int i;
             while (true) {
@@ -914,7 +915,7 @@ public class CLI implements UI {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
-            while (i < 0 || i > turnMoves) {
+            while (i < 0 || i > client.getLocalModel().getBoardOf(client.getNickname()).getMoves()) {
                 System.out.println("That number is not right! Try again.\n");
                 while (true) {
                     input = in.next();

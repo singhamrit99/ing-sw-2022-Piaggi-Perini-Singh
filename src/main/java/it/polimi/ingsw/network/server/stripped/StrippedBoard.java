@@ -19,6 +19,7 @@ public class StrippedBoard implements Serializable {
     private int numberOfTowers;
     private Towers colorsTowers;
     private AssistantCardDeck deck;
+    private int moves;
 
     public StrippedBoard(Player boardOwner) {
         this.owner = boardOwner.getNickname();
@@ -90,5 +91,13 @@ public class StrippedBoard implements Serializable {
 
     public void setDeck(AssistantCardDeck deck) {
         this.deck = deck;
+    }
+
+    public int getMoves() {
+        return moves;
+    }
+
+    public void setMoves(int moves) {
+        this.moves = moves;
     }
 }
