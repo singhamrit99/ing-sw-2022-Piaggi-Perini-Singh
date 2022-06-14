@@ -517,7 +517,7 @@ public class GameViewController extends InitialStage implements Controller {
         });
     }
 
-    private void reloadEntrance() {
+    public void reloadEntrance() {
         board.setOnMouseClicked((event) -> {
             Scene scene;
             try {
@@ -636,6 +636,74 @@ public class GameViewController extends InitialStage implements Controller {
                 indexStudentsAssets++;
             }
         }
+        /*ArrayList<ImageView> cloudsArray = new ArrayList<>();
+        cloudsArray.add(cloud1);
+        cloudsArray.add(cloud2);
+        cloudsArray.add(cloud3);
+        cloudsArray.add(cloud4);
+
+        for (ImageView image : cloudsArray) {
+            image.setOnMouseClicked(event -> {
+                System.out.println("CLSDAADAS");
+                PickCloud pickCloud = new PickCloud(GUI.client.getNickname(), cloudsArray.indexOf(image));
+
+                try {
+                    GUI.client.performGameAction(pickCloud);
+                } catch (NotEnoughCoinsException e) {
+                    Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
+                } catch (AssistantCardNotFoundException e) {
+                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
+                } catch (NegativeValueException e) {
+                    Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
+                } catch (IncorrectStateException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
+                } catch (MotherNatureLostException e) {
+                    Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
+                } catch (ProfessorNotFoundException e) {
+                    Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
+                } catch (IncorrectPlayerException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
+                } catch (RemoteException e) {
+                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                } catch (IncorrectArgumentException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                } catch (UserNotInRoomException e) {
+                    Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                } catch (UserNotRegisteredException e) {
+                    Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                }
+
+                Window window = ((Node) (event.getSource())).getScene().getWindow();
+                window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
+            });*/
+
+        cloudv1.setOnMouseClicked(event -> {
+            pickCloud();
+        });
+
+        cloudv2.setOnMouseClicked(event -> {
+            pickCloud();
+        });
+    }
+
+    private void pickCloud() {
+        Scene scene;
+        try {
+            String filePath = ResourcesPath.FXML_FILE_PATH + "TakeStudentsFromCloudView" + ResourcesPath.FILE_EXTENSION;
+            FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+            loader.setController(new TakeFromCloudTilesController(gui));
+
+            scene = new Scene(loader.load());
+            Stage stage = new Stage();
+            stage.setTitle(StringNames.TITLE);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void reloadTowers() {
@@ -668,7 +736,7 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
-    private void reloadProfs() {
+    public void reloadProfs() {
         try {
             ArrayList<Colors> table = GUI.client.getLocalModel().getBoardOf(currentBoardView).getProfessorsTable();
             blueProf.setVisible(false);
@@ -928,4 +996,7 @@ public class GameViewController extends InitialStage implements Controller {
 
     @FXML
     private ImageView assistantDeck;
+
+    @FXML
+    private VBox cloudv1, cloudv2;
 }
