@@ -19,7 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AssistantCardController extends InitialStage implements Controller {
@@ -50,19 +49,24 @@ public class AssistantCardController extends InitialStage implements Controller 
         }
 
         for (AssistantCard card : cards) {
-            choiceBox.getItems().add("Character " + card.getImageName());
+            choiceBox.getItems().add("Assistant " + card.getImageName());
         }
+
+        //image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARD_1))));
 
         //cambio l immagine in base al selector
         ArrayList<AssistantCard> finalCards = cards;
         AtomicReference<String> choosenCard = new AtomicReference<>("");
-        AtomicInteger selectedIndex = new AtomicInteger();
         choiceBox.setOnAction((event) -> {
-            selectedIndex.set(choiceBox.getSelectionModel().getSelectedIndex());
+            int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
             try {
-                image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS + finalCards.get(selectedIndex.get()).getImageName() + ResourcesPath.IMAGE_EXTENSION))));
-                choosenCard.set(finalCards.get(selectedIndex.get()).getImageName());
+                image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS + finalCards.get(selectedIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION))));
+                choosenCard.set(finalCards.get(selectedIndex).getImageName());
+                GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(selectedIndex).getMove());
+
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (LocalModelNotLoadedException e) {
                 e.printStackTrace();
             }
         });
@@ -71,7 +75,6 @@ public class AssistantCardController extends InitialStage implements Controller 
         confirmButton.setOnAction((event) -> {
             PlayAssistantCard playAssistantCard = new PlayAssistantCard(GUI.client.getNickname(), choosenCard.get());
             try {
-                GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getDeck().get(String.valueOf(selectedIndex.get())).getMove());
                 GUI.client.performGameAction(playAssistantCard);
             } catch (NotEnoughCoinsException e) {
                 Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
@@ -95,8 +98,6 @@ public class AssistantCardController extends InitialStage implements Controller 
                 Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
             } catch (UserNotRegisteredException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
-            } catch (LocalModelNotLoadedException e) {
-                Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
             }
 
             Window window = ((Node) (event.getSource())).getScene().getWindow();
