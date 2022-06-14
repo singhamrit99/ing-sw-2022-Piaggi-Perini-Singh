@@ -62,6 +62,15 @@ public class GUI implements UI {
     }
 
     @Override
+    public void professorChanged() {
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> gameController.reloadProfs());
+            }
+        }
+    }
+
+    @Override
     public void startGame() throws RemoteException {
         if (GUI.client.view.equals(StringNames.INGAME)) {
             Platform.runLater(() -> Controller.load(ResourcesPath.GAME_VIEW, gameController));
@@ -141,7 +150,11 @@ public class GUI implements UI {
 
     @Override
     public void entranceChanged(PropertyChangeEvent e) {
-
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> gameController.reloadEntrance());
+            }
+        }
     }
 
     @Override
