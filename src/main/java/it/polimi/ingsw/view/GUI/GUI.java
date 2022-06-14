@@ -107,7 +107,11 @@ public class GUI implements UI {
 
     @Override
     public void islandChange(PropertyChangeEvent e) {
-
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> gameController.reloadIslands());
+            }
+        }
     }
 
     @Override
