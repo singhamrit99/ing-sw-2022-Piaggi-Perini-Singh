@@ -2,33 +2,54 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-    <top>
-        <StackPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" styleClass="title">
             <children>
-                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="Lobby" textAlignment="CENTER">
+                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="Lobby" textAlignment="JUSTIFY" StackPane.alignment="CENTER">
                     <font>
                         <Font name="Rockwell Extra Bold" size="40.0" />
                     </font>
                 </Text>
             </children>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
         </StackPane>
+        <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1920.0" styleClass="WhiteBackground">
+            <children>
+                <GridPane fx:id="roomsList" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="115.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="40.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="NAME" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Text layoutX="36.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TEAM" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                    </children>
+                </GridPane>
+            </children>
+            <padding>
+                <Insets bottom="40.0" top="40.0" />
+            </padding>
+        </FlowPane>
+        <HBox fx:id="expertBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" spacing="20.0">
 
-    </top>
-    <bottom>
-        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="121.0" prefWidth="1920.0" spacing="20.0">
+        </HBox>
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" spacing="20.0">
             <children>
                 <Button fx:id="createRoomButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="confirm-button" text="Create Room" textFill="WHITE">
                     <font>
@@ -42,35 +63,5 @@
                 </Button>
             </children>
         </HBox>
-    </bottom>
-   <center>
-          <FlowPane alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="840.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/Style.css" BorderPane.alignment="CENTER">
-              <children>
-            <ScrollPane prefHeight="820.0" prefWidth="1920.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="821.0" prefWidth="1920.0">
-                     <children>
-                              <GridPane fx:id="roomsList" alignment="CENTER" gridLinesVisible="true" layoutX="840.0" layoutY="71.0" prefHeight="40.0" prefWidth="200.0">
-                                  <columnConstraints>
-                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0" />
-                                      <ColumnConstraints minWidth="120.0" prefWidth="120.0" />
-                                  </columnConstraints>
-                                  <rowConstraints>
-                                      <RowConstraints minHeight="40.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES" />
-                                  </rowConstraints>
-                                  <children>
-                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Action" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                  </children>
-                              </GridPane>
-                     </children>
-                  </AnchorPane>
-              </content>
-            </ScrollPane>
-              </children>
-              <padding>
-                  <Insets bottom="40.0" top="40.0" />
-              </padding>
-          </FlowPane>
-   </center>
-</BorderPane>
+    </children>
+</VBox>

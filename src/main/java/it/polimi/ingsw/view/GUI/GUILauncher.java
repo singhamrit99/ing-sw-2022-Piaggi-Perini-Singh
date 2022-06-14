@@ -51,11 +51,9 @@ public class GUILauncher extends Application implements Initializable {
         stage.setResizable(true);
         stage.setMaxWidth(MAIN_MENU_WIDTH);
         stage.setMaxHeight(MAIN_MENU_HEIGHT);
-        //stage.setMinHeight(950);
-        //stage.setMinWidth(1800);
-        //stage.setWidth(MAIN_MENU_WIDTH);
-        //stage.setHeight(MAIN_MENU_HEIGHT);
-        //stage.setMaximized(true);
+        stage.setMinHeight(MAIN_MENU_HEIGHT);
+        stage.setMinWidth(MAIN_MENU_WIDTH);
+        stage.setMaximized(true);
 
         mainWindow = stage;
         javafx.scene.image.Image icon = new Image(new FileInputStream("src/main/resources/img/professors/teacher_blue.png"));

@@ -8,10 +8,10 @@
 }
 
 .title {
-    -fx-fill: #000;
+    -fx-fill: #ffffff;
     -fx-font-family: "Rockwell Extra Bold";
     -fx-font-size: 60;
-    -fx-stroke: #000;
+    -fx-stroke: #ffffff;
     -fx-stroke-width: 0;
 }
 
@@ -24,21 +24,21 @@
 }
 
 .confirm-button {
-    -fx-border-color: #1ce625;
-    -fx-background-color: #61f268;
+    -fx-border-color: #2c43ff;
+    -fx-background-color: #848abd;
 }
 
 .confirm-button:hover {
-    -fx-background-color: #05fc11;
+    -fx-background-color: #b4bee6;
 }
 
 .cancel-button {
-    -fx-border-color: #e64727;
-    -fx-background-color: #fa6446;
+    -fx-border-color: #fdf694;
+    -fx-background-color: #fb581d;
 }
 
 .cancel-button:hover {
-    -fx-background-color: #fa2e05;
+    -fx-background-color: #fe0000;
 }
 
 .background{
@@ -50,6 +50,12 @@
 }
 
 .WhiteBackground{
-    -fx-border-color: rgba(255, 255, 255, 0.495);
-    -fx-background-color: rgba(255, 255, 255, 0.495);
+    -fx-border-color: rgba(132, 138, 189, 0);
+    -fx-background-color: rgba(132, 138, 189, 0.5);
+}
+
+
+.BlackBackground{
+    -fx-border-color: rgb(0, 0, 0);
+    -fx-background-color: rgba(132, 138, 189, 0.23);
 }

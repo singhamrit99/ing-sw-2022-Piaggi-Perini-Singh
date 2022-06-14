@@ -53,13 +53,11 @@ public class RoomController extends InitialStage implements Controller {
     public void initialize() {
         opened.set(true);
         roomTitle.setText(GUI.client.getRoom());
-
         expertMode = new Label();
         expertMode.setLabelFor(setExpertMode);
         setExpertMode = new SwitchButton();
         setExpertMode.setMaxHeight(20);
         setExpertMode.setMaxWidth(20);
-
         expertBox.getChildren().add(expertMode);
         expertBox.getChildren().add(setExpertMode);
 
