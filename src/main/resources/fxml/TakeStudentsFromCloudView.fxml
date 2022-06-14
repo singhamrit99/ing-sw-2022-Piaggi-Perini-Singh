@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.image.Image?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0"
+            prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@../css/Style.css">
+    <center>
+        <StackPane prefHeight="430.0" prefWidth="300.0">
+            <children>
+                <ChoiceBox fx:id="cloudChoice" prefWidth="150.0" StackPane.alignment="TOP_CENTER">
+                    <StackPane.margin>
+                        <Insets top="30.0"/>
+                    </StackPane.margin>
+                </ChoiceBox>
+                <GridPane gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                          minWidth="-Infinity" prefHeight="380.0" prefWidth="300.0" StackPane.alignment="CENTER">
+                    <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Student" GridPane.halignment="CENTER"
+                              GridPane.valignment="CENTER"/>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Entrance" GridPane.columnIndex="1"
+                              GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
+
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true"
+                                   GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true"
+                                   GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true"
+                                   GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true"
+                                   GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <GridPane.margin>
+                                <Insets/>
+                            </GridPane.margin>
+                        </ImageView>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true"
+                                   GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <GridPane.margin>
+                                <Insets/>
+                            </GridPane.margin>
+                        </ImageView>
+
+                        <Text fx:id="totalYellow" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1"
+                              GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Text>
+                        <Text fx:id="totalBlue" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1"
+                              GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Text>
+                        <Text fx:id="totalGreen" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1"
+                              GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Text>
+                        <Text fx:id="totalRed" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1"
+                              GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Text>
+                        <Text fx:id="totalPink" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1"
+                              GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Text>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="106.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints/>
+                        <RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+            </children>
+        </StackPane>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+              minWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" spacing="20.0">
+            <children>
+                <Button fx:id="confirmButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                        minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
+                        styleClass="confirm-button" text="Confirm" textFill="WHITE">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Button>
+                <Button fx:id="cancelButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                        minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
+                        styleClass="cancel-button" text="Leave" textFill="WHITE">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+    </bottom>
+    <top>
+        <StackPane maxWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+            <children>
+                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0"
+                      text="Select Cloud" textAlignment="JUSTIFY"
+                      StackPane.alignment="CENTER">
+                    <font>
+                        <Font name="Rockwell Extra Bold" size="25.0"/>
+                    </font>
+                </Text>
+            </children>
+        </StackPane>
+    </top>
+</BorderPane>
+
