@@ -71,8 +71,8 @@ public class GUI implements UI {
     @Override
     public void currentPlayer(String currentPlayer) {
         if (GUI.client.view.equals(StringNames.INGAME)) {
-            if (gameController.isOpened()) {
-                Platform.runLater(() -> gameController.setCurrentPlayer(currentPlayer));
+            if (gameController.isOpened()) { //TODO
+                // Platform.runLater(() -> gameController.setCurrentPlayer(currentPlayer));
             }
         }
     }

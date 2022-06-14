@@ -42,8 +42,6 @@ public class GameViewController extends InitialStage implements Controller {
     private String currentBoardView; //the owner of the board current visible on the screen
     ArrayList<StackPane> islandsPanes;
 
-    private String currentPlayer;
-
     public GameViewController(GUI gui) {
         super(gui);
         opened.set(false);
@@ -73,8 +71,6 @@ public class GameViewController extends InitialStage implements Controller {
             initializePlayersViewMenu(GUI.client.getLocalPlayerList());
             firstRefreshBoard();
         }
-
-        this.currentViewPlayer.setText("Current player: " + currentPlayer);
 
         if (itemBoardViewArray.size() > 0) {
             for (MenuItem boardView : itemBoardViewArray) {
@@ -124,9 +120,6 @@ public class GameViewController extends InitialStage implements Controller {
         else return redStudentImg;
     }
 
-    public void setCurrentPlayer(String currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
 
     public boolean isOpened() {
         return opened.get();
