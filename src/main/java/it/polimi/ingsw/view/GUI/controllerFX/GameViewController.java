@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.network.server.commands.DrawFromBagCommand;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
@@ -58,7 +57,7 @@ public class GameViewController extends InitialStage implements Controller {
             island0 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_0)));
             island1 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_1)));
             island2 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_2)));
-            MotherNature = new Image(Files.newInputStream(Paths.get(ResourcesPath.MN)));
+            motherNature = new Image(Files.newInputStream(Paths.get(ResourcesPath.MN)));
         } catch (IOException io) {
             System.out.println("Error importing img assets in GameViewController");
         }
@@ -68,6 +67,7 @@ public class GameViewController extends InitialStage implements Controller {
     public void initialize() {
         if (!opened.get()) { //first opening
             opened.set(true);
+            System.out.println(GUI.client.getLocalPlayerList());
             initializePlayersViewMenu(GUI.client.getLocalPlayerList());
             firstRefreshBoard();
         }
@@ -137,6 +137,7 @@ public class GameViewController extends InitialStage implements Controller {
             indexItem++;
         }
         itemBoardViewArray = items;
+
     }
 
     private void firstRefreshBoard() {
@@ -207,7 +208,7 @@ public class GameViewController extends InitialStage implements Controller {
         ArrayList<ImageView> towersToReturn = new ArrayList<>();
         EnumMap<Colors, Integer> students = island.getStudents();
         Image rightColor;
-        switch(island.getTowersColor()){
+        switch (island.getTowersColor()) {
             case WHITE:
                 rightColor = whiteTowerImg;
                 break;
@@ -217,9 +218,10 @@ public class GameViewController extends InitialStage implements Controller {
             default:
                 rightColor = blackTowerImg;
                 break;
-        };
+        }
+        ;
 
-        for(int i =0;i<island.getNumOfTowers();i++){
+        for (int i = 0; i < island.getNumOfTowers(); i++) {
             ImageView towerImage = new ImageView(rightColor);
             towersToReturn.add(towerImage);
         }
@@ -283,7 +285,7 @@ public class GameViewController extends InitialStage implements Controller {
                         img.setFitHeight(20);
                         studentsPane.addRow(j / 3, img);
                     }
-                    if(islandsBackEnd.get(indexIsland).hasMotherNature())spawnMN(studentsPane);
+                    if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMN(studentsPane);
                     Islands.addRow(0, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -304,7 +306,7 @@ public class GameViewController extends InitialStage implements Controller {
                     HBox islandHbox = new HBox();
                     GridPane towersPane = initGridPaneIsland(island, islandHbox);
                     ArrayList<ImageView> towers = spawnTowers(islandsBackEnd.get(11));
-                    for (int x = 0; x<towers.size();x++) {
+                    for (int x = 0; x < towers.size(); x++) {
                         towers.get(x).setFitHeight(25);
                         towers.get(x).setFitWidth(25);
                         towersPane.addRow(x / 2, towers.get(x));
@@ -317,7 +319,7 @@ public class GameViewController extends InitialStage implements Controller {
                         img.setFitHeight(20);
                         studentsPane.addRow(j / 2, img);
                     }
-                    if(islandsBackEnd.get(11).hasMotherNature())spawnMN(studentsPane);
+                    if (islandsBackEnd.get(11).hasMotherNature()) spawnMN(studentsPane);
                     Islands.addRow(1, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -330,7 +332,7 @@ public class GameViewController extends InitialStage implements Controller {
                     HBox islandHbox = new HBox();
                     GridPane towersPane = initGridPaneIsland(island, islandHbox);
                     ArrayList<ImageView> towers = spawnTowers(islandsBackEnd.get(4));
-                    int y =0;
+                    int y = 0;
                     for (ImageView tower : towers) {
                         tower.setFitHeight(25);
                         tower.setFitWidth(25);
@@ -346,7 +348,7 @@ public class GameViewController extends InitialStage implements Controller {
                         studentsPane.addRow(im / 2, img);
                         im++;
                     }
-                    if(islandsBackEnd.get(4).hasMotherNature())spawnMN(studentsPane);
+                    if (islandsBackEnd.get(4).hasMotherNature()) spawnMN(studentsPane);
                     Islands.addRow(1, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -366,7 +368,7 @@ public class GameViewController extends InitialStage implements Controller {
                     HBox islandHbox = new HBox();
                     GridPane towersPane = initGridPaneIsland(island, islandHbox);
                     ArrayList<ImageView> towers = spawnTowers(islandsBackEnd.get(10));
-                    int t =0;
+                    int t = 0;
                     for (ImageView tower : towers) {
                         tower.setFitHeight(25);
                         tower.setFitWidth(25);
@@ -381,7 +383,7 @@ public class GameViewController extends InitialStage implements Controller {
                         img.setFitHeight(20);
                         studentsPane.addRow(j / 2, img);
                     }
-                    if(islandsBackEnd.get(10).hasMotherNature())spawnMN(towersPane);
+                    if (islandsBackEnd.get(10).hasMotherNature()) spawnMN(towersPane);
                     Islands.addRow(2, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -409,7 +411,7 @@ public class GameViewController extends InitialStage implements Controller {
                         img.setFitHeight(20);
                         studentsPane.addRow(j / 2, img);
                     }
-                    if(islandsBackEnd.get(5).hasMotherNature())spawnMN(studentsPane);
+                    if (islandsBackEnd.get(5).hasMotherNature()) spawnMN(studentsPane);
                     Islands.addRow(2, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -445,7 +447,7 @@ public class GameViewController extends InitialStage implements Controller {
                         img.setFitHeight(20);
                         studentsPane.addRow(j / 2, img);
                     }
-                    if(islandsBackEnd.get(indexIsland).hasMotherNature())spawnMN(studentsPane);
+                    if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMN(studentsPane);
                     Islands.addRow(3, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -488,12 +490,31 @@ public class GameViewController extends InitialStage implements Controller {
     }
 
     private void spawnMN(GridPane pane) {
-        ImageView mn = new ImageView(MotherNature);
+        ImageView mn = new ImageView(motherNature);
         mn.setFitHeight(40);
         mn.setFitWidth(40);
         mn.maxWidth(40);
         mn.maxHeight(40);
-        pane.addRow(0,mn);
+        pane.addRow(0, mn);
+
+        mn.setOnMouseClicked((event) -> {
+            Scene scene;
+            try {
+                String filePath = ResourcesPath.FXML_FILE_PATH + "MoveMotherNatureView" + ResourcesPath.FILE_EXTENSION;
+                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+                loader.setController(new MoveMotherNatureController(gui));
+                scene = new Scene(loader.load());
+                Stage stage = new Stage();
+                stage.setTitle(StringNames.TITLE);
+                stage.setResizable(false);
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
+                stage.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void reloadEntrance() {
@@ -867,12 +888,11 @@ public class GameViewController extends InitialStage implements Controller {
 
     private Image island0, island1, island2;
 
-    private Image MotherNature;
+    private Image motherNature;
 
     // assets on screen
     @FXML
     private Menu changeViewBoard;
-
 
     @FXML
     private MenuItem leaveGame;
