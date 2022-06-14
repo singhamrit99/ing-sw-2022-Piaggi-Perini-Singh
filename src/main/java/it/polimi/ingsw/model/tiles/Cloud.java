@@ -36,6 +36,8 @@ public class Cloud {
         return returnedStudents;
     }
 
+    //TODO
+    //it should be depracated:
     public void addStudents(EnumMap<Colors, Integer> summedStudents) throws NegativeValueException {
         EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getStudents(), summedStudents);
         if (newStudents != null) {
@@ -45,7 +47,7 @@ public class Cloud {
         }
     }
 
-    private void setStudents(EnumMap<Colors, Integer> students) {
+    public void setStudents(EnumMap<Colors, Integer> students) {
         this.students = students;
     }
 }

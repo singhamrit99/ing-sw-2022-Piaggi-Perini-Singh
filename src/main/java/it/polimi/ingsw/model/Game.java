@@ -288,10 +288,10 @@ public class Game {
      */
     public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         if (state == State.PLANNINGPHASE && !playerDrawnOut) {
-            System.out.println("Nicknamecaller: " + nicknameCaller + " currentplayer " + currentPlayer.getNickname());
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
+                System.out.println("Nicknamecaller: " + nicknameCaller + " currentplayer " + currentPlayer.getNickname());
                 for (Cloud cloud : clouds) {
-                    cloud.addStudents(bag.drawStudents(numDrawnStudents));
+                    cloud.setStudents(bag.drawStudents(numDrawnStudents)); //it was addStudents
                     //notify cloud
                     StrippedCloud newCloud = new StrippedCloud(cloud);
                     PropertyChangeEvent evt =
