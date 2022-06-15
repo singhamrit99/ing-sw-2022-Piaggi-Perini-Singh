@@ -68,7 +68,8 @@ public class LobbyController extends InitialStage implements Controller {
     private void loadRoomsList() {
         for (int i = 0; i < rooms.size(); i++) {
             RowConstraints row = new RowConstraints();
-            row.setPrefHeight(40);
+            row.setPrefHeight(50);
+            row.setMinHeight(50);
             roomsList.getRowConstraints().add(row);
 
             Text roomName = new Text();
@@ -76,6 +77,10 @@ public class LobbyController extends InitialStage implements Controller {
 
             Button joinRoom = new Button();
             joinRoom.setText(StringNames.JOIN);
+            joinRoom.setStyle("-fx-border-color: #2c43ff;\n" +
+                    "    -fx-background-color: #848abd; \n -fx-border-width: 1;\n" +
+                    "    -fx-border-radius: 30;\n" +
+                    "    -fx-background-radius: 30;");
 
             joinRoom.setOnAction((event) -> {
                 try {
