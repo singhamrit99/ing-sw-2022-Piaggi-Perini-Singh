@@ -1,7 +1,5 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
-import java.net.URI;
-
 public interface ResourcesPath {
     String FXML_FILE_PATH = "/fxml/";
     String FILE_EXTENSION = ".fxml";
@@ -39,8 +37,13 @@ public interface ResourcesPath {
 
     //Assistants
     String ASSISTANT_CARDS = "src/main/resources/img/assistants/";
-    String IMAGE_EXTENSION = ".png";
+    String IMAGE_EXTENSION_ASS = ".png";
 
     //css
     String TEST_CSS = "src/main/resources/css/MainMenuStyle.css";
+
+
+    //Characters
+    String CHARACTERS = "src/main/resources/img/assistants/";
+    String IMAGE_EXTENSION_CHAR = ".jpg";
 }

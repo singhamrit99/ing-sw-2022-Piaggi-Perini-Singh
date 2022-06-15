@@ -174,6 +174,11 @@ public class CLI implements UI {
     }
 
     @Override
+    public void professorChanged() {
+        return;
+    }
+
+    @Override
     public void startGame() throws RemoteException {
         if (!client.isInGame()) {
             try {

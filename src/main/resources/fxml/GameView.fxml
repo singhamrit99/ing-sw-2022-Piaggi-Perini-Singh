@@ -974,7 +974,7 @@
                            <children>
                               <ImageView fx:id="character1" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../img/characters/character.jpg" />
+                                    <Image url="@../img/characters/character1.jpg" />
                                  </image>
                                  <HBox.margin>
                                     <Insets right="10.0" />

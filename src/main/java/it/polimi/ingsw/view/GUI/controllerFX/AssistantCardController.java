@@ -60,7 +60,7 @@ public class AssistantCardController extends InitialStage implements Controller 
         choiceBox.setOnAction((event) -> {
             int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
             try {
-                image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS + finalCards.get(selectedIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION))));
+                image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS + finalCards.get(selectedIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS))));
                 choosenCard.set(finalCards.get(selectedIndex).getImageName());
                 GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(selectedIndex).getMove());
 
