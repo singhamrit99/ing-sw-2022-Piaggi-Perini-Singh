@@ -199,22 +199,61 @@ public class GameViewController extends InitialStage implements Controller {
     @FXML
     private ImageView character3;
 
+    @FXML
+    private VBox character1Vbox;
+
+    @FXML
+    private VBox character2Vbox;
+
+    @FXML
+    private VBox character3Vbox;
+
     ArrayList<ImageView> charactersCards;
 
-    private void reloadCharacters()  {
+    private void reloadCharacters() {
         charactersCards = new ArrayList<>();
         charactersCards.add(character1);
         charactersCards.add(character2);
         charactersCards.add(character3);
         ArrayList<StrippedCharacter> characterCardsStripped = GUI.client.getLocalModel().getCharacters();
-        for(StrippedCharacter c : characterCardsStripped){
+        int indexCharacter = 0;
+
+        for (StrippedCharacter c : characterCardsStripped) {
             try {
                 Image character = new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS
                         + c.getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR)));
                 character1.setImage(character);
+            } catch (IOException ignored) {
             }
-            catch (IOException ignored){}
+
+            ArrayList<VBox> vBoxesCharacters = new ArrayList<>();
+            vBoxesCharacters.add(character1Vbox);
+            vBoxesCharacters.add(character2Vbox);
+            vBoxesCharacters.add(character3Vbox);
+
+            for(VBox box : vBoxesCharacters){
+                for(Node student : box.getChildren()){
+                    student.setVisible(false);
+                }
+            }
+
+            int i = 0;
+            for(Colors color : c.getStudents().keySet()){
+                if(c.getStudents().get(color)>0){
+                    ArrayList<Node> studentsOnCard = (ArrayList<Node>) vBoxesCharacters.get(indexCharacter).getChildren();
+                    while(i<c.getStudents().get(color)){
+                        ImageView student = (ImageView)studentsOnCard.get(i);
+                        student.setImage(studentImgFromColor(color));
+                        student.setVisible(true);
+                        i++;
+                    }
+                }
+            }
+            indexCharacter++;
         }
+
+
+
     }
 
 
@@ -353,7 +392,7 @@ public class GameViewController extends InitialStage implements Controller {
                 if (islandsBackEnd.get(10).getName().equals("EMPTY")) {
                     Islands.addRow(2, new Text("")); //empty cell alignment
                 } else {
-                    StackPane island = initIsland(1 );
+                    StackPane island = initIsland(1);
                     HBox islandHbox = new HBox();
                     GridPane towersPane = initGridPaneIsland(island, islandHbox);
                     ArrayList<ImageView> towers = spawnTowersIsland(islandsBackEnd.get(10));
