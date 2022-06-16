@@ -33,8 +33,6 @@ import java.util.ResourceBundle;
 public class GUILauncher extends Application implements Initializable {
     public static Client client = GUI.client;
     public static Stage mainWindow;
-    public static final int MAIN_MENU_WIDTH = 1920;
-    public static final int MAIN_MENU_HEIGHT = 1080;
 
     @FXML
     private StackPane mainMenuStage;
@@ -49,10 +47,6 @@ public class GUILauncher extends Application implements Initializable {
     public void start(Stage stage) throws Exception {
         stage.setTitle(StringNames.TITLE);
         stage.setResizable(true);
-        stage.setMaxWidth(MAIN_MENU_WIDTH);
-        stage.setMaxHeight(MAIN_MENU_HEIGHT);
-        stage.setMinHeight(MAIN_MENU_HEIGHT);
-        stage.setMinWidth(MAIN_MENU_WIDTH);
         stage.setMaximized(true);
 
         mainWindow = stage;
