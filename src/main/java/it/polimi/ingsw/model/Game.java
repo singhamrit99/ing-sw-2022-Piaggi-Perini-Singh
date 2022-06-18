@@ -349,7 +349,6 @@ public class Game {
                 }
                 playerPlanPhase++;
                 currentPlayer = players.get(playerPlanPhase);
-                playerDrawnOut = false;
             } else {
                 for (Player p : players)
                     p.forgetAssistantCard(); //necessary to always play the AssistantCards that hasn't played by any other players during the SAME turn (for the Planning Phase)
@@ -401,6 +400,7 @@ public class Game {
                 gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
+                playerDrawnOut=false;
                 PropertyChangeEvent phaseChange =
                         new PropertyChangeEvent(this, "change-phase", state, null);
                 gameListener.propertyChange(phaseChange);
@@ -539,7 +539,7 @@ public class Game {
             IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, NegativeValueException {
         if (playerCaller.equals(currentPlayer.getNickname())) {
             if (state == State.ACTIONPHASE_2) {
-                int destinationMotherNature = motherNaturePosition + distanceChosen;
+                int destinationMotherNature = (motherNaturePosition + distanceChosen)%islands.size();
                 if (islands.get(motherNaturePosition).hasMotherNature()) {
                     if (distanceChosen <= getMaxMotherNatureMove()) {
                         //notify oldIsland
