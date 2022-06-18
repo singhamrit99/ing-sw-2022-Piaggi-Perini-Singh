@@ -57,6 +57,15 @@ public class AssistantCardController extends InitialStage implements Controller 
         //cambio l immagine in base al selector
         ArrayList<AssistantCard> finalCards = cards;
         AtomicReference<String> choosenCard = new AtomicReference<>("");
+        choiceBox.getSelectionModel().selectFirst();
+        int firstIndex = choiceBox.getSelectionModel().getSelectedIndex();
+        choosenCard.set(finalCards.get(firstIndex).getImageName());
+        try {
+            image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS + finalCards.get(firstIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         choiceBox.setOnAction((event) -> {
             int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
             try {
