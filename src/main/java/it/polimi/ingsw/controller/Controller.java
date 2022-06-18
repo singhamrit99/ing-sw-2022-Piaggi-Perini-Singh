@@ -22,7 +22,10 @@ public class Controller {
         return game;
     }
 
-    public void callMoveMotherNature(String playerCaller, int distance) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException {
+    public void callMoveMotherNature(String playerCaller, int distance) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException,
+            MotherNatureLostException, IncorrectStateException {
+        if(playerCaller.equals(null))throw new IncorrectArgumentException();
+        if(distance <= 0 )throw  new NegativeValueException();
         game.moveMotherNature(playerCaller, distance);
     }
 

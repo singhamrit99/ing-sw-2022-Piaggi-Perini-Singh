@@ -309,6 +309,7 @@ public class Game {
      * taking advantage of the comparable interface of Player
      */
     public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFoundException {
+        if(playerDrawnOut==false)throw new IncorrectStateException();
         if (state == State.PLANNINGPHASE) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {  //playerDrawnOut = player has drawn from bag
                 for (Player p : players) {
@@ -348,7 +349,6 @@ public class Game {
                 }
                 playerPlanPhase++;
                 currentPlayer = players.get(playerPlanPhase);
-                playerDrawnOut = false;
             } else {
                 for (Player p : players)
                     p.forgetAssistantCard(); //necessary to always play the AssistantCards that hasn't played by any other players during the SAME turn (for the Planning Phase)
@@ -400,6 +400,7 @@ public class Game {
                 gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
+                playerDrawnOut=false;
                 PropertyChangeEvent phaseChange =
                         new PropertyChangeEvent(this, "change-phase", state, null);
                 gameListener.propertyChange(phaseChange);
@@ -538,7 +539,7 @@ public class Game {
             IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, NegativeValueException {
         if (playerCaller.equals(currentPlayer.getNickname())) {
             if (state == State.ACTIONPHASE_2) {
-                int destinationMotherNature = motherNaturePosition + distanceChosen;
+                int destinationMotherNature = (motherNaturePosition + distanceChosen)%islands.size();
                 if (islands.get(motherNaturePosition).hasMotherNature()) {
                     if (distanceChosen <= getMaxMotherNatureMove()) {
                         //notify oldIsland
@@ -586,14 +587,14 @@ public class Game {
      * It returns a boolean to signal if it has been a change in the professor table.
      */
     public void checkAndPlaceProfessor() throws ProfessorNotFoundException {
-        int max = 0;
         Player maxPlayer = null;
-        for (Colors studentColor : Colors.values()) {
+        for (Colors color : Colors.values()) {
+            int max = 0;
             for (Player player : players) {
-                if (player.getNumOfStudent(studentColor) > max) {
+                if (player.getNumOfStudent(color) > max) {
                     maxPlayer = player;
-                    max = player.getNumOfStudent(studentColor);
-                } else if (player.getNumOfStudent(studentColor) == max) {
+                    max = player.getNumOfStudent(color);
+                } else if (player.getNumOfStudent(color) == max) {
                     CharacterCard cardPlayed = player.getPlayedCharacterCard();
                     if (cardPlayed != null) {
                         if (cardPlayed.getAbility().getAction().equals(Actions.TAKE_PROFESSORS) && cardPlayed.getStatus() >= 1) {
@@ -609,8 +610,8 @@ public class Game {
             }
             if (maxPlayer != null) {
                 for (Player player : players) { //eventually remove the player who had that professor
-                    if (player.hasProfessorOfColor(studentColor)) {
-                        player.removeProfessor(studentColor);
+                    if (player.hasProfessorOfColor(color)) {
+                        player.removeProfessor(color);
                         //notify the removed professors
                         ArrayList<Colors> professors = player.getSchoolBoard().getProfessorsTable();
                         PropertyChangeEvent evt =
@@ -618,7 +619,7 @@ public class Game {
                         gameListener.propertyChange(evt);
                     }
                 }
-                maxPlayer.addProfessor(studentColor);
+                maxPlayer.addProfessor(color);
                 //notify the added prof
                 ArrayList<Colors> professors = maxPlayer.getSchoolBoard().getProfessorsTable();
                 PropertyChangeEvent evt =
