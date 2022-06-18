@@ -124,6 +124,7 @@ public class StrippedModel implements Serializable {
                     break;
                 case "professorTable":
                     boardToModify.get().setProfessorsTable((ArrayList<Colors>) evt.getNewValue());
+                    ui.professorChanged();
                     break;
                 default:
                     System.out.println("exception da fare setBoard"); //todo
