@@ -136,7 +136,7 @@ public class StrippedModel implements Serializable {
     }
 
     private void changePriceCharacterCard(PropertyChangeEvent evt) {
-        StrippedCharacter changedCard = (StrippedCharacter) evt.getOldValue();
+        StrippedCharacter changedCard = (StrippedCharacter) evt.getNewValue();
         StrippedCharacter cardToUpdate = null;
         for (StrippedCharacter card : characters) {
             if (card.sameCard(changedCard)) {

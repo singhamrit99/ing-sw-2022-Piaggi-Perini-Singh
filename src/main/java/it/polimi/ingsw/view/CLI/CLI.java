@@ -15,9 +15,11 @@ import it.polimi.ingsw.network.server.commands.*;
 import it.polimi.ingsw.view.UI;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
+
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.*;
+
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
 import static org.fusesource.jansi.Ansi.ansi;
@@ -39,6 +41,7 @@ public class CLI implements UI {
     PlayCharacterCardC playCharacterCardCOrder;
     PlayCharacterCardD playCharacterCardDOrder;
     DrawFromBagCommand drawFromBagOrder;
+    HashMap<String, ArrayList<Colors>> professorsTables= new HashMap<>();
     private final Scanner in = new Scanner(System.in);
 
     public CLI(Client client) {
@@ -108,12 +111,13 @@ public class CLI implements UI {
                         startGame();
                         break;
                     case "help":
-                        System.out.println("Possible options: \n JOIN to join a room; \n CREATE to create a new room;\n ROOMS to list rooms;" +
-                                "\n PLAYERS to list players in current lobby; \n INFO to view your current room's information;\n " +
-                                "CHANGE to toggle expert mode for the current lobby;\n " +
-                                "LEAVE to leave current lobby;\n" +
-                                "HELP to see this message again.\n" +
-                                "When you're ready to go and everyone is in the lobby type START to start the game!\n");
+                        System.out.println("O----------------------------------------------------------------------------------------O\n" +
+                                "|Possible options: JOIN to join a room; CREATE to create a new room; ROOMS to list rooms;|\n" +
+                                "|PLAYERS to list players in current lobby; INFO to view your current room's information; |\n" +
+                                "|CHANGE to toggle expert mode for the current lobby; LEAVE to leave current lobby;       |\n" +
+                                "|HELP to see this message again.                                                         |\n" +
+                                "|When you're ready to go and everyone is in the lobby type START to start the game!      |\n" +
+                                "O----------------------------------------------------------------------------------------O");
                         break;
                     case "\n":
                         System.out.println(command);
@@ -126,6 +130,11 @@ public class CLI implements UI {
         System.out.println("Loading...");
         Thread.sleep(500);
         //Main game loop
+        //Initializing local professors board
+        for (StrippedBoard s: client.getLocalModel().getBoards())
+        {
+            professorsTables.put(s.getOwner(), s.getProfessorsTable());
+        }
         while (client.isInGame()) {
             if (playedThisTurn == null)
                 playedThisTurn = new ArrayList<>();
@@ -150,7 +159,7 @@ public class CLI implements UI {
                     while (!client.isMyTurn()) {
 
                     }
-                    expertprintCommandHelp();
+                    expertPrintCommandHelp();
                     performActionInTurnExpert();
 
                 }
@@ -160,8 +169,7 @@ public class CLI implements UI {
                     while (!client.isMyTurn()) {
                         waitForTurn();
                     }
-                    if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_2))
-                    {
+                    if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_2)) {
                         printCommandHelp();
                         performActionInTurn();
                     }
@@ -175,6 +183,25 @@ public class CLI implements UI {
 
     @Override
     public void professorChanged() {
+        ArrayList<StrippedBoard> tmp = new ArrayList<>(client.getLocalModel().getBoards());
+        for (StrippedBoard s: tmp)
+        {
+            if (professorsTables.get(s.getOwner()).equals(s.getProfessorsTable()))
+            {
+                    //No change
+            }
+
+            else
+            {
+                System.out.println(s.getOwner()+ "'s professors changed from ");
+                System.out.println(professorsTables.get(s.getOwner()));
+                System.out.println(" to ");
+                System.out.println(s.getProfessorsTable());
+                professorsTables.replace(s.getOwner(),s.getProfessorsTable());
+            }
+
+        }
+
         return;
     }
 
@@ -494,35 +521,7 @@ public class CLI implements UI {
         }
     }
 
-    public void printCommandHelp() {
-        System.out.println("O-----------------------------------------------------------------------O\n" +
-                "|              The commands available are the following:                |\n" +
-                "|\"Press 1 to view everyone's boards                                    |\n" +
-                "|\"Press 2 to view every player's name                                  |\n" +
-                "|\"Press 3 to view all the islands                                      |\n" +
-                "|\"Press 4 to view all the clouds                                       |\n" +
-                "|\"Press 5 to move students across the islands and the dining room      |\n" +
-                "|\"Press 6 to move mother nature. This will end your turn               |\n" +
-                "|\"Press 7 to view this message again                                   |\n" +
-                "O-----------------------------------------------------------------------O");
-    }
-
-    public void expertprintCommandHelp() {
-        System.out.println("O-----------------------------------------------------------------------O\n" +
-                "|              The commands available are the following:                |\n" +
-                "|\"Press 1 to view everyone's boards                                    |\n" +
-                "|\"Press 2 to view every player's name                                  |\n" +
-                "|\"Press 3 to view all the islands                                      |\n" +
-                "|\"Press 4 to view all the clouds                                       |\n" +
-                "|\"Press 5 to move students across the islands and the dining room      |\n" +
-                "|\"Press 6 to move mother nature. This will end your turn               |\n" +
-                "|\"Press 7 to see the character cards in the game                       |\n" +
-                "|\"Press 8 to play a character card                                     |\n" +
-                "|\"Press 9 to view this message again                                   |\n" +
-                "O-----------------------------------------------------------------------O");
-    }
-
-    //Game methods
+    // **********************************   Gameplay methods    ***************************************************************
 
     public void drawFromBag() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         drawFromBagOrder = new DrawFromBagCommand(client.getNickname());
@@ -570,15 +569,6 @@ public class CLI implements UI {
             playAssistantCard();
         }
         client.setMyTurn(false);
-    }
-
-    public void printAssistantCards() throws LocalModelNotLoadedException {
-        AssistantCardDeck myDeck = client.getLocalModel().getBoardOf(client.getNickname()).getDeck();
-        int i = 0;
-        for (AssistantCard a : myDeck.getDeck()) {
-            System.out.println("Card number " + a.getImageName() + " Moves: " + a.getMove());
-            i++;
-        }
     }
 
     public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException {
@@ -669,87 +659,12 @@ public class CLI implements UI {
                 playCharacterCard();
                 break;
             case 9:
-                expertprintCommandHelp();
+                expertPrintCommandHelp();
                 break;
             default:
                 //TODO: add exception
         }
 
-    }
-
-
-    public synchronized void waitForTurn() throws InterruptedException {
-        if(!client.isMyTurn())
-        {
-        System.out.println("Waiting for turn ...");
-        System.out.println(ansi().eraseScreen());
-        Thread.sleep(500);
-        System.out.println("Waiting for turn ..");
-        System.out.println(ansi().eraseScreen());
-        Thread.sleep(500);
-        System.out.println("Waiting for turn . .");
-        System.out.println(ansi().eraseScreen());
-        Thread.sleep(500);
-        System.out.println("Waiting for turn .. ");
-        System.out.println(ansi().eraseScreen());
-        Thread.sleep(500);}
-    }
-
-    public void printCharacterCards() {
-        int i = 0;
-        ArrayList<StrippedCharacter> temp = client.getLocalModel().getCharacters();
-        for (StrippedCharacter c : temp) {
-            System.out.println("Character " + i);
-            System.out.println("Price: " + c.getPrice() + ", description:  " + c.getDescription());
-            i++;
-        }
-    }
-
-    public void playCharacterCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
-        StrippedCharacter tmp;
-        System.out.println("Select the character you want to play! You currently have " + client.getLocalModel().getBoards().get(playerNumber).getCoins() + " coins \n");
-        printCharacterCards();
-        int i;
-        String input;
-        while (true) {
-            input = in.next();
-            try {
-                i = Integer.parseInt(input);
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("That's not a number! Try again.\n");
-            }
-        }
-        while (i < 0 || i > 2) {
-            System.out.println("That's not right! Try again\n");
-            while (true) {
-                input = in.next();
-                try {
-                    i = Integer.parseInt(input);
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("That's not a number! Try again.\n");
-                }
-            }
-        }
-        tmp = client.getLocalModel().getCharacters().get(i);
-        switch (tmp.getRequirements().getRequirements().toLowerCase(Locale.ROOT)) {
-            //TODO: test if this actually works as intended
-            case "islands":
-                playCharacterB(i, tmp);
-                break;
-            case "colors,islands":
-                playCharacterC(i, tmp);
-                break;
-            default:
-                if (tmp.getRequirements().getRequirements().equals(""))
-                    //Automatic action card
-                    playCharacterA(i);
-                else
-                    //No resource used but input needed card
-                    playCharacterD(i);
-                break;
-        }
     }
 
     public void pickCloud() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
@@ -778,248 +693,10 @@ public class CLI implements UI {
                 }
             }
         }
-        pickCloudOrder = new PickCloud(client.getNickname(), i-1);
+        pickCloudOrder = new PickCloud(client.getNickname(), i - 1);
         System.out.println(client.getLocalModel().getState());
         client.performGameAction(pickCloudOrder);
         client.setMyTurn(false);
-    }
-
-    public void printClouds() {
-        EnumMap<Colors, Integer> students;
-        int i;
-        Color color;
-        int rows = 0;
-        for (StrippedCloud cloud : client.getLocalModel().getClouds()) {
-            students = cloud.getStudents();
-            System.out.println(("Cloud name:" + cloud.getName()));
-            System.out.println(" 00000000000000000000");
-            System.out.println("0                    0");
-            for (Colors c : cloud.getStudents().keySet()) {
-                //System.out.println(c + " students: " + board.getEntrance().get(c));
-                i = cloud.getStudents().get(c);
-                // System.out.println("I secondo: "+i);
-                color = colorsToColor(c);
-                while (i > 0) {
-                    if ((rows % 3) < 2) {
-                        if (rows != 6) {
-                            System.out.print(ansi().fg(color).a("\t* ").reset());
-                            rows++;
-                        } else
-                            System.out.print(ansi().fg(color).a("  *\n").reset());
-                    } else {
-                        System.out.print(ansi().fg(color).a("*\n").reset());
-                        rows++;
-
-                    }
-                    i--;
-                }
-
-            }
-            System.out.println();
-            System.out.println("0                    0");
-            System.out.println(" 00000000000000000000");
-            System.out.println("Number of students: ");
-            for (Colors c : Colors.values()) {
-                System.out.println(c + " " + students.get(c));
-            }
-        }
-    }
-
-    public void playCharacterA(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-        System.out.println("You have chosen a no parameter character! Buckle up, the effects are on the way!\n");
-        playCharacterCardAOrder = new PlayCharacterCardA(client.getNickname(), id);
-        try {
-            client.performGameAction(playCharacterCardAOrder);
-        } catch (UserNotInRoomException | UserNotRegisteredException e) {
-            throw new RuntimeException(e);
-        } catch (NotEnoughCoinsException e)
-    {
-        System.out.println(StringNames.NOT_ENOUGH_COINS);
-    }
-
-    }
-
-    public void playCharacterB(int id, StrippedCharacter character) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-        System.out.println("You have chosen a student island card\n");
-        int student = 0, island;
-        EnumMap<Colors, Integer> students= character.getStudents();
-        System.out.println(client.getLocalModel().getCharacters().get(id).getDescription());
-        System.out.println();
-        printExpertIslands();
-        for (Colors c : students.keySet()) {
-            System.out.println(c + " students: " + students.get(c));
-        }
-        String input;
-        while (true) {
-            input = in.next();
-            try {
-                island = Integer.parseInt(input);
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("That's not a number! Try again.\n");
-            }
-        }
-
-
-        playCharacterCardBOrder = new PlayCharacterCardB(client.getNickname(), id, student, island);
-        try {
-            client.performGameAction(playCharacterCardBOrder);
-        } catch (UserNotInRoomException | UserNotRegisteredException e) {
-            throw new RuntimeException(e);
-        }catch (NotEnoughCoinsException e)
-        {
-            System.out.println(StringNames.NOT_ENOUGH_COINS);
-        }
-    }
-
-    public void playCharacterC(int id, StrippedCharacter card) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
-        System.out.println("You have chosen a card that requires two sets of students\n");
-
-        String answer;
-        String[] parts;
-        String color;
-        int value;
-        int movedStudents = 0;
-        boolean isValidInputYN = false;
-        boolean doItAgain;
-        System.out.println("These are the students on your card: \n");
-
-        EnumMap<Colors, Integer> students1, students2 = null;
-
-        //There's gonna be two cases here
-        StrippedBoard myBoard= client.getLocalModel().getBoardOf(client.getNickname());
-        if (card.getDescription().equals("Swap 3 of the students on this card with 3 from your Entrance!")) {
-            students1 = card.getStudents();
-            for (Colors c : myBoard.getEntrance().keySet()) {
-                System.out.println(c + " students: " + myBoard.getEntrance().get(c));
-            }
-            //Students input code
-
-            do {
-                answer = in.nextLine();
-                answer = answer.toLowerCase(Locale.ROOT);
-                if (answer.equals("y") || answer.equals("n"))
-                    isValidInputYN = true;
-                else if (answer.equals("\n")) {
-
-                } else
-                    System.out.println("Whoops! That's not right. Try again: \n");
-            } while (!isValidInputYN);
-            //Move students to the dining room
-            doItAgain = true;
-            isValidInputYN = false;
-            if (answer.equals("y")) {
-                do {
-                    while (true) {
-                        System.out.println("Type the students you want to move as \"color, number\"");
-                        answer = in.nextLine();
-                        // System.out.println("answer "+ answer);
-                        parts = answer.split(",|, | ,");
-                        color = parts[0];
-                        color = color.replaceAll("[^a-zA Z0-9]", "");
-                        try {
-                            parts[1] = parts[1].trim();
-                            try {
-                                value = Integer.parseInt(parts[1]);
-                                color = color.toUpperCase(Locale.ROOT);
-                                break;
-                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                                System.out.println("Something went wrong with your input, try again!");
-                                //in.nextLine();
-                            }
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            System.out.println("Something went wrong with your input, try again!");
-                            //in.nextLine();
-                        }
-
-                    }
-
-                    if (isValidColor(color)) {
-                        if (value <= myBoard.getEntrance().get(stringToColor(color))) {
-                            students2 = initializeMove(students2);
-                            students2.put(stringToColor(color), students2.get(stringToColor(color)) + value);
-                            movedStudents += value;
-                            if (movedStudents < 3) {
-                                System.out.println("Do you want to move other students?\n");
-                                do {
-                                    answer = in.nextLine();
-                                    answer = answer.toLowerCase(Locale.ROOT);
-                                    if (answer.equals("y") || answer.equals("n"))
-                                        isValidInputYN = true;
-                                    else
-                                        System.out.println("Whoops! That's not right. Try again: \n");
-                                } while (!isValidInputYN);
-                            }
-                            //Since a player can only move 3 students in a turn there needs to be a check here too
-                            if (answer.equals(("n"))) {
-                                doItAgain = false;
-                            }
-                        } else
-                            System.out.println("You don't have enough students of that color! Try again.\n");
-                    } else
-                        System.out.println("There is no such color as " + color + "! Try again. \n");
-                } while (doItAgain && movedStudents < 3);
-            }
-            //Once I get here I should have a valid enummap comprised of 3 students. Which means...
-            //...I can just call the order right?
-
-        }
-            else
-        {
-            //TODO: finish character card activation and lots of testing
-            students1=card.getStudents();
-            for (Colors c : students1.keySet()) {
-                System.out.println(c + " students: " + students1.get(c));
-            }
-
-        }
-
-        playCharacterCardCOrder = new PlayCharacterCardC(client.getNickname(), id, students1, students2);
-        try {
-            client.performGameAction(playCharacterCardCOrder);
-        } catch (UserNotInRoomException | UserNotRegisteredException e) {
-            throw new RuntimeException(e);
-        }catch (NotEnoughCoinsException e)
-        {
-            System.out.println(StringNames.NOT_ENOUGH_COINS);
-        }
-    }
-
-    public void playCharacterD(int id) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-        System.out.println("You have to make a choice\n");
-        //There are two cards that only need a color to work, and the effects then take place
-        //Globally. Both of them ask for colors
-        System.out.println(client.getLocalModel().getCharacters().get(id));
-        System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
-        int choice;
-        String input;
-        boolean invalidChoice = true;
-        do {
-            while (true) {
-                input = in.next();
-                try {
-                    choice = Integer.parseInt(input);
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("That's not a number! Try again.\n");
-                }
-            }
-            if (choice < 0 || choice > 4) {
-                System.out.println("Invalid color! Try again.");
-                System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
-            } else
-                invalidChoice = false;
-        } while (!invalidChoice);
-
-        playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, choice);
-        try {
-            client.performGameAction(playCharacterCardDOrder);
-        } catch (UserNotInRoomException | UserNotRegisteredException e) {
-            throw new RuntimeException(e);
-        }catch (NotEnoughCoinsException e)
-        {
-            System.out.println(StringNames.NOT_ENOUGH_COINS);
-        }
     }
 
     public void moveMN() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
@@ -1118,7 +795,10 @@ public class CLI implements UI {
                             try {
                                 value = Integer.parseInt(parts[1]);
                                 color = color.toUpperCase(Locale.ROOT);
-                                break;
+                                if (value <= 3)
+                                    break;
+                                else
+                                    System.out.println("You can't move more than 3 students in a single turn! Try again.");
                             } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                                 System.out.println("Something went wrong with your input, try again!");
                                 //in.nextLine();
@@ -1131,8 +811,6 @@ public class CLI implements UI {
                     }
                     //  System.out.println("The color you chose was "+ color + " the number you picked was "+ value);
                     if (isValidColor(color)) {
-                        // System.out.println("StringToColor output: "+ stringToColor(color));
-                        //  System.out.println("The number of students of that color in your entrance is "+ myBoard.getEntrance().get(stringToColor(color)));
                         if (value <= myBoard.getEntrance().get(stringToColor(color))) {
                             studentsToMove = initializeMove(studentsToMove);
                             studentsToMove.put(stringToColor(color), studentsToMove.get(stringToColor(color)) + value);
@@ -1177,7 +855,10 @@ public class CLI implements UI {
                             try {
                                 value = Integer.parseInt(parts[1]);
                                 color = color.toUpperCase(Locale.ROOT);
-                                break;
+                                if (value <= 3)
+                                    break;
+                                else
+                                    System.out.println("You can't move more than 3 students in a single turn! Try again.");
                             } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                                 System.out.println("Something went wrong with your input, try again!");
                                 //in.nextLine();
@@ -1205,7 +886,7 @@ public class CLI implements UI {
                         //    System.out.println("The color you chose was " + color);
                         //  System.out.println("The number of students of that color in your entrance is " + myBoard.getEntrance().get(stringToColor(color)));
                         if (value <= myBoard.getEntrance().get(stringToColor(color))) {
-                          //  System.out.println("Number of islands" + client.getLocalModel().getIslands().size());
+                            //  System.out.println("Number of islands" + client.getLocalModel().getIslands().size());
                             if (island > 0 && island <= client.getLocalModel().getIslands().size()) {
 
                                 studentsToMove.put(stringToColor(color), value);
@@ -1220,7 +901,7 @@ public class CLI implements UI {
                                             isValidInputYN = true;
                                         else
                                             System.out.println("Whoops! That's not right. Try again: \n");
-                                    } while (!isValidInputYN && movedStudents < 3);
+                                    } while (!isValidInputYN);
                                 }
                                 if (answer.equals("n") || movedStudents == 3) {
                                     doItAgain = false;
@@ -1247,11 +928,397 @@ public class CLI implements UI {
     }
 
     //End of MoveStudents
-    public EnumMap<Colors, Integer> initializeMove(EnumMap<Colors, Integer> move) {
-        for (Colors c : Colors.values()) {
-            move.put(c, 0);
+
+    // **********************************   Character card methods    ***************************************************************
+    public void playCharacterCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
+        StrippedCharacter tmp;
+        System.out.println("Select the character you want to play! You currently have " + client.getLocalModel().getBoards().get(playerNumber).getCoins() + " coins \n");
+        printCharacterCards();
+        int i;
+        String input;
+        while (true) {
+            input = in.next();
+            try {
+                i = Integer.parseInt(input);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("That's not a number! Try again.\n");
+            }
         }
-        return move;
+        while (i < 0 || i > 2) {
+            System.out.println("That's not right! Try again\n");
+            while (true) {
+                input = in.next();
+                try {
+                    i = Integer.parseInt(input);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
+        }
+        tmp = client.getLocalModel().getCharacters().get(i);
+        // System.out.println(tmp.getRequirements().getRequirements().toLowerCase(Locale.ROOT));
+        switch (tmp.getDescription()) {
+
+            //Island and student card
+            case "Calculate the influence on any Island and reap the rewards!":
+            case "Place a No Entry card on an isle and block Mother Nature's power once!":
+            case "Move a student on the character card to any isle you wish!":
+                playCharacterB(i, tmp);
+                break;
+            //Students on card card
+            case "Swap 3 of the students on this card with 3 from your Entrance!":
+            case "Switch up to two students between your Entrance and your Dining Room!":
+                playCharacterC(i, tmp);
+                break;
+            //Automatic action card
+            case "If somebody tries to Conquer an island, ignore the towers for this turn!":
+            case "Add 2 to your Influence this turn!":
+                playCharacterA(i);
+                break;
+            //No resource used but input needed card
+            case "Snag an opponent's professor if you have the same number of their students!":
+            case "Choose a student color to ignore when calculating Influence this turn!":
+            case "Choose a color: EVERYONE must return 3 students of that color to the bag!":
+                playCharacterD(i);
+                //MN movement
+            case "You may move Mother Nature up to 2 additional spaces!":
+                //Updating localmodel for +2 moves
+                client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getMoves() + 2);
+                playCharacterD(i);
+                break;
+        }
+    }
+
+    public void playCharacterA(int id) throws AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+        System.out.println("You have chosen a no parameter character! Buckle up, the effects are on the way!\n");
+        playCharacterCardAOrder = new PlayCharacterCardA(client.getNickname(), id);
+        try {
+            client.performGameAction(playCharacterCardAOrder);
+        } catch (UserNotInRoomException | UserNotRegisteredException e) {
+            throw new RuntimeException(e);
+        } catch (NotEnoughCoinsException e) {
+            System.out.println(StringNames.NOT_ENOUGH_COINS);
+        }
+
+    }
+
+    public void playCharacterB(int id, StrippedCharacter character) throws AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+        System.out.println("You have chosen a student island card\n");
+        int student = 0, island;
+        EnumMap<Colors, Integer> students = character.getStudents();
+        System.out.println(character.getDescription());
+        System.out.println();
+        printExpertIslands();
+        for (Colors c : students.keySet()) {
+            System.out.println(c + " students: " + students.get(c));
+        }
+        String input;
+        while (true) {
+            input = in.next();
+            try {
+                island = Integer.parseInt(input);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("That's not a number! Try again.\n");
+            }
+        }
+        playCharacterCardBOrder = new PlayCharacterCardB(client.getNickname(), id, student, island);
+        try {
+            client.performGameAction(playCharacterCardBOrder);
+        } catch (UserNotInRoomException | UserNotRegisteredException e) {
+            throw new RuntimeException(e);
+        } catch (NotEnoughCoinsException e) {
+            System.out.println(StringNames.NOT_ENOUGH_COINS);
+        }
+    }
+
+    public void playCharacterC(int id, StrippedCharacter card) throws AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
+        System.out.println("You have chosen a card that requires two sets of students\n");
+        String answer;
+        String[] parts;
+        String color;
+        int value;
+        int movedStudents = 0;
+        boolean validInput = false;
+        System.out.println("These are the students on the card: \n");
+        EnumMap<Colors, Integer> students1 = new EnumMap<>(Colors.class), students2 = new EnumMap<>(Colors.class);
+        //There's gonna be two cases here
+        StrippedBoard myBoard = client.getLocalModel().getBoardOf(client.getNickname());
+        if (card.getDescription().equals("Swap 3 of the students on this card with 3 from your Entrance!")) {
+            System.out.println(card.getDescription());
+            //Students input code
+            //Students from entrance
+            do {
+                while (true) {
+                    printEntrance(myBoard);
+                    printStudentsOnCard(card);
+                    System.out.println("Type the students you want to move from your entrance as \"color, number\"");
+                    answer = in.nextLine();
+                    // System.out.println("answer "+ answer);
+                    parts = answer.split(",|, | ,");
+                    color = parts[0];
+                    color = color.replaceAll("[^a-zA Z0-9]", "");
+                    try {
+                        parts[1] = parts[1].trim();
+                        try {
+                            value = Integer.parseInt(parts[1]);
+                            color = color.toUpperCase(Locale.ROOT);
+                            if (value <= 3)
+                                break;
+                            else
+                                System.out.println("You can't move more than 3 students in a single turn! Try again.");
+                        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Something went wrong with your input, try again!");
+                            //in.nextLine();
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Something went wrong with your input, try again!");
+                        //in.nextLine();
+                    }
+                }
+                if (isValidColor(color)) {
+                    if (value <= myBoard.getEntrance().get(stringToColor(color))) {
+                        students1 = initializeMove(students2);
+                        students1.put(stringToColor(color), students1.get(stringToColor(color)) + value);
+                        movedStudents += value;
+                        if (movedStudents < 3) {
+                            System.out.println("You still have to pick " + (3 - movedStudents) + " students to move!");
+                        }
+                        //Since a player can only move 3 students in a turn there needs to be a check here too
+                    } else
+                        System.out.println("You don't have enough students of that color! Try again.\n");
+                } else
+                    System.out.println("There is no such color as " + color + "! Try again. \n");
+            } while (movedStudents < 3);
+
+            //**************************** Students from entrance taken **************************************
+            //Resetting the variable for later use
+            movedStudents = 0;
+            printStudentsOnCard(card);
+            //Students from card
+            do {
+                while (true) {
+                    System.out.println("Type the students you want to take from the card as \"color, number\"");
+                    answer = in.nextLine();
+                    // System.out.println("answer "+ answer);
+                    parts = answer.split(",|, | ,");
+                    color = parts[0];
+                    color = color.replaceAll("[^a-zA Z0-9]", "");
+                    try {
+                        parts[1] = parts[1].trim();
+                        try {
+                            value = Integer.parseInt(parts[1]);
+                            color = color.toUpperCase(Locale.ROOT);
+                            if (value <= 3)
+                                break;
+                            else
+                                System.out.println("You can't move more than 3 students in a single turn! Try again.");
+                        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Something went wrong with your input, try again!");
+                            //in.nextLine();
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Something went wrong with your input, try again!");
+                        //in.nextLine();
+                    }
+                }
+                if (isValidColor(color)) {
+                    if (value <= card.getStudents().get(stringToColor(color))) {
+                        students2 = initializeMove(students2);
+                        students2.put(stringToColor(color), students2.get(stringToColor(color)) + value);
+                        movedStudents += value;
+                        if (movedStudents < 3) {
+                            System.out.println("You still have to pick " + (3 - movedStudents) + " students to move!");
+                        }
+                        //Since a player can only move 3 students in a turn there needs to be a check here too
+                    } else
+                        System.out.println("You don't have enough students of that color! Try again.\n");
+                } else
+                    System.out.println("There is no such color as " + color + "! Try again. \n");
+            } while (movedStudents < 3);
+
+            //**************************** Students from card taken **************************************
+            validInput = true;
+        }
+
+        //**************************** OTHER CARD **************************************
+        else {   //First a check to make sure there are at least 2 students in the dining room
+            int diningStudents = 0;
+
+            for (Colors c : myBoard.getDining().keySet()) {
+                diningStudents += myBoard.getDining().get(c);
+            }
+            if (diningStudents >= 2) {
+                do {
+                    while (true) {
+                        printEntrance(myBoard);
+                        printDining(myBoard);
+                        System.out.println("Type the students you want to move from your entrance as \"color, number\"");
+                        answer = in.nextLine();
+                        // System.out.println("answer "+ answer);
+                        parts = answer.split(",|, | ,");
+                        color = parts[0];
+                        color = color.replaceAll("[^a-zA Z0-9]", "");
+                        try {
+                            parts[1] = parts[1].trim();
+                            try {
+                                value = Integer.parseInt(parts[1]);
+                                color = color.toUpperCase(Locale.ROOT);
+                                if (value <= 2)
+                                    break;
+                                else
+                                    System.out.println("You can't move more than 2 students with this card! Try again.");
+                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                                System.out.println("Something went wrong with your input, try again!");
+                                //in.nextLine();
+                            }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Something went wrong with your input, try again!");
+                            //in.nextLine();
+                        }
+                    }
+                    if (isValidColor(color)) {
+                        if (value <= myBoard.getEntrance().get(stringToColor(color))) {
+                            students1 = initializeMove(students1);
+                            students1.put(stringToColor(color), students1.get(stringToColor(color)) + value);
+                            movedStudents += value;
+                            if (movedStudents < 2) {
+                                System.out.println("You still have to pick " + (2 - movedStudents) + " students to move!");
+                            }
+                            //Since a player can only move 2 students in a turn there needs to be a check here too
+                        } else
+                            System.out.println("You don't have enough students of that color! Try again.\n");
+                    } else
+                        System.out.println("There is no such color as " + color + "! Try again. \n");
+                } while (movedStudents < 2);
+
+                //**************************** Students from entrance taken **************************************
+                movedStudents = 0;
+                do {
+                    while (true) {
+                        printDining(myBoard);
+                        System.out.println("Type the students you want to move from your dining room as \"color, number\"");
+                        answer = in.nextLine();
+                        // System.out.println("answer "+ answer);
+                        parts = answer.split(",|, | ,");
+                        color = parts[0];
+                        color = color.replaceAll("[^a-zA Z0-9]", "");
+                        try {
+                            parts[1] = parts[1].trim();
+                            try {
+                                value = Integer.parseInt(parts[1]);
+                                color = color.toUpperCase(Locale.ROOT);
+                                if (value <= 2)
+                                    break;
+                                else
+                                    System.out.println("You can't move more than 2 students with this card! Try again.");
+                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                                System.out.println("Something went wrong with your input, try again!");
+                                //in.nextLine();
+                            }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Something went wrong with your input, try again!");
+                            //in.nextLine();
+                        }
+                    }
+                    if (isValidColor(color)) {
+                        if (value <= myBoard.getDining().get(stringToColor(color))) {
+                            students2 = initializeMove(students2);
+                            students2.put(stringToColor(color), students2.get(stringToColor(color)) + value);
+                            movedStudents += value;
+                            if (movedStudents < 2) {
+                                System.out.println("You still have to pick " + (2 - movedStudents) + " students to move!");
+                            }
+                            //Since a player can only move 2 students in a turn there needs to be a check here too
+                        } else
+                            System.out.println("You don't have enough students of that color! Try again.\n");
+                    } else
+                        System.out.println("There is no such color as " + color + "! Try again. \n");
+                } while (movedStudents < 2);
+                validInput = true;
+            } else
+            { System.out.println("Whoops! You don't have enough students in your dining room to play this card!");}
+            //**************************** Students from dining room taken **************************************
+
+        }
+
+        if (validInput) {
+            playCharacterCardCOrder = new PlayCharacterCardC(client.getNickname(), id, students1, students2);
+            try {
+                client.performGameAction(playCharacterCardCOrder);
+            } catch (UserNotInRoomException | UserNotRegisteredException e) {
+                throw new RuntimeException(e);
+            } catch (NotEnoughCoinsException e) {
+                System.out.println(StringNames.NOT_ENOUGH_COINS);
+            }
+        }
+    }
+
+    public void playCharacterD(int id) throws AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+        System.out.println("You have to make a choice\n");
+        //There are two cards that only need a color to work, and the effects then take place
+        //Globally. Both of them ask for colors
+        System.out.println(client.getLocalModel().getCharacters().get(id).getDescription());
+        System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
+        int choice;
+        String input;
+        boolean invalidChoice = true;
+        do {
+            while (true) {
+                input = in.next();
+                try {
+                    choice = Integer.parseInt(input);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
+            if (choice < 0 || choice > 4) {
+                System.out.println("Invalid color! Try again.");
+                System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
+            } else
+                invalidChoice = false;
+        } while (!invalidChoice);
+
+        playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, choice);
+        try {
+            client.performGameAction(playCharacterCardDOrder);
+        } catch (UserNotInRoomException | UserNotRegisteredException e) {
+            throw new RuntimeException(e);
+        } catch (NotEnoughCoinsException e) {
+            System.out.println(StringNames.NOT_ENOUGH_COINS);
+        }
+    }
+
+    // **********************************   Printer Methods    ***************************************************************
+    public void printCommandHelp() {
+        System.out.println("O-----------------------------------------------------------------------O\n" +
+                "|              The commands available are the following:                |\n" +
+                "|\"Press 1 to view everyone's boards                                    |\n" +
+                "|\"Press 2 to view every player's name                                  |\n" +
+                "|\"Press 3 to view all the islands                                      |\n" +
+                "|\"Press 4 to view all the clouds                                       |\n" +
+                "|\"Press 5 to move students across the islands and the dining room      |\n" +
+                "|\"Press 6 to move mother nature. This will end your turn               |\n" +
+                "|\"Press 7 to view this message again                                   |\n" +
+                "O-----------------------------------------------------------------------O");
+    }
+
+    public void expertPrintCommandHelp() {
+        System.out.println("O-----------------------------------------------------------------------O\n" +
+                "|              The commands available are the following:                |\n" +
+                "|\"Press 1 to view everyone's boards                                    |\n" +
+                "|\"Press 2 to view every player's name                                  |\n" +
+                "|\"Press 3 to view all the islands                                      |\n" +
+                "|\"Press 4 to view all the clouds                                       |\n" +
+                "|\"Press 5 to move students across the islands and the dining room      |\n" +
+                "|\"Press 6 to move mother nature. This will end your turn               |\n" +
+                "|\"Press 7 to see the character cards in the game                       |\n" +
+                "|\"Press 8 to play a character card                                     |\n" +
+                "|\"Press 9 to view this message again                                   |\n" +
+                "O-----------------------------------------------------------------------O");
     }
 
     public void printPlayerBoards() {
@@ -1264,68 +1331,17 @@ public class CLI implements UI {
     }
 
     public void printPlayerBoard(StrippedBoard board) {
-        Integer i;
-        int rows=0, printColumns;
-        Ansi.Color color;
+
         System.out.println("O----------------------O");
         System.out.println(board.getOwner() + "'s board: ");
         System.out.println("Coins: " + board.getCoins());
         System.out.println("\nDining room configuration: ");
-        System.out.println("----------------------╗");
-        for (Colors c : board.getDining().keySet()) {
-            i=board.getDining().get(c);
-            //  System.out.println("I: "+i);
-            color= colorsToColor(c);
-            printColumns=0;
-            while(i>0)
-            {   if (printColumns==0) {
-                System.out.print("|");
-                System.out.print(ansi().fg(color).a("*\t").reset());
-                printColumns++;
-            }
-            else
-            {
-                System.out.print(ansi().fg(color).a("*\t").reset());
-                printColumns++;
-            }
-                i--;
-
-            }
-            System.out.println();
-        }
-        System.out.println("O----------------------O");
+        printDining(board);
         for (Colors c : board.getDining().keySet()) {
             System.out.println(c + " students: " + board.getDining().get(c));
         }
         System.out.println("O----------------------O");
-        System.out.println("\nEntrance configuration: ");
-        System.out.println("O-----O");
-        System.out.print("|");
-        for (Colors c : board.getEntrance().keySet()) {
-            i=board.getEntrance().get(c);
-            color= colorsToColor(c);
-
-            while (i > 0) {
-                if ((rows % 3) < 2) {
-                    if (rows != 6) {
-                        System.out.print(ansi().fg(color).a("* ").reset());
-                        rows++;
-                    } else {
-                        System.out.print(ansi().fg(color).a("  *  ").reset());
-                        System.out.print("|");
-                    }
-                } else {
-                    System.out.print(ansi().fg(color).a("*").reset());
-                    System.out.print("|");
-                    System.out.print("\n");
-                    System.out.print("|");
-                    rows++;
-                }
-                i--;
-            }
-        }
-        System.out.println();
-        System.out.println("O-----O");
+        printEntrance(board);
         for (Colors c : board.getEntrance().keySet()) {
             System.out.println(c + " students: " + board.getEntrance().get(c));
         }
@@ -1336,7 +1352,6 @@ public class CLI implements UI {
         }
         System.out.println("O----------------------O");
     }
-
 
     public void printPlayerNames() {
         for (StrippedBoard board : client.getLocalModel().getBoards()) {
@@ -1362,9 +1377,69 @@ public class CLI implements UI {
         for (StrippedIsland island : islands) {
             printexpertIsland(island);
         }
-
         System.out.println("Mother Nature is on isle number " + (motherNature + 1) + "!");
 
+    }
+
+    public void printDining(StrippedBoard board) {
+        Integer i;
+        int printColumns;
+        Ansi.Color color;
+        System.out.println("----------------------╗");
+        for (Colors c : board.getDining().keySet()) {
+            i = board.getDining().get(c);
+            //  System.out.println("I: "+i);
+            color = colorsToColor(c);
+            printColumns = 0;
+            while (i > 0) {
+                if (printColumns == 0) {
+                    System.out.print("|");
+                    System.out.print(ansi().fg(color).a("*\t").reset());
+                    printColumns++;
+                } else {
+                    System.out.print(ansi().fg(color).a("*\t").reset());
+                    printColumns++;
+                }
+                i--;
+
+            }
+            System.out.println();
+        }
+        System.out.println("O----------------------O");
+    }
+
+    public void printEntrance(StrippedBoard board) {
+        Integer i;
+        int rows = 0;
+        Ansi.Color color;
+        System.out.println("\nEntrance configuration: ");
+        System.out.println("O-----O");
+        System.out.print("|");
+        for (Colors c : board.getEntrance().keySet()) {
+            i = board.getEntrance().get(c);
+            color = colorsToColor(c);
+
+            while (i > 0) {
+                if ((rows % 3) < 2) {
+                    if (rows != 6) {
+                        System.out.print(ansi().fg(color).a("* ").reset());
+                        rows++;
+                    } else {
+                        System.out.print(ansi().fg(color).a("  *  ").reset());
+                        System.out.print("|");
+                    }
+                } else {
+                    System.out.print(ansi().fg(color).a("*").reset());
+                    System.out.print("|");
+                    System.out.print("\n");
+                    System.out.print("|");
+                    rows++;
+                }
+                i--;
+            }
+        }
+        System.out.println();
+        System.out.println("O-----O");
     }
 
     public void printIsland(StrippedIsland island) {
@@ -1424,21 +1499,157 @@ public class CLI implements UI {
     }
 
     public void printexpertIsland(StrippedIsland island) {
+        int i;
+        Color color;
+        int rows = 0;
         System.out.println("Island: " + island.getName());
-        if (island.hasNoEnterTile())
-            System.out.println("This island has a \"No entry\" tile on it!");
         System.out.println("Students on the island: ");
-        System.out.println(" students: " + island.getStudents() + "\n");
+        if (island.hasMotherNature())
+            System.out.println(ansi().fg(CYAN).a("* Mother Nature's here!  *").reset());
+        if (island.hasNoEnterTile())
+            System.out.println(ansi().fg(RED).a("!!! There's a No Entry Tile on this island !!!").reset());
+        System.out.println(" ____________________");
+        System.out.println("/                    \\");
+        for (Colors c : island.getStudents().keySet()) {
+            //System.out.println(c + " students: " + board.getEntrance().get(c));
+            i = island.getStudents().get(c);
+            // System.out.println("I secondo: "+i);
+            color = colorsToColor(c);
+            while (i > 0) {
+                if ((rows % 3) < 2) {
+                    if (rows != 6) {
+                        System.out.print(ansi().fg(color).a("\t* ").reset());
+                        rows++;
+                    } else
+                        System.out.print(ansi().fg(color).a("  *\n").reset());
+                } else {
+                    System.out.print(ansi().fg(color).a("*\n").reset());
+                    rows++;
+
+
+                }
+                i--;
+            }
+
+        }
+        System.out.println();
+        System.out.println("\\                    /");
+        System.out.println(" ____________________");
+        int w = 0;
+        for (Colors c : island.getStudents().keySet()) {
+            if (w % 3 == 0) {
+                System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
+                w++;
+            } else
+                System.out.print(c + " students: " + island.getStudents().get(c) + "\n");
+        }
+
         if (island.getNumOfTowers() == 0)
             System.out.println("There are no towers yet on this island!\n");
         else
-            System.out.println("Towers: " + island.getNumOfTowers() + island.getTowersColor() + "towers \n");
+            System.out.println("Towers: " + island.getNumOfTowers() + " " + island.getTowersColor() + "towers \n");
+
+
         if (island.hasMotherNature())
             System.out.println("Mother Nature is on this island!");
         else
             System.out.println("Mother Nature is not on this island!");
     }
 
+    public void printClouds() {
+        EnumMap<Colors, Integer> students;
+        int i;
+        Color color;
+        int rows = 0;
+        for (StrippedCloud cloud : client.getLocalModel().getClouds()) {
+            students = cloud.getStudents();
+            System.out.println(("Cloud name:" + cloud.getName()));
+            System.out.println(" 00000000000000000000");
+            System.out.println("0                    0");
+            for (Colors c : cloud.getStudents().keySet()) {
+                //System.out.println(c + " students: " + board.getEntrance().get(c));
+                i = cloud.getStudents().get(c);
+                // System.out.println("I secondo: "+i);
+                color = colorsToColor(c);
+                while (i > 0) {
+                    if ((rows % 3) < 2) {
+                        if (rows != 6) {
+                            System.out.print(ansi().fg(color).a("\t* ").reset());
+                            rows++;
+                        } else
+                            System.out.print(ansi().fg(color).a("  *\n").reset());
+                    } else {
+                        System.out.print(ansi().fg(color).a("*\n").reset());
+                        rows++;
+
+                    }
+                    i--;
+                }
+
+            }
+            System.out.println();
+            System.out.println("0                    0");
+            System.out.println(" 00000000000000000000");
+            System.out.println("Number of students: ");
+            for (Colors c : Colors.values()) {
+                System.out.println(c + " " + students.get(c));
+            }
+        }
+    }
+
+    public void printCharacterCards() {
+        int i = 0;
+        ArrayList<StrippedCharacter> temp = client.getLocalModel().getCharacters();
+        for (StrippedCharacter c : temp) {
+            System.out.println("Character " + i);
+            System.out.println("Price: " + c.getPrice() + ", description:  " + c.getDescription());
+            i++;
+        }
+    }
+
+    public void printAssistantCards() throws LocalModelNotLoadedException {
+        AssistantCardDeck myDeck = client.getLocalModel().getBoardOf(client.getNickname()).getDeck();
+        int i = 0;
+        for (AssistantCard a : myDeck.getDeck()) {
+            System.out.println("Card number " + a.getImageName() + " Moves: " + a.getMove());
+            i++;
+        }
+    }
+
+    public void printStudentsOnCard(StrippedCharacter card) {
+        Integer i;
+        int rows = 0;
+        Ansi.Color color;
+        System.out.println("*-----*");
+        for (Colors c : card.getStudents().keySet()) {
+            i = card.getStudents().get(c);
+            color = colorsToColor(c);
+
+            while (i > 0) {
+                if ((rows % 3) < 2) {
+                    if (rows != 6) {
+                        System.out.print(ansi().fg(color).a("* ").reset());
+                        rows++;
+                    } else {
+                        System.out.print(ansi().fg(color).a("  *  ").reset());
+                        System.out.print("|");
+                    }
+                } else {
+                    System.out.print(ansi().fg(color).a("*").reset());
+                    System.out.print("|");
+                    System.out.print("\n");
+                    System.out.print("|");
+                    rows++;
+                }
+                i--;
+            }
+        }
+        System.out.println();
+        System.out.println("*-----*");
+    }
+
+
+    // **********************************   Utility Methods    ***************************************************************
     public boolean isValidColor(String input) {
         input = input.toUpperCase(Locale.ROOT);
         for (Colors c : Colors.values()) {
@@ -1510,6 +1721,32 @@ public class CLI implements UI {
     private synchronized void sendArrayString(ArrayList<String> messageArray) {
         for (String message : messageArray) System.out.println(message);
     }
+
+    public EnumMap<Colors, Integer> initializeMove(EnumMap<Colors, Integer> move) {
+        for (Colors c : Colors.values()) {
+            move.put(c, 0);
+        }
+        return move;
+    }
+
+    public synchronized void waitForTurn() throws InterruptedException {
+        if (!client.isMyTurn()) {
+            System.out.println("Waiting for turn ...");
+            System.out.println(ansi().eraseScreen());
+            Thread.sleep(500);
+            System.out.println("Waiting for turn ..");
+            System.out.println(ansi().eraseScreen());
+            Thread.sleep(500);
+            System.out.println("Waiting for turn . .");
+            System.out.println(ansi().eraseScreen());
+            Thread.sleep(500);
+            System.out.println("Waiting for turn .. ");
+            System.out.println(ansi().eraseScreen());
+            Thread.sleep(500);
+        }
+    }
+
+    // **********************************   End of Utility Methods    ***************************************************************
 }
 
 
