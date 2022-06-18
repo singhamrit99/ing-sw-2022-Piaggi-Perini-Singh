@@ -155,7 +155,7 @@ public class GameViewController extends InitialStage implements Controller {
         reloadIslands();
         reloadBag();
         loadAssistantDeck();
-        reloadCharacters();
+        //reloadCharacters();
     }
 
     private void reloadBag() {
