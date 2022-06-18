@@ -61,6 +61,11 @@ public class AssistantCardController extends InitialStage implements Controller 
         int firstIndex = choiceBox.getSelectionModel().getSelectedIndex();
         choosenCard.set(finalCards.get(firstIndex).getImageName());
         try {
+            GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(firstIndex).getMove());
+        } catch (LocalModelNotLoadedException e) {
+            e.printStackTrace();
+        }
+        try {
             image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS + finalCards.get(firstIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS))));
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,7 +77,6 @@ public class AssistantCardController extends InitialStage implements Controller 
                 image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS + finalCards.get(selectedIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS))));
                 choosenCard.set(finalCards.get(selectedIndex).getImageName());
                 GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(selectedIndex).getMove());
-
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (LocalModelNotLoadedException e) {
