@@ -1,61 +1,42 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.stage.Screen?>
-<?import javafx.scene.layout.BorderPane?>
-<BorderPane prefWidth="${screen.visualBounds.width}"
-            prefHeight="${screen.visualBounds.height}" stylesheets="@../css/Style.css"
-            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.GUILauncher">
-    <fx:define>
-        <Screen fx:factory="getPrimary" fx:id="screen"/>
-    </fx:define>
-
-    <center>
-        <StackPane fx:id="mainMenuStage" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-                   prefHeight="720.0" prefWidth="1280.0" styleClass="body" stylesheets="@../css/MainMenuStyle.css"
-                   xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                  minWidth="-Infinity" prefHeight="230.0" prefWidth="429.0" spacing="10.0"
-                  StackPane.alignment="BOTTOM_CENTER">
-                <padding>
-                    <Insets bottom="20.0"/>
-                </padding>
-                <TextField fx:id="nicknameField" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity"
-                           minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="310.0"
-                           promptText="Insert nickname" VBox.vgrow="NEVER"/>
-                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                           prefHeight="40.0" prefWidth="310.0">
-                    <Button fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity"
-                            maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                            mnemonicParsing="false" prefHeight="50.0" prefWidth="130.0"
-                            styleClass="confirm-button" stylesheets="@../css/Style.css" text="Start Game"
-                            textAlignment="CENTER" textFill="WHITE">
-                        <cursor>
-                            <Cursor fx:constant="HAND"/>
-                        </cursor>
-                        <font>
-                            <Font size="18.0"/>
-                        </font>
-                    </Button>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<StackPane fx:id="mainMenuStage" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="body" stylesheets="@../css/MainMenuStyle.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.GUILauncher">
+    <children>
+        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="429.0" spacing="10.0" StackPane.alignment="BOTTOM_CENTER">
+            <children>
+                <TextField fx:id="nicknameField" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="310.0" promptText="Insert nickname" VBox.vgrow="NEVER" />
+                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="310.0">
+                    <children>
+                        <Button fx:id="startButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="130.0" styleClass="confirm-button" stylesheets="@../css/Style.css" text="Start Game" textAlignment="CENTER" textFill="WHITE">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                    </children>
                 </StackPane>
-            </VBox>
-            <ImageView fx:id="title" fitHeight="700.0" fitWidth="700.0" layoutX="80.0" layoutY="10.0"
-                       pickOnBounds="true" preserveRatio="true" scaleX="1.2" scaleY="1.2" scaleZ="1.2"
-                       StackPane.alignment="TOP_CENTER">
-                <StackPane.margin>
-                    <Insets top="-50.0"/>
-                </StackPane.margin>
-                <Image url="@../img/custom/EryantisLogo.png"/>
-            </ImageView>
-        </StackPane>
-    </center>
-</BorderPane>
+            </children>
+            <padding>
+                <Insets bottom="20.0" />
+            </padding>
+        </VBox>
+        <ImageView fx:id="title" fitHeight="700.0" fitWidth="700.0" layoutX="80.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="1.2" scaleY="1.2" scaleZ="1.2" StackPane.alignment="TOP_CENTER">
+            <image>
+                <Image url="@../img/custom/EryantisLogo.png" />
+            </image>
+            <StackPane.margin>
+                <Insets top="-50.0" />
+            </StackPane.margin>
+        </ImageView>
+    </children>
+</StackPane>
