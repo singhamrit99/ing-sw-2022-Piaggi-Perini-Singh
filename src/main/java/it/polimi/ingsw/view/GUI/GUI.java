@@ -125,17 +125,24 @@ public class GUI implements UI {
 
     @Override
     public void islandMerged(PropertyChangeEvent e) {
-
     }
 
     @Override
     public void islandConquest(PropertyChangeEvent e) {
-
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> gameController.reloadIslands());
+            }
+        }
     }
 
     @Override
     public void towersEvent(PropertyChangeEvent e) {
-
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> gameController.reloadIslands());
+            }
+        }
     }
 
     @Override
