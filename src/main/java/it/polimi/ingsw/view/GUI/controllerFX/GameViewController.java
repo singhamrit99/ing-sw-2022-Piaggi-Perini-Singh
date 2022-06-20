@@ -251,16 +251,20 @@ public class GameViewController extends InitialStage implements Controller {
                     System.out.println("IO error while loading characters card!"); //TODO
                 }
 
+                if(c.getStudents() != null) System.out.println(c.getStudents().values());
+
                 //if there are students ..
                 if (c.getStudents() != null) {
                     int i = 0;
                     for (Colors color : c.getStudents().keySet()) {
                         if (c.getStudents().get(color) > 0) {
-                            while (i < c.getStudents().get(color)) {
+                            int y = c.getStudents().get(color);
+                            while (y>0) {
                                 ImageView student = (ImageView) vBoxesCharacters.get(indexCharacter).getChildren().get(i);
                                 student.setImage(studentImgFromColor(color));
                                 student.setVisible(true);
                                 i++;
+                                y--;
                             }
                         }
                     }
