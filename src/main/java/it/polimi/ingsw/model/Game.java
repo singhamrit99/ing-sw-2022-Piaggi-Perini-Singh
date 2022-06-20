@@ -244,9 +244,6 @@ public class Game {
         //Insertion in each SchoolBoard 7 students drawn from Bag
         for (Player p : players) {
             p.addStudents(bag.drawStudents(7));
-            for (Map.Entry<Colors, Integer> entry : p.getSchoolBoard().getEntrance().entrySet()) {
-                System.out.println(entry.getKey().toString() + " " + entry.getValue().toString());
-            }
         }
     }
 
@@ -289,7 +286,6 @@ public class Game {
     public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         if (state == State.PLANNINGPHASE && !playerDrawnOut) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
-                System.out.println("Nicknamecaller: " + nicknameCaller + " currentplayer " + currentPlayer.getNickname());
                 for (Cloud cloud : clouds) {
                     cloud.setStudents(bag.drawStudents(numDrawnStudents)); //it was addStudents
                     //notify cloud
