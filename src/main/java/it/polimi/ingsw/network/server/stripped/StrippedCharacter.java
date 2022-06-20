@@ -21,6 +21,8 @@ public class StrippedCharacter implements Serializable {
         this.description = card.getDescription();
         this.type = card.getType();
         this.requirements = card.getRequirements();
+        System.out.println(Integer.parseInt(card.getImageName())); //TODO //error 
+        this.characterID = Integer.parseInt(card.getImageName());
     }
 
     public int getCharacterID() {

@@ -44,6 +44,6 @@ public interface ResourcesPath {
 
 
     //Characters
-    String CHARACTERS = "src/main/resources/img/characters/";
+    String CHARACTERS = "src/main/resources/img/characters/character";
     String IMAGE_EXTENSION_CHAR = ".jpg";
 }
