@@ -508,11 +508,6 @@ public class Game {
         if (state == State.ACTIONPHASE_3) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
                 currentPlayer.addStudents(clouds.get(index).drawStudents());
-                //notify entrance
-                EnumMap<Colors, Integer> newEntrance = currentPlayer.getSchoolBoard().getEntrance();
-                PropertyChangeEvent evt =
-                        new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), newEntrance);
-                gameListener.propertyChange(evt);
                 //notify cloud change and entrance change
                 StrippedCloud changedCloud = new StrippedCloud(clouds.get(index));
                 PropertyChangeEvent evtCloud =
@@ -521,7 +516,6 @@ public class Game {
                 PropertyChangeEvent event =
                         new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), currentPlayer.getSchoolBoard().getEntrance());
                 gameListener.propertyChange(event);
-
                 nextPlayer();
             } else throw new IncorrectPlayerException();
         } else {
@@ -692,7 +686,6 @@ public class Game {
         }
 
         //substitution + notify islands
-
         if (newTeamOwner != null) {
             ArrayList<Player> newTeam = findPlayerFromTeam(newTeamOwner);
             if (island.getNumOfTowers() == 0) {// The island was empty
@@ -700,11 +693,15 @@ public class Game {
                 StrippedIsland oldIsland = new StrippedIsland(island);
                 //set ownership
                 island.setTowersColor(newTeamOwner);
+                try { island.sumTowers(1);
+                } catch (NegativeValueException ignored) {}
+
                 //notify island change
                 StrippedIsland islandChangedStripped = new StrippedIsland(island);
                 PropertyChangeEvent evtConquest =
                         new PropertyChangeEvent(this, "island-conquest", oldIsland, islandChangedStripped);
                 gameListener.propertyChange(evtConquest);
+
                 moveTowersFromTeam(newTeam, -1);
             } else if (newTeamOwner != island.getTowersColor()) { //it means that there is a switch from team
                 int switchedTowers = island.getNumOfTowers();

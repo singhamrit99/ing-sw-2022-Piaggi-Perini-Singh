@@ -794,7 +794,7 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
-    private void reloadTowers() {
+    public void reloadTowers() {
         try {
             StrippedBoard b = GUI.client.getLocalModel().getBoardOf(currentBoardView);
             int numberOfTowers = b.getNumberOfTowers();
