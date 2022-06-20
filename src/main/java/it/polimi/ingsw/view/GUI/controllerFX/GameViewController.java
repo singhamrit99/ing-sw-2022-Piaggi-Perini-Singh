@@ -818,6 +818,7 @@ public class GameViewController extends InitialStage implements Controller {
                 } else {
                     t.setVisible(false);
                 }
+                i++;
             }
         } catch (LocalModelNotLoadedException e) {
             Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
