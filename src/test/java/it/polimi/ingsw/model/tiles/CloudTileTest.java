@@ -18,16 +18,15 @@ class CloudTileTest {
             i++;
         }
         Cloud tile = new Cloud("TestCloud");
-        try {
-            tile.addStudents(students);
-        } catch (NegativeValueException e) {
-            e.printStackTrace();
-        }
+        tile.setStudents(students);
+
         tile.drawStudents();
         for (Colors color : Colors.values()) {
             assertEquals(0, tile.getStudents().get(color));
         }
     }
+
+    /*
 
     @Test
     void testAddStudents() {
@@ -38,11 +37,8 @@ class CloudTileTest {
             newStudents.put(color, i);
             i++;
         }
-        try {
-            tile.addStudents(newStudents);
-        } catch (NegativeValueException e) {
-            e.printStackTrace();
-        }
+
+        tile.setStudents(newStudents);
 
         for (Colors color : Colors.values()) {
             assertEquals(newStudents.get(color), tile.getStudents().get(color));
@@ -57,8 +53,13 @@ class CloudTileTest {
             students.put(color, i);
         }
         Cloud tile = new Cloud("TestCloud");
-        assertThrows(NegativeValueException.class, () -> tile.addStudents(students));
+        assertThrows(NegativeValueException.class, () -> tile.setStudents(students));
     }
+
+    */
+
+    //TODO
+    //tested unused method 'addstudents' and not 'setStudents'
 
     @Test
     public void testGetName() {
