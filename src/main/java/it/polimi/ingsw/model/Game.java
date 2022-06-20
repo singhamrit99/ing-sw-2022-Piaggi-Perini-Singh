@@ -222,10 +222,7 @@ public class Game {
         bag.setStudents(students);
 
         //calculate opposite MotherNature's Island
-        int oppositeMotherNaturePos;
-        if (motherNaturePosition >= islands.size() / 2)
-            oppositeMotherNaturePos = motherNaturePosition - islands.size() / 2 + 1;
-        else oppositeMotherNaturePos = motherNaturePosition + islands.size() / 2 - 1;
+        int oppositeMotherNaturePos = (motherNaturePosition + 6)%islands.size();
         // placing students except MotherNature's Island and the opposite one
         Island islandOppositeMN = islands.get(oppositeMotherNaturePos);
         for (Island island : islands) {
