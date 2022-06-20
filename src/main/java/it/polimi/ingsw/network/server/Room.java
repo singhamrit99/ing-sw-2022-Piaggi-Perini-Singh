@@ -102,19 +102,11 @@ public class Room implements PropertyChangeListener {
             strippedBoards.add(newStrippedBoard);
             assistantCardDecks.add(p.getAssistantCardDeck());
         }
-        //This should be able to provide strippedCharacters with the correct id for controller calls
-        for (CharacterCard c : charactersCard) {
-            System.out.println("Building stripped character card\n");
-            StrippedCharacter newStrippedCharCard = new StrippedCharacter(c);
-            //If there are no students this should just return null
-            newStrippedCharCard.setStudents(c.getStudents());
-            //If this card is the right one we get no entry tiles, otherwise we don't
-            if (c.getAbility().getAction().equals(Actions.NO_ENTRY_TILE))
-            newStrippedCharCard.setNoEntryTiles(4);
-            else
-                newStrippedCharCard.setNoEntryTiles(0);
-            strippedCharacters.add(newStrippedCharCard);
 
+
+        for (CharacterCard c : charactersCard) {
+            StrippedCharacter newStrippedCharCard = new StrippedCharacter(c);
+            strippedCharacters.add(newStrippedCharCard);
         }
 
         for (Cloud c : clouds) {
@@ -130,7 +122,6 @@ public class Room implements PropertyChangeListener {
         StrippedModel strippedModel = new StrippedModel(strippedBoards, strippedCharacters, strippedClouds, strippedIslands, assistantCardDecks);
         PropertyChangeEvent evtInitialGame =
                 new PropertyChangeEvent(this, "init", null, strippedModel);
-        System.out.println("Adding strippedModel send to buffer\n");
         addEventToBuffer(evtInitialGame);
     }
 

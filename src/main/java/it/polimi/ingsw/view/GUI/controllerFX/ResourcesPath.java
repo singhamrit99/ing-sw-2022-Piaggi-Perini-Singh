@@ -44,6 +44,7 @@ public interface ResourcesPath {
 
 
     //Characters
-    String CHARACTERS = "src/main/resources/img/assistants/";
+    String CHARACTERS = "src/main/resources/img/characters/character";
     String IMAGE_EXTENSION_CHAR = ".jpg";
+    String NOENTRYTILE = "src/main/resources/img/characters/effects/noEntry.png";
 }

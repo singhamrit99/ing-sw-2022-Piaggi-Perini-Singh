@@ -244,9 +244,6 @@ public class Game {
         //Insertion in each SchoolBoard 7 students drawn from Bag
         for (Player p : players) {
             p.addStudents(bag.drawStudents(7));
-            for (Map.Entry<Colors, Integer> entry : p.getSchoolBoard().getEntrance().entrySet()) {
-                System.out.println(entry.getKey().toString() + " " + entry.getValue().toString());
-            }
         }
     }
 
@@ -289,7 +286,6 @@ public class Game {
     public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         if (state == State.PLANNINGPHASE && !playerDrawnOut) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
-                System.out.println("Nicknamecaller: " + nicknameCaller + " currentplayer " + currentPlayer.getNickname());
                 for (Cloud cloud : clouds) {
                     cloud.setStudents(bag.drawStudents(numDrawnStudents)); //it was addStudents
                     //notify cloud
@@ -637,15 +633,14 @@ public class Game {
      * different from the new team. It works with 2 players, 3 players and 4 players.
      */
     private void checkAndPlaceTower(Island island) {
+        EnumMap<Colors, Integer> students = island.getStudents();
         HashMap<Towers, Integer> influenceScores = new HashMap<>();
         influenceScores.put(Towers.BLACK, 0);
         influenceScores.put(Towers.WHITE, 0);
-        CharacterCard cardPlayed = currentPlayer.getPlayedCharacterCard();
-
         if (numOfPlayer % 2 == 1) influenceScores.put(Towers.GREY, 0);
 
-        EnumMap<Colors, Integer> students = island.getStudents();
 
+        CharacterCard cardPlayed = currentPlayer.getPlayedCharacterCard();
         for (Colors studentColor : Colors.values()) {
             if (cardPlayed != null) {
                 if (cardPlayed.getAbility().getAction().equals(Actions.AVOID_COLOR_INFLUENCE) && cardPlayed.getStatus() >= 1) {
@@ -696,17 +691,30 @@ public class Game {
             }
         }
 
+        //substitution + notify islands
+
         if (newTeamOwner != null) {
             ArrayList<Player> newTeam = findPlayerFromTeam(newTeamOwner);
-            if (island.getTowersColor() == null) {// The island was empty
-                moveTowersFromTeam(newTeam, -island.getNumOfTowers());
+            if (island.getNumOfTowers() == 0) {// The island was empty
+                //notify prep
+                StrippedIsland oldIsland = new StrippedIsland(island);
+                //set ownership
+                island.setTowersColor(newTeamOwner);
+                //notify island change
+                StrippedIsland islandChangedStripped = new StrippedIsland(island);
+                PropertyChangeEvent evtConquest =
+                        new PropertyChangeEvent(this, "island-conquest", oldIsland, islandChangedStripped);
+                gameListener.propertyChange(evtConquest);
+                moveTowersFromTeam(newTeam, -1);
             } else if (newTeamOwner != island.getTowersColor()) { //it means that there is a switch from team
                 int switchedTowers = island.getNumOfTowers();
                 moveTowersFromTeam(newTeam, -switchedTowers); //removing towers from new team player
                 ArrayList<Player> oldTeam = findPlayerFromTeam(island.getTowersColor()); //oldTeamOwnerShip
                 moveTowersFromTeam(oldTeam, switchedTowers); //adding towers to old team
+                //notify prep
                 StrippedIsland oldIsland = new StrippedIsland(island);
-                island.setTowersColor(newTeamOwner); //set ownership
+                //set ownership
+                island.setTowersColor(newTeamOwner);
                 //notify island change
                 StrippedIsland islandChangedStripped = new StrippedIsland(island);
                 PropertyChangeEvent evtConquest =

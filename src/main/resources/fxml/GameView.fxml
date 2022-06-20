@@ -986,19 +986,34 @@
                                           <Image url="@../img/characters/character1.jpg" />
                                        </image>
                                     </ImageView>
-                                    <VBox fx:id="character1Vbox" alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
+                                    <VBox fx:id="character1Vbox" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="100.0">
                                        <children>
-                                          <ImageView fitHeight="52.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="30.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../img/students/student_pink.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="52.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../img/students/student_pink.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="52.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true" scaleZ="0.4">
+                                             <image>
+                                                <Image url="@../img/students/student_pink.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/students/student_pink.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/students/student_pink.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../img/students/student_pink.png" />
                                              </image>
@@ -1016,17 +1031,32 @@
                                     </ImageView>
                                     <VBox fx:id="character2Vbox" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                        <children>
-                                          <ImageView fitHeight="52.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="30.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../img/students/student_pink.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="52.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../img/students/student_pink.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="52.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/students/student_pink.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/students/student_pink.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/students/student_pink.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../img/students/student_pink.png" />
                                              </image>
@@ -1044,17 +1074,32 @@
                                     </ImageView>
                                     <VBox fx:id="character3Vbox" alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
                                        <children>
-                                          <ImageView fitHeight="52.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="30.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../img/students/student_pink.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="52.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../img/students/student_pink.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="52.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/students/student_pink.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="30.0" layoutX="92.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/students/student_pink.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="30.0" layoutX="92.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../img/students/student_pink.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="30.0" layoutX="92.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../img/students/student_pink.png" />
                                              </image>

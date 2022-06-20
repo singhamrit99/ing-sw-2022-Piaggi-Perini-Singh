@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.server.stripped;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.Requirements;
 import it.polimi.ingsw.model.cards.charactercard.Type;
+import it.polimi.ingsw.model.enumerations.Actions;
 import it.polimi.ingsw.model.enumerations.Colors;
 
 import java.io.Serializable;
@@ -16,11 +17,21 @@ public class StrippedCharacter implements Serializable {
     private int characterID;
     private int noEntryTiles;
     private EnumMap<Colors, Integer> students;
+
     public StrippedCharacter(CharacterCard card) {
         this.price = card.getPrice();
         this.description = card.getDescription();
         this.type = card.getType();
         this.requirements = card.getRequirements();
+        this.characterID = Integer.parseInt(card.getImageName());
+
+        //If there are no students this should just return null
+        setStudents(card.getStudents());
+        //If this card is the right one we get no entry tiles, otherwise we don't
+        if (card.getAbility().getAction().equals(Actions.NO_ENTRY_TILE))
+            setNoEntryTiles(4);
+        else
+            setNoEntryTiles(0);
     }
 
     public int getCharacterID() {
