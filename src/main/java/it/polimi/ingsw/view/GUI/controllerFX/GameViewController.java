@@ -59,6 +59,7 @@ public class GameViewController extends InitialStage implements Controller {
             island1 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_1)));
             island2 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_2)));
             motherNature = new Image(Files.newInputStream(Paths.get(ResourcesPath.MN)));
+            noEntry = new Image(Files.newInputStream(Paths.get(ResourcesPath.NOENTRYTILE)));
         } catch (IOException io) {
             System.out.println("Error importing img assets in GameViewController");
         }
@@ -144,18 +145,20 @@ public class GameViewController extends InitialStage implements Controller {
     private void firstRefreshBoard() {
         initializeImagesEntrance();
         currentBoardView = GUI.client.getNickname();
-        reloadEntrance();
+
         initializeImagesTowers();
+        initializeImagesDining();
+        initializeClouds();
+        loadAssistantDeck();
+
+        reloadCharacters();
+        reloadEntrance();
         reloadTowers();
         reloadProfs();
-        initializeImagesDining();
         reloadDining();
-        initializeClouds();
         reloadClouds();
         reloadIslands();
         reloadBag();
-        loadAssistantDeck();
-        reloadCharacters();
     }
 
     private void reloadBag() {
@@ -248,10 +251,10 @@ public class GameViewController extends InitialStage implements Controller {
                     charactersCards.get(indexCharacter).setImage(character);
                 } catch (IOException characterImageLoading) {
                     characterImageLoading.printStackTrace();
-                    System.out.println("IO error while loading characters card!"); //TODO
+                    System.out.println("IO error while loading characters card!");
                 }
 
-                if(c.getStudents() != null) System.out.println(c.getStudents().values());
+                if (c.getStudents() != null) System.out.println(c.getStudents().values());
 
                 //if there are students ..
                 if (c.getStudents() != null) {
@@ -259,7 +262,7 @@ public class GameViewController extends InitialStage implements Controller {
                     for (Colors color : c.getStudents().keySet()) {
                         if (c.getStudents().get(color) > 0) {
                             int y = c.getStudents().get(color);
-                            while (y>0) {
+                            while (y > 0) {
                                 ImageView student = (ImageView) vBoxesCharacters.get(indexCharacter).getChildren().get(i);
                                 student.setImage(studentImgFromColor(color));
                                 student.setVisible(true);
@@ -269,10 +272,20 @@ public class GameViewController extends InitialStage implements Controller {
                         }
                     }
                 }
+
+                //if there are no entry tiles, I replace the students IMG with NoEntry tiles
+                if (c.getNoEntryTiles() > 0) {
+                    int i = 0;
+                    while (i < c.getNoEntryTiles()) {
+                        ImageView NoEntryTile = (ImageView) vBoxesCharacters.get(indexCharacter).getChildren().get(i);
+                        NoEntryTile.setImage(noEntry);
+                        NoEntryTile.setVisible(true);
+                        i++;
+                    }
+                }
                 indexCharacter++;
             }
         }
-
     }
 
 
@@ -301,6 +314,7 @@ public class GameViewController extends InitialStage implements Controller {
         islandsImgs.add(island0);
         islandsImgs.add(island1);
         islandsImgs.add(island2);
+
 
         ArrayList<StrippedIsland> islandsBackEnd = GUI.client.getLocalModel().getIslands();
         int indexIsland = 0;
@@ -333,6 +347,7 @@ public class GameViewController extends InitialStage implements Controller {
                         studentsPane.addRow(j / 3, img);
                     }
                     if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
+                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()) spawnNoEntryTile(island);
                     Islands.addRow(0, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -367,6 +382,7 @@ public class GameViewController extends InitialStage implements Controller {
                         studentsPane.addRow(j / 2, img);
                     }
                     if (islandsBackEnd.get(11).hasMotherNature()) spawnMNIsland(studentsPane);
+                    if (islandsBackEnd.get(11).hasNoEnterTile()) spawnNoEntryTile(island);
                     Islands.addRow(1, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -396,6 +412,7 @@ public class GameViewController extends InitialStage implements Controller {
                         im++;
                     }
                     if (islandsBackEnd.get(4).hasMotherNature()) spawnMNIsland(studentsPane);
+                    if (islandsBackEnd.get(4).hasNoEnterTile()) spawnNoEntryTile(island);
                     Islands.addRow(1, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -431,6 +448,7 @@ public class GameViewController extends InitialStage implements Controller {
                         studentsPane.addRow(j / 2, img);
                     }
                     if (islandsBackEnd.get(10).hasMotherNature()) spawnMNIsland(towersPane);
+                    if (islandsBackEnd.get(10).hasNoEnterTile()) spawnNoEntryTile(island);
                     Islands.addRow(2, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -459,6 +477,7 @@ public class GameViewController extends InitialStage implements Controller {
                         studentsPane.addRow(j / 2, img);
                     }
                     if (islandsBackEnd.get(5).hasMotherNature()) spawnMNIsland(studentsPane);
+                    if (islandsBackEnd.get(5).hasNoEnterTile()) spawnNoEntryTile(island);
                     Islands.addRow(2, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -495,6 +514,7 @@ public class GameViewController extends InitialStage implements Controller {
                         studentsPane.addRow(j / 2, img);
                     }
                     if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
+                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()) spawnNoEntryTile(island);
                     Islands.addRow(3, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -563,6 +583,16 @@ public class GameViewController extends InitialStage implements Controller {
             }
         });
     }
+
+    private void spawnNoEntryTile(StackPane pane) {
+        ImageView noEntryView = new ImageView(noEntry);
+        noEntryView.setFitHeight(150);
+        noEntryView.setFitWidth(150);
+        noEntryView.maxWidth(150);
+        noEntryView.maxHeight(150);
+        pane.getChildren().add(noEntryView);
+    }
+
 
     private ArrayList<ImageView> spawnStudentsIsland(StrippedIsland island) {
         ArrayList<ImageView> imagesToReturn = new ArrayList<>();
@@ -765,13 +795,9 @@ public class GameViewController extends InitialStage implements Controller {
                 window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
             });*/
 
-        cloudv1.setOnMouseClicked(event -> {
-            pickCloud();
-        });
+        cloudv1.setOnMouseClicked(event -> pickCloud());
 
-        cloudv2.setOnMouseClicked(event -> {
-            pickCloud();
-        });
+        cloudv2.setOnMouseClicked(event -> pickCloud());
     }
 
     private void pickCloud() {
@@ -1045,7 +1071,7 @@ public class GameViewController extends InitialStage implements Controller {
 
     private Image island0, island1, island2;
 
-    private Image motherNature;
+    private Image motherNature, noEntry;
 
     // assets on screen
     @FXML
