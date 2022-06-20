@@ -106,13 +106,6 @@ public class Room implements PropertyChangeListener {
 
         for (CharacterCard c : charactersCard) {
             StrippedCharacter newStrippedCharCard = new StrippedCharacter(c);
-            //If there are no students this should just return null
-            newStrippedCharCard.setStudents(c.getStudents());
-            //If this card is the right one we get no entry tiles, otherwise we don't
-            if (c.getAbility().getAction().equals(Actions.NO_ENTRY_TILE))
-            newStrippedCharCard.setNoEntryTiles(4);
-            else
-                newStrippedCharCard.setNoEntryTiles(0);
             strippedCharacters.add(newStrippedCharCard);
         }
 
