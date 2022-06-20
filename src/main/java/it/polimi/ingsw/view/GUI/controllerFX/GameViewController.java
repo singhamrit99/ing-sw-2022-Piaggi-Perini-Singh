@@ -337,8 +337,8 @@ public class GameViewController extends InitialStage implements Controller {
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
                 }
+                indexIsland++;
             }
-            indexIsland++;
         }
 
         //SECOND LINE
