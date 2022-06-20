@@ -32,6 +32,7 @@ public class CLI implements UI {
     int playerNumber;
     String clientRoom = null;
     int action;
+    int numOfPlayers;
     MoveMotherNature moveMotherNatureOrder;
     MoveStudents moveStudentsOrder;
     PickCloud pickCloudOrder;
@@ -128,21 +129,25 @@ public class CLI implements UI {
                 }
         }
         System.out.println("Loading...");
-        Thread.sleep(500);
+
         //Main game loop
         //Initializing local professors board
+        while (client.getLocalModel()==null) {
+
+        }
         for (StrippedBoard s: client.getLocalModel().getBoards())
         {
             professorsTables.put(s.getOwner(), s.getProfessorsTable());
         }
+
+
         while (client.isInGame()) {
+            numOfPlayers=client.getLocalModel().getBoards().size();
             if (playedThisTurn == null)
                 playedThisTurn = new ArrayList<>();
             //Assistant Card play phase
-
             while (!client.isMyTurn()) {
                 //Wait for the other players to be done with their turn while I still output their moves...
-
             }
             if (client.isMyTurn() && !client.isDrawnOut()) {
                 drawFromBag();
@@ -150,14 +155,16 @@ public class CLI implements UI {
             if (client.isMyTurn() && client.getLocalModel().getState().equals(State.PLANNINGPHASE))
                 playAssistantCard();
 
-            Thread.sleep(400);
+            System.out.println("Waiting for everyone to play an assistant card");
+            while(numOfPlayers>0)
+            {
 
+            }
 
             //Turn phase
             if (client.getExpertMode()) {
                 while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) {
                     while (!client.isMyTurn()) {
-
                     }
                     expertPrintCommandHelp();
                     performActionInTurnExpert();
@@ -165,11 +172,11 @@ public class CLI implements UI {
                 }
                 pickCloud();
             } else {
-                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_2)) {
+                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) {
                     while (!client.isMyTurn()) {
-                        waitForTurn();
+                       // waitForTurn();
                     }
-                    if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_2)) {
+                    if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) {
                         printCommandHelp();
                         performActionInTurn();
                     }
@@ -245,6 +252,7 @@ public class CLI implements UI {
         if (playedThisTurn == null)
             playedThisTurn = new ArrayList<>();
         playedThisTurn.add(Integer.parseInt(tmp));
+        numOfPlayers--;
     }
 
     @Override
@@ -571,11 +579,10 @@ public class CLI implements UI {
         client.setMyTurn(false);
     }
 
-    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException {
+    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException {
         do {
             //   System.out.println("Press any key to continue\n");
-            in.nextLine();
-            // printCommandHelp();
+           // in.nextLine();
             System.out.println("Select an action: ");
             String input;
             while (true) {
@@ -616,11 +623,10 @@ public class CLI implements UI {
 
     }
 
-    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException {
+    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException {
         do {
             //   System.out.println("Press any key to continue\n");
             in.nextLine();
-            // printCommandHelp();
             System.out.println("Select an action: ");
             String input;
             while (true) {
@@ -694,7 +700,7 @@ public class CLI implements UI {
             }
         }
         pickCloudOrder = new PickCloud(client.getNickname(), i - 1);
-        System.out.println(client.getLocalModel().getState());
+       // System.out.println(client.getLocalModel().getState());
         client.performGameAction(pickCloudOrder);
         client.setMyTurn(false);
     }
@@ -728,6 +734,7 @@ public class CLI implements UI {
             moveMotherNatureOrder = new MoveMotherNature(client.getNickname(), i);
             try {
                 client.performGameAction(moveMotherNatureOrder);
+
             } catch (IncorrectStateException e) {
                 System.out.println("You can't do that yet! Current state:" + e.getMessage());
             } catch (IncorrectArgumentException e) {
@@ -739,24 +746,22 @@ public class CLI implements UI {
         } else System.out.println("You can't move Mother Nature yet! First things first: move three students!");
     }
 
-    public void moveStudents() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+    public void moveStudents() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, RoomNotExistsException, LocalModelNotLoadedException {
         if (!client.getLocalModel().isCanPlayMN()) {
-            StrippedBoard myBoard = null;
-            ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
-            for (StrippedBoard b : boards) {
-                if (b.getOwner().equals(client.getNickname()))
-                    myBoard = b;
-            }
+            StrippedBoard myBoard = client.getLocalModel().getBoardOf(client.getNickname());
             // System.out.println("Board owner:"+ myBoard.getOwner());
-            System.out.println("These are the students in your entrance: \n");
-            System.out.println("\nEntrance configuration: ");
-            for (Colors c : myBoard.getEntrance().keySet()) {
-                System.out.println(c + " students: " + myBoard.getEntrance().get(c));
-            }
+
             EnumMap<Colors, ArrayList<String>> studentsToGame = new EnumMap<>(Colors.class);
             for (Colors c : Colors.values()) {
                 studentsToGame.put(c, new ArrayList<>());
             }
+            System.out.println("These are the available islands: ");
+            if(client.getExpertMode())
+            printExpertIslands();
+            else
+                printIslands();
+            System.out.println("These are the students in your entrance: \n");
+            printEntrance(myBoard);
             String answer;
             String[] parts;
             String color;
@@ -986,7 +991,7 @@ public class CLI implements UI {
             case "You may move Mother Nature up to 2 additional spaces!":
                 //Updating localmodel for +2 moves
                 client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getMoves() + 2);
-                playCharacterD(i);
+                playCharacterA(i);
                 break;
         }
     }
@@ -1325,7 +1330,8 @@ public class CLI implements UI {
         ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
         System.out.println("Player boards:\n");
         for (StrippedBoard s : boards) {
-
+            if( s.getOwner().equals(client.getNickname()))
+                System.out.println(ansi().fg(YELLOW).a("This is your board!").reset());
             printPlayerBoard(s);
         }
     }
@@ -1731,16 +1737,16 @@ public class CLI implements UI {
 
     public synchronized void waitForTurn() throws InterruptedException {
         if (!client.isMyTurn()) {
-            System.out.println("Waiting for turn ...");
+            System.out.println("Waiting ...");
             System.out.println(ansi().eraseScreen());
             Thread.sleep(500);
-            System.out.println("Waiting for turn ..");
+            System.out.println("Waiting ..");
             System.out.println(ansi().eraseScreen());
             Thread.sleep(500);
-            System.out.println("Waiting for turn . .");
+            System.out.println("Waiting . .");
             System.out.println(ansi().eraseScreen());
             Thread.sleep(500);
-            System.out.println("Waiting for turn .. ");
+            System.out.println("Waiting .. ");
             System.out.println(ansi().eraseScreen());
             Thread.sleep(500);
         }
