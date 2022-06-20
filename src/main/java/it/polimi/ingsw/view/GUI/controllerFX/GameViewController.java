@@ -155,7 +155,7 @@ public class GameViewController extends InitialStage implements Controller {
         reloadIslands();
         reloadBag();
         loadAssistantDeck();
-        //reloadCharacters();
+        reloadCharacters();
     }
 
     private void reloadBag() {
@@ -216,43 +216,58 @@ public class GameViewController extends InitialStage implements Controller {
         charactersCards.add(character2);
         charactersCards.add(character3);
         ArrayList<StrippedCharacter> characterCardsStripped = GUI.client.getLocalModel().getCharacters();
-        int indexCharacter = 0;
 
-        for (StrippedCharacter c : characterCardsStripped) {
-            try {
-                Image character = new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS
-                        + c.getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR)));
-                character1.setImage(character);
-            } catch (IOException ignored) {
-            }
-
-            ArrayList<VBox> vBoxesCharacters = new ArrayList<>();
-            vBoxesCharacters.add(character1Vbox);
-            vBoxesCharacters.add(character2Vbox);
-            vBoxesCharacters.add(character3Vbox);
-
-            for(VBox box : vBoxesCharacters){
-                for(Node student : box.getChildren()){
-                    student.setVisible(false);
-                }
-            }
-
-            int i = 0;
-            for(Colors color : c.getStudents().keySet()){
-                if(c.getStudents().get(color)>0){
-                    ArrayList<Node> studentsOnCard = (ArrayList<Node>) vBoxesCharacters.get(indexCharacter).getChildren();
-                    while(i<c.getStudents().get(color)){
-                        ImageView student = (ImageView)studentsOnCard.get(i);
-                        student.setImage(studentImgFromColor(color));
-                        student.setVisible(true);
-                        i++;
-                    }
-                }
-            }
-            indexCharacter++;
+        boolean expert = false;
+        try {
+            expert = GUI.client.getExpertMode();
+        } catch (RemoteException | RoomNotExistsException e) {
+            //TODO exception
         }
 
 
+        //default state is with students hidden
+        ArrayList<VBox> vBoxesCharacters = new ArrayList<>();
+        vBoxesCharacters.add(character1Vbox);
+        vBoxesCharacters.add(character2Vbox);
+        vBoxesCharacters.add(character3Vbox);
+        for (VBox box : vBoxesCharacters) {
+            for (Node student : box.getChildren()) {
+                student.setVisible(false);
+            }
+        }
+
+        //hide characters card in case of not expert mode
+        if (!expert) for (int i = 0; i < 3; i++) charactersCards.get(i).setVisible(false);
+
+        if (expert) {
+            int indexCharacter = 0;
+            for (StrippedCharacter c : characterCardsStripped) {
+                try {
+                    Image character = new Image(Files.newInputStream(Paths.get(ResourcesPath.CHARACTERS
+                            + c.getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR)));
+                    charactersCards.get(indexCharacter).setImage(character);
+                } catch (IOException characterImageLoading) {
+                    characterImageLoading.printStackTrace();
+                    System.out.println("IO error while loading characters card!"); //TODO
+                }
+
+                //if there are students ..
+                if (c.getStudents() != null) {
+                    int i = 0;
+                    for (Colors color : c.getStudents().keySet()) {
+                        if (c.getStudents().get(color) > 0) {
+                            while (i < c.getStudents().get(color)) {
+                                ImageView student = (ImageView) vBoxesCharacters.get(indexCharacter).getChildren().get(i);
+                                student.setImage(studentImgFromColor(color));
+                                student.setVisible(true);
+                                i++;
+                            }
+                        }
+                    }
+                }
+                indexCharacter++;
+            }
+        }
 
     }
 
