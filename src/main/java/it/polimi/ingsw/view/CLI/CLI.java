@@ -33,6 +33,7 @@ public class CLI implements UI {
     String clientRoom = null;
     int action;
     int numOfPlayers;
+    boolean endturn=false;
     MoveMotherNature moveMotherNatureOrder;
     MoveStudents moveStudentsOrder;
     PickCloud pickCloudOrder;
@@ -142,41 +143,55 @@ public class CLI implements UI {
 
 
         while (client.isInGame()) {
+            endturn=false;
             numOfPlayers=client.getLocalModel().getBoards().size();
             if (playedThisTurn == null)
                 playedThisTurn = new ArrayList<>();
             //Assistant Card play phase
             while (!client.isMyTurn()) {
                 //Wait for the other players to be done with their turn while I still output their moves...
+                waitForTurn();
             }
-            if (client.isMyTurn() && !client.isDrawnOut()) {
+
+            if (client.isMyTurn() && client.getLocalModel().getFirstPlayer().equals(client.getNickname())) {
+                System.out.println("Drawing from bag...");
                 drawFromBag();
             }
             if (client.isMyTurn() && client.getLocalModel().getState().equals(State.PLANNINGPHASE))
-                playAssistantCard();
+               while (true)try {
+                    playAssistantCard();
+                    break;
+                }catch (AssistantCardNotFoundException e)
+               {
+                   System.out.println("Invalid assistant card! Try again.");
+               }
+
 
             System.out.println("Waiting for everyone to play an assistant card");
-            while(numOfPlayers>0)
+            while(numOfPlayers>1)
             {
-
+                //System.out.println(numOfPlayers);
             }
 
             //Turn phase
             if (client.getExpertMode()) {
-                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) {
+                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)&&!endturn) {
                     while (!client.isMyTurn()) {
                     }
-                    expertPrintCommandHelp();
-                    performActionInTurnExpert();
+                    if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)&&!endturn) {
+                        expertPrintCommandHelp();
+                        performActionInTurnExpert();
+                    }
 
                 }
                 pickCloud();
             } else {
-                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) {
+
+                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)&&!endturn) {
                     while (!client.isMyTurn()) {
-                       // waitForTurn();
+                        waitForTurn();
                     }
-                    if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) {
+                    if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)&&!endturn) {
                         printCommandHelp();
                         performActionInTurn();
                     }
@@ -240,7 +255,7 @@ public class CLI implements UI {
 
     @Override
     public void notifyCloud(PropertyChangeEvent e) {
-        client.setDrawnOut(true);
+
     }
 
     @Override
@@ -743,6 +758,7 @@ public class CLI implements UI {
             }
             //After my turn is over I set the Mother Nature flag to false for the next turn
             client.getLocalModel().setCanPlayMN(false);
+            endturn=true;
         } else System.out.println("You can't move Mother Nature yet! First things first: move three students!");
     }
 

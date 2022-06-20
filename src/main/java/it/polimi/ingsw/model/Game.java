@@ -378,9 +378,11 @@ public class Game {
         }
 
         //notify current player
-        PropertyChangeEvent changeCurrentPlayer =
-                new PropertyChangeEvent(this, "current-player", null, currentPlayer.getNickname());
-        gameListener.propertyChange(changeCurrentPlayer);
+        if(currentPlayer.getNickname()!=null) {
+            PropertyChangeEvent changeCurrentPlayer =
+                    new PropertyChangeEvent(this, "current-player", null, currentPlayer.getNickname());
+            gameListener.propertyChange(changeCurrentPlayer);
+        }
     }
 
     /**
@@ -408,7 +410,7 @@ public class Game {
                 firstPlayer = players.get(playerPlanPhase).getNickname();
 
                 PropertyChangeEvent firstPlayerChange =
-                        new PropertyChangeEvent(this, "first-player-change", firstPlayer, null);
+                        new PropertyChangeEvent(this, "first-player-change", firstPlayer, firstPlayer);
                 gameListener.propertyChange(firstPlayerChange);
 
                 currentPlayer = players.get(playerPlanPhase); //This is decided with the Assistant Card values and is assign in nextPlayer()
