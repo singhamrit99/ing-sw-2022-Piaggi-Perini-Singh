@@ -187,15 +187,20 @@ public class StrippedModel implements Serializable {
         StrippedCloud changedCloud;
         if (evt.getOldValue() != null) {
             changedCloud = (StrippedCloud) evt.getOldValue();
-            ui.notifyCloud(evt);
         } else {
             changedCloud = (StrippedCloud) evt.getNewValue();
-            ui.notifyCloud(evt);
         }
         Optional<StrippedCloud> optionalCloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
-        StrippedCloud cloudFound = optionalCloudFound.get();
-        clouds.remove(cloudFound);
-        clouds.add(changedCloud);
+        if(optionalCloudFound.isPresent()){
+            StrippedCloud cloudFound = optionalCloudFound.get();
+            int indexOfCloudsToReplace = clouds.indexOf(cloudFound);
+            clouds.remove(cloudFound);
+            clouds.add(indexOfCloudsToReplace,changedCloud);
+        }
+        else{
+            clouds.add(changedCloud);
+        }
+        ui.notifyCloud(evt);
     }
 
     private void setCurrentPlayer(String currentPlayer) {

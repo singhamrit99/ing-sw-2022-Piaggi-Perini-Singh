@@ -684,6 +684,11 @@ public class GameViewController extends InitialStage implements Controller {
         int numPlayers = GUI.client.getLocalPlayerList().size();
         ArrayList<StrippedCloud> clouds = GUI.client.getLocalModel().getClouds();
 
+        System.out.println("number of clouds are: "+ clouds.size());
+
+        System.out.println("name of the first is: "+clouds.get(0).getName());
+
+
         for (int cloudIndex = 0; cloudIndex < numPlayers; cloudIndex++) {
             int indexStudentsAssets = 0;
             EnumMap<Colors, Integer> students = clouds.get(cloudIndex).getStudents();
@@ -730,6 +735,7 @@ public class GameViewController extends InitialStage implements Controller {
                     }
                 }
             }
+
             //hides remaining students
             int studentsForEachCloud = 3;
             if (numPlayers == 3) studentsForEachCloud = 4;
@@ -754,49 +760,8 @@ public class GameViewController extends InitialStage implements Controller {
                 indexStudentsAssets++;
             }
         }
-        /*ArrayList<ImageView> cloudsArray = new ArrayList<>();
-        cloudsArray.add(cloud1);
-        cloudsArray.add(cloud2);
-        cloudsArray.add(cloud3);
-        cloudsArray.add(cloud4);
-
-        for (ImageView image : cloudsArray) {
-            image.setOnMouseClicked(event -> {
-                System.out.println("CLSDAADAS");
-                PickCloud pickCloud = new PickCloud(GUI.client.getNickname(), cloudsArray.indexOf(image));
-
-                try {
-                    GUI.client.performGameAction(pickCloud);
-                } catch (NotEnoughCoinsException e) {
-                    Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
-                } catch (AssistantCardNotFoundException e) {
-                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
-                } catch (NegativeValueException e) {
-                    Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
-                } catch (IncorrectStateException e) {
-                    Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
-                } catch (MotherNatureLostException e) {
-                    Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
-                } catch (ProfessorNotFoundException e) {
-                    Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
-                } catch (IncorrectPlayerException e) {
-                    Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
-                } catch (RemoteException e) {
-                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
-                } catch (IncorrectArgumentException e) {
-                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
-                } catch (UserNotInRoomException e) {
-                    Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
-                } catch (UserNotRegisteredException e) {
-                    Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
-                }
-
-                Window window = ((Node) (event.getSource())).getScene().getWindow();
-                window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
-            });*/
 
         cloudv1.setOnMouseClicked(event -> pickCloud());
-
         cloudv2.setOnMouseClicked(event -> pickCloud());
     }
 
