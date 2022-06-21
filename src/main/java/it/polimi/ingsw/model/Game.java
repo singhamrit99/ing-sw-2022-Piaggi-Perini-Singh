@@ -108,7 +108,6 @@ public class Game {
 
     private void increaseCharacterPrice(int index) throws NegativeValueException, IncorrectArgumentException {
         CharacterCard updatedCard = characterCards.get(index);
-        CharacterCard oldCard = new CharacterCard(updatedCard.getImageName(), updatedCard.getPrice(), updatedCard.getDescription());
         int coinsRemoved = currentPlayer.getPlayedCharacterCard().getPrice();
         currentPlayer.removeCoins(coinsRemoved);
         int coins = currentPlayer.getCoins();
@@ -120,13 +119,12 @@ public class Game {
         updatedCard.increasePrice();
         updatedCard.setStatus(0);
         currentPlayer.setPlayedCharacterCard(null);
-        notifyCharacterEvent(oldCard, updatedCard);
+        notifyCharacterEvent(updatedCard);
     }
 
-    private void notifyCharacterEvent(CharacterCard oldCard, CharacterCard updatedCard) {
+    private void notifyCharacterEvent(CharacterCard updatedCard) {
         StrippedCharacter strippedCard = new StrippedCharacter(updatedCard);
-        StrippedCharacter oldStrippedCard = new StrippedCharacter(oldCard);
-        PropertyChangeEvent cardEvent = new PropertyChangeEvent(this, "character", oldStrippedCard, strippedCard);
+        PropertyChangeEvent cardEvent = new PropertyChangeEvent(this, "character", null, strippedCard);
         gameListener.propertyChange(cardEvent);
     }
 
