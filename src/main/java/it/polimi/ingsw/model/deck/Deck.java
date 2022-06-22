@@ -11,6 +11,10 @@ public interface Deck<T> {
      */
     void fillDeck();
 
+    /**
+     * Return all cards of type T, reading from appropriate data structure.
+     * @return arraylist (T)
+     */
     ArrayList<T> getAllCards();
 
 }
