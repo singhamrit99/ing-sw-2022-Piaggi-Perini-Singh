@@ -1,8 +1,6 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
 import it.polimi.ingsw.StringNames;
-import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.network.server.commands.PlayAssistantCard;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
@@ -18,16 +16,12 @@ import javafx.stage.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CharacterCardController extends InitialStage implements Controller {
     @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button confirmButton;
+    private Button cancelButton, confirmButton;
 
     @FXML
     private ChoiceBox<String> choiceBox;
@@ -47,9 +41,9 @@ public class CharacterCardController extends InitialStage implements Controller 
             choiceBox.getItems().add("Character " + card.getCharacterID());
         }
 
-        //cambio l immagine in base al selector
         ArrayList<StrippedCharacter> finalCards = cards;
         AtomicReference<String> chosenCard = new AtomicReference<>("");
+
         choiceBox.getSelectionModel().selectFirst();
         int firstIndex = choiceBox.getSelectionModel().getSelectedIndex();
         chosenCard.set(String.valueOf(finalCards.get(firstIndex).getCharacterID()));
@@ -71,9 +65,8 @@ public class CharacterCardController extends InitialStage implements Controller 
             }
         });
 
-        //conferma
         confirmButton.setOnAction((event) -> {
-            switch (GUI.client.getLocalModel().selectedCharacter.getCharacterID()){
+            switch (GUI.client.getLocalModel().selectedCharacter.getCharacterID()) {
                 case 2:
                 case 4:
                 case 6:
@@ -119,14 +112,66 @@ public class CharacterCardController extends InitialStage implements Controller 
                     stage.showAndWait();
                     break;
                 case 1:
-                    break;
-                case 5:
+                case 11:
+                    filePath = ResourcesPath.FXML_FILE_PATH + "CharacterMultipleSelectView" + ResourcesPath.FILE_EXTENSION;
+                    loader = new FXMLLoader(Controller.class.getResource(filePath));
+                    loader.setController(new CharacterMultipleSelectController(gui));
+
+                    scene = null;
+                    try {
+                        scene = new Scene(loader.load());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    stage = new Stage();
+                    stage.setTitle(StringNames.TITLE);
+                    stage.setResizable(false);
+                    stage.initStyle(StageStyle.UNDECORATED);
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.setScene(scene);
+                    stage.showAndWait();
                     break;
                 case 7:
-                    break;
                 case 10:
+                    filePath = ResourcesPath.FXML_FILE_PATH + "CharacterSwapView" + ResourcesPath.FILE_EXTENSION;
+                    loader = new FXMLLoader(Controller.class.getResource(filePath));
+                    loader.setController(new CharacterSwapController(gui));
+
+                    scene = null;
+                    try {
+                        scene = new Scene(loader.load());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    stage = new Stage();
+                    stage.setTitle(StringNames.TITLE);
+                    stage.setResizable(false);
+                    stage.initStyle(StageStyle.UNDECORATED);
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.setScene(scene);
+                    stage.showAndWait();
                     break;
-                case 11:
+                case 5:
+                    filePath = ResourcesPath.FXML_FILE_PATH + "CharacterTileView" + ResourcesPath.FILE_EXTENSION;
+                    loader = new FXMLLoader(Controller.class.getResource(filePath));
+                    loader.setController(new CharacterTileController(gui));
+
+                    scene = null;
+                    try {
+                        scene = new Scene(loader.load());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    stage = new Stage();
+                    stage.setTitle(StringNames.TITLE);
+                    stage.setResizable(false);
+                    stage.initStyle(StageStyle.UNDECORATED);
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.setScene(scene);
+                    stage.showAndWait();
                     break;
                 default:
                     break;
