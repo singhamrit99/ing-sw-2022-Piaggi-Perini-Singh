@@ -42,7 +42,6 @@ public interface ResourcesPath {
     //css
     String TEST_CSS = "src/main/resources/css/MainMenuStyle.css";
 
-
     //Characters
     String CHARACTERS = "src/main/resources/img/characters/character";
     String IMAGE_EXTENSION_CHAR = ".jpg";
