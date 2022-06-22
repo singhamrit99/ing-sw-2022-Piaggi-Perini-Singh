@@ -40,7 +40,6 @@ public class AssistantCardController extends InitialStage implements Controller 
 
     @Override
     public void initialize() {
-        //prendo e incorpo il selector
         ArrayList<AssistantCard> cards = new ArrayList<>();
         try {
             cards = GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getDeck().getAllCards();
@@ -52,14 +51,12 @@ public class AssistantCardController extends InitialStage implements Controller 
             choiceBox.getItems().add("Assistant " + card.getImageName());
         }
 
-        //image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARD_1))));
-
         //cambio l immagine in base al selector
         ArrayList<AssistantCard> finalCards = cards;
-        AtomicReference<String> choosenCard = new AtomicReference<>("");
+        AtomicReference<String> chosenCard = new AtomicReference<>("");
         choiceBox.getSelectionModel().selectFirst();
         int firstIndex = choiceBox.getSelectionModel().getSelectedIndex();
-        choosenCard.set(finalCards.get(firstIndex).getImageName());
+        chosenCard.set(finalCards.get(firstIndex).getImageName());
         try {
             GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(firstIndex).getMove());
         } catch (LocalModelNotLoadedException e) {
@@ -75,18 +72,16 @@ public class AssistantCardController extends InitialStage implements Controller 
             int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
             try {
                 image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS + finalCards.get(selectedIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS))));
-                choosenCard.set(finalCards.get(selectedIndex).getImageName());
+                chosenCard.set(finalCards.get(selectedIndex).getImageName());
                 GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(selectedIndex).getMove());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (LocalModelNotLoadedException e) {
+            } catch (IOException | LocalModelNotLoadedException e) {
                 e.printStackTrace();
             }
         });
 
         //conferma
         confirmButton.setOnAction((event) -> {
-            PlayAssistantCard playAssistantCard = new PlayAssistantCard(GUI.client.getNickname(), choosenCard.get());
+            PlayAssistantCard playAssistantCard = new PlayAssistantCard(GUI.client.getNickname(), chosenCard.get());
             try {
                 GUI.client.performGameAction(playAssistantCard);
             } catch (NotEnoughCoinsException e) {
@@ -95,10 +90,10 @@ public class AssistantCardController extends InitialStage implements Controller 
                 Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
                 Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
-            } catch (IncorrectStateException e) {
-                Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
             } catch (MotherNatureLostException e) {
                 Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
+            } catch (IncorrectStateException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
             } catch (ProfessorNotFoundException e) {
                 Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
             } catch (IncorrectPlayerException e) {
