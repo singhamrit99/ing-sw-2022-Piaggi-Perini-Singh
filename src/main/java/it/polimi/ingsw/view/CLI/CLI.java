@@ -716,7 +716,7 @@ public class CLI implements UI {
                 }
             }
         }
-        pickCloudOrder = new PickCloud(client.getNickname(), i - 1);
+        //pickCloudOrder = new PickCloud(client.getNickname(), i - 1);
        // System.out.println(client.getLocalModel().getState());
         client.performGameAction(pickCloudOrder);
         client.setMyTurn(false);

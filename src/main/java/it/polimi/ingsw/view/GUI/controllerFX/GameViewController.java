@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GameViewController extends InitialStage implements Controller {
     protected static AtomicBoolean opened = new AtomicBoolean(false);
     private String currentBoardView; //the owner of the board current visible on the screen
-    ArrayList<StackPane> islandsPanes;
+    ArrayList<StackPane> islandsPanes = new ArrayList<>();
 
     public GameViewController(GUI gui) {
         super(gui);
@@ -88,20 +88,6 @@ public class GameViewController extends InitialStage implements Controller {
             } catch (RemoteException | UserNotInRoomException | UserNotRegisteredException ignored) {
             }
         });
-
-        //animations
-        if (islandsPanes.size() != 0) {
-            for (Pane island : islandsPanes) {
-                TranslateTransition floatingTitle = new TranslateTransition();
-                floatingTitle.setNode(island);
-                floatingTitle.setDuration(Duration.millis(4000));
-                floatingTitle.setCycleCount(TranslateTransition.INDEFINITE);
-                floatingTitle.setByX(10);
-                floatingTitle.setAutoReverse(true);
-                floatingTitle.setInterpolator(Interpolator.EASE_BOTH);
-                floatingTitle.play();
-            }
-        }
     }
 
     public void changeViewBoard(String viewOwnerTarget) {
@@ -522,6 +508,18 @@ public class GameViewController extends InitialStage implements Controller {
                 indexIsland--; //out from the if !!
             }
         }
+
+        //animations
+        for (Pane island : islandsPanes) {
+            TranslateTransition floatingTitle = new TranslateTransition();
+            floatingTitle.setNode(island);
+            floatingTitle.setDuration(Duration.millis(4000));
+            floatingTitle.setCycleCount(TranslateTransition.INDEFINITE);
+            floatingTitle.setByX(10);
+            floatingTitle.setAutoReverse(true);
+            floatingTitle.setInterpolator(Interpolator.EASE_BOTH);
+            floatingTitle.play();
+        }
     }
 
     private StackPane initIsland(int index) {
@@ -684,9 +682,9 @@ public class GameViewController extends InitialStage implements Controller {
         int numPlayers = GUI.client.getLocalPlayerList().size();
         ArrayList<StrippedCloud> clouds = GUI.client.getLocalModel().getClouds();
 
-        System.out.println("number of clouds are: "+ clouds.size());
+        System.out.println("number of clouds are: " + clouds.size());
 
-        System.out.println("name of the first is: "+clouds.get(0).getName());
+        System.out.println("name of the first is: " + clouds.get(0).getName());
 
 
         for (int cloudIndex = 0; cloudIndex < numPlayers; cloudIndex++) {
