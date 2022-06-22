@@ -984,10 +984,20 @@ public class CLI implements UI {
         tmp = client.getLocalModel().getCharacters().get(i);
         // System.out.println(tmp.getRequirements().getRequirements().toLowerCase(Locale.ROOT));
         switch (tmp.getDescription()) {
-
+            //Automatic action card
+            case "If somebody tries to Conquer an island, ignore the towers for this turn!":
+            case "Add 2 to your Influence this turn!":
+            case "Snag an opponent's professor if you have the same number of their students!":
+                playCharacterA(i);
+                break;
+            //MN movement
+            case "You may move Mother Nature up to 2 additional spaces!":
+                //Updating localmodel for +2 moves
+                client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getMoves() + 2);
+                playCharacterA(i);
+                break;
             //Island and student card
-            case "Calculate the influence on any Island and reap the rewards!":
-            case "Move a student on the character card to any isle you wish!":
+            case "Move students on the character card to any isle you wish!":
                 playCharacterB(i, tmp);
                 break;
             //Students on card card
@@ -995,24 +1005,14 @@ public class CLI implements UI {
             case "Switch up to two students between your Entrance and your Dining Room!":
                 playCharacterC(i, tmp);
                 break;
-            //Automatic action card
-            case "If somebody tries to Conquer an island, ignore the towers for this turn!":
-            case "Add 2 to your Influence this turn!":
-            case "Snag an opponent's professor if you have the same number of their students!":
-                playCharacterA(i);
-                break;
             //No STUDENTS used but input needed card (no entry tiles are also here since you have to pick the island)
+            case "Calculate the influence on any Island and reap the rewards!":
             case "Place a No Entry card on an isle and block Mother Nature's power once!":
             case "Choose a student color to ignore when calculating Influence this turn!":
             case "Choose a color: EVERYONE must return 3 students of that color to the bag!":
             case "Take one student from this card and put them in the dining room, then draw another from the bag and replace them!":
                 playCharacterD(i);
-                //MN movement
-            case "You may move Mother Nature up to 2 additional spaces!":
-                //Updating localmodel for +2 moves
-                client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getMoves() + 2);
-                playCharacterA(i);
-                break;
+
         }
     }
 
@@ -1029,26 +1029,41 @@ public class CLI implements UI {
 
     }
 
+    //This is only one card but it's unique since it calls for a color AND an island.
     public void playCharacterB(int id, StrippedCharacter character) throws AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have chosen a student island card\n");
-        int student = 0, island;
-        EnumMap<Colors, Integer> students = character.getStudents();
+        int student, island;
         System.out.println(character.getDescription());
-        System.out.println();
-        printExpertIslands();
-            for (Colors c : students.keySet()) {
-                System.out.println(c + " students: " + students.get(c));
-            }
+        printStudentsOnCard(character);
+        System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
+            System.out.println();
             String input;
             while (true) {
                 input = in.next();
                 try {
-                    island = Integer.parseInt(input);
+                    student = Integer.parseInt(input);
+                    if (student>=0&&student<=5)
                     break;
+                    else
+                        System.out.println("Invalid number! Try again.");
                 } catch (NumberFormatException e) {
-                    System.out.println("That's not a number! Try again.\n");
+                    System.out.println("That's not a number! Try again.");
                 }
             }
+        printExpertIslands();
+        while (true) {
+            input = in.next();
+            try {
+                island = Integer.parseInt(input);
+                if (island>0&&island<client.getLocalModel().getIslands().size())
+                break;
+                else
+                    System.out.println("Invalid island! Try again.");
+            } catch (NumberFormatException e) {
+                System.out.println("That's not a number! Try again.\n");
+            }
+        }
+        //Now I have a valid island and color choice.
             playCharacterCardBOrder = new PlayCharacterCardB(client.getNickname(), id, student, island);
             try {
                 client.performGameAction(playCharacterCardBOrder);
@@ -1305,7 +1320,7 @@ public class CLI implements UI {
                     System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
                 } else
                     invalidChoice = false;
-            } while (!invalidChoice);
+            } while (invalidChoice);
 
             playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, choice);
             try {
@@ -1339,7 +1354,7 @@ public class CLI implements UI {
                     System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
                 } else
                     invalidChoice = false;
-            } while (!invalidChoice);
+            } while (invalidChoice);
 
             playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, choice);
             try {
@@ -1350,6 +1365,42 @@ public class CLI implements UI {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             }
 
+        }
+        else if (client.getLocalModel().getCharacters().get(id).getDescription().equals("Calculate the influence on any Island and reap the rewards!"))
+            {printExpertIslands();
+            System.out.println("Choose an island to resolve and reap the rewards!");
+            String input;
+            int island;
+            while (true) {
+                input = in.next();
+                try {
+                    island = Integer.parseInt(input);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("That's not a number! Try again.\n");
+                }
+            }
+            island--;
+            while (island < 0 || island > client.getLocalModel().getIslands().size()) {
+                System.out.println("That number is not right! Try again.\n");
+                while (true) {
+                    input = in.next();
+                    try {
+                        island = Integer.parseInt(input);
+                        break;
+                    } catch (NumberFormatException e) {
+                        System.out.println("That's not a number! Try again.\n");
+                    }
+                }
+            }
+                playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, island);
+                try {
+                    client.performGameAction(playCharacterCardDOrder);
+                } catch (UserNotInRoomException | UserNotRegisteredException e) {
+                    throw new RuntimeException(e);
+                } catch (NotEnoughCoinsException e) {
+                    System.out.println(StringNames.NOT_ENOUGH_COINS);
+                }
         }
         else
         {
@@ -1463,7 +1514,7 @@ public class CLI implements UI {
 
     public void printIslands() {
         ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
-        int i = 1, motherNature = 0;
+        int i = 0, motherNature = 0;
         for (StrippedIsland island : islands) {
             if (!island.getName().equals("EMPTY")) {
                 printIsland(island);
@@ -1604,15 +1655,10 @@ public class CLI implements UI {
         }
 
         if (island.getNumOfTowers() == 0)
-            System.out.println("There are no towers yet on this island!\n");
+            System.out.println("There are no towers yet on this island!");
         else
             System.out.println("Towers: " + island.getNumOfTowers() + " " + island.getTowersColor() + "towers \n");
 
-
-        if (island.hasMotherNature())
-            System.out.println("Mother Nature is on this island!");
-        else
-            System.out.println("Mother Nature is not on this island!");
     }
 
     public void printexpertIsland(StrippedIsland island) {
