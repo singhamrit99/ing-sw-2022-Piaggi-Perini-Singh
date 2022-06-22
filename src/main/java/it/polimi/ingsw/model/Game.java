@@ -23,6 +23,9 @@ import java.beans.PropertyChangeListener;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 public class Game {
     private State state;
@@ -536,7 +539,8 @@ public class Game {
      * control it moves the Mother Nature and it eventually moves the towers and unify islands.
      */
     public void moveMotherNature(String playerCaller, int distanceChosen) throws
-            IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, NegativeValueException {
+            IncorrectPlayerException, IncorrectArgumentException,
+            MotherNatureLostException, IncorrectStateException, NegativeValueException {
         if (playerCaller.equals(currentPlayer.getNickname())) {
             if (state == State.ACTIONPHASE_2) {
                 int destinationMotherNature = (motherNaturePosition + distanceChosen)%islands.size();
@@ -701,7 +705,8 @@ public class Game {
                 StrippedIsland oldIsland = new StrippedIsland(island);
                 //set ownership
                 island.setTowersColor(newTeamOwner);
-                try { island.sumTowers(1);
+                try {
+                    island.sumTowers(1);
                 } catch (NegativeValueException ignored) {}
 
                 //notify island change
@@ -728,7 +733,6 @@ public class Game {
             }
         }
     }
-
     public ArrayList<Player> findPlayerFromTeam(Towers teamColor) {
         Player firstPlayer = null;
         Player secondPlayer = null; // in case of 4 players I have to check both players of the team
@@ -783,21 +787,23 @@ public class Game {
 
     public void checkUnificationIslands() throws NegativeValueException {
         boolean listChanged = false;
-        ListIterator<Island> it = islands.listIterator();
         Island currentTile;
-        Island nextTile;
-        while (it.hasNext()) {
-            currentTile = it.next();
-            if (it.hasNext()) nextTile = it.next();
-            else nextTile = islands.getFirst();
-            if (nextTile.getNumOfTowers() != 0 && currentTile.getNumOfTowers() != 0
-                    && (nextTile.getTowersColor().equals(currentTile.getTowersColor()))) {
-                currentTile.addStudents(nextTile.getStudents());
-                currentTile.sumTowers(nextTile.getNumOfTowers());
+        Island prevTile;
+        int islandToDestroy = -1;
+
+        for(int i=0;i<islands.size() && !listChanged;i++) {
+            if (i+1<islands.size()) currentTile = islands.get(i+1);
+            else currentTile = islands.get(0);
+
+            prevTile = islands.get(i);
+
+            if (prevTile.getNumOfTowers() != 0 && currentTile.getNumOfTowers() != 0
+                    && (prevTile.getTowersColor().equals(currentTile.getTowersColor()))) {
+                currentTile.addStudents(prevTile.getStudents());
+                currentTile.sumTowers(prevTile.getNumOfTowers());
                 currentTile.moveMotherNature();
                 StrippedIsland mergedTile = new StrippedIsland(currentTile); //notify currentTile
-                StrippedIsland deletedTile = new StrippedIsland(nextTile); //notify tile to deleted
-                islands.remove(nextTile);
+                StrippedIsland deletedTile = new StrippedIsland(prevTile); //notify tile to deleted
                 //notifications Island merged
                 PropertyChangeEvent islandMergeEvent =
                         new PropertyChangeEvent(this, "island", mergedTile, mergedTile);
@@ -805,11 +811,15 @@ public class Game {
                 PropertyChangeEvent islandDeletedEvent =
                         new PropertyChangeEvent(this, "island-merged", deletedTile, null);
                 gameListener.propertyChange(islandDeletedEvent);
-                listChanged = true;
+                listChanged=true;
+                islandToDestroy = i;
             }
         }
-        if (listChanged)
+
+        if (listChanged){
+            if(islandToDestroy>0)islands.remove(islandToDestroy);
             checkUnificationIslands();//recursive method necessary to check double+ unification in a single time
+        }
     }
 
     /**

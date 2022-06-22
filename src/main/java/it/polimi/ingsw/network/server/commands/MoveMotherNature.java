@@ -9,7 +9,6 @@ public class MoveMotherNature implements Command, Serializable {
     String playerCaller;
     int distance;
     public MoveMotherNature(String playerCaller, int distance) {
-
         this.playerCaller = playerCaller;
         this.distance = distance;
     }
