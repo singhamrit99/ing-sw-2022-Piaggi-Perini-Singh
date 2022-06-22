@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class StrippedModel implements Serializable {
     final private ArrayList<StrippedBoard> boards;
@@ -25,11 +26,12 @@ public class StrippedModel implements Serializable {
     private State state;
     private String firstPlayer;
     final private ArrayList<AssistantCardDeck> assistantDecks;
+
     public ArrayList<AssistantCardDeck> getAssistantDecks() {
         return assistantDecks;
     }
 
-
+    public StrippedCharacter selectedCharacter;
 
     public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters,
                          ArrayList<StrippedCloud> clouds, ArrayList<StrippedIsland> islands, ArrayList<AssistantCardDeck> assistantDecks) {
@@ -40,6 +42,7 @@ public class StrippedModel implements Serializable {
         this.assistantDecks = assistantDecks;
         this.state = State.PLANNINGPHASE;
         firstPlayer = "";
+        selectedCharacter = null;
     }
 
     public void updateModel(PropertyChangeEvent evt) throws LocalModelNotLoadedException, BadFormattedLocalModelEvent {
@@ -95,11 +98,11 @@ public class StrippedModel implements Serializable {
 
     private void changeAssistantDeck(PropertyChangeEvent evt) throws LocalModelNotLoadedException {
         String ownerDeck = currentPlayer;
-        StrippedBoard board=getBoardOf(ownerDeck);
-            board.setDeck((AssistantCardDeck) evt.getNewValue());
-            String playedCard = (String) evt.getOldValue();
-            ui.deckChange(playedCard);
-        }
+        StrippedBoard board = getBoardOf(ownerDeck);
+        board.setDeck((AssistantCardDeck) evt.getNewValue());
+        String playedCard = (String) evt.getOldValue();
+        ui.deckChange(playedCard);
+    }
 
     private void setBoard(PropertyChangeEvent evt) {
         String ownerBoard = (String) evt.getOldValue();
@@ -161,22 +164,22 @@ public class StrippedModel implements Serializable {
         Optional<StrippedIsland> optionalIslandFound = islands.stream().filter(x -> x.getName().equals(changedIsland.getName())).findFirst();
         if (optionalIslandFound.isPresent()) {
             StrippedIsland islandToChange = optionalIslandFound.get();
-                if (evt.getNewValue() != null) { // change
-                    if (evt.getPropertyName().equals("island")||
-                            evt.getPropertyName().equals("island-conquest")) {
-                        StrippedIsland newProperties = (StrippedIsland) evt.getNewValue();
-                        islandToChange.setNumberOfTowers(newProperties.getNumOfTowers());
-                        islandToChange.setTowersColor(newProperties.getTowersColor());
-                        islandToChange.setStudents(newProperties.getStudents());
-                        islandToChange.setHasMotherNature(newProperties.hasMotherNature());
-                        islandToChange.setHasNoEnterTile(newProperties.hasNoEnterTile());
-                        if(evt.getPropertyName().equals("island"))ui.islandChange(evt);
-                        else ui.islandConquest(evt);
-                    } else if (evt.getPropertyName().equals("island-merged")) {
-                        islandToChange.setDestroyed();
-                        ui.islandMerged(evt);
-                    }
+            if (evt.getNewValue() != null) { // change
+                if (evt.getPropertyName().equals("island") ||
+                        evt.getPropertyName().equals("island-conquest")) {
+                    StrippedIsland newProperties = (StrippedIsland) evt.getNewValue();
+                    islandToChange.setNumberOfTowers(newProperties.getNumOfTowers());
+                    islandToChange.setTowersColor(newProperties.getTowersColor());
+                    islandToChange.setStudents(newProperties.getStudents());
+                    islandToChange.setHasMotherNature(newProperties.hasMotherNature());
+                    islandToChange.setHasNoEnterTile(newProperties.hasNoEnterTile());
+                    if (evt.getPropertyName().equals("island")) ui.islandChange(evt);
+                    else ui.islandConquest(evt);
+                } else if (evt.getPropertyName().equals("island-merged")) {
+                    islandToChange.setDestroyed();
+                    ui.islandMerged(evt);
                 }
+            }
         } else {
             System.out.println("Exception changeIsland , strippedModel"); //TODO
         }
@@ -191,13 +194,12 @@ public class StrippedModel implements Serializable {
             changedCloud = (StrippedCloud) evt.getNewValue();
         }
         Optional<StrippedCloud> optionalCloudFound = clouds.stream().filter(x -> x.getName().equals(changedCloud.getName())).findFirst();
-        if(optionalCloudFound.isPresent()){
+        if (optionalCloudFound.isPresent()) {
             StrippedCloud cloudFound = optionalCloudFound.get();
             int indexOfCloudsToReplace = clouds.indexOf(cloudFound);
             clouds.remove(cloudFound);
-            clouds.add(indexOfCloudsToReplace,changedCloud);
-        }
-        else{
+            clouds.add(indexOfCloudsToReplace, changedCloud);
+        } else {
             clouds.add(changedCloud);
         }
         ui.notifyCloud(evt);
@@ -252,5 +254,14 @@ public class StrippedModel implements Serializable {
 
     public String getFirstPlayer() {
         return firstPlayer;
+    }
+
+    public StrippedCloud getCloudByName(AtomicReference<String> selectedItem) {
+        for (StrippedCloud cloud : getClouds()) {
+            if (cloud.getName().equals(selectedItem.get())) {
+                return cloud;
+            }
+        }
+        return null;
     }
 }
