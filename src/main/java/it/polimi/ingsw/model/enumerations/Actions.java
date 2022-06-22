@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.enumerations;
 
 import java.io.Serializable;
 
+/**
+ * Enumeration that lists the 12 different Character Card powers.
+ */
 public enum Actions implements Serializable {
     ADD_ISLAND,
     TAKE_PROFESSORS,

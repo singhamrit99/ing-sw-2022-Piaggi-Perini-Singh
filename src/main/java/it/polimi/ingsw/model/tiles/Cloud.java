@@ -7,6 +7,9 @@ import it.polimi.ingsw.exceptions.NegativeValueException;
 import java.util.EnumMap;
 import java.util.Map;
 
+/**
+ *
+ */
 public class Cloud {
     final private String name;
     private EnumMap<Colors, Integer> students;

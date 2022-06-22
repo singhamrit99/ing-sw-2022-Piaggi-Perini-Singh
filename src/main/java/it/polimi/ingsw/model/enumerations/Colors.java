@@ -22,6 +22,12 @@ public enum Colors implements Serializable {
         return index;
     }
 
+    /**
+     * A method used to return a student of a certain color.
+     * @param index The color of the student to return.
+     * @return The student to return, implemented as a Colors instance.
+     * @throws IllegalArgumentException if the index is not associated with any of the Enum values this exception is thrown.
+     */
     public static Colors getStudent(int index) throws IllegalArgumentException {
         for (Colors student : values()) {
             if (student.getIndex() == index) return student;
