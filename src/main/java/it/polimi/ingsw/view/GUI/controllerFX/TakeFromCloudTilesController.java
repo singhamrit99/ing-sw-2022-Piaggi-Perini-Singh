@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.network.server.commands.PickCloud;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
 import it.polimi.ingsw.view.GUI.GUI;
@@ -17,7 +18,7 @@ import javafx.stage.WindowEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TakeFromCloudTilesController extends InitialStage implements Controller {
     @FXML
@@ -53,7 +54,6 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
         text.add(totalPink);
 
         for (int i = 0; i < GUI.client.getLocalModel().getClouds().size(); i++) {
-
             StrippedCloud cloud = GUI.client.getLocalModel().getClouds().get(i);
 
             toAdd = false;
@@ -66,10 +66,13 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
                 cloudChoice.getItems().add(cloud.getName());
             }
         }
-        AtomicInteger selectedIndex = new AtomicInteger();
+
+        AtomicReference<String> selectedItem = new AtomicReference<>("");
         cloudChoice.setOnAction((event) -> {
-            selectedIndex.set(cloudChoice.getSelectionModel().getSelectedIndex());
-            EnumMap<Colors, Integer> students = GUI.client.getLocalModel().getClouds().get(selectedIndex.get()).getStudents();
+            selectedItem.set(cloudChoice.getSelectionModel().getSelectedItem().toString());
+            ArrayList<StrippedCloud> clouds = GUI.client.getLocalModel().getClouds();
+
+            EnumMap<Colors, Integer> students = GUI.client.getLocalModel().getCloudByName(selectedItem).getStudents();
 
             for (int i = 0; i < students.size(); i++) {
                 text.get(i).setText(String.valueOf(students.get(Colors.getStudent(i))));
@@ -78,7 +81,8 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
 
         //conferma
         confirmButton.setOnAction((event) -> {
-            PickCloud pickCloud = new PickCloud(GUI.client.getNickname(), selectedIndex.get());
+            System.out.println("Selected cloud name is: " + selectedItem.get());
+            PickCloud pickCloud = new PickCloud(GUI.client.getNickname(), selectedItem.get());
 
             try {
                 GUI.client.performGameAction(pickCloud);
