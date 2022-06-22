@@ -2,49 +2,64 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.network.server.commands.MoveMotherNature;
+import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.network.server.commands.PlayCharacterCardD;
+import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
+import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.text.Text;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
 import java.rmi.RemoteException;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class MoveMotherNatureController extends InitialStage implements Controller {
+public class CharacterOneSelectController extends InitialStage implements Controller {
     @FXML
-    private Slider slider;
+    private Button cancelButton;
 
     @FXML
-    private Button cancelButton, confirmButton;
+    private Button confirmButton;
 
-    public MoveMotherNatureController(GUI gui) {
+    @FXML
+    private Text description;
+
+    @FXML
+    private ChoiceBox<String> choiceBox;
+
+    public CharacterOneSelectController(GUI gui) {
         super(gui);
     }
 
     @Override
     public void initialize() {
-        try {
-            slider.setMin(1);
-            slider.setMax(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getMoves());
-            System.out.println(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getMoves());
-            slider.setValue(1);
-            slider.setMajorTickUnit(1.0);
-            slider.setMinorTickCount(0);
-            slider.setSnapToTicks(true);
-            slider.setShowTickMarks(true);
-            slider.setShowTickLabels(true);
-        } catch (LocalModelNotLoadedException e) {
-            e.printStackTrace();
+        StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
+        description.setText(selectedCharacter.getDescription());
+
+        if (selectedCharacter.getCharacterID() == 3) {
+            for (StrippedIsland island : GUI.client.getLocalModel().getIslands()) {
+                choiceBox.getItems().add(island.getName());
+            }
+        } else {
+            for (Colors color : Colors.values()) {
+                choiceBox.getItems().add(color.toString());
+            }
         }
+        choiceBox.getSelectionModel().selectFirst();
+
+        AtomicInteger chosen = new AtomicInteger();
+        chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
+
+        choiceBox.setOnAction((event) -> chosen.set(choiceBox.getSelectionModel().getSelectedIndex()));
 
         confirmButton.setOnAction((event) -> {
-            MoveMotherNature moveMotherNature = new MoveMotherNature(GUI.client.getNickname(), (int) slider.getValue());
-
+            PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), selectedCharacter.getCharacterID(), chosen.get());
             try {
-                GUI.client.performGameAction(moveMotherNature);
+                GUI.client.performGameAction(playCharacterCardD);
             } catch (NotEnoughCoinsException e) {
                 Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
@@ -53,12 +68,12 @@ public class MoveMotherNatureController extends InitialStage implements Controll
                 Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
             } catch (IncorrectStateException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
+            } catch (ProfessorNotFoundException e) {
+                Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
             } catch (MotherNatureLostException e) {
                 Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
             } catch (IncorrectPlayerException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
-            } catch (ProfessorNotFoundException e) {
-                Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
             } catch (RemoteException e) {
                 Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             } catch (IncorrectArgumentException e) {

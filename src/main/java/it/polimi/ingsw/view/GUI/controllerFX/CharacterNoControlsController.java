@@ -2,49 +2,42 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.network.server.commands.MoveMotherNature;
+import it.polimi.ingsw.network.server.commands.PlayCharacterCardA;
+import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
+import javafx.scene.text.Text;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
 import java.rmi.RemoteException;
 
-public class MoveMotherNatureController extends InitialStage implements Controller {
+public class CharacterNoControlsController extends InitialStage implements Controller {
     @FXML
-    private Slider slider;
+    private Button cancelButton;
 
     @FXML
-    private Button cancelButton, confirmButton;
+    private Button confirmButton;
 
-    public MoveMotherNatureController(GUI gui) {
+    @FXML
+    private Text description;
+
+    public CharacterNoControlsController(GUI gui) {
         super(gui);
     }
 
     @Override
     public void initialize() {
-        try {
-            slider.setMin(1);
-            slider.setMax(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getMoves());
-            System.out.println(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getMoves());
-            slider.setValue(1);
-            slider.setMajorTickUnit(1.0);
-            slider.setMinorTickCount(0);
-            slider.setSnapToTicks(true);
-            slider.setShowTickMarks(true);
-            slider.setShowTickLabels(true);
-        } catch (LocalModelNotLoadedException e) {
-            e.printStackTrace();
-        }
+        StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
+        description.setText(selectedCharacter.getDescription());
 
+        //conferma
         confirmButton.setOnAction((event) -> {
-            MoveMotherNature moveMotherNature = new MoveMotherNature(GUI.client.getNickname(), (int) slider.getValue());
-
+            PlayCharacterCardA playCharacterCardA = new PlayCharacterCardA(GUI.client.getNickname(), selectedCharacter.getCharacterID());
             try {
-                GUI.client.performGameAction(moveMotherNature);
+                GUI.client.performGameAction(playCharacterCardA);
             } catch (NotEnoughCoinsException e) {
                 Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
@@ -55,10 +48,10 @@ public class MoveMotherNatureController extends InitialStage implements Controll
                 Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
             } catch (MotherNatureLostException e) {
                 Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
-            } catch (IncorrectPlayerException e) {
-                Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
             } catch (ProfessorNotFoundException e) {
                 Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
+            } catch (IncorrectPlayerException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
             } catch (RemoteException e) {
                 Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             } catch (IncorrectArgumentException e) {

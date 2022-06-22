@@ -36,11 +36,57 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GameViewController extends InitialStage implements Controller {
     protected static AtomicBoolean opened = new AtomicBoolean(false);
     private String currentBoardView; //the owner of the board current visible on the screen
     ArrayList<StackPane> islandsPanes = new ArrayList<>();
+
+    private List<MenuItem> itemBoardViewArray; //the menu items necessary to change the view
+
+    private ArrayList<ImageView> entranceStudentsImgs, towersImgs, charactersCards;
+
+    //image assets import
+    private Image blackTowerImg, whiteTowerImg, greyTowerImg,
+            blueStudentImg, greenStudentImg, pinkStudentImg, redStudentImg, yellowStudentImg;
+
+    private ArrayList<ImageView> blueDiningImgs, redDiningImgs, yellowDiningImgs,
+            greenDiningImgs, pinkDiningImgs;
+
+    private ArrayList<ImageView> studentsCloud1v3, studentsCloud1v4,
+            studentsCloud2v3, studentsCloud2v4, studentsCloud3v3,
+            studentsCloud3v4, studentsCloud4v4;
+
+    private Image island0, island1, island2,
+            motherNature, noEntry;
+
+    private ArrayList<Image> islandsImgs;
+
+    // assets on screen
+    @FXML
+    private Menu changeViewBoard;
+
+    @FXML
+    private MenuItem leaveGame;
+
+    @FXML
+    private ImageView redProf, yellowProf, greenProf, pinkProf, blueProf,
+            cloud1, cloud2, cloud3, cloud4,
+            assistantDeck,
+            character1, character2, character3;
+
+    @FXML
+    private StackPane cloud1v3, cloud1v4, cloud2v3, cloud2v4, cloud3v3, cloud3v4, cloud4v4,
+            yellowDining, redDining, greenDining, blueDining, pinkDining,
+            towers, islandsPane, bag, entrance, board;
+
+    @FXML
+    private VBox cloudv1, cloudv2,
+            character1Vbox, character2Vbox, character3Vbox;
+
+    @FXML
+    private HBox characters;
 
     public GameViewController(GUI gui) {
         super(gui);
@@ -125,7 +171,6 @@ public class GameViewController extends InitialStage implements Controller {
             indexItem++;
         }
         itemBoardViewArray = items;
-
     }
 
     private void firstRefreshBoard() {
@@ -178,32 +223,12 @@ public class GameViewController extends InitialStage implements Controller {
         });
     }
 
-
-    @FXML
-    private ImageView character1;
-
-    @FXML
-    private ImageView character2;
-
-    @FXML
-    private ImageView character3;
-
-    @FXML
-    private VBox character1Vbox;
-
-    @FXML
-    private VBox character2Vbox;
-
-    @FXML
-    private VBox character3Vbox;
-
-    ArrayList<ImageView> charactersCards;
-
     private void reloadCharacters() {
         charactersCards = new ArrayList<>();
         charactersCards.add(character1);
         charactersCards.add(character2);
         charactersCards.add(character3);
+
         ArrayList<StrippedCharacter> characterCardsStripped = GUI.client.getLocalModel().getCharacters();
 
         boolean expert = false;
@@ -212,7 +237,6 @@ public class GameViewController extends InitialStage implements Controller {
         } catch (RemoteException | RoomNotExistsException e) {
             //TODO exception
         }
-
 
         //default state is with students hidden
         ArrayList<VBox> vBoxesCharacters = new ArrayList<>();
@@ -230,11 +254,13 @@ public class GameViewController extends InitialStage implements Controller {
 
         if (expert) {
             int indexCharacter = 0;
+            AtomicReference<String> view = new AtomicReference<>("");
             for (StrippedCharacter c : characterCardsStripped) {
                 try {
                     Image character = new Image(Files.newInputStream(Paths.get(ResourcesPath.CHARACTERS
                             + c.getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR)));
                     charactersCards.get(indexCharacter).setImage(character);
+
                 } catch (IOException characterImageLoading) {
                     characterImageLoading.printStackTrace();
                     System.out.println("IO error while loading characters card!");
@@ -272,20 +298,28 @@ public class GameViewController extends InitialStage implements Controller {
                 indexCharacter++;
             }
         }
+
+        characters.setOnMouseClicked(mouseEvent -> {
+            String filePath = ResourcesPath.FXML_FILE_PATH + "SelectCharacterView" + ResourcesPath.FILE_EXTENSION;
+            FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+            loader.setController(new CharacterCardController(gui));
+            try {
+                loadScene(loader);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
-
-
-    private ArrayList<Image> islandsImgs;
 
     public void reloadIslands() {
         islandsPanes = new ArrayList<>();
-        IslandsPane.getChildren().clear();
-        IslandsPane.maxHeight(450);
-        IslandsPane.maxWidth(1000);
-        IslandsPane.setAlignment(Pos.TOP_CENTER);
+        islandsPane.getChildren().clear();
+        islandsPane.maxHeight(450);
+        islandsPane.maxWidth(1000);
+        islandsPane.setAlignment(Pos.TOP_CENTER);
         GridPane Islands = new GridPane();
         Islands.setGridLinesVisible(false);
-        IslandsPane.getChildren().add(Islands);
+        islandsPane.getChildren().add(Islands);
         RowConstraints row = new RowConstraints();
         row.setPrefHeight(150);
         row.setMaxHeight(150);
@@ -301,6 +335,16 @@ public class GameViewController extends InitialStage implements Controller {
         islandsImgs.add(island1);
         islandsImgs.add(island2);
 
+        islandsPane.setOnMouseClicked((event) -> {
+            try {
+                String filePath = ResourcesPath.FXML_FILE_PATH + "MoveMotherNatureView" + ResourcesPath.FILE_EXTENSION;
+                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+                loader.setController(new MoveMotherNatureController(gui));
+                loadScene(loader);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         ArrayList<StrippedIsland> islandsBackEnd = GUI.client.getLocalModel().getIslands();
         int indexIsland = 0;
@@ -561,25 +605,18 @@ public class GameViewController extends InitialStage implements Controller {
         mn.maxWidth(40);
         mn.maxHeight(40);
         pane.addRow(0, mn);
+    }
 
-        mn.setOnMouseClicked((event) -> {
-            Scene scene;
-            try {
-                String filePath = ResourcesPath.FXML_FILE_PATH + "MoveMotherNatureView" + ResourcesPath.FILE_EXTENSION;
-                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
-                loader.setController(new MoveMotherNatureController(gui));
-                scene = new Scene(loader.load());
-                Stage stage = new Stage();
-                stage.setTitle(StringNames.TITLE);
-                stage.setResizable(false);
-                stage.initStyle(StageStyle.UNDECORATED);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(scene);
-                stage.showAndWait();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    private void loadScene(FXMLLoader loader) throws IOException {
+        Scene scene;
+        scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        stage.setTitle(StringNames.TITLE);
+        stage.setResizable(false);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 
     private void spawnNoEntryTile(StackPane pane) {
@@ -590,7 +627,6 @@ public class GameViewController extends InitialStage implements Controller {
         noEntryView.maxHeight(150);
         pane.getChildren().add(noEntryView);
     }
-
 
     private ArrayList<ImageView> spawnStudentsIsland(StrippedIsland island) {
         ArrayList<ImageView> imagesToReturn = new ArrayList<>();
@@ -635,19 +671,11 @@ public class GameViewController extends InitialStage implements Controller {
 
     public void reloadEntrance() {
         board.setOnMouseClicked((event) -> {
-            Scene scene;
             try {
                 String filePath = ResourcesPath.FXML_FILE_PATH + "MoveStudentsView" + ResourcesPath.FILE_EXTENSION;
                 FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
                 loader.setController(new MoveStudentsController(gui));
-                scene = new Scene(loader.load());
-                Stage stage = new Stage();
-                stage.setTitle(StringNames.TITLE);
-                stage.setResizable(false);
-                stage.initStyle(StageStyle.UNDECORATED);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(scene);
-                stage.showAndWait();
+                loadScene(loader);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -685,7 +713,6 @@ public class GameViewController extends InitialStage implements Controller {
         System.out.println("number of clouds are: " + clouds.size());
 
         System.out.println("name of the first is: " + clouds.get(0).getName());
-
 
         for (int cloudIndex = 0; cloudIndex < numPlayers; cloudIndex++) {
             int indexStudentsAssets = 0;
@@ -759,25 +786,19 @@ public class GameViewController extends InitialStage implements Controller {
             }
         }
 
-        cloudv1.setOnMouseClicked(event -> pickCloud());
+        if (GUI.client.getLocalPlayerList().size() > 2) {
+            cloudv1.setOnMouseClicked(event -> pickCloud());
+        }
         cloudv2.setOnMouseClicked(event -> pickCloud());
     }
 
     private void pickCloud() {
-        Scene scene;
         try {
             String filePath = ResourcesPath.FXML_FILE_PATH + "TakeStudentsFromCloudView" + ResourcesPath.FILE_EXTENSION;
             FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
             loader.setController(new TakeFromCloudTilesController(gui));
 
-            scene = new Scene(loader.load());
-            Stage stage = new Stage();
-            stage.setTitle(StringNames.TITLE);
-            stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(scene);
-            stage.showAndWait();
+            loadScene(loader);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -993,88 +1014,15 @@ public class GameViewController extends InitialStage implements Controller {
 
     private void loadAssistantDeck() {
         assistantDeck.setOnMouseClicked(mouseEvent -> {
-            Scene scene;
             try {
                 String filePath = ResourcesPath.FXML_FILE_PATH + "SelectAssistantView" + ResourcesPath.FILE_EXTENSION;
                 FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
                 loader.setController(new AssistantCardController(gui));
 
-                scene = new Scene(loader.load());
-                Stage stage = new Stage();
-                stage.setTitle(StringNames.TITLE);
-                stage.setResizable(false);
-                stage.initStyle(StageStyle.UNDECORATED);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(scene);
-                stage.showAndWait();
+                loadScene(loader);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
-
-    private List<MenuItem> itemBoardViewArray; //the menu items necessary to change the view
-
-    private ArrayList<ImageView> entranceStudentsImgs;
-
-    private ArrayList<ImageView> towersImgs;
-
-    //image assets import
-    private Image blackTowerImg, whiteTowerImg, greyTowerImg;
-
-    private Image blueStudentImg, greenStudentImg, pinkStudentImg,
-            redStudentImg, yellowStudentImg;
-
-    private ArrayList<ImageView> blueDiningImgs, redDiningImgs, yellowDiningImgs,
-            greenDiningImgs, pinkDiningImgs;
-
-    private ArrayList<ImageView> studentsCloud1v3, studentsCloud1v4,
-            studentsCloud2v3, studentsCloud2v4, studentsCloud3v3,
-            studentsCloud3v4, studentsCloud4v4;
-
-    private Image island0, island1, island2;
-
-    private Image motherNature, noEntry;
-
-    // assets on screen
-    @FXML
-    private Menu changeViewBoard;
-
-    @FXML
-    private MenuItem leaveGame;
-    @FXML
-    private ImageView redProf, yellowProf,
-            greenProf, pinkProf, blueProf;
-
-    @FXML
-    private ImageView cloud1, cloud2, cloud3, cloud4;
-
-    @FXML
-    private StackPane cloud1v3, cloud1v4, cloud2v3,
-            cloud2v4, cloud3v3, cloud3v4, cloud4v4;
-
-    @FXML
-    private StackPane board;
-
-    @FXML
-    private StackPane entrance;
-
-    @FXML
-    private StackPane towers;
-
-    @FXML
-    private StackPane yellowDining, redDining, greenDining,
-            blueDining, pinkDining;
-
-    @FXML
-    private StackPane IslandsPane;
-
-    @FXML
-    private StackPane bag;
-
-    @FXML
-    private ImageView assistantDeck;
-
-    @FXML
-    private VBox cloudv1, cloudv2;
 }

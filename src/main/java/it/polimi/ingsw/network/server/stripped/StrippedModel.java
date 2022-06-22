@@ -1,11 +1,11 @@
 package it.polimi.ingsw.network.server.stripped;
 
 import it.polimi.ingsw.exceptions.BadFormattedLocalModelEvent;
-import it.polimi.ingsw.model.enumerations.State;
-import it.polimi.ingsw.view.UI;
 import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.State;
+import it.polimi.ingsw.view.UI;
 
 import java.beans.PropertyChangeEvent;
 import java.io.Serializable;
