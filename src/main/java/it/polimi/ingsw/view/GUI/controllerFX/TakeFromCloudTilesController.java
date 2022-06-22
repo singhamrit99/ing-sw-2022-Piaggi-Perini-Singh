@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.network.server.commands.PickCloud;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
 import it.polimi.ingsw.view.GUI.GUI;
@@ -24,20 +23,9 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
     @FXML
     private ChoiceBox cloudChoice;
     @FXML
-    private Button cancelButton;
+    private Button cancelButton, confirmButton;
     @FXML
-    private Button confirmButton;
-
-    @FXML
-    private Text totalYellow;
-    @FXML
-    private Text totalBlue;
-    @FXML
-    private Text totalGreen;
-    @FXML
-    private Text totalRed;
-    @FXML
-    private Text totalPink;
+    private Text totalYellow, totalBlue, totalGreen, totalRed, totalPink;
 
     public TakeFromCloudTilesController(GUI gui) {
         super(gui);
@@ -45,7 +33,6 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
 
     @Override
     public void initialize() {
-        boolean toAdd;
         ArrayList<Text> text = new ArrayList<>();
         text.add(totalYellow);
         text.add(totalBlue);
@@ -53,6 +40,7 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
         text.add(totalRed);
         text.add(totalPink);
 
+        boolean toAdd;
         for (int i = 0; i < GUI.client.getLocalModel().getClouds().size(); i++) {
             StrippedCloud cloud = GUI.client.getLocalModel().getClouds().get(i);
 
@@ -70,8 +58,6 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
         AtomicReference<String> selectedItem = new AtomicReference<>("");
         cloudChoice.setOnAction((event) -> {
             selectedItem.set(cloudChoice.getSelectionModel().getSelectedItem().toString());
-            ArrayList<StrippedCloud> clouds = GUI.client.getLocalModel().getClouds();
-
             EnumMap<Colors, Integer> students = GUI.client.getLocalModel().getCloudByName(selectedItem).getStudents();
 
             for (int i = 0; i < students.size(); i++) {
@@ -79,9 +65,7 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
             }
         });
 
-        //conferma
         confirmButton.setOnAction((event) -> {
-            System.out.println("Selected cloud name is: " + selectedItem.get());
             PickCloud pickCloud = new PickCloud(GUI.client.getNickname(), selectedItem.get());
 
             try {
@@ -104,16 +88,15 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
                 Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             } catch (IncorrectArgumentException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
-            } catch (UserNotInRoomException e) {
-                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
             } catch (UserNotRegisteredException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+            } catch (UserNotInRoomException e) {
+                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
             }
 
             Window window = ((Node) (event.getSource())).getScene().getWindow();
             window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
-
 
         cancelButton.setOnAction((event) -> {
             Window window = ((Node) (event.getSource())).getScene().getWindow();
