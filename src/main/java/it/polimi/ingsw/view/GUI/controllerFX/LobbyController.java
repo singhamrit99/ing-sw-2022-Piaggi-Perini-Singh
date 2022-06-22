@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.RoomFullException;
+import it.polimi.ingsw.exceptions.RoomInGameException;
 import it.polimi.ingsw.exceptions.RoomNotExistsException;
 import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import it.polimi.ingsw.view.GUI.GUI;
@@ -93,12 +94,23 @@ public class LobbyController extends InitialStage implements Controller {
                     Controller.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
                 } catch (UserNotRegisteredException e) {
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
-                } catch (RoomFullException e) {
+                } catch (RoomFullException | RoomInGameException e) {
                     Controller.showErrorDialogBox(e.getMessage());
                 }
             });
-            roomsList.addRow(i + 1, roomName, joinRoom);
 
+            try {
+                if(GUI.client.isRoomInGame(rooms.get(i))){
+                    joinRoom.setVisible(false);
+                }
+                else{
+                    joinRoom.setVisible(true);
+                }
+            } catch (RoomNotExistsException |RemoteException e) {
+                throw new RuntimeException(e);
+            }
+
+            roomsList.addRow(i + 1, roomName, joinRoom);
             GridPane.setHalignment(roomName, HPos.CENTER);
             GridPane.setHalignment(joinRoom, HPos.CENTER);
         }

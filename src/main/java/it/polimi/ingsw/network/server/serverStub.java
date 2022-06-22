@@ -10,15 +10,15 @@ import java.util.ArrayList;
 
 public interface serverStub extends Remote {
 
+    boolean isInGame(String roomName)throws RemoteException,RoomNotExistsException;
     void registerUser(String name) throws RemoteException, UserAlreadyExistsException;
-
     void deregisterConnection(String username) throws RemoteException, UserNotRegisteredException;
 
     ArrayList<String> getRoomsList() throws RemoteException;
 
     void createRoom(String username, String roomName) throws RemoteException, RoomAlreadyExistsException, UserNotRegisteredException;
 
-    void joinRoom(String username, String roomName) throws RemoteException, UserNotRegisteredException, RoomNotExistsException, RoomFullException;
+    void joinRoom(String username, String roomName) throws RemoteException,RoomInGameException, UserNotRegisteredException, RoomNotExistsException, RoomFullException;
 
     void leaveRoom(String username) throws RemoteException, UserNotInRoomException, UserNotRegisteredException;
 

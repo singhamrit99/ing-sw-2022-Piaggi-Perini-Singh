@@ -77,7 +77,7 @@ public class Client implements Runnable {
         }
     }
 
-    public void requestRoomJoin(String roomName) throws RemoteException, RoomNotExistsException, UserNotRegisteredException, RoomFullException {
+    public void requestRoomJoin(String roomName) throws RemoteException, RoomInGameException, RoomNotExistsException, UserNotRegisteredException, RoomFullException {
         server.joinRoom(nickname, roomName);
         clientRoom = roomName;
         try {
@@ -132,7 +132,6 @@ public class Client implements Runnable {
         }
         ui.roomsAvailable(roomList);
     }
-
     @Override
     public void run() {
         boolean first = true;
@@ -245,6 +244,10 @@ public class Client implements Runnable {
 
     public boolean isInGame() {
         return inGame;
+    }
+
+    public boolean isRoomInGame(String roomName) throws RoomNotExistsException,RemoteException{
+        return server.isInGame(roomName);
     }
 
     public StrippedModel getLocalModel() {

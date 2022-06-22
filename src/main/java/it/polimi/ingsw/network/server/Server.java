@@ -66,12 +66,12 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         rooms.put(roomName, newRoom);
         try {
             joinRoom(username, roomName);
-        } catch (RoomNotExistsException | RoomFullException ignored) {
+        } catch (RoomNotExistsException | RoomFullException | RoomInGameException ignored) {
         }
     }
 
     @Override
-    public synchronized void joinRoom(String username, String roomName) throws RemoteException, UserNotRegisteredException, RoomNotExistsException, RoomFullException {
+    public synchronized void joinRoom(String username, String roomName) throws RemoteException, RoomInGameException, UserNotRegisteredException, RoomNotExistsException, RoomFullException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         if (!rooms.containsKey(roomName)) throw new RoomNotExistsException();
         //if (users.get(username).getRoom() != null) throw new UserInRoomException();
@@ -85,6 +85,15 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
             }
             else throw new RoomFullException();
         }
+        else{
+            throw new RoomInGameException();
+        }
+    }
+
+    @Override
+    public synchronized boolean isInGame(String roomName)throws RoomNotExistsException{
+        if (!rooms.containsKey(roomName)) throw new RoomNotExistsException();
+        return rooms.get(roomName).isInGame();
     }
 
     @Override
