@@ -22,6 +22,16 @@ public class StudentCharacter extends CharacterCard implements Serializable {
     private EnumMap<Colors, Integer> students1;
     private EnumMap<Colors, Integer> students2;
 
+    /**
+     * StudentCharacter constructor
+     * @param imageName Taken from father CharacterCard in CharacterCardFactory.
+     * @param startingPrice Taken from father CharacterCard in CharacterCardFactory.
+     * @param description Taken from father CharacterCard in CharacterCardFactory.
+     * @param type Taken from father CharacterCard in CharacterCardFactory.
+     * @param ability Taken from father CharacterCard in CharacterCardFactory.
+     * @param requirements Taken from father CharacterCard in CharacterCardFactory.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     */
     public StudentCharacter(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) throws NegativeValueException {
         super(imageName, startingPrice, description, type, ability, requirements);
         bag = Bag.getInstance();
@@ -38,6 +48,11 @@ public class StudentCharacter extends CharacterCard implements Serializable {
         }
     }
 
+    /**
+     * Method used to add students to the card.
+     * @param studentsToAdd Students to add.
+     * @throws IncorrectArgumentException Thrown when the provided EnumMap is null or incorrect.
+     */
     public void addStudents(EnumMap<Colors, Integer> studentsToAdd) throws IncorrectArgumentException {
         EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getStudents(), studentsToAdd);
         if (newStudents != null) {
@@ -47,6 +62,11 @@ public class StudentCharacter extends CharacterCard implements Serializable {
         }
     }
 
+    /**
+     * Method used to remove students to the card.
+     * @param studentsToRemove Students to remove
+     * @throws IncorrectArgumentException Thrown when the provided EnumMap is null or incorrect.
+     */
     public void removeStudents(EnumMap<Colors, Integer> studentsToRemove) throws IncorrectArgumentException {
         EnumMap<Colors, Integer> newStudents = StudentManager.removeStudent(students, studentsToRemove);
         if (newStudents != null) {
@@ -56,6 +76,13 @@ public class StudentCharacter extends CharacterCard implements Serializable {
         }
     }
 
+    /**
+     * Checks if the provided EnumMap is correct, and if it is checks if it has enough students to perform the requested action.
+     * @param students The students EnumMap to check
+     * @return boolean value of the check or an exception.
+     * @throws IllegalArgumentException Thrown when the EnumMap is incorrect.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     */
     public boolean hasEnoughStudents(EnumMap<Colors, Integer> students) throws IllegalArgumentException, NegativeValueException {
         EnumMap<Colors, Integer> studentsDiscs = getStudents();
 
@@ -75,6 +102,14 @@ public class StudentCharacter extends CharacterCard implements Serializable {
         return true;
     }
 
+    /**
+     * Activate method for StudentCharacter cards
+     * @param game The game in which the card is being activated
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectArgumentException Thrown when the values required for card power activation are incorrect.
+     * @throws ProfessorNotFoundException Thrown if the professor assignment method fails to find the related professor, either because of a color
+     *                                     mismatch or other internal error.
+     */
     @Override
     public void activate(Game game) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException {
         Actions action = this.getAbility().getAction();
@@ -108,7 +143,6 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                 addStudents(students2);
 
                 setStatus(2);
-                //TODO notifys
                 break;
             case SWAP_ENTRANCE_DINING:
                 count = 0;
@@ -125,7 +159,6 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                 game.getCurrentPlayer().getSchoolBoard().removeDiningStudents(students2);
                 game.getCurrentPlayer().getSchoolBoard().addStudents(students2);
 
-                //TODO add notifies
                 break;
             case ADD_DINING:
                 EnumMap<Colors, Integer> studentsToAddDining = StudentManager.createEmptyStudentsEnum();
@@ -146,24 +179,46 @@ public class StudentCharacter extends CharacterCard implements Serializable {
         }
     }
 
+    /**
+     * Setter methods for students
+     * @param students Students to set.
+     */
     private void setStudents(EnumMap<Colors, Integer> students) {
         this.students = students;
     }
 
+    /**
+     * Getter method for students field
+     * @return Students
+     */
     public EnumMap<Colors, Integer> getStudents() {
         return students;
     }
 
+    /**
+     * SetChoices method implemented in StudentCharacter card
+     * @param student The student, passed as an int (Color)
+     * @param island The island, passed as an int (number)
+     */
     public void setChoices(int student, int island) {
         studentIndex = student;
         islandIndex = island;
     }
 
+    /**
+     * SetEnum method implemented in StudentCharacter card
+     * @param students1 first student enum.
+     * @param students2 second student enum.
+     */
     public void setEnums(EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) {
         this.students1 = students1;
         this.students2 = students2;
     }
 
+    /**
+     * studentIndex setter method
+     * @param index provided value for index.
+     */
     public void setChoiceIndex(int index) {
         this.studentIndex = index;
     }

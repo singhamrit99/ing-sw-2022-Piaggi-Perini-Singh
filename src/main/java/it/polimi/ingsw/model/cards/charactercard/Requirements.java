@@ -13,11 +13,20 @@ public class Requirements implements Serializable {
         value = -1;
     }
 
+    /**
+     * Requirements constructor, created from a Resource and a related value (such as number of students).
+     * @param resource Resource field.
+     * @param value Value field.
+     */
     public Requirements(Resources resource, int value) {
         this.resource = resource;
         this.value = value;
     }
 
+    /**
+     * Requirements getter method, returns null if there are no requirements.
+     * @return Requirements.
+     */
     public String getRequirements() {
         if (resource == null) {
             return null;
@@ -25,6 +34,10 @@ public class Requirements implements Serializable {
         return resource.toString();
     }
 
+    /**
+     * Value field getter.
+     * @return value.
+     */
     public int getValue() {
         return value;
     }
