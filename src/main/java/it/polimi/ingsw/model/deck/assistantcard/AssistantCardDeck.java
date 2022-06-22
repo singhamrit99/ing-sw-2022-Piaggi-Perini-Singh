@@ -19,19 +19,33 @@ public class AssistantCardDeck implements Deck<AssistantCard>, Serializable {
 
     private String owner;
 
+    /**
+     * AssistantCardDeck constructor: the class is simply an ArrayList of Assistant cards with the player's name.
+     * @param owner The player that owns this deck.
+     */
     public AssistantCardDeck(String owner) {
         this.owner = owner;
         assistantCards = new ArrayList<>();
     }
 
+    /**
+     * Getter method for the deck of assistant cards.
+     * @return Assistant cards arrayList.
+     */
     public ArrayList<AssistantCard> getDeck() {
         return assistantCards;
     }
-
+    /**
+     * Getter method for the player name.
+     * @return player name.
+     */
     public String getOwner() {
         return owner;
     }
 
+    /**
+     * Method that fills the deck with information coming from the AssistantCards JSON file.
+     */
     @Override
     public void fillDeck() {
         Type collectionType = new TypeToken<ArrayList<AssistantCard>>() {
@@ -40,6 +54,12 @@ public class AssistantCardDeck implements Deck<AssistantCard>, Serializable {
         assistantCards = deckGenerator.getDeck();
     }
 
+    /**
+     * Getter method for single card in the deck. Essential for play.
+     * @param cardName requested card.
+     * @return requested card
+     * @throws AssistantCardNotFoundException Thrown when the requested Assistant Card is not found in the deck.
+     */
     public AssistantCard get(String cardName) throws AssistantCardNotFoundException {
         for (AssistantCard card : assistantCards) {
             if (card.getImageName().equals(cardName)) {
@@ -52,6 +72,10 @@ public class AssistantCardDeck implements Deck<AssistantCard>, Serializable {
         throw new AssistantCardNotFoundException();
     }
 
+    /**
+     * Returns all cards in the deck.
+     * @return assistantcards.
+     */
     public ArrayList<AssistantCard> getAllCards() {
         return assistantCards;
     }
