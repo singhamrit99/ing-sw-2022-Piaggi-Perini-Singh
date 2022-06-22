@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0"
-            prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/Style.css">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="450.0" styleClass="WhiteBackground" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <StackPane prefHeight="650.0" prefWidth="450.0" BorderPane.alignment="CENTER">
             <children>
-                <ChoiceBox fx:id="choiceBox" prefWidth="150.0" StackPane.alignment="TOP_CENTER">
+                <ChoiceBox fx:id="choiceBox" prefWidth="150.0" styleClass="confirm-button" stylesheets="@../css/Style.css" StackPane.alignment="TOP_CENTER">
                     <StackPane.margin>
-                        <Insets top="30.0"/>
+                        <Insets top="30.0" />
                     </StackPane.margin>
                 </ChoiceBox>
-                <ImageView fx:id="image" fitHeight="533.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true"/>
+                <ImageView fx:id="image" fitHeight="533.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" />
             </children>
         </StackPane>
     </center>
     <bottom>
-        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" spacing="20.0">
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" spacing="20.0">
             <children>
-                <Button fx:id="confirmButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                        minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
-                        styleClass="confirm-button" text="Confirm" textFill="WHITE">
+                <Button fx:id="confirmButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="confirm-button" text="Confirm" textFill="WHITE">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </Button>
-                <Button fx:id="cancelButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                        minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
-                        styleClass="cancel-button" text="Leave" textFill="WHITE">
+                <Button fx:id="cancelButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="cancel-button" text="Leave" textFill="WHITE">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </Button>
             </children>
@@ -44,10 +42,9 @@
     <top>
         <StackPane maxWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" BorderPane.alignment="CENTER">
             <children>
-                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" text="Select Assistant Card" textAlignment="JUSTIFY"
-                      StackPane.alignment="CENTER">
+                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" text="Select Assistant Card" textAlignment="JUSTIFY" StackPane.alignment="CENTER">
                     <font>
-                        <Font name="Rockwell Extra Bold" size="25.0"/>
+                        <Font name="Rockwell Extra Bold" size="25.0" />
                     </font>
                 </Text>
             </children>
