@@ -499,10 +499,23 @@ public class Game {
      * It takes the students from a cloud and throw them to the entrance using a method of the player. It checks
      * that is the correct moment and the correct player to perform the action.
      */
-    public void takeStudentsFromCloud(String nicknameCaller, int index) throws IncorrectStateException, IncorrectPlayerException, NegativeValueException {
+    public void takeStudentsFromCloud(String nicknameCaller, String name) throws IncorrectStateException, IncorrectPlayerException, NegativeValueException, IncorrectArgumentException {
+        int index = -1;
         if (state == State.ACTIONPHASE_3) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
+
+                for (int i = 0; i < clouds.size(); i++){
+                    if (clouds.get(i).getName().equals(name)){
+                        index = i;
+                    }
+                }
+                if (index == -1){
+                    throw new IncorrectArgumentException();
+                }
+
                 currentPlayer.addStudents(clouds.get(index).drawStudents());
+
+
                 //notify cloud change and entrance change
                 StrippedCloud changedCloud = new StrippedCloud(clouds.get(index));
                 PropertyChangeEvent evtCloud =
