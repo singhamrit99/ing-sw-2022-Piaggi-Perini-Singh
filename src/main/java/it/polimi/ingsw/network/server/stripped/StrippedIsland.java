@@ -62,5 +62,6 @@ public class StrippedIsland implements Serializable {
 
     public void setDestroyed(){
         name="EMPTY";
+        System.out.println("DESTROYED");
     }
 }

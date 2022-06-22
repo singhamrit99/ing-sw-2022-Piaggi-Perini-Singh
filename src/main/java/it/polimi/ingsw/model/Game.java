@@ -794,15 +794,16 @@ public class Game {
                     && (nextTile.getTowersColor().equals(currentTile.getTowersColor()))) {
                 currentTile.addStudents(nextTile.getStudents());
                 currentTile.sumTowers(nextTile.getNumOfTowers());
+                currentTile.moveMotherNature();
                 StrippedIsland mergedTile = new StrippedIsland(currentTile); //notify currentTile
                 StrippedIsland deletedTile = new StrippedIsland(nextTile); //notify tile to deleted
                 islands.remove(nextTile);
                 //notifications Island merged
                 PropertyChangeEvent islandMergeEvent =
-                        new PropertyChangeEvent(this, "island-merged", mergedTile, mergedTile);
+                        new PropertyChangeEvent(this, "island", mergedTile, mergedTile);
                 gameListener.propertyChange(islandMergeEvent);
                 PropertyChangeEvent islandDeletedEvent =
-                        new PropertyChangeEvent(this, "island", deletedTile, null);
+                        new PropertyChangeEvent(this, "island-merged", deletedTile, null);
                 gameListener.propertyChange(islandDeletedEvent);
                 listChanged = true;
             }

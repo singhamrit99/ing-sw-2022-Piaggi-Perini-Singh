@@ -164,7 +164,7 @@ public class StrippedModel implements Serializable {
         Optional<StrippedIsland> optionalIslandFound = islands.stream().filter(x -> x.getName().equals(changedIsland.getName())).findFirst();
         if (optionalIslandFound.isPresent()) {
             StrippedIsland islandToChange = optionalIslandFound.get();
-            if (evt.getNewValue() != null) { // change
+            if (evt.getNewValue() != null) {
                 if (evt.getPropertyName().equals("island") ||
                         evt.getPropertyName().equals("island-conquest")) {
                     StrippedIsland newProperties = (StrippedIsland) evt.getNewValue();
@@ -175,9 +175,17 @@ public class StrippedModel implements Serializable {
                     islandToChange.setHasNoEnterTile(newProperties.hasNoEnterTile());
                     if (evt.getPropertyName().equals("island")) ui.islandChange(evt);
                     else ui.islandConquest(evt);
-                } else if (evt.getPropertyName().equals("island-merged")) {
+                }else{
+                    System.out.println("Exception changeIsland , strippedModel"); //TODO
+                }
+            }
+            else{
+                if (evt.getPropertyName().equals("island-merged")) {
                     islandToChange.setDestroyed();
                     ui.islandMerged(evt);
+                }
+                else{
+                    System.out.println("Exception changeIsland , strippedModel"); //TODO
                 }
             }
         } else {
