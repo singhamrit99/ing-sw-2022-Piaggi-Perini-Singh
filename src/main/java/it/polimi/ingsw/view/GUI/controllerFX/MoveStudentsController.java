@@ -22,48 +22,16 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 
 public class MoveStudentsController extends InitialStage implements Controller {
+    @FXML
+    private Button cancelButton, confirmButton;
 
     @FXML
-    private Button cancelButton;
+    private Text totalYellow, totalBlue, totalGreen, totalRed, totalPink;
 
     @FXML
-    private Button confirmButton;
-
-    @FXML
-    private Text totalYellow;
-    @FXML
-    private Text totalBlue;
-    @FXML
-    private Text totalGreen;
-    @FXML
-    private Text totalRed;
-    @FXML
-    private Text totalPink;
-
-    @FXML
-    private ComboBox islandNumber;
-
-    @FXML
-    private ComboBox totalDiningYellow;
-    @FXML
-    private ComboBox totalDiningBlue;
-    @FXML
-    private ComboBox totalDiningGreen;
-    @FXML
-    private ComboBox totalDiningRed;
-    @FXML
-    private ComboBox totalDiningPink;
-
-    @FXML
-    private ComboBox totalIslandYellow;
-    @FXML
-    private ComboBox totalIslandBlue;
-    @FXML
-    private ComboBox totalIslandGreen;
-    @FXML
-    private ComboBox totalIslandRed;
-    @FXML
-    private ComboBox totalIslandPink;
+    private ComboBox islandNumber,
+            totalDiningYellow, totalDiningBlue, totalDiningGreen, totalDiningRed, totalDiningPink,
+            totalIslandYellow, totalIslandBlue, totalIslandGreen, totalIslandRed, totalIslandPink;
 
     public MoveStudentsController(GUI gui) {
         super(gui);
@@ -135,9 +103,6 @@ public class MoveStudentsController extends InitialStage implements Controller {
             }
         });
 
-        //button start
-        //crea ciò che devi passare prendendo i valori dei select
-        //conferma
         confirmButton.setOnAction((event) -> {
             EnumMap<Colors, ArrayList<String>> studentToMove = new EnumMap<>(Colors.class);
             ArrayList<String> emptyString = new ArrayList<>();
@@ -175,10 +140,10 @@ public class MoveStudentsController extends InitialStage implements Controller {
             MoveStudents moveStudents = new MoveStudents(GUI.client.getNickname(), studentToMove);
             try {
                 GUI.client.performGameAction(moveStudents);
-            } catch (NotEnoughCoinsException e) {
-                Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
                 Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
+            } catch (NotEnoughCoinsException e) {
+                Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (NegativeValueException e) {
                 Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
             } catch (IncorrectStateException e) {
@@ -203,7 +168,6 @@ public class MoveStudentsController extends InitialStage implements Controller {
             window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
 
-        //button cancel
         cancelButton.setOnAction((event) -> {
             Window window = ((Node) (event.getSource())).getScene().getWindow();
             window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
