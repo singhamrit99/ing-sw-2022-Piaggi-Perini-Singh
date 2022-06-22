@@ -104,7 +104,7 @@ public class CLI implements UI {
                         getLobbyInfo();//fatto
                         break;
                     case "change":
-                        setExpertMode();// TODO exception
+                        setExpertMode();//fatto
                         break;
                     case "leave":
                         leaveRoom();//fatto
@@ -716,7 +716,7 @@ public class CLI implements UI {
                 }
             }
         }
-        //pickCloudOrder = new PickCloud(client.getNickname(), i - 1);
+        pickCloudOrder = new PickCloud(client.getNickname(), "cloud"+i);
        // System.out.println(client.getLocalModel().getState());
         client.performGameAction(pickCloudOrder);
         client.setMyTurn(false);
@@ -1463,24 +1463,39 @@ public class CLI implements UI {
 
     public void printIslands() {
         ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
-        int i = 0, motherNature = 0;
+        int i = 1, motherNature = 0;
         for (StrippedIsland island : islands) {
-            if (!island.getName().equals("EMPTY"))
+            if (!island.getName().equals("EMPTY")) {
                 printIsland(island);
+                i++;
+            }
+                if (island.hasMotherNature())
+            {
+                motherNature=i;
+            }
+
         }
 
-        System.out.println("Mother Nature is on isle number " + (motherNature + 1) + "!");
+        System.out.println("Mother Nature is on isle number " + (motherNature) + "!");
 
     }
 
     public void printExpertIslands() {
         ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
-        int i = 0, motherNature = 0;
+        int i = 1, motherNature = 0;
         for (StrippedIsland island : islands) {
-            printexpertIsland(island);
-        }
-        System.out.println("Mother Nature is on isle number " + (motherNature + 1) + "!");
+            if (!island.getName().equals("EMPTY")) {
+                printexpertIsland(island);
+                i++;
+            }
+            if (island.hasMotherNature())
+            {
+                motherNature=i;
+            }
 
+        }
+
+        System.out.println("Mother Nature is on isle number " + (motherNature) + "!");
     }
 
     public void printDining(StrippedBoard board) {
