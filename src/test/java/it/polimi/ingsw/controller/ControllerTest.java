@@ -131,7 +131,7 @@ class ControllerTest {
         }
         controller.callMoveStudent(game.getCurrentPlayer().getNickname(), movingStudents);
         controller.callMoveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        controller.callPickCloud(game.getCurrentPlayer().getNickname(), 0);
+        controller.callPickCloud(game.getCurrentPlayer().getNickname(), "cloud1");
         EnumMap<Colors, Integer> studentsoncloud = game.getCloudTile(0).getStudents();
         for (Colors color : Colors.values()) {
             assertEquals(0, studentsoncloud.get(color));
