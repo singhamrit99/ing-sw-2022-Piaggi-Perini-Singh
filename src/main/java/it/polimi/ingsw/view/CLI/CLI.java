@@ -914,6 +914,8 @@ public class CLI implements UI {
 
                                 studentsToMove.put(stringToColor(color), value);
                                 movedStudents += value;
+                                if (movedStudents>3)
+                                    doItAgain=false;
                                 studentsToGame = strippedToGame(studentsToMove, studentsToGame, "island" + island);
                                 if (movedStudents < 3) {
                                     System.out.println("Do you want to move other students to the islands?\n");
