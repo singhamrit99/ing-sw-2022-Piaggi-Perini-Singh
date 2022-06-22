@@ -103,7 +103,7 @@ public class SchoolBoard {
                         return false;
                     }
                 } else {
-                    throw new IllegalArgumentException("EnumMap is not correct");
+                    throw new IllegalArgumentException("EnumMap is incorrect");
                 }
             } else {
                 throw new NegativeValueException("EnumMap is not correct");
