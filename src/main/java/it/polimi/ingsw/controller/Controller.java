@@ -37,10 +37,7 @@ public class Controller {
         game.moveStudents(playerCaller, students);
     }
 
-    public void callPickCloud(String playerCaller, int cloudTileID) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, IncorrectStateException {
-        if (cloudTileID < 0 || cloudTileID > 3) {
-            throw new IncorrectArgumentException();
-        }
+    public void callPickCloud(String playerCaller, String cloudTileID) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, IncorrectStateException {
         game.takeStudentsFromCloud(playerCaller, cloudTileID);
     }
 
