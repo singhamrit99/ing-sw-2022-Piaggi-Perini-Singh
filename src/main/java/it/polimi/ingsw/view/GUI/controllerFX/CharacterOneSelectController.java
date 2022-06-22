@@ -41,7 +41,6 @@ public class CharacterOneSelectController extends InitialStage implements Contro
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
         description.setText(selectedCharacter.getDescription());
 
-        System.out.println("SELECTED CHARACTER ASDAS: " + selectedCharacter.getCharacterID());
         if (selectedCharacter.getCharacterID() == 3) {
             for (StrippedIsland island : GUI.client.getLocalModel().getIslands()) {
                 choiceBox.getItems().add(island.getName());
