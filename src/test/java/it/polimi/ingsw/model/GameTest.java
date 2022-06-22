@@ -221,7 +221,7 @@ class GameTest {
         g.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
         g.moveMotherNature(g.getCurrentPlayer().getNickname(), 1);
         EnumMap<Colors, Integer> s = g.getCloudTile(0).getStudents();
-        g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(), 0);
+        g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(), "cloud1");
         s = g.getCloudTile(0).getStudents();
         for (Colors c : Colors.values()) {
             assertEquals(s.get(c), 0);
@@ -250,7 +250,7 @@ class GameTest {
             g.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
             g.moveMotherNature(g.getCurrentPlayer().getNickname(), 1);
             EnumMap<Colors, Integer> s = g.getCloudTile(0).getStudents();
-            g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(), playersTurn);
+            g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(), "cloud1");
 
         }
         assertEquals(State.PLANNINGPHASE, g.getCurrentState());
@@ -259,7 +259,7 @@ class GameTest {
     @Test
     void testTakeStudentsFromCloudException() throws IncorrectArgumentException, AssistantCardNotFoundException, IncorrectPlayerException, IncorrectStateException, NegativeValueException {
         Game g = planningPhaseComplete();
-        assertThrows(IncorrectStateException.class, () -> g.takeStudentsFromCloud("wrong player", 0));
+        assertThrows(IncorrectStateException.class, () -> g.takeStudentsFromCloud("wrong player", "cloud1"));
     }
 
 
@@ -344,12 +344,12 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
@@ -380,7 +380,7 @@ class GameTest {
 
         System.out.println("PROFESSORE " + game.getCurrentPlayer().getSchoolBoard().getProfessorsTable().get(0) + game.getCurrentPlayer().getNickname() + " ");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -405,12 +405,12 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         System.out.println(game.getCurrentState());
 
@@ -420,7 +420,7 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -444,7 +444,7 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -470,12 +470,12 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
@@ -504,12 +504,12 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
@@ -538,12 +538,12 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
@@ -600,12 +600,12 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
@@ -634,12 +634,12 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
@@ -668,12 +668,12 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
@@ -735,12 +735,12 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
@@ -769,12 +769,12 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
-        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), 0);
+        game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
