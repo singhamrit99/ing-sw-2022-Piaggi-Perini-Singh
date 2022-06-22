@@ -99,17 +99,6 @@ public class LobbyController extends InitialStage implements Controller {
                 }
             });
 
-            try {
-                if(GUI.client.isRoomInGame(rooms.get(i))){
-                    joinRoom.setVisible(false);
-                }
-                else{
-                    joinRoom.setVisible(true);
-                }
-            } catch (RoomNotExistsException |RemoteException e) {
-                throw new RuntimeException(e);
-            }
-
             roomsList.addRow(i + 1, roomName, joinRoom);
             GridPane.setHalignment(roomName, HPos.CENTER);
             GridPane.setHalignment(joinRoom, HPos.CENTER);
