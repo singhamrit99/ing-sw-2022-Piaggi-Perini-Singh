@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
-import it.polimi.ingsw.network.server.commands.PlayCharacterCardB;
 import it.polimi.ingsw.network.server.commands.PlayCharacterCardD;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.network.server.stripped.StrippedIsland;
@@ -55,11 +54,8 @@ public class CharacterOneSelectController extends InitialStage implements Contro
         AtomicInteger chosen = new AtomicInteger();
         chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
 
-        choiceBox.setOnAction((event) -> {
-            chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
-        });
+        choiceBox.setOnAction((event) -> chosen.set(choiceBox.getSelectionModel().getSelectedIndex()));
 
-        //conferma
         confirmButton.setOnAction((event) -> {
             PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), selectedCharacter.getCharacterID(), chosen.get());
             try {
@@ -72,10 +68,10 @@ public class CharacterOneSelectController extends InitialStage implements Contro
                 Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
             } catch (IncorrectStateException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
-            } catch (MotherNatureLostException e) {
-                Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
             } catch (ProfessorNotFoundException e) {
                 Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
+            } catch (MotherNatureLostException e) {
+                Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
             } catch (IncorrectPlayerException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
             } catch (RemoteException e) {
