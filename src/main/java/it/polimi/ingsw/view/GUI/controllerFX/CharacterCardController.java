@@ -136,7 +136,7 @@ public class CharacterCardController extends InitialStage implements Controller 
                 case 10:
                     filePath = ResourcesPath.FXML_FILE_PATH + "CharacterSwapView" + ResourcesPath.FILE_EXTENSION;
                     loader = new FXMLLoader(Controller.class.getResource(filePath));
-                    loader.setController(new CharacterSwapController(gui));
+                    //loader.setController(new CharacterSwapController(gui));
 
                     scene = null;
                     try {
@@ -156,7 +156,7 @@ public class CharacterCardController extends InitialStage implements Controller 
                 case 5:
                     filePath = ResourcesPath.FXML_FILE_PATH + "CharacterTileView" + ResourcesPath.FILE_EXTENSION;
                     loader = new FXMLLoader(Controller.class.getResource(filePath));
-                    loader.setController(new CharacterTileController(gui));
+                    //loader.setController(new CharacterTileController(gui));
 
                     scene = null;
                     try {
