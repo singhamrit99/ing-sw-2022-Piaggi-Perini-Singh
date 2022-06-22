@@ -10,9 +10,9 @@ import java.io.Serializable;
 
 public class PickCloud implements Command, Serializable {
     String playerCaller;
-    int cloudTileID;
+    String cloudTileID;
 
-    public PickCloud(String playerCaller,int cloudTileID) {
+    public PickCloud(String playerCaller,String cloudTileID) {
         this.playerCaller=playerCaller;
         this.cloudTileID = cloudTileID;
     }
