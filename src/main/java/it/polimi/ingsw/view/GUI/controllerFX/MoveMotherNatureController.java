@@ -18,10 +18,7 @@ public class MoveMotherNatureController extends InitialStage implements Controll
     private Slider slider;
 
     @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button confirmButton;
+    private Button cancelButton, confirmButton;
 
     public MoveMotherNatureController(GUI gui) {
         super(gui);
@@ -29,14 +26,13 @@ public class MoveMotherNatureController extends InitialStage implements Controll
 
     @Override
     public void initialize() {
-        //mostra uno slider da un minimo a un massimo
         try {
             slider.setMin(1);
             slider.setMax(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getMoves());
             System.out.println(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getMoves());
             slider.setValue(1);
             slider.setMajorTickUnit(1.0);
-            slider.setShowTickMarks(false);
+            slider.setMinorTickCount(0);
             slider.setSnapToTicks(true);
             slider.setShowTickMarks(true);
             slider.setShowTickLabels(true);
@@ -44,9 +40,7 @@ public class MoveMotherNatureController extends InitialStage implements Controll
             e.printStackTrace();
         }
 
-        //fai bottone conferma per muovere
         confirmButton.setOnAction((event) -> {
-            //prendo il numero da slider
             MoveMotherNature moveMotherNature = new MoveMotherNature(GUI.client.getNickname(), (int) slider.getValue());
 
             try {
@@ -61,10 +55,10 @@ public class MoveMotherNatureController extends InitialStage implements Controll
                 Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
             } catch (MotherNatureLostException e) {
                 Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
-            } catch (ProfessorNotFoundException e) {
-                Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
             } catch (IncorrectPlayerException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
+            } catch (ProfessorNotFoundException e) {
+                Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
             } catch (RemoteException e) {
                 Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             } catch (IncorrectArgumentException e) {
@@ -79,7 +73,6 @@ public class MoveMotherNatureController extends InitialStage implements Controll
             window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
 
-        //button cancel
         cancelButton.setOnAction((event) -> {
             Window window = ((Node) (event.getSource())).getScene().getWindow();
             window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
