@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.StringNames;
+import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.view.UI;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.network.server.stripped.StrippedModel;
@@ -77,13 +78,17 @@ public class Client implements Runnable {
         }
     }
 
-    public void requestRoomJoin(String roomName) throws RemoteException, RoomInGameException, RoomNotExistsException, UserNotRegisteredException, RoomFullException {
-        server.joinRoom(nickname, roomName);
-        clientRoom = roomName;
+    public void requestRoomJoin(String roomName) throws RemoteException, RoomInGameException,
+            RoomNotExistsException, UserNotRegisteredException, RoomFullException {
         try {
+            server.joinRoom(nickname, roomName);
+            clientRoom = roomName;
             playersList = getNicknamesInRoom();
         } catch (UserNotInRoomException ignored) {
-        } //just joined a Room that exists because checked by the server
+            //TODO
+        } catch(UserInRoomException problem){
+            problem.printStackTrace(); //TODO
+        }
         ui.roomJoin(playersList);
     }
 
@@ -112,6 +117,8 @@ public class Client implements Runnable {
             clientRoom = null;
             roomList = getRooms();
             ui.roomsAvailable(roomList);
+            oldSize = 0; //this is necessary for the correct reloading of the rooms list but maybe refactor name
+            firstRoomListRefactor = true; //TODO name also of this
         }
     }
 
@@ -132,65 +139,60 @@ public class Client implements Runnable {
         }
         ui.roomsAvailable(roomList);
     }
+
+    int oldSize = 0;
+    boolean firstRoomListRefactor = true;
     @Override
     public void run() {
-        boolean first = true;
-        int oldSize = 0;
-
         while (userRegistered) {
             try {
+                inGame = server.inGame(nickname);
                 if (inGame) {
-                    //System.out.println("the room is playing and I'm in");
                     ArrayList<PropertyChangeEvent> newUpdates = server.getUpdates(nickname);
                     manageUpdates(newUpdates);
                 } else {
-                    try {
-                        inGame = server.inGame(nickname);
-                        roomList = server.getRoomsList();
-                        //display and refresh of room list
-                        if (view.equals(StringNames.LOBBY)) {
-                            if (first) {
-                                roomListShow();
-                                oldSize = roomList.size();
-                                first = false;
-                            } else if (roomList.size() != oldSize) {
-                                oldSize = roomList.size();
-                                roomListShow();
-                            }
-                        } else if (view.equals(StringNames.ROOM)) {
-                            //display and refresh playerList if in room
-                            if (clientRoom != null) {
-                                if (!getNicknamesInRoom().equals(playersList) || roomExpertMode != getExpertMode()) {
-                                    playersList = getNicknamesInRoom();
-                                    roomExpertMode = getExpertMode();
-                                    ui.roomJoin(playersList);
-                                }
+                    roomList = server.getRoomsList();
+
+                    if (view.equals(StringNames.LOBBY)) {
+                        if (firstRoomListRefactor) {
+                            roomListShow();
+                            oldSize = roomList.size();
+                            firstRoomListRefactor = false;
+                        } else if (roomList.size() != oldSize) {
+                            oldSize = roomList.size();
+                            roomListShow();
+                        }
+                    }
+
+                    if (view.equals(StringNames.ROOM)) {
+                        //display and refresh playerList if in room
+                        if (clientRoom != null) {
+                            if (!getNicknamesInRoom().equals(playersList) || roomExpertMode != getExpertMode()) {
+                                playersList = getNicknamesInRoom();
+                                roomExpertMode = getExpertMode();
+                                ui.roomJoin(playersList); //TODO refactor the NAME of this method
                             }
                         }
-                    } catch (UserNotRegisteredException notRegisteredException) {
-                        userRegistered = false;
-                        break;
-                    } catch (RoomNotExistsException e) {
-                        e.printStackTrace();
                     }
                 }
                 Thread.sleep(100);
             } catch (RemoteException | LocalModelNotLoadedException | BadFormattedLocalModelEvent |
-                    UserNotInRoomException | UserNotRegisteredException |
-                    InterruptedException e) {
+                     InterruptedException | UserNotInRoomException | RoomNotExistsException e) {
                 System.err.println("Client exception: " + e);
+            } catch (UserNotRegisteredException e) {
+                userRegistered = false;
             }
         }
     }
 
     private void ping() {
-        while(userRegistered){
+        while (userRegistered) {
             try {
                 server.ping(nickname);
             } catch (RemoteException e) {
                 e.printStackTrace();
             } catch (UserNotRegisteredException e) {
-                userRegistered=false; //TODO
+                userRegistered = false; //TODO
                 e.printStackTrace();
             }
             try {
@@ -202,7 +204,6 @@ public class Client implements Runnable {
     }
 
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException, BadFormattedLocalModelEvent {
-        //TODO for Lore: all the System.out.println have to go into the cli
         for (PropertyChangeEvent evt : evtArray) {
             switch (evt.getPropertyName()) {
                 case "first-player":
@@ -227,7 +228,7 @@ public class Client implements Runnable {
                     break;
                 case "current-player":
                     setInGame(true);
-                   // System.out.println("Changed current player");
+                    // System.out.println("Changed current player");
                     if (nickname.equals(evt.getNewValue()))
                         isMyTurn = true;
                     if (localModel != null) {
@@ -236,7 +237,17 @@ public class Client implements Runnable {
                         throw new LocalModelNotLoadedException();
                     }
                     break;
-                case "leave-game": //TODO
+                case "game-finished":
+                    try {
+                        ui.reloadRoomsFromGameView();
+                        leaveRoom();
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    } catch (UserNotInRoomException e) {
+                        throw new RuntimeException(e);
+                    } catch (UserNotRegisteredException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 default:
                     if (localModel != null) {
@@ -259,7 +270,7 @@ public class Client implements Runnable {
         return inGame;
     }
 
-    public boolean isRoomInGame(String roomName) throws RoomNotExistsException,RemoteException{
+    public boolean isRoomInGame(String roomName) throws RoomNotExistsException, RemoteException {
         return server.isInGame(roomName);
     }
 
