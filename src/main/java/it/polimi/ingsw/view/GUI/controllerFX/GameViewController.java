@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -181,7 +182,7 @@ public class GameViewController extends InitialStage implements Controller {
         initializeImagesDining();
         initializeClouds();
         loadAssistantDeck();
-
+        reloadCoins();
         reloadCharacters();
         reloadEntrance();
         reloadTowers();
@@ -311,6 +312,31 @@ public class GameViewController extends InitialStage implements Controller {
         });
     }
 
+    @FXML
+    Label coinsText;
+
+    @FXML
+    StackPane coinsIndicator;
+
+    public void reloadCoins(){
+        boolean expert = false;
+        try {
+            expert = GUI.client.getExpertMode();
+        } catch (RemoteException | RoomNotExistsException ignored) {}
+
+        if(expert){
+            coinsIndicator.setVisible(true);
+            try {
+                int coins = GUI.client.getLocalModel().getBoardOf(currentBoardView).getCoins();
+                coinsText.setText(Integer.toString(coins));
+            }catch (LocalModelNotLoadedException e){
+                //TODO
+            }
+        }
+        else{
+            coinsIndicator.setVisible(false);
+        }
+    }
     public void reloadIslands() {
         islandsPanes = new ArrayList<>();
         islandsPane.getChildren().clear();
