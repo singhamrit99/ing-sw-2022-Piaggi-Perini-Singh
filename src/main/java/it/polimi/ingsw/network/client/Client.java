@@ -45,7 +45,7 @@ public class Client implements Runnable {
             server = (serverStub) registry.lookup("server");
             //System.out.println("connection done");
         } catch (Exception e) {
-            System.err.println("Client exception: " + e);
+            System.err.println("Client connection to server exception: " + e); //TODO
             e.printStackTrace();
         }
     }
@@ -54,8 +54,8 @@ public class Client implements Runnable {
         server.registerUser(nickName);
         this.nickname = nickName;
         userRegistered = true;
-
-        new Thread(this).start(); //it's important that the thread runs only after the correct registration!
+        new Thread(this::ping).start();
+        new Thread(this).start();
     }
 
     public void deregisterClient() throws RemoteException, UserNotRegisteredException {
@@ -174,8 +174,7 @@ public class Client implements Runnable {
                         e.printStackTrace();
                     }
                 }
-                Ping();
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (RemoteException | LocalModelNotLoadedException | BadFormattedLocalModelEvent |
                     UserNotInRoomException | UserNotRegisteredException |
                     InterruptedException e) {
@@ -184,8 +183,22 @@ public class Client implements Runnable {
         }
     }
 
-    private void Ping() throws RemoteException, UserNotRegisteredException {
-        server.ping(nickname);
+    private void ping() {
+        while(userRegistered){
+            try {
+                server.ping(nickname);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (UserNotRegisteredException e) {
+                userRegistered=false; //TODO
+                e.printStackTrace();
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException, BadFormattedLocalModelEvent {

@@ -226,7 +226,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
             } catch (ConcurrentModificationException ignored) {
             }
             try {
-                sleep(1000); //must be double client ping timeout
+                sleep(2000); //must be double client ping timeout
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
