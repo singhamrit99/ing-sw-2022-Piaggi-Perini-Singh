@@ -20,10 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CharacterOneSelectController extends InitialStage implements Controller {
     @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button confirmButton;
+    private Button cancelButton, confirmButton;
 
     @FXML
     private Text description;
