@@ -1,10 +1,12 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
+import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.view.GUI.GUILauncher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -40,5 +42,17 @@ public interface Controller {
         alert.setContentText(content);
 
         alert.showAndWait();
+    }
+
+    static void loadScene(FXMLLoader loader) throws IOException {
+        Scene scene;
+        scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        stage.setTitle(StringNames.TITLE);
+        stage.setResizable(false);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 }
