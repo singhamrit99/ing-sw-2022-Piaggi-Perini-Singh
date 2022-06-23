@@ -26,7 +26,7 @@
                 <Insets />
             </VBox.margin>
         </StackPane>
-        <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1920.0" styleClass="WhiteBackground">
+        <FlowPane alignment="CENTER" columnHalignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1920.0" styleClass="WhiteBackground">
             <children>
                 <GridPane fx:id="playersList" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="115.0">
                     <columnConstraints>
