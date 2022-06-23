@@ -23,10 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class AssistantCardController extends InitialStage implements Controller {
     @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button confirmButton;
+    private Button cancelButton, confirmButton;
 
     @FXML
     private ChoiceBox<String> choiceBox;
@@ -51,7 +48,6 @@ public class AssistantCardController extends InitialStage implements Controller 
             choiceBox.getItems().add("Assistant " + card.getImageName());
         }
 
-        //cambio l immagine in base al selector
         ArrayList<AssistantCard> finalCards = cards;
         AtomicReference<String> chosenCard = new AtomicReference<>("");
         choiceBox.getSelectionModel().selectFirst();
@@ -79,7 +75,6 @@ public class AssistantCardController extends InitialStage implements Controller 
             }
         });
 
-        //conferma
         confirmButton.setOnAction((event) -> {
             PlayAssistantCard playAssistantCard = new PlayAssistantCard(GUI.client.getNickname(), chosenCard.get());
             try {
