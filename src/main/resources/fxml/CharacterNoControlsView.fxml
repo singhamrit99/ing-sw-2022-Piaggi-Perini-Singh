@@ -18,7 +18,7 @@
     </top>
 
     <center>
-        <Text fx:id="description" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" textAlignment="JUSTIFY" wrappingWidth="720.703125" StackPane.alignment="CENTER">
+        <Text fx:id="description" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" textAlignment="CENTER" wrappingWidth="400.0" StackPane.alignment="CENTER">
             <font>
                 <Font name="Cambria" size="12.0" />
             </font>
