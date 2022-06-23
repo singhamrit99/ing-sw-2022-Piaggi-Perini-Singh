@@ -422,6 +422,7 @@ public class Game {
     public void moveStudents(String playerCaller, EnumMap<Colors, ArrayList<String>> studentsToMove) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException {
         if (currentPlayer.getNickname().equals(playerCaller)) {
             if (state == State.ACTIONPHASE_1) {
+                int oldCoins=currentPlayer.getCoins(), newCoins;
                 //First a check if the number of students moved is right
                 int numOfStudents;
                 if (numOfPlayer == 3) numOfStudents = 4;
@@ -485,7 +486,14 @@ public class Game {
                 System.out.println("Send property change event for dining room\n");
                 if (isDiningChanged) {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
-                    //notify dining AND entrance change
+                    //notify dining AND entrance AND possible coins change
+                    newCoins=currentPlayer.getCoins();
+                    if (newCoins!=oldCoins)
+                    {
+                        PropertyChangeEvent coinsAddedEvent=
+                                new PropertyChangeEvent(this, "coins",currentPlayer.getNickname(), newCoins);
+                        gameListener.propertyChange(coinsAddedEvent);
+                    }
                     EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
                     PropertyChangeEvent event =
                             new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), currentPlayer.getSchoolBoard().getEntrance());

@@ -1780,7 +1780,7 @@ public class CLI implements UI {
         }
     }
 
-    public void printCharacterCards() {
+    public void printCharacterCards() throws LocalModelNotLoadedException {
         int i = 0;
         ArrayList<StrippedCharacter> temp = client.getLocalModel().getCharacters();
         for (StrippedCharacter c : temp) {
@@ -1788,6 +1788,8 @@ public class CLI implements UI {
             System.out.println("Price: " + c.getPrice() + ", description:  " + c.getDescription());
             i++;
         }
+        System.out.println();
+        System.out.println("You currently have "+client.getLocalModel().getBoardOf(client.getNickname()).getCoins() + " coins!");
     }
 
     public void printAssistantCards() throws LocalModelNotLoadedException {
