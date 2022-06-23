@@ -190,7 +190,6 @@ public class StrippedModel implements Serializable {
         }
     }
 
-
     private void changeCloud(PropertyChangeEvent evt) {
         StrippedCloud changedCloud;
         if (evt.getOldValue() != null) {

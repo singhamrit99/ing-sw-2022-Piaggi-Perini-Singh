@@ -16,11 +16,7 @@ import java.rmi.RemoteException;
 
 public class CharacterNoControlsController extends InitialStage implements Controller {
     @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button confirmButton;
-
+    private Button cancelButton, confirmButton;
     @FXML
     private Text description;
 
@@ -33,7 +29,6 @@ public class CharacterNoControlsController extends InitialStage implements Contr
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
         description.setText(selectedCharacter.getDescription());
 
-        //conferma
         confirmButton.setOnAction((event) -> {
             PlayCharacterCardA playCharacterCardA = new PlayCharacterCardA(GUI.client.getNickname(), selectedCharacter.getCharacterID());
             try {
