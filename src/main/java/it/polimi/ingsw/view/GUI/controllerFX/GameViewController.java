@@ -16,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -24,9 +23,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -305,7 +301,7 @@ public class GameViewController extends InitialStage implements Controller {
             FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
             loader.setController(new CharacterCardController(gui));
             try {
-                loadScene(loader);
+                Controller.loadScene(loader);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -366,7 +362,7 @@ public class GameViewController extends InitialStage implements Controller {
                 String filePath = ResourcesPath.FXML_FILE_PATH + "MoveMotherNatureView" + ResourcesPath.FILE_EXTENSION;
                 FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
                 loader.setController(new MoveMotherNatureController(gui));
-                loadScene(loader);
+                Controller.loadScene(loader);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -633,18 +629,6 @@ public class GameViewController extends InitialStage implements Controller {
         pane.addRow(0, mn);
     }
 
-    private void loadScene(FXMLLoader loader) throws IOException {
-        Scene scene;
-        scene = new Scene(loader.load());
-        Stage stage = new Stage();
-        stage.setTitle(StringNames.TITLE);
-        stage.setResizable(false);
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.showAndWait();
-    }
-
     private void spawnNoEntryTile(StackPane pane) {
         ImageView noEntryView = new ImageView(noEntry);
         noEntryView.setFitHeight(150);
@@ -701,7 +685,7 @@ public class GameViewController extends InitialStage implements Controller {
                 String filePath = ResourcesPath.FXML_FILE_PATH + "MoveStudentsView" + ResourcesPath.FILE_EXTENSION;
                 FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
                 loader.setController(new MoveStudentsController(gui));
-                loadScene(loader);
+                Controller.loadScene(loader);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -824,7 +808,7 @@ public class GameViewController extends InitialStage implements Controller {
             FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
             loader.setController(new TakeFromCloudTilesController(gui));
 
-            loadScene(loader);
+            Controller.loadScene(loader);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1045,7 +1029,7 @@ public class GameViewController extends InitialStage implements Controller {
                 FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
                 loader.setController(new AssistantCardController(gui));
 
-                loadScene(loader);
+                Controller.loadScene(loader);
             } catch (IOException e) {
                 e.printStackTrace();
             }
