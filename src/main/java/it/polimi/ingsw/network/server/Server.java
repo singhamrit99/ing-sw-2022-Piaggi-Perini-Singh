@@ -66,15 +66,15 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         rooms.put(roomName, newRoom);
         try {
             joinRoom(username, roomName);
-        } catch (RoomNotExistsException | RoomFullException | RoomInGameException ignored) {
+        } catch (RoomNotExistsException | UserInRoomException | RoomFullException | RoomInGameException ignored) {
         }
     }
 
     @Override
-    public synchronized void joinRoom(String username, String roomName) throws RemoteException, RoomInGameException, UserNotRegisteredException, RoomNotExistsException, RoomFullException {
+    public synchronized void joinRoom(String username, String roomName) throws RemoteException, RoomInGameException, UserNotRegisteredException, RoomNotExistsException, RoomFullException, UserInRoomException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         if (!rooms.containsKey(roomName)) throw new RoomNotExistsException();
-        //if (users.get(username).getRoom() != null) throw new UserInRoomException();
+        if (users.get(username).getRoom() != null) throw new UserInRoomException();
         ClientConnection userClient = users.get(username);
         Room desiredRoom = rooms.get(roomName);
         if (!desiredRoom.isInGame()) {
@@ -101,13 +101,17 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         ClientConnection user = users.get(username);
         if (user.getRoom() == null) throw new UserNotInRoomException();
+        user.setInGame(false);
         String roomName = user.getRoom();
         rooms.get(roomName).removeUser(user);
-/*
+        user.setRoom(null);
+
         if(rooms.get(roomName).isInGame()){
-            rooms.get(roomName).kickOut();
+            PropertyChangeEvent gameFinishedEvent = new PropertyChangeEvent(this,"game-finished",null,null);
+            rooms.get(roomName).notifyPlayerInGameLeaves(gameFinishedEvent);
         }
-*/
+
+        //complete deletion
         if (rooms.get(roomName).getPlayers().size() == 0) {
             rooms.remove(roomName);
             System.out.println("Room " + roomName + " deleted after " + username + " left room");
@@ -213,7 +217,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
                 try {
                     deregisterConnection(client.getNickname());
                 } catch (RemoteException | UserNotRegisteredException ignored) {
-                }
+                    }
             } else client.setDown();
         }
     }

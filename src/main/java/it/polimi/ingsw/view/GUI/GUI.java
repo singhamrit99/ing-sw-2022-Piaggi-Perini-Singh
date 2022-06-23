@@ -156,6 +156,15 @@ public class GUI implements UI {
     }
 
     @Override
+    public void reloadRoomsFromGameView(){
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> gameController.reloadRoomsFromGameView());
+            }
+        }
+    }
+
+    @Override
     public void coinsChanged(PropertyChangeEvent e) {
         if (GUI.client.view.equals(StringNames.INGAME)) {
             if (gameController.isOpened()) {
@@ -171,10 +180,5 @@ public class GUI implements UI {
                 Platform.runLater(() -> gameController.reloadEntrance());
             }
         }
-    }
-
-    @Override
-    public void removedProfessors(PropertyChangeEvent e) {
-
     }
 }
