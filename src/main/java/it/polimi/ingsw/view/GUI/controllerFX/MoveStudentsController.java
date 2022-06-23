@@ -19,6 +19,9 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
+/**
+ * @noinspection rawtypes
+ */
 public class MoveStudentsController extends InitialStage implements Controller {
     @FXML
     private Button cancelButton, confirmButton;
@@ -31,12 +34,15 @@ public class MoveStudentsController extends InitialStage implements Controller {
             totalDiningYellow, totalDiningBlue, totalDiningGreen, totalDiningRed, totalDiningPink,
             totalIslandYellow, totalIslandBlue, totalIslandGreen, totalIslandRed, totalIslandPink;
 
+    private int motherNatureIndex;
+
     public MoveStudentsController(GUI gui) {
         super(gui);
     }
 
     @Override
     public void initialize() {
+        motherNatureIndex = -1;
         loadComboBox(islandNumber, GUI.client.getLocalModel().getIslands().size());
 
         ArrayList<Text> text = new ArrayList<>();
@@ -122,17 +128,23 @@ public class MoveStudentsController extends InitialStage implements Controller {
                 }
 
                 if (islandNumber.getSelectionModel().getSelectedIndex() != 0 && islandsComboBoxes.get(i).getSelectionModel().getSelectedItem() != null) {
+                    String islandNum;
+                    if (islandNumber.getSelectionModel().getSelectedIndex() == motherNatureIndex) {
+                        islandNum = String.valueOf(motherNatureIndex);
+                    } else {
+                        islandNum = islandNumber.getSelectionModel().getSelectedItem().toString();
+                    }
                     value = Integer.parseInt(islandsComboBoxes.get(i).getSelectionModel().getSelectedItem().toString());
+
                     for (int j = 0; j < value; j++) {
-                        destinations.add("island" + value);
+                        destinations.add("island" + islandNum);
                     }
                 }
-
                 studentToMove.put(Colors.getStudent(i), destinations);
             }
 
             for (Colors colors : Colors.values()) {
-                System.out.println(studentToMove.get(colors));
+                System.out.println(colors + " " + studentToMove.get(colors));
             }
 
             MoveStudents moveStudents = new MoveStudents(GUI.client.getNickname(), studentToMove);
@@ -175,8 +187,14 @@ public class MoveStudentsController extends InitialStage implements Controller {
     public void loadComboBox(ComboBox comboBox, int num) {
         ObservableList<String> choices = FXCollections.observableArrayList();
 
-        for (int i = 0; i <= num; i++)
-            choices.add(Integer.toString(i));
+        for (int i = 0; i <= num; i++) {
+            if (i > 0 && GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
+                choices.add(i + "MN island");
+                motherNatureIndex = i;
+            } else {
+                choices.add(Integer.toString(i));
+            }
+        }
 
         comboBox.setItems(choices);
     }
