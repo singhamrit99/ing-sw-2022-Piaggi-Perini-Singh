@@ -471,6 +471,10 @@ public class Game {
                                         PropertyChangeEvent evt =
                                                 new PropertyChangeEvent(this, "island", oldIsland, changedIsland);
                                         gameListener.propertyChange(evt);
+
+                                        PropertyChangeEvent event =
+                                                new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), currentPlayer.getSchoolBoard().getEntrance());
+                                        gameListener.propertyChange(event);
                                     }
                                 }
                             }
