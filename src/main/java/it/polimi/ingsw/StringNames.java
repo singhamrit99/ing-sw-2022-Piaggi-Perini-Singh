@@ -37,4 +37,5 @@ public interface StringNames {
     String PROFESSOR_NOT_FOUND = "Professor not found";
     String INCORRECT_PLAYER = "Incorrect player";
     String INCORRECT_ARGUMENT = "Given parameters are not correct";
+    String USER_ALREADY_IN_ROOM= "User is already in a room";
 }

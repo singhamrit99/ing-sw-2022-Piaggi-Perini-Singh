@@ -113,7 +113,7 @@ public class Client implements Runnable {
      * @throws UserNotRegisteredException Thrown if the method is called by an invalid user.
      * @throws RoomFullException Thrown if the room we're trying to join already has 4 players in it.
      */
-    public void requestRoomJoin(String roomName) throws RemoteException, RoomInGameException, RoomNotExistsException, UserNotRegisteredException, RoomFullException {
+    public void requestRoomJoin(String roomName) throws RemoteException, RoomInGameException, RoomNotExistsException, UserNotRegisteredException, RoomFullException, UserInRoomException {
         server.joinRoom(nickname, roomName);
         clientRoom = roomName;
         try {

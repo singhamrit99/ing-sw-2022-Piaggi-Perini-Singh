@@ -1,10 +1,7 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
 import it.polimi.ingsw.StringNames;
-import it.polimi.ingsw.exceptions.RoomFullException;
-import it.polimi.ingsw.exceptions.RoomInGameException;
-import it.polimi.ingsw.exceptions.RoomNotExistsException;
-import it.polimi.ingsw.exceptions.UserNotRegisteredException;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -93,6 +90,8 @@ public class LobbyController extends InitialStage implements Controller {
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                 } catch (RoomFullException | RoomInGameException e) {
                     Controller.showErrorDialogBox(e.getMessage());
+                } catch (UserInRoomException e) {
+                    Controller.showErrorDialogBox(StringNames.USER_ALREADY_IN_ROOM);
                 }
             });
 

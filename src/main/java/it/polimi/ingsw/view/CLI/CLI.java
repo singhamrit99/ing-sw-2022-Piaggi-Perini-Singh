@@ -233,8 +233,6 @@ public class CLI implements UI {
             }
 
         }
-
-        return;
     }
 
     @Override
@@ -532,7 +530,7 @@ public class CLI implements UI {
                     client.requestRoomJoin(requestedRoom);
                 } catch (RoomNotExistsException | UserNotRegisteredException e) {
                     throw new RuntimeException(e);
-                } catch (RoomFullException | RoomInGameException e) {
+                } catch (RoomFullException | RoomInGameException |UserInRoomException e) {
                     System.out.println(e.getMessage());
                 }
                 client.view = StringNames.ROOM;
