@@ -34,13 +34,9 @@ public class RoomController extends InitialStage implements Controller {
     @FXML
     private Text roomTitle;
     @FXML
-    private Button startGameButton;
-    @FXML
-    private Button leaveButton;
+    private Button startGameButton, leaveButton;
 
-    private Image blackTowerImage;
-    private Image whiteTowerImage;
-    private Image greyTowerImage;
+    private Image blackTowerImage, whiteTowerImage, greyTowerImage;
 
     private SwitchButton setExpertMode;
     private Label expertMode;
