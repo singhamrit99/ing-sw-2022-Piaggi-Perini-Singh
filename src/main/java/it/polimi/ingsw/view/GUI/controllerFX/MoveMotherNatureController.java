@@ -42,7 +42,6 @@ public class MoveMotherNatureController extends InitialStage implements Controll
 
         confirmButton.setOnAction((event) -> {
             MoveMotherNature moveMotherNature = new MoveMotherNature(GUI.client.getNickname(), (int) slider.getValue());
-
             try {
                 GUI.client.performGameAction(moveMotherNature);
             } catch (NotEnoughCoinsException e) {

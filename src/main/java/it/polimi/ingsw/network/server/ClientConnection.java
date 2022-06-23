@@ -17,7 +17,7 @@ public class ClientConnection{
     public synchronized String getRoom() {
         return clientRoom;
     }
-    public synchronized  void setRoom(String room) {
+    public synchronized void setRoom(String room) {
         this.clientRoom = room;
     }
     public synchronized boolean inGame(){ return inGame;}

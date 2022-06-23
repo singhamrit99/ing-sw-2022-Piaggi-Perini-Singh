@@ -28,7 +28,7 @@
                 <Text fx:id="description" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0"
                       strokeWidth="0.0" text="Description" textAlignment="JUSTIFY" StackPane.alignment="TOP_CENTER">
                     <font>
-                        <Font name="Cambria" size="18.0"/>
+                        <Font name="Cambria" size="12.0"/>
                     </font>
                 </Text>
 
