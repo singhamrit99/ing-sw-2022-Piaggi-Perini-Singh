@@ -211,7 +211,7 @@ public class Game {
         }
 
         // place MotherNature on a random island
-        motherNaturePosition = (int)(Math.random()*11.99999f);
+        motherNaturePosition = (int) (Math.random() * 11.99999f);
         islands.get(motherNaturePosition).moveMotherNature();
 
         // create Bag and students
@@ -223,7 +223,7 @@ public class Game {
         bag.setStudents(students);
 
         //calculate opposite MotherNature's Island
-        int oppositeMotherNaturePos = (motherNaturePosition + 6)%islands.size();
+        int oppositeMotherNaturePos = (motherNaturePosition + 6) % islands.size();
         // placing students except MotherNature's Island and the opposite one
         Island islandOppositeMN = islands.get(oppositeMotherNaturePos);
         for (Island island : islands) {
@@ -303,7 +303,7 @@ public class Game {
      * taking advantage of the comparable interface of Player
      */
     public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFoundException {
-        if(playerDrawnOut==false)throw new IncorrectStateException();
+        if (playerDrawnOut == false) throw new IncorrectStateException();
         if (state == State.PLANNINGPHASE) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {  //playerDrawnOut = player has drawn from bag
                 for (Player p : players) {
@@ -372,7 +372,7 @@ public class Game {
         }
 
         //notify current player
-        if(currentPlayer.getNickname()!=null) {
+        if (currentPlayer.getNickname() != null) {
             PropertyChangeEvent changeCurrentPlayer =
                     new PropertyChangeEvent(this, "current-player", null, currentPlayer.getNickname());
             gameListener.propertyChange(changeCurrentPlayer);
@@ -396,7 +396,7 @@ public class Game {
                 gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
-                playerDrawnOut=false;
+                playerDrawnOut = false;
                 PropertyChangeEvent phaseChange =
                         new PropertyChangeEvent(this, "change-phase", state, null);
                 gameListener.propertyChange(phaseChange);
@@ -507,12 +507,12 @@ public class Game {
         if (state == State.ACTIONPHASE_3) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
 
-                for (int i = 0; i < clouds.size(); i++){
-                    if (clouds.get(i).getName().equals(name)){
+                for (int i = 0; i < clouds.size(); i++) {
+                    if (clouds.get(i).getName().equals(name)) {
                         index = i;
                     }
                 }
-                if (index == -1){
+                if (index == -1) {
                     throw new IncorrectArgumentException();
                 }
 
@@ -539,43 +539,50 @@ public class Game {
      * control it moves the Mother Nature and it eventually moves the towers and unify islands.
      */
     public void moveMotherNature(String playerCaller, int distanceChosen) throws
-            IncorrectPlayerException, IncorrectArgumentException,
-            MotherNatureLostException, IncorrectStateException, NegativeValueException {
+            IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, NegativeValueException {
+
         if (playerCaller.equals(currentPlayer.getNickname())) {
             if (state == State.ACTIONPHASE_2) {
-                int destinationMotherNature = (motherNaturePosition + distanceChosen)%islands.size();
-                if (islands.get(motherNaturePosition).hasMotherNature()) {
-                    if (distanceChosen <= getMaxMotherNatureMove()) {
-                        //notify oldIsland
-                        StrippedIsland oldIsland = new StrippedIsland(islands.get(motherNaturePosition)); //saving oldIsland source
-                        islands.get(motherNaturePosition).removeMotherNature();
-                        StrippedIsland changedIsland = new StrippedIsland(islands.get(motherNaturePosition));
-                        PropertyChangeEvent evt = new PropertyChangeEvent(this, "island", oldIsland, changedIsland);
-                        gameListener.propertyChange(evt);
-                        //notify destination island
-                        StrippedIsland oldIslandDest = new StrippedIsland(islands.get(destinationMotherNature)); //saving oldIsland destination
-                        islands.get(destinationMotherNature).moveMotherNature();
-                        //notify new newIslandDest (changedIsland)
-                        changedIsland = new StrippedIsland(islands.get(destinationMotherNature));
-                        PropertyChangeEvent evtDest = new PropertyChangeEvent(this, "island", oldIslandDest, changedIsland);
-                        gameListener.propertyChange(evtDest);
-                        //ended notifications
-                        motherNaturePosition = destinationMotherNature;
-                        resolveMotherNature(destinationMotherNature);
-                        state = State.ACTIONPHASE_3;
-                        PropertyChangeEvent phaseChange =
-                                new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
-                        gameListener.propertyChange(phaseChange);
-                    } else {
-                        throw new IncorrectArgumentException();
-                    }
+                motherNaturePosition = findMotherNature();
+                int destinationMotherNature = (motherNaturePosition + distanceChosen) % islands.size();
+                if (distanceChosen <= getMaxMotherNatureMove()) {
+                    //notify oldIsland
+                    StrippedIsland oldIsland = new StrippedIsland(islands.get(motherNaturePosition)); //saving oldIsland source
+                    islands.get(motherNaturePosition).removeMotherNature();
+                    StrippedIsland changedIsland = new StrippedIsland(islands.get(motherNaturePosition));
+                    PropertyChangeEvent evt = new PropertyChangeEvent(this, "island", oldIsland, changedIsland);
+                    gameListener.propertyChange(evt);
+                    //notify destination island
+                    StrippedIsland oldIslandDest = new StrippedIsland(islands.get(destinationMotherNature)); //saving oldIsland destination
+                    islands.get(destinationMotherNature).moveMotherNature();
+                    //notify new newIslandDest (changedIsland)
+                    changedIsland = new StrippedIsland(islands.get(destinationMotherNature));
+                    PropertyChangeEvent evtDest = new PropertyChangeEvent(this, "island", oldIslandDest, changedIsland);
+                    gameListener.propertyChange(evtDest);
+                    //ended notifications
+                    motherNaturePosition = destinationMotherNature;
+                    resolveMotherNature(destinationMotherNature);
+                    state = State.ACTIONPHASE_3;
+                    PropertyChangeEvent phaseChange =
+                            new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
+                    gameListener.propertyChange(phaseChange);
                 } else {
-                    throw new MotherNatureLostException();
+                    throw new IncorrectArgumentException();
                 }
             } else throw new IncorrectStateException(state.toString());
         } else throw new IncorrectPlayerException();
     }
 
+    private int findMotherNature() throws MotherNatureLostException {
+        int i = 0;
+        for (Island is : islands) {
+            if (is.hasMotherNature()) {
+                return i;
+            }
+            i++;
+        }
+        throw new MotherNatureLostException();
+    }
     public void resolveMotherNature(int island) throws NegativeValueException {
         if (islands.get(island).hasNoEntryTile()) {
             islands.get(island).setHasNoEntryTile(false);
@@ -707,7 +714,8 @@ public class Game {
                 island.setTowersColor(newTeamOwner);
                 try {
                     island.sumTowers(1);
-                } catch (NegativeValueException ignored) {}
+                } catch (NegativeValueException ignored) {
+                }
 
                 //notify island change
                 StrippedIsland islandChangedStripped = new StrippedIsland(island);
@@ -784,15 +792,14 @@ public class Game {
             gameListener.propertyChange(towersEvent);
         }
     }
-
     public void checkUnificationIslands() throws NegativeValueException {
         boolean listChanged = false;
         Island currentTile;
         Island prevTile;
         int islandToDestroy = -1;
 
-        for(int i=0;i<islands.size() && !listChanged;i++) {
-            if (i+1<islands.size()) currentTile = islands.get(i+1);
+        for (int i = 0; i < islands.size() && !listChanged &&islands.size()>1; i++) {
+            if (i + 1 < islands.size()) currentTile = islands.get(i + 1);
             else currentTile = islands.get(0);
 
             prevTile = islands.get(i);
@@ -811,13 +818,13 @@ public class Game {
                 PropertyChangeEvent islandDeletedEvent =
                         new PropertyChangeEvent(this, "island-merged", deletedTile, null);
                 gameListener.propertyChange(islandDeletedEvent);
-                listChanged=true;
+                listChanged = true;
                 islandToDestroy = i;
             }
         }
 
-        if (listChanged){
-            if(islandToDestroy>0)islands.remove(islandToDestroy);
+        if (listChanged) {
+            if (islandToDestroy > 0) islands.remove(islandToDestroy);
             checkUnificationIslands();//recursive method necessary to check double+ unification in a single time
         }
     }
