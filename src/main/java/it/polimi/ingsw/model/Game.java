@@ -11,21 +11,18 @@ import it.polimi.ingsw.model.enumerations.Actions;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.model.enumerations.Towers;
-import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
-import it.polimi.ingsw.network.server.stripped.StrippedCloud;
-import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import it.polimi.ingsw.model.tiles.Cloud;
 import it.polimi.ingsw.model.tiles.Island;
 import it.polimi.ingsw.network.server.Room;
+import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
+import it.polimi.ingsw.network.server.stripped.StrippedCloud;
+import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Arrays.stream;
 
 public class Game {
     private State state;
@@ -422,7 +419,7 @@ public class Game {
     public void moveStudents(String playerCaller, EnumMap<Colors, ArrayList<String>> studentsToMove) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException {
         if (currentPlayer.getNickname().equals(playerCaller)) {
             if (state == State.ACTIONPHASE_1) {
-                int oldCoins=currentPlayer.getCoins(), newCoins;
+                int oldCoins = currentPlayer.getCoins(), newCoins;
                 //First a check if the number of students moved is right
                 int numOfStudents;
                 if (numOfPlayer == 3) numOfStudents = 4;
@@ -491,11 +488,10 @@ public class Game {
                 if (isDiningChanged) {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
                     //notify dining AND entrance AND possible coins change
-                    newCoins=currentPlayer.getCoins();
-                    if (newCoins!=oldCoins)
-                    {
-                        PropertyChangeEvent coinsAddedEvent=
-                                new PropertyChangeEvent(this, "coins",currentPlayer.getNickname(), newCoins);
+                    newCoins = currentPlayer.getCoins();
+                    if (newCoins != oldCoins) {
+                        PropertyChangeEvent coinsAddedEvent =
+                                new PropertyChangeEvent(this, "coins", currentPlayer.getNickname(), newCoins);
                         gameListener.propertyChange(coinsAddedEvent);
                     }
                     EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
@@ -595,9 +591,15 @@ public class Game {
         }
         throw new MotherNatureLostException();
     }
+
     public void resolveMotherNature(int island) throws NegativeValueException {
         if (islands.get(island).hasNoEntryTile()) {
             islands.get(island).setHasNoEntryTile(false);
+            for (CharacterCard card : characterCards) {
+                if (card.getAbility().getAction().equals(Actions.NO_ENTRY_TILE)) {
+                    card.incrementNoTileNumber();
+                }
+            }
         } else {
             checkAndPlaceTower(islands.get(island));
             checkUnificationIslands();
@@ -753,6 +755,7 @@ public class Game {
             }
         }
     }
+
     public ArrayList<Player> findPlayerFromTeam(Towers teamColor) {
         Player firstPlayer = null;
         Player secondPlayer = null; // in case of 4 players I have to check both players of the team
@@ -804,13 +807,14 @@ public class Game {
             gameListener.propertyChange(towersEvent);
         }
     }
+
     public void checkUnificationIslands() throws NegativeValueException {
         boolean listChanged = false;
         Island currentTile;
         Island prevTile;
         int islandToDestroy = -1;
 
-        for (int i = 0; i < islands.size() && !listChanged &&islands.size()>1; i++) {
+        for (int i = 0; i < islands.size() && !listChanged && islands.size() > 1; i++) {
             if (i + 1 < islands.size()) currentTile = islands.get(i + 1);
             else currentTile = islands.get(0);
 
