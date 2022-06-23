@@ -21,7 +21,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-/** @noinspection rawtypes*/
 public class CharacterSwapController extends InitialStage implements Controller {
     @FXML
     private Button cancelButton, confirmButton;
@@ -156,7 +155,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
                 c++;
             }
 
-            PlayCharacterCardC playCharacterCardC = new PlayCharacterCardC(GUI.client.getNickname(), GUI.client.getLocalModel().selectedCharacter.getCharacterID(), swap1, swap2);
+            PlayCharacterCardC playCharacterCardC = new PlayCharacterCardC(GUI.client.getNickname(), selectedCharacter.getCharacterID(), swap1, swap2);
             try {
                 GUI.client.performGameAction(playCharacterCardC);
             } catch (NotEnoughCoinsException e) {
