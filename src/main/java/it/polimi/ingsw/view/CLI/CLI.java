@@ -695,27 +695,45 @@ public class CLI implements UI {
         printClouds();
         int i;
         String input;
-        while (true) {
-            input = in.next();
-            try {
-                i = Integer.parseInt(input);
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("That's not a number! Try again.\n");
-            }
-        }
-        while (i < 0 || i > client.getLocalModel().getClouds().size()) {
-            System.out.println("Invalid cloud number! Try again.\n");
+        EnumMap<Colors, Integer> emptyEnum= new EnumMap<>(Colors.class);
+        emptyEnum=initializeMove(emptyEnum);
+        boolean invalidCloud;
+        do {
             while (true) {
                 input = in.next();
                 try {
                     i = Integer.parseInt(input);
+                    invalidCloud=false;
                     break;
                 } catch (NumberFormatException e) {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
-        }
+            while (i < 0 || i > client.getLocalModel().getClouds().size()) {
+                System.out.println("Invalid cloud number! Try again.\n");
+                while (true) {
+                    input = in.next();
+                    try {
+                        i = Integer.parseInt(input);
+                        break;
+                    } catch (NumberFormatException e) {
+                        System.out.println("That's not a number! Try again.\n");
+                    }
+                }
+                if (client.getLocalModel().getClouds().get(i).getStudents().equals(emptyEnum))
+                {
+                    System.out.println("Someone already picked that cloud! Try another.");
+                }
+                else {
+                    invalidCloud = false;
+                    break;
+                }
+
+
+            }
+        }while(invalidCloud);
+
+        //Reached a valid cloud color
         pickCloudOrder = new PickCloud(client.getNickname(), "cloud"+i);
        // System.out.println(client.getLocalModel().getState());
         client.performGameAction(pickCloudOrder);

@@ -816,7 +816,7 @@ public class Game {
                         new PropertyChangeEvent(this, "island", mergedTile, mergedTile);
                 gameListener.propertyChange(islandMergeEvent);
                 PropertyChangeEvent islandDeletedEvent =
-                        new PropertyChangeEvent(this, "island-merged", deletedTile, null);
+                        new PropertyChangeEvent(this, "island-merged", deletedTile, mergedTile);
                 gameListener.propertyChange(islandDeletedEvent);
                 listChanged = true;
                 islandToDestroy = i;
