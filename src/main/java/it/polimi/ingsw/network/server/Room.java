@@ -52,20 +52,8 @@ public class Room implements PropertyChangeListener {
     public synchronized void addUser(ClientConnection user) {
         players.add(user);
     }
-
     public synchronized void removeUser(ClientConnection user) {
         players.remove(user);
-    }
-
-    public synchronized void kickOut() {
-        if (this.isInGame()) {
-            PropertyChangeEvent gameFinished =
-                    new PropertyChangeEvent(this, "leave-game", null, null);
-            addEventToBuffer(gameFinished);
-
-            players = new ArrayList<>(); //the players array is reset, the room will be deleted by the server
-            System.out.println("Room kicked out every players after a player leaves the game.");
-        }
     }
 
     public synchronized void startGame() throws NegativeValueException, IncorrectArgumentException, InterruptedException {
@@ -157,5 +145,10 @@ public class Room implements PropertyChangeListener {
 
     public synchronized boolean isInGame() {
         return inGame;
+    }
+
+    public synchronized void notifyPlayerInGameLeaves(PropertyChangeEvent finalEvent){
+        addEventToBuffer(finalEvent);
+        System.out.println("notificato che utente ha abbandonato");
     }
 }
