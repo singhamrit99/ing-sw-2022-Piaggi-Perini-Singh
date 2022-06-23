@@ -15,11 +15,9 @@ import it.polimi.ingsw.network.server.commands.*;
 import it.polimi.ingsw.view.UI;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
-
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.*;
-
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
 import static org.fusesource.jansi.Ansi.ansi;
