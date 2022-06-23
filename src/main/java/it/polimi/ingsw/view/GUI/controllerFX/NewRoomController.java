@@ -20,9 +20,7 @@ public class NewRoomController extends InitialStage implements Controller {
     @FXML
     private TextField roomName;
     @FXML
-    private Button cancelButton;
-    @FXML
-    private Button createNewGameButton;
+    private Button cancelButton, createNewGameButton;
 
     public NewRoomController(GUI gui) {
         super(gui);
