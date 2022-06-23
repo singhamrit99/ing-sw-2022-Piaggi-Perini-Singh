@@ -52,7 +52,7 @@ public class Player implements Comparable<Player> {
         schoolBoard.addStudents(students);
     }
 
-    public void moveStudents(EnumMap<Colors, Integer> move, EnumMap<Colors, Integer> remove) throws NegativeValueException {
+    public void moveStudents(EnumMap<Colors, Integer> move, EnumMap<Colors, Integer> remove) throws NegativeValueException, IncorrectArgumentException {
         EnumMap<Colors, Integer> total = new EnumMap<>(Colors.class);
         for (Colors color : Colors.values()) {
             total.put(color, move.get(color) + remove.get(color));
@@ -64,7 +64,7 @@ public class Player implements Comparable<Player> {
             if (remove.size() != 0) schoolBoard.removeStudents(remove);
             System.out.println("Coins after: " + coins);
         } else {
-            throw new IllegalArgumentException("EnumMap is incorrect");
+            throw new IncorrectArgumentException("EnumMap is incorrect");
         }
     }
 
