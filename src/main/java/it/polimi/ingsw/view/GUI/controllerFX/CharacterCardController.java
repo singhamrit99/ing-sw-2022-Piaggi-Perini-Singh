@@ -1,17 +1,16 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
-import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.*;
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -75,19 +74,11 @@ public class CharacterCardController extends InitialStage implements Controller 
                     FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
                     loader.setController(new CharacterNoControlsController(gui));
 
-                    Scene scene = null;
                     try {
-                        scene = new Scene(loader.load());
+                        Controller.loadScene(loader);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Stage stage = new Stage();
-                    stage.setTitle(StringNames.TITLE);
-                    stage.setResizable(false);
-                    stage.initStyle(StageStyle.UNDECORATED);
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.setScene(scene);
-                    stage.showAndWait();
                     break;
                 case 3:
                 case 9:
@@ -96,20 +87,11 @@ public class CharacterCardController extends InitialStage implements Controller 
                     loader = new FXMLLoader(Controller.class.getResource(filePath));
                     loader.setController(new CharacterOneSelectController(gui));
 
-                    scene = null;
                     try {
-                        scene = new Scene(loader.load());
+                        Controller.loadScene(loader);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    stage = new Stage();
-                    stage.setTitle(StringNames.TITLE);
-                    stage.setResizable(false);
-                    stage.initStyle(StageStyle.UNDECORATED);
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.setScene(scene);
-                    stage.showAndWait();
                     break;
                 case 1:
                 case 11:
@@ -117,61 +99,34 @@ public class CharacterCardController extends InitialStage implements Controller 
                     loader = new FXMLLoader(Controller.class.getResource(filePath));
                     loader.setController(new CharacterMultipleSelectController(gui));
 
-                    scene = null;
                     try {
-                        scene = new Scene(loader.load());
+                        Controller.loadScene(loader);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    stage = new Stage();
-                    stage.setTitle(StringNames.TITLE);
-                    stage.setResizable(false);
-                    stage.initStyle(StageStyle.UNDECORATED);
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.setScene(scene);
-                    stage.showAndWait();
                     break;
                 case 7:
                 case 10:
                     filePath = ResourcesPath.FXML_FILE_PATH + "CharacterSwapView" + ResourcesPath.FILE_EXTENSION;
                     loader = new FXMLLoader(Controller.class.getResource(filePath));
-                    //loader.setController(new CharacterSwapController(gui));
+                    loader.setController(new CharacterSwapController(gui));
 
-                    scene = null;
                     try {
-                        scene = new Scene(loader.load());
+                        Controller.loadScene(loader);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    stage = new Stage();
-                    stage.setTitle(StringNames.TITLE);
-                    stage.setResizable(false);
-                    stage.initStyle(StageStyle.UNDECORATED);
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.setScene(scene);
-                    stage.showAndWait();
                     break;
                 case 5:
                     filePath = ResourcesPath.FXML_FILE_PATH + "CharacterTileView" + ResourcesPath.FILE_EXTENSION;
                     loader = new FXMLLoader(Controller.class.getResource(filePath));
-                    //loader.setController(new CharacterTileController(gui));
+                    loader.setController(new CharacterTileController(gui));
 
-                    scene = null;
                     try {
-                        scene = new Scene(loader.load());
+                        Controller.loadScene(loader);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    stage = new Stage();
-                    stage.setTitle(StringNames.TITLE);
-                    stage.setResizable(false);
-                    stage.initStyle(StageStyle.UNDECORATED);
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.setScene(scene);
-                    stage.showAndWait();
                     break;
                 default:
                     break;
