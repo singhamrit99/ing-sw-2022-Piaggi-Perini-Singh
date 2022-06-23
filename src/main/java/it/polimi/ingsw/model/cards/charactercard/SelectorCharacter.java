@@ -13,12 +13,13 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
 
     /**
      * SelectorCharacter constructor
-     * @param imageName Taken from father CharacterCard in CharacterCardFactory.
+     *
+     * @param imageName     Taken from father CharacterCard in CharacterCardFactory.
      * @param startingPrice Taken from father CharacterCard in CharacterCardFactory.
-     * @param description Taken from father CharacterCard in CharacterCardFactory.
-     * @param type Taken from father CharacterCard in CharacterCardFactory.
-     * @param ability Taken from father CharacterCard in CharacterCardFactory.
-     * @param requirements Taken from father CharacterCard in CharacterCardFactory.
+     * @param description   Taken from father CharacterCard in CharacterCardFactory.
+     * @param type          Taken from father CharacterCard in CharacterCardFactory.
+     * @param ability       Taken from father CharacterCard in CharacterCardFactory.
+     * @param requirements  Taken from father CharacterCard in CharacterCardFactory.
      */
     public SelectorCharacter(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) {
         super(imageName, startingPrice, description, type, ability, requirements);
@@ -32,10 +33,11 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
 
     /**
      * Activate override in Selector Character
+     *
      * @param game The game in which the card is being activated
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws ProfessorNotFoundException Thrown if the professor assignment method fails to find the related professor, either because of a color
-     *                                     mismatch or other internal error.
+     *                                    mismatch or other internal error.
      */
     @Override
     public void activate(Game game) throws NegativeValueException, ProfessorNotFoundException {
@@ -47,6 +49,7 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
             case NO_ENTRY_TILE:
                 if (!game.getIsland(choiceIndex).hasNoEntryTile()) {
                     game.getIsland(choiceIndex).setHasNoEntryTile(true);
+                    noTileNumber--;
                     setStatus(2);
                 }
                 setStatus(0);
@@ -61,6 +64,7 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
 
     /**
      * Choice index setter method.
+     *
      * @param choiceIndex parameter used in selector characters.
      */
     public void setChoiceIndex(int choiceIndex) {
@@ -69,9 +73,14 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
 
     /**
      * Getter for No Entry Tiles value.
+     *
      * @return No Entry Tiles left on the card.
      */
     public int getNoTileNumber() {
         return noTileNumber;
+    }
+
+    public void incrementNoTileNumber() {
+        noTileNumber++;
     }
 }
