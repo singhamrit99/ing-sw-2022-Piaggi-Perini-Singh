@@ -2,10 +2,8 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.StudentManager;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.network.server.commands.MoveStudents;
-import it.polimi.ingsw.network.server.commands.PlayAssistantCard;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -117,16 +115,16 @@ public class MoveStudentsController extends InitialStage implements Controller {
                 destinations = new ArrayList<>();
 
                 if (diningComboBoxes.get(i).getSelectionModel().getSelectedIndex() != 0) {
-                    value = Integer.parseInt((String) diningComboBoxes.get(i).getSelectionModel().getSelectedItem());
+                    value = Integer.parseInt(diningComboBoxes.get(i).getSelectionModel().getSelectedItem().toString());
                     for (int j = 0; j < value; j++) {
                         destinations.add(dining);
                     }
                 }
 
                 if (islandNumber.getSelectionModel().getSelectedIndex() != 0 && islandsComboBoxes.get(i).getSelectionModel().getSelectedItem() != null) {
-                    value = Integer.parseInt((String) islandsComboBoxes.get(i).getSelectionModel().getSelectedItem());
+                    value = Integer.parseInt(islandsComboBoxes.get(i).getSelectionModel().getSelectedItem().toString());
                     for (int j = 0; j < value; j++) {
-                        destinations.add(GUI.client.getLocalModel().getIslands().get(value).getName());
+                        destinations.add("island" + value);
                     }
                 }
 
@@ -177,8 +175,7 @@ public class MoveStudentsController extends InitialStage implements Controller {
     public void loadComboBox(ComboBox comboBox, int num) {
         ObservableList<String> choices = FXCollections.observableArrayList();
 
-        choices.add("None");
-        for (int i = 1; i <= num; i++)
+        for (int i = 0; i <= num; i++)
             choices.add(Integer.toString(i));
 
         comboBox.setItems(choices);
