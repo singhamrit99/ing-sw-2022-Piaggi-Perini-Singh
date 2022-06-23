@@ -125,14 +125,21 @@ public class GameViewController extends InitialStage implements Controller {
 
         leaveGame.setOnAction((event) -> { //leaving game
             try {
+                reloadRoomsFromGameView();
                 GUI.client.leaveRoom();
-                Platform.exit();
-                System.exit(0);
-            } catch (RemoteException | UserNotInRoomException | UserNotRegisteredException ignored) {
+            } catch (RemoteException | UserNotInRoomException | UserNotRegisteredException e) {
+                e.printStackTrace();
+                //reverting reloadRoomsFromGameView() effects:
+                opened.set(true);
+                GUI.client.view = StringNames.INGAME;
             }
         });
     }
 
+    public void reloadRoomsFromGameView(){
+        opened.set(false);
+        GUI.client.view = StringNames.LOBBY;
+    }
     public void changeViewBoard(String viewOwnerTarget) {
         if (GUI.client.getLocalPlayerList().contains(viewOwnerTarget)) {
             currentBoardView = viewOwnerTarget;
@@ -314,25 +321,26 @@ public class GameViewController extends InitialStage implements Controller {
     @FXML
     StackPane coinsIndicator;
 
-    public void reloadCoins(){
+    public void reloadCoins() {
         boolean expert = false;
         try {
             expert = GUI.client.getExpertMode();
-        } catch (RemoteException | RoomNotExistsException ignored) {}
+        } catch (RemoteException | RoomNotExistsException ignored) {
+        }
 
-        if(expert){
+        if (expert) {
             coinsIndicator.setVisible(true);
             try {
                 int coins = GUI.client.getLocalModel().getBoardOf(currentBoardView).getCoins();
                 coinsText.setText(Integer.toString(coins));
-            }catch (LocalModelNotLoadedException e){
+            } catch (LocalModelNotLoadedException e) {
                 //TODO
             }
-        }
-        else{
+        } else {
             coinsIndicator.setVisible(false);
         }
     }
+
     public void reloadIslands() {
         islandsPanes = new ArrayList<>();
         islandsPane.getChildren().clear();
