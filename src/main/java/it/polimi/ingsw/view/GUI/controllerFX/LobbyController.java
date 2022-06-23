@@ -6,7 +6,6 @@ import it.polimi.ingsw.exceptions.RoomInGameException;
 import it.polimi.ingsw.exceptions.RoomNotExistsException;
 import it.polimi.ingsw.exceptions.UserNotRegisteredException;
 import it.polimi.ingsw.view.GUI.GUI;
-import it.polimi.ingsw.view.GUI.GUILauncher;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -32,9 +31,7 @@ public class LobbyController extends InitialStage implements Controller {
     @FXML
     private GridPane roomsList;
     @FXML
-    private Button createRoomButton;
-    @FXML
-    private Button exitButton;
+    private Button createRoomButton, exitButton;
 
     public LobbyController(GUI gui) {
         super(gui);
