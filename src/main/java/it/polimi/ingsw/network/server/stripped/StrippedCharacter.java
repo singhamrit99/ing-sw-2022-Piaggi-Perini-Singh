@@ -27,11 +27,8 @@ public class StrippedCharacter implements Serializable {
 
         //If there are no students this should just return null
         setStudents(card.getStudents());
-        //If this card is the right one we get no entry tiles, otherwise we don't
-        if (card.getAbility().getAction().equals(Actions.NO_ENTRY_TILE))
-            setNoEntryTiles(4);
-        else
-            setNoEntryTiles(0);
+        //If there are no tiles this should just put 0
+        setNoEntryTiles(card.getNoTileNumber());
     }
 
     public int getCharacterID() {
@@ -63,7 +60,7 @@ public class StrippedCharacter implements Serializable {
     }
 
     public boolean sameCard(StrippedCharacter other) {
-        if (this.characterID==other.getCharacterID()) return true;
+        if (this.characterID == other.getCharacterID()) return true;
         return description.equals(other.description) && type.getName().equals(other.type.getName())
                 && requirements.equals(other.getRequirements());
     }
