@@ -20,7 +20,6 @@ public class StrippedModel implements Serializable {
     final private ArrayList<StrippedCloud> clouds;
     final private ArrayList<StrippedIsland> islands;
     private String currentPlayer;
-    private String winnerTeam;
     private UI ui;
     private boolean canPlayMN;
     private State state;
@@ -85,10 +84,6 @@ public class StrippedModel implements Serializable {
             case "current-player":
                 setCurrentPlayer((String) evt.getNewValue());
                 ui.currentPlayer((String) evt.getNewValue());
-                break;
-            case "game-over":
-                winnerTeam = (String) evt.getNewValue();
-                ui.gameOver(winnerTeam);
                 break;
             case "change-phase":
                 setState(evt);
