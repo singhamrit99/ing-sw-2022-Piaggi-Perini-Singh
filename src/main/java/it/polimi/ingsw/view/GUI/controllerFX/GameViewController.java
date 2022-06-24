@@ -238,7 +238,7 @@ public class GameViewController extends InitialStage implements Controller {
         try {
             expert = GUI.client.getExpertMode();
         } catch (RemoteException | RoomNotExistsException e) {
-            //TODO exception
+            Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
         }
 
         //default state is with students hidden
@@ -828,7 +828,7 @@ public class GameViewController extends InitialStage implements Controller {
                 cloud2.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CLOUD_2))));
                 cloud3.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CLOUD_3))));
             } catch (IOException e) {
-                throw new RuntimeException(e); //todo
+                Controller.showErrorDialogBox(StringNames.ERROR_IO);
             }
             cloud4.setVisible(false);
         } else if (numOfPlayers == 2) {
