@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
+import it.polimi.ingsw.model.enumerations.State;
 import it.polimi.ingsw.network.server.commands.DrawFromBagCommand;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
@@ -192,31 +193,33 @@ public class GameViewController extends InitialStage implements Controller {
 
     private void reloadBag() {
         bag.setOnMouseClicked(mouseEvent -> {
-            DrawFromBagCommand drawFromBagOrder = new DrawFromBagCommand(GUI.client.getNickname());
-            try {
-                GUI.client.performGameAction(drawFromBagOrder);
-            } catch (NotEnoughCoinsException e) {
-                Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
-            } catch (AssistantCardNotFoundException e) {
-                Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
-            } catch (NegativeValueException e) {
-                Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
-            } catch (IncorrectStateException e) {
-                Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
-            } catch (MotherNatureLostException e) {
-                Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
-            } catch (ProfessorNotFoundException e) {
-                Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
-            } catch (IncorrectPlayerException e) {
-                Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
-            } catch (RemoteException e) {
-                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
-            } catch (UserNotInRoomException e) {
-                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
-            } catch (IncorrectArgumentException e) {
-                Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
-            } catch (UserNotRegisteredException e) {
-                Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+            if (GUI.client.getLocalModel().getState().equals(State.PLANNINGPHASE) && GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {
+                DrawFromBagCommand drawFromBagOrder = new DrawFromBagCommand(GUI.client.getNickname());
+                try {
+                    GUI.client.performGameAction(drawFromBagOrder);
+                } catch (NotEnoughCoinsException e) {
+                    Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
+                } catch (AssistantCardNotFoundException e) {
+                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
+                } catch (NegativeValueException e) {
+                    Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
+                } catch (IncorrectStateException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
+                } catch (MotherNatureLostException e) {
+                    Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
+                } catch (ProfessorNotFoundException e) {
+                    Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
+                } catch (IncorrectPlayerException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
+                } catch (RemoteException e) {
+                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                } catch (UserNotInRoomException e) {
+                    Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                } catch (IncorrectArgumentException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                } catch (UserNotRegisteredException e) {
+                    Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                }
             }
         });
     }
@@ -297,13 +300,15 @@ public class GameViewController extends InitialStage implements Controller {
         }
 
         characters.setOnMouseClicked(mouseEvent -> {
-            String filePath = ResourcesPath.FXML_FILE_PATH + "SelectCharacterView" + ResourcesPath.FILE_EXTENSION;
-            FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
-            loader.setController(new CharacterCardController(gui));
-            try {
-                Controller.loadScene(loader);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if ((GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_1) || GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_2) || GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) && GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {
+                String filePath = ResourcesPath.FXML_FILE_PATH + "SelectCharacterView" + ResourcesPath.FILE_EXTENSION;
+                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+                loader.setController(new CharacterCardController(gui));
+                try {
+                    Controller.loadScene(loader);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -359,13 +364,15 @@ public class GameViewController extends InitialStage implements Controller {
         islandsImgs.add(island2);
 
         islandsPane.setOnMouseClicked((event) -> {
-            try {
-                String filePath = ResourcesPath.FXML_FILE_PATH + "MoveMotherNatureView" + ResourcesPath.FILE_EXTENSION;
-                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
-                loader.setController(new MoveMotherNatureController(gui));
-                Controller.loadScene(loader);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_2) && GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {
+                try {
+                    String filePath = ResourcesPath.FXML_FILE_PATH + "MoveMotherNatureView" + ResourcesPath.FILE_EXTENSION;
+                    FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+                    loader.setController(new MoveMotherNatureController(gui));
+                    Controller.loadScene(loader);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -682,13 +689,15 @@ public class GameViewController extends InitialStage implements Controller {
 
     public void reloadEntrance() {
         board.setOnMouseClicked((event) -> {
-            try {
-                String filePath = ResourcesPath.FXML_FILE_PATH + "MoveStudentsView" + ResourcesPath.FILE_EXTENSION;
-                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
-                loader.setController(new MoveStudentsController(gui));
-                Controller.loadScene(loader);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_1) && GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {
+                try {
+                    String filePath = ResourcesPath.FXML_FILE_PATH + "MoveStudentsView" + ResourcesPath.FILE_EXTENSION;
+                    FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+                    loader.setController(new MoveStudentsController(gui));
+                    Controller.loadScene(loader);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -800,14 +809,16 @@ public class GameViewController extends InitialStage implements Controller {
     }
 
     private void pickCloud() {
-        try {
-            String filePath = ResourcesPath.FXML_FILE_PATH + "TakeStudentsFromCloudView" + ResourcesPath.FILE_EXTENSION;
-            FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
-            loader.setController(new TakeFromCloudTilesController(gui));
+        if (GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {
+            try {
+                String filePath = ResourcesPath.FXML_FILE_PATH + "TakeStudentsFromCloudView" + ResourcesPath.FILE_EXTENSION;
+                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+                loader.setController(new TakeFromCloudTilesController(gui));
 
-            Controller.loadScene(loader);
-        } catch (IOException e) {
-            e.printStackTrace();
+                Controller.loadScene(loader);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1021,14 +1032,16 @@ public class GameViewController extends InitialStage implements Controller {
 
     private void loadAssistantDeck() {
         assistantDeck.setOnMouseClicked(mouseEvent -> {
-            try {
-                String filePath = ResourcesPath.FXML_FILE_PATH + "SelectAssistantView" + ResourcesPath.FILE_EXTENSION;
-                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
-                loader.setController(new AssistantCardController(gui));
+            if (GUI.client.getLocalModel().getState().equals(State.PLANNINGPHASE) && GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {
+                try {
+                    String filePath = ResourcesPath.FXML_FILE_PATH + "SelectAssistantView" + ResourcesPath.FILE_EXTENSION;
+                    FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
+                    loader.setController(new AssistantCardController(gui));
 
-                Controller.loadScene(loader);
-            } catch (IOException e) {
-                e.printStackTrace();
+                    Controller.loadScene(loader);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
