@@ -414,7 +414,6 @@ public class Game {
         }
         orderPlayers.add(currentPlayer); //adding to priority queue the player in the correct order
         nextPlayer();
-        System.out.println("Next player is" + currentPlayer.getNickname());
     }
 
     /**
@@ -587,7 +586,6 @@ public class Game {
                 PropertyChangeEvent phaseChange =
                         new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
                 gameListener.propertyChange(phaseChange);
-                System.out.println("Send property change event for dining room\n");
                 if (isDiningChanged) {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
                     //notify dining AND entrance AND possible coins change
