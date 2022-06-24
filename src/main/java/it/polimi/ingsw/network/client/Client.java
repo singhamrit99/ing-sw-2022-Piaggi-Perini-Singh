@@ -124,8 +124,6 @@ public class Client implements Runnable {
             playersList = getNicknamesInRoom();
         } catch (UserNotInRoomException ignored) {
             ignored.printStackTrace();
-        } catch (UserInRoomException problem) {
-            problem.printStackTrace(); //TODO
         }
         ui.roomJoin(playersList);
     }
@@ -235,8 +233,6 @@ public class Client implements Runnable {
         ui.roomsAvailable(roomList);
     }
 
-    int oldSize = 0;
-    boolean firstRoomListRefactor = true;
     /**
      * Run method that continuously listens to update events coming from the Game Listener.
      */
@@ -283,7 +279,7 @@ public class Client implements Runnable {
                     }
                 }
                 Thread.sleep(100);
-            } catch (RemoteException | LocalModelNotLoadedException | InterruptedException | UserNotInRoomException | RoomNotExistsException e) {
+            } catch (RemoteException | LocalModelNotLoadedException | InterruptedException | UserNotInRoomException  e) {
                 e.printStackTrace();
             } catch (UserNotRegisteredException e) {
                 e.printStackTrace();
@@ -317,7 +313,7 @@ public class Client implements Runnable {
      * Method that actually manages the events received in the run method.
      * @param evtArray The events buffer that need to be managed and sorted via their identificators.
      * @throws LocalModelNotLoadedException Thrown if localModel field is null.
-     * @throws BadFormattedLocalModelEvent Thrown if localModel is present but incorrectly built.
+     * @throws BadFormattedLocalModelException Thrown if localModel is present but incorrectly built.
      */
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
         for (PropertyChangeEvent evt : evtArray) {

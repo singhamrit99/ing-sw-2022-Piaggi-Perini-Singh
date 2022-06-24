@@ -542,6 +542,11 @@ public class CLI implements UI {
 
     // **********************************   Gameplay methods    ***************************************************************
 
+    public void leaveGame() throws UserNotInRoomException, UserNotRegisteredException, RemoteException {
+        client.leaveGame();
+    }
+
+
     public void drawFromBag() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         drawFromBagOrder = new DrawFromBagCommand(client.getNickname());
         System.out.println("Drawing from bag...\n");
@@ -605,7 +610,7 @@ public class CLI implements UI {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
-        } while (action < 1 || action > 7);
+        } while (action < 1 || action > 8);
         switch (action) {
             case 1:
                 printPlayerBoards();
@@ -628,6 +633,8 @@ public class CLI implements UI {
             case 7:
                 printCommandHelp();
                 break;
+            case 8:
+                leaveGame();
             default:
                 System.out.println("Invalid input, try again\n");
         }
@@ -649,7 +656,7 @@ public class CLI implements UI {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
-        } while (action < 1 || action > 9);
+        } while (action < 1 || action > 10);
         switch (action) {
             case 1:
                 printPlayerBoards();
@@ -677,6 +684,8 @@ public class CLI implements UI {
                 break;
             case 9:
                 expertPrintCommandHelp();
+            case 10:
+                leaveGame();
                 break;
             default:
                 //TODO: add exception
@@ -1469,6 +1478,7 @@ public class CLI implements UI {
                 "|\"Press 5 to move students across the islands and the dining room      |\n" +
                 "|\"Press 6 to move mother nature. This will end your turn               |\n" +
                 "|\"Press 7 to view this message again                                   |\n" +
+                "|\"Press 8 to leave the game                                            |\n" +
                 "O-----------------------------------------------------------------------O");
     }
 
@@ -1484,6 +1494,7 @@ public class CLI implements UI {
                 "|\"Press 7 to see the character cards in the game                       |\n" +
                 "|\"Press 8 to play a character card                                     |\n" +
                 "|\"Press 9 to view this message again                                   |\n" +
+                "|\"Press 10 to leave the game                                            |\n" +
                 "O-----------------------------------------------------------------------O");
     }
 
