@@ -20,12 +20,22 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     private HashMap<String, Room> rooms;
     private boolean serverActive;
 
+    /**
+     * Server class builder
+     * @throws RemoteException Thrown in case of a network error.
+     */
     public Server() throws RemoteException {
         users = new HashMap<>();
         rooms = new HashMap<>();
         serverActive = true;
     }
 
+    /**
+     * Registers a new user on the server.
+     * @param name the name of the user to register.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws UserAlreadyExistsException Thrown in case of a duplicate user.
+     */
     @Override
     public synchronized void registerUser(String name) throws RemoteException, UserAlreadyExistsException {
         ClientConnection c = new ClientConnection(name);
@@ -35,6 +45,12 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         System.out.println("user '" + name + "' is registered in the server");
     }
 
+    /**
+     * Deregisters connection when too many pings are missed.
+      * @param username The username of the user to remover.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws UserNotRegisteredException Thrown if the selected player can't be found on the server.
+     */
     @Override
     public synchronized void deregisterConnection(String username) throws RemoteException, UserNotRegisteredException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
@@ -48,6 +64,11 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         System.out.println("De-registered " + username + " because inactivity");
     }
 
+    /**
+     * Returns the list of available rooms on the server.
+     * @return the list of available rooms.
+     * @throws RemoteException Thrown in case of a network error.
+     */
     @Override
     public synchronized ArrayList<String> getRoomsList() throws RemoteException {
         ArrayList<String> roomList = new ArrayList<>();
@@ -57,6 +78,14 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         return roomList;
     }
 
+    /**
+     * Creates a room and sets the user that created it as its leader.
+     * @param username The user that called this action.
+     * @param roomName The name of the room.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws RoomAlreadyExistsException Thrown if the provided room name already exists on the server.
+     * @throws UserNotRegisteredException Thrown in case of client error(user is not present on the server).
+     */
     @Override
     public synchronized void createRoom(String username, String roomName) throws RemoteException, RoomAlreadyExistsException, UserNotRegisteredException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
@@ -70,6 +99,17 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         }
     }
 
+    /**
+     * The method used to join an existing room.
+     * @param username The user that is requesting the action
+     * @param roomName The room the user wants to join.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws RoomInGameException The room that the client tried to join was already playing a game of Eriantys
+     * @throws UserNotRegisteredException Thrown in case of client error(user is not present on the server).
+     * @throws RoomNotExistsException The requested room can't be found on the server.
+     * @throws RoomFullException The room already has 4 players.
+     * @throws UserInRoomException The user is already in the room.
+     */
     @Override
     public synchronized void joinRoom(String username, String roomName) throws RemoteException, RoomInGameException, UserNotRegisteredException, RoomNotExistsException, RoomFullException, UserInRoomException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
@@ -88,12 +128,26 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         }
     }
 
+    /**
+     * Returns if the given room is playing or not.
+     * @param roomName the chosen room.
+     * @return true or false depending on the outcome.
+     * @throws RoomNotExistsException The requested room can't be found on the server.
+     */
     @Override
     public synchronized boolean isInGame(String roomName) throws RoomNotExistsException {
         if (!rooms.containsKey(roomName)) throw new RoomNotExistsException();
         return rooms.get(roomName).isInGame();
     }
 
+    /**
+     * Method used to leave a room previously entered. In case of the leader leaving the room the next highest player will be appointed leader.
+     * If there are no more players in the room it will be deleted.
+     * @param username The player that is trying to leave the room.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws UserNotInRoomException Thrown if this method is called when the user is not inside a room.
+     * @throws UserNotRegisteredException Thrown if the provided username is not present on the server.
+     */
     @Override
     public synchronized void leaveRoom(String username) throws RemoteException, UserNotInRoomException, UserNotRegisteredException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
@@ -111,6 +165,12 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         }
     }
 
+    /**
+     * Method used to leave when the game is being played.
+     * @param username The player that wants to leave the game.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws UserNotRegisteredException Thrown if the provided username is not present on the server.
+     */
     public synchronized void leaveGame(String username) throws RemoteException, UserNotRegisteredException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         ClientConnection user = users.get(username);
@@ -120,13 +180,26 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         rooms.get(roomName).notifyPlayerInGameLeaves(gameFinishedEvent);
     }
 
-
+    /**
+     * Returns the players in a room.
+     * @param roomName the room we're querying.
+     * @return the list of players in the room.
+     * @throws RemoteException Thrown if the provided username is not present on the server.
+     * @throws RoomNotExistsException The provided room name can't be found on the server.
+     */
     @Override
     public synchronized ArrayList<String> getPlayers(String roomName) throws RemoteException, RoomNotExistsException {
         if (!rooms.containsKey(roomName)) throw new RoomNotExistsException();
         return rooms.get(roomName).getPlayers().stream().map(ClientConnection::getNickname).collect(toCollection(ArrayList::new));
     }
 
+    /**
+     * Returns various lobby information.
+     * @param roomName The name of the queried room.
+     * @return room name, players and whether it is set to expert or standard mode.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws RoomNotExistsException Thrown if the provided username is not present on the server.
+     */
     @Override
     public synchronized ArrayList<String> getLobbyInfo(String roomName) throws RemoteException, RoomNotExistsException {
         if (!rooms.containsKey(roomName)) throw new RoomNotExistsException();
@@ -137,10 +210,24 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         return result;
     }
 
+    /**
+     * Getter method for expert mode given a room name.
+     * @param roomName the room to query.
+     * @return true or false depending on expert mode setting
+     */
     private synchronized boolean isExpertMode(String roomName) { //only called by the server
         return rooms.get(roomName).getExpertMode();
     }
 
+    /**
+     * Method to set a particular room to expert mode. Can only be done by the room's leader.
+     * @param username The user that requested this action
+     * @param expertMode The value expert mode is to be set to.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws UserNotInRoomException Thrown if the user is not in a room.
+     * @throws NotLeaderRoomException Thrown if the user is not the leader of the room.
+     * @throws UserNotRegisteredException Thrown if the provided username is not present on the server.
+     */
     @Override
     public synchronized void setExpertMode(String username, boolean expertMode) throws RemoteException, UserNotInRoomException, NotLeaderRoomException, UserNotRegisteredException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
@@ -154,6 +241,16 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         } else throw new NotLeaderRoomException();
     }
 
+    /**
+     * Method used to start the game
+     * @param username The player that requested this action.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws NotLeaderRoomException Thrown when the player that tried
+     * @throws UserNotInRoomException Thrown when the user is not in a room.
+     * @throws UserNotRegisteredException Thrown if the provided username is not present on the server.
+     * @throws RoomNotExistsException Thrown if the provided room name isn't present on the server.
+     * @throws NotEnoughPlayersException Thrown when there's only 1 player in the room and a game is trying to start.
+     */
     @Override
     public synchronized void startGame(String username) throws RemoteException, NotLeaderRoomException,
             UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException, NotEnoughPlayersException {
@@ -179,12 +276,35 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         }
     }
 
+    /**
+     * Used to check if an username is in game.
+     * @param username the user to check.
+     * @return whether the user is in the room or not.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws UserNotRegisteredException Thrown if the provided username is not present on the server.
+     */
     @Override
     public synchronized boolean inGame(String username) throws RemoteException, UserNotRegisteredException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         return users.get(username).inGame();
     }
 
+    /**
+     * Method used to perform a game action.
+     * @param username The user that called this action
+     * @param gameAction the Action Command.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws AssistantCardNotFoundException Thrown when the provided assistant card name can't be found in the deck.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws ProfessorNotFoundException If the method call causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws IncorrectStateException Thrown if action is being performed in an invalid phase of the turn.
+     * @throws UserNotRegisteredException Thrown if the provided username is not present on the server.
+     * @throws UserNotInRoomException Thrown when the user is not in a room.
+     */
     @Override
     public synchronized void performGameAction(String username, Command gameAction) throws RemoteException, MotherNatureLostException,
             NegativeValueException, AssistantCardNotFoundException, IncorrectArgumentException, IncorrectPlayerException,
@@ -196,6 +316,14 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         }
     }
 
+    /**
+     * Method used to get updates
+     * @param username The user that requested the update.
+     * @return The event buffer.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws UserNotRegisteredException Thrown if the provided username is not present on the server.
+     * @throws UserNotInRoomException  Thrown when the user is not in a room.
+     */
     @Override
     public synchronized ArrayList<PropertyChangeEvent> getUpdates(String username) throws RemoteException, UserNotRegisteredException, UserNotInRoomException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
@@ -206,12 +334,21 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         return callerRoom.getBuffer(userCl);
     }
 
+    /**
+     * Ping method used to make sure the client is still connected to the server.
+     * @param username The client name.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws UserNotRegisteredException Thrown when the user is not in a room.
+     */
     @Override
     public synchronized void ping(String username) throws RemoteException, UserNotRegisteredException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         users.get(username).setUp();
     }
 
+    /**
+     * Method to check if any clients were disconnected
+      */
     private synchronized void findDisconnectedUsers() {
         for (ClientConnection client : users.values()) {
             if (!client.isUp()) {
@@ -224,6 +361,9 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         }
     }
 
+    /**
+     * Method used to keep the connection with the clients alive.
+     */
     @Override
     public void run() {
         while (serverActive) {
