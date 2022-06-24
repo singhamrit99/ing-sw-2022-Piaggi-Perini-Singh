@@ -11,7 +11,6 @@ import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class GameViewController extends InitialStage implements Controller {
     protected static AtomicBoolean opened = new AtomicBoolean(false);
@@ -108,11 +106,14 @@ public class GameViewController extends InitialStage implements Controller {
         }
     }
 
+    public static void setOpened(boolean b) {
+        opened.set(b);
+    }
+
     @FXML
     public void initialize() {
         if (!opened.get()) { //first opening
             opened.set(true);
-            System.out.println(GUI.client.getLocalPlayerList());
             initializePlayersViewMenu(GUI.client.getLocalPlayerList());
             firstRefreshBoard();
         }
@@ -125,21 +126,14 @@ public class GameViewController extends InitialStage implements Controller {
 
         leaveGame.setOnAction((event) -> { //leaving game
             try {
-                reloadRoomsFromGameView();
-                GUI.client.leaveRoom();
-            } catch (RemoteException | UserNotInRoomException | UserNotRegisteredException e) {
+                GUI.client.leaveGame();
+                opened.set(false);
+            } catch (UserNotInRoomException | UserNotRegisteredException | RemoteException e) {
                 e.printStackTrace();
-                //reverting reloadRoomsFromGameView() effects:
-                opened.set(true);
-                GUI.client.view = StringNames.INGAME;
             }
         });
     }
 
-    public void reloadRoomsFromGameView(){
-        opened.set(false);
-        GUI.client.view = StringNames.LOBBY;
-    }
     public void changeViewBoard(String viewOwnerTarget) {
         if (GUI.client.getLocalPlayerList().contains(viewOwnerTarget)) {
             currentBoardView = viewOwnerTarget;
@@ -258,7 +252,6 @@ public class GameViewController extends InitialStage implements Controller {
 
         if (expert) {
             int indexCharacter = 0;
-            AtomicReference<String> view = new AtomicReference<>("");
             for (StrippedCharacter c : characterCardsStripped) {
                 try {
                     Image character = new Image(Files.newInputStream(Paths.get(ResourcesPath.CHARACTERS
@@ -727,10 +720,6 @@ public class GameViewController extends InitialStage implements Controller {
     public void reloadClouds() {
         int numPlayers = GUI.client.getLocalPlayerList().size();
         ArrayList<StrippedCloud> clouds = GUI.client.getLocalModel().getClouds();
-
-        System.out.println("number of clouds are: " + clouds.size());
-
-        System.out.println("name of the first is: " + clouds.get(0).getName());
 
         for (int cloudIndex = 0; cloudIndex < numPlayers; cloudIndex++) {
             int indexStudentsAssets = 0;
