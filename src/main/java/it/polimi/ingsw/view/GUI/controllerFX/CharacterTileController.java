@@ -35,9 +35,11 @@ public class CharacterTileController extends InitialStage implements Controller 
     @Override
     public void initialize() {
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
+        int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
+
         description.setText(selectedCharacter.getDescription());
 
-        availableTiles.setText("Tiles Available " + selectedCharacter.getNoEntryTiles());
+        availableTiles.setText("Tiles Available " + GUI.client.getLocalModel().getCharacters().get(indexSelectedCharacter).getNoEntryTiles());
 
         for (StrippedIsland island : GUI.client.getLocalModel().getIslands()) {
             choiceBox.getItems().add(island.getName());
@@ -50,15 +52,15 @@ public class CharacterTileController extends InitialStage implements Controller 
         choiceBox.setOnAction((event) -> chosen.set(choiceBox.getSelectionModel().getSelectedIndex()));
 
         confirmButton.setOnAction((event) -> {
-            PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), selectedCharacter.getCharacterID(), chosen.get());
+            PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), indexSelectedCharacter, chosen.get());
             try {
                 GUI.client.performGameAction(playCharacterCardD);
             } catch (NotEnoughCoinsException e) {
                 Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
                 Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
-                Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
             } catch (NegativeValueException e) {
+                Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
             } catch (IncorrectStateException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
             } catch (ProfessorNotFoundException e) {
