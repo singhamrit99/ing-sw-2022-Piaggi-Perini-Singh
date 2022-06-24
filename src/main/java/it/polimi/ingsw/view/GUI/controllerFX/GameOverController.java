@@ -56,7 +56,7 @@ public class GameOverController extends InitialStage implements Controller {
             else winnerDeclare.setText("There is a tie!");
         }
         else{
-            winnerDeclare.setText("Game over! Team " + winnerTeam + "won! Congratulations!");
+            winnerDeclare.setText("Team " + winnerTeam + " won! Congratulations!");
         }
 
         exitButton.setOnAction((event) -> {
