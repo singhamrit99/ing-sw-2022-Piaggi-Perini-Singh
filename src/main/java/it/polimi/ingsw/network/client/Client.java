@@ -31,7 +31,6 @@ public class Client implements Runnable {
     private boolean localModelLoaded;
     private boolean isMyTurn;
     private boolean userRegistered;
-    private boolean drawnOut;
     private boolean roomExpertMode = false;
     int oldSize = 0;
     boolean firstRoomListRefactor = true;
@@ -117,13 +116,16 @@ public class Client implements Runnable {
      * @throws UserNotRegisteredException Thrown if the method is called by an invalid user.
      * @throws RoomFullException Thrown if the room we're trying to join already has 4 players in it.
      */
-    public void requestRoomJoin(String roomName) throws RemoteException, RoomInGameException, RoomNotExistsException, UserNotRegisteredException, RoomFullException, UserInRoomException {
-        server.joinRoom(nickname, roomName);
-        clientRoom = roomName;
+    public void requestRoomJoin(String roomName) throws RemoteException, RoomInGameException,
+            RoomNotExistsException, UserNotRegisteredException, RoomFullException {
         try {
+            server.joinRoom(nickname, roomName);
+            clientRoom = roomName;
             playersList = getNicknamesInRoom();
         } catch (UserNotInRoomException ignored) {
             ignored.printStackTrace();
+        } catch (UserInRoomException problem) {
+            problem.printStackTrace(); //TODO
         }
         ui.roomJoin(playersList);
     }
@@ -186,6 +188,8 @@ public class Client implements Runnable {
             clientRoom = null;
             roomList = getRooms();
             ui.roomsAvailable(roomList);
+            oldSize = 0; //this is necessary for the correct reloading of the rooms list but maybe refactor name
+            firstRoomListRefactor = true; //TODO name also of this
         }
     }
 
@@ -196,6 +200,7 @@ public class Client implements Runnable {
             server.leaveGame(nickname);
         }
     }
+
     /**
      * Returns the room leader.
      * @return the room leader's nickname(String)
@@ -238,48 +243,39 @@ public class Client implements Runnable {
      */
     @Override
     public void run() {
-        boolean first = true;
-        int oldSize = 0;
-
         while (userRegistered) {
             try {
+                inGame = server.inGame(nickname);
                 if (inGame) {
-                    //System.out.println("the room is playing and I'm in");
                     ArrayList<PropertyChangeEvent> newUpdates = server.getUpdates(nickname);
                     manageUpdates(newUpdates);
                 } else {
-                    try {
-                        inGame = server.inGame(nickname);
-                        roomList = server.getRoomsList();
-                        //display and refresh of room list
-                        if (view.equals(StringNames.LOBBY)) {
-                            if (first) {
-                                roomListShow();
-                                oldSize = roomList.size();
-                                first = false;
-                            } else if (roomList.size() != oldSize) {
-                                oldSize = roomList.size();
-                                roomListShow();
-                            }
-                        } else if (view.equals(StringNames.ROOM)) {
-                            //display and refresh playerList if in room
-                            if (clientRoom != null) {
-                                if (!getNicknamesInRoom().equals(playersList) || roomExpertMode != getExpertMode()) {
-                                    playersList = getNicknamesInRoom();
-                                    roomExpertMode = getExpertMode();
-                                    ui.roomJoin(playersList);
-                                }
+                    roomList = server.getRoomsList();
+
+                    if (view.equals(StringNames.LOBBY)) {
+                        if (firstRoomListRefactor) {
+                            roomListShow();
+                            oldSize = roomList.size();
+                            firstRoomListRefactor = false;
+                        } else if (roomList.size() != oldSize) {
+                            oldSize = roomList.size();
+                            roomListShow();
+                        }
+                    }
+
+                    if (view.equals(StringNames.ROOM)) {
+                        //display and refresh playerList if in room
+                        if (clientRoom != null) {
+                            if (!getNicknamesInRoom().equals(playersList) || roomExpertMode != getExpertMode()) {
+                                playersList = getNicknamesInRoom();
+                                roomExpertMode = getExpertMode();
+                                ui.roomJoin(playersList); //TODO refactor the NAME of this method
                             }
                         }
-                    } catch (UserNotRegisteredException notRegisteredException) {
-                        userRegistered = false;
-                        break;
-                    } catch (RoomNotExistsException e) {
-                        e.printStackTrace();
                     }
                 }
                 Thread.sleep(100);
-            } catch (RemoteException | LocalModelNotLoadedException | InterruptedException | UserNotInRoomException  e) {
+            } catch (RemoteException | LocalModelNotLoadedException | InterruptedException | UserNotInRoomException | RoomNotExistsException e) {
                 e.printStackTrace();
             } catch (UserNotRegisteredException e) {
                 e.printStackTrace();
@@ -292,13 +288,13 @@ public class Client implements Runnable {
      * Pink method to make sure the client is connected at all times. If the client misses too many pings they will be disconnected automatically.
      */
     private void ping() {
-        while(userRegistered){
+        while (userRegistered) {
             try {
                 server.ping(nickname);
             } catch (RemoteException e) {
                 e.printStackTrace();
             } catch (UserNotRegisteredException e) {
-                userRegistered=false; //TODO
+                userRegistered = false; //TODO
                 e.printStackTrace();
             }
             try {
@@ -345,7 +341,6 @@ public class Client implements Runnable {
                     break;
                 case "current-player":
                     setInGame(true);
-                   // System.out.println("Changed current player");
                     if (nickname.equals(evt.getNewValue()))
                         isMyTurn = true;
                     if (localModel != null) {
