@@ -16,7 +16,7 @@
     <children>
         <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" styleClass="title">
             <children>
-                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="Lobby" textAlignment="JUSTIFY" StackPane.alignment="CENTER">
+                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="Lobby" textAlignment="JUSTIFY" underline="true" StackPane.alignment="CENTER">
                     <font>
                         <Font name="Rockwell Extra Bold" size="40.0" />
                     </font>
