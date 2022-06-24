@@ -25,7 +25,7 @@ public interface UI {
 
     void towersEvent(PropertyChangeEvent e);
 
-    void gameOver(String winner);
+    void gameOver(String leavingPlayer, String winner);
 
     void coinsChanged(PropertyChangeEvent e);
 

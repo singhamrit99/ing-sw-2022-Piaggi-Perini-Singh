@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.StringNames;
+import it.polimi.ingsw.view.GUI.controllerFX.GameOverController;
 import it.polimi.ingsw.view.GUI.controllerFX.GameViewController;
 import it.polimi.ingsw.view.GUI.controllerFX.LobbyController;
 import it.polimi.ingsw.view.GUI.controllerFX.RoomController;
@@ -185,12 +186,27 @@ public class Client implements Runnable {
             throw new UserNotInRoomException();
         } else {
             server.leaveRoom(nickname);
-            clientRoom = null;
-            roomList = getRooms();
-            ui.roomsAvailable(roomList);
-            oldSize = 0; //this is necessary for the correct reloading of the rooms list but maybe refactor name
-            firstRoomListRefactor = true; //TODO name also of this
         }
+    }
+
+    public void leaveGameOverScreenGUI(){
+        view = StringNames.LOBBY;
+        LobbyController.setOpened(false);
+        RoomController.setOpened(false);
+        GameViewController.setOpened(false);
+        GameOverController.setOpened(false);
+        localModelLoaded = false;
+        setInGame(false);
+        localModel = null;
+        clientRoom = null;
+        try {
+            roomList = getRooms();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e); //todo
+        }
+        ui.roomsAvailable(roomList);
+        oldSize = 0; //this is necessary for the correct reloading of the rooms list but maybe refactor name
+        firstRoomListRefactor = true; //TODO name also of this
     }
 
     public void leaveGame() throws UserNotRegisteredException, UserNotInRoomException, RemoteException {
@@ -198,6 +214,7 @@ public class Client implements Runnable {
             throw new UserNotInRoomException();
         } else {
             server.leaveGame(nickname);
+            leaveGameOverScreenGUI();
         }
     }
 
@@ -355,22 +372,15 @@ public class Client implements Runnable {
                     break;
                 case "game-finished":
                     try {
-                        server.leaveRoom(nickname);
-                    } catch (UserNotRegisteredException e) {
-                        e.printStackTrace();
+                        leaveRoom();
                     } catch (RemoteException e) {
-                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     } catch (UserNotInRoomException e) {
-                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    } catch (UserNotRegisteredException e) {
+                        throw new RuntimeException(e);
                     }
-                    LobbyController.setOpened(false);
-                    RoomController.setOpened(false);
-                    GameViewController.setOpened(false);
-                    view = StringNames.LOBBY;
-                    firstRoomListRefactor = true;
-                    setInGame(false);
-                    localModelLoaded = false;
-                    localModel = null;
+                    ui.gameOver((String) evt.getOldValue(),(String) evt.getNewValue());
                     break;
                 default:
                     if (localModel != null) {

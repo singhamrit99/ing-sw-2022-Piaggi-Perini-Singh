@@ -470,7 +470,7 @@ public class Game {
                 ArrayList<Player> teamWinner = checkWinner();
                 //notify game-over
                 PropertyChangeEvent gameOverEvt =
-                        new PropertyChangeEvent(this, "game-over", null, teamWinner);
+                        new PropertyChangeEvent(this, "game-finished", null, teamWinner);
                 gameListener.propertyChange(gameOverEvt);
             } else {
                 state = State.PLANNINGPHASE;
