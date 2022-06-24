@@ -27,10 +27,11 @@ public class CharacterNoControlsController extends InitialStage implements Contr
     @Override
     public void initialize() {
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
+        int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
         description.setText(selectedCharacter.getDescription());
 
         confirmButton.setOnAction((event) -> {
-            PlayCharacterCardA playCharacterCardA = new PlayCharacterCardA(GUI.client.getNickname(), selectedCharacter.getCharacterID());
+            PlayCharacterCardA playCharacterCardA = new PlayCharacterCardA(GUI.client.getNickname(), indexSelectedCharacter);
             try {
                 GUI.client.performGameAction(playCharacterCardA);
             } catch (NotEnoughCoinsException e) {
