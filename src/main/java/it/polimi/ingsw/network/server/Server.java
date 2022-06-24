@@ -110,11 +110,12 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     }
 
     public synchronized void leaveGame(String username) throws RemoteException, UserNotRegisteredException {
-        if (!users.containsKey(username)) throw new UserNotRegisteredException();
-        ClientConnection user = users.get(username);
-        String roomName = user.getRoom();
+        String roomName = users.get(username).getRoom();
+        try {
+            leaveRoom(username);
+        } catch (UserNotInRoomException ignored) {} //this method is only accessible from inside the room
 
-        PropertyChangeEvent gameFinishedEvent = new PropertyChangeEvent(this, "game-finished", null, null);
+        PropertyChangeEvent gameFinishedEvent = new PropertyChangeEvent(this, "game-finished", username, null);
         rooms.get(roomName).notifyPlayerInGameLeaves(gameFinishedEvent);
     }
 
