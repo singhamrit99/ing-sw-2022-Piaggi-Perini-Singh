@@ -9,6 +9,8 @@ public interface ResourcesPath {
     String NEW_ROOM = "NewRoom";
     String GAME_VIEW = "GameView";
 
+    String GAME_OVER = "GameOver";
+
     // ----   GRAPHICS IMG IN GAME -----
     //towers
     String BLACK_TOWER = "src/main/resources/img/towers/black_tower.png";
