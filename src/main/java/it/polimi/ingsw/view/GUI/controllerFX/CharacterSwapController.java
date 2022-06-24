@@ -70,6 +70,8 @@ public class CharacterSwapController extends InitialStage implements Controller 
         secondBoxes.add(totalSecondPink);
 
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
+        int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
+
         description.setText(selectedCharacter.getDescription());
 
         if (selectedCharacter.getCharacterID() == 7) {
@@ -155,7 +157,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
                 c++;
             }
 
-            PlayCharacterCardC playCharacterCardC = new PlayCharacterCardC(GUI.client.getNickname(), selectedCharacter.getCharacterID(), swap1, swap2);
+            PlayCharacterCardC playCharacterCardC = new PlayCharacterCardC(GUI.client.getNickname(), indexSelectedCharacter, swap1, swap2);
             try {
                 GUI.client.performGameAction(playCharacterCardC);
             } catch (NotEnoughCoinsException e) {
