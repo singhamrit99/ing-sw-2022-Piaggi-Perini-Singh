@@ -998,9 +998,6 @@ public class Game {
      * Check the game over returning true if it is
      */
     public boolean isGameOver() {
-        for (Player p : players) {
-            if (p.getPlayerTowers() <= 0) return true;
-        }
         return !bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9 || isTeamWithZeroTowers();
     }
 
@@ -1073,11 +1070,12 @@ public class Game {
         if (minTowers!=42){
             return teamMinTowers.get(0).getTowerColor().toString();
         }
-        else if(teamsTie.size()>1){
+        else if(teamsTie.size()>1){ //there is a tie between teams
             ArrayList<Player> winningTeam = null;
             int professorsOfTeam = 0;
             int maxProfessors = -1;
          for (ArrayList<Player> team : teamsTie){
+
              for (Player p : team){
                  for(Colors colorProf : Colors.values()){
                      if(p.hasProfessorOfColor(colorProf))professorsOfTeam+=1;
