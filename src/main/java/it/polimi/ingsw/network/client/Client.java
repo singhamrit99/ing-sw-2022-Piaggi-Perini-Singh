@@ -33,13 +33,14 @@ public class Client implements Runnable {
     private boolean isMyTurn;
     private boolean userRegistered;
     private boolean roomExpertMode = false;
-    int oldSize = 0;
-    boolean firstRoomListRefactor = true;
+    int oldRoomListSize = 0;
+    boolean firstRoomListRefresh = true;
 
     /**
      * Client class constructor. Ip and Port are needed for connectivity purposes.
      * Also initializes inGame, localModelLoaded and userRegistered fields to false.
-     * @param ip The Ip to connect to.
+     *
+     * @param ip   The Ip to connect to.
      * @param port The port to connect to.
      */
     public Client(String ip, int port) {
@@ -65,8 +66,9 @@ public class Client implements Runnable {
 
     /**
      * Method used to register a new client to the server with a unique username.
+     *
      * @param nickName the username chosen by the new player.
-     * @throws RemoteException Thrown in case of a network error.
+     * @throws RemoteException            Thrown in case of a network error.
      * @throws UserAlreadyExistsException Thrown if the chosen name is already on the server.
      */
     public void registerClient(String nickName) throws RemoteException, UserAlreadyExistsException {
@@ -79,7 +81,8 @@ public class Client implements Runnable {
 
     /**
      * Used to deregister a client.
-     * @throws RemoteException Thrown in case of a network error.
+     *
+     * @throws RemoteException            Thrown in case of a network error.
      * @throws UserNotRegisteredException Thrown if the chosen name is already on the server.
      */
     public void deregisterClient() throws RemoteException, UserNotRegisteredException {
@@ -92,8 +95,9 @@ public class Client implements Runnable {
 
     /**
      * Method used to request a room creation from the server.
+     *
      * @param roomName the name of the room to create.
-     * @throws RemoteException Thrown in case of a network error.
+     * @throws RemoteException            Thrown in case of a network error.
      * @throws UserNotRegisteredException Thrown if the chosen name is already on the server.
      * @throws RoomAlreadyExistsException Thrown if the chosen room name is already on the server.
      */
@@ -110,32 +114,31 @@ public class Client implements Runnable {
 
     /**
      * Method used to send a request to join a room.
+     *
      * @param roomName the name of the room the request is sent to.
-     * @throws RemoteException Thrown in case of a network error.
-     * @throws RoomInGameException Thrown if the room is already playing Eriantys.
-     * @throws RoomNotExistsException Thrown if the given room name doesn't exist on the server.
+     * @throws RemoteException            Thrown in case of a network error.
+     * @throws RoomInGameException        Thrown if the room is already playing Eriantys.
+     * @throws RoomNotExistsException     Thrown if the given room name doesn't exist on the server.
      * @throws UserNotRegisteredException Thrown if the method is called by an invalid user.
-     * @throws RoomFullException Thrown if the room we're trying to join already has 4 players in it.
+     * @throws RoomFullException          Thrown if the room we're trying to join already has 4 players in it.
      */
     public void requestRoomJoin(String roomName) throws RemoteException, RoomInGameException,
-            RoomNotExistsException, UserNotRegisteredException, RoomFullException {
+            RoomNotExistsException, UserNotRegisteredException, RoomFullException, UserInRoomException {
         try {
             server.joinRoom(nickname, roomName);
             clientRoom = roomName;
             playersList = getNicknamesInRoom();
+            ui.roomJoin(playersList);
         } catch (UserNotInRoomException ignored) {
-            ignored.printStackTrace();
-        } catch (UserInRoomException problem) {
-            problem.printStackTrace(); //TODO
-        }
-        ui.roomJoin(playersList);
+        } //after joining ...
     }
 
     /**
      * Method used to request lobby info.
+     *
      * @param roomName The room we're requesting information from
      * @return The information asked (players, room name, whether it's a Standard or Expert play room)
-     * @throws RemoteException Thrown in case of a network error.
+     * @throws RemoteException        Thrown in case of a network error.
      * @throws RoomNotExistsException Thrown if the given room name doesn't exist on the server.
      */
     public ArrayList<String> requestLobbyInfo(String roomName) throws RemoteException, RoomNotExistsException {
@@ -144,6 +147,7 @@ public class Client implements Runnable {
 
     /**
      * Returns the rooms on the server
+     *
      * @return List of rooms on the server.
      * @throws RemoteException Thrown in case of a network error.
      */
@@ -153,8 +157,9 @@ public class Client implements Runnable {
 
     /**
      * Returns the nicknames of every player in the room.
+     *
      * @return nicknames String ArrayList.
-     * @throws RemoteException Thrown in case of a network error.
+     * @throws RemoteException        Thrown in case of a network error.
      * @throws RoomNotExistsException Thrown if the given room name doesn't exist on the server.
      * @throws UserNotInRoomException Thrown if the user tries to call this action when not in a room.
      */
@@ -165,10 +170,11 @@ public class Client implements Runnable {
 
     /**
      * Sends a request to switch the game mode to Expert Mode or back to Standard Mode.
+     *
      * @param value the boolean value corresponding with the choice (true=switch)
-     * @throws RemoteException Thrown in case of a network error.
-     * @throws NotLeaderRoomException Thrown if this method is accessed by any player that isn't the room's leader.
-     * @throws UserNotInRoomException Thrown if the user tries to call this action when not in a room.
+     * @throws RemoteException            Thrown in case of a network error.
+     * @throws NotLeaderRoomException     Thrown if this method is accessed by any player that isn't the room's leader.
+     * @throws UserNotInRoomException     Thrown if the user tries to call this action when not in a room.
      * @throws UserNotRegisteredException Thrown if the method is called by an invalid user.
      */
     public void setExpertMode(boolean value) throws RemoteException, NotLeaderRoomException, UserNotInRoomException, UserNotRegisteredException {
@@ -177,8 +183,9 @@ public class Client implements Runnable {
 
     /**
      * Method used to leave a room.
-     * @throws RemoteException Thrown in case of a network error.
-     * @throws UserNotInRoomException Thrown if the user tries to call this action when not in a room.
+     *
+     * @throws RemoteException            Thrown in case of a network error.
+     * @throws UserNotInRoomException     Thrown if the user tries to call this action when not in a room.
      * @throws UserNotRegisteredException Thrown if the method is called by an invalid user.
      */
     public void leaveRoom() throws RemoteException, UserNotInRoomException, UserNotRegisteredException {
@@ -189,7 +196,7 @@ public class Client implements Runnable {
         }
     }
 
-    public void leaveGameOverScreenGUI(){
+    public void leaveGameOverScreenGUI() throws RemoteException {
         view = StringNames.LOBBY;
         LobbyController.setOpened(false);
         RoomController.setOpened(false);
@@ -199,14 +206,10 @@ public class Client implements Runnable {
         setInGame(false);
         localModel = null;
         clientRoom = null;
-        try {
-            roomList = getRooms();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e); //todo
-        }
+        roomList = getRooms();
         ui.roomsAvailable(roomList);
-        oldSize = 0; //this is necessary for the correct reloading of the rooms list but maybe refactor name
-        firstRoomListRefactor = true; //TODO name also of this
+        oldRoomListSize = 0; //this is necessary for the correct reloading of the rooms
+        firstRoomListRefresh = true;
     }
 
     public void leaveGame() throws UserNotRegisteredException, UserNotInRoomException, RemoteException {
@@ -220,8 +223,9 @@ public class Client implements Runnable {
 
     /**
      * Returns the room leader.
+     *
      * @return the room leader's nickname(String)
-     * @throws RemoteException Thrown in case of a network error.
+     * @throws RemoteException        Thrown in case of a network error.
      * @throws RoomNotExistsException Thrown if the given room name doesn't exist on the server.
      * @throws UserNotInRoomException Thrown if the user tries to call this action when not in a room.
      */
@@ -231,11 +235,12 @@ public class Client implements Runnable {
 
     /**
      * Method used to send the Start Game request.
-     * @throws RemoteException Thrown in case of a network error.
-     * @throws NotLeaderRoomException Thrown if this method is accessed by any player that isn't the room's leader.
-     * @throws UserNotInRoomException Thrown if the user tries to call this action when not in a room.
-     * @throws RoomNotExistsException Thrown if the given room name doesn't exist on the server.
-     * @throws NotEnoughPlayersException Thrown if there aren't enough players to start the game.
+     *
+     * @throws RemoteException            Thrown in case of a network error.
+     * @throws NotLeaderRoomException     Thrown if this method is accessed by any player that isn't the room's leader.
+     * @throws UserNotInRoomException     Thrown if the user tries to call this action when not in a room.
+     * @throws RoomNotExistsException     Thrown if the given room name doesn't exist on the server.
+     * @throws NotEnoughPlayersException  Thrown if there aren't enough players to start the game.
      * @throws UserNotRegisteredException Thrown if the method is called by an invalid user.
      */
     public void startGame() throws RemoteException, NotLeaderRoomException, UserNotInRoomException,
@@ -270,12 +275,12 @@ public class Client implements Runnable {
                     roomList = server.getRoomsList();
 
                     if (view.equals(StringNames.LOBBY)) {
-                        if (firstRoomListRefactor) {
+                        if (firstRoomListRefresh) {
                             roomListShow();
-                            oldSize = roomList.size();
-                            firstRoomListRefactor = false;
-                        } else if (roomList.size() != oldSize) {
-                            oldSize = roomList.size();
+                            oldRoomListSize = roomList.size();
+                            firstRoomListRefresh = false;
+                        } else if (roomList.size() != oldRoomListSize) {
+                            oldRoomListSize = roomList.size();
                             roomListShow();
                         }
                     }
@@ -286,13 +291,14 @@ public class Client implements Runnable {
                             if (!getNicknamesInRoom().equals(playersList) || roomExpertMode != getExpertMode()) {
                                 playersList = getNicknamesInRoom();
                                 roomExpertMode = getExpertMode();
-                                ui.roomJoin(playersList); //TODO refactor the NAME of this method
+                                ui.roomJoin(playersList); //method used also to refresh the screen
                             }
                         }
                     }
                 }
                 Thread.sleep(100);
-            } catch (RemoteException | LocalModelNotLoadedException | InterruptedException | UserNotInRoomException | RoomNotExistsException e) {
+            } catch (RemoteException | LocalModelNotLoadedException | InterruptedException | UserNotInRoomException |
+                     RoomNotExistsException e) {
                 e.printStackTrace();
             } catch (UserNotRegisteredException e) {
                 e.printStackTrace();
@@ -311,21 +317,21 @@ public class Client implements Runnable {
             } catch (RemoteException e) {
                 e.printStackTrace();
             } catch (UserNotRegisteredException e) {
-                userRegistered = false; //TODO
-                e.printStackTrace();
+                userRegistered = false;
             }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                e.printStackTrace(); //todo
             }
         }
     }
 
     /**
      * Method that actually manages the events received in the run method.
+     *
      * @param evtArray The events buffer that need to be managed and sorted via their identificators.
-     * @throws LocalModelNotLoadedException Thrown if localModel field is null.
+     * @throws LocalModelNotLoadedException    Thrown if localModel field is null.
      * @throws BadFormattedLocalModelException Thrown if localModel is present but incorrectly built.
      */
     private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
@@ -380,7 +386,7 @@ public class Client implements Runnable {
                     } catch (UserNotRegisteredException e) {
                         throw new RuntimeException(e);
                     }
-                    ui.gameOver((String) evt.getOldValue(),(String) evt.getNewValue());
+                    ui.gameOver((String) evt.getOldValue(), (String) evt.getNewValue());
                     break;
                 default:
                     if (localModel != null) {
@@ -399,18 +405,19 @@ public class Client implements Runnable {
 
     /**
      * Method used to perform game actions through Commands infrastructure.
+     *
      * @param command The command that is then forwarded to the Invoker.
-     * @throws NotEnoughCoinsException Thrown if the player that tried to play a character card doesn't have enough coins to buy it.
+     * @throws NotEnoughCoinsException        Thrown if the player that tried to play a character card doesn't have enough coins to buy it.
      * @throws AssistantCardNotFoundException Thrown if the Assistant card string provided is invalid.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
-     * @throws IncorrectStateException Thrown when an action is performed in an invalid phase of the game.
-     * @throws MotherNatureLostException Thrown when the game can't calculate Mother Nature's position.
-     * @throws ProfessorNotFoundException Thrown when a professor search generates an error.
-     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
-     * @throws RemoteException Thrown in case of a network error.
-     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
-     * @throws UserNotInRoomException Thrown if the user tries to call this action when not in a room.
-     * @throws UserNotRegisteredException Thrown if the method is called by an invalid user.
+     * @throws NegativeValueException         As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException        Thrown when an action is performed in an invalid phase of the game.
+     * @throws MotherNatureLostException      Thrown when the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException     Thrown when a professor search generates an error.
+     * @throws IncorrectPlayerException       Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException                Thrown in case of a network error.
+     * @throws IncorrectArgumentException     Thrown if any of the parameters used by the method are invalid.
+     * @throws UserNotInRoomException         Thrown if the user tries to call this action when not in a room.
+     * @throws UserNotRegisteredException     Thrown if the method is called by an invalid user.
      */
     public void performGameAction(Command command) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException,
             IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException,
@@ -420,6 +427,7 @@ public class Client implements Runnable {
 
     /**
      * Getter method for inGame field
+     *
      * @return inGame
      */
     public boolean isInGame() {
@@ -428,17 +436,19 @@ public class Client implements Runnable {
 
     /**
      * Returns whether the given room is playing Eriantys.
+     *
      * @param roomName The name of the room to check.
      * @return true or false depending on the outcome.
      * @throws RoomNotExistsException Thrown if the given room name doesn't exist on the server.
-     * @throws RemoteException Thrown in case of a network error.
+     * @throws RemoteException        Thrown in case of a network error.
      */
-    public boolean isRoomInGame(String roomName) throws RoomNotExistsException,RemoteException{
+    public boolean isRoomInGame(String roomName) throws RoomNotExistsException, RemoteException {
         return server.isInGame(roomName);
     }
 
     /**
      * LocalModel getter method.
+     *
      * @return localmodel.
      */
     public StrippedModel getLocalModel() {
@@ -447,6 +457,7 @@ public class Client implements Runnable {
 
     /**
      * isMyTurn getter method
+     *
      * @return isMyturn.
      */
     public boolean isMyTurn() {
@@ -455,6 +466,7 @@ public class Client implements Runnable {
 
     /**
      * Method used to set player turn.
+     *
      * @param myTurn set to true when "next-player" event's appropriate field equals nickname.
      */
     public void setMyTurn(boolean myTurn) {
@@ -463,6 +475,7 @@ public class Client implements Runnable {
 
     /**
      * Getter method for nickname
+     *
      * @return nickname
      */
     public String getNickname() {
@@ -471,6 +484,7 @@ public class Client implements Runnable {
 
     /**
      * Binds the ui to this client.
+     *
      * @param ui Either GUI or CLI interface.
      */
     public void setUi(UI ui) {
@@ -479,6 +493,7 @@ public class Client implements Runnable {
 
     /**
      * inGame field setter
+     *
      * @param inGame value to set inGame to. Always false except for when the client is playing.
      */
     public void setInGame(boolean inGame) {
@@ -487,6 +502,7 @@ public class Client implements Runnable {
 
     /**
      * clientRoom getter
+     *
      * @return the room the client is in.
      */
     public String getRoom() {
@@ -495,6 +511,7 @@ public class Client implements Runnable {
 
     /**
      * returns the local playerlist.
+     *
      * @return local Players list.
      */
     public ArrayList<String> getLocalPlayerList() {
@@ -503,8 +520,9 @@ public class Client implements Runnable {
 
     /**
      * Asks the server whether the room is in Expert or Standard play mode.
+     *
      * @return true if expertmode, false if not
-     * @throws RemoteException Thrown in case of a network error.
+     * @throws RemoteException        Thrown in case of a network error.
      * @throws RoomNotExistsException Thrown if the given room name doesn't exist on the server.
      */
     public boolean getExpertMode() throws RemoteException, RoomNotExistsException {
