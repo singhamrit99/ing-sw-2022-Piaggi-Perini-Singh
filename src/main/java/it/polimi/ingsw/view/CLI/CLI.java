@@ -356,38 +356,6 @@ public class CLI implements UI {
 
     }
 
-    public void gameOver(String s) {
-
-        System.out.println("Game over! Team " + s + "won! Congratulations!\n");
-        client.setInGame(false);
-        System.out.println("Do you want to play again? Y/N");
-        boolean validInput = false;
-        boolean result = false;
-        String answer;
-        while (!validInput) {
-            answer = in.nextLine().toLowerCase(Locale.ROOT);
-            switch (answer) {
-                case "y": {
-                    result = true;
-                    validInput = true;
-                    break;
-                }
-                case "n": {
-                    result = false;
-                    validInput = true;
-                    break;
-                }
-                default:
-                    System.out.println("Command not recognized\n");
-            }
-        }
-
-        if (result) {
-            System.out.println("Cool\n");
-        } else
-            System.out.println("Goodbye!\n");
-    }
-
     @Override
     public void coinsChanged(PropertyChangeEvent e) {
 
