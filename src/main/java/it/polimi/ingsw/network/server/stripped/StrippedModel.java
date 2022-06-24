@@ -15,6 +15,9 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class StrippedModel implements Serializable {
+
+    //TODO AMRIT: change the name of this exception with something more specific
+    //TODO TINO:  search all the BadFormattedLocalModelException and replace the argument with a string that tell better the problem?
     final private ArrayList<StrippedBoard> boards;
     final private ArrayList<StrippedCharacter> characters;
     final private ArrayList<StrippedCloud> clouds;
@@ -130,7 +133,7 @@ public class StrippedModel implements Serializable {
      *Method used to set the board after a related event.
      * @param evt Any board event (change dining, change entrance, professors...)
      */
-    private void setBoard(PropertyChangeEvent evt) {
+    private void setBoard(PropertyChangeEvent evt) throws BadFormattedLocalModelException {
         String ownerBoard = (String) evt.getOldValue();
         Optional<StrippedBoard> boardToModify = boards.stream().filter(b -> ownerBoard.equals(b.getOwner())).findFirst();
         if (boardToModify.isPresent()) {
@@ -156,11 +159,10 @@ public class StrippedModel implements Serializable {
                     ui.professorChanged();
                     break;
                 default:
-                    System.out.println("exception da fare setBoard"); //todo
-                    break;
+                    throw new BadFormattedLocalModelException();
             }
-        } else { //todo
-            System.out.println("exception da fare setBoard");
+        } else {
+            throw new BadFormattedLocalModelException();
         }
     }
 
@@ -168,7 +170,7 @@ public class StrippedModel implements Serializable {
      *Changes the price of a character card after successful activation.
      * @param evt the Change-price event.
      */
-    private void changePriceCharacterCard(PropertyChangeEvent evt) {
+    private void changePriceCharacterCard(PropertyChangeEvent evt) throws BadFormattedLocalModelException {
         StrippedCharacter changedCard = (StrippedCharacter) evt.getNewValue();
         StrippedCharacter cardToUpdate = null;
         for (StrippedCharacter card : characters) {
@@ -182,10 +184,10 @@ public class StrippedModel implements Serializable {
                 int newPriceCard = (int) evt.getNewValue();
                 cardToUpdate.setPrice(newPriceCard); //update
             } else {
-                System.out.println("throws an exception because the old price of character is not the same"); //todo
+                throw new BadFormattedLocalModelException();
             }
         } else {
-            System.out.println("throws an exception not found card to update"); //todo
+            throw new BadFormattedLocalModelException();  //exception not found card to update
         }
     }
 
@@ -193,7 +195,7 @@ public class StrippedModel implements Serializable {
      *Handler of change-island event.
      * @param evt change-island event(such as students or towers being placed or conquests happening)
      */
-    private void changeIsland(PropertyChangeEvent evt) {
+    private void changeIsland(PropertyChangeEvent evt) throws BadFormattedLocalModelException {
         StrippedIsland changedIsland = (StrippedIsland) evt.getOldValue();
         Optional<StrippedIsland> optionalIslandFound = islands.stream().filter(x -> x.getName().equals(changedIsland.getName())).findFirst();
         if (optionalIslandFound.isPresent()) {
@@ -213,11 +215,11 @@ public class StrippedModel implements Serializable {
                     islandToChange.setDestroyed();
                     ui.islandMerged(evt);
                 } else {
-                    System.out.println("Exception changeIsland , strippedModel due"); //TODO
+                    throw new BadFormattedLocalModelException();
                 }
             }
         } else {
-            System.out.println("Exception changeIsland , strippedModel tre"); //TODO
+            throw new BadFormattedLocalModelException();
         }
     }
 
@@ -301,7 +303,7 @@ public class StrippedModel implements Serializable {
         for (StrippedBoard b : boards) {
             if (b.getOwner().equals(owner)) return b;
         }
-        throw new LocalModelNotLoadedException(); //todo change the name of this exception with something more specific
+        throw new LocalModelNotLoadedException();
     }
 
     /**
