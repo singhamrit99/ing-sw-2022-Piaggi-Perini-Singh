@@ -44,18 +44,13 @@ public class GameViewController extends InitialStage implements Controller {
     private ArrayList<ImageView> entranceStudentsImgs, towersImgs, charactersCards;
 
     //image assets import
-    private Image blackTowerImg, whiteTowerImg, greyTowerImg,
-            blueStudentImg, greenStudentImg, pinkStudentImg, redStudentImg, yellowStudentImg;
+    private Image blackTowerImg, whiteTowerImg, greyTowerImg, blueStudentImg, greenStudentImg, pinkStudentImg, redStudentImg, yellowStudentImg;
 
-    private ArrayList<ImageView> blueDiningImgs, redDiningImgs, yellowDiningImgs,
-            greenDiningImgs, pinkDiningImgs;
+    private ArrayList<ImageView> blueDiningImgs, redDiningImgs, yellowDiningImgs, greenDiningImgs, pinkDiningImgs;
 
-    private ArrayList<ImageView> studentsCloud1v3, studentsCloud1v4,
-            studentsCloud2v3, studentsCloud2v4, studentsCloud3v3,
-            studentsCloud3v4, studentsCloud4v4;
+    private ArrayList<ImageView> studentsCloud1v3, studentsCloud1v4, studentsCloud2v3, studentsCloud2v4, studentsCloud3v3, studentsCloud3v4, studentsCloud4v4;
 
-    private Image island0, island1, island2,
-            motherNature, noEntry;
+    private Image island0, island1, island2, motherNature, noEntry;
 
     private ArrayList<Image> islandsImgs;
 
@@ -67,10 +62,8 @@ public class GameViewController extends InitialStage implements Controller {
     private MenuItem leaveGame;
 
     @FXML
-    private ImageView redProf, yellowProf, greenProf, pinkProf, blueProf,
-            cloud1, cloud2, cloud3, cloud4,
-            assistantDeck,
-            character1, character2, character3;
+    private ImageView redProf, yellowProf, greenProf, pinkProf, blueProf, cloud1, cloud2, cloud3, cloud4,
+            assistantDeck, character1, character2, character3;
 
     @FXML
     private StackPane cloud1v3, cloud1v4, cloud2v3, cloud2v4, cloud3v3, cloud3v4, cloud4v4,
@@ -78,8 +71,7 @@ public class GameViewController extends InitialStage implements Controller {
             towers, islandsPane, bag, entrance, board;
 
     @FXML
-    private VBox cloudv1, cloudv2,
-            character1Vbox, character2Vbox, character3Vbox;
+    private VBox cloudv1, cloudv2, character1Vbox, character2Vbox, character3Vbox;
 
     @FXML
     private HBox characters;
@@ -133,6 +125,17 @@ public class GameViewController extends InitialStage implements Controller {
                 e.printStackTrace();
             }
         });
+
+
+        //animation islands
+        TranslateTransition floatingIslands = new TranslateTransition();
+        floatingIslands.setNode(islandsPane);
+        floatingIslands.setDuration(Duration.millis(4000));
+        floatingIslands.setCycleCount(TranslateTransition.INDEFINITE);
+        floatingIslands.setByX(10);
+        floatingIslands.setAutoReverse(true);
+        floatingIslands.setInterpolator(Interpolator.EASE_BOTH);
+        floatingIslands.play();
     }
 
     public void changeViewBoard(String viewOwnerTarget) {
@@ -173,9 +176,8 @@ public class GameViewController extends InitialStage implements Controller {
     }
 
     private void firstRefreshBoard() {
-        initializeImagesEntrance();
         currentBoardView = GUI.client.getNickname();
-
+        initializeImagesEntrance();
         initializeImagesTowers();
         initializeImagesDining();
         initializeClouds();
@@ -363,6 +365,7 @@ public class GameViewController extends InitialStage implements Controller {
         islandsImgs.add(island1);
         islandsImgs.add(island2);
 
+        //clickEvent
         islandsPane.setOnMouseClicked((event) -> {
             if (GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_2) && GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {
                 try {
@@ -389,23 +392,8 @@ public class GameViewController extends InitialStage implements Controller {
                 } else {
                     StackPane island = initIsland(i % 3);
                     HBox islandHbox = new HBox();
-                    GridPane towersPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> towers = spawnTowersIsland(islandsBackEnd.get(indexIsland));
-                    int j = 0;
-                    for (ImageView tower : towers) {
-                        tower.setFitHeight(25);
-                        tower.setFitWidth(25);
-                        towersPane.addRow(j / 2, tower);
-                        j++;
-                    }
-                    GridPane studentsPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> imgStudents = spawnStudentsIsland(islandsBackEnd.get(indexIsland));
-                    for (j = 0; j < imgStudents.size(); j++) {
-                        ImageView img = imgStudents.get(j);
-                        img.setFitWidth(20);
-                        img.setFitHeight(20);
-                        studentsPane.addRow(j / 3, img);
-                    }
+                    initTowersPane(island,islandHbox,islandsBackEnd.get(indexIsland));
+                    GridPane studentsPane = initStudentsPane(island,islandHbox,islandsBackEnd.get(indexIsland));
                     if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
                     if (islandsBackEnd.get(indexIsland).hasNoEnterTile()) spawnNoEntryTile(island);
                     Islands.addRow(0, island);
@@ -420,59 +408,18 @@ public class GameViewController extends InitialStage implements Controller {
         for (int i = 0; i < 6; i++) {
             if (i != 0 && i != 5) {
                 Islands.addRow(1, new Text("")); //empty cell
-            } else if (i == 0) {
-                if (islandsBackEnd.get(11).getName().equals("EMPTY")) {
+            } else { //for island 11 and 4
+                int correctIndexCorrispondence = 11;  //in case of i =0;
+                if(i!=0)correctIndexCorrispondence=4;
+                if (islandsBackEnd.get(correctIndexCorrispondence).getName().equals("EMPTY")) {
                     Islands.addRow(1, new Text("")); //empty cell alignment
                 } else {
                     StackPane island = initIsland(1);
                     HBox islandHbox = new HBox();
-                    GridPane towersPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> towers = spawnTowersIsland(islandsBackEnd.get(11));
-                    for (int x = 0; x < towers.size(); x++) {
-                        towers.get(x).setFitHeight(25);
-                        towers.get(x).setFitWidth(25);
-                        towersPane.addRow(x / 2, towers.get(x));
-                    }
-                    GridPane studentsPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> imgStudents = spawnStudentsIsland(islandsBackEnd.get(11));
-                    for (int j = 0; j < imgStudents.size(); j++) {
-                        ImageView img = imgStudents.get(j);
-                        img.setFitWidth(20);
-                        img.setFitHeight(20);
-                        studentsPane.addRow(j / 2, img);
-                    }
-                    if (islandsBackEnd.get(11).hasMotherNature()) spawnMNIsland(studentsPane);
-                    if (islandsBackEnd.get(11).hasNoEnterTile()) spawnNoEntryTile(island);
-                    Islands.addRow(1, island);
-                    Islands.getRowConstraints().add(row);
-                    Islands.getColumnConstraints().add(column);
-                }
-            } else { //second island of the FIRST line with the HOLE of the circle inside
-                if (islandsBackEnd.get(4).getName().equals("EMPTY")) {
-                    Islands.addRow(1, new Text("")); //empty cell alignment
-                } else {
-                    StackPane island = initIsland(2);
-                    HBox islandHbox = new HBox();
-                    GridPane towersPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> towers = spawnTowersIsland(islandsBackEnd.get(4));
-                    int y = 0;
-                    for (ImageView tower : towers) {
-                        tower.setFitHeight(25);
-                        tower.setFitWidth(25);
-                        towersPane.addRow(y / 2, tower);
-                        y++;
-                    }
-                    GridPane studentsPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> imgStudents = spawnStudentsIsland(islandsBackEnd.get(4));
-                    int im = 0;
-                    for (ImageView img : imgStudents) {
-                        img.setFitWidth(20);
-                        img.setFitHeight(20);
-                        studentsPane.addRow(im / 2, img);
-                        im++;
-                    }
-                    if (islandsBackEnd.get(4).hasMotherNature()) spawnMNIsland(studentsPane);
-                    if (islandsBackEnd.get(4).hasNoEnterTile()) spawnNoEntryTile(island);
+                    initTowersPane(island,islandHbox,islandsBackEnd.get(correctIndexCorrispondence));
+                    GridPane studentsPane = initStudentsPane(island,islandHbox,islandsBackEnd.get(correctIndexCorrispondence));
+                    if (islandsBackEnd.get(correctIndexCorrispondence).hasMotherNature()) spawnMNIsland(studentsPane);
+                    if (islandsBackEnd.get(correctIndexCorrispondence).hasNoEnterTile()) spawnNoEntryTile(island);
                     Islands.addRow(1, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -480,64 +427,22 @@ public class GameViewController extends InitialStage implements Controller {
             }
         }
 
-        //THIRD LINE
+
         for (int i = 0; i < 6; i++) {
             if (i != 0 && i != 5) {
                 Islands.addRow(2, new Text("")); //empty cell
-            } else if (i == 0) {
-                if (islandsBackEnd.get(10).getName().equals("EMPTY")) {
+            } else { //for island 10 and 5
+                int correctIndexCorrispondence = i;  //in case of i=5 -> 5;
+                if(i!=5)correctIndexCorrispondence=10; //in case of i=0 -> 10
+                if (islandsBackEnd.get(correctIndexCorrispondence).getName().equals("EMPTY")) {
                     Islands.addRow(2, new Text("")); //empty cell alignment
                 } else {
                     StackPane island = initIsland(1);
                     HBox islandHbox = new HBox();
-                    GridPane towersPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> towers = spawnTowersIsland(islandsBackEnd.get(10));
-                    int t = 0;
-                    for (ImageView tower : towers) {
-                        tower.setFitHeight(25);
-                        tower.setFitWidth(25);
-                        towersPane.addRow(t / 2, tower);
-                        t++;
-                    }
-                    GridPane studentsPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> imgStudents = spawnStudentsIsland(islandsBackEnd.get(10));
-                    for (int j = 0; j < imgStudents.size(); j++) {
-                        ImageView img = imgStudents.get(j);
-                        img.setFitWidth(20);
-                        img.setFitHeight(20);
-                        studentsPane.addRow(j / 2, img);
-                    }
-                    if (islandsBackEnd.get(10).hasMotherNature()) spawnMNIsland(towersPane);
-                    if (islandsBackEnd.get(10).hasNoEnterTile()) spawnNoEntryTile(island);
-                    Islands.addRow(2, island);
-                    Islands.getRowConstraints().add(row);
-                    Islands.getColumnConstraints().add(column);
-                }
-            } else { //second island of the SECOND line with the HOLE of the circle inside
-                if (islandsBackEnd.get(5).getName().equals("EMPTY")) {
-                    Islands.addRow(2, new Text("")); //empty cell alignment
-                } else {
-                    StackPane island = initIsland(1 + i % 2);
-                    HBox islandHbox = new HBox();
-                    GridPane towersPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> towers = spawnTowersIsland(islandsBackEnd.get(5));
-                    int x = 0;
-                    for (ImageView tower : towers) {
-                        tower.setFitHeight(25);
-                        tower.setFitWidth(25);
-                        towersPane.addRow(x / 2, tower);
-                        x++;
-                    }
-                    GridPane studentsPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> imgStudents = spawnStudentsIsland(islandsBackEnd.get(5));
-                    for (int j = 0; j < imgStudents.size(); j++) {
-                        ImageView img = imgStudents.get(j);
-                        img.setFitWidth(20);
-                        img.setFitHeight(20);
-                        studentsPane.addRow(j / 2, img);
-                    }
-                    if (islandsBackEnd.get(5).hasMotherNature()) spawnMNIsland(studentsPane);
-                    if (islandsBackEnd.get(5).hasNoEnterTile()) spawnNoEntryTile(island);
+                    initTowersPane(island,islandHbox,islandsBackEnd.get(correctIndexCorrispondence));
+                    GridPane studentsPane = initStudentsPane(island,islandHbox,islandsBackEnd.get(correctIndexCorrispondence));
+                    if (islandsBackEnd.get(correctIndexCorrispondence).hasMotherNature()) spawnMNIsland(studentsPane);
+                    if (islandsBackEnd.get(correctIndexCorrispondence).hasNoEnterTile()) spawnNoEntryTile(island);
                     Islands.addRow(2, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -545,7 +450,7 @@ public class GameViewController extends InitialStage implements Controller {
             }
         }
 
-        //LAST ISLANDS
+        //LAST LINE OF ISLANDS IN THE GRID
         indexIsland = 9;
         for (int i = 0; i < 6; i++) {
             if (i == 0 || i == 5) {
@@ -556,23 +461,8 @@ public class GameViewController extends InitialStage implements Controller {
                 } else {
                     StackPane island = initIsland(i % 3);
                     HBox islandHbox = new HBox();
-                    GridPane towersPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> towers = spawnTowersIsland(islandsBackEnd.get(indexIsland));
-                    int o = 0;
-                    for (ImageView tower : towers) {
-                        tower.setFitHeight(25);
-                        tower.setFitWidth(25);
-                        towersPane.addRow(o / 2, tower);
-                        o++;
-                    }
-                    GridPane studentsPane = initGridPaneIsland(island, islandHbox);
-                    ArrayList<ImageView> imgStudents = spawnStudentsIsland(islandsBackEnd.get(indexIsland));
-                    for (int j = 0; j < imgStudents.size(); j++) {
-                        ImageView img = imgStudents.get(j);
-                        img.setFitWidth(20);
-                        img.setFitHeight(20);
-                        studentsPane.addRow(j / 2, img);
-                    }
+                    initTowersPane(island,islandHbox,islandsBackEnd.get(indexIsland));
+                    GridPane studentsPane = initStudentsPane(island,islandHbox,islandsBackEnd.get(indexIsland));
                     if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
                     if (islandsBackEnd.get(indexIsland).hasNoEnterTile()) spawnNoEntryTile(island);
                     Islands.addRow(3, island);
@@ -582,17 +472,28 @@ public class GameViewController extends InitialStage implements Controller {
                 indexIsland--; //out from the if !!
             }
         }
+    }
 
-        //animations
-        for (Pane island : islandsPanes) {
-            TranslateTransition floatingTitle = new TranslateTransition();
-            floatingTitle.setNode(island);
-            floatingTitle.setDuration(Duration.millis(4000));
-            floatingTitle.setCycleCount(TranslateTransition.INDEFINITE);
-            floatingTitle.setByX(10);
-            floatingTitle.setAutoReverse(true);
-            floatingTitle.setInterpolator(Interpolator.EASE_BOTH);
-            floatingTitle.play();
+
+    private GridPane initStudentsPane(StackPane island, HBox islandHbox, StrippedIsland backendIsland){
+        GridPane studentsPane = initGridPaneIsland(island, islandHbox);
+        ArrayList<ImageView> imgStudents = spawnStudentsIsland(backendIsland);
+        for (int j = 0; j < imgStudents.size(); j++) {
+            ImageView img = imgStudents.get(j);
+            img.setFitWidth(20);
+            img.setFitHeight(20);
+            studentsPane.addRow(j / 2, img);
+        }
+        return studentsPane;
+    }
+
+    private void initTowersPane(StackPane island, HBox islandHbox, StrippedIsland backendIsland){
+        GridPane towersPane = initGridPaneIsland(island, islandHbox);
+        ArrayList<ImageView> towers = spawnTowersIsland(backendIsland);
+        for (int x = 0; x < towers.size(); x++) {
+            towers.get(x).setFitHeight(25);
+            towers.get(x).setFitWidth(25);
+            towersPane.addRow(x / 2, towers.get(x));
         }
     }
 
