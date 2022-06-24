@@ -185,7 +185,14 @@ public class Client implements Runnable {
             throw new UserNotInRoomException();
         } else {
             server.leaveRoom(nickname);
+            LobbyController.setOpened(false);
+            RoomController.setOpened(false);
+            GameViewController.setOpened(false);
+            localModelLoaded = false;
+            setInGame(false);
+            localModel = null;
             clientRoom = null;
+            view = StringNames.LOBBY;
             roomList = getRooms();
             ui.roomsAvailable(roomList);
             oldSize = 0; //this is necessary for the correct reloading of the rooms list but maybe refactor name
@@ -355,7 +362,7 @@ public class Client implements Runnable {
                     break;
                 case "game-finished":
                     try {
-                        server.leaveRoom(nickname);
+                        leaveRoom();
                     } catch (UserNotRegisteredException e) {
                         e.printStackTrace();
                     } catch (RemoteException e) {
@@ -363,14 +370,6 @@ public class Client implements Runnable {
                     } catch (UserNotInRoomException e) {
                         e.printStackTrace();
                     }
-                    LobbyController.setOpened(false);
-                    RoomController.setOpened(false);
-                    GameViewController.setOpened(false);
-                    view = StringNames.LOBBY;
-                    firstRoomListRefactor = true;
-                    setInGame(false);
-                    localModelLoaded = false;
-                    localModel = null;
                     break;
                 default:
                     if (localModel != null) {

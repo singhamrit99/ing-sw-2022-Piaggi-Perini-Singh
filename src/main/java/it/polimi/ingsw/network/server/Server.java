@@ -205,15 +205,21 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     }
 
     private synchronized void findDisconnectedUsers() {
+        ArrayList<ClientConnection> usersToRemove = new ArrayList<>();
+
         synchronized (users){
             for (ClientConnection client : users.values()) {
                 if (!client.isUp()) {
-                    try {
-                        deregisterConnection(client.getNickname());
-                    } catch (RemoteException | UserNotRegisteredException ignored) {
-                        ignored.printStackTrace();
-                    }
+                    usersToRemove.add(client);
                 } else client.setDown();
+            }
+
+            for (ClientConnection clientToRemove : usersToRemove) {
+                try {
+                    deregisterConnection(clientToRemove.getNickname());
+                } catch (RemoteException | UserNotRegisteredException ignored) {
+                    ignored.printStackTrace(); //TODO
+                }
             }
         }
     }
