@@ -1,7 +1,9 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.StringNames;
-import it.polimi.ingsw.view.GUI.GUI;
+import it.polimi.ingsw.view.GUI.controllerFX.GameViewController;
+import it.polimi.ingsw.view.GUI.controllerFX.LobbyController;
+import it.polimi.ingsw.view.GUI.controllerFX.RoomController;
 import it.polimi.ingsw.view.UI;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.network.server.stripped.StrippedModel;
@@ -31,6 +33,8 @@ public class Client implements Runnable {
     private boolean userRegistered;
     private boolean drawnOut;
     private boolean roomExpertMode = false;
+    int oldSize = 0;
+    boolean firstRoomListRefactor = true;
 
     public Client(String ip, int port) {
         this.ip = ip;
@@ -44,7 +48,6 @@ public class Client implements Runnable {
         try {
             Registry registry = LocateRegistry.getRegistry(ip, port);
             server = (serverStub) registry.lookup("server");
-            //System.out.println("connection done");
         } catch (Exception e) {
             System.err.println("Client connection to server exception: " + e); //TODO
             e.printStackTrace();
@@ -85,8 +88,8 @@ public class Client implements Runnable {
             clientRoom = roomName;
             playersList = getNicknamesInRoom();
         } catch (UserNotInRoomException ignored) {
-            //TODO
-        } catch(UserInRoomException problem){
+            ignored.printStackTrace();
+        } catch (UserInRoomException problem) {
             problem.printStackTrace(); //TODO
         }
         ui.roomJoin(playersList);
@@ -122,6 +125,14 @@ public class Client implements Runnable {
         }
     }
 
+    public void leaveGame() throws UserNotRegisteredException, UserNotInRoomException, RemoteException {
+        if (clientRoom == null) {
+            throw new UserNotInRoomException();
+        } else {
+            server.leaveGame(nickname);
+        }
+    }
+
     public boolean isLeader() throws RemoteException, RoomNotExistsException, UserNotInRoomException {
         return getNicknamesInRoom().get(0).equals(nickname);
     }
@@ -140,8 +151,6 @@ public class Client implements Runnable {
         ui.roomsAvailable(roomList);
     }
 
-    int oldSize = 0;
-    boolean firstRoomListRefactor = true;
     @Override
     public void run() {
         while (userRegistered) {
@@ -176,10 +185,10 @@ public class Client implements Runnable {
                     }
                 }
                 Thread.sleep(100);
-            } catch (RemoteException | LocalModelNotLoadedException | BadFormattedLocalModelEvent |
-                     InterruptedException | UserNotInRoomException | RoomNotExistsException e) {
-                System.err.println("Client exception: " + e);
+            } catch (RemoteException | LocalModelNotLoadedException | InterruptedException | UserNotInRoomException | RoomNotExistsException e) {
+                e.printStackTrace();
             } catch (UserNotRegisteredException e) {
+                e.printStackTrace();
                 userRegistered = false;
             }
         }
@@ -203,14 +212,19 @@ public class Client implements Runnable {
         }
     }
 
-    private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException, BadFormattedLocalModelEvent {
+    private void manageUpdates(ArrayList<PropertyChangeEvent> evtArray) throws LocalModelNotLoadedException {
         for (PropertyChangeEvent evt : evtArray) {
             switch (evt.getPropertyName()) {
                 case "first-player":
                     if (nickname.equals(evt.getNewValue()))
                         setMyTurn(true);
                     if (localModel != null) {
-                        localModel.updateModel(evt);
+                        try {
+                            localModel.updateModel(evt);
+                        } catch (BadFormattedLocalModelException badFormattedLocalModelException) {
+                            badFormattedLocalModelException.printStackTrace();
+                            badFormattedLocalModelException.printStackTrace();
+                        }
                     } else {
                         throw new LocalModelNotLoadedException();
                     }
@@ -228,30 +242,44 @@ public class Client implements Runnable {
                     break;
                 case "current-player":
                     setInGame(true);
-                    // System.out.println("Changed current player");
                     if (nickname.equals(evt.getNewValue()))
                         isMyTurn = true;
                     if (localModel != null) {
-                        localModel.updateModel(evt);
+                        try {
+                            localModel.updateModel(evt);
+                        } catch (BadFormattedLocalModelException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         throw new LocalModelNotLoadedException();
                     }
                     break;
                 case "game-finished":
                     try {
-                        ui.reloadRoomsFromGameView();
-                        leaveRoom();
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    } catch (UserNotInRoomException e) {
-                        throw new RuntimeException(e);
+                        server.leaveRoom(nickname);
                     } catch (UserNotRegisteredException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    } catch (UserNotInRoomException e) {
+                        e.printStackTrace();
                     }
+                    LobbyController.setOpened(false);
+                    RoomController.setOpened(false);
+                    GameViewController.setOpened(false);
+                    view = StringNames.LOBBY;
+                    firstRoomListRefactor = true;
+                    setInGame(false);
+                    localModelLoaded = false;
+                    localModel = null;
                     break;
                 default:
                     if (localModel != null) {
-                        localModel.updateModel(evt);
+                        try {
+                            localModel.updateModel(evt);
+                        } catch (BadFormattedLocalModelException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         throw new LocalModelNotLoadedException();
                     }
