@@ -209,7 +209,6 @@ public class Client implements Runnable {
         firstRoomListRefactor = true; //TODO name also of this
     }
 
-
     public void leaveGame() throws UserNotRegisteredException, UserNotInRoomException, RemoteException {
         if (clientRoom == null) {
             throw new UserNotInRoomException();
@@ -381,7 +380,7 @@ public class Client implements Runnable {
                     } catch (UserNotRegisteredException e) {
                         throw new RuntimeException(e);
                     }
-                    ui.gameOver((String) evt.getNewValue());
+                    ui.gameOver((String) evt.getOldValue(),(String) evt.getNewValue());
                     break;
                 default:
                     if (localModel != null) {
