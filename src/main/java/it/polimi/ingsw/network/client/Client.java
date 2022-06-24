@@ -31,7 +31,6 @@ public class Client implements Runnable {
     private boolean localModelLoaded;
     private boolean isMyTurn;
     private boolean userRegistered;
-    private boolean drawnOut;
     private boolean roomExpertMode = false;
     int oldSize = 0;
     boolean firstRoomListRefactor = true;
@@ -324,14 +323,6 @@ public class Client implements Runnable {
 
     public void setInGame(boolean inGame) {
         this.inGame = inGame;
-    }
-
-    public boolean isDrawnOut() {
-        return drawnOut;
-    }
-
-    public void setDrawnOut(boolean drawnOut) {
-        this.drawnOut = drawnOut;
     }
 
     public String getRoom() {
