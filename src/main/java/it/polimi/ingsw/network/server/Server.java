@@ -352,9 +352,8 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
             for (ClientConnection clientToRemove : usersToRemove) {
                 try {
                     deregisterConnection(clientToRemove.getNickname());
-                } catch (RemoteException | UserNotRegisteredException ignored) {
-                    ignored.printStackTrace(); //TODO
-                }
+                    //inside the server can't be 'remoteException' and UserNotRegistered is not a bad exception in this case
+                } catch (RemoteException | UserNotRegisteredException ignored) {}
             }
         }
     }
