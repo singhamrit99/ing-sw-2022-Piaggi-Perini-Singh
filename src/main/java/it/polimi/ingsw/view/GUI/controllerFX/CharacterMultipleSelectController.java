@@ -62,6 +62,7 @@ public class CharacterMultipleSelectController extends InitialStage implements C
         AtomicInteger chosen = new AtomicInteger();
 
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
+        int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
         description.setText(selectedCharacter.getDescription());
 
         for (int i = 0; i < selectedCharacter.getStudents().size(); i++) {
@@ -107,7 +108,7 @@ public class CharacterMultipleSelectController extends InitialStage implements C
 
         confirmButton.setOnAction((event) -> {
             if (selectedCharacter.getCharacterID() == 1) {
-                PlayCharacterCardB playCharacterCardB = new PlayCharacterCardB(GUI.client.getNickname(), selectedCharacter.getCharacterID(), index.get(), chosen.get());
+                PlayCharacterCardB playCharacterCardB = new PlayCharacterCardB(GUI.client.getNickname(), indexSelectedCharacter, index.get(), chosen.get());
                 try {
                     GUI.client.performGameAction(playCharacterCardB);
                 } catch (AssistantCardNotFoundException e) {
@@ -134,7 +135,7 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                 }
             } else {
-                PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), selectedCharacter.getCharacterID(), index.get());
+                PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), indexSelectedCharacter, index.get());
                 try {
                     GUI.client.performGameAction(playCharacterCardD);
                 } catch (AssistantCardNotFoundException e) {
