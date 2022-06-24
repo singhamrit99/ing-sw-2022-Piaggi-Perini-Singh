@@ -152,10 +152,11 @@ public class GUI implements UI {
     }
 
     @Override
-    public void gameOver(String winner) {
+    public void gameOver(String leavingPlayer, String winner) {
             if (GUI.client.view.equals(StringNames.INGAME)) {
                 if (gameController.isOpened()) {
                     Platform.runLater(() -> {
+                        gameOverController.setLeavingPlayer(leavingPlayer);
                         gameOverController.setWinner(winner);
                         Controller.load(ResourcesPath.GAME_OVER, gameOverController);
                     });
