@@ -45,6 +45,10 @@ public class RoomController extends InitialStage implements Controller {
         super(gui);
     }
 
+    public static void setOpened(boolean b) {
+        opened.set(false);
+    }
+
     @FXML
     public void initialize() {
         opened.set(true);
