@@ -41,6 +41,7 @@ public class GameOverController extends InitialStage implements Controller {
     }
 
     String winnerTeam = null;
+    String leavingPlayer = null;
     @FXML
     Text winnerDeclare;
 
@@ -51,7 +52,8 @@ public class GameOverController extends InitialStage implements Controller {
     public void initialize() {
         opened.set(true);
         if(winnerTeam==null){
-            winnerDeclare.setText("Game interrupted by a player who leaved the game!");
+            if(leavingPlayer!=null)winnerDeclare.setText("Game interrupted by "+ leavingPlayer + " who leaved the game!");
+            else winnerDeclare.setText("Game interrupted by a player who leaved the game!");
         }
         else{
             winnerDeclare.setText("Game over! Team " + winnerTeam + "won! Congratulations!");
@@ -64,6 +66,10 @@ public class GameOverController extends InitialStage implements Controller {
 
     public void setWinner(String winner){
         winnerTeam = winner;
+    }
+
+    public void setLeavingPlayer(String leavingPlayer){
+        this.leavingPlayer = leavingPlayer;
     }
 
 }
