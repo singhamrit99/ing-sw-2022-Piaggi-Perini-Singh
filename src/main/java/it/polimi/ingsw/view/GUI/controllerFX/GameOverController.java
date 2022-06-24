@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
+import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.rmi.RemoteException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -60,7 +62,11 @@ public class GameOverController extends InitialStage implements Controller {
         }
 
         exitButton.setOnAction((event) -> {
-            GUI.client.leaveGameOverScreenGUI();
+            try {
+                GUI.client.leaveGameOverScreenGUI();
+            } catch (RemoteException e) {
+                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+            }
         });
     }
 
