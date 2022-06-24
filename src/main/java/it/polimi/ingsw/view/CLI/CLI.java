@@ -53,157 +53,153 @@ public class CLI implements UI {
     public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException, RoomNotExistsException, LocalModelNotLoadedException {
 
         AnsiConsole.systemInstall();
-        System.out.println("Welcome to...");
+        while(true) {
+            System.out.println("Welcome to...");
 
-        System.out.println(("      ########## #########  ###########     ###     ####    ### ########### ###   ###  ######## \n") +
-                "     #+#        #+#    #+#     #+#       #+# #+#   #+#+#   #+#     #+#     #+#   #+# #+#    #+# \n" +
-                "    +#+        +#+    +#+     +#+      +#+   +#+  #+#+#+  +#+     +#+      +#+ +#+  +#+         \n" +
-                "   +#++#++#   +#++#++##      +#+     +#++#++#++# +#+ +#+ +#+     +#+       +#++#   +#++#++#++   \n" +
-                "  +#+        +#+    +#+     +#+     +#+     +#+ +#+  +#+#+#     +#+        +#+           +#+    \n" +
-                " #+#        #+#    #+#     #+#     #+#     #+# #+#   #+#+#     #+#        #+#    #+#    #+#     \n" +
-                "########## ###    ### ########### ###     ### ###    ####     ###        ###     ########     ");
-        System.out.println("Welcome to the lobby!\nWhat's your name?");
-        while (true) {
-            try {
-                nickName = in.nextLine();
-                client.registerClient(nickName);
-                client.view = StringNames.LOBBY;
-                break;
-            } catch (UserAlreadyExistsException e) {
-                System.out.println("That username is already in the game! Try another.\n");
-            }
-        }
-        System.out.println("O----------------------------------------------------------------------------------------O\n" +
-                "|Possible options: JOIN to join a room; CREATE to create a new room; ROOMS to list rooms;|\n" +
-                "|PLAYERS to list players in current lobby; INFO to view your current room's information; |\n" +
-                "|CHANGE to toggle expert mode for the current lobby; LEAVE to leave current lobby;       |\n" +
-                "|HELP to see this message again.                                                         |\n" +
-                "|When you're ready to go and everyone is in the lobby type START to start the game!      |\n" +
-                "O----------------------------------------------------------------------------------------O");
-        //Main room loop
-        while (!client.isInGame()) {
-            //codice della lobby
-            String command = in.nextLine().toLowerCase(Locale.ROOT).replaceAll("\\s+", "");
-            if (!client.isInGame())
-                switch (command) {
-                    case "join":
-                        requestRoomJoin(); //fatto
-                        break;
-                    case "create":
-                        requestRoomCreation(); //fatto
-                        break;
-                    case "players":
-                        getPlayersInRoom();//fatto
-                        break;
-                    case "rooms":
-                        getRooms();//fatto
-                        break;
-                    case "info":
-                        getLobbyInfo();//fatto
-                        break;
-                    case "change":
-                        setExpertMode();//fatto
-                        break;
-                    case "leave":
-                        leaveRoom();//fatto
-                        break;
-                    case "start":
-                        startGame();
-                        break;
-                    case "help":
-                        System.out.println("O----------------------------------------------------------------------------------------O\n" +
-                                "|Possible options: JOIN to join a room; CREATE to create a new room; ROOMS to list rooms;|\n" +
-                                "|PLAYERS to list players in current lobby; INFO to view your current room's information; |\n" +
-                                "|CHANGE to toggle expert mode for the current lobby; LEAVE to leave current lobby;       |\n" +
-                                "|HELP to see this message again.                                                         |\n" +
-                                "|When you're ready to go and everyone is in the lobby type START to start the game!      |\n" +
-                                "O----------------------------------------------------------------------------------------O");
-                        break;
-                    case "\n":
-                        System.out.println(command);
-                        break;
-                    default:
-                        System.out.println("Command not recognized");
-                        break;
-                }
-        }
-        System.out.println("Loading...");
-
-        //Main game loop
-        //Initializing local professors board
-        while (client.getLocalModel()==null) {
-
-        }
-        for (StrippedBoard s: client.getLocalModel().getBoards())
-        {
-            professorsTables.put(s.getOwner(), s.getProfessorsTable());
-        }
-
-
-
-
-
-        while (client.isInGame()) {
-            endturn=false;
-            numOfPlayers=client.getLocalModel().getBoards().size();
-            if (playedThisTurn == null)
-                playedThisTurn = new ArrayList<>();
-            //Assistant Card play phase
-            while (!client.isMyTurn()) {
-                //Wait for the other players to be done with their turn while I still output their moves...
-                waitForTurn();
-            }
-
-            if (client.isMyTurn() && client.getLocalModel().getFirstPlayer().equals(client.getNickname())) {
-                System.out.println("Drawing from bag...");
-                drawFromBag();
-            }
-            if (client.isMyTurn() && client.getLocalModel().getState().equals(State.PLANNINGPHASE))
-               while (true)try {
-                    playAssistantCard();
+            System.out.println(("      ########## #########  ###########     ###     ####    ### ########### ###   ###  ######## \n") +
+                    "     #+#        #+#    #+#     #+#       #+# #+#   #+#+#   #+#     #+#     #+#   #+# #+#    #+# \n" +
+                    "    +#+        +#+    +#+     +#+      +#+   +#+  #+#+#+  +#+     +#+      +#+ +#+  +#+         \n" +
+                    "   +#++#++#   +#++#++##      +#+     +#++#++#++# +#+ +#+ +#+     +#+       +#++#   +#++#++#++   \n" +
+                    "  +#+        +#+    +#+     +#+     +#+     +#+ +#+  +#+#+#     +#+        +#+           +#+    \n" +
+                    " #+#        #+#    #+#     #+#     #+#     #+# #+#   #+#+#     #+#        #+#    #+#    #+#     \n" +
+                    "########## ###    ### ########### ###     ### ###    ####     ###        ###     ########     ");
+            System.out.println("Welcome to the lobby!\nWhat's your name?");
+            while (true) {
+                try {
+                    nickName = in.nextLine();
+                    client.registerClient(nickName);
+                    client.view = StringNames.LOBBY;
                     break;
-                }catch (AssistantCardNotFoundException e)
-               {
-                   System.out.println("Invalid assistant card! Try again.");
-               }
+                } catch (UserAlreadyExistsException e) {
+                    System.out.println("That username is already in the game! Try another.\n");
+                }
+            }
+            System.out.println("O----------------------------------------------------------------------------------------O\n" +
+                    "|Possible options: JOIN to join a room; CREATE to create a new room; ROOMS to list rooms;|\n" +
+                    "|PLAYERS to list players in current lobby; INFO to view your current room's information; |\n" +
+                    "|CHANGE to toggle expert mode for the current lobby; LEAVE to leave current lobby;       |\n" +
+                    "|HELP to see this message again.                                                         |\n" +
+                    "|When you're ready to go and everyone is in the lobby type START to start the game!      |\n" +
+                    "O----------------------------------------------------------------------------------------O");
+            //Main room loop
+            while (!client.isInGame()) {
+                //codice della lobby
+                String command = in.nextLine().toLowerCase(Locale.ROOT).replaceAll("\\s+", "");
+                if (!client.isInGame())
+                    switch (command) {
+                        case "join":
+                            requestRoomJoin(); //fatto
+                            break;
+                        case "create":
+                            requestRoomCreation(); //fatto
+                            break;
+                        case "players":
+                            getPlayersInRoom();//fatto
+                            break;
+                        case "rooms":
+                            getRooms();//fatto
+                            break;
+                        case "info":
+                            getLobbyInfo();//fatto
+                            break;
+                        case "change":
+                            setExpertMode();//fatto
+                            break;
+                        case "leave":
+                            leaveRoom();//fatto
+                            break;
+                        case "start":
+                            startGame();
+                            break;
+                        case "help":
+                            System.out.println("O----------------------------------------------------------------------------------------O\n" +
+                                    "|Possible options: JOIN to join a room; CREATE to create a new room; ROOMS to list rooms;|\n" +
+                                    "|PLAYERS to list players in current lobby; INFO to view your current room's information; |\n" +
+                                    "|CHANGE to toggle expert mode for the current lobby; LEAVE to leave current lobby;       |\n" +
+                                    "|HELP to see this message again.                                                         |\n" +
+                                    "|When you're ready to go and everyone is in the lobby type START to start the game!      |\n" +
+                                    "O----------------------------------------------------------------------------------------O");
+                            break;
+                        case "\n":
+                            System.out.println(command);
+                            break;
+                        default:
+                            System.out.println("Command not recognized");
+                            break;
+                    }
+            }
+            System.out.println("Loading...");
 
+            //Main game loop
+            //Initializing local professors board
+            while (client.getLocalModel() == null) {
 
-            System.out.println("Waiting for everyone to play an assistant card");
-            while(numOfPlayers>1)
-            {
-                //System.out.println(numOfPlayers);
+            }
+            for (StrippedBoard s : client.getLocalModel().getBoards()) {
+                professorsTables.put(s.getOwner(), s.getProfessorsTable());
             }
 
-            //Turn phase
-            if (client.getExpertMode()) {
 
-                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)&&!endturn) {
-                    while (!client.isMyTurn()) {
-                        waitForTurn();
-                    }
-                    if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)&&!endturn) {
-                        expertPrintCommandHelp();
-                        performActionInTurnExpert();
-                    }
-                    //System.out.println(client.getLocalModel().getState());
+            while (client.isInGame()) {
+                endturn = false;
+                numOfPlayers = client.getLocalModel().getBoards().size();
+                if (playedThisTurn == null)
+                    playedThisTurn = new ArrayList<>();
+                //Assistant Card play phase
+                while (!client.isMyTurn()) {
+                    //Wait for the other players to be done with their turn while I still output their moves...
+                    waitForTurn();
                 }
-                pickCloud();
-            } else {
 
-                while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)&&!endturn) {
-                    while (!client.isMyTurn()) {
-                        waitForTurn();
-                    }
-                    if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3)&&!endturn) {
-                        printCommandHelp();
-                        performActionInTurn();
-                    }
-                    //System.out.println(client.getLocalModel().getState());
+                if (client.isMyTurn() && client.getLocalModel().getFirstPlayer().equals(client.getNickname())) {
+                    System.out.println("Drawing from bag...");
+                    drawFromBag();
                 }
-                pickCloud();
+                if (client.isMyTurn() && client.getLocalModel().getState().equals(State.PLANNINGPHASE))
+                    while (true) try {
+                        playAssistantCard();
+                        break;
+                    } catch (AssistantCardNotFoundException e) {
+                        System.out.println("Invalid assistant card! Try again.");
+                    }
+
+
+                System.out.println("Waiting for everyone to play an assistant card");
+                while (numOfPlayers > 1) {
+                    //System.out.println(numOfPlayers);
+                }
+
+                //Turn phase
+                if (client.getExpertMode()) {
+
+                    while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endturn) {
+                        while (!client.isMyTurn()) {
+                            waitForTurn();
+                        }
+                        if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endturn) {
+                            expertPrintCommandHelp();
+                            performActionInTurnExpert();
+                        }
+                        //System.out.println(client.getLocalModel().getState());
+                    }
+                    pickCloud();
+                } else {
+
+                    while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endturn) {
+                        while (!client.isMyTurn()) {
+                            waitForTurn();
+                        }
+                        if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endturn) {
+                            printCommandHelp();
+                            performActionInTurn();
+                        }
+                        //System.out.println(client.getLocalModel().getState());
+                    }
+                    pickCloud();
+                }
             }
+
         }
-
     }
 
     @Override
@@ -347,6 +343,19 @@ public class CLI implements UI {
     }
 
     @Override
+    public void gameOver(String leavingPlayer, String winner) {
+
+        if (winner!=null) {
+            System.out.println("Game over! Team " + winner + "won! Congratulations!\n");
+            client.setInGame(false);
+        }
+        else
+        {
+            System.out.println("Player "+ leavingPlayer + "left the game. Everyone will be put back into the lobby.");
+        }
+
+    }
+
     public void gameOver(String s) {
 
         System.out.println("Game over! Team " + s + "won! Congratulations!\n");
