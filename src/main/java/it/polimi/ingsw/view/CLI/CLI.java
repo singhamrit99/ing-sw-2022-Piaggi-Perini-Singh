@@ -44,12 +44,34 @@ public class CLI implements UI {
     HashMap<String, ArrayList<Colors>> professorsTables= new HashMap<>();
     private final Scanner in = new Scanner(System.in);
 
+    /**
+     * CLI constructor.
+     * @param client the client this view is connected to.
+     */
     public CLI(Client client) {
         this.client = client;
         this.client.setUi(this);
         this.client.view = StringNames.LAUNCHER;
     }
 
+    /**
+     * The main view method, in which the game loop remains for all the uptime of the program.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws UserNotInRoomException Thrown when the player tries to perform a room action without being in a room.
+     * @throws NotLeaderRoomException Throw if the player that tried to perform certain actions isn't the leader of the room.
+     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws AssistantCardNotFoundException  Thrown if the provided assistant card is invalid.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown when methods are called in an incorrect method of the game.
+     * @throws MotherNatureLostException Thrown when the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the method causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws IncorrectPlayerException Thrown if a method is accessed by any player that isn't the room's leader.
+     * @throws IncorrectArgumentException  Thrown if any of the parameters used by the method are invalid.
+     * @throws UserNotRegisteredException  Thrown if the given room name doesn't exist on the server.
+     * @throws InterruptedException Interrupted
+     * @throws RoomNotExistsException Thrown when the provided room name doesn't exist on the server.
+     * @throws LocalModelNotLoadedException Thrown when the local model is null when accessed.
+     */
     public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException, RoomNotExistsException, LocalModelNotLoadedException {
 
         AnsiConsole.systemInstall();
@@ -202,6 +224,9 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     */
     @Override
     public void professorChanged() {
         ArrayList<StrippedBoard> tmp = new ArrayList<>(client.getLocalModel().getBoards());
@@ -224,6 +249,10 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @throws RemoteException
+     */
     @Override
     public void startGame() throws RemoteException {
         if (!client.isInGame()) {
@@ -244,17 +273,29 @@ public class CLI implements UI {
 
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param s current player name.
+     */
     @Override
     public void currentPlayer(String s) {
         client.view = StringNames.INGAME;
         System.out.println("It's now " + s + "'s turn!");
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param e the event that changed the clouds.
+     */
     @Override
     public void notifyCloud(PropertyChangeEvent e) {
 
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param assistantCard card played by one of the players.
+     */
     @Override
     public void deckChange(String assistantCard) {
         String tmp;
@@ -267,12 +308,19 @@ public class CLI implements UI {
         numOfPlayers--;
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param e deck change event.
+     */
     @Override
     public void assistantCardPlayed(PropertyChangeEvent e) {
 
     }
 
-
+    /**
+     * Display method for events. Check UI file for details.
+     * @param e island change event
+     */
     @Override
     public void islandChange(PropertyChangeEvent e) {
         if (!client.getLocalModel().getCurrentPlayer().equals(client.getNickname())) {
@@ -283,6 +331,10 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param e island merge event
+     */
     @Override
     public void islandMerged(PropertyChangeEvent e) {
         StrippedIsland oldIsland, newIsland;
@@ -291,6 +343,10 @@ public class CLI implements UI {
         System.out.println("Islands " + oldIsland.getName() + " and " + newIsland.getName() + " merged!\n");
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param e island conquest event
+     */
     @Override
     public void islandConquest(PropertyChangeEvent e) {
         StrippedIsland island = (StrippedIsland) e.getNewValue();
@@ -298,6 +354,10 @@ public class CLI implements UI {
 
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param e dining change event.
+     */
     @Override
     public void diningChange(PropertyChangeEvent e) {
         String player = (String) e.getOldValue();
@@ -313,6 +373,10 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param e entrance changed event.
+     */
     @Override
     public void entranceChanged(PropertyChangeEvent e) {
         EnumMap<Colors, Integer> newBoard;
@@ -330,6 +394,10 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param e tower change event.
+     */
     @Override
     public void towersEvent(PropertyChangeEvent e) {
 
@@ -342,6 +410,11 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param leavingPlayer The leaving player in case of quit-out and remaking of game
+     * @param winner Winner team if the game reached a valid end.
+     */
     @Override
     public void gameOver(String leavingPlayer, String winner) {
 
@@ -356,11 +429,19 @@ public class CLI implements UI {
 
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param e coins changed event.
+     */
     @Override
     public void coinsChanged(PropertyChangeEvent e) {
 
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param rooms the rooms to display on the server.
+     */
     @Override
     public void roomsAvailable(ArrayList<String> rooms) {
         try {
@@ -371,6 +452,10 @@ public class CLI implements UI {
 
     }
 
+    /**
+     * Display method for events. Check UI file for details.
+     * @param players players in the room
+     */
     @Override
     public void roomJoin(ArrayList<String> players) {
         try {
@@ -381,6 +466,10 @@ public class CLI implements UI {
 
     }
 
+    /**
+     * Method that returns all the players in a room.
+     * @throws RemoteException Thrown in case of a network error.
+     */
     private void getPlayersInRoom() throws RemoteException {
         if (clientRoom != null) {
             ArrayList<String> response;
@@ -394,6 +483,10 @@ public class CLI implements UI {
         // System.out.println("You're not in a room, so there are no players to show\n");
     }
 
+    /**
+     * Returns the lobby name, leader and whether you're in expert mode or not.
+     * @throws RemoteException Thrown in case of a network error.
+     */
     private void getLobbyInfo() throws RemoteException {
         if (clientRoom != null) {
             ArrayList<String> result;
@@ -409,6 +502,10 @@ public class CLI implements UI {
             System.out.println("You're not in a room yet\n");
     }
 
+    /**
+     * Method used to leave the room.
+     * @throws RemoteException Thrown in case of a network error.
+     */
     private void leaveRoom() throws RemoteException {
         try {
             client.leaveRoom();
@@ -419,6 +516,10 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Method used to return all the rooms on the server.
+     * @throws RemoteException Thrown in case of a network error.
+     */
     public void getRooms() throws RemoteException {
         System.out.println("Rooms on the server: ");
         ArrayList<String> response = client.getRooms();
@@ -428,6 +529,12 @@ public class CLI implements UI {
             sendArrayString(response);
     }
 
+    /**
+     * Method used to switch game mode in the room.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws UserNotInRoomException Thrown if the user tries to perform this action when not in a room.
+     * @throws NotLeaderRoomException Thrown if the method is called by a player that is not the room leader.
+     */
     public void setExpertMode() throws RemoteException, UserNotInRoomException, NotLeaderRoomException {
         boolean result = false;
         System.out.println("Do you want to play in expert mode? Y/N");
@@ -460,6 +567,10 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Method used to call for a room creation from Client.
+     * @throws RemoteException Thrown in case of a network error.
+     */
     public synchronized void requestRoomCreation() throws RemoteException {
         System.out.println("Insert room name: \n");
         String nameRoom;
@@ -476,6 +587,10 @@ public class CLI implements UI {
         clientRoom = nameRoom;
     }
 
+    /**
+     * Method used to request room join from Client.
+     * @throws RemoteException Thrown in case of a network error.
+     */
     public synchronized void requestRoomJoin() throws RemoteException {
         String requestedRoom;
         System.out.println("Select the room: \n");
@@ -519,17 +634,48 @@ public class CLI implements UI {
 
     // **********************************   Gameplay methods    ***************************************************************
 
+    /**
+     * Method used to leave the game.
+     * @throws UserNotInRoomException Thrown if the user that calls this method is not in a room.
+     * @throws UserNotRegisteredException Thrown if the user that called this method is not present on the server.
+     * @throws RemoteException Thrown in case of a network error.
+     */
     public void leaveGame() throws UserNotInRoomException, UserNotRegisteredException, RemoteException {
         client.leaveGame();
     }
 
-
+    /**
+     * Method used to draw
+     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws UserNotInRoomException Thrown if the user that performed this action is not in a room.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws UserNotRegisteredException Thrown if the user that performed this action isn't registered on the server.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     */
     public void drawFromBag() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         drawFromBagOrder = new DrawFromBagCommand(client.getNickname());
         System.out.println("Drawing from bag...\n");
         client.performGameAction(drawFromBagOrder);
     }
 
+    /**
+     * Method used to play assistant cards.
+     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     */
     public synchronized void playAssistantCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
         System.out.println("It's your turn! Pick an assistant card to play. \n");
         printAssistantCards();
@@ -572,6 +718,23 @@ public class CLI implements UI {
         client.setMyTurn(false);
     }
 
+    /**
+     * Method used to choose the actions the player wants to perform in their turn and also print game info such as clouds, islands and player boards.
+     *
+     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     * @throws UserNotInRoomException Thrown when this method is called by a user who is not in a room.
+     * @throws UserNotRegisteredException Thrown when this method is called by a user who is not on the server.
+     * @throws LocalModelNotLoadedException Thrown when the local model field in client is null.
+     * @throws RoomNotExistsException Thrown when the given room name doesn't exist.
+     */
     public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException {
         do {
             //   System.out.println("Press any key to continue\n");
@@ -618,6 +781,23 @@ public class CLI implements UI {
 
     }
 
+    /**
+     *Basically the same method as performActionInTurn, but also contains character cards related methods.
+     *
+     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     * @throws UserNotInRoomException Thrown when this method is called by a user who is not in a room.
+     * @throws UserNotRegisteredException Thrown when this method is called by a user who is not on the server.
+     * @throws LocalModelNotLoadedException Thrown when the local model field in client is null.
+     * @throws RoomNotExistsException Thrown when the given room name doesn't exist.
+     */
     public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException {
         do {
             //   System.out.println("Press any key to continue\n");
@@ -670,6 +850,21 @@ public class CLI implements UI {
 
     }
 
+    /**
+     * Method used to pick a cloud tile at the end of the player turn.
+     *
+     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws UserNotInRoomException Thrown when this method is called by a user who is not in a room.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws UserNotRegisteredException Thrown when this method is called by a user who is not on the server.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     */
     public void pickCloud() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("Almost at the end of your turn! Pick a cloud to refill your entrance.\n");
         printClouds();
@@ -720,6 +915,22 @@ public class CLI implements UI {
         client.setMyTurn(false);
     }
 
+    /**
+     *Method used to move Mother Nature after moving the students.
+     *
+     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws UserNotInRoomException Thrown when this method is called by a user who is not in a room.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws UserNotRegisteredException Thrown when this method is called by a user who is not on the server.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     * @throws LocalModelNotLoadedException Thrown if the local model field in client is null.
+     */
     public void moveMN() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
         if (client.getLocalModel().isCanPlayMN()) {
             System.out.println("Input the number of steps you want Mother Nature to move! The maximum steps according to the card you played are \n " + client.getLocalModel().getBoardOf(client.getNickname()).getMoves());
@@ -762,6 +973,23 @@ public class CLI implements UI {
         } else System.out.println("You can't move Mother Nature yet! First things first: move three students!");
     }
 
+    /**
+     *Method used to move students in the mandatory dining/island phase of the turn.
+     *
+     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws UserNotInRoomException Thrown when this method is called by a user who is not in a room.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws UserNotRegisteredException Thrown when this method is called by a user who is not on the server.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     * @throws RoomNotExistsException The requested room does not exist.
+     * @throws LocalModelNotLoadedException Thrown if the local model field in client is null.
+     */
     public void moveStudents() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, RoomNotExistsException, LocalModelNotLoadedException {
         if (!client.getLocalModel().isCanPlayMN()) {
             StrippedBoard myBoard = client.getLocalModel().getBoardOf(client.getNickname());
@@ -953,6 +1181,21 @@ public class CLI implements UI {
     //End of MoveStudents
 
     // **********************************   Character card methods    ***************************************************************
+
+    /**
+     *Method used to play a character card. Splits off in several children methods based on parameters needed.
+     *
+     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     * @throws LocalModelNotLoadedException Thrown if the local model field in client is null.
+     */
     public void playCharacterCard() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
         StrippedCharacter tmp;
         System.out.println("Select the character you want to play! You currently have " + client.getLocalModel().getBoards().get(playerNumber).getCoins() + " coins \n");
@@ -1016,6 +1259,19 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Character card method that is used to play automatic action cards.
+     *
+     * @param id The ID of the character card played.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     */
     public void playCharacterA(int id) throws AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         System.out.println("You have chosen a no parameter character! Buckle up, the effects are on the way!\n");
         playCharacterCardAOrder = new PlayCharacterCardA(client.getNickname(), id);
@@ -1030,8 +1286,23 @@ public class CLI implements UI {
     }
 
     //This is only one card but it's unique since it calls for a color AND an island.
+
+    /**
+     *Method to call Character Card B. This type of card requires an island and a set of students on the card.
+     *
+     * @param id the ID of the character card.
+     * @param character The character card itself, since we need to have the students present on it.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     */
     public void playCharacterB(int id, StrippedCharacter character) throws AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
-        System.out.println("You have chosen a student island card\n");
+        //System.out.println("You have chosen a student island card\n");
         int student, island;
         System.out.println(character.getDescription());
         printStudentsOnCard(character);
@@ -1074,6 +1345,21 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     *Method used to call Character card type C. This type of card requires two sets of students.
+     * 
+     * @param id the ID of the character card.
+     * @param card The character card itself.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     * @throws LocalModelNotLoadedException Thrown when local model field is null.
+     */
     public void playCharacterC(int id, StrippedCharacter card) throws AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
         System.out.println("You have chosen a card that requires two sets of students\n");
         String answer;
@@ -1296,6 +1582,18 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Method used to call Character card type D. They require a choice from the player, but after that the action is automatic.
+     * @param id the ID of the character card.
+     * @throws AssistantCardNotFoundException Thrown if the assistant card provided is invalid.
+     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException Thrown if the method is called in an illegal phase.
+     * @throws MotherNatureLostException Thrown if the game can't calculate Mother Nature's position.
+     * @throws ProfessorNotFoundException If the action causes a professor gain or loss and that generates an error this exception is thrown.
+     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
+     * @throws RemoteException Thrown in case of a network error.
+     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     */
     public void playCharacterD(int id) throws AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
         //There are THREE cards that ask for colors (the professors one just takes them all. One of them has students on it, so I have to differentiate.
         //And the No Entry card that wants the island number so it ends up here
@@ -1445,6 +1743,10 @@ public class CLI implements UI {
     }
 
     // **********************************   Printer Methods    ***************************************************************
+
+    /**
+     * Method used to print available commands during the turn.
+     */
     public void printCommandHelp() {
         System.out.println("O-----------------------------------------------------------------------O\n" +
                 "|              The commands available are the following:                |\n" +
@@ -1459,6 +1761,9 @@ public class CLI implements UI {
                 "O-----------------------------------------------------------------------O");
     }
 
+    /**
+     * Same as above, but with added character cards.
+     */
     public void expertPrintCommandHelp() {
         System.out.println("O-----------------------------------------------------------------------O\n" +
                 "|              The commands available are the following:                |\n" +
@@ -1475,6 +1780,9 @@ public class CLI implements UI {
                 "O-----------------------------------------------------------------------O");
     }
 
+    /**
+     * Method used to print every player board. Your own board is highlighted.
+     */
     public void printPlayerBoards() {
         ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
         System.out.println("Player boards:\n");
@@ -1485,6 +1793,10 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Method that prints a given StrippedBoard.
+     * @param board The StrippedBoard to print.
+     */
     public void printPlayerBoard(StrippedBoard board) {
 
         System.out.println("O----------------------O");
@@ -1508,12 +1820,18 @@ public class CLI implements UI {
         System.out.println("O----------------------O");
     }
 
+    /**
+     * Method that prints all the player names in the game.
+     */
     public void printPlayerNames() {
         for (StrippedBoard board : client.getLocalModel().getBoards()) {
             System.out.println(board.getOwner() + "\n");
         }
     }
 
+    /**
+     * Method that prints every island in standard mode.
+     */
     public void printIslands() {
         ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
         int i = 0, motherNature = 0;
@@ -1533,12 +1851,15 @@ public class CLI implements UI {
 
     }
 
+    /**
+     * Method that prints every island in expert mode.
+     */
     public void printExpertIslands() {
         ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
         int i = 1, motherNature = 0;
         for (StrippedIsland island : islands) {
             if (!island.getName().equals("EMPTY")) {
-                printexpertIsland(island);
+                printExpertIsland(island);
                 i++;
             }
             if (island.hasMotherNature())
@@ -1551,6 +1872,10 @@ public class CLI implements UI {
         System.out.println("Mother Nature is on isle number " + (motherNature) + "!");
     }
 
+    /**
+     * Method that prints the dining room of a given board.
+     * @param board the board to print.
+     */
     public void printDining(StrippedBoard board) {
         Integer i;
         int printColumns;
@@ -1578,6 +1903,10 @@ public class CLI implements UI {
         System.out.println("O----------------------O");
     }
 
+    /**
+     * Method that prints the entrance of a given board.
+     * @param board the board to print.
+     */
     public void printEntrance(StrippedBoard board) {
         Integer i;
         int rows = 0;
@@ -1612,6 +1941,10 @@ public class CLI implements UI {
         System.out.println("O-----O");
     }
 
+    /**
+     * Prints a single standard island (No "No entry" tiles).
+     * @param island the island to print.
+     */
     public void printIsland(StrippedIsland island) {
         int i;
         Color color;
@@ -1663,7 +1996,11 @@ public class CLI implements UI {
 
     }
 
-    public void printexpertIsland(StrippedIsland island) {
+    /**
+     * Prints a single expert island (with eventual "No entry" tiles).
+     * @param island the island to print.
+     */
+    public void printExpertIsland(StrippedIsland island) {
         int i;
         Color color;
         int rows = 0;
@@ -1721,6 +2058,9 @@ public class CLI implements UI {
             System.out.println("Mother Nature is not on this island!");
     }
 
+    /**
+     * Prints every cloud in the game.
+     */
     public void printClouds() {
         EnumMap<Colors, Integer> students;
         int i;
@@ -1762,6 +2102,10 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Prints every character card in the game.
+     * @throws LocalModelNotLoadedException Thrown if the local model is null.
+     */
     public void printCharacterCards() throws LocalModelNotLoadedException {
         int i = 0;
         ArrayList<StrippedCharacter> temp = client.getLocalModel().getCharacters();
@@ -1774,6 +2118,10 @@ public class CLI implements UI {
         System.out.println("You currently have "+client.getLocalModel().getBoardOf(client.getNickname()).getCoins() + " coins!");
     }
 
+    /**
+     * Prints every assistant card in the local personal deck.
+     * @throws LocalModelNotLoadedException Thrown if the local model is null.
+     */
     public void printAssistantCards() throws LocalModelNotLoadedException {
         AssistantCardDeck myDeck = client.getLocalModel().getBoardOf(client.getNickname()).getDeck();
         int i = 0;
@@ -1783,6 +2131,10 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Prints the students present on a card.
+     * @param card the card to print the students of.
+     */
     public void printStudentsOnCard(StrippedCharacter card) {
         Integer i;
         int rows = 0;
@@ -1817,6 +2169,12 @@ public class CLI implements UI {
 
 
     // **********************************   Utility Methods    ***************************************************************
+
+    /**
+     * Checks if the string input corresponds to a valid color
+     * @param input the string to check
+     * @return whether it corresponds (true) or it doesn't(false)
+     */
     public boolean isValidColor(String input) {
         input = input.toUpperCase(Locale.ROOT);
         for (Colors c : Colors.values()) {
@@ -1826,6 +2184,11 @@ public class CLI implements UI {
         return false;
     }
 
+    /**
+     * Takes a string and converts it to a Colors Enum value.
+     * @param input the string to convert
+     * @return the corresponding Colors Enum value.
+     */
     public Colors stringToColor(String input) {
         input = input.toLowerCase(Locale.ROOT);
         switch (input) {
@@ -1844,6 +2207,11 @@ public class CLI implements UI {
         }
     }
 
+    /**
+     * Colors (our enum) to Color (Standard Enum) converter for color display purposes.
+     * @param color the color to convert
+     * @return its equivalent color in ANSI notation.
+     */
     public Color colorsToColor(Colors color) {
         Color colorToReturn = null;
         switch (color) {
@@ -1866,6 +2234,13 @@ public class CLI implements UI {
         return colorToReturn;
     }
 
+    /**
+     * Method that converts stripped students EnumMaps built in client in input appropriate for the moveStudents method in Game.
+     * @param students the students to convert
+     * @param returnStudents the game format EnumMap the students are to be added to
+     * @param destination the destination of this batch of students (either "dining" or "islandx"
+     * @return returnStudents with the students and their relative destinations added.
+     */
     public EnumMap<Colors, ArrayList<String>> strippedToGame(EnumMap<Colors, Integer> students, EnumMap<Colors, ArrayList<String>> returnStudents, String destination) {
         EnumMap<Colors, Integer> tmp = students;
         for (Colors c : students.keySet()) {
@@ -1885,10 +2260,19 @@ public class CLI implements UI {
         return returnStudents;
     }
 
+    /**
+     * Printer method for arraylists
+     * @param messageArray the arraylist to print.
+     */
     private synchronized void sendArrayString(ArrayList<String> messageArray) {
         for (String message : messageArray) System.out.println(message);
     }
 
+    /**
+     * Method used to initalize students EnumMap.
+     * @param move enumMap to intialize
+     * @return initialized EnumMap.
+     */
     public EnumMap<Colors, Integer> initializeMove(EnumMap<Colors, Integer> move) {
         for (Colors c : Colors.values()) {
             move.put(c, 0);
@@ -1896,6 +2280,10 @@ public class CLI implements UI {
         return move;
     }
 
+    /**
+     * Method that waits for turn.
+     * @throws InterruptedException Thrown when this method is interrupted incorrectly.
+     */
     public synchronized void waitForTurn() throws InterruptedException {
         if (!client.isMyTurn()) {
             System.out.println("Waiting ...");
@@ -1917,4 +2305,3 @@ public class CLI implements UI {
 }
 
 
-//TODO: watch all the \n that you print since sometimes they tend to separate things
