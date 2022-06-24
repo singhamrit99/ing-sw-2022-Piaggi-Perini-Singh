@@ -33,6 +33,14 @@ public class StrippedModel implements Serializable {
 
     public StrippedCharacter selectedCharacter;
 
+    /**
+     * StrippedModel constructor, called from Room class on game startup. Build the whole StrippedModel.
+     * @param boards Every player's board in ArrayList form.
+     * @param characters Every character in the game, in ArrayList form.
+     * @param clouds Every Cloud in the game, in ArrayList form.
+     * @param islands Every Island in the game, in ArrayList form.
+     * @param assistantDecks Every Assistant Card Deck in the game, in ArrayList form.
+     */
     public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters,
                          ArrayList<StrippedCloud> clouds, ArrayList<StrippedIsland> islands, ArrayList<AssistantCardDeck> assistantDecks) {
         this.boards = boards;
@@ -45,6 +53,12 @@ public class StrippedModel implements Serializable {
         selectedCharacter = null;
     }
 
+    /**
+     * The method that updates the LocalModel following the arrival of an event.
+      * @param evt The event that is received. Its name field allows for handling.
+     * @throws LocalModelNotLoadedException Thrown if the LocalModel isn't loaded.
+     * @throws BadFormattedLocalModelException Thrown if the local model has been built incorrectly.
+     */
     public void updateModel(PropertyChangeEvent evt) throws LocalModelNotLoadedException, BadFormattedLocalModelException {
         switch (evt.getPropertyName()) {
             case "entrance":
@@ -88,14 +102,27 @@ public class StrippedModel implements Serializable {
         }
     }
 
+    /**
+     *Setter method for the first player.
+     * @param evt First player event.
+     */
     private void setFirstPlayer(PropertyChangeEvent evt) {
         firstPlayer = (String) evt.getNewValue();
     }
 
+    /**
+     *Setter method for changing the state.
+     * @param evt Change-state event.
+     */
     private void setState(PropertyChangeEvent evt) {
         state = (State) evt.getOldValue();
     }
 
+    /**
+     *Method called when a change in the assistant card deck is notified.
+     * @param evt Change assistant deck event (play card)
+     * @throws LocalModelNotLoadedException Thrown if the local model is not loaded.
+     */
     private void changeAssistantDeck(PropertyChangeEvent evt) throws LocalModelNotLoadedException {
         String ownerDeck = currentPlayer;
         StrippedBoard board = getBoardOf(ownerDeck);
@@ -104,6 +131,10 @@ public class StrippedModel implements Serializable {
         ui.deckChange(playedCard);
     }
 
+    /**
+     *Method used to set the board after a related event.
+     * @param evt Any board event (change dining, change entrance, professors...)
+     */
     private void setBoard(PropertyChangeEvent evt) {
         String ownerBoard = (String) evt.getOldValue();
         Optional<StrippedBoard> boardToModify = boards.stream().filter(b -> ownerBoard.equals(b.getOwner())).findFirst();
@@ -138,6 +169,10 @@ public class StrippedModel implements Serializable {
         }
     }
 
+    /**
+     *Changes the price of a character card after successful activation.
+     * @param evt the Change-price event.
+     */
     private void changePriceCharacterCard(PropertyChangeEvent evt) {
         StrippedCharacter changedCard = (StrippedCharacter) evt.getNewValue();
         StrippedCharacter cardToUpdate = null;
@@ -159,6 +194,10 @@ public class StrippedModel implements Serializable {
         }
     }
 
+    /**
+     *Handler of change-island event.
+     * @param evt change-island event(such as students or towers being placed or conquests happening)
+     */
     private void changeIsland(PropertyChangeEvent evt) {
         StrippedIsland changedIsland = (StrippedIsland) evt.getOldValue();
         Optional<StrippedIsland> optionalIslandFound = islands.stream().filter(x -> x.getName().equals(changedIsland.getName())).findFirst();
@@ -187,6 +226,10 @@ public class StrippedModel implements Serializable {
         }
     }
 
+    /**
+     *Method used to handle changes in clouds.
+     * @param evt change-cloud event.
+     */
     private void changeCloud(PropertyChangeEvent evt) {
         StrippedCloud changedCloud;
         if (evt.getOldValue() != null) {
@@ -206,30 +249,59 @@ public class StrippedModel implements Serializable {
         ui.notifyCloud(evt);
     }
 
+    /**
+     *Current player setter.
+     * @param currentPlayer the nickname of the current player.
+     */
     private void setCurrentPlayer(String currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
+    /**
+     *Getter for the Current player field.
+     * @return Current player
+     */
     public String getCurrentPlayer() {
         return currentPlayer;
     }
 
+    /**
+     *Getter for the characters field.
+     * @return characters
+     */
     public ArrayList<StrippedCharacter> getCharacters() {
         return characters;
     }
 
+    /**
+     *Getter for the clouds field.
+     * @return clouds
+     */
     public ArrayList<StrippedCloud> getClouds() {
         return clouds;
     }
 
+    /**Getter for the islands field.
+     * @return islands
+     */
     public ArrayList<StrippedIsland> getIslands() {
         return islands;
     }
 
+    /**
+     *Getter for the boards field.
+     * @return boards
+     */
     public ArrayList<StrippedBoard> getBoards() {
         return boards;
     }
 
+    /**
+     *Returns a specific player's board. Utility method.
+     * @param owner The nickname of the desired board.
+     * @return the board where the owner field is the same as "owner" parameter.
+     * @throws LocalModelNotLoadedException Thrown when there's an issue with the localmodel.
+     */
     public StrippedBoard getBoardOf(String owner) throws LocalModelNotLoadedException {
         for (StrippedBoard b : boards) {
             if (b.getOwner().equals(owner)) return b;
@@ -237,26 +309,51 @@ public class StrippedModel implements Serializable {
         throw new LocalModelNotLoadedException(); //todo change the name of this exception with something more specific
     }
 
+    /**
+     *Binds this localModel to a UI(GUI or CLI)
+     * @param ui the UI of choice
+     */
     public void setUi(UI ui) {
         this.ui = ui;
     }
 
+    /**
+     *Getter for the can play MN field.
+     * @return can play MN
+     */
     public boolean isCanPlayMN() {
         return canPlayMN;
     }
 
+    /**
+     *Setter for the can play MN field.
+     * @param canPlayMN true or false depending on the state of the game.
+     */
     public void setCanPlayMN(boolean canPlayMN) {
         this.canPlayMN = canPlayMN;
     }
 
+    /**
+     *Getter for the state field.
+     * @return state
+     */
     public State getState() {
         return state;
     }
 
+    /**
+     * Getter for the firstplayer field.
+     * @return firstplayer
+     */
     public String getFirstPlayer() {
         return firstPlayer;
     }
 
+    /**
+     * Returns a cloud, selected by its name.
+     * @param selectedItem the Name the Cloud is selected by.
+     * @return the StrippedCloud itself.
+     */
     public StrippedCloud getCloudByName(AtomicReference<String> selectedItem) {
         for (StrippedCloud cloud : getClouds()) {
             if (cloud.getName().equals(selectedItem.get())) {
