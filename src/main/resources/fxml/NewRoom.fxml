@@ -12,7 +12,7 @@
     <children>
         <StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0">
             <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="New Room">
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="New Room" underline="true">
                     <font>
                         <Font size="35.0" />
                     </font>

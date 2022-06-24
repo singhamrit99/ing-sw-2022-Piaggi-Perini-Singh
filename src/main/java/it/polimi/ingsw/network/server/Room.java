@@ -223,6 +223,5 @@ public class Room implements PropertyChangeListener {
      */
     public synchronized void notifyPlayerInGameLeaves(PropertyChangeEvent finalEvent){
         addEventToBuffer(finalEvent);
-        System.out.println("Notified player left event.");
     }
 }

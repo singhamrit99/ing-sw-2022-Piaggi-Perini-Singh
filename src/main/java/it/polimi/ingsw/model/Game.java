@@ -71,8 +71,9 @@ public class Game {
 
     /**
      * Method used to load character cards from their JSON file
+     *
      * @throws IncorrectArgumentException thrown when fillDeck method can't find JSON file.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      */
     private void importingCharacterCards() throws IncorrectArgumentException, NegativeValueException {
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
@@ -92,6 +93,7 @@ public class Game {
 
     /**
      * Method used to buy a character card.
+     *
      * @param index Index of the character card.
      * @return whether the card can be bought or not according to the player's coins.
      */
@@ -110,9 +112,10 @@ public class Game {
     /**
      * Method implemented locally through Factory method in each specific Character Card.
      * This is the simplest type of card as it requires no additional resources or information for activation.
+     *
      * @param index The index of the called card.
-     * @throws NotEnoughCoinsException Thrown when the player that tried to perform this character call doesn't have enough coins to complete it.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NotEnoughCoinsException    Thrown when the player that tried to perform this character call doesn't have enough coins to complete it.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
@@ -127,8 +130,9 @@ public class Game {
 
     /**
      * After a successful character activation the card's price is increased by 1 through this method.
+     *
      * @param index The index of the character card to increment the price of.
-     * @throws NegativeValueException  As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws IncorrectArgumentException Thrown if the coins field is invalid.
      */
     private void increaseCharacterPrice(int index) throws NegativeValueException, IncorrectArgumentException {
@@ -148,6 +152,7 @@ public class Game {
 
     /**
      * Method used to notify the client of character card event.
+     *
      * @param updatedCard The card that was modified.
      */
     private void notifyCharacterEvent(CharacterCard updatedCard) {
@@ -157,12 +162,13 @@ public class Game {
     }
 
     /**
-     *Method implemented locally through Factory method in each specific Character Card.
+     * Method implemented locally through Factory method in each specific Character Card.
      * This type of card requires an additional integer for activation (a color, a student or an island).
-     * @param index The index of the character card to be called.
+     *
+     * @param index  The index of the character card to be called.
      * @param choice The choice the card power acts upon.
-     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NotEnoughCoinsException    Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
@@ -179,11 +185,12 @@ public class Game {
     /**
      * Method implemented locally through Factory method in each specific Character Card.
      * This card requires two sets of students to operate.
-     * @param index Card number.
+     *
+     * @param index     Card number.
      * @param students1 Students EnumMap 1
      * @param students2 Students EnumMap 2
-     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NotEnoughCoinsException    Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
@@ -200,11 +207,12 @@ public class Game {
     /**
      * Method implemented locally through Factory method in each specific Character Card.
      * This one requires a student and an island to work, both coded as an integer for convenience.
-     * @param index Card Number.
+     *
+     * @param index   Card Number.
      * @param student The color of student chosen by the player.
-     * @param island The island chosen by the player.z
-     * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @param island  The island chosen by the player.z
+     * @throws NotEnoughCoinsException    Thrown if the player that tried to play the card doesn't have enough coins to buy it.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
@@ -220,6 +228,7 @@ public class Game {
 
     /**
      * Method used to initialize players at the beginning of the game.
+     *
      * @param nicknames The nicknames of every player in the game
      */
     private void initializationPlayers(ArrayList<String> nicknames) {
@@ -256,6 +265,7 @@ public class Game {
 
     /**
      * Method used to initialize tiles (islands and clouds), pulling from the JSON file.
+     *
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
     private void initializationTilesBag() throws NegativeValueException {
@@ -345,10 +355,11 @@ public class Game {
      * The number of students drawn varies depending on how many players are in the game.
      * PlayerDrawnOut is a boolean variable that is used to prevent the current player from playing Assistant Cards before
      * drawing from the bag.
+     *
      * @param nicknameCaller The player that needs to draw from the bag.
      * @throws IncorrectArgumentException Thrown if any of the parameters used in the methods are incorrect.
-     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectPlayerException   Thrown if the player that called the method isn't the current player.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      */
     public void drawFromBag(String nicknameCaller) throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         if (state == State.PLANNINGPHASE && !playerDrawnOut) {
@@ -371,11 +382,12 @@ public class Game {
      * Method used to play a card. Notice that it calls 'nextPlayer() at the end and creates
      * the correct order of player for the ActionPhase. It is based using a PriorityQueue and
      * taking advantage of the comparable interface of Player
+     *
      * @param nicknameCaller The player that plays the assistant card.
-     * @param nameCard the name of the assistant card that's being played.
-     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
-     * @throws IncorrectStateException Thrown if the method is called in an illegal phase (in this case, anything but Planning Phase)
-     * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
+     * @param nameCard       the name of the assistant card that's being played.
+     * @throws IncorrectPlayerException       Thrown if the player that called the method isn't the current player.
+     * @throws IncorrectStateException        Thrown if the method is called in an illegal phase (in this case, anything but Planning Phase)
+     * @throws IncorrectArgumentException     Thrown if any of the parameters used by the method are invalid.
      * @throws AssistantCardNotFoundException Thrown if the assistant card name provided doesn't correspond to any card.
      */
     public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFoundException {
@@ -402,13 +414,13 @@ public class Game {
         }
         orderPlayers.add(currentPlayer); //adding to priority queue the player in the correct order
         nextPlayer();
-        System.out.println("Next player is" + currentPlayer.getNickname());
     }
 
     /**
-     This is the function that correctly switch the player during the phases. It is called at the end
+     * This is the function that correctly switch the player during the phases. It is called at the end
      * of the last action of each phase: so at the end of playAssistantCard for the Planning Phase and
      * at the end of takeStudentsFromCloud for the Action Phase. It also switch the state of the game.
+     *
      * @throws IncorrectStateException Thrown if the method is called in an illegal phase
      */
     public void nextPlayer() throws IncorrectStateException {
@@ -461,13 +473,14 @@ public class Game {
      * phase. It checks if there is a gameOver and a winner, otherwise it starts the planning phase assigning
      * the correct currentPlayer, initializing the counter for the PlanningPhase and increasing the num of rounds
      * counter (that is one of the gameOver conditions.
+     *
      * @throws IncorrectStateException Thrown if the method is called in an illegal phase
      */
     private void nextRound() throws IncorrectStateException {
         if (state == State.ENDTURN) {
             if (isGameOver()) {
                 state = State.END;
-                ArrayList<Player> teamWinner = checkWinner();
+                String teamWinner = checkWinner();
                 //notify game-over
                 PropertyChangeEvent gameOverEvt =
                         new PropertyChangeEvent(this, "game-finished", null, teamWinner);
@@ -496,12 +509,13 @@ public class Game {
      * It makes a split of the students, checking which of them go to islands or to the Player that controls the dining room
      * In case the destination is the islands, an array of islandDestination is used by the game to send
      * the students in the correct place (the array uses the unique name of each island).
-     * @param playerCaller the player that called the MoveStudents method
+     *
+     * @param playerCaller   the player that called the MoveStudents method
      * @param studentsToMove the EnumMap that contains the students that need to be moved and their destinations
      * @throws IncorrectArgumentException Thrown when either of the parameters are incorrect.
-     * @throws IncorrectStateException Thrown when this method is called in an invalid phase of the game.
-     * @throws IncorrectPlayerException Thrown when the playerCaller is not the CurrentPlayer.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectStateException    Thrown when this method is called in an invalid phase of the game.
+     * @throws IncorrectPlayerException   Thrown when the playerCaller is not the CurrentPlayer.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws ProfessorNotFoundException This is thrown if the move produces a professor change and that creates an error.
      */
     public void moveStudents(String playerCaller, EnumMap<Colors, ArrayList<String>> studentsToMove) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException {
@@ -572,7 +586,6 @@ public class Game {
                 PropertyChangeEvent phaseChange =
                         new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
                 gameListener.propertyChange(phaseChange);
-                System.out.println("Send property change event for dining room\n");
                 if (isDiningChanged) {
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
                     //notify dining AND entrance AND possible coins change
@@ -597,11 +610,12 @@ public class Game {
     /**
      * It takes the students from a cloud and throw them to the entrance using a method of the player. It checks
      * that is the correct moment and the correct player to perform the action.
+     *
      * @param nicknameCaller The player that called this method
-     * @param name The name of the cloud.
-     * @throws IncorrectStateException Thrown if the method is called in an illegal phase (in this case any state but ActionPhase_3)
-     * @throws IncorrectPlayerException Thrown if the player that called the method isn't the current player.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @param name           The name of the cloud.
+     * @throws IncorrectStateException    Thrown if the method is called in an illegal phase (in this case any state but ActionPhase_3)
+     * @throws IncorrectPlayerException   Thrown if the player that called the method isn't the current player.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
      */
     public void takeStudentsFromCloud(String nicknameCaller, String name) throws IncorrectStateException, IncorrectPlayerException, NegativeValueException, IncorrectArgumentException {
@@ -640,13 +654,14 @@ public class Game {
     /**
      * It uses a method in player to check if the distance choosen by the player is legal. After the
      * control it moves the Mother Nature and it eventually moves the towers and unify islands.
-     * @param playerCaller The player that called this method
+     *
+     * @param playerCaller   The player that called this method
      * @param distanceChosen Distance chosen for MN movement.
-     * @throws IncorrectPlayerException  Thrown if the player that called the method isn't the current player.
+     * @throws IncorrectPlayerException   Thrown if the player that called the method isn't the current player.
      * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
-     * @throws MotherNatureLostException Thrown if after movement the game cannot calculate Mother Nature's position.
-     * @throws IncorrectStateException Thrown if the method is called in an illegal phase (Such as PlanningPhase)
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws MotherNatureLostException  Thrown if after movement the game cannot calculate Mother Nature's position.
+     * @throws IncorrectStateException    Thrown if the method is called in an illegal phase (Such as PlanningPhase)
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      */
     public void moveMotherNature(String playerCaller, int distanceChosen) throws
             IncorrectPlayerException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, NegativeValueException {
@@ -685,6 +700,7 @@ public class Game {
 
     /**
      * Method used to find Mother Nature after a movement.
+     *
      * @return Mother Nature's position.
      * @throws MotherNatureLostException Thrown if after movement the game cannot calculate Mother Nature's position.
      */
@@ -701,6 +717,7 @@ public class Game {
 
     /**
      * Method called to check for influence calculations on the island MN ended up on.
+     *
      * @param island The island to check.
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
@@ -718,10 +735,11 @@ public class Game {
         }
     }
 
-  /**
+    /**
      * Method called if new students are added to the dining room and checks if new professor need to be placed.
      * It is only called in moveStudents method in the Action Phase and by the CharactersCard.
      * It returns a boolean to signal if it has been a change in the professor table.
+     *
      * @throws ProfessorNotFoundException If there's an issue in professor placement this exception is thrown.
      */
     public void checkAndPlaceProfessor() throws ProfessorNotFoundException {
@@ -766,10 +784,12 @@ public class Game {
             }
         }
     }
+
     /**
      * It computes the influence of each team on a given island. If it finds a team with more influence
      * than another assign the ownership and a new tower only if the island hasn't any owner or has an owner
      * different from the new team. It works with 2 players, 3 players and 4 players.
+     *
      * @param island the island the tower needs to be placed on.
      */
     private void checkAndPlaceTower(Island island) {
@@ -871,6 +891,7 @@ public class Game {
 
     /**
      * Finds player from the relative team.
+     *
      * @param teamColor the color of the team that is being checked.
      * @return the players in the team.
      */
@@ -895,7 +916,8 @@ public class Game {
      * It is used from checkAndPlaceTowers to add or remove towers from a team. The towers must be
      * removed from each player ONCE at time each. For example if playerA and playerB of same team have 3 and 4 towers
      * and 3 towers will be removed, it will leave this configuration: 2 and 2.
-     * @param team the team that the towers need to be moved from
+     *
+     * @param team   the team that the towers need to be moved from
      * @param amount the number of towers that need to be moved.
      */
     public void moveTowersFromTeam(ArrayList<Player> team, int amount) {
@@ -930,6 +952,7 @@ public class Game {
 
     /**
      * Method that checks if the condition for the unification of two or more islands are met.
+     *
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
     public void checkUnificationIslands() throws NegativeValueException {
@@ -973,10 +996,7 @@ public class Game {
      * Check the game over returning true if it is
      */
     public boolean isGameOver() {
-        for (Player p : players) {
-            if (p.getPlayerTowers() <= 0) return true;
-        }
-        return !bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9 || checkWinner() != null;
+        return !bag.hasEnoughStudents(numDrawnStudents) || islands.size() <= 3 || numRounds >= 9 || isTeamWithZeroTowers();
     }
 
     /**
@@ -984,7 +1004,8 @@ public class Game {
      * winning team using an arrayList of Player (that could have size of 1 or 2 depending on numOfPLayers).
      * If it returns null it's a tie.
      */
-    public ArrayList<Player> checkWinner() {
+
+    public boolean isTeamWithZeroTowers(){
         ArrayList<Player> team1 = findPlayerFromTeam(Towers.WHITE);
         ArrayList<Player> team2 = findPlayerFromTeam(Towers.BLACK);
         ArrayList<ArrayList<Player>> teams = new ArrayList<>();
@@ -996,11 +1017,84 @@ public class Game {
         }
 
         for (ArrayList<Player> team : teams) {
-            boolean teamWin = false;
+            boolean teamWin = true;
             for (Player p : team) {
-                teamWin = p.getPlayerTowers() == 0;
+                if (p.getPlayerTowers() != 0) {
+                    teamWin = false;
+                }
             }
-            if (teamWin) return team;
+            if (teamWin) return true;
+        }
+
+        return false;
+    }
+
+    public String checkWinner() {
+        ArrayList<Player> team1 = findPlayerFromTeam(Towers.WHITE);
+        ArrayList<Player> team2 = findPlayerFromTeam(Towers.BLACK);
+        ArrayList<ArrayList<Player>> teams = new ArrayList<>();
+        teams.add(team1);
+        teams.add(team2);
+        if (numOfPlayer % 2 == 1) {
+            ArrayList<Player> team3 = findPlayerFromTeam(Towers.GREY);
+            teams.add(team3);
+        }
+
+
+        //Find winner team in case of fewer towers (or 0 towers)
+        int minTowers = 42;
+        ArrayList<ArrayList<Player>> teamsTie = new ArrayList<>();
+        ArrayList<Player> teamMinTowers = null;
+
+        for (ArrayList<Player> team : teams) {
+            int teamTowers = 0;
+            for (Player p : team) {
+                teamTowers += p.getPlayerTowers();
+            }
+            if(teamTowers<=minTowers){
+                if (teamTowers == minTowers){ //there is a tie of towers between teams
+                    minTowers = 42;
+                    teamsTie.add(teamMinTowers);
+                    teamsTie.add(team);
+                }
+                else{
+                    minTowers = teamTowers;
+                    teamMinTowers = team;
+                }
+            }
+        }
+
+
+        if (minTowers!=42){
+            return teamMinTowers.get(0).getTowerColor().toString();
+        }
+        else if(teamsTie.size()>1){ //there is a tie between teams
+            ArrayList<Player> winningTeam = null;
+            int professorsOfTeam = 0;
+            int maxProfessors = -1;
+         for (ArrayList<Player> team : teamsTie){
+
+             for (Player p : team){
+                 for(Colors colorProf : Colors.values()){
+                     if(p.hasProfessorOfColor(colorProf))professorsOfTeam+=1;
+                 }
+             }
+
+             if(professorsOfTeam>=maxProfessors){
+                 if(professorsOfTeam==maxProfessors){
+                     winningTeam=null;
+                 }
+                 else{
+                     maxProfessors = professorsOfTeam;
+                     winningTeam=team;
+                 }
+             }
+         }
+
+         if(winningTeam!=null){
+             if(winningTeam.size()>0)return winningTeam.get(0).getTowerColor().toString();
+         }
+
         }
 
         return null;  //no win
@@ -1019,27 +1113,34 @@ public class Game {
 
     /**
      * Players getter.
+     *
      * @return Players.
      */
     public ArrayList<Player> getPlayers() {
         return players;
     }
+
     /**
      * CurrentPlayer getter.
+     *
      * @return CurrentPlayer
      */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+
     /**
      * State getter.
+     *
      * @return State.
      */
     public State getCurrentState() {
         return state;
     }
+
     /**
      * playerDrawnOut getter.
+     *
      * @return playerDrawnOut.
      */
     public boolean getPlayerDrawnOut() {
@@ -1048,14 +1149,17 @@ public class Game {
 
     /**
      * Returns the cloudTIle found through its index.
+     *
      * @param index The index of the cloudTile.
      * @return CloudTile.
      */
     public Cloud getCloudTile(int index) {
         return clouds.get(index);
     }
+
     /**
      * MotherNaturePosition getter.
+     *
      * @return MotherNaturePosition.
      */
     public int getMotherNaturePosition() {
@@ -1064,6 +1168,7 @@ public class Game {
 
     /**
      * Returns the maximum number of tiles that MotherNature can move according to the CharacterCard played this turn.
+     *
      * @return Maximum allowed Mother Nature move.
      */
     public int getMaxMotherNatureMove() {
@@ -1079,6 +1184,7 @@ public class Game {
 
     /**
      * Island getter
+     *
      * @param index the index of the island to return.
      * @return island.
      */
@@ -1088,12 +1194,13 @@ public class Game {
 
     /**
      * Updates schoolBoard enumMaps according to Character card action.
+     *
      * @param choiceIndex the color chosen.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      */
     public void returnStudentsEffect(int choiceIndex) throws NegativeValueException, ProfessorNotFoundException {
-        int oldCoins=currentPlayer.getCoins();
+        int oldCoins = currentPlayer.getCoins();
         EnumMap<Colors, Integer> enumMap = new EnumMap<>(Colors.class);
         for (Player player : players) {
             if (player.getSchoolBoard().getStudentsByColor(Colors.getStudent(choiceIndex)) < 3) {
@@ -1113,8 +1220,8 @@ public class Game {
         PropertyChangeEvent evt =
                 new PropertyChangeEvent(this, "dining", currentPlayer.getNickname(), newDining);
         gameListener.propertyChange(evt);
-        int coins=currentPlayer.getCoins();
-        if (coins!=oldCoins) {
+        int coins = currentPlayer.getCoins();
+        if (coins != oldCoins) {
             PropertyChangeEvent coinsEvt =
                     new PropertyChangeEvent(this, "coins", currentPlayer.getNickname(), coins);
             gameListener.propertyChange(coinsEvt);
@@ -1125,6 +1232,7 @@ public class Game {
 
     /**
      * Returns the Character cards currently in the game.
+     *
      * @return CharacterCards
      */
     public ArrayList<CharacterCard> getCharacterCards() {
@@ -1133,6 +1241,7 @@ public class Game {
 
     /**
      * Returns the clouds.
+     *
      * @return clouds.
      */
     public ArrayList<Cloud> getClouds() {
@@ -1141,6 +1250,7 @@ public class Game {
 
     /**
      * Island getter.
+     *
      * @return islands.
      */
     public LinkedList<Island> getIslands() {
@@ -1149,7 +1259,8 @@ public class Game {
 
     /**
      * Method used in character card setup and testing
-     * @param index The index of the card to setup for testing
+     *
+     * @param index         The index of the card to setup for testing
      * @param characterCard the Character card itself.
      */
     protected void setCharacterCards(int index, CharacterCard characterCard) {
@@ -1158,8 +1269,9 @@ public class Game {
 
     /**
      * Notifies client and Stripped classes of a students change in an island.
+     *
      * @param islandToChange The island in which the change occurs.
-     * @param studentsToAdd The students that need to be added.
+     * @param studentsToAdd  The students that need to be added.
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
     public void notifyIsland(Island islandToChange, EnumMap<Colors, Integer> studentsToAdd) throws NegativeValueException {
@@ -1174,6 +1286,7 @@ public class Game {
 
     /**
      * Returns the first player.
+     *
      * @return First player
      */
     public String getFirstPlayer() {

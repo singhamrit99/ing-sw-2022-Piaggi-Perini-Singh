@@ -36,8 +36,8 @@ class ControllerTest {
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
         Room roomTest = new Room("testRoom", emptyClientListsTest);
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         for (int i = 0; i < 4; i++) {
-            game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 1));
         }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
@@ -74,8 +74,8 @@ class ControllerTest {
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
         Room roomTest = new Room("testRoom", emptyClientListsTest);
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         for (int i = 0; i < 4; i++) {
-            game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 1));
         }
         assertEquals(game.getCurrentState(), State.ACTIONPHASE_1);
@@ -110,8 +110,8 @@ class ControllerTest {
         ArrayList<ClientConnection> emptyClientListsTest = new ArrayList<>();
         Room roomTest = new Room("testRoom", emptyClientListsTest);
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         for (int i = 0; i < 4; i++) {
-            game.drawFromBag(game.getCurrentPlayer().getNickname());
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 4));
         }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();

@@ -53,10 +53,10 @@ public class GameOverController extends InitialStage implements Controller {
         opened.set(true);
         if(winnerTeam==null){
             if(leavingPlayer!=null)winnerDeclare.setText("Game interrupted by "+ leavingPlayer + " who leaved the game!");
-            else winnerDeclare.setText("Game interrupted by a player who leaved the game!");
+            else winnerDeclare.setText("There is a tie!");
         }
         else{
-            winnerDeclare.setText("Game over! Team " + winnerTeam + "won! Congratulations!");
+            winnerDeclare.setText("Team " + winnerTeam + " won! Congratulations!");
         }
 
         exitButton.setOnAction((event) -> {
