@@ -82,16 +82,14 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
                 desiredRoom.addUser(userClient);
                 userClient.setRoom(desiredRoom.getRoomName());
                 System.out.println(username + " joined room " + roomName);
-            }
-            else throw new RoomFullException();
-        }
-        else{
+            } else throw new RoomFullException();
+        } else {
             throw new RoomInGameException();
         }
     }
 
     @Override
-    public synchronized boolean isInGame(String roomName)throws RoomNotExistsException{
+    public synchronized boolean isInGame(String roomName) throws RoomNotExistsException {
         if (!rooms.containsKey(roomName)) throw new RoomNotExistsException();
         return rooms.get(roomName).isInGame();
     }
@@ -106,17 +104,20 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         rooms.get(roomName).removeUser(user);
         user.setRoom(null);
 
-        if(rooms.get(roomName).isInGame()){
-            PropertyChangeEvent gameFinishedEvent = new PropertyChangeEvent(this,"game-finished",null,null);
-            rooms.get(roomName).notifyPlayerInGameLeaves(gameFinishedEvent);
-        }
-
         //complete deletion
         if (rooms.get(roomName).getPlayers().size() == 0) {
             rooms.remove(roomName);
             System.out.println("Room " + roomName + " deleted after " + username + " left room");
         }
-        user.setRoom(null);
+    }
+
+    public synchronized void leaveGame(String username) throws RemoteException, UserNotRegisteredException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        ClientConnection user = users.get(username);
+        String roomName = user.getRoom();
+
+        PropertyChangeEvent gameFinishedEvent = new PropertyChangeEvent(this, "game-finished", null, null);
+        rooms.get(roomName).notifyPlayerInGameLeaves(gameFinishedEvent);
     }
 
 
@@ -155,14 +156,14 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
 
     @Override
     public synchronized void startGame(String username) throws RemoteException, NotLeaderRoomException,
-            UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException , NotEnoughPlayersException{
+            UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException, NotEnoughPlayersException {
         System.out.println("Start game request received\n");
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         ClientConnection user = users.get(username);
         if (user.getRoom() == null) throw new UserNotInRoomException();
         if (!rooms.containsKey(user.getRoom())) throw new RoomNotExistsException();
         Room targetRoom = rooms.get(user.getRoom());
-        if(targetRoom.getPlayers().size()<2) throw new NotEnoughPlayersException();
+        if (targetRoom.getPlayers().size() < 2) throw new NotEnoughPlayersException();
         if (targetRoom.getPlayers().get(0).getNickname().equals(username)) {   //only leader of the Room (players.get(0) can start the game)
             try {
                 System.out.println("Game starting...");
@@ -217,7 +218,8 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
                 try {
                     deregisterConnection(client.getNickname());
                 } catch (RemoteException | UserNotRegisteredException ignored) {
-                    }
+                    ignored.printStackTrace();
+                }
             } else client.setDown();
         }
     }
@@ -228,6 +230,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
             try {
                 findDisconnectedUsers();
             } catch (ConcurrentModificationException ignored) {
+                ignored.printStackTrace();
             }
             try {
                 sleep(2000); //must be double client ping timeout
