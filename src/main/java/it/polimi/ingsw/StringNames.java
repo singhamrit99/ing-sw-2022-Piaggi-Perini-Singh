@@ -38,4 +38,6 @@ public interface StringNames {
     String INCORRECT_PLAYER = "Incorrect player";
     String INCORRECT_ARGUMENT = "Given parameters are not correct";
     String USER_ALREADY_IN_ROOM= "User is already in a room";
+
+    String ERROR_IO = "Error while loading image assets";
 }
