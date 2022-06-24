@@ -35,6 +35,8 @@ public class CharacterOneSelectController extends InitialStage implements Contro
     @Override
     public void initialize() {
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
+        int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
+
         description.setText(selectedCharacter.getDescription());
 
         if (selectedCharacter.getCharacterID() == 3) {
@@ -54,7 +56,7 @@ public class CharacterOneSelectController extends InitialStage implements Contro
         choiceBox.setOnAction((event) -> chosen.set(choiceBox.getSelectionModel().getSelectedIndex()));
 
         confirmButton.setOnAction((event) -> {
-            PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), selectedCharacter.getCharacterID(), chosen.get());
+            PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), indexSelectedCharacter, chosen.get());
             try {
                 GUI.client.performGameAction(playCharacterCardD);
             } catch (NotEnoughCoinsException e) {
@@ -65,14 +67,14 @@ public class CharacterOneSelectController extends InitialStage implements Contro
                 Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);
             } catch (IncorrectStateException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);
-            } catch (ProfessorNotFoundException e) {
-                Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
             } catch (MotherNatureLostException e) {
                 Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);
-            } catch (IncorrectPlayerException e) {
-                Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
+            } catch (ProfessorNotFoundException e) {
+                Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
             } catch (RemoteException e) {
                 Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+            } catch (IncorrectPlayerException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
             } catch (IncorrectArgumentException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
             } catch (UserNotInRoomException e) {
