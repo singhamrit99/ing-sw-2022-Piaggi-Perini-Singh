@@ -50,13 +50,6 @@ public class CLI implements UI {
         this.client.view = StringNames.LAUNCHER;
     }
 
-    @Override
-    public void reloadRoomsFromGameView() {
-        //TODO
-        // In gui we use this method to exit from GameView and enter in rooms scenes when
-        // the event to leave the game is triggered by another client
-    }
-
     public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException, RoomNotExistsException, LocalModelNotLoadedException {
 
         AnsiConsole.systemInstall();

@@ -36,6 +36,10 @@ public class LobbyController extends InitialStage implements Controller {
         opened.set(false);
     }
 
+    public static void setOpened(boolean b) {
+        opened.set(b);
+    }
+
     @FXML
     public void initialize() {
         opened.set(true);

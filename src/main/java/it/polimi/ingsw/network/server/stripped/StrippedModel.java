@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.server.stripped;
 
-import it.polimi.ingsw.exceptions.BadFormattedLocalModelEvent;
+import it.polimi.ingsw.exceptions.BadFormattedLocalModelException;
 import it.polimi.ingsw.exceptions.LocalModelNotLoadedException;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
@@ -45,7 +45,7 @@ public class StrippedModel implements Serializable {
         selectedCharacter = null;
     }
 
-    public void updateModel(PropertyChangeEvent evt) throws LocalModelNotLoadedException, BadFormattedLocalModelEvent {
+    public void updateModel(PropertyChangeEvent evt) throws LocalModelNotLoadedException, BadFormattedLocalModelException {
         switch (evt.getPropertyName()) {
             case "entrance":
             case "dining":
@@ -84,7 +84,7 @@ public class StrippedModel implements Serializable {
                 ui.currentPlayer((String) evt.getNewValue());
                 break;
             default:
-                throw new BadFormattedLocalModelEvent();
+                throw new BadFormattedLocalModelException();
         }
     }
 
@@ -164,7 +164,7 @@ public class StrippedModel implements Serializable {
         Optional<StrippedIsland> optionalIslandFound = islands.stream().filter(x -> x.getName().equals(changedIsland.getName())).findFirst();
         if (optionalIslandFound.isPresent()) {
             StrippedIsland islandToChange = optionalIslandFound.get();
-            if (evt.getNewValue()!= null) {
+            if (evt.getNewValue() != null) {
                 if (evt.getPropertyName().equals("island") ||
                         evt.getPropertyName().equals("island-conquest")) {
                     StrippedIsland newProperties = (StrippedIsland) evt.getNewValue();
@@ -175,13 +175,10 @@ public class StrippedModel implements Serializable {
                     islandToChange.setHasNoEnterTile(newProperties.hasNoEnterTile());
                     if (evt.getPropertyName().equals("island")) ui.islandChange(evt);
                     else ui.islandConquest(evt);
-            }
-            else if (evt.getPropertyName().equals("island-merged"))
-                 {
+                } else if (evt.getPropertyName().equals("island-merged")) {
                     islandToChange.setDestroyed();
                     ui.islandMerged(evt);
-                }
-                else{
+                } else {
                     System.out.println("Exception changeIsland , strippedModel due"); //TODO
                 }
             }

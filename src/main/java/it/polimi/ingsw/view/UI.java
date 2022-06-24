@@ -34,7 +34,6 @@ public interface UI {
     void roomsAvailable(ArrayList<String> rooms);
 
     void roomJoin(ArrayList<String> players);
-    void professorChanged();
 
-    void reloadRoomsFromGameView();
+    void professorChanged();
 }

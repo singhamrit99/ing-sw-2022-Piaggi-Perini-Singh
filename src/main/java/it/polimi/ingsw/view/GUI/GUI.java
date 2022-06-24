@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.GUI;
 
+import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.view.GUI.controllerFX.*;
-import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.view.UI;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -153,15 +153,6 @@ public class GUI implements UI {
     @Override
     public void gameOver(String winner) {
 
-    }
-
-    @Override
-    public void reloadRoomsFromGameView(){
-        if (GUI.client.view.equals(StringNames.INGAME)) {
-            if (gameController.isOpened()) {
-                Platform.runLater(() -> gameController.reloadRoomsFromGameView());
-            }
-        }
     }
 
     @Override

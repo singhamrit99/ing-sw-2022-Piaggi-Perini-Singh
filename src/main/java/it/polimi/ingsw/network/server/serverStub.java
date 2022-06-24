@@ -41,4 +41,5 @@ public interface serverStub extends Remote {
 
     void ping(String username) throws RemoteException, UserNotRegisteredException;
 
+    void leaveGame(String nickname) throws UserNotRegisteredException, RemoteException;
 }
