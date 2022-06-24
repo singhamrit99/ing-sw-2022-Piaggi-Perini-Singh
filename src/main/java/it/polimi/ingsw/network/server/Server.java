@@ -42,7 +42,6 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         if (!users.containsKey(name))
             users.put(name, c);
         else throw new UserAlreadyExistsException();
-        System.out.println("user '" + name + "' is registered in the server");
     }
 
     /**
@@ -61,7 +60,6 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
             }
         }
         users.remove(username);
-        System.out.println("De-registered " + username + " because inactivity");
     }
 
     /**
@@ -121,7 +119,6 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
             if (desiredRoom.getPlayers().size() < 4) {
                 desiredRoom.addUser(userClient);
                 userClient.setRoom(desiredRoom.getRoomName());
-                System.out.println(username + " joined room " + roomName);
             } else throw new RoomFullException();
         } else {
             throw new RoomInGameException();
