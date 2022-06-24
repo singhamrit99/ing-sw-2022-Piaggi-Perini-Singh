@@ -18,8 +18,8 @@ public class GUI implements UI {
     public static Client client;
     public LobbyController lobbyController;
     public RoomController roomController;
-
     public GameViewController gameController;
+    public GameOverController gameOverController;
 
     public GUI(Client client) {
         GUI.client = client;
@@ -29,6 +29,7 @@ public class GUI implements UI {
         lobbyController = new LobbyController(this);
         roomController = new RoomController(this);
         gameController = new GameViewController(this);
+        gameOverController = new GameOverController(this);
     }
 
     public void start() {
@@ -152,7 +153,14 @@ public class GUI implements UI {
 
     @Override
     public void gameOver(String winner) {
-
+            if (GUI.client.view.equals(StringNames.INGAME)) {
+                if (gameController.isOpened()) {
+                    Platform.runLater(() -> {
+                        gameOverController.setWinner(winner);
+                        Controller.load(ResourcesPath.GAME_OVER, gameOverController);
+                    });
+                }
+            }
     }
 
     @Override
