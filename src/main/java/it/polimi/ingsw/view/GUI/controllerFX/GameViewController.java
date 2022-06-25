@@ -103,10 +103,10 @@ public class GameViewController extends InitialStage implements Controller {
 
         //DropShadow effect for islands students, MN, towers
         dropShadowIslandStuff = new DropShadow();
-        dropShadowIslandStuff.setHeight(30);
-        dropShadowIslandStuff.setWidth(30);
-        dropShadowIslandStuff.setSpread(0.2);
-        dropShadowIslandStuff.setColor(Color.rgb(0,0,0,0.4f));
+        dropShadowIslandStuff.setHeight(40);
+        dropShadowIslandStuff.setWidth(40);
+        dropShadowIslandStuff.setSpread(0.3);
+        dropShadowIslandStuff.setColor(Color.rgb(0,0,0,0.6f));
     }
 
     public static void setOpened(boolean b) {
