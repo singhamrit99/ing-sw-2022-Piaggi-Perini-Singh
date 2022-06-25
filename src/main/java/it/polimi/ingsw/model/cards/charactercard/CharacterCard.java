@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
+import it.polimi.ingsw.exceptions.FullDiningException;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.cards.Card;
 import it.polimi.ingsw.model.enumerations.Colors;
@@ -125,7 +126,7 @@ public class CharacterCard extends Card {
      * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws IncorrectArgumentException Thrown in case of invalid values in Character cards implementations.
      */
-    public void activate(Game game) throws ProfessorNotFoundException, NegativeValueException, IncorrectArgumentException {
+    public void activate(Game game) throws ProfessorNotFoundException, NegativeValueException, IncorrectArgumentException, FullDiningException {
         status = 1;
     }
 
