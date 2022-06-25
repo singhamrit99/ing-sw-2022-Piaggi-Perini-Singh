@@ -298,7 +298,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     @Override
     public synchronized void performGameAction(String username, Command gameAction) throws RemoteException, MotherNatureLostException,
             NegativeValueException, AssistantCardNotFoundException, IncorrectArgumentException, IncorrectPlayerException,
-            ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException, UserNotRegisteredException, UserNotInRoomException {
+            ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException, UserNotRegisteredException, UserNotInRoomException, FullDiningException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         if (users.get(username).getRoom() == null) throw new UserNotInRoomException();
         if (users.get(username).inGame()) {
