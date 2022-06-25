@@ -1248,6 +1248,7 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
          <menus>
+            <Menu fx:id="currentPlayer" mnemonicParsing="false" />
             <Menu fx:id="changeViewBoard" mnemonicParsing="false" text="Change View Board">
                <items>
                   <MenuItem mnemonicParsing="false" text="Player1" />

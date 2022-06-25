@@ -82,6 +82,7 @@ public class GameViewController extends InitialStage implements Controller {
     public GameViewController(GUI gui) {
         super(gui);
         opened.set(false);
+
         //importing all assets from resource folder
         try {
             blackTowerImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.BLACK_TOWER)));
@@ -148,6 +149,21 @@ public class GameViewController extends InitialStage implements Controller {
         floatingIslands.play();
     }
 
+
+    @FXML
+    Menu currentPlayer;
+
+    public void setCurrentPlayer(String currentPlayer){
+        int maxLength = 28;
+        int panning = maxLength - currentPlayer.length();
+        String panningString = "";
+        for(int i=0;i<panning/2;i++){
+            panningString += ' ';
+        }
+        this.currentPlayer.setText("[ Current Player:" + panningString + currentPlayer + panningString + "]");
+    }
+
+
     public void changeViewBoard(String viewOwnerTarget) {
         if (GUI.client.getLocalPlayerList().contains(viewOwnerTarget)) {
             currentBoardView = viewOwnerTarget;
@@ -183,6 +199,9 @@ public class GameViewController extends InitialStage implements Controller {
             indexItem++;
         }
         itemBoardViewArray = items;
+
+        //initialize name current player
+        setCurrentPlayer(GUI.client.getLocalPlayerList().get(0));
     }
 
     private void firstRefreshBoard() {
