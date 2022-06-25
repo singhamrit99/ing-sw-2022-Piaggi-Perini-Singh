@@ -63,7 +63,7 @@ public class GameOverController extends InitialStage implements Controller {
 
         exitButton.setOnAction((event) -> {
             try {
-                GUI.client.leaveGameOverScreenGUI();
+                GUI.client.refreshScreenLobby();
             } catch (RemoteException e) {
                 Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             }
