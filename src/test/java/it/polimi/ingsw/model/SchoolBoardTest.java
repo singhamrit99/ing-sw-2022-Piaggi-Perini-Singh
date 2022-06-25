@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.FullDiningException;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
@@ -227,7 +228,7 @@ class SchoolBoardTest {
         enumMap.put(Colors.BLUE, 2);
         try {
             schoolBoard2.addStudentsDining(enumMap);
-        } catch (NegativeValueException e) {
+        } catch (NegativeValueException | FullDiningException e) {
             e.printStackTrace();
         }
 
@@ -243,7 +244,7 @@ class SchoolBoardTest {
 
         try {
             schoolBoard2.addStudentsDining(enumMap);
-        } catch (NegativeValueException e) {
+        } catch (NegativeValueException | FullDiningException e) {
             e.printStackTrace();
         }
         enumMap.clear();
@@ -271,7 +272,7 @@ class SchoolBoardTest {
         //if students are not present in the board
         try {
             schoolBoard2.addStudentsDining(enumMap);
-        } catch (NegativeValueException e) {
+        } catch (NegativeValueException | FullDiningException e) {
             e.printStackTrace();
         }
         assertEquals(2, schoolBoard2.getDining().get(Colors.BLUE));
@@ -281,7 +282,7 @@ class SchoolBoardTest {
         //if students are present in the board
         try {
             schoolBoard2.addStudentsDining(enumMap);
-        } catch (NegativeValueException e) {
+        } catch (NegativeValueException | FullDiningException e) {
             e.printStackTrace();
         }
         assertEquals(4, schoolBoard2.getDining().get(Colors.BLUE));
