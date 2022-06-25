@@ -33,7 +33,7 @@ public class CLI implements UI {
     String clientRoom = null;
     int action;
     int numOfPlayers;
-    boolean endturn = false;
+    boolean endTurn = false;
     MoveMotherNature moveMotherNatureOrder;
     MoveStudents moveStudentsOrder;
     PickCloud pickCloudOrder;
@@ -76,7 +76,7 @@ public class CLI implements UI {
      * @throws RoomNotExistsException         Thrown when the provided room name doesn't exist on the server.
      * @throws LocalModelNotLoadedException   Thrown when the local model is null when accessed.
      */
-    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException, RoomNotExistsException, LocalModelNotLoadedException {
+    public void Start() throws RemoteException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException, RoomNotExistsException, LocalModelNotLoadedException, FullDiningException {
 
         AnsiConsole.systemInstall();
         while (true) {
@@ -167,7 +167,7 @@ public class CLI implements UI {
 
 
             while (client.isInGame()) {
-                endturn = false;
+                endTurn = false;
                 numOfPlayers = client.getLocalModel().getBoards().size();
                 if (playedThisTurn == null)
                     playedThisTurn = new ArrayList<>();
@@ -198,11 +198,11 @@ public class CLI implements UI {
                 //Turn phase
                 if (client.getExpertMode()) {
 
-                    while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endturn) {
+                    while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
                         while (!client.isMyTurn()) {
                             waitForTurn();
                         }
-                        if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endturn) {
+                        if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
                             expertPrintCommandHelp();
                             performActionInTurnExpert();
                         }
@@ -211,11 +211,11 @@ public class CLI implements UI {
                     pickCloud();
                 } else {
 
-                    while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endturn) {
+                    while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
                         while (!client.isMyTurn()) {
                             waitForTurn();
                         }
-                        if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endturn) {
+                        if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
                             printCommandHelp();
                             performActionInTurn();
                         }
@@ -681,7 +681,7 @@ public class CLI implements UI {
      * @throws RemoteException                Thrown in case of a network error.
      * @throws IncorrectArgumentException     Thrown if any of the parameters used by the method are invalid.
      */
-    public void drawFromBag() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+    public void drawFromBag() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, FullDiningException {
         drawFromBagOrder = new DrawFromBagCommand(client.getNickname());
         System.out.println("Drawing from bag...\n");
         client.performGameAction(drawFromBagOrder);
@@ -738,6 +738,8 @@ public class CLI implements UI {
         } catch (AssistantCardNotFoundException e) {
             System.out.println("Looks like someone has already played that card this turn! Try again.");
             playAssistantCard();
+        } catch (FullDiningException e) {
+            e.printStackTrace();
         }
         client.setMyTurn(false);
     }
@@ -759,7 +761,7 @@ public class CLI implements UI {
      * @throws LocalModelNotLoadedException   Thrown when the local model field in client is null.
      * @throws RoomNotExistsException         Thrown when the given room name doesn't exist.
      */
-    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException {
+    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException {
         do {
             //   System.out.println("Press any key to continue\n");
             // in.nextLine();
@@ -822,7 +824,7 @@ public class CLI implements UI {
      * @throws LocalModelNotLoadedException   Thrown when the local model field in client is null.
      * @throws RoomNotExistsException         Thrown when the given room name doesn't exist.
      */
-    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException {
+    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException {
         do {
             //   System.out.println("Press any key to continue\n");
             in.nextLine();
@@ -889,7 +891,7 @@ public class CLI implements UI {
      * @throws RemoteException                Thrown in case of a network error.
      * @throws IncorrectArgumentException     Thrown if any of the parameters used by the method are invalid.
      */
-    public void pickCloud() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException {
+    public void pickCloud() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, FullDiningException {
         System.out.println("Almost at the end of your turn! Pick a cloud to refill your entrance.\n");
         printClouds();
         int i;
@@ -988,10 +990,12 @@ public class CLI implements UI {
             } catch (IncorrectArgumentException e) {
                 System.out.println("That's not right, try again!\n");
                 moveMN();
+            } catch (FullDiningException e) {
+                e.printStackTrace();
             }
             //After my turn is over I set the Mother Nature flag to false for the next turn
             client.getLocalModel().setCanPlayMN(false);
-            endturn = true;
+            endTurn = true;
         } else System.out.println("You can't move Mother Nature yet! First things first: move three students!");
     }
 
@@ -1012,7 +1016,7 @@ public class CLI implements UI {
      * @throws RoomNotExistsException         The requested room does not exist.
      * @throws LocalModelNotLoadedException   Thrown if the local model field in client is null.
      */
-    public void moveStudents() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, RoomNotExistsException, LocalModelNotLoadedException {
+    public void moveStudents() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, RoomNotExistsException, LocalModelNotLoadedException, FullDiningException {
         if (!client.getLocalModel().isCanPlayMN()) {
             StrippedBoard myBoard = client.getLocalModel().getBoardOf(client.getNickname());
             // System.out.println("Board owner:"+ myBoard.getOwner());
@@ -1303,6 +1307,8 @@ public class CLI implements UI {
             throw new RuntimeException(e);
         } catch (NotEnoughCoinsException e) {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
+        } catch (FullDiningException e) {
+            e.printStackTrace();
         }
 
     }
@@ -1364,6 +1370,8 @@ public class CLI implements UI {
             throw new RuntimeException(e);
         } catch (NotEnoughCoinsException e) {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
+        } catch (FullDiningException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1601,6 +1609,8 @@ public class CLI implements UI {
                 throw new RuntimeException(e);
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
+            } catch (FullDiningException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -1651,6 +1661,8 @@ public class CLI implements UI {
                 throw new RuntimeException(e);
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
+            } catch (FullDiningException e) {
+                e.printStackTrace();
             }
         }
         //It's basically the same but I have to show the player the students on the card first
@@ -1684,6 +1696,8 @@ public class CLI implements UI {
                 throw new RuntimeException(e);
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
+            } catch (FullDiningException e) {
+                e.printStackTrace();
             }
 
         } else if (client.getLocalModel().getCharacters().get(id).getDescription().equals("Calculate the influence on any Island and reap the rewards!")) {
@@ -1720,6 +1734,8 @@ public class CLI implements UI {
                 throw new RuntimeException(e);
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
+            } catch (FullDiningException e) {
+                e.printStackTrace();
             }
         } else {
             //This is the entry Tile one so we have to do some more stuff
@@ -1756,6 +1772,8 @@ public class CLI implements UI {
                 throw new RuntimeException(e);
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
+            } catch (FullDiningException e) {
+                e.printStackTrace();
             }
 
 
