@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
@@ -40,9 +41,20 @@ public class LobbyController extends InitialStage implements Controller {
         opened.set(b);
     }
 
+
+    @FXML
+    ScrollPane scrollLobby;
     @FXML
     public void initialize() {
         opened.set(true);
+
+        roomsList.setOnScroll((event) -> {
+            final double y = event.getDeltaY();
+            if(y != 0){ //prevent from panning before values are initialized
+                roomsList.setTranslateY(y);
+            }
+        });
+
         loadRoomsList();
 
         createRoomButton.setOnAction((event) -> {
