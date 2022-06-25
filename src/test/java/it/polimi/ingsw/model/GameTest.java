@@ -131,7 +131,7 @@ class GameTest {
         String oldPlayer = "null";
         for (int i = 0; i < 4; i++) {
             oldPlayer = game.getCurrentPlayer().getNickname();
-            if(i==0)game.drawFromBag(oldPlayer);
+            if (i == 0) game.drawFromBag(oldPlayer);
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 1));
             String newPlayer = game.getCurrentPlayer().getNickname();
             assertNotEquals(oldPlayer, newPlayer);
@@ -347,6 +347,7 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
@@ -408,8 +409,7 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
-        System.out.println(game.getCurrentState());
-
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
@@ -473,6 +473,7 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
@@ -507,6 +508,7 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
@@ -541,6 +543,7 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
@@ -603,6 +606,7 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
@@ -637,6 +641,7 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
@@ -671,6 +676,7 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud2");
 
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
@@ -738,6 +744,7 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
@@ -754,6 +761,10 @@ class GameTest {
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
 
         System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
+        for (Colors color: Colors.values()){
+            System.out.println("Color " + color + " " + game.getCurrentPlayer().getSchoolBoard().getDining().get(color));
+        }
+
         game.activateCharacterCard(0, 0);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
@@ -772,6 +783,7 @@ class GameTest {
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud2");
 
+        game.drawFromBag(game.getCurrentPlayer().getNickname());
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "3");
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
