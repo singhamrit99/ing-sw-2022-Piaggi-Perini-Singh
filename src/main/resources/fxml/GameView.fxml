@@ -147,7 +147,7 @@
                         <Insets />
                      </HBox.margin>
                      <effect>
-                        <Bloom threshold="0.7" />
+                        <Bloom threshold="0.9" />
                      </effect>
                   </VBox>
                   <StackPane fx:id="islandsPane" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0">
@@ -329,7 +329,7 @@
                         </StackPane>
                      </children>
                      <effect>
-                        <Bloom threshold="0.7" />
+                        <Bloom threshold="0.9" />
                      </effect>
                   </VBox>
                   <StackPane fx:id="bag" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="200.0">
