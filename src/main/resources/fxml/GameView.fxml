@@ -6,12 +6,16 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
@@ -142,6 +146,9 @@
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
+                     <effect>
+                        <Bloom threshold="0.7" />
+                     </effect>
                   </VBox>
                   <StackPane fx:id="islandsPane" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0">
                      <HBox.margin>
@@ -156,6 +163,13 @@
                <VBox.margin>
                   <Insets />
                </VBox.margin>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" height="25.0" radius="12.0" width="25.0">
+                     <color>
+                        <Color red="0.40784314274787903" green="0.843137264251709" blue="1.0" />
+                     </color>
+                  </DropShadow>
+               </effect>
             </HBox>
             <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="1920.0">
                <children>
@@ -314,6 +328,9 @@
                            </children>
                         </StackPane>
                      </children>
+                     <effect>
+                        <Bloom threshold="0.7" />
+                     </effect>
                   </VBox>
                   <StackPane fx:id="bag" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="200.0">
                      <opaqueInsets>
@@ -404,6 +421,13 @@
                                  </StackPane.margin>
                               </ImageView>
                            </children>
+                           <effect>
+                              <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" width="50.0">
+                                 <color>
+                                    <Color opacity="0.6973282694816589" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
                         </StackPane>
                         <StackPane alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0">
                            <children>
@@ -448,6 +472,13 @@
                                  </StackPane.margin>
                               </ImageView>
                            </children>
+                           <effect>
+                              <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" width="50.0">
+                                 <color>
+                                    <Color opacity="0.6973282694816589" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
                         </StackPane>
                         <StackPane fx:id="entrance" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0">
                            <children>
@@ -527,6 +558,13 @@
                            <StackPane.margin>
                               <Insets />
                            </StackPane.margin>
+                           <effect>
+                              <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" width="50.0">
+                                 <color>
+                                    <Color opacity="0.6973282694816589" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
                         </StackPane>
                         <StackPane fx:id="blueDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0" prefWidth="200.0">
                            <children>
@@ -611,6 +649,13 @@
                                  </StackPane.margin>
                               </ImageView>
                            </children>
+                           <effect>
+                              <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" width="50.0">
+                                 <color>
+                                    <Color opacity="0.6973282694816589" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
                         </StackPane>
                         <StackPane fx:id="pinkDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
                            <children>
@@ -698,6 +743,13 @@
                            <StackPane.margin>
                               <Insets bottom="70.0" />
                            </StackPane.margin>
+                           <effect>
+                              <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" width="50.0">
+                                 <color>
+                                    <Color opacity="0.6973282694816589" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
                         </StackPane>
                         <StackPane fx:id="yellowDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
                            <children>
@@ -785,6 +837,13 @@
                            <StackPane.margin>
                               <Insets bottom="140.0" />
                            </StackPane.margin>
+                           <effect>
+                              <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" width="50.0">
+                                 <color>
+                                    <Color opacity="0.6973282694816589" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
                         </StackPane>
                         <StackPane fx:id="redDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
                            <children>
@@ -872,6 +931,13 @@
                            <StackPane.margin>
                               <Insets bottom="210.0" />
                            </StackPane.margin>
+                           <effect>
+                              <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" width="50.0">
+                                 <color>
+                                    <Color opacity="0.6973282694816589" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
                         </StackPane>
                         <StackPane fx:id="greenDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
                            <children>
@@ -959,11 +1025,25 @@
                            <StackPane.margin>
                               <Insets bottom="283.0" />
                            </StackPane.margin>
+                           <effect>
+                              <DropShadow blurType="GAUSSIAN" height="50.0" radius="24.5" width="50.0">
+                                 <color>
+                                    <Color opacity="0.6973282694816589" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
                         </StackPane>
                      </children>
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
+                     <effect>
+                        <InnerShadow blurType="GAUSSIAN" height="25.0" radius="12.0" width="25.0">
+                           <color>
+                              <Color red="0.40784314274787903" green="0.843137264251709" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
                   </StackPane>
                   <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0">
                      <children>
@@ -1021,6 +1101,13 @@
                                              </image>
                                           </ImageView>
                                        </children>
+                                       <effect>
+                                          <DropShadow blurType="GAUSSIAN">
+                                             <color>
+                                                <Color opacity="0.5699999928474426" />
+                                             </color>
+                                          </DropShadow>
+                                       </effect>
                                     </VBox>
                                  </children>
                               </StackPane>
@@ -1064,6 +1151,13 @@
                                              </image>
                                           </ImageView>
                                        </children>
+                                       <effect>
+                                          <DropShadow>
+                                             <color>
+                                                <Color opacity="0.5699999928474426" />
+                                             </color>
+                                          </DropShadow>
+                                       </effect>
                                     </VBox>
                                  </children>
                               </StackPane>
@@ -1107,6 +1201,13 @@
                                              </image>
                                           </ImageView>
                                        </children>
+                                       <effect>
+                                          <DropShadow>
+                                             <color>
+                                                <Color opacity="0.5699999928474426" />
+                                             </color>
+                                          </DropShadow>
+                                       </effect>
                                     </VBox>
                                  </children>
                               </StackPane>
@@ -1132,6 +1233,13 @@
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" height="25.0" radius="12.0" width="25.0">
+                     <color>
+                        <Color red="0.40784314274787903" green="0.843137264251709" blue="1.0" />
+                     </color>
+                  </DropShadow>
+               </effect>
             </HBox>
          </children>
       </VBox>
