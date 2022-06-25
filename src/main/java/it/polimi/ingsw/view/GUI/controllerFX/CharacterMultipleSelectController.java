@@ -133,6 +133,8 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                     Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
                 } catch (UserNotRegisteredException e) {
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                } catch (FullDiningException e) {
+                    Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
                 }
             } else {
                 PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), indexSelectedCharacter, index.get());
@@ -160,6 +162,8 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                     Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
                 } catch (UserNotRegisteredException e) {
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+                } catch (FullDiningException e) {
+                    Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
                 }
             }
 
