@@ -24,6 +24,7 @@ import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
@@ -91,7 +92,13 @@ public class GUILauncher extends Application implements Initializable {
             if (controlNickname()) {
                 final String nickname = nicknameField.getText();
                 GUI.client.view = StringNames.LOBBY;
-                client.registerClient(nickname);
+                try {
+                    client.registerClient(nickname);
+                } catch (NotBoundException | RemoteException e) {
+                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                } catch (UserAlreadyExistsException e) {
+                    Controller.showErrorDialogBox(StringNames.USER_ALREADY_IN_ROOM);
+                }
             }
         });
     }

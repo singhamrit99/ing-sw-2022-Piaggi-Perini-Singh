@@ -104,6 +104,4 @@ public interface UI {
      */
     void professorChanged();
 
-
-    void errorAlert(String errorName);
 }

@@ -72,10 +72,6 @@ public class GUI implements UI {
         }
     }
 
-    @Override
-    public void errorAlert(String errorName) {
-        Controller.showErrorDialogBox(errorName);
-    }
 
     @Override
     public void startGame() throws RemoteException {
