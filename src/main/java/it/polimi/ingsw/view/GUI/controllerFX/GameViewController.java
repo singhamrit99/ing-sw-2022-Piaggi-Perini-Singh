@@ -19,9 +19,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -39,6 +41,7 @@ public class GameViewController extends InitialStage implements Controller {
     private String currentBoardView; //the owner of the board current visible on the screen
     ArrayList<StackPane> islandsPanes = new ArrayList<>();
 
+    private final DropShadow dropShadowIslandStuff;
     private List<MenuItem> itemBoardViewArray; //the menu items necessary to change the view
 
     private ArrayList<ImageView> entranceStudentsImgs, towersImgs, charactersCards;
@@ -97,6 +100,13 @@ public class GameViewController extends InitialStage implements Controller {
         } catch (IOException io) {
             System.out.println("Error importing img assets in GameViewController");
         }
+
+        //DropShadow effect for islands students, MN, towers
+        dropShadowIslandStuff = new DropShadow();
+        dropShadowIslandStuff.setHeight(30);
+        dropShadowIslandStuff.setWidth(30);
+        dropShadowIslandStuff.setSpread(0.2);
+        dropShadowIslandStuff.setColor(Color.rgb(0,0,0,0.4f));
     }
 
     public static void setOpened(boolean b) {
@@ -533,6 +543,7 @@ public class GameViewController extends InitialStage implements Controller {
 
     private void spawnMNIsland(GridPane pane) {
         ImageView mn = new ImageView(motherNature);
+        mn.setEffect(dropShadowIslandStuff);
         mn.setFitHeight(40);
         mn.setFitWidth(40);
         mn.maxWidth(40);
@@ -546,6 +557,7 @@ public class GameViewController extends InitialStage implements Controller {
         noEntryView.setFitWidth(150);
         noEntryView.maxWidth(150);
         noEntryView.maxHeight(150);
+        noEntryView.setEffect(dropShadowIslandStuff);
         pane.getChildren().add(noEntryView);
     }
 
@@ -558,6 +570,7 @@ public class GameViewController extends InitialStage implements Controller {
                 Image rightColor = studentImgFromColor(c);
                 while (i < students.get(c)) {
                     ImageView student = new ImageView(rightColor);
+                    student.setEffect(dropShadowIslandStuff);
                     imagesToReturn.add(student);
                     i++;
                 }
@@ -584,6 +597,7 @@ public class GameViewController extends InitialStage implements Controller {
 
         for (int i = 0; i < island.getNumOfTowers(); i++) {
             ImageView towerImage = new ImageView(rightColor);
+            towerImage.setEffect(dropShadowIslandStuff);
             towersToReturn.add(towerImage);
         }
 
