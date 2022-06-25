@@ -1,10 +1,7 @@
 package it.polimi.ingsw.network.server.commands;
 
 import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.exceptions.NegativeValueException;
-import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
-import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
+import it.polimi.ingsw.exceptions.*;
 
 import java.io.Serializable;
 
@@ -21,7 +18,7 @@ public class PlayCharacterCardA implements Command, Serializable {
         return playerCaller;
     }
     @Override
-    public void execute(Controller controller) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException {
+    public void execute(Controller controller) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException {
         controller.callPlayCharacterCard(characterCardID);
     }
 }
