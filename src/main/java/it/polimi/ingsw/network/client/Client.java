@@ -195,8 +195,7 @@ public class Client implements Runnable {
             server.leaveRoom(nickname);
         }
     }
-
-    public void leaveGameOverScreenGUI() throws RemoteException {
+    public void refreshScreenLobby() throws RemoteException {
         view = StringNames.LOBBY;
         LobbyController.setOpened(false);
         RoomController.setOpened(false);
@@ -206,10 +205,9 @@ public class Client implements Runnable {
         setInGame(false);
         localModel = null;
         clientRoom = null;
-        roomList = getRooms();
-        ui.roomsAvailable(roomList);
         oldRoomListSize = 0; //this is necessary for the correct reloading of the rooms
         firstRoomListRefresh = true;
+        roomListShow();
     }
 
     public void leaveGame() throws UserNotRegisteredException, UserNotInRoomException, RemoteException {
@@ -217,7 +215,7 @@ public class Client implements Runnable {
             throw new UserNotInRoomException();
         } else {
             server.leaveGame(nickname);
-            leaveGameOverScreenGUI();
+            refreshScreenLobby();
         }
     }
 
