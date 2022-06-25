@@ -119,7 +119,7 @@ public class Game {
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
-    public void activateCharacterCard(int index) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
+    public void activateCharacterCard(int index) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException {
         if (buyCharacterCard(index) && expertMode) {
             currentPlayer.getPlayedCharacterCard().activate(this);
         } else {
@@ -172,7 +172,7 @@ public class Game {
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
-    public void activateCharacterCard(int index, int choice) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
+    public void activateCharacterCard(int index, int choice) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException {
         if (buyCharacterCard(index) && expertMode) {
             currentPlayer.getPlayedCharacterCard().setChoiceIndex(choice);
             currentPlayer.getPlayedCharacterCard().activate(this);
@@ -194,7 +194,7 @@ public class Game {
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
-    public void activateCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
+    public void activateCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException {
         if (buyCharacterCard(index) && expertMode) {
             currentPlayer.getPlayedCharacterCard().setEnums(students1, students2);
             currentPlayer.getPlayedCharacterCard().activate(this);
@@ -216,7 +216,7 @@ public class Game {
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
-    public void activateCharacterCard(int index, int student, int island) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
+    public void activateCharacterCard(int index, int student, int island) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException {
         if (buyCharacterCard(index) && expertMode) {
             currentPlayer.getPlayedCharacterCard().setChoices(student, island);
             currentPlayer.getPlayedCharacterCard().activate(this);
@@ -438,8 +438,10 @@ public class Game {
                 state = State.ACTIONPHASE_1;
                 playerPlanPhase = players.indexOf(orderPlayers.peek());
                 currentPlayer = orderPlayers.poll(); //first player of Action Phase
-                PropertyChangeEvent phaseChange =
-                        new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
+                PropertyChangeEvent phaseChange = null;
+                if (currentPlayer != null) {
+                    phaseChange = new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
+                }
                 gameListener.propertyChange(phaseChange);
             }
         } else if (state == State.ACTIONPHASE_3) { //Last player did the 3 step of Action Phase
