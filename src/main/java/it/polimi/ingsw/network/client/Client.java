@@ -57,8 +57,8 @@ public class Client implements Runnable {
      * Method used to connect to the server.
      */
     private void connect() throws NotBoundException, RemoteException {
-            Registry registry = LocateRegistry.getRegistry(ip, port);
-            server = (serverStub) registry.lookup("server");
+        Registry registry = LocateRegistry.getRegistry(ip, port);
+        server = (serverStub) registry.lookup("server");
     }
 
     /**
@@ -68,20 +68,13 @@ public class Client implements Runnable {
      * @throws RemoteException            Thrown in case of a network error.
      * @throws UserAlreadyExistsException Thrown if the chosen name is already on the server.
      */
-    public void registerClient(String nickName) {
-        try{
-            connect();
-            server.registerUser(nickName);
-            this.nickname = nickName;
-            userRegistered = true;
-            new Thread(this::ping).start();
-            new Thread(this).start();
-        }
-        catch (NotBoundException | RemoteException e) {
-            ui.errorAlert(StringNames.CONNECTION_ERROR);
-        } catch (UserAlreadyExistsException e) {
-            ui.errorAlert(StringNames.NICKNAME_ALREADY_EXISTS);
-        }
+    public void registerClient(String nickName) throws NotBoundException, RemoteException, UserAlreadyExistsException {
+        connect();
+        server.registerUser(nickName);
+        this.nickname = nickName;
+        userRegistered = true;
+        new Thread(this::ping).start();
+        new Thread(this).start();
     }
 
     /**
@@ -200,6 +193,7 @@ public class Client implements Runnable {
             server.leaveRoom(nickname);
         }
     }
+
     public void refreshScreenLobby() throws RemoteException {
         view = StringNames.LOBBY;
         LobbyController.setOpened(false);
