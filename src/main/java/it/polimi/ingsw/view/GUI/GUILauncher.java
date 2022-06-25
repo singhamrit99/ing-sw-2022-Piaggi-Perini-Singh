@@ -106,7 +106,7 @@ public class GUILauncher extends Application implements Initializable {
     private boolean controlNickname() {
         final String nickname = nicknameField.getText();
 
-        if (nickname.length() == 0) {
+        if (nickname.isBlank()){
             Controller.showErrorDialogBox(StringNames.NICKNAME_FIELD_NULL);
             return false;
         }
