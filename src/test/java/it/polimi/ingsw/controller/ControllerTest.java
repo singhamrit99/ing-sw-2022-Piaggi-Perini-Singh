@@ -41,7 +41,7 @@ class ControllerTest {
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 1));
         }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
-        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
             ArrayList<String> tmp = new ArrayList<>();
@@ -81,7 +81,7 @@ class ControllerTest {
         assertEquals(game.getCurrentState(), State.ACTIONPHASE_1);
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
         assertEquals(7, game.valueOfEnum(entrance));
-        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
             ArrayList<String> tmp = new ArrayList<>();
@@ -115,7 +115,7 @@ class ControllerTest {
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 4));
         }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
-        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap(Colors.class);
+        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
             ArrayList<String> tmp = new ArrayList<>();
@@ -170,7 +170,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallPlayCharacterA() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException, AssistantCardNotFoundException, IncorrectStateException, ProfessorNotFoundException, NotEnoughCoinsException {
+    void testCallPlayCharacterA() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
@@ -185,7 +185,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallPlayCharacterB() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException, AssistantCardNotFoundException, IncorrectStateException, ProfessorNotFoundException, NotEnoughCoinsException {
+    void testCallPlayCharacterB() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
@@ -200,7 +200,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallPlayCharacterC() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException, AssistantCardNotFoundException, IncorrectStateException {
+    void testCallPlayCharacterC() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
@@ -216,7 +216,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallPlayCharacterD() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException, AssistantCardNotFoundException, IncorrectStateException {
+    void testCallPlayCharacterD() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
