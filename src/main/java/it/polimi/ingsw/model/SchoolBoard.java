@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.FullDiningException;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
@@ -75,6 +76,8 @@ public class SchoolBoard {
     public int moveStudents(EnumMap<Colors, Integer> studentsToMove) throws NegativeValueException {
         EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(getDining(), studentsToMove);
         int count = 0;
+
+
 
         if (newStudents != null) {
             removeStudents(studentsToMove);
@@ -246,12 +249,25 @@ public class SchoolBoard {
      * @param studentsToAddDining Students to be added to Dining room.
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
-    public void addStudentsDining(EnumMap<Colors, Integer> studentsToAddDining) throws NegativeValueException {
+    public void addStudentsDining(EnumMap<Colors, Integer> studentsToAddDining) throws NegativeValueException, FullDiningException {
         EnumMap<Colors, Integer> newStudents = StudentManager.addStudent(entrance, studentsToAddDining);
+
+        if (checkColorsNum(newStudents, 10)) throw new FullDiningException();
+
         if (newStudents != null) {
             setDining(newStudents);
         } else {
             throw new NegativeValueException();
         }
+    }
+
+    private boolean checkColorsNum(EnumMap<Colors, Integer> studentsToCheck, int max) {
+        for (Colors color: Colors.values()){
+            if (studentsToCheck.get(color) > max){
+                return false;
+            }
+        }
+
+        return true;
     }
 }
