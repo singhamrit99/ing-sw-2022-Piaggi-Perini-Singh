@@ -7,6 +7,7 @@ import it.polimi.ingsw.view.UI;
 import javafx.application.Application;
 import javafx.application.Platform;
 
+import javax.naming.ldap.Control;
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -69,6 +70,11 @@ public class GUI implements UI {
                 Platform.runLater(() -> gameController.reloadProfs());
             }
         }
+    }
+
+    @Override
+    public void errorAlert(String errorName) {
+        Controller.showErrorDialogBox(errorName);
     }
 
     @Override
@@ -153,15 +159,15 @@ public class GUI implements UI {
 
     @Override
     public void gameOver(String leavingPlayer, String winner) {
-            if (GUI.client.view.equals(StringNames.INGAME)) {
-                if (gameController.isOpened()) {
-                    Platform.runLater(() -> {
-                        gameOverController.setLeavingPlayer(leavingPlayer);
-                        gameOverController.setWinner(winner);
-                        Controller.load(ResourcesPath.GAME_OVER, gameOverController);
-                    });
-                }
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> {
+                    gameOverController.setLeavingPlayer(leavingPlayer);
+                    gameOverController.setWinner(winner);
+                    Controller.load(ResourcesPath.GAME_OVER, gameOverController);
+                });
             }
+        }
     }
 
     @Override
