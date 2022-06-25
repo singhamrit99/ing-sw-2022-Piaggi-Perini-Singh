@@ -17,6 +17,7 @@ import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
 import java.beans.PropertyChangeEvent;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -64,7 +65,7 @@ public class CLI implements UI {
     public void Start() throws InterruptedException {
 
         AnsiConsole.systemInstall();
-        while (true) {
+
             System.out.println("Welcome to...");
 
             System.out.println(("      ########## #########  ###########     ###     ####    ### ########### ###   ###  ######## \n") +
@@ -74,6 +75,7 @@ public class CLI implements UI {
                     "  +#+        +#+    +#+     +#+     +#+     +#+ +#+  +#+#+#     +#+        +#+           +#+    \n" +
                     " #+#        #+#    #+#     #+#     #+#     #+# #+#   #+#+#     #+#        #+#    #+#    #+#     \n" +
                     "########## ###    ### ########### ###     ### ###    ####     ###        ###     ########     ");
+        while (true) {
             System.out.println("Welcome to the lobby!\nWhat's your name?");
                 try {
                     nickName = in.nextLine();
@@ -84,8 +86,10 @@ public class CLI implements UI {
                     System.out.println("That username is already in the game! Try another.\n");
                 } catch (RemoteException e) {
                     System.out.println();
+                } catch (NotBoundException e) {
+                    e.printStackTrace();
                 }
-            }
+        }
         while (true) {
             System.out.println("O----------------------------------------------------------------------------------------O\n" +
                     "|Possible options: JOIN to join a room; CREATE to create a new room; ROOMS to list rooms;|\n" +
