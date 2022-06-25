@@ -182,6 +182,8 @@ public class CharacterSwapController extends InitialStage implements Controller 
                 Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
             } catch (UserNotRegisteredException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+            } catch (FullDiningException e) {
+                Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
             }
 
             Window window = ((Node) (event.getSource())).getScene().getWindow();
