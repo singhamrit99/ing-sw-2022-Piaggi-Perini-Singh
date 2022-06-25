@@ -226,31 +226,32 @@ class GameTest {
     }
 
     @Test
-    void testNextRound() throws IncorrectArgumentException, IncorrectPlayerException, AssistantCardNotFoundException, IncorrectStateException, MotherNatureLostException, NegativeValueException, ProfessorNotFoundException {
-        Game g = planningPhaseComplete();
-        for (int playersTurn = 0; playersTurn < 4; playersTurn++) {
-            EnumMap<Colors, Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
-            EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
-            int countNumStudents = 3;
-            for (Colors c : Colors.values()) {
-                ArrayList<String> tmp = new ArrayList<>();
-                movingStudents.put(c, tmp);
-                for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
-                    tmp = movingStudents.get(c);
-                    if (Math.random() > 0.5) {
-                        tmp.add("dining");
-                    } else tmp.add("island4");
+    void testCompleteRound() throws IncorrectArgumentException, IncorrectPlayerException, AssistantCardNotFoundException,
+            IncorrectStateException, MotherNatureLostException, NegativeValueException, ProfessorNotFoundException {
+            Game g = planningPhaseComplete();
+            for (int playersTurn = 0; playersTurn < 4; playersTurn++) {
+                EnumMap<Colors, Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
+                EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
+                int countNumStudents = 3;
+                for (Colors c : Colors.values()) {
+                    ArrayList<String> tmp = new ArrayList<>();
                     movingStudents.put(c, tmp);
-                    countNumStudents--;
+                    for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
+                        tmp = movingStudents.get(c);
+                        if (Math.random() > 0.5) {
+                            tmp.add("dining");
+                        } else tmp.add("island4");
+                        movingStudents.put(c, tmp);
+                        countNumStudents--;
+                    }
                 }
-            }
-            g.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
-            g.moveMotherNature(g.getCurrentPlayer().getNickname(), 1);
-            EnumMap<Colors, Integer> s = g.getCloudTile(0).getStudents();
-            g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(), "cloud1");
+                g.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
+                g.moveMotherNature(g.getCurrentPlayer().getNickname(), 1);
+                EnumMap<Colors, Integer> s = g.getCloudTile(0).getStudents();
+                g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(), "cloud1");
 
-        }
-        assertEquals(State.PLANNINGPHASE, g.getCurrentState());
+            }
+            assertEquals(State.PLANNINGPHASE, g.getCurrentState());
     }
 
     @Test

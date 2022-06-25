@@ -21,6 +21,7 @@ import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -964,9 +965,7 @@ public class Game {
         int islandToDestroy = -1;
 
         for (int i = 0; i < islands.size() && !listChanged && islands.size() > 1; i++) {
-            if (i + 1 < islands.size()) currentTile = islands.get(i + 1);
-            else currentTile = islands.get(0);
-
+            currentTile = islands.get((i + 1)%islands.size());
             prevTile = islands.get(i);
 
             if (prevTile.getNumOfTowers() != 0 && currentTile.getNumOfTowers() != 0
@@ -974,6 +973,8 @@ public class Game {
                 currentTile.addStudents(prevTile.getStudents());
                 currentTile.sumTowers(prevTile.getNumOfTowers());
                 currentTile.moveMotherNature();
+                islandToDestroy = i;
+                listChanged = true;
                 StrippedIsland mergedTile = new StrippedIsland(currentTile); //notify currentTile
                 StrippedIsland deletedTile = new StrippedIsland(prevTile); //notify tile to deleted
                 //notifications Island merged
@@ -983,14 +984,14 @@ public class Game {
                 PropertyChangeEvent islandDeletedEvent =
                         new PropertyChangeEvent(this, "island-merged", deletedTile, mergedTile);
                 gameListener.propertyChange(islandDeletedEvent);
-                listChanged = true;
-                islandToDestroy = i;
             }
         }
 
-        if (listChanged) {
-            if (islandToDestroy > 0) islands.remove(islandToDestroy);
-            checkUnificationIslands();//recursive method necessary to check double+ unification in a single time
+        if (listChanged){
+            if (islandToDestroy > 0) {
+                islands.remove(islandToDestroy);
+                checkUnificationIslands();
+            }
         }
     }
 

@@ -90,10 +90,8 @@ public class Player implements Comparable<Player> {
         }
 
         if (schoolBoard.hasEnoughStudents(total)) {
-            System.out.println("Coins before: " + coins);
             if (move.size() != 0) coins += schoolBoard.moveStudents(move);
             if (remove.size() != 0) schoolBoard.removeStudents(remove);
-            System.out.println("Coins after: " + coins);
         } else {
             throw new IncorrectArgumentException("EnumMap is incorrect");
         }

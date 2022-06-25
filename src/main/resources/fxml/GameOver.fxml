@@ -24,9 +24,9 @@
         </StackPane>
         <HBox fx:id="expertBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1920.0" spacing="20.0" styleClass="WhiteBackground">
          <children>
-            <Text fx:id="winnerDeclare" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="sdasd" textAlignment="CENTER">
+            <Text fx:id="winnerDeclare" fill="WHITE" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" text="sdasd" textAlignment="CENTER">
                <font>
-                  <Font name="Rockwell Extra Bold" size="20.0" />
+                  <Font name="Rockwell Extra Bold" size="44.0" />
                </font>
             </Text>
          </children></HBox>

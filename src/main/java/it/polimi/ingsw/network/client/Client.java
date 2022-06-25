@@ -12,10 +12,12 @@ import it.polimi.ingsw.network.server.commands.Command;
 import it.polimi.ingsw.network.server.serverStub;
 
 import java.beans.PropertyChangeEvent;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.SplittableRandom;
 
 public class Client implements Runnable {
     final private String ip;
@@ -54,14 +56,9 @@ public class Client implements Runnable {
     /**
      * Method used to connect to the server.
      */
-    public void connect() {
-        try {
+    private void connect() throws NotBoundException, RemoteException {
             Registry registry = LocateRegistry.getRegistry(ip, port);
             server = (serverStub) registry.lookup("server");
-        } catch (Exception e) {
-            System.err.println("Client connection to server exception: " + e); //TODO
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -71,12 +68,20 @@ public class Client implements Runnable {
      * @throws RemoteException            Thrown in case of a network error.
      * @throws UserAlreadyExistsException Thrown if the chosen name is already on the server.
      */
-    public void registerClient(String nickName) throws RemoteException, UserAlreadyExistsException {
-        server.registerUser(nickName);
-        this.nickname = nickName;
-        userRegistered = true;
-        new Thread(this::ping).start();
-        new Thread(this).start();
+    public void registerClient(String nickName) {
+        try{
+            connect();
+            server.registerUser(nickName);
+            this.nickname = nickName;
+            userRegistered = true;
+            new Thread(this::ping).start();
+            new Thread(this).start();
+        }
+        catch (NotBoundException | RemoteException e) {
+            ui.errorAlert(StringNames.CONNECTION_ERROR);
+        } catch (UserAlreadyExistsException e) {
+            ui.errorAlert(StringNames.NICKNAME_ALREADY_EXISTS);
+        }
     }
 
     /**
@@ -195,8 +200,7 @@ public class Client implements Runnable {
             server.leaveRoom(nickname);
         }
     }
-
-    public void leaveGameOverScreenGUI() throws RemoteException {
+    public void refreshScreenLobby() throws RemoteException {
         view = StringNames.LOBBY;
         LobbyController.setOpened(false);
         RoomController.setOpened(false);
@@ -206,10 +210,9 @@ public class Client implements Runnable {
         setInGame(false);
         localModel = null;
         clientRoom = null;
-        roomList = getRooms();
-        ui.roomsAvailable(roomList);
         oldRoomListSize = 0; //this is necessary for the correct reloading of the rooms
         firstRoomListRefresh = true;
+        roomListShow();
     }
 
     public void leaveGame() throws UserNotRegisteredException, UserNotInRoomException, RemoteException {
@@ -217,7 +220,7 @@ public class Client implements Runnable {
             throw new UserNotInRoomException();
         } else {
             server.leaveGame(nickname);
-            leaveGameOverScreenGUI();
+            refreshScreenLobby();
         }
     }
 
