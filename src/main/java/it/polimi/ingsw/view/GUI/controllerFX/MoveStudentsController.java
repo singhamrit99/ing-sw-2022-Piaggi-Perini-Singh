@@ -172,6 +172,8 @@ public class MoveStudentsController extends InitialStage implements Controller {
                 Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
             } catch (UserNotRegisteredException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+            } catch (FullDiningException e) {
+                Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
             }
 
             Window window = ((Node) (event.getSource())).getScene().getWindow();
