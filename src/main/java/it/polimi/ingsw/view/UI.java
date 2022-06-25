@@ -103,4 +103,7 @@ public interface UI {
      * Event that displays if anyone professors changed.
      */
     void professorChanged();
+
+
+    void errorAlert(String errorName);
 }
