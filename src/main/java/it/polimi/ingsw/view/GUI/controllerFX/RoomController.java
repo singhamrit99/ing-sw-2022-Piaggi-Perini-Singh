@@ -73,9 +73,8 @@ public class RoomController extends InitialStage implements Controller {
 
         leaveButton.setOnAction((event) -> {
             try {
-                opened.set(false);
-                GUI.client.view = StringNames.LOBBY;
                 GUI.client.leaveRoom();
+                GUI.client.refreshScreenLobby();
             } catch (RemoteException e) {
                 Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             } catch (UserNotInRoomException e) {
