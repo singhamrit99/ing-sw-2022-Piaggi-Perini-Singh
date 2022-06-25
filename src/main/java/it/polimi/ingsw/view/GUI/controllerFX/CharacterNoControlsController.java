@@ -34,6 +34,9 @@ public class CharacterNoControlsController extends InitialStage implements Contr
             PlayCharacterCardA playCharacterCardA = new PlayCharacterCardA(GUI.client.getNickname(), indexSelectedCharacter);
             try {
                 GUI.client.performGameAction(playCharacterCardA);
+                if (selectedCharacter.getCharacterID() == 4) {
+                    GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getMoves() + 2);
+                }
             } catch (NotEnoughCoinsException e) {
                 Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
@@ -58,6 +61,8 @@ public class CharacterNoControlsController extends InitialStage implements Contr
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             } catch (FullDiningException e) {
                 Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
+            } catch (LocalModelNotLoadedException e) {
+                Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
             }
 
             Window window = ((Node) (event.getSource())).getScene().getWindow();
