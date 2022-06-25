@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
+import it.polimi.ingsw.exceptions.FullDiningException;
 import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.StudentManager;
@@ -111,7 +112,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
      *                                     mismatch or other internal error.
      */
     @Override
-    public void activate(Game game) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException {
+    public void activate(Game game) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, FullDiningException {
         Actions action = this.getAbility().getAction();
         switch (action) {
             case ADD_ISLAND:
