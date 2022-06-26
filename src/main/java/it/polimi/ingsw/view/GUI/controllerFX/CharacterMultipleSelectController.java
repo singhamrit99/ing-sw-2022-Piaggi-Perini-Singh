@@ -41,13 +41,15 @@ public class CharacterMultipleSelectController extends InitialStage implements C
 
     /**
      * Binds this stage to a user GUI.
+     *
      * @param gui the GUI to bind to.
      */
     public CharacterMultipleSelectController(GUI gui) {
         super(gui);
     }
+
     /**
-     *Method used to initialize the Character select controller stage.
+     * Method used to initialize the Character select controller stage.
      */
     @Override
     public void initialize() {
@@ -141,6 +143,8 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                 } catch (FullDiningException e) {
                     Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
+                } catch (CardPlayedInTurnException e) {
+                    Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
                 }
             } else {
                 PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), indexSelectedCharacter, index.get());
@@ -172,6 +176,8 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                 } catch (FullDiningException e) {
                     Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
+                } catch (CardPlayedInTurnException e) {
+                    Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
                 }
             }
         });
