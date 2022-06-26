@@ -27,8 +27,10 @@ public class CharacterOneSelectController extends InitialStage implements Contro
 
     @FXML
     private ChoiceBox<String> choiceBox;
+
     /**
      * Binds this stage to a user GUI.
+     *
      * @param gui the GUI to bind to.
      */
     public CharacterOneSelectController(GUI gui) {
@@ -91,6 +93,8 @@ public class CharacterOneSelectController extends InitialStage implements Contro
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             } catch (FullDiningException e) {
                 Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
+            } catch (CardPlayedInTurnException e) {
+                Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
             }
         });
 
