@@ -23,7 +23,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.FileInputStream;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -47,6 +46,7 @@ public class GUILauncher extends Application implements Initializable {
 
     /**
      * Starts the GUI on the starting stage.
+     *
      * @param stage The stage to set to
      * @throws Exception used for Stage exceptions.
      */
@@ -57,24 +57,26 @@ public class GUILauncher extends Application implements Initializable {
         stage.setMaximized(true);
 
         mainWindow = stage;
-        javafx.scene.image.Image icon = new Image(new FileInputStream("src/main/resources/img/professors/teacher_blue.png"));
-        mainWindow.getIcons().add(icon);
 
-        stage.setOnCloseRequest((event) -> {
-            Platform.exit();
-            System.exit(0);
-        });
+        Image icon = new Image("/img/professors/teacher_blue.png");
+        mainWindow.getIcons().add(icon);
 
         String path = ResourcesPath.FXML_FILE_PATH + ResourcesPath.LAUNCHER + ResourcesPath.FILE_EXTENSION;
         Parent root = FXMLLoader.load(getClass().getResource(path));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+        stage.setOnCloseRequest((event) -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     /**
      * Initializes launcher in preparation for start button event.
-     * @param url The url of the resource
+     *
+     * @param url            The url of the resource
      * @param resourceBundle the graphical resources of the game
      */
     @Override
@@ -103,22 +105,23 @@ public class GUILauncher extends Application implements Initializable {
      */
     private void startButtonEvent() {
         startButton.setOnAction((event) -> {
-                final String nickname = nicknameField.getText();
-                GUI.client.view = StringNames.LOBBY;
-                try {
-                    client.registerClient(nickname);
-                } catch (NotBoundException | RemoteException e) {
-                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
-                } catch (UserAlreadyExistsException e) {
-                    Controller.showErrorDialogBox(StringNames.USER_ALREADY_IN_ROOM);
-                } catch (NameFieldException e) {
-                    Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
-                }
+            final String nickname = nicknameField.getText();
+            GUI.client.view = StringNames.LOBBY;
+            try {
+                client.registerClient(nickname);
+            } catch (NotBoundException | RemoteException e) {
+                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+            } catch (UserAlreadyExistsException e) {
+                Controller.showErrorDialogBox(StringNames.USER_ALREADY_IN_ROOM);
+            } catch (NameFieldException e) {
+                Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
+            }
         });
     }
 
     /**
      * Method that checks the nickname
+     *
      * @return whether the nickname is valid.
      */
     private boolean controlNickname() {

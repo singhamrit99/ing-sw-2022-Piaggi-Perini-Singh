@@ -1,12 +1,15 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.StringNames;
-import it.polimi.ingsw.view.GUI.controllerFX.*;
-import it.polimi.ingsw.view.UI;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.network.server.stripped.StrippedModel;
 import it.polimi.ingsw.network.server.commands.Command;
 import it.polimi.ingsw.network.server.serverStub;
+import it.polimi.ingsw.network.server.stripped.StrippedModel;
+import it.polimi.ingsw.view.GUI.controllerFX.GameOverController;
+import it.polimi.ingsw.view.GUI.controllerFX.GameViewController;
+import it.polimi.ingsw.view.GUI.controllerFX.LobbyController;
+import it.polimi.ingsw.view.GUI.controllerFX.RoomController;
+import it.polimi.ingsw.view.UI;
 
 import java.beans.PropertyChangeEvent;
 import java.rmi.NotBoundException;
@@ -14,7 +17,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import java.util.SplittableRandom;
 
 public class Client implements Runnable {
     final private String ip;
@@ -62,10 +64,10 @@ public class Client implements Runnable {
      * Method used to register a new client to the server with a unique username.
      *
      * @param nickName the username chosen by the new player.
-     * @throws NotBoundException Thrown if the registry has problems to find the server binding.
-     * @throws RemoteException  Thrown in case of a network error.
+     * @throws NotBoundException          Thrown if the registry has problems to find the server binding.
+     * @throws RemoteException            Thrown in case of a network error.
      * @throws UserAlreadyExistsException Thrown if the chosen name is already on the server.
-     * @throws NameFieldException Thrown if the chosen name is blank
+     * @throws NameFieldException         Thrown if the chosen name is blank
      */
     public void registerClient(String nickName) throws NotBoundException, RemoteException,
             UserAlreadyExistsException, NameFieldException {
@@ -98,7 +100,7 @@ public class Client implements Runnable {
      * @throws RemoteException            Thrown in case of a network error.
      * @throws UserNotRegisteredException Thrown if the chosen name is already on the server.
      * @throws RoomAlreadyExistsException Thrown if the chosen room name is already on the server.
-     * @throws NameFieldException Thrown if the chosen name is blank
+     * @throws NameFieldException         Thrown if the chosen name is blank
      */
     public void createRoom(String roomName) throws RemoteException, UserNotRegisteredException,
             RoomAlreadyExistsException, NameFieldException {
@@ -297,7 +299,7 @@ public class Client implements Runnable {
                 }
                 Thread.sleep(50);
             } catch (RemoteException | LocalModelNotLoadedException | InterruptedException | UserNotInRoomException |
-                     RoomNotExistsException e) {
+                    RoomNotExistsException e) {
                 e.printStackTrace();
             } catch (UserNotRegisteredException e) {
                 e.printStackTrace();

@@ -22,6 +22,7 @@ public class MoveMotherNatureController extends InitialStage implements Controll
 
     /**
      * Binds this controller to a GUI
+     *
      * @param gui the GUI to bind to.
      */
     public MoveMotherNatureController(GUI gui) {

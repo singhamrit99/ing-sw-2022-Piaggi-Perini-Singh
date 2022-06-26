@@ -151,12 +151,10 @@ public class CLI implements UI {
             //Main game loop
             //Initializing local professors board
             while (client.getLocalModel() == null) {
-
             }
             for (StrippedBoard s : client.getLocalModel().getBoards()) {
                 professorsTables.put(s.getOwner(), s.getProfessorsTable());
             }
-
 
             while (client.isInGame()) {
                 Thread.sleep(500);
@@ -188,7 +186,6 @@ public class CLI implements UI {
                     } catch (AssistantCardNotFoundException e) {
                         System.out.println("Invalid assistant card! Try again.");
                     }
-
 
                 System.out.println("Waiting for everyone to play an assistant card");
                 int i = 0;
@@ -276,7 +273,6 @@ public class CLI implements UI {
             }
 
         }
-
     }
 
     /**
@@ -295,7 +291,6 @@ public class CLI implements UI {
                 System.out.println(s.getProfessorsTable());
                 professorsTables.replace(s.getOwner(), s.getProfessorsTable());
             }
-
         }
     }
 
@@ -321,7 +316,6 @@ public class CLI implements UI {
                 System.out.println("Remote exception");
             }
         }
-
     }
 
     /**
@@ -411,7 +405,6 @@ public class CLI implements UI {
     public void islandConquest(PropertyChangeEvent e) {
         StrippedIsland island = (StrippedIsland) e.getNewValue();
         System.out.println(client.getLocalModel().getCurrentPlayer() + " conquered island " + island.getName() + "!\n");
-
     }
 
     /**
@@ -489,7 +482,6 @@ public class CLI implements UI {
         client.setMyTurn(false);
         client.setInGame(false);
         client.view = StringNames.LOBBY;
-
     }
 
     /**

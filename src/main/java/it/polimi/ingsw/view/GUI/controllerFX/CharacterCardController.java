@@ -13,8 +13,6 @@ import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -45,29 +43,19 @@ public class CharacterCardController extends InitialStage implements Controller 
         for (StrippedCharacter card : cards) {
             choiceBox.getItems().add("Character " + card.getCharacterID());
         }
-
-        ArrayList<StrippedCharacter> finalCards = cards;
         AtomicReference<String> chosenCard = new AtomicReference<>("");
 
         choiceBox.getSelectionModel().selectFirst();
         int firstIndex = choiceBox.getSelectionModel().getSelectedIndex();
-        chosenCard.set(String.valueOf(finalCards.get(firstIndex).getCharacterID()));
-        GUI.client.getLocalModel().selectedCharacter = finalCards.get(firstIndex);
-        try {
-            image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CHARACTERS + finalCards.get(firstIndex).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        chosenCard.set(String.valueOf(cards.get(firstIndex).getCharacterID()));
+        GUI.client.getLocalModel().selectedCharacter = cards.get(firstIndex);
+        image.setImage(new Image(ResourcesPath.CHARACTERS + cards.get(firstIndex).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
 
         choiceBox.setOnAction((event) -> {
             int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
-            try {
-                image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CHARACTERS + finalCards.get(selectedIndex).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR))));
-                chosenCard.set(String.valueOf(finalCards.get(selectedIndex).getCharacterID()));
-                GUI.client.getLocalModel().selectedCharacter = finalCards.get(selectedIndex);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            image.setImage(new Image(ResourcesPath.CHARACTERS + cards.get(selectedIndex).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
+            chosenCard.set(String.valueOf(cards.get(selectedIndex).getCharacterID()));
+            GUI.client.getLocalModel().selectedCharacter = cards.get(selectedIndex);
         });
 
         confirmButton.setOnAction((event) -> {

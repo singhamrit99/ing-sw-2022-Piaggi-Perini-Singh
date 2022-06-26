@@ -4,8 +4,6 @@ import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -29,10 +27,6 @@ public class GameOverController extends InitialStage implements Controller {
     @FXML
     private Button startGameButton, leaveButton;
 
-    private Image blackTowerImage, whiteTowerImage, greyTowerImage;
-
-    private SwitchButton setExpertMode;
-    private Label expertMode;
     /**
      * Binds this stage to a user GUI.
      * @param gui the GUI to bind to.

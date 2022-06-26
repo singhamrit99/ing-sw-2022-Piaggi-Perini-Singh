@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
-import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
+import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
@@ -14,8 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Text;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,19 +38,23 @@ public class RoomController extends InitialStage implements Controller {
 
     private SwitchButton setExpertMode;
     private Label expertMode;
+
     /**
      * Method used to bind this scene to a GUI
+     *
      * @param gui the GUI to bind to
      */
     public RoomController(GUI gui) {
         super(gui);
     }
+
     /**
      * Setter method to tell whether the view is open or not
+     *
      * @param b boolean value
      */
     public static void setOpened(boolean b) {
-        opened.set(false);
+        opened.set(b);
     }
 
     /**
@@ -70,13 +72,9 @@ public class RoomController extends InitialStage implements Controller {
         expertBox.getChildren().add(expertMode);
         expertBox.getChildren().add(setExpertMode);
 
-        try {
-            blackTowerImage = new Image(new FileInputStream(ResourcesPath.BLACK_TOWER));
-            whiteTowerImage = new Image(new FileInputStream(ResourcesPath.WHITE_TOWER));
-            greyTowerImage = new Image(new FileInputStream(ResourcesPath.GREY_TOWER));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        blackTowerImage = new Image(ResourcesPath.BLACK_TOWER);
+        whiteTowerImage = new Image(ResourcesPath.WHITE_TOWER);
+        greyTowerImage = new Image(ResourcesPath.GREY_TOWER);
 
         loadPlayersList();
 
@@ -96,6 +94,7 @@ public class RoomController extends InitialStage implements Controller {
 
     /**
      * Sets the list of players currently in the room
+     *
      * @param players the nicknames of every player in the room.
      */
     public void setPlayersList(ArrayList<String> players) {

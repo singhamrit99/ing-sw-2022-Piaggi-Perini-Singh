@@ -10,8 +10,6 @@ import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
 import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import it.polimi.ingsw.view.GUI.GUI;
-import javafx.animation.Interpolator;
-import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -26,11 +24,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -82,30 +77,12 @@ public class GameViewController extends InitialStage implements Controller {
 
     /**
      * The constructor class for GameVieController, which imports all assets from resource folder.
+     *
      * @param gui The GUI that needs to display all of this information.
      */
     public GameViewController(GUI gui) {
         super(gui);
         opened.set(false);
-
-        //importing all assets from resource folder
-        try {
-            blackTowerImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.BLACK_TOWER)));
-            whiteTowerImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.WHITE_TOWER)));
-            greyTowerImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.GREY_TOWER)));
-            blueStudentImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.BLUE_STUDENT)));
-            greenStudentImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.GREEN_STUDENT)));
-            pinkStudentImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.PINK_STUDENT)));
-            redStudentImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.RED_STUDENT)));
-            yellowStudentImg = new Image(Files.newInputStream(Paths.get(ResourcesPath.YELLOW_STUDENT)));
-            island0 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_0)));
-            island1 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_1)));
-            island2 = new Image(Files.newInputStream(Paths.get(ResourcesPath.ISLAND_2)));
-            motherNature = new Image(Files.newInputStream(Paths.get(ResourcesPath.MN)));
-            noEntry = new Image(Files.newInputStream(Paths.get(ResourcesPath.NOENTRYTILE)));
-        } catch (IOException io) {
-            Controller.showErrorDialogBox(StringNames.ERROR_IO);
-        }
 
         //DropShadow effect for islands students, MN, towers
         dropShadowIslandStuff = new DropShadow();
@@ -113,10 +90,12 @@ public class GameViewController extends InitialStage implements Controller {
         dropShadowIslandStuff.setHeight(40);
         dropShadowIslandStuff.setWidth(40);
         dropShadowIslandStuff.setSpread(0.3);
-        dropShadowIslandStuff.setColor(Color.rgb(0,0,0,0.6f));
+        dropShadowIslandStuff.setColor(Color.rgb(0, 0, 0, 0.6f));
     }
+
     /**
      * Setter method to tell whether the view is open or not
+     *
      * @param b boolean value
      */
     public static void setOpened(boolean b) {
@@ -125,6 +104,21 @@ public class GameViewController extends InitialStage implements Controller {
 
     @FXML
     public void initialize() {
+        //importing all assets from resource folder
+        blackTowerImg = new Image(ResourcesPath.BLACK_TOWER);
+        whiteTowerImg = new Image(ResourcesPath.WHITE_TOWER);
+        greyTowerImg = new Image(ResourcesPath.GREY_TOWER);
+        blueStudentImg = new Image(ResourcesPath.BLUE_STUDENT);
+        greenStudentImg = new Image(ResourcesPath.GREEN_STUDENT);
+        pinkStudentImg = new Image(ResourcesPath.PINK_STUDENT);
+        redStudentImg = new Image(ResourcesPath.RED_STUDENT);
+        yellowStudentImg = new Image(ResourcesPath.YELLOW_STUDENT);
+        island0 = new Image(ResourcesPath.ISLAND_0);
+        island1 = new Image(ResourcesPath.ISLAND_1);
+        island2 = new Image(ResourcesPath.ISLAND_2);
+        motherNature = new Image(ResourcesPath.MN);
+        noEntry = new Image(ResourcesPath.NOENTRYTILE);
+
         if (!opened.get()) { //first opening
             opened.set(true);
             initializePlayersViewMenu(GUI.client.getLocalPlayerList());
@@ -145,18 +139,17 @@ public class GameViewController extends InitialStage implements Controller {
                 e.printStackTrace();
             }
         });
-
     }
 
 
     @FXML
     Menu currentPlayer;
 
-    public void setCurrentPlayer(String currentPlayer){
+    public void setCurrentPlayer(String currentPlayer) {
         int maxLength = 28;
         int panning = maxLength - currentPlayer.length();
         String panningString = "";
-        for(int i=0;i<panning/2;i++){
+        for (int i = 0; i < panning / 2; i++) {
             panningString += ' ';
         }
         this.currentPlayer.setText("[ Current Player:" + panningString + currentPlayer + panningString + "]");
@@ -288,15 +281,9 @@ public class GameViewController extends InitialStage implements Controller {
         if (expert) {
             int indexCharacter = 0;
             for (StrippedCharacter c : characterCardsStripped) {
-                try {
-                    Image character = new Image(Files.newInputStream(Paths.get(ResourcesPath.CHARACTERS
-                            + c.getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR)));
-                    charactersCards.get(indexCharacter).setImage(character);
-
-                } catch (IOException characterImageLoading) {
-                    Controller.showErrorDialogBox(StringNames.ERROR_IO);
-                }
-
+                Image character = new Image(getClass().getResourceAsStream(ResourcesPath.CHARACTERS
+                        + c.getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
+                charactersCards.get(indexCharacter).setImage(character);
 
                 //if there are students ..
                 if (c.getStudents() != null) {
@@ -855,13 +842,9 @@ public class GameViewController extends InitialStage implements Controller {
         studentsCloud3v4 = new ArrayList<>();
 
         if (numOfPlayers == 3) {
-            try {
-                cloud1.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CLOUD_1))));
-                cloud2.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CLOUD_2))));
-                cloud3.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.CLOUD_3))));
-            } catch (IOException e) {
-                Controller.showErrorDialogBox(StringNames.ERROR_IO);
-            }
+            cloud1.setImage(new Image(ResourcesPath.CLOUD_1));
+            cloud2.setImage(new Image(ResourcesPath.CLOUD_2));
+            cloud3.setImage(new Image(ResourcesPath.CLOUD_3));
             cloud4.setVisible(false);
         } else if (numOfPlayers == 2) {
             cloud3.setVisible(false);
