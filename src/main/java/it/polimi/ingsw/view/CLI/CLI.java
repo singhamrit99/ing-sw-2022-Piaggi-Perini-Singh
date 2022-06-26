@@ -2059,7 +2059,7 @@ public class CLI implements UI {
                 i++;
             }
             if (island.hasMotherNature()) {
-                motherNature = i;
+                motherNature = i-1;
             }
 
         }
