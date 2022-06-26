@@ -197,12 +197,18 @@ public class CLI implements UI {
                 try {
                     if (client.getExpertMode()&&client.isInGame()) {
 
+                        System.out.println();
+                        System.out.print("");
                         while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
-                            while (!client.isMyTurn()&&client.isInGame()) {
+                            System.out.print("");
+                            while (!client.isMyTurn() && client.isInGame()) {
                                 waitForTurn();
-
+                                if (!client.isInGame())
+                                    break;
                             }
-                            if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
+                            System.out.print("");
+                            if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn && client.isInGame()) {
+                                System.out.print("");
                                 expertPrintCommandHelp();
                                 performActionInTurnExpert();
                                 if (!client.isInGame())
@@ -215,6 +221,7 @@ public class CLI implements UI {
                         if (!client.isInGame())
                             break;
                         pickCloud();
+
                     } else if (client.isInGame()) {
                         System.out.println();
                         System.out.print("");
@@ -483,6 +490,7 @@ public class CLI implements UI {
         }
         client.setMyTurn(false);
         client.setInGame(false);
+        clientRoom=null;
         client.view = StringNames.LOBBY;
     }
 

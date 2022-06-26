@@ -170,15 +170,19 @@ public class StrippedModel implements Serializable {
     private void changePriceCharacterCard(PropertyChangeEvent evt) throws BadFormattedLocalModelException {
         StrippedCharacter changedCard = (StrippedCharacter) evt.getNewValue();
         StrippedCharacter cardToUpdate = null;
+        int i=0;
         for (StrippedCharacter card : characters) {
             if (card.sameCard(changedCard)) {
-                cardToUpdate = card;
+                characters.get(i).setStudents(changedCard.getStudents());
+                characters.get(i).setNoEntryTiles(changedCard.getNoEntryTiles());
+                cardToUpdate=card;
             }
+            i++;
         }
 
-        if (cardToUpdate != null) {
+        if (changedCard != null) {
             if (cardToUpdate.getPrice() == changedCard.getPrice()) {
-                int newPriceCard = (int) evt.getNewValue();
+                int newPriceCard = changedCard.getPrice();
                 cardToUpdate.setPrice(newPriceCard); //update
             } else {
                 throw new BadFormattedLocalModelException();
