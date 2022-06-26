@@ -422,7 +422,7 @@ public class Client implements Runnable {
      */
     public void performGameAction(Command command) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException,
             IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException,
-            UserNotInRoomException, UserNotRegisteredException, FullDiningException {
+            UserNotInRoomException, UserNotRegisteredException, FullDiningException, CardPlayedInTurnException {
         server.performGameAction(nickname, command);
     }
 
