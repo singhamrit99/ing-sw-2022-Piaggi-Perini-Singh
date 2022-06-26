@@ -79,6 +79,8 @@ public class CharacterCardController extends InitialStage implements Controller 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    Window window = ((Node) (event.getSource())).getScene().getWindow();
+                    window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
                     break;
                 case 3:
                 case 9:
@@ -92,6 +94,8 @@ public class CharacterCardController extends InitialStage implements Controller 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    window = ((Node) (event.getSource())).getScene().getWindow();
+                    window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
                     break;
                 case 1:
                 case 11:
@@ -104,6 +108,8 @@ public class CharacterCardController extends InitialStage implements Controller 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    window = ((Node) (event.getSource())).getScene().getWindow();
+                    window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
                     break;
                 case 7:
                 case 10:
@@ -116,6 +122,8 @@ public class CharacterCardController extends InitialStage implements Controller 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    window = ((Node) (event.getSource())).getScene().getWindow();
+                    window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
                     break;
                 case 5:
                     filePath = ResourcesPath.FXML_FILE_PATH + "CharacterTileView" + ResourcesPath.FILE_EXTENSION;
@@ -127,6 +135,8 @@ public class CharacterCardController extends InitialStage implements Controller 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    window = ((Node) (event.getSource())).getScene().getWindow();
+                    window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
                     break;
                 default:
                     break;
