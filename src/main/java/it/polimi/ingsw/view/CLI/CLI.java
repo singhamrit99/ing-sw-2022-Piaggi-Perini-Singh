@@ -151,12 +151,10 @@ public class CLI implements UI {
             //Main game loop
             //Initializing local professors board
             while (client.getLocalModel() == null) {
-
             }
             for (StrippedBoard s : client.getLocalModel().getBoards()) {
                 professorsTables.put(s.getOwner(), s.getProfessorsTable());
             }
-
 
             while (client.isInGame()) {
                 Thread.sleep(500);
@@ -189,7 +187,6 @@ public class CLI implements UI {
                         System.out.println("Invalid assistant card! Try again.");
                     }
 
-
                 System.out.println("Waiting for everyone to play an assistant card");
                 int i = 0;
                 while (numOfPlayers > 1) {
@@ -203,7 +200,6 @@ public class CLI implements UI {
                 //Turn phase
                 try {
                     if (client.getExpertMode()) {
-
                         while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
                             while (!client.isMyTurn()) {
                                 waitForTurn();
@@ -216,7 +212,6 @@ public class CLI implements UI {
                         }
                         pickCloud();
                     } else {
-
                         while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
                             while (!client.isMyTurn()) {
                                 waitForTurn();
@@ -262,7 +257,6 @@ public class CLI implements UI {
 
             System.out.println("Out of game");
         }
-
     }
 
     /**
@@ -281,7 +275,6 @@ public class CLI implements UI {
                 System.out.println(s.getProfessorsTable());
                 professorsTables.replace(s.getOwner(), s.getProfessorsTable());
             }
-
         }
     }
 
@@ -307,7 +300,6 @@ public class CLI implements UI {
                 System.out.println("Remote exception");
             }
         }
-
     }
 
     /**
@@ -397,7 +389,6 @@ public class CLI implements UI {
     public void islandConquest(PropertyChangeEvent e) {
         StrippedIsland island = (StrippedIsland) e.getNewValue();
         System.out.println(client.getLocalModel().getCurrentPlayer() + " conquered island " + island.getName() + "!\n");
-
     }
 
     /**
@@ -476,7 +467,6 @@ public class CLI implements UI {
         client.setMyTurn(false);
         client.setInGame(false);
         client.view = StringNames.LOBBY;
-
     }
 
     /**
