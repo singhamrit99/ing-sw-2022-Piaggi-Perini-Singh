@@ -24,40 +24,53 @@ public class Starter {
      * @throws AlreadyBoundException Thrown if the 23023 socket is already bound to another process.
      * @throws IOException Thrown in case of an input error.
      */
-    public static void main(String[] args) throws InterruptedException, AlreadyBoundException, IOException {
-        String serverClient = args[0];
-        switch (serverClient) {
-            case "-server":
-                try {
-                    Server server = new Server();
-                    serverStub stub = server;
-                    System.out.println("Binding server implementation to registry...");
-                    Registry registry = LocateRegistry.createRegistry(23023);
-                    registry.bind("server", stub);
-                    System.out.println("Server has started");
-                    System.out.println("Waiting for invocations from clients...");
-                    new Thread(server).start();
-                } catch (IOException e) {
-                    e.printStackTrace();
+    public static void main(String[] args){
+        if (args.length != 0) {
+            String serverClient = args[0];
+            if (args.length < 3) {
+                if (args.length > 1) {
+                    if (args[0].equals("-cli")) {
+                        Client client = new Client(args[1], 23023);
+                        client.run();
+                        CLI cli = new CLI(client);
+                        try {
+                            cli.Start();
+                        } catch (InterruptedException e) {
+                            System.out.println("There has been an error");
+                            System.exit(0);
+                        }
+                    } else if (args[0].equals("-gui")) {
+                        Client client = new Client(args[1], 23023);
+                        client.run();
+                        GUI gui = new GUI(client);
+                        gui.start();
+                    } else {
+                        System.out.println("Incorrect parameters inserted");
+                        System.exit(0);
+                    }
+                } else {
+                    if (args[0].equals("-server")) {
+                        try {
+                            Server server = new Server();
+                            Registry registry = LocateRegistry.createRegistry(23023);
+                            registry.bind("server", server);
+                            new Thread(server).start();
+                        } catch (IOException | AlreadyBoundException e) {
+                            System.out.println("There has been some errors");
+                        }
+                    } else {
+                        System.out.println("Incorrect parameters inserted");
+                        System.exit(0);
+                    }
                 }
-                break;
-            case "-cli": {
-                Client client = new Client("localhost", 23023);
-                client.run();
-                CLI cli = new CLI(client);
-                cli.Start();
-                break;
-            }
-            case "-gui": {
-                Client client = new Client("localhost", 23023);
-                client.run();
-                GUI gui = new GUI(client);
-                gui.start();
-                break;
-            }
-            default:
-                System.out.println("Parameters not correct");
+            } else {
+                System.out.println("Too many parameters inserted");
                 System.exit(0);
+            }
+        } else {
+            System.out.println("No parameters inserted");
+            System.exit(0);
         }
+
     }
 }

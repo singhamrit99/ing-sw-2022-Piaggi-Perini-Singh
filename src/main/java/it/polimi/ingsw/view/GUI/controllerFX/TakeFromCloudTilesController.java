@@ -63,12 +63,18 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
         AtomicReference<String> selectedItem = new AtomicReference<>("");
         cloudChoice.getSelectionModel().selectFirst();
         selectedItem.set(cloudChoice.getSelectionModel().getSelectedItem().toString());
+        AtomicReference<EnumMap<Colors, Integer>> students = new AtomicReference<>(GUI.client.getLocalModel().getCloudByName(selectedItem).getStudents());
+
+        for (int i = 0; i < students.get().size(); i++) {
+            text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+        }
+
         cloudChoice.setOnAction((event) -> {
             selectedItem.set(cloudChoice.getSelectionModel().getSelectedItem().toString());
-            EnumMap<Colors, Integer> students = GUI.client.getLocalModel().getCloudByName(selectedItem).getStudents();
+            students.set(GUI.client.getLocalModel().getCloudByName(selectedItem).getStudents());
 
-            for (int i = 0; i < students.size(); i++) {
-                text.get(i).setText(String.valueOf(students.get(Colors.getStudent(i))));
+            for (int i = 0; i < students.get().size(); i++) {
+                text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
             }
         });
 
