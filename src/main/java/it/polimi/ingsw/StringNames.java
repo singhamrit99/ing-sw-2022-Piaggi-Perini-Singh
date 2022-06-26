@@ -21,7 +21,7 @@ public interface StringNames {
     //used for alerts
     String NICKNAME_ALREADY_EXISTS = "Nickname is already taken";
     String CONNECTION_ERROR = "There is an issue with the connection";
-    String NICKNAME_FIELD_NULL = "Nickname field is not filled";
+    String NAME_FIELD_NULL = "Name field is not filled or blank";
     String NO_SUCH_ROOM = "No such room found";
     String USER_NOT_REGISTERED = "User is not registered in the server";
     String NO_LEADER = "You don't have permission to perform this action";
