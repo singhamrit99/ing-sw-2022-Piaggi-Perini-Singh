@@ -14,9 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
@@ -64,19 +61,16 @@ public class AssistantCardController extends InitialStage implements Controller 
         } catch (LocalModelNotLoadedException e) {
             e.printStackTrace();
         }
-        try {
-            image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS + finalCards.get(firstIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        image.setImage(new Image(ResourcesPath.ASSISTANT_CARDS + finalCards.get(firstIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS));
 
         choiceBox.setOnAction((event) -> {
             int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
             try {
-                image.setImage(new Image(Files.newInputStream(Paths.get(ResourcesPath.ASSISTANT_CARDS + finalCards.get(selectedIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS))));
+                image.setImage(new Image(ResourcesPath.ASSISTANT_CARDS + finalCards.get(selectedIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS));
                 chosenCard.set(finalCards.get(selectedIndex).getImageName());
                 GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(selectedIndex).getMove());
-            } catch (IOException | LocalModelNotLoadedException e) {
+            } catch (LocalModelNotLoadedException e) {
                 e.printStackTrace();
             }
         });
