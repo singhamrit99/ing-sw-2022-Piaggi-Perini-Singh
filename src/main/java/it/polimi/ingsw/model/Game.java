@@ -21,7 +21,6 @@ import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -47,6 +46,7 @@ public class Game {
     private String JSONContent;
     private PropertyChangeListener gameListener;
     private String firstPlayer;
+    private int selectedCharacterIndex;
 
     /**
      * Constructor it initializes everything following the rules of the game. It finishes initialize the first (random)
@@ -103,7 +103,7 @@ public class Game {
             if (characterCards.get(index).getPrice() <= currentPlayer.getCoins()) {
                 characterCards.get(index).setStatus(1);
                 currentPlayer.setPlayedCharacterCard(characterCards.get(index));
-
+                selectedCharacterIndex = index;
                 return true;
             }
         }
@@ -120,13 +120,17 @@ public class Game {
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
-    public void activateCharacterCard(int index) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException {
-        if (buyCharacterCard(index) && expertMode) {
-            currentPlayer.getPlayedCharacterCard().activate(this);
+    public void activateCharacterCard(int index) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException, CardPlayedInTurnException {
+        if (currentPlayer.getPlayedCharacterCard() != null) {
+            throw new CardPlayedInTurnException();
         } else {
-            throw new NotEnoughCoinsException();
+            if (buyCharacterCard(index) && expertMode) {
+                currentPlayer.getPlayedCharacterCard().activate(this);
+            } else {
+                throw new NotEnoughCoinsException();
+            }
+            if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
         }
-        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
     }
 
     /**
@@ -136,9 +140,10 @@ public class Game {
      * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws IncorrectArgumentException Thrown if the coins field is invalid.
      */
-    private void increaseCharacterPrice(int index) throws NegativeValueException, IncorrectArgumentException {
+    public void increaseCharacterPrice(int index) throws NegativeValueException, IncorrectArgumentException {
         CharacterCard updatedCard = characterCards.get(index);
         int coinsRemoved = currentPlayer.getPlayedCharacterCard().getPrice();
+        System.out.println("Rimuovi " + coinsRemoved);
         currentPlayer.removeCoins(coinsRemoved);
         int coins = currentPlayer.getCoins();
         //notify coins changed
@@ -156,7 +161,7 @@ public class Game {
      *
      * @param updatedCard The card that was modified.
      */
-    private void notifyCharacterEvent(CharacterCard updatedCard) {
+    public void notifyCharacterEvent(CharacterCard updatedCard) {
         StrippedCharacter strippedCard = new StrippedCharacter(updatedCard);
         PropertyChangeEvent cardEvent = new PropertyChangeEvent(this, "character", null, strippedCard);
         gameListener.propertyChange(cardEvent);
@@ -173,14 +178,18 @@ public class Game {
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
-    public void activateCharacterCard(int index, int choice) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException {
-        if (buyCharacterCard(index) && expertMode) {
-            currentPlayer.getPlayedCharacterCard().setChoiceIndex(choice);
-            currentPlayer.getPlayedCharacterCard().activate(this);
+    public void activateCharacterCard(int index, int choice) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException, CardPlayedInTurnException {
+        if (currentPlayer.getPlayedCharacterCard() != null) {
+            throw new CardPlayedInTurnException();
         } else {
-            throw new NotEnoughCoinsException();
+            if (buyCharacterCard(index) && expertMode) {
+                currentPlayer.getPlayedCharacterCard().setChoiceIndex(choice);
+                currentPlayer.getPlayedCharacterCard().activate(this);
+            } else {
+                throw new NotEnoughCoinsException();
+            }
+            if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
         }
-        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
     }
 
     /**
@@ -195,14 +204,18 @@ public class Game {
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
-    public void activateCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException {
-        if (buyCharacterCard(index) && expertMode) {
-            currentPlayer.getPlayedCharacterCard().setEnums(students1, students2);
-            currentPlayer.getPlayedCharacterCard().activate(this);
+    public void activateCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException, CardPlayedInTurnException {
+        if (currentPlayer.getPlayedCharacterCard() != null) {
+            throw new CardPlayedInTurnException();
         } else {
-            throw new NotEnoughCoinsException();
+            if (buyCharacterCard(index) && expertMode) {
+                currentPlayer.getPlayedCharacterCard().setEnums(students1, students2);
+                currentPlayer.getPlayedCharacterCard().activate(this);
+            } else {
+                throw new NotEnoughCoinsException();
+            }
+            if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
         }
-        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
     }
 
     /**
@@ -391,7 +404,7 @@ public class Game {
      * @throws IncorrectArgumentException     Thrown if any of the parameters used by the method are invalid.
      * @throws AssistantCardNotFoundException Thrown if the assistant card name provided doesn't correspond to any card.
      */
-    public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFoundException {
+    public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFoundException, NegativeValueException {
         if (!playerDrawnOut) throw new IncorrectStateException();
         if (state == State.PLANNINGPHASE) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {  //playerDrawnOut = player has drawn from bag
@@ -424,7 +437,7 @@ public class Game {
      *
      * @throws IncorrectStateException Thrown if the method is called in an illegal phase
      */
-    public void nextPlayer() throws IncorrectStateException {
+    public void nextPlayer() throws IncorrectStateException, IncorrectArgumentException, NegativeValueException {
         if (state == State.PLANNINGPHASE) {
             if (counterPlanningPhase > 0) {
                 counterPlanningPhase--;
@@ -673,7 +686,24 @@ public class Game {
             if (state == State.ACTIONPHASE_2) {
                 motherNaturePosition = findMotherNature();
                 int destinationMotherNature = (motherNaturePosition + distanceChosen) % islands.size();
-                if (distanceChosen <= getMaxMotherNatureMove()) {
+                CharacterCard cardPlayed = currentPlayer.getPlayedCharacterCard();
+                int maxMotherNatureMove = currentPlayer.getPlayedAssistantCard().getMove();
+
+                if (cardPlayed != null) {
+                    if (cardPlayed.getAbility().getAction().equals(Actions.MOVE_MOTHER_NATURE) && cardPlayed.getStatus() >= 1) {
+                        currentPlayer.getPlayedCharacterCard().setStatus(2);
+                        try {
+                            increaseCharacterPrice(selectedCharacterIndex);
+                        } catch (NegativeValueException e) {
+                            throw new NegativeValueException();
+                        } catch (IncorrectArgumentException e) {
+                            throw new IncorrectArgumentException();
+                        }
+
+                        maxMotherNatureMove = currentPlayer.getPlayedAssistantCard().getMove() + cardPlayed.getAbility().getValue();
+                    }
+                }
+                if (distanceChosen <= maxMotherNatureMove) {
                     //notify oldIsland
                     StrippedIsland oldIsland = new StrippedIsland(islands.get(motherNaturePosition)); //saving oldIsland source
                     islands.get(motherNaturePosition).removeMotherNature();
@@ -756,7 +786,7 @@ public class Game {
                 } else if (player.getNumOfStudent(color) == max) {
                     CharacterCard cardPlayed = player.getPlayedCharacterCard();
                     if (cardPlayed != null) {
-                        if (cardPlayed.getAbility().getAction().equals(Actions.TAKE_PROFESSORS) && cardPlayed.getStatus() >= 1) {
+                        if (cardPlayed.getAbility().getAction().equals(Actions.TAKE_PROFESSORS) && cardPlayed.getStatus() >= 1 && player.getNickname().equals(currentPlayer.getNickname())) {
                             maxPlayer = currentPlayer;
                             currentPlayer.getPlayedCharacterCard().setStatus(2);
                         } else {
@@ -821,11 +851,11 @@ public class Game {
                         influenceScores.replace(teamColor, influenceScores.get(teamColor) + students.get(studentColor));
 
                         if (cardPlayed != null) {
-                            if (cardPlayed.getAbility().getAction().equals(Actions.TOWER_INFLUENCE) && cardPlayed.getStatus() >= 1) {
+                            if (cardPlayed.getAbility().getAction().equals(Actions.TOWER_INFLUENCE) && cardPlayed.getStatus() >= 1 && p.getNickname().equals(currentPlayer.getNickname())) {
                                 currentPlayer.getPlayedCharacterCard().setStatus(2);
                                 influenceScores.replace(teamColor, influenceScores.get(teamColor));
                                 currentPlayer.getPlayedCharacterCard().setStatus(2);
-                            } else if (cardPlayed.getAbility().getAction().equals(Actions.ADD_POINTS) && cardPlayed.getStatus() >= 1) {
+                            } else if (cardPlayed.getAbility().getAction().equals(Actions.ADD_POINTS) && cardPlayed.getStatus() >= 1 && p.getNickname().equals(currentPlayer.getNickname())) {
                                 currentPlayer.getPlayedCharacterCard().setStatus(2);
                                 influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers() + cardPlayed.getAbility().getValue());
                             } else {
@@ -965,7 +995,7 @@ public class Game {
         int islandToDestroy = -1;
 
         for (int i = 0; i < islands.size() && !listChanged && islands.size() > 1; i++) {
-            currentTile = islands.get((i + 1)%islands.size());
+            currentTile = islands.get((i + 1) % islands.size());
             prevTile = islands.get(i);
 
             if (prevTile.getNumOfTowers() != 0 && currentTile.getNumOfTowers() != 0
@@ -987,7 +1017,7 @@ public class Game {
             }
         }
 
-        if (listChanged){
+        if (listChanged) {
             if (islandToDestroy > 0) {
                 islands.remove(islandToDestroy);
                 checkUnificationIslands();
@@ -1008,7 +1038,7 @@ public class Game {
      * If it returns null it's a tie.
      */
 
-    public boolean isTeamWithZeroTowers(){
+    public boolean isTeamWithZeroTowers() {
         ArrayList<Player> team1 = findPlayerFromTeam(Towers.WHITE);
         ArrayList<Player> team2 = findPlayerFromTeam(Towers.BLACK);
         ArrayList<ArrayList<Player>> teams = new ArrayList<>();
@@ -1054,13 +1084,12 @@ public class Game {
             for (Player p : team) {
                 teamTowers += p.getPlayerTowers();
             }
-            if(teamTowers<=minTowers){
-                if (teamTowers == minTowers){ //there is a tie of towers between teams
+            if (teamTowers <= minTowers) {
+                if (teamTowers == minTowers) { //there is a tie of towers between teams
                     minTowers = 42;
                     teamsTie.add(teamMinTowers);
                     teamsTie.add(team);
-                }
-                else{
+                } else {
                     minTowers = teamTowers;
                     teamMinTowers = team;
                 }
@@ -1068,35 +1097,33 @@ public class Game {
         }
 
 
-        if (minTowers!=42){
+        if (minTowers != 42) {
             return teamMinTowers.get(0).getTowerColor().toString();
-        }
-        else if(teamsTie.size()>1){ //there is a tie between teams
+        } else if (teamsTie.size() > 1) { //there is a tie between teams
             ArrayList<Player> winningTeam = null;
             int professorsOfTeam = 0;
             int maxProfessors = -1;
-         for (ArrayList<Player> team : teamsTie){
+            for (ArrayList<Player> team : teamsTie) {
 
-             for (Player p : team){
-                 for(Colors colorProf : Colors.values()){
-                     if(p.hasProfessorOfColor(colorProf))professorsOfTeam+=1;
-                 }
-             }
+                for (Player p : team) {
+                    for (Colors colorProf : Colors.values()) {
+                        if (p.hasProfessorOfColor(colorProf)) professorsOfTeam += 1;
+                    }
+                }
 
-             if(professorsOfTeam>=maxProfessors){
-                 if(professorsOfTeam==maxProfessors){
-                     winningTeam=null;
-                 }
-                 else{
-                     maxProfessors = professorsOfTeam;
-                     winningTeam=team;
-                 }
-             }
-         }
+                if (professorsOfTeam >= maxProfessors) {
+                    if (professorsOfTeam == maxProfessors) {
+                        winningTeam = null;
+                    } else {
+                        maxProfessors = professorsOfTeam;
+                        winningTeam = team;
+                    }
+                }
+            }
 
-         if(winningTeam!=null){
-             if(winningTeam.size()>0)return winningTeam.get(0).getTowerColor().toString();
-         }
+            if (winningTeam != null) {
+                if (winningTeam.size() > 0) return winningTeam.get(0).getTowerColor().toString();
+            }
 
         }
 
@@ -1167,22 +1194,6 @@ public class Game {
      */
     public int getMotherNaturePosition() {
         return motherNaturePosition;
-    }
-
-    /**
-     * Returns the maximum number of tiles that MotherNature can move according to the CharacterCard played this turn.
-     *
-     * @return Maximum allowed Mother Nature move.
-     */
-    public int getMaxMotherNatureMove() {
-        CharacterCard cardPlayed = currentPlayer.getPlayedCharacterCard();
-        if (cardPlayed != null) {
-            if (cardPlayed.getAbility().getAction().equals(Actions.MOVE_MOTHER_NATURE) && cardPlayed.getStatus() >= 1) {
-                currentPlayer.getPlayedCharacterCard().setStatus(2);
-                return currentPlayer.getPlayedAssistantCard().getMove() + currentPlayer.getPlayedCharacterCard().getAbility().getValue();
-            }
-        }
-        return currentPlayer.getPlayedAssistantCard().getMove();
     }
 
     /**
@@ -1294,5 +1305,13 @@ public class Game {
      */
     public String getFirstPlayer() {
         return firstPlayer;
+    }
+
+    public PropertyChangeListener getGameListener() {
+        return gameListener;
+    }
+
+    public int getSelectedCharacterIndex() {
+        return selectedCharacterIndex;
     }
 }
