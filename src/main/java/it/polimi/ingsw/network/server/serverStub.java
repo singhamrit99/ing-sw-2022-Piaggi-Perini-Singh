@@ -35,7 +35,7 @@ public interface serverStub extends Remote {
 
     void performGameAction(String username, Command gameAction) throws RemoteException, MotherNatureLostException,
             NegativeValueException, AssistantCardNotFoundException, IncorrectArgumentException, IncorrectPlayerException,
-            ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException, UserNotRegisteredException, UserNotInRoomException, FullDiningException;
+            ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException, UserNotRegisteredException, UserNotInRoomException, FullDiningException, CardPlayedInTurnException;
 
     ArrayList<PropertyChangeEvent> getUpdates(String username) throws RemoteException, UserNotRegisteredException, UserNotInRoomException;
 
