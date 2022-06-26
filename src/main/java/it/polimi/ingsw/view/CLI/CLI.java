@@ -301,6 +301,11 @@ public class CLI implements UI {
         }
     }
 
+    @Override
+    public void characterChanged(PropertyChangeEvent evt) {
+
+    }
+
     /**
      * Display method for events. Check UI file for details.
      */
@@ -775,6 +780,8 @@ public class CLI implements UI {
             System.out.println(StringNames.USER_NOT_REGISTERED);
         } catch (FullDiningException e) {
             e.printStackTrace();
+        } catch (CardPlayedInTurnException e) {
+            e.printStackTrace();
         }
     }
 
@@ -841,6 +848,8 @@ public class CLI implements UI {
             System.out.println(StringNames.INCORRECT_ARGUMENT);
         } catch (NotEnoughCoinsException e) {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
+        } catch (CardPlayedInTurnException e) {
+            e.printStackTrace();
         }
         client.setMyTurn(false);
     }
@@ -1027,6 +1036,8 @@ public class CLI implements UI {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
         } catch (FullDiningException e) {
             e.printStackTrace();
+        } catch (CardPlayedInTurnException e) {
+            e.printStackTrace();
         }
         client.setMyTurn(false);
     }
@@ -1070,6 +1081,8 @@ public class CLI implements UI {
                 System.out.println("That's not right, try again!\n");
                 moveMN();
             } catch (FullDiningException e) {
+                e.printStackTrace();
+            } catch (CardPlayedInTurnException e) {
                 e.printStackTrace();
             }
             //After my turn is over I set the Mother Nature flag to false for the next turn
@@ -1298,6 +1311,8 @@ public class CLI implements UI {
                 System.out.println("You're not in a room");
             } catch (UserNotRegisteredException e) {
                 System.out.println(StringNames.USER_NOT_REGISTERED);
+            } catch (CardPlayedInTurnException e) {
+                e.printStackTrace();
             }
             client.getLocalModel().setCanPlayMN(true);
         } else
@@ -1411,6 +1426,8 @@ public class CLI implements UI {
             System.out.println("Network error");
         } catch (IncorrectArgumentException e) {
             System.out.println(StringNames.INCORRECT_ARGUMENT);
+        } catch (CardPlayedInTurnException e) {
+            e.printStackTrace();
         }
 
     }
@@ -1482,6 +1499,8 @@ public class CLI implements UI {
             System.out.println("Network error");
         } catch (IncorrectArgumentException e) {
             System.out.println(StringNames.INCORRECT_ARGUMENT);
+        } catch (CardPlayedInTurnException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1733,6 +1752,8 @@ public class CLI implements UI {
                 System.out.println("Critical network error.");
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
+            } catch (CardPlayedInTurnException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -1793,6 +1814,8 @@ public class CLI implements UI {
                 System.out.println("Network error");
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
+            } catch (CardPlayedInTurnException e) {
+                e.printStackTrace();
             }
         }
         //It's basically the same but I have to show the player the students on the card first
@@ -1844,6 +1867,8 @@ public class CLI implements UI {
                 System.out.println("Network error");
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
+            } catch (CardPlayedInTurnException e) {
+                e.printStackTrace();
             }
 
         } else if (client.getLocalModel().getCharacters().get(id).getDescription().equals("Calculate the influence on any Island and reap the rewards!")) {
@@ -1898,6 +1923,8 @@ public class CLI implements UI {
                 System.out.println("Network error");
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
+            } catch (CardPlayedInTurnException e) {
+                e.printStackTrace();
             }
         } else {
             //This is the entry Tile one so we have to do some more stuff
@@ -1952,6 +1979,8 @@ public class CLI implements UI {
                 System.out.println("Network error");
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
+            } catch (CardPlayedInTurnException e) {
+                e.printStackTrace();
             }
 
 
