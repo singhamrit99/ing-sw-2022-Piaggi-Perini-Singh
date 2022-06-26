@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.network.server.commands.Command;
 
@@ -60,9 +61,12 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         if (users.get(username).getRoom() != null) {
             try {
-                leaveRoom(username);
-            } catch (UserNotInRoomException | UserNotRegisteredException ignored) {
-            }
+                String roomName = users.get(username).getRoom();
+                if(rooms.containsKey(roomName)){
+                    if(rooms.get(roomName).isInGame()) leaveGame(username); // leaveGame() so that the other players are notified
+                    else leaveRoom(username);
+                }
+            } catch (UserNotInRoomException | UserNotRegisteredException ignored) {}
         }
         users.remove(username);
     }
@@ -358,14 +362,14 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
             for (ClientConnection clientToRemove : usersToRemove) {
                 try {
                     deregisterConnection(clientToRemove.getNickname());
-                    //inside the server can't be 'remoteException' and UserNotRegistered is not a bad exception in this case
+                    //inside the server can't be 'remoteException' and UserNotRegistered is not harmful in this case
                 } catch (RemoteException | UserNotRegisteredException ignored) {}
             }
         }
     }
 
     /**
-     * Method used to keep the connection with the clients alive.
+     * Method used to find dead clients
      */
     @Override
     public void run() {
@@ -376,7 +380,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
                 ignored.printStackTrace();
             }
             try {
-                sleep(2000); //must be double client ping timeout
+                sleep(500); //must be double client ping timeout
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
