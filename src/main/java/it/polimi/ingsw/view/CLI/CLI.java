@@ -155,13 +155,12 @@ public class CLI implements UI {
             for (StrippedBoard s : client.getLocalModel().getBoards()) {
                 professorsTables.put(s.getOwner(), s.getProfessorsTable());
             }
-
+            numOfPlayers = client.getLocalModel().getBoards().size();
             while (!client.isInGame())
             {System.out.print("a");}
             while (client.isInGame()) {
 
                 endTurn = false;
-                numOfPlayers = client.getLocalModel().getBoards().size();
                 if (playedThisTurn == null)
                     playedThisTurn = new ArrayList<>();
                 //Assistant Card play phase
@@ -218,14 +217,17 @@ public class CLI implements UI {
                         pickCloud();
                     } else if (client.isInGame()) {
                         System.out.println();
+                        System.out.print("");
                         while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
-                            System.out.println();
+                            System.out.print("");
                             while (!client.isMyTurn() && client.isInGame()) {
                                 waitForTurn();
                                 if (!client.isInGame())
                                     break;
                             }
+                            System.out.print("");
                             if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn && client.isInGame()) {
+                                System.out.print("");
                                 printCommandHelp();
                                 performActionInTurn();
                                 if (!client.isInGame())
@@ -325,8 +327,10 @@ public class CLI implements UI {
     public void currentPlayer(String s) {
         if (!s.equals(client.getNickname()))
         System.out.println("It's now " + s + "'s turn!");
-        else
+        else {
+            client.setMyTurn(true);
             System.out.println("It's your turn! Press any key to continue.");
+        }
     }
 
     /**
@@ -2277,8 +2281,9 @@ public class CLI implements UI {
         EnumMap<Colors, Integer> students;
         int i;
         Color color;
-        int rows = 0;
+        int rows;
         for (StrippedCloud cloud : client.getLocalModel().getClouds()) {
+            rows=0;
             students = cloud.getStudents();
             if (!students.isEmpty()) {
                 System.out.println(("Cloud name:" + cloud.getName()));
