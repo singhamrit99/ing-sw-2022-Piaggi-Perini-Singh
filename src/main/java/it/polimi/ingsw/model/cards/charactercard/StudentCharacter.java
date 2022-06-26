@@ -10,6 +10,7 @@ import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
 
+import java.beans.PropertyChangeEvent;
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
@@ -25,12 +26,13 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
     /**
      * StudentCharacter constructor
-     * @param imageName Taken from father CharacterCard in CharacterCardFactory.
+     *
+     * @param imageName     Taken from father CharacterCard in CharacterCardFactory.
      * @param startingPrice Taken from father CharacterCard in CharacterCardFactory.
-     * @param description Taken from father CharacterCard in CharacterCardFactory.
-     * @param type Taken from father CharacterCard in CharacterCardFactory.
-     * @param ability Taken from father CharacterCard in CharacterCardFactory.
-     * @param requirements Taken from father CharacterCard in CharacterCardFactory.
+     * @param description   Taken from father CharacterCard in CharacterCardFactory.
+     * @param type          Taken from father CharacterCard in CharacterCardFactory.
+     * @param ability       Taken from father CharacterCard in CharacterCardFactory.
+     * @param requirements  Taken from father CharacterCard in CharacterCardFactory.
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
     public StudentCharacter(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) throws NegativeValueException {
@@ -51,6 +53,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
     /**
      * Method used to add students to the card.
+     *
      * @param studentsToAdd Students to add.
      * @throws IncorrectArgumentException Thrown when the provided EnumMap is null or incorrect.
      */
@@ -65,6 +68,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
     /**
      * Method used to remove students to the card.
+     *
      * @param studentsToRemove Students to remove
      * @throws IncorrectArgumentException Thrown when the provided EnumMap is null or incorrect.
      */
@@ -79,12 +83,13 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
     /**
      * Checks if the provided EnumMap is correct, and if it is checks if it has enough students to perform the requested action.
+     *
      * @param students The students EnumMap to check
      * @return boolean value of the check or an exception.
-     * @throws IllegalArgumentException Thrown when the EnumMap is incorrect.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws IncorrectArgumentException Thrown when the EnumMap is incorrect.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      */
-    public boolean hasEnoughStudents(EnumMap<Colors, Integer> students) throws IllegalArgumentException, NegativeValueException {
+    public boolean hasEnoughStudents(EnumMap<Colors, Integer> students) throws NegativeValueException, IncorrectArgumentException {
         EnumMap<Colors, Integer> studentsDiscs = getStudents();
 
         for (Map.Entry<Colors, Integer> set : students.entrySet()) {
@@ -94,7 +99,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                         return false;
                     }
                 } else {
-                    throw new IllegalArgumentException("EnumMap is not correct");
+                    throw new IncorrectArgumentException("EnumMap is not correct");
                 }
             } else {
                 throw new NegativeValueException("EnumMap is not correct");
@@ -105,15 +110,17 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
     /**
      * Activate method for StudentCharacter cards
+     *
      * @param game The game in which the card is being activated
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws IncorrectArgumentException Thrown when the values required for card power activation are incorrect.
      * @throws ProfessorNotFoundException Thrown if the professor assignment method fails to find the related professor, either because of a color
-     *                                     mismatch or other internal error.
+     *                                    mismatch or other internal error.
      */
     @Override
     public void activate(Game game) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, FullDiningException {
         Actions action = this.getAbility().getAction();
+        PropertyChangeEvent event;
         switch (action) {
             case ADD_ISLAND:
                 EnumMap<Colors, Integer> studentsToAddIsland = StudentManager.createEmptyStudentsEnum();
@@ -123,6 +130,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                     game.notifyIsland(game.getIsland(islandIndex), studentsToAddIsland);
                     removeStudents(studentsToAddIsland);
                     setStatus(2);
+                    game.notifyCharacterEvent(game.getCurrentPlayer().getPlayedCharacterCard());
                 }
 
                 break;
@@ -132,34 +140,49 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
                 for (Map.Entry<Colors, Integer> set : students1.entrySet()) count += set.getValue();
 
-                if (getAbility().getValue() < count) throw new IllegalArgumentException("Too many students are given");
+                if (getAbility().getValue() < count)
+                    throw new IncorrectArgumentException("Too many students are given");
 
                 for (Map.Entry<Colors, Integer> set : students2.entrySet()) count1 += set.getValue();
 
-                if (count != count1) throw new IllegalArgumentException("The given students number do not match");
+                if (count != count1) throw new IncorrectArgumentException("The given students number do not match");
 
                 game.getCurrentPlayer().getSchoolBoard().removeStudents(students2);
                 game.getCurrentPlayer().getSchoolBoard().addStudents(students1);
                 removeStudents(students1);
                 addStudents(students2);
-
                 setStatus(2);
+
+                event =
+                        new PropertyChangeEvent(this, "entrance", game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getSchoolBoard().getEntrance());
+                game.getGameListener().propertyChange(event);
+
+                game.notifyCharacterEvent(game.getCurrentPlayer().getPlayedCharacterCard());
                 break;
             case SWAP_ENTRANCE_DINING:
                 count = 0;
                 count1 = 0;
 
                 for (Map.Entry<Colors, Integer> set : students1.entrySet()) count += set.getValue();
-                System.out.println(count);
-                if (getAbility().getValue() < count) throw new IllegalArgumentException("Too many students are given");
+                if (getAbility().getValue() < count)
+                    throw new IncorrectArgumentException("Too many students are given");
 
                 for (Map.Entry<Colors, Integer> set : students2.entrySet()) count1 += set.getValue();
-                if (count != count1) throw new IllegalArgumentException("The given students number do not match");
+                if (count != count1) throw new IncorrectArgumentException("The given students number do not match");
 
                 game.getCurrentPlayer().getSchoolBoard().moveStudents(students1);
                 game.getCurrentPlayer().getSchoolBoard().removeDiningStudents(students2);
                 game.getCurrentPlayer().getSchoolBoard().addStudents(students2);
 
+                event =
+                        new PropertyChangeEvent(this, "entrance", game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getSchoolBoard().getEntrance());
+                game.getGameListener().propertyChange(event);
+
+                event =
+                        new PropertyChangeEvent(this, "dining", game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getSchoolBoard().getDining());
+                game.getGameListener().propertyChange(event);
+
+                game.increaseCharacterPrice(game.getSelectedCharacterIndex());
                 break;
             case ADD_DINING:
                 EnumMap<Colors, Integer> studentsToAddDining = StudentManager.createEmptyStudentsEnum();
@@ -171,9 +194,13 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                     removeStudents(studentsToAddDining);
                     addStudents(bag.drawStudents(getAbility().getValue()));
                     setStatus(2);
-                }
 
-                //TODO add notifies
+                    event =
+                            new PropertyChangeEvent(this, "dining", game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getSchoolBoard().getDining());
+                    game.getGameListener().propertyChange(event);
+
+                    game.notifyCharacterEvent(game.getCurrentPlayer().getPlayedCharacterCard());
+                }
                 break;
             default:
                 break;
@@ -182,6 +209,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
     /**
      * Setter methods for students
+     *
      * @param students Students to set.
      */
     private void setStudents(EnumMap<Colors, Integer> students) {
@@ -190,6 +218,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
     /**
      * Getter method for students field
+     *
      * @return Students
      */
     public EnumMap<Colors, Integer> getStudents() {
@@ -198,8 +227,9 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
     /**
      * SetChoices method implemented in StudentCharacter card
+     *
      * @param student The student, passed as an int (Color)
-     * @param island The island, passed as an int (number)
+     * @param island  The island, passed as an int (number)
      */
     public void setChoices(int student, int island) {
         studentIndex = student;
@@ -208,6 +238,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
     /**
      * SetEnum method implemented in StudentCharacter card
+     *
      * @param students1 first student enum.
      * @param students2 second student enum.
      */
@@ -218,6 +249,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
     /**
      * studentIndex setter method
+     *
      * @param index provided value for index.
      */
     public void setChoiceIndex(int index) {
