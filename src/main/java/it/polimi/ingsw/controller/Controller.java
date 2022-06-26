@@ -120,7 +120,7 @@ public class Controller {
      * @throws AssistantCardNotFoundException Thrown if the playedCardName string is invalid or if the card has been removed after being played.
      * @throws IncorrectStateException        Thrown if this method is called in any phase but Planning Phase.
      */
-    public void callPlayAssistantCard(String playerCaller, String playedCardName) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException {
+    public void callPlayAssistantCard(String playerCaller, String playedCardName) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, NegativeValueException {
         game.playAssistantCard(playerCaller, playedCardName);
     }
 
@@ -134,7 +134,7 @@ public class Controller {
      * @throws ProfessorNotFoundException Thrown by one of the cards' power if there are no professors to steal.
      * @throws NotEnoughCoinsException    Thrown if the Player doesn't have enough coins to buy this Character card.
      */
-    public void callPlayCharacterCard(int index) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException {
+    public void callPlayCharacterCard(int index) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         game.activateCharacterCard(index);
     }
 
@@ -164,7 +164,7 @@ public class Controller {
      * @throws ProfessorNotFoundException Thrown if the power activation results in a professor gain and an error occurs.
      * @throws NotEnoughCoinsException    Thrown if the Player doesn't have enough coins to buy this Character card.
      */
-    public void callPlayCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException {
+    public void callPlayCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         game.activateCharacterCard(index, students1, students2);
     }
 
@@ -178,7 +178,7 @@ public class Controller {
      * @throws ProfessorNotFoundException Thrown if the power activation results in a professor gain and an error occurs.
      * @throws NotEnoughCoinsException    Thrown if the Player doesn't have enough coins to buy this Character card.
      */
-    public void callPlayCharacterCard(int index, int choice) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException {
+    public void callPlayCharacterCard(int index, int choice) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         game.activateCharacterCard(index, choice);
     }
 }
