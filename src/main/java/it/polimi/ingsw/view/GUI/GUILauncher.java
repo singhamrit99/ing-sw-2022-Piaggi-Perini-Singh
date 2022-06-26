@@ -105,16 +105,18 @@ public class GUILauncher extends Application implements Initializable {
      */
     private void startButtonEvent() {
         startButton.setOnAction((event) -> {
-            final String nickname = nicknameField.getText();
-            GUI.client.view = StringNames.LOBBY;
-            try {
-                client.registerClient(nickname);
-            } catch (NotBoundException | RemoteException e) {
-                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
-            } catch (UserAlreadyExistsException e) {
-                Controller.showErrorDialogBox(StringNames.USER_ALREADY_IN_ROOM);
-            } catch (NameFieldException e) {
-                Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
+            if (controlNickname()) {
+                final String nickname = nicknameField.getText();
+                GUI.client.view = StringNames.LOBBY;
+                try {
+                    client.registerClient(nickname);
+                } catch (NotBoundException | RemoteException e) {
+                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                } catch (UserAlreadyExistsException e) {
+                    Controller.showErrorDialogBox(StringNames.USER_ALREADY_IN_ROOM);
+                } catch (NameFieldException e) {
+                    Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
+                }
             }
         });
     }
