@@ -39,15 +39,10 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
      */
     @Override
     public synchronized void registerUser(String name) throws RemoteException, UserAlreadyExistsException, NameFieldException {
-        controlName(name);
         ClientConnection c = new ClientConnection(name);
         if (!users.containsKey(name))
             users.put(name, c);
         else throw new UserAlreadyExistsException();
-    }
-
-    private void controlName(String nickName) throws NameFieldException {
-        if (nickName.isBlank())throw new NameFieldException();
     }
 
     /**
@@ -96,7 +91,6 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     @Override
     public synchronized void createRoom(String username, String roomName) throws RemoteException, RoomAlreadyExistsException, UserNotRegisteredException, NameFieldException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
-        controlName(roomName);
         if (rooms.containsKey(roomName)) throw new RoomAlreadyExistsException();
         ArrayList<ClientConnection> members = new ArrayList<>();
         Room newRoom = new Room(roomName, members);
