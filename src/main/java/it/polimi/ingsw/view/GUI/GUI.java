@@ -24,6 +24,7 @@ public class GUI implements UI {
 
     /**
      * GUI constructor. Binds this instance to a Client instance.
+     *
      * @param client the Client that is using this GUI.
      */
     public GUI(Client client) {
@@ -46,6 +47,7 @@ public class GUI implements UI {
 
     /**
      * Method that outputs the available rooms in graphical format
+     *
      * @param rooms the rooms to display on the server.
      */
     public void roomsAvailable(ArrayList<String> rooms) {
@@ -63,6 +65,7 @@ public class GUI implements UI {
 
     /**
      * Method used to join a room.
+     *
      * @param players players in the room
      */
     public void roomJoin(ArrayList<String> players) {
@@ -90,8 +93,18 @@ public class GUI implements UI {
         }
     }
 
+    @Override
+    public void characterChanged(PropertyChangeEvent evt) {
+        if (GUI.client.view.equals(StringNames.INGAME)) {
+            if (gameController.isOpened()) {
+                Platform.runLater(() -> gameController.reloadCharacters());
+            }
+        }
+    }
+
     /**
      * Method used to start the game
+     *
      * @throws RemoteException Thrown in case of a network error
      */
     @Override
@@ -103,6 +116,7 @@ public class GUI implements UI {
 
     /**
      * Displays the current player
+     *
      * @param currentPlayer the current player's nickname
      */
     @Override
@@ -116,6 +130,7 @@ public class GUI implements UI {
 
     /**
      * Notifies cloud change through an event.
+     *
      * @param e the event that changed the clouds.
      */
     @Override
@@ -129,6 +144,7 @@ public class GUI implements UI {
 
     /**
      * Notifies dining change through an event.
+     *
      * @param e dining change event.
      */
     @Override
@@ -142,6 +158,7 @@ public class GUI implements UI {
 
     /**
      * Notifies assistant deck change
+     *
      * @param input the assistant card to play.
      */
     @Override
@@ -151,6 +168,7 @@ public class GUI implements UI {
 
     /**
      * Notifies the assistant card played
+     *
      * @param e deck change event.
      */
     @Override
@@ -160,6 +178,7 @@ public class GUI implements UI {
 
     /**
      * Notifies island changed through an event.
+     *
      * @param e island change event
      */
     @Override
@@ -173,6 +192,7 @@ public class GUI implements UI {
 
     /**
      * Notifies island merge through an event.
+     *
      * @param e island merge event
      */
     @Override
@@ -186,6 +206,7 @@ public class GUI implements UI {
 
     /**
      * Notifies an island conquest through an event.
+     *
      * @param e island conquest event
      */
     @Override
@@ -199,6 +220,7 @@ public class GUI implements UI {
 
     /**
      * Notifies tower change through an event.
+     *
      * @param e tower change event.
      */
     @Override
@@ -212,8 +234,9 @@ public class GUI implements UI {
 
     /**
      * Notifies game over through an event.
+     *
      * @param leavingPlayer The leaving player in case of quit-out and remaking of game
-     * @param winner Winner team if the game reached a valid end.
+     * @param winner        Winner team if the game reached a valid end.
      */
     @Override
     public void gameOver(String leavingPlayer, String winner) {
@@ -230,6 +253,7 @@ public class GUI implements UI {
 
     /**
      * Notifies coins changed through an event.
+     *
      * @param e coins changed event.
      */
     @Override
@@ -243,6 +267,7 @@ public class GUI implements UI {
 
     /**
      * Notifies entrance changed through an event.
+     *
      * @param e entrance changed event.
      */
     @Override
