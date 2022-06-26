@@ -37,9 +37,10 @@ public interface StringNames {
     String PROFESSOR_NOT_FOUND = "Professor not found";
     String INCORRECT_PLAYER = "Incorrect player";
     String INCORRECT_ARGUMENT = "Given parameters are not correct";
-    String USER_ALREADY_IN_ROOM= "User is already in a room";
+    String USER_ALREADY_IN_ROOM = "User is already in a room";
     String DINING_WILL_FULL = "You are adding more than you can put";
-    String NICKNAME_FIELD_NULL ="Invalid nickname";
+    String NICKNAME_FIELD_NULL = "Invalid nickname";
+    String CARD_PLAYED_IN_TURN = "You have already played a character card in this turn";
 
     String ERROR_IO = "Error while loading image assets";
 }
