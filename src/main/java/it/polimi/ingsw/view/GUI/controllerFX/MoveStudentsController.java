@@ -143,9 +143,6 @@ public class MoveStudentsController extends InitialStage implements Controller {
                 studentToMove.put(Colors.getStudent(i), destinations);
             }
 
-            for (Colors colors : Colors.values()) {
-                System.out.println(colors + " " + studentToMove.get(colors));
-            }
 
             MoveStudents moveStudents = new MoveStudents(GUI.client.getNickname(), studentToMove);
             try {
