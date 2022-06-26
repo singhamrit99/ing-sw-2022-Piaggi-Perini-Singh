@@ -44,6 +44,8 @@ public class MoveMotherNatureController extends InitialStage implements Controll
             MoveMotherNature moveMotherNature = new MoveMotherNature(GUI.client.getNickname(), (int) slider.getValue());
             try {
                 GUI.client.performGameAction(moveMotherNature);
+                Window window = ((Node) (event.getSource())).getScene().getWindow();
+                window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
             } catch (NotEnoughCoinsException e) {
                 Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
@@ -69,9 +71,6 @@ public class MoveMotherNatureController extends InitialStage implements Controll
             } catch (FullDiningException e) {
                 Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
             }
-
-            Window window = ((Node) (event.getSource())).getScene().getWindow();
-            window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
 
         cancelButton.setOnAction((event) -> {
