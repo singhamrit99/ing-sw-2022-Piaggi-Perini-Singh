@@ -37,6 +37,8 @@ public class CharacterNoControlsController extends InitialStage implements Contr
                 if (selectedCharacter.getCharacterID() == 4) {
                     GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getMoves() + 2);
                 }
+                Window window = ((Node) (event.getSource())).getScene().getWindow();
+                window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
             } catch (NotEnoughCoinsException e) {
                 Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
@@ -64,9 +66,6 @@ public class CharacterNoControlsController extends InitialStage implements Contr
             } catch (LocalModelNotLoadedException e) {
                 Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
             }
-
-            Window window = ((Node) (event.getSource())).getScene().getWindow();
-            window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
 
         cancelButton.setOnAction((event) -> {
