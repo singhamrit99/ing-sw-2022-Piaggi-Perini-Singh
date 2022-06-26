@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -104,6 +105,7 @@ public class GameViewController extends InitialStage implements Controller {
 
         //DropShadow effect for islands students, MN, towers
         dropShadowIslandStuff = new DropShadow();
+        dropShadowIslandStuff.setBlurType(BlurType.ONE_PASS_BOX);
         dropShadowIslandStuff.setHeight(40);
         dropShadowIslandStuff.setWidth(40);
         dropShadowIslandStuff.setSpread(0.3);
@@ -137,16 +139,6 @@ public class GameViewController extends InitialStage implements Controller {
             }
         });
 
-
-        //animation islands
-        TranslateTransition floatingIslands = new TranslateTransition();
-        floatingIslands.setNode(islandsPane);
-        floatingIslands.setDuration(Duration.millis(4000));
-        floatingIslands.setCycleCount(TranslateTransition.INDEFINITE);
-        floatingIslands.setByX(10);
-        floatingIslands.setAutoReverse(true);
-        floatingIslands.setInterpolator(Interpolator.EASE_BOTH);
-        floatingIslands.play();
     }
 
 
