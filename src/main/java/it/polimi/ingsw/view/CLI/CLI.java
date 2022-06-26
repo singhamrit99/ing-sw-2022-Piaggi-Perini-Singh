@@ -157,7 +157,7 @@ public class CLI implements UI {
             }
 
             while (client.isInGame()) {
-                Thread.sleep(500);
+                Thread.sleep(1000);
                 endTurn = false;
                 numOfPlayers = client.getLocalModel().getBoards().size();
                 if (playedThisTurn == null)
@@ -168,11 +168,8 @@ public class CLI implements UI {
                 while (!client.isMyTurn()&& client.isInGame()) {
                     //Wait for the other players to be done with their turn while I still output their moves...
                     waitForTurn();
-                    System.out.println("Wait delle assistant");
-
                 }
                 //Means the game finished while we were waiting for turn
-                System.out.println("Salame");
                 if (!client.isInGame())
                     break;
                 if (client.isMyTurn() && client.getLocalModel().getFirstPlayer().equals(client.getNickname())) {
@@ -2512,16 +2509,12 @@ public class CLI implements UI {
     public synchronized void waitForTurn() throws InterruptedException {
         if (!client.isMyTurn()) {
             System.out.println("Waiting ...");
-            System.out.println(ansi().eraseScreen());
             Thread.sleep(500);
             System.out.println("Waiting ..");
-            System.out.println(ansi().eraseScreen());
             Thread.sleep(500);
             System.out.println("Waiting . .");
-            System.out.println(ansi().eraseScreen());
             Thread.sleep(500);
             System.out.println("Waiting .. ");
-            System.out.println(ansi().eraseScreen());
             Thread.sleep(500);
         }
 
