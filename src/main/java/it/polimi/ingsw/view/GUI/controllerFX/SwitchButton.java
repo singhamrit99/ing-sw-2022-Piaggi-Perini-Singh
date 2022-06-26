@@ -14,6 +14,9 @@ public class SwitchButton extends StackPane {
     private final String buttonStyleOn = "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 0.2, 0.0, 0.0, 2); -fx-background-color: #00893d;";
     private boolean state;
 
+    /**
+     * Initializes the Switch Button
+     */
     private void init() {
         getChildren().addAll(back, button);
         setMinSize(30, 15);
@@ -33,24 +36,42 @@ public class SwitchButton extends StackPane {
         state = false;
     }
 
+    /**
+     * Switch button constructor
+     */
     public SwitchButton() {
         init();
         button.setFocusTraversable(false);
     }
 
+    /**
+     * Switch button state setter method
+     * @param state the state to set to (boolean)
+     */
     public void setState(boolean state) {
         this.state = state;
     }
 
+    /**
+     * Returns the current state
+     * @return the state to return
+     */
     public boolean getState() {
         return state;
     }
 
+    /**
+     * Changes the state to the parameter and the style accordingly.
+     * @param state The state to change to (boolean)
+     */
     public void changeState(boolean state) {
         this.state = state;
         setButtonStyle();
     }
 
+    /**
+     * Changes the style of the button according to the action performed on it.
+     */
     private void setButtonStyle() {
         if (state) {
             button.setStyle(buttonStyleOn);

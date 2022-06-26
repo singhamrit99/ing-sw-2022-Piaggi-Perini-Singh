@@ -26,11 +26,16 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
     private Button cancelButton, confirmButton;
     @FXML
     private Text totalYellow, totalBlue, totalGreen, totalRed, totalPink;
-
+    /**
+     * Method used to bind this scene to a GUI
+     * @param gui the GUI to bind to
+     */
     public TakeFromCloudTilesController(GUI gui) {
         super(gui);
     }
-
+    /**
+     * Initializes the Take Students from Clouds controller scene.
+     */
     @Override
     public void initialize() {
         ArrayList<Text> text = new ArrayList<>();

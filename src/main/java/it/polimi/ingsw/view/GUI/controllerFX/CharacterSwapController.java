@@ -34,11 +34,17 @@ public class CharacterSwapController extends InitialStage implements Controller 
     private ComboBox islandNumber,
             totalFirstYellow, totalFirstBlue, totalFirstGreen, totalFirstRed, totalFirstPink,
             totalSecondYellow, totalSecondBlue, totalSecondGreen, totalSecondRed, totalSecondPink;
-
+    /**
+     * Binds this stage to a user GUI.
+     * @param gui the GUI to bind to.
+     */
     public CharacterSwapController(GUI gui) {
         super(gui);
     }
 
+    /**
+     * Method used to initialize the Character Swap Controller Scene (for moving students from the character card).
+     */
     @Override
     public void initialize() {
         ArrayList<Text> text1 = new ArrayList<>();
@@ -196,6 +202,11 @@ public class CharacterSwapController extends InitialStage implements Controller 
         });
     }
 
+    /**
+     * Loads combo box object for student choice.
+     * @param comboBox The combo box loaded.
+     * @param num the number of available choices.
+     */
     public void loadComboBox(ComboBox comboBox, int num) {
         ObservableList<String> choices = FXCollections.observableArrayList();
 

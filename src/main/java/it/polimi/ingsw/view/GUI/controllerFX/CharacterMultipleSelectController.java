@@ -39,10 +39,16 @@ public class CharacterMultipleSelectController extends InitialStage implements C
     @FXML
     private CheckBox check1, check2, check3, check4, check5;
 
+    /**
+     * Binds this stage to a user GUI.
+     * @param gui the GUI to bind to.
+     */
     public CharacterMultipleSelectController(GUI gui) {
         super(gui);
     }
-
+    /**
+     *Method used to initialize the Character select controller stage.
+     */
     @Override
     public void initialize() {
         ArrayList<Text> text = new ArrayList<>();

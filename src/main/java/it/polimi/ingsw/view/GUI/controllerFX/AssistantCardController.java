@@ -30,11 +30,17 @@ public class AssistantCardController extends InitialStage implements Controller 
 
     @FXML
     private ImageView image;
-
+    /**
+     * Binds this stage to a user GUI.
+     * @param gui the GUI to bind to.
+     */
     public AssistantCardController(GUI gui) {
         super(gui);
     }
 
+    /**
+     *Method used to initialize the Assistant Card Controller stage.
+     */
     @Override
     public void initialize() {
         ArrayList<AssistantCard> cards = new ArrayList<>();

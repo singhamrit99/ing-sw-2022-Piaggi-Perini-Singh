@@ -33,11 +33,17 @@ public class GameOverController extends InitialStage implements Controller {
 
     private SwitchButton setExpertMode;
     private Label expertMode;
-
+    /**
+     * Binds this stage to a user GUI.
+     * @param gui the GUI to bind to.
+     */
     public GameOverController(GUI gui) {
         super(gui);
     }
-
+    /**
+     * Setter method to tell whether the view is open or not
+     * @param b boolean value
+     */
     public static void setOpened(boolean b) {
         opened.set(false);
     }

@@ -27,11 +27,17 @@ public class CharacterOneSelectController extends InitialStage implements Contro
 
     @FXML
     private ChoiceBox<String> choiceBox;
-
+    /**
+     * Binds this stage to a user GUI.
+     * @param gui the GUI to bind to.
+     */
     public CharacterOneSelectController(GUI gui) {
         super(gui);
     }
 
+    /**
+     * Method used to initialize the unique character controller stage.
+     */
     @Override
     public void initialize() {
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;

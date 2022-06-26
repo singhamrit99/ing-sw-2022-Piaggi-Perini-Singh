@@ -19,11 +19,17 @@ public class CharacterNoControlsController extends InitialStage implements Contr
     private Button cancelButton, confirmButton;
     @FXML
     private Text description;
-
+    /**
+     * Binds this stage to a user GUI.
+     * @param gui the GUI to bind to.
+     */
     public CharacterNoControlsController(GUI gui) {
         super(gui);
     }
 
+    /**
+     * Method used to initialize the controller stage for characters which require no additional user input after activation.
+     */
     @Override
     public void initialize() {
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;

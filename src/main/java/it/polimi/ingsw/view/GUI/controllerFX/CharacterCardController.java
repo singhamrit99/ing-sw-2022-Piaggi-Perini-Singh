@@ -27,11 +27,17 @@ public class CharacterCardController extends InitialStage implements Controller 
 
     @FXML
     private ImageView image;
-
+    /**
+     * Binds this stage to a user GUI.
+     * @param gui the GUI to bind to.
+     */
     public CharacterCardController(GUI gui) {
         super(gui);
     }
 
+    /**
+     *Method used to initialize the Character Card Controller stage.
+     */
     @Override
     public void initialize() {
         ArrayList<StrippedCharacter> cards = GUI.client.getLocalModel().getCharacters();

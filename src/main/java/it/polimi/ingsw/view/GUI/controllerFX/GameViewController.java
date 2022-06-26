@@ -79,6 +79,10 @@ public class GameViewController extends InitialStage implements Controller {
     @FXML
     private HBox characters;
 
+    /**
+     * The constructor class for GameVieController, which imports all assets from resource folder.
+     * @param gui The GUI that needs to display all of this information.
+     */
     public GameViewController(GUI gui) {
         super(gui);
         opened.set(false);
@@ -108,7 +112,10 @@ public class GameViewController extends InitialStage implements Controller {
         dropShadowIslandStuff.setSpread(0.3);
         dropShadowIslandStuff.setColor(Color.rgb(0,0,0,0.6f));
     }
-
+    /**
+     * Setter method to tell whether the view is open or not
+     * @param b boolean value
+     */
     public static void setOpened(boolean b) {
         opened.set(b);
     }

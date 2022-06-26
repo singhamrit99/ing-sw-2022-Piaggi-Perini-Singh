@@ -16,9 +16,17 @@ import java.io.IOException;
  * @author Amrit
  */
 public interface Controller {
+    /**
+     * Method to be overridden in different controller types.
+     */
     @FXML
     void initialize();
 
+    /**
+     * Method that loads a scene and related controller.
+     * @param sceneName The name of the scene to load
+     * @param controller Its relative controller.
+     */
     static void load(String sceneName, Controller controller) {
         String filePath = ResourcesPath.FXML_FILE_PATH + sceneName + ResourcesPath.FILE_EXTENSION;
         FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));
@@ -34,6 +42,10 @@ public interface Controller {
         }
     }
 
+    /**
+     * Method used to show errors
+     * @param content The error message itself
+     */
     static void showErrorDialogBox(String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initStyle(StageStyle.DECORATED);
@@ -44,6 +56,11 @@ public interface Controller {
         alert.showAndWait();
     }
 
+    /**
+     * Method used to load a scene.
+     * @param loader The loader that is used to load a scene.
+     * @throws IOException Thrown on load failure.
+     */
     static void loadScene(FXMLLoader loader) throws IOException {
         Scene scene;
         scene = new Scene(loader.load());

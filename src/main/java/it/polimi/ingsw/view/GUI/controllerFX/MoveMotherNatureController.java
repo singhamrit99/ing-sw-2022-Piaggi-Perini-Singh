@@ -20,10 +20,17 @@ public class MoveMotherNatureController extends InitialStage implements Controll
     @FXML
     private Button cancelButton, confirmButton;
 
+    /**
+     * Binds this controller to a GUI
+     * @param gui the GUI to bind to.
+     */
     public MoveMotherNatureController(GUI gui) {
         super(gui);
     }
 
+    /**
+     * Method used to initialize the move mother nature controller scene.
+     */
     @Override
     public void initialize() {
         try {

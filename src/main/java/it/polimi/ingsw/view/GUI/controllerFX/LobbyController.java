@@ -31,12 +31,20 @@ public class LobbyController extends InitialStage implements Controller {
     @FXML
     private Button createRoomButton, exitButton;
 
+    /**
+     * Constructor for Lobby controller scene.
+     * @param gui The GUI this controller is bound to.
+     */
     public LobbyController(GUI gui) {
         super(gui);
         new ArrayList<>();
         opened.set(false);
     }
 
+    /**
+     * Setter method to tell whether the view is open or not
+     * @param b boolean value
+     */
     public static void setOpened(boolean b) {
         opened.set(b);
     }
@@ -44,6 +52,10 @@ public class LobbyController extends InitialStage implements Controller {
 
     @FXML
     ScrollPane scrollLobby;
+
+    /**
+     * Initializer for lobby controller scene
+     */
     @FXML
     public void initialize() {
         opened.set(true);
@@ -72,10 +84,17 @@ public class LobbyController extends InitialStage implements Controller {
         });
     }
 
+    /**
+     * Setter for rooms parameter
+      * @param rooms the rooms available on the server.
+     */
     public void setRoomsList(ArrayList<String> rooms) {
         this.rooms = rooms;
     }
 
+    /**
+     * Loads the rooms list with graphical output.
+     */
     private void loadRoomsList() {
         for (int i = 0; i < rooms.size(); i++) {
             RowConstraints row = new RowConstraints();
@@ -117,10 +136,18 @@ public class LobbyController extends InitialStage implements Controller {
         }
     }
 
+    /**
+     * Getter method for the opened status.
+     * @return boolean value depending on the state.
+     */
     public static boolean isOpened() {
         return opened.get();
     }
 
+    /**
+     * Updates the rooms list because of room deletion or creation.
+     * @param rooms New rooms name array.
+     */
     public void update(ArrayList<String> rooms) {
         roomsList.getChildren().remove(3, roomsList.getChildren().size());
         setRoomsList(rooms);

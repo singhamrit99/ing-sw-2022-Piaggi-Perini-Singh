@@ -36,10 +36,17 @@ public class MoveStudentsController extends InitialStage implements Controller {
 
     private int motherNatureIndex;
 
+    /**
+     * Method used to bind this scene to a GUI
+     * @param gui the GUI to bind to
+     */
     public MoveStudentsController(GUI gui) {
         super(gui);
     }
 
+    /**
+     * Initializes the Move Students controller scene.
+     */
     @Override
     public void initialize() {
         motherNatureIndex = -1;
@@ -186,6 +193,11 @@ public class MoveStudentsController extends InitialStage implements Controller {
         });
     }
 
+    /**
+     * Loads combo box for student choices
+     * @param comboBox The Combo box selector
+     * @param num Number of choices
+     */
     public void loadComboBox(ComboBox comboBox, int num) {
         ObservableList<String> choices = FXCollections.observableArrayList();
 

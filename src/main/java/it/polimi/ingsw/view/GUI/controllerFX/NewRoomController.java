@@ -21,11 +21,16 @@ public class NewRoomController extends InitialStage implements Controller {
     private TextField roomName;
     @FXML
     private Button cancelButton, createNewGameButton;
-
+    /**
+     * Method used to bind this scene to a GUI
+     * @param gui the GUI to bind to
+     */
     public NewRoomController(GUI gui) {
         super(gui);
     }
-
+    /**
+     * Initializes the New Room controller scene.
+     */
     @FXML
     public void initialize() {
         roomName.textProperty().addListener((event) -> {
@@ -39,6 +44,9 @@ public class NewRoomController extends InitialStage implements Controller {
         initializeCancelButton();
     }
 
+    /**
+     * Initializes the "cancel" button
+     */
     private void initializeCancelButton() {
         cancelButton.setOnAction((event) -> {
             GUI.client.view = StringNames.LOBBY;
@@ -46,6 +54,9 @@ public class NewRoomController extends InitialStage implements Controller {
         });
     }
 
+    /**
+     * Initializes the "confirm" button
+     */
     private void initializeConfirmButton() {
         createNewGameButton.setOnAction((event) -> {
             if (!roomName.getText().equals("")) {

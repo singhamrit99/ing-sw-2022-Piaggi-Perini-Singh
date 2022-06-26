@@ -27,11 +27,17 @@ public class CharacterTileController extends InitialStage implements Controller 
 
     @FXML
     private ChoiceBox<String> choiceBox;
-
+    /**
+     * Binds this stage to a user GUI.
+     * @param gui the GUI to bind to.
+     */
     public CharacterTileController(GUI gui) {
         super(gui);
     }
 
+    /**
+     * Method used to initialize the Character Tile Controller Stage (such as in the case of students on card scenarios)
+     */
     @Override
     public void initialize() {
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
