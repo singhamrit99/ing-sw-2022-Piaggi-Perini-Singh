@@ -104,7 +104,7 @@ public class GameViewController extends InitialStage implements Controller {
             motherNature = new Image(Files.newInputStream(Paths.get(ResourcesPath.MN)));
             noEntry = new Image(Files.newInputStream(Paths.get(ResourcesPath.NOENTRYTILE)));
         } catch (IOException io) {
-            System.out.println("Error importing img assets in GameViewController");
+            Controller.showErrorDialogBox(StringNames.ERROR_IO);
         }
 
         //DropShadow effect for islands students, MN, towers
@@ -294,11 +294,9 @@ public class GameViewController extends InitialStage implements Controller {
                     charactersCards.get(indexCharacter).setImage(character);
 
                 } catch (IOException characterImageLoading) {
-                    characterImageLoading.printStackTrace();
-                    System.out.println("IO error while loading characters card!");
+                    Controller.showErrorDialogBox(StringNames.ERROR_IO);
                 }
 
-                if (c.getStudents() != null) System.out.println(c.getStudents().values());
 
                 //if there are students ..
                 if (c.getStudents() != null) {
@@ -339,7 +337,7 @@ public class GameViewController extends InitialStage implements Controller {
                 try {
                     Controller.loadScene(loader);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Controller.showErrorDialogBox(StringNames.ERROR_IO);
                 }
             }
         });
@@ -404,7 +402,7 @@ public class GameViewController extends InitialStage implements Controller {
                     loader.setController(new MoveMotherNatureController(gui));
                     Controller.loadScene(loader);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Controller.showErrorDialogBox(StringNames.ERROR_IO);
                 }
             }
         });
@@ -631,7 +629,7 @@ public class GameViewController extends InitialStage implements Controller {
                     loader.setController(new MoveStudentsController(gui));
                     Controller.loadScene(loader);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Controller.showErrorDialogBox(StringNames.ERROR_IO);
                 }
             }
         });
@@ -752,7 +750,7 @@ public class GameViewController extends InitialStage implements Controller {
 
                 Controller.loadScene(loader);
             } catch (IOException e) {
-                e.printStackTrace();
+                Controller.showErrorDialogBox(StringNames.ERROR_IO);
             }
         }
     }
@@ -975,7 +973,7 @@ public class GameViewController extends InitialStage implements Controller {
 
                     Controller.loadScene(loader);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Controller.showErrorDialogBox(StringNames.ERROR_IO);
                 }
             }
         });
