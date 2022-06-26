@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class StrippedModel implements Serializable {
-   //TODO TINO:  search all the BadFormattedLocalModelException and replace the argument with a string that tell better the problem?
+    //TODO TINO:  search all the BadFormattedLocalModelException and replace the argument with a string that tell better the problem?
     final private ArrayList<StrippedBoard> boards;
     final private ArrayList<StrippedCharacter> characters;
     final private ArrayList<StrippedCloud> clouds;
@@ -35,10 +35,11 @@ public class StrippedModel implements Serializable {
 
     /**
      * StrippedModel constructor, called from Room class on game startup. Build the whole StrippedModel.
-     * @param boards Every player's board in ArrayList form.
-     * @param characters Every character in the game, in ArrayList form.
-     * @param clouds Every Cloud in the game, in ArrayList form.
-     * @param islands Every Island in the game, in ArrayList form.
+     *
+     * @param boards         Every player's board in ArrayList form.
+     * @param characters     Every character in the game, in ArrayList form.
+     * @param clouds         Every Cloud in the game, in ArrayList form.
+     * @param islands        Every Island in the game, in ArrayList form.
      * @param assistantDecks Every Assistant Card Deck in the game, in ArrayList form.
      */
     public StrippedModel(ArrayList<StrippedBoard> boards, ArrayList<StrippedCharacter> characters,
@@ -55,8 +56,9 @@ public class StrippedModel implements Serializable {
 
     /**
      * The method that updates the LocalModel following the arrival of an event.
-      * @param evt The event that is received. Its name field allows for handling.
-     * @throws LocalModelNotLoadedException Thrown if the LocalModel isn't loaded.
+     *
+     * @param evt The event that is received. Its name field allows for handling.
+     * @throws LocalModelNotLoadedException    Thrown if the LocalModel isn't loaded.
      * @throws BadFormattedLocalModelException Thrown if the local model has been built incorrectly.
      */
     public void updateModel(PropertyChangeEvent evt) throws LocalModelNotLoadedException, BadFormattedLocalModelException {
@@ -98,7 +100,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Setter method for the first player.
+     * Setter method for the first player.
+     *
      * @param evt First player event.
      */
     private void setFirstPlayer(PropertyChangeEvent evt) {
@@ -106,7 +109,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Setter method for changing the state.
+     * Setter method for changing the state.
+     *
      * @param evt Change-state event.
      */
     private void setState(PropertyChangeEvent evt) {
@@ -114,7 +118,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Method called when a change in the assistant card deck is notified.
+     * Method called when a change in the assistant card deck is notified.
+     *
      * @param evt Change assistant deck event (play card)
      * @throws LocalModelNotLoadedException Thrown if the local model is not loaded.
      */
@@ -127,7 +132,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Method used to set the board after a related event.
+     * Method used to set the board after a related event.
+     *
      * @param evt Any board event (change dining, change entrance, professors...)
      */
     private void setBoard(PropertyChangeEvent evt) throws BadFormattedLocalModelException {
@@ -164,28 +170,28 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Changes the price of a character card after successful activation.
+     * Changes the price of a character card after successful activation.
+     *
      * @param evt the Change-price event.
      */
     private void changePriceCharacterCard(PropertyChangeEvent evt) throws BadFormattedLocalModelException {
         StrippedCharacter changedCard = (StrippedCharacter) evt.getNewValue();
         StrippedCharacter cardToUpdate = null;
-        int i=0;
+        int i = 0;
         for (StrippedCharacter card : characters) {
             if (card.sameCard(changedCard)) {
                 characters.get(i).setStudents(changedCard.getStudents());
                 characters.get(i).setNoEntryTiles(changedCard.getNoEntryTiles());
-                cardToUpdate=card;
+                cardToUpdate = card;
             }
             i++;
         }
 
-        if (changedCard != null) {
+        if (changedCard != null && cardToUpdate != null) {
             if (cardToUpdate.getPrice() == changedCard.getPrice()) {
                 int newPriceCard = changedCard.getPrice();
                 cardToUpdate.setPrice(newPriceCard); //update
-            } else {
-                throw new BadFormattedLocalModelException();
+                ui.characterChanged(evt);
             }
         } else {
             throw new BadFormattedLocalModelException();  //exception not found card to update
@@ -193,7 +199,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Handler of change-island event.
+     * Handler of change-island event.
+     *
      * @param evt change-island event(such as students or towers being placed or conquests happening)
      */
     private void changeIsland(PropertyChangeEvent evt) throws BadFormattedLocalModelException {
@@ -225,7 +232,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Method used to handle changes in clouds.
+     * Method used to handle changes in clouds.
+     *
      * @param evt change-cloud event.
      */
     private void changeCloud(PropertyChangeEvent evt) {
@@ -248,7 +256,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Current player setter.
+     * Current player setter.
+     *
      * @param currentPlayer the nickname of the current player.
      */
     private void setCurrentPlayer(String currentPlayer) {
@@ -256,7 +265,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Getter for the Current player field.
+     * Getter for the Current player field.
+     *
      * @return Current player
      */
     public String getCurrentPlayer() {
@@ -264,7 +274,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Getter for the characters field.
+     * Getter for the characters field.
+     *
      * @return characters
      */
     public ArrayList<StrippedCharacter> getCharacters() {
@@ -272,14 +283,17 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Getter for the clouds field.
+     * Getter for the clouds field.
+     *
      * @return clouds
      */
     public ArrayList<StrippedCloud> getClouds() {
         return clouds;
     }
 
-    /**Getter for the islands field.
+    /**
+     * Getter for the islands field.
+     *
      * @return islands
      */
     public ArrayList<StrippedIsland> getIslands() {
@@ -287,7 +301,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Getter for the boards field.
+     * Getter for the boards field.
+     *
      * @return boards
      */
     public ArrayList<StrippedBoard> getBoards() {
@@ -295,7 +310,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Returns a specific player's board. Utility method.
+     * Returns a specific player's board. Utility method.
+     *
      * @param owner The nickname of the desired board.
      * @return the board where the owner field is the same as "owner" parameter.
      * @throws LocalModelNotLoadedException Thrown when there's an issue with the localmodel.
@@ -308,7 +324,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Binds this localModel to a UI(GUI or CLI)
+     * Binds this localModel to a UI(GUI or CLI)
+     *
      * @param ui the UI of choice
      */
     public void setUi(UI ui) {
@@ -316,7 +333,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Getter for the can play MN field.
+     * Getter for the can play MN field.
+     *
      * @return can play MN
      */
     public boolean isCanPlayMN() {
@@ -324,7 +342,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Setter for the can play MN field.
+     * Setter for the can play MN field.
+     *
      * @param canPlayMN true or false depending on the state of the game.
      */
     public void setCanPlayMN(boolean canPlayMN) {
@@ -332,7 +351,8 @@ public class StrippedModel implements Serializable {
     }
 
     /**
-     *Getter for the state field.
+     * Getter for the state field.
+     *
      * @return state
      */
     public State getState() {
@@ -341,6 +361,7 @@ public class StrippedModel implements Serializable {
 
     /**
      * Getter for the firstplayer field.
+     *
      * @return firstplayer
      */
     public String getFirstPlayer() {
@@ -349,6 +370,7 @@ public class StrippedModel implements Serializable {
 
     /**
      * Returns a cloud, selected by its name.
+     *
      * @param selectedItem the Name the Cloud is selected by.
      * @return the StrippedCloud itself.
      */
