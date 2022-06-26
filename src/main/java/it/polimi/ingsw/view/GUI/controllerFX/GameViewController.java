@@ -26,8 +26,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -141,7 +139,6 @@ public class GameViewController extends InitialStage implements Controller {
                 e.printStackTrace();
             }
         });
-
     }
 
 
