@@ -19,9 +19,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-/**
- * @noinspection rawtypes
- */
 public class MoveStudentsController extends InitialStage implements Controller {
     @FXML
     private Button cancelButton, confirmButton;
@@ -38,6 +35,7 @@ public class MoveStudentsController extends InitialStage implements Controller {
 
     /**
      * Method used to bind this scene to a GUI
+     *
      * @param gui the GUI to bind to
      */
     public MoveStudentsController(GUI gui) {
@@ -87,7 +85,7 @@ public class MoveStudentsController extends InitialStage implements Controller {
                 i++;
             }
         } catch (LocalModelNotLoadedException e) {
-            e.printStackTrace();
+            Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
         }
 
         int k = 0;
@@ -191,8 +189,9 @@ public class MoveStudentsController extends InitialStage implements Controller {
 
     /**
      * Loads combo box for student choices
+     *
      * @param comboBox The Combo box selector
-     * @param num Number of choices
+     * @param num      Number of choices
      */
     public void loadComboBox(ComboBox comboBox, int num) {
         ObservableList<String> choices = FXCollections.observableArrayList();
@@ -203,6 +202,8 @@ public class MoveStudentsController extends InitialStage implements Controller {
                     if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
                         choices.add(i + ": MN present");
                         motherNatureIndex = i;
+                    } else {
+                        choices.add(Integer.toString(i));
                     }
                 }
             } else {
