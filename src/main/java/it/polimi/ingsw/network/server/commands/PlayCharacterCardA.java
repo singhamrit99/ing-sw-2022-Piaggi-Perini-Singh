@@ -18,7 +18,7 @@ public class PlayCharacterCardA implements Command, Serializable {
         return playerCaller;
     }
     @Override
-    public void execute(Controller controller) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException {
+    public void execute(Controller controller) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         controller.callPlayCharacterCard(characterCardID);
     }
 }
