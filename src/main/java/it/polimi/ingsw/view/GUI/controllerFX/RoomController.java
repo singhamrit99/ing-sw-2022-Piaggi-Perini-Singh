@@ -38,15 +38,19 @@ public class RoomController extends InitialStage implements Controller {
 
     private SwitchButton setExpertMode;
     private Label expertMode;
+
     /**
      * Method used to bind this scene to a GUI
+     *
      * @param gui the GUI to bind to
      */
     public RoomController(GUI gui) {
         super(gui);
     }
+
     /**
      * Setter method to tell whether the view is open or not
+     *
      * @param b boolean value
      */
     public static void setOpened(boolean b) {
@@ -90,6 +94,7 @@ public class RoomController extends InitialStage implements Controller {
 
     /**
      * Sets the list of players currently in the room
+     *
      * @param players the nicknames of every player in the room.
      */
     public void setPlayersList(ArrayList<String> players) {
