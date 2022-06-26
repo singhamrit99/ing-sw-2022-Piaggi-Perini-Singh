@@ -37,7 +37,6 @@ public class MoveMotherNatureController extends InitialStage implements Controll
         try {
             slider.setMin(1);
             slider.setMax(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getMoves());
-            System.out.println(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getMoves());
             slider.setValue(1);
             slider.setMajorTickUnit(1.0);
             slider.setMinorTickCount(0);
@@ -45,7 +44,7 @@ public class MoveMotherNatureController extends InitialStage implements Controll
             slider.setShowTickMarks(true);
             slider.setShowTickLabels(true);
         } catch (LocalModelNotLoadedException e) {
-            e.printStackTrace();
+            Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
         }
 
         confirmButton.setOnAction((event) -> {

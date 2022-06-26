@@ -2,7 +2,6 @@ package it.polimi.ingsw.network.server.stripped;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.SchoolBoard;
-import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.model.deck.assistantcard.AssistantCardDeck;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
@@ -37,9 +36,6 @@ public class StrippedBoard implements Serializable {
         this.numberOfTowers = tmpBoard.getTowers();
         this.colorsTowers = boardOwner.getTowerColor();
         this.deck = boardOwner.getAssistantCardDeck();
-        ArrayList<AssistantCard> temp = boardOwner.getAssistantCardDeck().getAllCards();
-        AssistantCard add = null;
-        int i = 0;
     }
 
     /**

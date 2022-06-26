@@ -55,7 +55,7 @@ public class GameViewController extends InitialStage implements Controller {
 
     // assets on screen
     @FXML
-    private Menu changeViewBoard;
+    private Menu changeViewBoard, currentPlayer;
 
     @FXML
     private MenuItem leaveGame;
@@ -135,15 +135,15 @@ public class GameViewController extends InitialStage implements Controller {
             try {
                 GUI.client.leaveGame();
                 opened.set(false);
-            } catch (UserNotInRoomException | UserNotRegisteredException | RemoteException e) {
-                e.printStackTrace();
+            } catch (UserNotRegisteredException e) {
+                Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+            } catch (RemoteException e) {
+                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+            } catch (UserNotInRoomException e) {
+                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
             }
         });
     }
-
-
-    @FXML
-    Menu currentPlayer;
 
     public void setCurrentPlayer(String currentPlayer) {
         int maxLength = 28;
