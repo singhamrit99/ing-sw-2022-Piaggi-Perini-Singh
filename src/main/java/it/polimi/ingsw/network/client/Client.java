@@ -1,10 +1,7 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.StringNames;
-import it.polimi.ingsw.view.GUI.controllerFX.GameOverController;
-import it.polimi.ingsw.view.GUI.controllerFX.GameViewController;
-import it.polimi.ingsw.view.GUI.controllerFX.LobbyController;
-import it.polimi.ingsw.view.GUI.controllerFX.RoomController;
+import it.polimi.ingsw.view.GUI.controllerFX.*;
 import it.polimi.ingsw.view.UI;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.network.server.stripped.StrippedModel;
@@ -65,10 +62,13 @@ public class Client implements Runnable {
      * Method used to register a new client to the server with a unique username.
      *
      * @param nickName the username chosen by the new player.
-     * @throws RemoteException            Thrown in case of a network error.
+     * @throws NotBoundException Thrown if the registry has problems to find the server binding.
+     * @throws RemoteException  Thrown in case of a network error.
      * @throws UserAlreadyExistsException Thrown if the chosen name is already on the server.
+     * @throws NameFieldException Thrown if the chosen name is blank
      */
-    public void registerClient(String nickName) throws NotBoundException, RemoteException, UserAlreadyExistsException {
+    public void registerClient(String nickName) throws NotBoundException, RemoteException,
+            UserAlreadyExistsException, NameFieldException {
         connect();
         server.registerUser(nickName);
         this.nickname = nickName;
@@ -98,8 +98,10 @@ public class Client implements Runnable {
      * @throws RemoteException            Thrown in case of a network error.
      * @throws UserNotRegisteredException Thrown if the chosen name is already on the server.
      * @throws RoomAlreadyExistsException Thrown if the chosen room name is already on the server.
+     * @throws NameFieldException Thrown if the chosen name is blank
      */
-    public void createRoom(String roomName) throws RemoteException, UserNotRegisteredException, RoomAlreadyExistsException {
+    public void createRoom(String roomName) throws RemoteException, UserNotRegisteredException,
+            RoomAlreadyExistsException, NameFieldException {
         server.createRoom(nickname, roomName);
         clientRoom = roomName;
         try {
