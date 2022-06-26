@@ -228,30 +228,30 @@ class GameTest {
     @Test
     void testCompleteRound() throws IncorrectArgumentException, IncorrectPlayerException, AssistantCardNotFoundException,
             IncorrectStateException, MotherNatureLostException, NegativeValueException, ProfessorNotFoundException {
-            Game g = planningPhaseComplete();
-            for (int playersTurn = 0; playersTurn < 4; playersTurn++) {
-                EnumMap<Colors, Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
-                EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
-                int countNumStudents = 3;
-                for (Colors c : Colors.values()) {
-                    ArrayList<String> tmp = new ArrayList<>();
+        Game g = planningPhaseComplete();
+        for (int playersTurn = 0; playersTurn < 4; playersTurn++) {
+            EnumMap<Colors, Integer> entrance = g.getCurrentPlayer().getSchoolBoard().getEntrance();
+            EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
+            int countNumStudents = 3;
+            for (Colors c : Colors.values()) {
+                ArrayList<String> tmp = new ArrayList<>();
+                movingStudents.put(c, tmp);
+                for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
+                    tmp = movingStudents.get(c);
+                    if (Math.random() > 0.5) {
+                        tmp.add("dining");
+                    } else tmp.add("island4");
                     movingStudents.put(c, tmp);
-                    for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
-                        tmp = movingStudents.get(c);
-                        if (Math.random() > 0.5) {
-                            tmp.add("dining");
-                        } else tmp.add("island4");
-                        movingStudents.put(c, tmp);
-                        countNumStudents--;
-                    }
+                    countNumStudents--;
                 }
-                g.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
-                g.moveMotherNature(g.getCurrentPlayer().getNickname(), 1);
-                EnumMap<Colors, Integer> s = g.getCloudTile(0).getStudents();
-                g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(), "cloud1");
-
             }
-            assertEquals(State.PLANNINGPHASE, g.getCurrentState());
+            g.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
+            g.moveMotherNature(g.getCurrentPlayer().getNickname(), 1);
+            EnumMap<Colors, Integer> s = g.getCloudTile(0).getStudents();
+            g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(), "cloud1");
+
+        }
+        assertEquals(State.PLANNINGPHASE, g.getCurrentState());
     }
 
     @Test
@@ -371,7 +371,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards2() throws NegativeValueException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, IncorrectPlayerException, NotEnoughCoinsException, ProfessorNotFoundException, MotherNatureLostException, FullDiningException {
+    void testBuyCharacterCards2() throws NegativeValueException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, IncorrectPlayerException, NotEnoughCoinsException, ProfessorNotFoundException, MotherNatureLostException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -398,7 +398,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards3() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, NotEnoughCoinsException, MotherNatureLostException, FullDiningException {
+    void testBuyCharacterCards3() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, NotEnoughCoinsException, MotherNatureLostException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -436,7 +436,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards4() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException {
+    void testBuyCharacterCards4() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -462,7 +462,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards5() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException {
+    void testBuyCharacterCards5() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -497,7 +497,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards6() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException {
+    void testBuyCharacterCards6() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -532,7 +532,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards7() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException {
+    void testBuyCharacterCards7() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -595,7 +595,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards8() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException {
+    void testBuyCharacterCards8() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -630,7 +630,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards9() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException {
+    void testBuyCharacterCards9() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -665,7 +665,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards10() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException {
+    void testBuyCharacterCards10() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -733,7 +733,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards11() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException {
+    void testBuyCharacterCards11() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
@@ -762,7 +762,7 @@ class GameTest {
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
 
         System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
-        for (Colors color: Colors.values()){
+        for (Colors color : Colors.values()) {
             System.out.println("Color " + color + " " + game.getCurrentPlayer().getSchoolBoard().getDining().get(color));
         }
 
@@ -772,7 +772,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards12() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException {
+    void testBuyCharacterCards12() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
