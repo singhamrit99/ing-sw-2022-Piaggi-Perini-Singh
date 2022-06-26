@@ -295,7 +295,7 @@ public class Client implements Runnable {
                         }
                     }
                 }
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch (RemoteException | LocalModelNotLoadedException | InterruptedException | UserNotInRoomException |
                      RoomNotExistsException e) {
                 e.printStackTrace();
@@ -319,7 +319,7 @@ public class Client implements Runnable {
                 userRegistered = false;
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(250);
             } catch (InterruptedException e) {
                 e.printStackTrace(); //todo
             }
