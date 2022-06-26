@@ -79,6 +79,8 @@ public class AssistantCardController extends InitialStage implements Controller 
             PlayAssistantCard playAssistantCard = new PlayAssistantCard(GUI.client.getNickname(), chosenCard.get());
             try {
                 GUI.client.performGameAction(playAssistantCard);
+                Window window = ((Node) (event.getSource())).getScene().getWindow();
+                window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
             } catch (NotEnoughCoinsException e) {
                 Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
@@ -104,9 +106,6 @@ public class AssistantCardController extends InitialStage implements Controller 
             } catch (FullDiningException e) {
                 Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
             }
-
-            Window window = ((Node) (event.getSource())).getScene().getWindow();
-            window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
 
         cancelButton.setOnAction((event) -> {
