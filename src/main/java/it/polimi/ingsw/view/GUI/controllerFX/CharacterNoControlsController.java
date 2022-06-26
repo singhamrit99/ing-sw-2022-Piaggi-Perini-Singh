@@ -71,6 +71,8 @@ public class CharacterNoControlsController extends InitialStage implements Contr
                 Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
             } catch (LocalModelNotLoadedException e) {
                 Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
+            } catch (CardPlayedInTurnException e) {
+                Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
             }
         });
 
