@@ -156,15 +156,15 @@ public class CLI implements UI {
                 professorsTables.put(s.getOwner(), s.getProfessorsTable());
             }
 
+            while (!client.isInGame())
+            {System.out.print("a");}
             while (client.isInGame()) {
-                Thread.sleep(1000);
+
                 endTurn = false;
                 numOfPlayers = client.getLocalModel().getBoards().size();
                 if (playedThisTurn == null)
                     playedThisTurn = new ArrayList<>();
                 //Assistant Card play phase
-                if (!client.isInGame())
-                    break;
                 while (!client.isMyTurn()&& client.isInGame()) {
                     //Wait for the other players to be done with their turn while I still output their moves...
                     waitForTurn();
@@ -192,7 +192,7 @@ public class CLI implements UI {
                         i++;
                     }
                 }
-
+                Thread.sleep(500);
                 System.out.println();
                 //Turn phase
                 try {
@@ -217,8 +217,9 @@ public class CLI implements UI {
                             break;
                         pickCloud();
                     } else if (client.isInGame()) {
-
+                        System.out.println();
                         while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
+                            System.out.println();
                             while (!client.isMyTurn() && client.isInGame()) {
                                 waitForTurn();
                                 if (!client.isInGame())
@@ -674,6 +675,16 @@ public class CLI implements UI {
                         if (clientRoom != null)
                             leaveRoom();
                         client.requestRoomJoin(requestedRoom);
+                        client.view = StringNames.ROOM;
+                        clientRoom = requestedRoom;
+                        System.out.println("You entered room " + clientRoom + " successfully \n");
+                        System.out.println("Players in this room:");
+                        try {
+                            sendArrayString(client.getNicknamesInRoom());
+
+                        } catch (RoomNotExistsException | UserNotInRoomException e) {
+                            throw new RuntimeException(e);
+                        }
                     } catch (RoomNotExistsException | UserNotRegisteredException e) {
                         throw new RuntimeException(e);
                     } catch (RoomFullException | RoomInGameException e) {
@@ -681,16 +692,7 @@ public class CLI implements UI {
                     } catch (UserInRoomException e) {
                         System.out.println("You're already in that room!");
                     }
-                    client.view = StringNames.ROOM;
-                    clientRoom = requestedRoom;
-                    System.out.println("You entered room " + clientRoom + " successfully \n");
-                    System.out.println("Players in this room:");
-                    try {
-                        sendArrayString(client.getNicknamesInRoom());
 
-                    } catch (RoomNotExistsException | UserNotInRoomException e) {
-                        throw new RuntimeException(e);
-                    }
                 }
             }
         } catch (RemoteException e) {
@@ -1951,7 +1953,7 @@ public class CLI implements UI {
      */
     public void printCommandHelp() {
         System.out.println("O-----------------------------------------------------------------------O\n" +
-                "|              The commands available are the following:                |\n" +
+                "|              The commands available are the following:               |\n" +
                 "|\"Press 1 to view everyone's boards                                    |\n" +
                 "|\"Press 2 to view every player's name                                  |\n" +
                 "|\"Press 3 to view all the islands                                      |\n" +
@@ -1968,7 +1970,7 @@ public class CLI implements UI {
      */
     public void expertPrintCommandHelp() {
         System.out.println("O-----------------------------------------------------------------------O\n" +
-                "|              The commands available are the following:                |\n" +
+                "|              The commands available are the following:               |\n" +
                 "|\"Press 1 to view everyone's boards                                    |\n" +
                 "|\"Press 2 to view every player's name                                  |\n" +
                 "|\"Press 3 to view all the islands                                      |\n" +
@@ -2170,7 +2172,7 @@ public class CLI implements UI {
                         System.out.print(ansi().fg(color).a("\t* ").reset());
                         rows++;
                     } else
-                        System.out.print(ansi().fg(color).a("  *\n").reset());
+                        System.out.print(ansi().fg(color).a(" *\n").reset());
                 } else {
                     System.out.print(ansi().fg(color).a("*\n").reset());
                     rows++;
@@ -2186,11 +2188,16 @@ public class CLI implements UI {
         System.out.println(" ____________________");
         int w = 0;
         for (Colors c : island.getStudents().keySet()) {
-            if (w % 3 == 0) {
+            if (w <2) {
                 System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
                 w++;
-            } else
+            } else if (w==2) {
                 System.out.print(c + " students: " + island.getStudents().get(c) + "\n");
+                w++;
+            }
+            else
+                System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
+
         }
 
         if (island.getNumOfTowers() == 0)
