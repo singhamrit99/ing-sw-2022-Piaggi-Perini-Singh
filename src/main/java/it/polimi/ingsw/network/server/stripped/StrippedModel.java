@@ -15,9 +15,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class StrippedModel implements Serializable {
-
-    //TODO AMRIT: change the name of this exception with something more specific
-    //TODO TINO:  search all the BadFormattedLocalModelException and replace the argument with a string that tell better the problem?
+   //TODO TINO:  search all the BadFormattedLocalModelException and replace the argument with a string that tell better the problem?
     final private ArrayList<StrippedBoard> boards;
     final private ArrayList<StrippedCharacter> characters;
     final private ArrayList<StrippedCloud> clouds;
@@ -93,7 +91,6 @@ public class StrippedModel implements Serializable {
                 break;
             case "first-player-change":
                 setFirstPlayer(evt);
-               // ui.currentPlayer((String) evt.getNewValue());
                 break;
             default:
                 throw new BadFormattedLocalModelException();
