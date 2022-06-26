@@ -104,4 +104,5 @@ public interface UI {
      */
     void professorChanged();
 
+    void characterChanged(PropertyChangeEvent evt);
 }
