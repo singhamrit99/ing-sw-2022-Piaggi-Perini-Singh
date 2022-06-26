@@ -109,7 +109,7 @@ public class GUI implements UI {
     public void currentPlayer(String currentPlayer) {
         if (GUI.client.view.equals(StringNames.INGAME)) {
             if (gameController.isOpened()) { //TODO
-                // Platform.runLater(() -> gameController.setCurrentPlayer(currentPlayer));
+                Platform.runLater(() -> gameController.setCurrentPlayer(currentPlayer));
             }
         }
     }

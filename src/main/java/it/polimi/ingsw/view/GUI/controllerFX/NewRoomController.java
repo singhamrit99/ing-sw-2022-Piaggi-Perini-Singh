@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
+import it.polimi.ingsw.exceptions.NameFieldException;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.RoomAlreadyExistsException;
@@ -59,7 +60,6 @@ public class NewRoomController extends InitialStage implements Controller {
      */
     private void initializeConfirmButton() {
         createNewGameButton.setOnAction((event) -> {
-            if (!roomName.getText().equals("")) {
                 try {
                     GUI.client.view = StringNames.ROOM;
                     GUI.client.createRoom(roomName.getText());
@@ -69,8 +69,9 @@ public class NewRoomController extends InitialStage implements Controller {
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                 } catch (RoomAlreadyExistsException e) {
                     Controller.showErrorDialogBox(StringNames.ROOM_EXISTS);
+                } catch (NameFieldException e) {
+                    Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
                 }
-            }
         });
     }
 }

@@ -65,6 +65,8 @@ public class CharacterOneSelectController extends InitialStage implements Contro
             PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), indexSelectedCharacter, chosen.get());
             try {
                 GUI.client.performGameAction(playCharacterCardD);
+                Window window = ((Node) (event.getSource())).getScene().getWindow();
+                window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
             } catch (NotEnoughCoinsException e) {
                 Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
@@ -90,9 +92,6 @@ public class CharacterOneSelectController extends InitialStage implements Contro
             } catch (FullDiningException e) {
                 Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
             }
-
-            Window window = ((Node) (event.getSource())).getScene().getWindow();
-            window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
 
         cancelButton.setOnAction((event) -> {

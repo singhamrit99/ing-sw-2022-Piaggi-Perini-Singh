@@ -166,6 +166,9 @@ public class CharacterSwapController extends InitialStage implements Controller 
             PlayCharacterCardC playCharacterCardC = new PlayCharacterCardC(GUI.client.getNickname(), indexSelectedCharacter, swap1, swap2);
             try {
                 GUI.client.performGameAction(playCharacterCardC);
+
+                Window window = ((Node) (event.getSource())).getScene().getWindow();
+                window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
             } catch (NotEnoughCoinsException e) {
                 Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
@@ -191,9 +194,6 @@ public class CharacterSwapController extends InitialStage implements Controller 
             } catch (FullDiningException e) {
                 Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
             }
-
-            Window window = ((Node) (event.getSource())).getScene().getWindow();
-            window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
 
         cancelButton.setOnAction((event) -> {

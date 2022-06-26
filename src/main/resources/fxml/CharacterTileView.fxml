@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="450.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="450.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/">
     <top>
         <StackPane maxWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" BorderPane.alignment="CENTER">
             <children>

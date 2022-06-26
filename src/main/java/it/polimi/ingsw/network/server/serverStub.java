@@ -11,12 +11,12 @@ import java.util.ArrayList;
 public interface serverStub extends Remote {
 
     boolean isInGame(String roomName)throws RemoteException,RoomNotExistsException;
-    void registerUser(String name) throws RemoteException, UserAlreadyExistsException;
+    void registerUser(String name) throws RemoteException, UserAlreadyExistsException, NameFieldException;
     void deregisterConnection(String username) throws RemoteException, UserNotRegisteredException;
 
     ArrayList<String> getRoomsList() throws RemoteException;
 
-    void createRoom(String username, String roomName) throws RemoteException, RoomAlreadyExistsException, UserNotRegisteredException;
+    void createRoom(String username, String roomName) throws RemoteException, RoomAlreadyExistsException, UserNotRegisteredException, NameFieldException;
 
     void joinRoom(String username, String roomName) throws RemoteException,RoomInGameException, UserNotRegisteredException, RoomNotExistsException, RoomFullException, UserInRoomException;
 

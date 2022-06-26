@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.StringNames;
+import it.polimi.ingsw.exceptions.NameFieldException;
 import it.polimi.ingsw.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.view.GUI.controllerFX.Controller;
@@ -102,7 +103,6 @@ public class GUILauncher extends Application implements Initializable {
      */
     private void startButtonEvent() {
         startButton.setOnAction((event) -> {
-            if (controlNickname()) {
                 final String nickname = nicknameField.getText();
                 GUI.client.view = StringNames.LOBBY;
                 try {
@@ -111,8 +111,9 @@ public class GUILauncher extends Application implements Initializable {
                     Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
                 } catch (UserAlreadyExistsException e) {
                     Controller.showErrorDialogBox(StringNames.USER_ALREADY_IN_ROOM);
+                } catch (NameFieldException e) {
+                    Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
                 }
-            }
         });
     }
 

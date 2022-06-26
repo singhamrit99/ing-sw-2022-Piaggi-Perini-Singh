@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0"
-            prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="450.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
             stylesheets="@../css/Style.css">
     <center>
         <StackPane prefHeight="650.0" prefWidth="450.0" BorderPane.alignment="CENTER">

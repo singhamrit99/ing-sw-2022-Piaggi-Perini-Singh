@@ -150,9 +150,6 @@ public class MoveStudentsController extends InitialStage implements Controller {
                 studentToMove.put(Colors.getStudent(i), destinations);
             }
 
-            for (Colors colors : Colors.values()) {
-                System.out.println(colors + " " + studentToMove.get(colors));
-            }
 
             MoveStudents moveStudents = new MoveStudents(GUI.client.getNickname(), studentToMove);
             try {
@@ -202,9 +199,13 @@ public class MoveStudentsController extends InitialStage implements Controller {
         ObservableList<String> choices = FXCollections.observableArrayList();
 
         for (int i = 0; i <= num; i++) {
-            if (i > 0 && GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature() && comboBox.getId().equals(islandNumber.getId())) {
-                choices.add(i + ": MN present");
-                motherNatureIndex = i;
+            if (i > 0 && comboBox.getId().equals(islandNumber.getId())) {
+                if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
+                    if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
+                        choices.add(i + ": MN present");
+                        motherNatureIndex = i;
+                    }
+                }
             } else {
                 choices.add(Integer.toString(i));
             }
