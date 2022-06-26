@@ -88,6 +88,8 @@ public class CLI implements UI {
                     System.out.println();
                 } catch (NotBoundException e) {
                     e.printStackTrace();
+                } catch (NameFieldException e) {
+                    System.out.println("Sorry, you really do need a name! Try again.");
                 }
         }
         while (true) {
@@ -641,6 +643,8 @@ public class CLI implements UI {
             throw new RuntimeException(e);
         } catch (RemoteException e) {
             System.out.println("Network error");
+        } catch (NameFieldException e) {
+            System.out.println(StringNames.NAME_FIELD_NULL);
         }
         clientRoom = nameRoom;
     }

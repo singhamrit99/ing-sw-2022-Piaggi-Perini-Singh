@@ -39,6 +39,7 @@ public interface StringNames {
     String INCORRECT_ARGUMENT = "Given parameters are not correct";
     String USER_ALREADY_IN_ROOM= "User is already in a room";
     String DINING_WILL_FULL = "You are adding more than you can put";
+    String NICKNAME_FIELD_NULL ="Invalid nickname";
 
     String ERROR_IO = "Error while loading image assets";
 }
