@@ -60,37 +60,36 @@ public class CLI implements UI {
 
     /**
      * The main view method, in which the game loop remains for all the uptime of the program.
-     *
      */
     public void Start() throws InterruptedException {
 
         AnsiConsole.systemInstall();
 
-            System.out.println("Welcome to...");
+        System.out.println("Welcome to...");
 
-            System.out.println(("      ########## #########  ###########     ###     ####    ### ########### ###   ###  ######## \n") +
-                    "     #+#        #+#    #+#     #+#       #+# #+#   #+#+#   #+#     #+#     #+#   #+# #+#    #+# \n" +
-                    "    +#+        +#+    +#+     +#+      +#+   +#+  #+#+#+  +#+     +#+      +#+ +#+  +#+         \n" +
-                    "   +#++#++#   +#++#++##      +#+     +#++#++#++# +#+ +#+ +#+     +#+       +#++#   +#++#++#++   \n" +
-                    "  +#+        +#+    +#+     +#+     +#+     +#+ +#+  +#+#+#     +#+        +#+           +#+    \n" +
-                    " #+#        #+#    #+#     #+#     #+#     #+# #+#   #+#+#     #+#        #+#    #+#    #+#     \n" +
-                    "########## ###    ### ########### ###     ### ###    ####     ###        ###     ########     ");
+        System.out.println(("      ########## #########  ###########     ###     ####    ### ########### ###   ###  ######## \n") +
+                "     #+#        #+#    #+#     #+#       #+# #+#   #+#+#   #+#     #+#     #+#   #+# #+#    #+# \n" +
+                "    +#+        +#+    +#+     +#+      +#+   +#+  #+#+#+  +#+     +#+      +#+ +#+  +#+         \n" +
+                "   +#++#++#   +#++#++##      +#+     +#++#++#++# +#+ +#+ +#+     +#+       +#++#   +#++#++#++   \n" +
+                "  +#+        +#+    +#+     +#+     +#+     +#+ +#+  +#+#+#     +#+        +#+           +#+    \n" +
+                " #+#        #+#    #+#     #+#     #+#     #+# #+#   #+#+#     #+#        #+#    #+#    #+#     \n" +
+                "########## ###    ### ########### ###     ### ###    ####     ###        ###     ########     ");
         while (true) {
             System.out.println("Welcome to the lobby!\nWhat's your name?");
-                try {
-                    nickName = in.nextLine();
-                    client.registerClient(nickName);
-                    client.view = StringNames.LOBBY;
-                    break;
-                } catch (UserAlreadyExistsException e) {
-                    System.out.println("That username is already in the game! Try another.\n");
-                } catch (RemoteException e) {
-                    System.out.println();
-                } catch (NotBoundException e) {
-                    e.printStackTrace();
-                } catch (NameFieldException e) {
-                    System.out.println("Sorry, you really do need a name! Try again.");
-                }
+            try {
+                nickName = in.nextLine();
+                client.registerClient(nickName);
+                client.view = StringNames.LOBBY;
+                break;
+            } catch (UserAlreadyExistsException e) {
+                System.out.println("That username is already in the game! Try another.\n");
+            } catch (RemoteException e) {
+                System.out.println();
+            } catch (NotBoundException e) {
+                e.printStackTrace();
+            } catch (NameFieldException e) {
+                System.out.println("Sorry, you really do need a name! Try again.");
+            }
         }
         while (true) {
             System.out.println("O----------------------------------------------------------------------------------------O\n" +
@@ -194,12 +193,13 @@ public class CLI implements UI {
                 System.out.println("Waiting for everyone to play an assistant card");
                 int i = 0;
                 while (numOfPlayers > 1) {
-                    if ((i < 250)) {
+                    if ((i < 50)) {
                         System.out.print(".");
                         i++;
                     }
                 }
 
+                System.out.println();
                 //Turn phase
                 try {
                     if (client.getExpertMode()) {
@@ -317,7 +317,10 @@ public class CLI implements UI {
      */
     @Override
     public void currentPlayer(String s) {
+        if (!s.equals(client.getNickname()))
         System.out.println("It's now " + s + "'s turn!");
+        else
+            System.out.println("It's your turn! Press any key to continue.");
     }
 
     /**
@@ -339,7 +342,7 @@ public class CLI implements UI {
     public void deckChange(String assistantCard) {
         String tmp;
         if (!client.getLocalModel().getCurrentPlayer().equals(client.getNickname()))
-            System.out.println(client.getLocalModel().getCurrentPlayer() + " has played " + assistantCard);
+            System.out.println(client.getLocalModel().getCurrentPlayer() + " has played Assistant card " + assistantCard + ".  Remember, you can't play the same card!");
         tmp = assistantCard.replaceAll("[^\\d.]", "");
         if (playedThisTurn == null)
             playedThisTurn = new ArrayList<>();
@@ -472,7 +475,7 @@ public class CLI implements UI {
         }
         client.setMyTurn(false);
         client.setInGame(false);
-        client.view=StringNames.LOBBY;
+        client.view = StringNames.LOBBY;
 
     }
 
@@ -508,9 +511,8 @@ public class CLI implements UI {
 
     /**
      * Method that returns all the players in a room.
-     *
      */
-    private void getPlayersInRoom(){
+    private void getPlayersInRoom() {
         if (clientRoom != null) {
             ArrayList<String> response = new ArrayList<>();
             try {
@@ -527,9 +529,8 @@ public class CLI implements UI {
 
     /**
      * Returns the lobby name, leader and whether you're in expert mode or not.
-     *
      */
-    private void getLobbyInfo(){
+    private void getLobbyInfo() {
         if (clientRoom != null) {
             ArrayList<String> result = new ArrayList<>();
             try {
@@ -548,9 +549,8 @@ public class CLI implements UI {
 
     /**
      * Method used to leave the room.
-     *
      */
-    private void leaveRoom(){
+    private void leaveRoom() {
         try {
             client.leaveRoom();
         } catch (UserNotInRoomException e) {
@@ -564,10 +564,9 @@ public class CLI implements UI {
 
     /**
      * Method used to return all the rooms on the server.
-     *
      */
-    public void getRooms(){
-        client.view=StringNames.LOBBY;
+    public void getRooms() {
+        client.view = StringNames.LOBBY;
         client.setInGame(false);
         System.out.println("Rooms on the server: ");
         ArrayList<String> response = null;
@@ -584,7 +583,6 @@ public class CLI implements UI {
 
     /**
      * Method used to switch game mode in the room.
-     *
      */
     public void setExpertMode() {
         boolean result = false;
@@ -622,9 +620,8 @@ public class CLI implements UI {
 
     /**
      * Method used to call for a room creation from Client.
-     *
      */
-    public synchronized void requestRoomCreation(){
+    public synchronized void requestRoomCreation() {
         System.out.println("Insert room name: \n");
         String nameRoom;
         nameRoom = in.nextLine();
@@ -703,7 +700,6 @@ public class CLI implements UI {
 
     /**
      * Method used to leave the game.
-     *
      */
     public void leaveGame() throws UserNotInRoomException, UserNotRegisteredException, RemoteException {
         client.leaveGame();
@@ -711,16 +707,15 @@ public class CLI implements UI {
 
     /**
      * Method used to draw
-     *
      */
-    public void drawFromBag(){
+    public void drawFromBag() {
         drawFromBagOrder = new DrawFromBagCommand(client.getNickname());
         System.out.println("Drawing from bag...\n");
         try {
             client.performGameAction(drawFromBagOrder);
         } catch (NotEnoughCoinsException e) {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
-        }catch (AssistantCardNotFoundException e) {
+        } catch (AssistantCardNotFoundException e) {
             System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
         } catch (NegativeValueException e) {
             System.out.println(StringNames.NEGATIVE_VALUE);
@@ -747,7 +742,6 @@ public class CLI implements UI {
 
     /**
      * Method used to play assistant cards.
-     *
      */
     public synchronized void playAssistantCard() throws AssistantCardNotFoundException {
         System.out.println("It's your turn! Pick an assistant card to play. \n");
@@ -793,7 +787,7 @@ public class CLI implements UI {
             playAssistantCard();
         } catch (FullDiningException e) {
             e.printStackTrace();
-        }catch (NegativeValueException e) {
+        } catch (NegativeValueException e) {
             System.out.println(StringNames.NEGATIVE_VALUE);
         } catch (IncorrectStateException e) {
             System.out.println(StringNames.INCORRECT_STATE);
@@ -815,7 +809,6 @@ public class CLI implements UI {
 
     /**
      * Method used to choose the actions the player wants to perform in their turn and also print game info such as clouds, islands and player boards.
-     *
      */
     public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException {
         do {
@@ -865,7 +858,6 @@ public class CLI implements UI {
 
     /**
      * Basically the same method as performActionInTurn, but also contains character cards related methods.
-     *
      */
     public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException {
         do {
@@ -921,16 +913,15 @@ public class CLI implements UI {
 
     /**
      * Method used to pick a cloud tile at the end of the player turn.
-     *
      */
-    public void pickCloud()  {
+    public void pickCloud() {
         System.out.println("Almost at the end of your turn! Pick a cloud to refill your entrance.\n");
         printClouds();
         int i;
         String input;
         EnumMap<Colors, Integer> emptyEnum = new EnumMap<>(Colors.class);
         emptyEnum = initializeMove(emptyEnum);
-        boolean invalidCloud= true;
+        boolean invalidCloud = true;
         do {
             while (true) {
                 input = in.next();
@@ -941,7 +932,7 @@ public class CLI implements UI {
                     System.out.println("That's not a number! Try again.\n");
                 }
             }
-            while (i < 0 || i > client.getLocalModel().getClouds().size()) {
+            while (i < 1 || i > client.getLocalModel().getClouds().size() + 1) {
                 System.out.println("Invalid cloud number! Try again.\n");
                 while (true) {
                     input = in.next();
@@ -952,17 +943,17 @@ public class CLI implements UI {
                         System.out.println("That's not a number! Try again.\n");
                     }
                 }
-                if (client.getLocalModel().getClouds().get(i).getStudents().equals(emptyEnum)) {
-                    System.out.println("Someone already picked that cloud! Try another.");
-                } else {
-
-                    invalidCloud = false;
+            }
+            for (StrippedCloud c : client.getLocalModel().getClouds()) {
+                if (c.getName().equals("cloud" + i))
+                {
+                    if (c.getStudents().equals(emptyEnum))
+                        System.out.println("Someone already picked that cloud! Try another.");
+                    else
+                        invalidCloud = false;
                 }
             }
-            if (i<client.getLocalModel().getClouds().size())
-           invalidCloud=false;
-            else
-                System.out.println("Invalid cloud number! Try again.");
+
         } while (invalidCloud);
 
         //Reached a valid cloud color
@@ -970,7 +961,7 @@ public class CLI implements UI {
         // System.out.println(client.getLocalModel().getState());
         try {
             client.performGameAction(pickCloudOrder);
-        }catch (AssistantCardNotFoundException e) {
+        } catch (AssistantCardNotFoundException e) {
             System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
         } catch (NegativeValueException e) {
             System.out.println(StringNames.NEGATIVE_VALUE);
@@ -1047,7 +1038,6 @@ public class CLI implements UI {
 
     /**
      * Method used to move students in the mandatory dining/island phase of the turn.
-     *
      */
     public void moveStudents() {
         if (!client.getLocalModel().isCanPlayMN()) {
@@ -1247,7 +1237,7 @@ public class CLI implements UI {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
                 e.printStackTrace();
-            }catch (AssistantCardNotFoundException e) {
+            } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
                 System.out.println(StringNames.NEGATIVE_VALUE);
@@ -1280,9 +1270,8 @@ public class CLI implements UI {
 
     /**
      * Method used to play a character card. Splits off in several children methods based on parameters needed.
-     *
      */
-    public void playCharacterCard(){
+    public void playCharacterCard() {
         StrippedCharacter tmp;
         System.out.println("Select the character you want to play! You currently have " + client.getLocalModel().getBoards().get(playerNumber).getCoins() + " coins \n");
         printCharacterCards();
@@ -1365,7 +1354,7 @@ public class CLI implements UI {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
         } catch (FullDiningException e) {
             e.printStackTrace();
-        }catch (AssistantCardNotFoundException e) {
+        } catch (AssistantCardNotFoundException e) {
             System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
         } catch (NegativeValueException e) {
             System.out.println(StringNames.NEGATIVE_VALUE);
@@ -1436,8 +1425,7 @@ public class CLI implements UI {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
         } catch (FullDiningException e) {
             e.printStackTrace();
-        }
-        catch (AssistantCardNotFoundException e) {
+        } catch (AssistantCardNotFoundException e) {
             System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
         } catch (NegativeValueException e) {
             System.out.println(StringNames.NEGATIVE_VALUE);
@@ -1748,7 +1736,7 @@ public class CLI implements UI {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
                 e.printStackTrace();
-            }catch (AssistantCardNotFoundException e) {
+            } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
                 System.out.println(StringNames.NEGATIVE_VALUE);
@@ -1799,7 +1787,7 @@ public class CLI implements UI {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
                 e.printStackTrace();
-            }catch (AssistantCardNotFoundException e) {
+            } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
                 System.out.println(StringNames.NEGATIVE_VALUE);
@@ -1853,7 +1841,7 @@ public class CLI implements UI {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
                 e.printStackTrace();
-            }catch (AssistantCardNotFoundException e) {
+            } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
                 System.out.println(StringNames.NEGATIVE_VALUE);
@@ -1907,7 +1895,7 @@ public class CLI implements UI {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
                 e.printStackTrace();
-            }catch (AssistantCardNotFoundException e) {
+            } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
                 System.out.println(StringNames.NEGATIVE_VALUE);
@@ -2298,7 +2286,7 @@ public class CLI implements UI {
     /**
      * Prints every character card in the game.
      */
-    public void printCharacterCards(){
+    public void printCharacterCards() {
         int i = 0;
         ArrayList<StrippedCharacter> temp = client.getLocalModel().getCharacters();
         for (StrippedCharacter c : temp) {
@@ -2316,7 +2304,6 @@ public class CLI implements UI {
 
     /**
      * Prints every assistant card in the local personal deck.
-     *
      */
     public void printAssistantCards() {
         AssistantCardDeck myDeck = null;
@@ -2348,14 +2335,13 @@ public class CLI implements UI {
 
             while (i > 0) {
 
-                if (rows == 0||rows==3) {
+                if (rows == 0 || rows == 3) {
                     System.out.print(ansi().fg(color).a("|* ").reset());
                     rows++;
-                } else if (rows==2||rows==5) {
+                } else if (rows == 2 || rows == 5) {
                     System.out.print(ansi().fg(color).a("  *|").reset());
                     System.out.print("|");
-                }
-            else {
+                } else {
                     System.out.print(ansi().fg(color).a("*").reset());
                     System.out.print("|");
                     System.out.print("\n");

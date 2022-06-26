@@ -93,7 +93,7 @@ public class StrippedModel implements Serializable {
                 break;
             case "first-player-change":
                 setFirstPlayer(evt);
-                ui.currentPlayer((String) evt.getNewValue());
+               // ui.currentPlayer((String) evt.getNewValue());
                 break;
             default:
                 throw new BadFormattedLocalModelException();

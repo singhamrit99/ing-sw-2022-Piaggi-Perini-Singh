@@ -25,7 +25,7 @@ public class ClientAppCLI {
      * @throws UserNotRegisteredException The user that called the action was not correctly registered on the server.
      * @throws InterruptedException Waiting exception.
      * @throws RoomNotExistsException Thrown if the room that was looked up does not exist.
-     * @throws LocalModelNotLoadedException Thron if the local model is null. Game exception.
+     * @throws LocalModelNotLoadedException Thrwon if the local model is null. Game exception.
      * @throws FullDiningException Thrown if the player tries to put more than 10 students of the same color in their dining room. Game exception.
      */
     public static void main(String[] args) throws IOException, UserNotInRoomException, NotLeaderRoomException, NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, UserNotRegisteredException, InterruptedException, RoomNotExistsException, LocalModelNotLoadedException, FullDiningException {
