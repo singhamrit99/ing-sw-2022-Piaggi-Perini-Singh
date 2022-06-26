@@ -165,14 +165,14 @@ public class CLI implements UI {
                 //Assistant Card play phase
                 if (!client.isInGame())
                     break;
-                while (!client.isMyTurn()) {
+                while (!client.isMyTurn()&& client.isInGame()) {
                     //Wait for the other players to be done with their turn while I still output their moves...
-                    if (!client.isInGame())
-                        break;
                     waitForTurn();
+                    System.out.println("Wait delle assistant");
 
                 }
                 //Means the game finished while we were waiting for turn
+                System.out.println("Salame");
                 if (!client.isInGame())
                     break;
                 if (client.isMyTurn() && client.getLocalModel().getFirstPlayer().equals(client.getNickname())) {
@@ -199,29 +199,46 @@ public class CLI implements UI {
                 System.out.println();
                 //Turn phase
                 try {
-                    if (client.getExpertMode()) {
+                    if (client.getExpertMode()&&client.isInGame()) {
+
                         while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
-                            while (!client.isMyTurn()) {
+                            while (!client.isMyTurn()&&client.isInGame()) {
                                 waitForTurn();
+
                             }
                             if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
                                 expertPrintCommandHelp();
                                 performActionInTurnExpert();
+                                if (!client.isInGame())
+                                    break;
                             }
+                            if (!client.isInGame())
+                                break;
                             //System.out.println(client.getLocalModel().getState());
                         }
+                        if (!client.isInGame())
+                            break;
                         pickCloud();
-                    } else {
+                    } else if (client.isInGame()) {
+
                         while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
-                            while (!client.isMyTurn()) {
+                            while (!client.isMyTurn() && client.isInGame()) {
                                 waitForTurn();
+                                if (!client.isInGame())
+                                    break;
                             }
-                            if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
+                            if (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn && client.isInGame()) {
                                 printCommandHelp();
                                 performActionInTurn();
+                                if (!client.isInGame())
+                                    break;
                             }
+                            if (!client.isInGame())
+                                break;
                             //System.out.println(client.getLocalModel().getState());
                         }
+                        if (!client.isInGame())
+                            break;
                         pickCloud();
                     }
                 } catch (AssistantCardNotFoundException e) {
@@ -255,7 +272,6 @@ public class CLI implements UI {
                 }
             }
 
-            System.out.println("Out of game");
         }
     }
 
@@ -458,11 +474,10 @@ public class CLI implements UI {
      */
     @Override
     public void gameOver(String leavingPlayer, String winner) {
-
         if (winner != null) {
             System.out.println("Game over! Team " + winner + "won! Congratulations!\n");
         } else {
-            System.out.println("Player " + leavingPlayer + "left the game. Everyone will be put back into the lobby.");
+            System.out.println("Player " + leavingPlayer + " left the game. Everyone will be put back into the lobby.");
         }
         client.setMyTurn(false);
         client.setInGame(false);
@@ -691,8 +706,30 @@ public class CLI implements UI {
     /**
      * Method used to leave the game.
      */
-    public void leaveGame() throws UserNotInRoomException, UserNotRegisteredException, RemoteException {
-        client.leaveGame();
+    public void leaveGame() throws UserNotInRoomException, UserNotRegisteredException, RemoteException, InterruptedException {
+        boolean isValidInputYN = false;
+        String answer;
+        System.out.println("Are you sure you wanna do this? If you're ragequitting you'll make everyone sad!");
+        in.nextLine();
+        do {
+            answer = in.nextLine();
+            answer = answer.toLowerCase(Locale.ROOT);
+            if (answer.equals("y") || answer.equals("n"))
+                isValidInputYN = true;
+            else if (answer.equals("\n")) {
+            } else
+                System.out.println("Whoops! That's not right. Try again: \n");
+        } while (!isValidInputYN);
+        if (answer.equals("y")) {
+            client.setMyTurn(false);
+            client.setInGame(false);
+            client.view = StringNames.LOBBY;
+            client.leaveGame();
+            Thread.sleep(500);
+        }
+        else
+            System.out.println("Gotcha! Returning to the game.");
+
     }
 
     /**
@@ -800,7 +837,7 @@ public class CLI implements UI {
     /**
      * Method used to choose the actions the player wants to perform in their turn and also print game info such as clouds, islands and player boards.
      */
-    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException {
+    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException, InterruptedException {
         do {
             //   System.out.println("Press any key to continue\n");
             // in.nextLine();
@@ -840,6 +877,8 @@ public class CLI implements UI {
                 break;
             case 8:
                 leaveGame();
+                break;
+
             default:
                 System.out.println("Invalid input, try again\n");
         }
@@ -849,7 +888,7 @@ public class CLI implements UI {
     /**
      * Basically the same method as performActionInTurn, but also contains character cards related methods.
      */
-    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException {
+    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException, InterruptedException {
         do {
             //   System.out.println("Press any key to continue\n");
             in.nextLine();
@@ -892,9 +931,11 @@ public class CLI implements UI {
                 break;
             case 9:
                 expertPrintCommandHelp();
+                break;
             case 10:
                 leaveGame();
                 break;
+
             default:
                 //TODO: add exception
         }
@@ -1073,7 +1114,6 @@ public class CLI implements UI {
                 if (answer.equals("y") || answer.equals("n"))
                     isValidInputYN = true;
                 else if (answer.equals("\n")) {
-                    System.out.println("yolo\n");
                 } else
                     System.out.println("Whoops! That's not right. Try again: \n");
             } while (!isValidInputYN);
