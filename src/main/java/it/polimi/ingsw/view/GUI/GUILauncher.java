@@ -44,6 +44,11 @@ public class GUILauncher extends Application implements Initializable {
     @FXML
     private ImageView title;
 
+    /**
+     * Starts the GUI on the starting stage.
+     * @param stage The stage to set to
+     * @throws Exception used for Stage exceptions.
+     */
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle(StringNames.TITLE);
@@ -66,6 +71,11 @@ public class GUILauncher extends Application implements Initializable {
         stage.show();
     }
 
+    /**
+     * Initializes launcher in preparation for start button event.
+     * @param url The url of the resource
+     * @param resourceBundle the graphical resources of the game
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         nicknameField.textProperty().addListener((event) -> {
@@ -87,6 +97,9 @@ public class GUILauncher extends Application implements Initializable {
         floatingTitle.play();
     }
 
+    /**
+     * Method that handles the Start Button being pressed.
+     */
     private void startButtonEvent() {
         startButton.setOnAction((event) -> {
             if (controlNickname()) {
@@ -103,6 +116,10 @@ public class GUILauncher extends Application implements Initializable {
         });
     }
 
+    /**
+     * Method that checks the nickname
+     * @return whether the nickname is valid.
+     */
     private boolean controlNickname() {
         final String nickname = nicknameField.getText();
 
