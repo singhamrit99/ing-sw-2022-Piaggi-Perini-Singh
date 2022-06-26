@@ -2018,6 +2018,7 @@ public class CLI implements UI {
 
         System.out.println("O----------------------O");
         System.out.println(board.getOwner() + "'s board: ");
+        System.out.println("Tower color: " + board.getColorsTowers());
         System.out.println("Coins: " + board.getCoins());
         System.out.println("\nDining room configuration: ");
         printDining(board);
