@@ -3,7 +3,6 @@ package it.polimi.ingsw.network.server.stripped;
 import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.cards.charactercard.Requirements;
 import it.polimi.ingsw.model.cards.charactercard.Type;
-import it.polimi.ingsw.model.enumerations.Actions;
 import it.polimi.ingsw.model.enumerations.Colors;
 
 import java.io.Serializable;
