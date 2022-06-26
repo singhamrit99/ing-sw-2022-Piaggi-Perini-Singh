@@ -244,12 +244,14 @@ public class GameViewController extends InitialStage implements Controller {
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                 } catch (FullDiningException e) {
                     Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
+                } catch (CardPlayedInTurnException e) {
+                    Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
                 }
             }
         });
     }
 
-    private void reloadCharacters() {
+    public void reloadCharacters() {
         charactersCards = new ArrayList<>();
         charactersCards.add(character1);
         charactersCards.add(character2);
@@ -347,6 +349,7 @@ public class GameViewController extends InitialStage implements Controller {
             coinsIndicator.setVisible(true);
             try {
                 int coins = GUI.client.getLocalModel().getBoardOf(currentBoardView).getCoins();
+
                 coinsText.setText(Integer.toString(coins));
             } catch (LocalModelNotLoadedException e) {
                 //TODO
