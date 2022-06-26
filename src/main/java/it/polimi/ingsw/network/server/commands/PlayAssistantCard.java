@@ -1,10 +1,7 @@
 package it.polimi.ingsw.network.server.commands;
 
 import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.exceptions.AssistantCardNotFoundException;
-import it.polimi.ingsw.exceptions.IncorrectArgumentException;
-import it.polimi.ingsw.exceptions.IncorrectPlayerException;
-import it.polimi.ingsw.exceptions.IncorrectStateException;
+import it.polimi.ingsw.exceptions.*;
 
 import java.io.Serializable;
 
@@ -22,7 +19,7 @@ public class PlayAssistantCard implements Command, Serializable {
         return playerCaller;
     }
     @Override
-    public void execute(Controller controller) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException {
+    public void execute(Controller controller) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, NegativeValueException {
         controller.callPlayAssistantCard(playerCaller, assistantCardName);
     }
 }
