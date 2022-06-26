@@ -20,5 +20,5 @@ public interface Command {
      * @throws NotEnoughCoinsException Thrown if the player that tried to play the character card doesn't have enough coins to buy it.
      * @throws AssistantCardNotFoundException Thrown if the given string doesn't correspond to any Assistant card in the deck.
      */
-    void execute(Controller controller) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, ProfessorNotFoundException, NotEnoughCoinsException, AssistantCardNotFoundException, FullDiningException;
+    void execute(Controller controller) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, MotherNatureLostException, IncorrectStateException, ProfessorNotFoundException, NotEnoughCoinsException, AssistantCardNotFoundException, FullDiningException, CardPlayedInTurnException;
 }
