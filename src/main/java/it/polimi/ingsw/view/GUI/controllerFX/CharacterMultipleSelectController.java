@@ -119,6 +119,8 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                 PlayCharacterCardB playCharacterCardB = new PlayCharacterCardB(GUI.client.getNickname(), indexSelectedCharacter, index.get(), chosen.get());
                 try {
                     GUI.client.performGameAction(playCharacterCardB);
+                    Window window = ((Node) (event.getSource())).getScene().getWindow();
+                    window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
                 } catch (AssistantCardNotFoundException e) {
                     Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);
                 } catch (NotEnoughCoinsException e) {
