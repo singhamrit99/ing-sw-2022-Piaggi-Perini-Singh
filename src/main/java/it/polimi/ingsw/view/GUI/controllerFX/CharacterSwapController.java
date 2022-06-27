@@ -34,8 +34,10 @@ public class CharacterSwapController extends InitialStage implements Controller 
     private ComboBox islandNumber,
             totalFirstYellow, totalFirstBlue, totalFirstGreen, totalFirstRed, totalFirstPink,
             totalSecondYellow, totalSecondBlue, totalSecondGreen, totalSecondRed, totalSecondPink;
+
     /**
      * Binds this stage to a user GUI.
+     *
      * @param gui the GUI to bind to.
      */
     public CharacterSwapController(GUI gui) {
@@ -182,7 +184,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
             } catch (ProfessorNotFoundException e) {
                 Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
             } catch (RemoteException e) {
-                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                Controller.showErrorDialogBox(StringNames.REMOTE);
             } catch (IncorrectPlayerException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
             } catch (UserNotInRoomException e) {
@@ -195,6 +197,8 @@ public class CharacterSwapController extends InitialStage implements Controller 
                 Controller.showErrorDialogBox(StringNames.FULL_DINING);
             } catch (CardPlayedInTurnException e) {
                 Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
+            } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+                Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
             }
         });
 
@@ -206,8 +210,9 @@ public class CharacterSwapController extends InitialStage implements Controller 
 
     /**
      * Loads combo box object for student choice.
+     *
      * @param comboBox The combo box loaded.
-     * @param num the number of available choices.
+     * @param num      the number of available choices.
      */
     public void loadComboBox(ComboBox comboBox, int num) {
         ObservableList<String> choices = FXCollections.observableArrayList();
