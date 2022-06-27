@@ -68,7 +68,7 @@ public class MoveMotherNatureController extends InitialStage implements Controll
             } catch (ProfessorNotFoundException e) {
                 Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);
             } catch (RemoteException e) {
-                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                Controller.showErrorDialogBox(StringNames.REMOTE);
             } catch (IncorrectArgumentException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
             } catch (UserNotInRoomException e) {
@@ -79,6 +79,8 @@ public class MoveMotherNatureController extends InitialStage implements Controll
                 Controller.showErrorDialogBox(StringNames.FULL_DINING);
             } catch (CardPlayedInTurnException e) {
                 Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
+            } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+                Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
             }
         });
 
