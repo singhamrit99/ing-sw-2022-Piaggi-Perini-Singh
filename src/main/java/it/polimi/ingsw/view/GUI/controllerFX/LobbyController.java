@@ -120,13 +120,13 @@ public class LobbyController extends InitialStage implements Controller {
                 } catch (RemoteException e) {
                     Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
                 } catch (RoomNotExistsException e) {
-                    Controller.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
+                    Controller.showErrorDialogBox(StringNames.ROOM_NOT_EXISTS);
                 } catch (UserNotRegisteredException e) {
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                 } catch (RoomFullException | RoomInGameException e) {
                     Controller.showErrorDialogBox(e.getMessage());
                 } catch (UserInRoomException e) {
-                    Controller.showErrorDialogBox(StringNames.USER_ALREADY_IN_ROOM);
+                    Controller.showErrorDialogBox(StringNames.USER_IN_ROOM);
                 }
             });
 
