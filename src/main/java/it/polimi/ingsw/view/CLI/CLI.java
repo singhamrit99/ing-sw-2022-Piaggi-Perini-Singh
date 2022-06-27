@@ -317,11 +317,11 @@ public class CLI implements UI {
                 client.startGame();
                 client.setInGame(true);
             } catch (NotEnoughPlayersException e) {
-                System.out.println(StringNames.ALONE_IN_ROOM);
+                System.out.println(StringNames.NOT_ENOUGH_PLAYERS);
             } catch (UserNotInRoomException e) {
                 System.out.println(StringNames.NOT_IN_ROOM);
             } catch (NotLeaderRoomException e) {
-                System.out.println(StringNames.NO_LEADER);
+                System.out.println(StringNames.NOT_LEADER);
             } catch (RoomNotExistsException | UserNotRegisteredException e) {
                 throw new RuntimeException(e);
             } catch (RemoteException e) {
@@ -1117,7 +1117,7 @@ public class CLI implements UI {
             } catch (RemoteException e) {
                 e.printStackTrace();
             } catch (RoomNotExistsException e) {
-                System.out.println(StringNames.NO_SUCH_ROOM);
+                System.out.println(StringNames.ROOM_NOT_EXISTS);
             }
             System.out.println("These are the students in your entrance: \n");
             printEntrance(myBoard);
