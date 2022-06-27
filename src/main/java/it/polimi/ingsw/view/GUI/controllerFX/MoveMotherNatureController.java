@@ -44,7 +44,7 @@ public class MoveMotherNatureController extends InitialStage implements Controll
             slider.setShowTickMarks(true);
             slider.setShowTickLabels(true);
         } catch (LocalModelNotLoadedException e) {
-            Controller.showErrorDialogBox(StringNames.ERROR_LOCALMODEL);
+            Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
         }
 
         confirmButton.setOnAction((event) -> {
@@ -76,7 +76,7 @@ public class MoveMotherNatureController extends InitialStage implements Controll
             } catch (UserNotRegisteredException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             } catch (FullDiningException e) {
-                Controller.showErrorDialogBox(StringNames.DINING_WILL_FULL);
+                Controller.showErrorDialogBox(StringNames.FULL_DINING);
             } catch (CardPlayedInTurnException e) {
                 Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
             }
