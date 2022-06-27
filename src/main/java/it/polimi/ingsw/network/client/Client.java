@@ -109,9 +109,7 @@ public class Client implements Runnable {
         try {
             playersList = server.getPlayers(clientRoom); //ui purposes
             ui.roomJoin(playersList);
-        } catch (RoomNotExistsException e) {
-            e.printStackTrace();
-        }
+        } catch (RoomNotExistsException ignoredBecauseJustCreated) {}
     }
 
     /**
@@ -252,12 +250,8 @@ public class Client implements Runnable {
     /**
      * Method used to show the list of available rooms
      */
-    public void roomListShow() {
-        try {
-            roomList = server.getRoomsList();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+    public void roomListShow() throws RemoteException {
+        roomList = server.getRoomsList();
         ui.roomsAvailable(roomList);
     }
 
@@ -298,11 +292,19 @@ public class Client implements Runnable {
                     }
                 }
                 Thread.sleep(50);
-            } catch (RemoteException | LocalModelNotLoadedException | InterruptedException | UserNotInRoomException |
-                    RoomNotExistsException e) {
-                e.printStackTrace();
+            } catch (RemoteException c){
+                System.out.println(StringNames.CONNECTION_ERROR);
+                userRegistered = false;
+            } catch (LocalModelNotLoadedException l){
+                System.out.println(StringNames.LOCAL_MODEL_ERROR);
+            } catch (InterruptedException i){
+                System.out.println(StringNames.INTERRUPTED);
+            } catch (UserNotInRoomException u){
+                System.out.println(StringNames.USER_NOT_IN_ROOM);
+            }catch (RoomNotExistsException e) {
+                System.out.println(StringNames.ROOM_NOT_EXISTS);
             } catch (UserNotRegisteredException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.USER_NOT_REGISTERED);
                 userRegistered = false;
             }
         }
@@ -316,14 +318,16 @@ public class Client implements Runnable {
             try {
                 server.ping(nickname);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.CONNECTION_ERROR);
+                userRegistered = false;
             } catch (UserNotRegisteredException e) {
+                System.out.println(StringNames.USER_NOT_REGISTERED);
                 userRegistered = false;
             }
             try {
                 Thread.sleep(250);
             } catch (InterruptedException e) {
-                e.printStackTrace(); //todo
+                System.out.println(StringNames.INTERRUPTED);
             }
         }
     }
@@ -360,7 +364,8 @@ public class Client implements Runnable {
                         view = StringNames.INGAME;
                         ui.startGame();
                     } catch (RemoteException e) {
-                        e.printStackTrace();
+                        System.out.println(StringNames.CONNECTION_ERROR);
+                        userRegistered=false;
                     }
                     break;
                 case "current-player":
@@ -371,21 +376,21 @@ public class Client implements Runnable {
                         try {
                             localModel.updateModel(evt);
                         } catch (BadFormattedLocalModelException e) {
-                            e.printStackTrace();
+                            System.out.println(StringNames.LOCAL_MODEL_ERROR);
                         }
                     } else {
-                        throw new LocalModelNotLoadedException();
+                        System.out.println(StringNames.LOCAL_MODEL_ERROR);
                     }
                     break;
                 case "game-finished":
                     try {
                         leaveRoom();
                     } catch (RemoteException e) {
-                        throw new RuntimeException(e);
+                        System.out.println(StringNames.CONNECTION_ERROR);
                     } catch (UserNotInRoomException e) {
-                        throw new RuntimeException(e);
+                        System.out.println(StringNames.USER_NOT_IN_ROOM);
                     } catch (UserNotRegisteredException e) {
-                        throw new RuntimeException(e);
+                        System.out.println(StringNames.USER_NOT_REGISTERED);
                     }
                     ui.gameOver((String) evt.getOldValue(), (String) evt.getNewValue());
                     break;
@@ -394,10 +399,10 @@ public class Client implements Runnable {
                         try {
                             localModel.updateModel(evt);
                         } catch (BadFormattedLocalModelException e) {
-                            e.printStackTrace();
+                            System.out.println(StringNames.LOCAL_MODEL_ERROR);
                         }
                     } else {
-                        throw new LocalModelNotLoadedException();
+                        System.out.println(StringNames.LOCAL_MODEL_ERROR);
                     }
                     break;
             }

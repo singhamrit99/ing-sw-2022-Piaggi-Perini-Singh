@@ -106,7 +106,7 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
             } catch (UserNotRegisteredException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             } catch (UserNotInRoomException e) {
-                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
             } catch (FullDiningException e) {
                 Controller.showErrorDialogBox(StringNames.FULL_DINING);
             } catch (CardPlayedInTurnException e) {

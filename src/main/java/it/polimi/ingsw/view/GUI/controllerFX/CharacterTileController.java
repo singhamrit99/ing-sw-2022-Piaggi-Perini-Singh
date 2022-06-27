@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
-import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.network.server.commands.PlayCharacterCardD;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.network.server.stripped.StrippedIsland;
@@ -82,7 +81,7 @@ public class CharacterTileController extends InitialStage implements Controller 
             } catch (IncorrectArgumentException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
             } catch (UserNotInRoomException e) {
-                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
             } catch (UserNotRegisteredException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             } catch (FullDiningException e) {

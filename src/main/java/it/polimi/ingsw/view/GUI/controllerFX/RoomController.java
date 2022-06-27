@@ -85,7 +85,7 @@ public class RoomController extends InitialStage implements Controller {
             } catch (RemoteException e) {
                 Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
             } catch (UserNotInRoomException e) {
-                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
             } catch (UserNotRegisteredException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             }
@@ -121,9 +121,9 @@ public class RoomController extends InitialStage implements Controller {
                     } catch (NotLeaderRoomException e) {
                         Controller.showErrorDialogBox(StringNames.NOT_LEADER);
                     } catch (UserNotInRoomException e) {
-                        Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                        Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
                     } catch (RoomNotExistsException e) {
-                        Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                        Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
                     } catch (UserNotRegisteredException e) {
                         Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                     } catch (NotEnoughPlayersException e) {
@@ -140,7 +140,7 @@ public class RoomController extends InitialStage implements Controller {
                     } catch (NotLeaderRoomException e) {
                         Controller.showErrorDialogBox(StringNames.NOT_LEADER);
                     } catch (UserNotInRoomException e) {
-                        Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                        Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
                     } catch (UserNotRegisteredException e) {
                         Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                     }
@@ -159,7 +159,7 @@ public class RoomController extends InitialStage implements Controller {
         } catch (RoomNotExistsException e) {
             Controller.showErrorDialogBox(StringNames.ROOM_NOT_EXISTS);
         } catch (UserNotInRoomException e) {
-            Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+            Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
         }
 
         for (int i = 0; i < players.size(); i++) {

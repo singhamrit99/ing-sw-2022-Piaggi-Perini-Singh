@@ -319,7 +319,7 @@ public class CLI implements UI {
             } catch (NotEnoughPlayersException e) {
                 System.out.println(StringNames.NOT_ENOUGH_PLAYERS);
             } catch (UserNotInRoomException e) {
-                System.out.println(StringNames.NOT_IN_ROOM);
+                System.out.println(StringNames.USER_NOT_IN_ROOM);
             } catch (NotLeaderRoomException e) {
                 System.out.println(StringNames.NOT_LEADER);
             } catch (RoomNotExistsException | UserNotRegisteredException e) {
@@ -628,7 +628,7 @@ public class CLI implements UI {
             else
                 System.out.println("Expert mode disabled|\n");
         } catch (UserNotInRoomException e) {
-            System.out.println(StringNames.NOT_IN_ROOM);
+            System.out.println(StringNames.USER_NOT_IN_ROOM);
         } catch (NotLeaderRoomException e) {
             System.out.println("You're not this lobby's leader, you can't do that!\n");
         } catch (UserNotRegisteredException e) {

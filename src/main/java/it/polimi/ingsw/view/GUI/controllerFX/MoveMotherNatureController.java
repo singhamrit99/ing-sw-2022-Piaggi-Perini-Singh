@@ -72,7 +72,7 @@ public class MoveMotherNatureController extends InitialStage implements Controll
             } catch (IncorrectArgumentException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
             } catch (UserNotInRoomException e) {
-                Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
+                Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
             } catch (UserNotRegisteredException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             } catch (FullDiningException e) {

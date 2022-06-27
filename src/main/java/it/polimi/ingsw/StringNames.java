@@ -60,12 +60,14 @@ public interface StringNames {
 
     String USER_IN_ROOM = "You are already in the room";
 
-    String NOT_IN_ROOM = "You are not in the room";
+    String USER_NOT_IN_ROOM = "You are not in the room";
 
     String USER_NOT_REGISTERED = "User is not registered in the server";
 
     String CONNECTION_ERROR = "There is an issue with the connection";
 
     String ERROR_IO = "Error while loading image assets";
+
+    String INTERRUPTED = "Client error while waiting updates";
 
 }
