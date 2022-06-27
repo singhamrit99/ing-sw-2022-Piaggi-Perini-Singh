@@ -45,6 +45,7 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
         switch (action) {
             case CALCULATE_INFLUENCE:
                 game.resolveMotherNature(choiceIndex);
+                setStatus(2);
                 break;
             case NO_ENTRY_TILE:
                 if (!game.getIsland(choiceIndex).hasNoEntryTile()) {
@@ -52,10 +53,10 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
                     noTileNumber--;
                     setStatus(2);
                 }
-                setStatus(0);
                 break;
             case RETURN_STUDENT:
                 game.returnStudentsEffect(choiceIndex);
+                setStatus(2);
                 break;
             default:
                 break;
