@@ -149,7 +149,6 @@ public class CLI implements UI {
             //Main game loop
             //Initializing local professors board
             while (client.getLocalModel() == null) {
-                System.out.println("stuck here");
             }
             for (StrippedBoard s : client.getLocalModel().getBoards()) {
                 professorsTables.put(s.getOwner(), s.getProfessorsTable());
@@ -185,19 +184,17 @@ public class CLI implements UI {
 
                 System.out.println("Waiting for everyone to play an assistant card");
                 int i = 0;
-                while (numOfPlayers > 1) {
+                while (numOfPlayers > 1&&!client.isInGame()) {
                     if ((i < 50)) {
-                        System.out.print(".");
                         i++;
                     }
                 }
                 Thread.sleep(500);
-                System.out.println();
                 //Turn phase
                 try {
                     if (client.getExpertMode() && client.isInGame()) {
                         System.out.println();
-                        System.out.print("");
+                        System.out.print("\n");
                         while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
                             System.out.print("");
                             while (!client.isMyTurn() && client.isInGame()) {
@@ -222,7 +219,7 @@ public class CLI implements UI {
 
                     } else if (client.isInGame()) {
                         System.out.println();
-                        System.out.print("");
+                        System.out.print("\n");
                         while (!client.getLocalModel().getState().equals(State.ACTIONPHASE_3) && !endTurn) {
                             System.out.print("");
                             while (!client.isMyTurn() && client.isInGame()) {
@@ -336,8 +333,10 @@ public class CLI implements UI {
      */
     @Override
     public void currentPlayer(String s) {
-        if (!s.equals(client.getNickname()))
+        if (!s.equals(client.getNickname())) {
             System.out.println("It's now " + s + "'s turn!");
+            client.setMyTurn(false);
+        }
         else {
             client.setMyTurn(true);
             System.out.println("It's your turn! Press any key to continue.");
