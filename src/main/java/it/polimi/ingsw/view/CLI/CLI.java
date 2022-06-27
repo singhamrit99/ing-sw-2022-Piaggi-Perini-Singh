@@ -402,8 +402,7 @@ public class CLI implements UI {
     public void islandMerged(PropertyChangeEvent e) {
         StrippedIsland oldIsland, newIsland;
         oldIsland = (StrippedIsland) e.getOldValue();
-        newIsland = (StrippedIsland) e.getNewValue();
-        System.out.println("Islands " + oldIsland.getName() + " and " + newIsland.getName() + " merged!\n");
+        System.out.println("Island " + oldIsland.getName()+" merged!\n");
     }
 
     /**

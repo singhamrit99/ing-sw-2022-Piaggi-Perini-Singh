@@ -904,6 +904,7 @@ public class Game {
                 gameListener.propertyChange(evtConquest);
 
                 moveTowersFromTeam(newTeam, -1);
+
             } else if (newTeamOwner != island.getTowersColor()) { //it means that there is a switch from team
                 int switchedTowers = island.getNumOfTowers();
                 moveTowersFromTeam(newTeam, -switchedTowers); //removing towers from new team player
@@ -1007,12 +1008,14 @@ public class Game {
                 listChanged = true;
                 StrippedIsland mergedTile = new StrippedIsland(currentTile); //notify currentTile
                 StrippedIsland deletedTile = new StrippedIsland(prevTile); //notify tile to deleted
-                //notifications Island merged
+                //notifications
                 PropertyChangeEvent islandMergeEvent =
                         new PropertyChangeEvent(this, "island", mergedTile, mergedTile);
                 gameListener.propertyChange(islandMergeEvent);
+
+                //notify Island merged (island that will be hidden)
                 PropertyChangeEvent islandDeletedEvent =
-                        new PropertyChangeEvent(this, "island-merged", deletedTile, mergedTile);
+                        new PropertyChangeEvent(this, "island-merged", deletedTile, null);
                 gameListener.propertyChange(islandDeletedEvent);
             }
         }

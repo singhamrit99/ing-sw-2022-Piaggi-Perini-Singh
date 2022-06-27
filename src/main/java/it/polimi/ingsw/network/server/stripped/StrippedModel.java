@@ -203,25 +203,27 @@ public class StrippedModel implements Serializable {
      * @param evt change-island event(such as students or towers being placed or conquests happening)
      */
     private void changeIsland(PropertyChangeEvent evt) throws BadFormattedLocalModelException {
-        StrippedIsland changedIsland = (StrippedIsland) evt.getOldValue();
-        Optional<StrippedIsland> optionalIslandFound = islands.stream().filter(x -> x.getName().equals(changedIsland.getName())).findFirst();
+        StrippedIsland islandToFound = (StrippedIsland) evt.getOldValue();
+        Optional<StrippedIsland> optionalIslandFound = islands.stream().filter(x -> x.getName().equals(islandToFound.getName())).findFirst();
+        String eventName = evt.getPropertyName();
         if (optionalIslandFound.isPresent()) {
             StrippedIsland islandToChange = optionalIslandFound.get();
             if (evt.getNewValue() != null) {
-                if (evt.getPropertyName().equals("island") ||
-                        evt.getPropertyName().equals("island-conquest")) {
+                if (eventName.equals("island") || eventName.equals("island-conquest")) {
                     StrippedIsland newProperties = (StrippedIsland) evt.getNewValue();
                     islandToChange.setNumberOfTowers(newProperties.getNumOfTowers());
                     islandToChange.setTowersColor(newProperties.getTowersColor());
                     islandToChange.setStudents(newProperties.getStudents());
                     islandToChange.setHasMotherNature(newProperties.hasMotherNature());
                     islandToChange.setHasNoEnterTile(newProperties.hasNoEnterTile());
-                    if (evt.getPropertyName().equals("island")) ui.islandChange(evt);
+                    if (eventName.equals("island")) ui.islandChange(evt);
                     else ui.islandConquest(evt);
-                } else if (evt.getPropertyName().equals("island-merged")) {
+                }
+            }else {
+                if(eventName.equals("island-merged")){
                     islandToChange.setDestroyed();
                     ui.islandMerged(evt);
-                } else {
+                }else{
                     throw new BadFormattedLocalModelException();
                 }
             }
