@@ -110,7 +110,7 @@ public class GUILauncher extends Application implements Initializable {
             try {
                 client.registerClient(nickname);
             } catch (NotBoundException | RemoteException e) {
-                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                Controller.showErrorDialogBox(StringNames.REMOTE);
             } catch (UserAlreadyExistsException e) {
                 Controller.showErrorDialogBox(StringNames.USER_ALREADY_EXISTS);
             } catch (NameFieldException e) {
