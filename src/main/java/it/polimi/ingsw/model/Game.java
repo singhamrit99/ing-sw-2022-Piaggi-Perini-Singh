@@ -143,7 +143,6 @@ public class Game {
     public void increaseCharacterPrice(int index) throws NegativeValueException, IncorrectArgumentException {
         CharacterCard updatedCard = characterCards.get(index);
         int coinsRemoved = currentPlayer.getPlayedCharacterCard().getPrice();
-        System.out.println("Rimuovi " + coinsRemoved);
         currentPlayer.removeCoins(coinsRemoved);
         int coins = currentPlayer.getCoins();
         //notify coins changed
