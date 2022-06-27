@@ -19,7 +19,7 @@ public class PlayAssistantCard implements Command, Serializable {
         return playerCaller;
     }
     @Override
-    public void execute(Controller controller) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, NegativeValueException {
+    public void execute(Controller controller) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, NegativeValueException, AssistantCardAlreadyPlayed {
         controller.callPlayAssistantCard(playerCaller, assistantCardName);
     }
 }
