@@ -1072,9 +1072,9 @@ public class CLI implements UI {
                 client.performGameAction(moveMotherNatureOrder);
 
             } catch (IncorrectStateException e) {
-                System.out.println("You can't do that yet! Current state:" + e.getMessage());
+                System.out.println(StringNames.INCORRECT_STATE);
             } catch (IncorrectArgumentException e) {
-                System.out.println("That's not right, try again!\n");
+                System.out.println(StringNames.INCORRECT_ARGUMENT);
                 moveMN();
             } catch (FullDiningException e) {
                 System.out.println(StringNames.FULL_DINING);
@@ -1096,7 +1096,7 @@ public class CLI implements UI {
             try {
                 myBoard = client.getLocalModel().getBoardOf(client.getNickname());
             } catch (LocalModelNotLoadedException e) {
-                System.out.println("Critical local model error");
+                System.out.println(StringNames.LOCAL_MODEL_ERROR);
             }
             // System.out.println("Board owner:"+ myBoard.getOwner());
 
@@ -1366,7 +1366,7 @@ public class CLI implements UI {
                 try {
                     client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getMoves() + 2);
                 } catch (LocalModelNotLoadedException e) {
-                    System.out.println("Critical local model error");
+                    System.out.println(StringNames.LOCAL_MODEL_ERROR);
                 }
                 playCharacterA(i);
                 break;
@@ -1521,7 +1521,7 @@ public class CLI implements UI {
         try {
             myBoard = client.getLocalModel().getBoardOf(client.getNickname());
         } catch (LocalModelNotLoadedException e) {
-            System.out.println("Critical error in local model");
+            System.out.println(StringNames.LOCAL_MODEL_ERROR);
         }
         if (card.getDescription().equals("Swap 3 of the students on this card with 3 from your Entrance!")) {
             System.out.println(card.getDescription());
@@ -1745,7 +1745,7 @@ public class CLI implements UI {
             } catch (IncorrectPlayerException e) {
                 System.out.println(StringNames.INCORRECT_PLAYER);
             } catch (RemoteException e) {
-                System.out.println("Critical network error.");
+                System.out.println(StringNames.CONNECTION_ERROR);
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
             } catch (CardPlayedInTurnException e) {
@@ -2371,7 +2371,7 @@ public class CLI implements UI {
         try {
             System.out.println("You currently have " + client.getLocalModel().getBoardOf(client.getNickname()).getCoins() + " coins!");
         } catch (LocalModelNotLoadedException e) {
-            System.out.println("Critical local model error");
+            System.out.println(StringNames.LOCAL_MODEL_ERROR);
         }
     }
 
@@ -2383,7 +2383,7 @@ public class CLI implements UI {
         try {
             myDeck = client.getLocalModel().getBoardOf(client.getNickname()).getDeck();
         } catch (LocalModelNotLoadedException e) {
-            System.out.println("Critical error with local model.");
+            System.out.println(StringNames.LOCAL_MODEL_ERROR);
         }
         int i = 0;
         for (AssistantCard a : myDeck.getDeck()) {
