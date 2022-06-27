@@ -118,7 +118,7 @@ public class LobbyController extends InitialStage implements Controller {
                     opened.set(false);
                     GUI.client.requestRoomJoin(roomName.getText());
                 } catch (RemoteException e) {
-                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                    Controller.showErrorDialogBox(StringNames.REMOTE);
                 } catch (RoomNotExistsException e) {
                     Controller.showErrorDialogBox(StringNames.ROOM_NOT_EXISTS);
                 } catch (UserNotRegisteredException e) {
