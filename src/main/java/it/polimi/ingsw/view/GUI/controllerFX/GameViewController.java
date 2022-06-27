@@ -480,7 +480,7 @@ public class GameViewController extends InitialStage implements Controller {
                 Islands.addRow(3, new Text("")); //empty cell
             } else {
                 if (islandsBackEnd.get(indexIsland).getName().equals("EMPTY")) {
-                    Islands.addRow(0, new Text("")); //empty cell alignment
+                    Islands.addRow(3, new Text("")); //empty cell alignment
                 } else {
                     StackPane island = initIsland(i % 3);
                     HBox islandHbox = new HBox();
