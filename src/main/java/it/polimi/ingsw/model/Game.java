@@ -228,14 +228,18 @@ public class Game {
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
-    public void activateCharacterCard(int index, int student, int island) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException {
-        if (buyCharacterCard(index) && expertMode) {
-            currentPlayer.getPlayedCharacterCard().setChoices(student, island);
-            currentPlayer.getPlayedCharacterCard().activate(this);
+    public void activateCharacterCard(int index, int student, int island) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException, CardPlayedInTurnException {
+        if (currentPlayer.getPlayedCharacterCard() != null) {
+            throw new CardPlayedInTurnException();
         } else {
-            throw new NotEnoughCoinsException();
+            if (buyCharacterCard(index) && expertMode) {
+                currentPlayer.getPlayedCharacterCard().setChoices(student, island);
+                currentPlayer.getPlayedCharacterCard().activate(this);
+            } else {
+                throw new NotEnoughCoinsException();
+            }
+            if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
         }
-        if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
     }
 
     /**
@@ -465,7 +469,10 @@ public class Game {
                 gameListener.propertyChange(phaseChange);
             } else {
                 state = State.ENDTURN;
-                currentPlayer.setPlayedCharacterCard(null);
+                if (currentPlayer.getPlayedCharacterCard() != null) {
+                    currentPlayer.setPlayedCharacterCard(null);
+                }
+
                 nextRound();
                 PropertyChangeEvent phaseChange =
                         new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
@@ -637,7 +644,6 @@ public class Game {
         int index = -1;
         if (state == State.ACTIONPHASE_3) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {
-
                 for (int i = 0; i < clouds.size(); i++) {
                     if (clouds.get(i).getName().equals(name)) {
                         index = i;
@@ -646,9 +652,7 @@ public class Game {
                 if (index == -1) {
                     throw new IncorrectArgumentException();
                 }
-
                 currentPlayer.addStudents(clouds.get(index).drawStudents());
-
 
                 //notify cloud change and entrance change
                 StrippedCloud changedCloud = new StrippedCloud(clouds.get(index));
@@ -785,7 +789,7 @@ public class Game {
                 } else if (player.getNumOfStudent(color) == max) {
                     CharacterCard cardPlayed = player.getPlayedCharacterCard();
                     if (cardPlayed != null) {
-                        if (cardPlayed.getAbility().getAction().equals(Actions.TAKE_PROFESSORS) && cardPlayed.getStatus() >= 1 && player.getNickname().equals(currentPlayer.getNickname())) {
+                        if (max != 0 && cardPlayed.getAbility().getAction().equals(Actions.TAKE_PROFESSORS) && cardPlayed.getStatus() >= 1 && player.getNickname().equals(currentPlayer.getNickname())) {
                             maxPlayer = currentPlayer;
                             currentPlayer.getPlayedCharacterCard().setStatus(2);
                         } else {
@@ -1225,7 +1229,6 @@ public class Game {
                 enumMap.put(Colors.getStudent(choiceIndex), 3);
             }
             player.getSchoolBoard().removeDiningStudents(enumMap);
-            player.getPlayedCharacterCard().setStatus(2);
         }
 
         checkAndPlaceProfessor(); //check and eventually modifies and notifies
