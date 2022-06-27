@@ -417,8 +417,11 @@ public class GameViewController extends InitialStage implements Controller {
                     HBox islandHbox = new HBox();
                     initTowersPane(island, islandHbox, islandsBackEnd.get(indexIsland));
                     GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(indexIsland));
-                    if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
-                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()) spawnNoEntryTile(island);
+                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()){
+                        spawnNoEntryTile(island);
+                        if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(island);
+                    }
+                    else if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
                     Islands.addRow(0, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -432,17 +435,20 @@ public class GameViewController extends InitialStage implements Controller {
             if (i != 0 && i != 5) {
                 Islands.addRow(1, new Text("")); //empty cell
             } else { //for island 11 and 4
-                int correctIndexCorrispondence = 11;  //in case of i =0;
-                if (i != 0) correctIndexCorrispondence = 4;
-                if (islandsBackEnd.get(correctIndexCorrispondence).getName().equals("EMPTY")) {
+                int realIndex = 11;  //in case of i =0;
+                if (i != 0) realIndex = 4;
+                if (islandsBackEnd.get(realIndex).getName().equals("EMPTY")) {
                     Islands.addRow(1, new Text("")); //empty cell alignment
                 } else {
                     StackPane island = initIsland(1);
                     HBox islandHbox = new HBox();
-                    initTowersPane(island, islandHbox, islandsBackEnd.get(correctIndexCorrispondence));
-                    GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(correctIndexCorrispondence));
-                    if (islandsBackEnd.get(correctIndexCorrispondence).hasMotherNature()) spawnMNIsland(studentsPane);
-                    if (islandsBackEnd.get(correctIndexCorrispondence).hasNoEnterTile()) spawnNoEntryTile(island);
+                    initTowersPane(island, islandHbox, islandsBackEnd.get(realIndex));
+                    GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(realIndex));
+                    if (islandsBackEnd.get(realIndex).hasNoEnterTile()){
+                        spawnNoEntryTile(island);
+                        if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(island);
+                    }
+                    else if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(studentsPane);
                     Islands.addRow(1, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -455,17 +461,20 @@ public class GameViewController extends InitialStage implements Controller {
             if (i != 0 && i != 5) {
                 Islands.addRow(2, new Text("")); //empty cell
             } else { //for island 10 and 5
-                int correctIndexCorrispondence = i;  //in case of i=5 -> 5;
-                if (i != 5) correctIndexCorrispondence = 10; //in case of i=0 -> 10
-                if (islandsBackEnd.get(correctIndexCorrispondence).getName().equals("EMPTY")) {
+                int realIndex = i;  //in case of i=5 -> 5;
+                if (i != 5) realIndex = 10; //in case of i=0 -> 10
+                if (islandsBackEnd.get(realIndex).getName().equals("EMPTY")) {
                     Islands.addRow(2, new Text("")); //empty cell alignment
                 } else {
                     StackPane island = initIsland(1);
                     HBox islandHbox = new HBox();
-                    initTowersPane(island, islandHbox, islandsBackEnd.get(correctIndexCorrispondence));
-                    GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(correctIndexCorrispondence));
-                    if (islandsBackEnd.get(correctIndexCorrispondence).hasMotherNature()) spawnMNIsland(studentsPane);
-                    if (islandsBackEnd.get(correctIndexCorrispondence).hasNoEnterTile()) spawnNoEntryTile(island);
+                    initTowersPane(island, islandHbox, islandsBackEnd.get(realIndex));
+                    GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(realIndex));
+                    if (islandsBackEnd.get(realIndex).hasNoEnterTile()){
+                        spawnNoEntryTile(island);
+                        if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(island);
+                    }
+                    else if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(studentsPane);
                     Islands.addRow(2, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -486,8 +495,11 @@ public class GameViewController extends InitialStage implements Controller {
                     HBox islandHbox = new HBox();
                     initTowersPane(island, islandHbox, islandsBackEnd.get(indexIsland));
                     GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(indexIsland));
-                    if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
-                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()) spawnNoEntryTile(island);
+                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()){
+                        spawnNoEntryTile(island);
+                        if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(island);
+                    }
+                    else if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
                     Islands.addRow(3, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -560,6 +572,16 @@ public class GameViewController extends InitialStage implements Controller {
         mn.maxWidth(40);
         mn.maxHeight(40);
         pane.addRow(0, mn);
+    }
+
+    private void spawnMNIsland(Pane pane) {
+        ImageView mn = new ImageView(motherNature);
+        mn.setEffect(dropShadowIslandStuff);
+        mn.setFitHeight(40);
+        mn.setFitWidth(40);
+        mn.maxWidth(40);
+        mn.maxHeight(40);
+        pane.getChildren().add(mn);
     }
 
     private void spawnNoEntryTile(StackPane pane) {
