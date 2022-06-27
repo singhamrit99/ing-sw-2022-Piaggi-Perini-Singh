@@ -336,7 +336,7 @@ class GameTest {
     }
 
     @Test
-    void testBuyCharacterCards1() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, AssistantCardAlreadyPlayed {
+    void testBuyCharacterCards1() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, AssistantCardAlreadyPlayed, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
