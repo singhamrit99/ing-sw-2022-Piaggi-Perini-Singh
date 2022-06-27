@@ -342,7 +342,9 @@ public class GameViewController extends InitialStage implements Controller {
         boolean expert = false;
         try {
             expert = GUI.client.getExpertMode();
-        } catch (RemoteException | RoomNotExistsException ignored) {
+        } catch (RoomNotExistsException ignored) {} //impossible in this case
+        catch (RemoteException e){
+            Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
         }
 
         if (expert) {
@@ -352,7 +354,7 @@ public class GameViewController extends InitialStage implements Controller {
 
                 coinsText.setText(Integer.toString(coins));
             } catch (LocalModelNotLoadedException e) {
-                //TODO
+                Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
             }
         } else {
             coinsIndicator.setVisible(false);

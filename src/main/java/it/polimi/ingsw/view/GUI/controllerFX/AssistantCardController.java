@@ -44,7 +44,7 @@ public class AssistantCardController extends InitialStage implements Controller 
         try {
             cards = GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getDeck().getAllCards();
         } catch (LocalModelNotLoadedException e) {
-            e.printStackTrace();
+            Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
         }
 
         for (AssistantCard card : cards) {
@@ -59,7 +59,7 @@ public class AssistantCardController extends InitialStage implements Controller 
         try {
             GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(firstIndex).getMove());
         } catch (LocalModelNotLoadedException e) {
-            e.printStackTrace();
+            Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
         }
 
         image.setImage(new Image(ResourcesPath.ASSISTANT_CARDS + finalCards.get(firstIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS));
@@ -71,7 +71,7 @@ public class AssistantCardController extends InitialStage implements Controller 
                 chosenCard.set(finalCards.get(selectedIndex).getImageName());
                 GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(selectedIndex).getMove());
             } catch (LocalModelNotLoadedException e) {
-                e.printStackTrace();
+                Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
             }
         });
 

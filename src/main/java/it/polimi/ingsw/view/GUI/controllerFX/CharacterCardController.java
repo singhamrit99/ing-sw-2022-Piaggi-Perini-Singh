@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
+import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
@@ -71,7 +72,7 @@ public class CharacterCardController extends InitialStage implements Controller 
                     try {
                         Controller.loadScene(loader);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Controller.showErrorDialogBox(StringNames.ERROR_IO);
                     }
                     Window window = ((Node) (event.getSource())).getScene().getWindow();
                     window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -86,7 +87,7 @@ public class CharacterCardController extends InitialStage implements Controller 
                     try {
                         Controller.loadScene(loader);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Controller.showErrorDialogBox(StringNames.ERROR_IO);
                     }
                     window = ((Node) (event.getSource())).getScene().getWindow();
                     window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -100,7 +101,7 @@ public class CharacterCardController extends InitialStage implements Controller 
                     try {
                         Controller.loadScene(loader);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Controller.showErrorDialogBox(StringNames.ERROR_IO);
                     }
                     window = ((Node) (event.getSource())).getScene().getWindow();
                     window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -114,7 +115,7 @@ public class CharacterCardController extends InitialStage implements Controller 
                     try {
                         Controller.loadScene(loader);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Controller.showErrorDialogBox(StringNames.ERROR_IO);
                     }
                     window = ((Node) (event.getSource())).getScene().getWindow();
                     window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -127,7 +128,7 @@ public class CharacterCardController extends InitialStage implements Controller 
                     try {
                         Controller.loadScene(loader);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Controller.showErrorDialogBox(StringNames.ERROR_IO);
                     }
                     window = ((Node) (event.getSource())).getScene().getWindow();
                     window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));

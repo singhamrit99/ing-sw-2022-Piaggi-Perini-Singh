@@ -129,8 +129,7 @@ public class Client implements Runnable {
             clientRoom = roomName;
             playersList = getNicknamesInRoom();
             ui.roomJoin(playersList);
-        } catch (UserNotInRoomException ignored) {
-        } //after joining ...
+        } catch (UserNotInRoomException ignored) {} //after joining ...
     }
 
     /**

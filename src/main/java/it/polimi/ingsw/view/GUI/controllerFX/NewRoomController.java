@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
+import com.sun.source.doctree.CommentTree;
 import it.polimi.ingsw.exceptions.NameFieldException;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.StringNames;
@@ -51,7 +52,11 @@ public class NewRoomController extends InitialStage implements Controller {
     private void initializeCancelButton() {
         cancelButton.setOnAction((event) -> {
             GUI.client.view = StringNames.LOBBY;
-            GUI.client.roomListShow();
+            try {
+                GUI.client.roomListShow();
+            } catch (RemoteException e) {
+                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+            }
         });
     }
 

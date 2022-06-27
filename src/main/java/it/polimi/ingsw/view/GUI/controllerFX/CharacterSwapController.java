@@ -100,7 +100,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
                     k++;
                 }
             } catch (LocalModelNotLoadedException e) {
-                e.printStackTrace();
+                Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
             }
         } else {
             totalFirst.setText("Entrance Total");
@@ -116,7 +116,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
                     i++;
                 }
             } catch (LocalModelNotLoadedException e) {
-                e.printStackTrace();
+                Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
             }
 
             try {
@@ -128,7 +128,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
                     k++;
                 }
             } catch (LocalModelNotLoadedException e) {
-                e.printStackTrace();
+                Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
             }
         }
 
