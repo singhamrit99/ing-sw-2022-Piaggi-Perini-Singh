@@ -82,8 +82,8 @@ public class CLI implements UI {
                 client.view = StringNames.LOBBY;
                 break;
             } catch (UserAlreadyExistsException e) {
-                System.out.println("That username is already in the game! Try another.\n");
-            } catch (RemoteException | NotBoundExceptione) {
+                System.out.println(StringNames.USER_ALREADY_EXISTS);
+            } catch (RemoteException | NotBoundException e) {
                 System.out.println(StringNames.CONNECTION_ERROR);
             } catch (NameFieldException e) {
                 System.out.println(StringNames.NAME_FIELD_NULL);
@@ -287,9 +287,7 @@ public class CLI implements UI {
     public void professorChanged() {
         ArrayList<StrippedBoard> tmp = new ArrayList<>(client.getLocalModel().getBoards());
         for (StrippedBoard s : tmp) {
-            if (professorsTables.get(s.getOwner()).equals(s.getProfessorsTable())) {
-                //No change
-            } else {
+            if (!professorsTables.get(s.getOwner()).equals(s.getProfessorsTable())) {
                 System.out.println(s.getOwner() + "'s professors changed from ");
                 System.out.println(professorsTables.get(s.getOwner()));
                 System.out.println(" to ");
@@ -591,12 +589,13 @@ public class CLI implements UI {
         try {
             response = client.getRooms();
         } catch (RemoteException e) {
-            System.out.println("Network error");
+            System.out.println(StringNames.CONNECTION_ERROR);
         }
-        if (response.isEmpty())
-            System.out.println("There are no rooms yet\n");
-        else
-            sendArrayString(response);
+
+        if (response!=null){
+            if(response.isEmpty()) System.out.println("There are no rooms yet\n");
+            else sendArrayString(response);
+        }
     }
 
     /**
@@ -613,7 +612,6 @@ public class CLI implements UI {
                 break;
             }
             case "n": {
-                result = false;
                 break;
             }
             default:
