@@ -138,7 +138,7 @@ public class GameViewController extends InitialStage implements Controller {
             } catch (UserNotRegisteredException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
             } catch (RemoteException e) {
-                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                Controller.showErrorDialogBox(StringNames.REMOTE);
             } catch (UserNotInRoomException e) {
                 Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
             }
@@ -235,7 +235,7 @@ public class GameViewController extends InitialStage implements Controller {
                 } catch (IncorrectPlayerException e) {
                     Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
                 } catch (RemoteException e) {
-                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                    Controller.showErrorDialogBox(StringNames.REMOTE);
                 } catch (UserNotInRoomException e) {
                     Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
                 } catch (IncorrectArgumentException e) {
@@ -246,6 +246,8 @@ public class GameViewController extends InitialStage implements Controller {
                     Controller.showErrorDialogBox(StringNames.FULL_DINING);
                 } catch (CardPlayedInTurnException e) {
                     Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
+                } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
                 }
             }
         });
@@ -263,7 +265,7 @@ public class GameViewController extends InitialStage implements Controller {
         try {
             expert = GUI.client.getExpertMode();
         } catch (RemoteException | RoomNotExistsException e) {
-            Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+            Controller.showErrorDialogBox(StringNames.REMOTE);
         }
 
         //default state is with students hidden
@@ -342,9 +344,10 @@ public class GameViewController extends InitialStage implements Controller {
         boolean expert = false;
         try {
             expert = GUI.client.getExpertMode();
-        } catch (RoomNotExistsException ignored) {} //impossible in this case
-        catch (RemoteException e){
-            Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+        } catch (RoomNotExistsException ignored) {
+        } //impossible in this case
+        catch (RemoteException e) {
+            Controller.showErrorDialogBox(StringNames.REMOTE);
         }
 
         if (expert) {
