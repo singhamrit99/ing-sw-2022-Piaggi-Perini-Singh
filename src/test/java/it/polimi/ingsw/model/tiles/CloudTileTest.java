@@ -44,18 +44,6 @@ class CloudTileTest {
     }
 
     @Test
-    void testSetStudentsException() {
-        EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
-        int i = -1;
-        for (Colors color : Colors.values()) {
-            students.put(color, i);
-        }
-        Cloud tile = new Cloud("TestCloud");
-        assertThrows(NegativeValueException.class, () -> tile.setStudents(students));
-    }
-
-
-    @Test
     public void testGetName() {
         Cloud testTile = new Cloud("NotTheTestName");
         assertEquals("NotTheTestName", testTile.getName());

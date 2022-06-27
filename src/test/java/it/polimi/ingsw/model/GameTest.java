@@ -364,7 +364,6 @@ class GameTest {
         CharacterCard card = characterCardDeck.get(index);
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
 
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0, 0, 0);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
@@ -376,7 +375,6 @@ class GameTest {
         game.getCurrentPlayer().addStudents(enumMap);
         game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove);
 
-        System.out.println("PROFESSORE " + game.getCurrentPlayer().getSchoolBoard().getProfessorsTable().get(0) + game.getCurrentPlayer().getNickname() + " ");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
@@ -394,7 +392,7 @@ class GameTest {
         assertEquals(0, game.getCurrentPlayer().getSchoolBoard().getProfessorsTable().size());
 
         game.activateCharacterCard(0);
-        System.out.println("PROFESSORE " + game.getCurrentPlayer().getSchoolBoard().getProfessorsTable().get(0) + game.getCurrentPlayer().getNickname() + " ");
+
     }
 
     @Test
@@ -430,9 +428,7 @@ class GameTest {
         CharacterCard card = characterCardDeck.get(index);
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
 
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0, 2);
-        System.out.println(game.getCurrentPlayer().getCoins());
     }
 
     @Test
@@ -455,7 +451,6 @@ class GameTest {
         CharacterCard card = characterCardDeck.get(index);
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
 
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getPlayedAssistantCard().getMove() + 1);
@@ -490,7 +485,6 @@ class GameTest {
         CharacterCard card = characterCardDeck.get(index);
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
 
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
@@ -524,8 +518,6 @@ class GameTest {
         index = 5;
         CharacterCard card = characterCardDeck.get(index);
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
-
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
@@ -571,10 +563,6 @@ class GameTest {
             }
         }
 
-        System.out.println("SWAP2");
-        for (Colors color : Colors.values()) {
-            System.out.println(color + " " + swap2.get(color));
-        }
 
         for (int i = 0, j = 0; i < 3; j++) {
             if (game.getCharacterCards().get(0).getStudents().get(Colors.getStudent(j)) > 0) {
@@ -583,12 +571,6 @@ class GameTest {
             }
         }
 
-        System.out.println("SWAP1");
-        for (Colors color : Colors.values()) {
-            System.out.println(color + " " + swap1.get(color));
-        }
-
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0, swap1, swap2);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
@@ -623,7 +605,6 @@ class GameTest {
         CharacterCard card = characterCardDeck.get(index);
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
 
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
@@ -657,8 +638,6 @@ class GameTest {
         index = 8;
         CharacterCard card = characterCardDeck.get(index);
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
-
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0, 0);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
@@ -708,25 +687,15 @@ class GameTest {
             }
         }
 
-        System.out.println("SWAP2");
-        for (Colors color : Colors.values()) {
-            System.out.println(color + " " + swap2.get(color));
-        }
 
         for (int i = 0, j = 0; i < 2; j++) {
             if (game.getCurrentPlayer().getSchoolBoard().getEntrance().get(Colors.getStudent(j)) > 0) {
                 swap1.put(Colors.getStudent(j), Math.min(game.getCurrentPlayer().getSchoolBoard().getEntrance().get(Colors.getStudent(j)), 2 - i));
                 i += Math.min(game.getCurrentPlayer().getSchoolBoard().getEntrance().get(Colors.getStudent(j)), 2 - i);
-                System.out.println("IIIIIIIIIIIIIIIIIIIIIIIIIII" + i);
+
             }
         }
 
-        System.out.println("SWAP1");
-        for (Colors color : Colors.values()) {
-            System.out.println(color + " " + swap1.get(color));
-        }
-
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0, swap1, swap2);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
@@ -761,11 +730,6 @@ class GameTest {
         CharacterCard card = characterCardDeck.get(index);
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
 
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
-        for (Colors color : Colors.values()) {
-            System.out.println("Color " + color + " " + game.getCurrentPlayer().getSchoolBoard().getDining().get(color));
-        }
-
         game.activateCharacterCard(0, 0);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
@@ -799,8 +763,6 @@ class GameTest {
         index = 11;
         CharacterCard card = characterCardDeck.get(index);
         game.setCharacterCards(0, factory.getCard(card.getImageName(), card.getPrice(), card.getDescription(), card.getType(), card.getAbility(), card.getRequirements()));
-
-        System.out.println("CARD PRICE: " + game.getCharacterCards().get(0).getPrice() + " coins: " + game.getCurrentPlayer().getCoins());
         game.activateCharacterCard(0, 0);
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
