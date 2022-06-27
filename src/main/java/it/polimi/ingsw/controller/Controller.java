@@ -149,7 +149,7 @@ public class Controller {
      * @throws ProfessorNotFoundException Thrown if the power activation results in a professor gain and an error occurs.
      * @throws NotEnoughCoinsException    Thrown if the Player doesn't have enough coins to buy this Character card.
      */
-    public void callPlayCharacterCard(int index, int student, int island) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException {
+    public void callPlayCharacterCard(int index, int student, int island) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
         game.activateCharacterCard(index, student, island);
     }
 
