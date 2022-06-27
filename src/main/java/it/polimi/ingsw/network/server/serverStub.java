@@ -10,15 +10,17 @@ import java.util.ArrayList;
 
 public interface serverStub extends Remote {
 
-    boolean isInGame(String roomName)throws RemoteException,RoomNotExistsException;
+    boolean isInGame(String roomName) throws RemoteException, RoomNotExistsException;
+
     void registerUser(String name) throws RemoteException, UserAlreadyExistsException, NameFieldException;
+
     void deregisterConnection(String username) throws RemoteException, UserNotRegisteredException;
 
     ArrayList<String> getRoomsList() throws RemoteException;
 
     void createRoom(String username, String roomName) throws RemoteException, RoomAlreadyExistsException, UserNotRegisteredException, NameFieldException;
 
-    void joinRoom(String username, String roomName) throws RemoteException,RoomInGameException, UserNotRegisteredException, RoomNotExistsException, RoomFullException, UserInRoomException;
+    void joinRoom(String username, String roomName) throws RemoteException, RoomInGameException, UserNotRegisteredException, RoomNotExistsException, RoomFullException, UserInRoomException;
 
     void leaveRoom(String username) throws RemoteException, UserNotInRoomException, UserNotRegisteredException;
 
@@ -29,13 +31,13 @@ public interface serverStub extends Remote {
     void setExpertMode(String username, boolean expertMode) throws RemoteException, UserNotInRoomException, NotLeaderRoomException, UserNotRegisteredException;
 
     void startGame(String username) throws RemoteException, NotLeaderRoomException,
-            UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException,NotEnoughPlayersException;
+            UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException, NotEnoughPlayersException;
 
     boolean inGame(String username) throws RemoteException, UserNotRegisteredException;
 
     void performGameAction(String username, Command gameAction) throws RemoteException, MotherNatureLostException,
             NegativeValueException, AssistantCardNotFoundException, IncorrectArgumentException, IncorrectPlayerException,
-            ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException, UserNotRegisteredException, UserNotInRoomException, FullDiningException, CardPlayedInTurnException;
+            ProfessorNotFoundException, NotEnoughCoinsException, IncorrectStateException, UserNotRegisteredException, UserNotInRoomException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed;
 
     ArrayList<PropertyChangeEvent> getUpdates(String username) throws RemoteException, UserNotRegisteredException, UserNotInRoomException;
 
