@@ -150,9 +150,9 @@ class ControllerTest {
         Room roomTest = new Room("testRoom", emptyClientListsTest);
         Game game = controller.initializeGame(roomTest, true, 4, nicknames);
         game.drawFromBag(game.getCurrentPlayer().getNickname());
-        String oldplayer = game.getCurrentPlayer().getNickname();
+        String oldPlayer = game.getCurrentPlayer().getNickname();
         controller.callPlayAssistantCard(game.getCurrentPlayer().getNickname(), "1");
-        assertNotEquals(oldplayer, game.getCurrentPlayer().getNickname());
+        assertNotEquals(oldPlayer, game.getCurrentPlayer().getNickname());
     }
 
     @Test
