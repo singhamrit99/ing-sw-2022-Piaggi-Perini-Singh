@@ -7,20 +7,8 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0"
-            prefWidth="450.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/"
-            stylesheets="@../css/Style.css">
-    <center>
-        <StackPane prefHeight="650.0" prefWidth="450.0" BorderPane.alignment="CENTER">
-            <children>
-                <ChoiceBox fx:id="choiceBox" prefWidth="150.0" StackPane.alignment="TOP_CENTER">
-                    <StackPane.margin>
-                        <Insets top="30.0"/>
-                    </StackPane.margin>
-                </ChoiceBox>
-                <ImageView fx:id="image" fitHeight="533.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true"/>
-            </children>
-        </StackPane>
-    </center>
+            prefWidth="450.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1">
     <bottom>
         <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
               minWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" spacing="20.0">
@@ -46,8 +34,7 @@
         <StackPane maxWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" BorderPane.alignment="CENTER">
             <children>
                 <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0"
-                      text="Select Character Card" textAlignment="JUSTIFY"
-                      StackPane.alignment="CENTER">
+                      text="Select Character Card" textAlignment="JUSTIFY" StackPane.alignment="CENTER">
                     <font>
                         <Font name="Rockwell Extra Bold" size="25.0"/>
                     </font>
@@ -55,4 +42,25 @@
             </children>
         </StackPane>
     </top>
+    <center>
+        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <top>
+                <Text fx:id="coins" text="COINS" BorderPane.alignment="TOP_CENTER">
+                    <font>
+                        <Font name="Rockwell Extra Bold" size="15.0"/>
+                    </font>
+                    <BorderPane.margin>
+                        <Insets top="20.0"/>
+                    </BorderPane.margin>
+                </Text>
+            </top>
+            <center>
+                <ChoiceBox fx:id="choiceBox" prefWidth="150.0" BorderPane.alignment="CENTER"/>
+            </center>
+            <bottom>
+                <ImageView fx:id="image" fitHeight="533.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true"
+                           BorderPane.alignment="BOTTOM_CENTER"/>
+            </bottom>
+        </BorderPane>
+    </center>
 </BorderPane>
