@@ -12,7 +12,7 @@ public class Controller {
     private Game game;
 
     /**
-     * Creates and initalizes the Game instance the Room will be playing in with its Players.
+     * Creates and initializes the Game instance the Room will be playing in with its Players.
      * As with every other remote method in the project it is called with RMI.
      *
      * @param room         The Room that called this command.
@@ -120,7 +120,7 @@ public class Controller {
      * @throws AssistantCardNotFoundException Thrown if the playedCardName string is invalid or if the card has been removed after being played.
      * @throws IncorrectStateException        Thrown if this method is called in any phase but Planning Phase.
      */
-    public void callPlayAssistantCard(String playerCaller, String playedCardName) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, NegativeValueException {
+    public void callPlayAssistantCard(String playerCaller, String playedCardName) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, NegativeValueException, AssistantCardAlreadyPlayed {
         game.playAssistantCard(playerCaller, playedCardName);
     }
 
