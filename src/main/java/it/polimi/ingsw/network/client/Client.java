@@ -5,10 +5,7 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.network.server.commands.Command;
 import it.polimi.ingsw.network.server.serverStub;
 import it.polimi.ingsw.network.server.stripped.StrippedModel;
-import it.polimi.ingsw.view.GUI.controllerFX.GameOverController;
-import it.polimi.ingsw.view.GUI.controllerFX.GameViewController;
-import it.polimi.ingsw.view.GUI.controllerFX.LobbyController;
-import it.polimi.ingsw.view.GUI.controllerFX.RoomController;
+import it.polimi.ingsw.view.GUI.controllerFX.*;
 import it.polimi.ingsw.view.UI;
 
 import java.beans.PropertyChangeEvent;
@@ -78,6 +75,8 @@ public class Client implements Runnable {
         new Thread(this::ping).start();
         new Thread(this).start();
     }
+
+
 
     /**
      * Used to deregister a client.
