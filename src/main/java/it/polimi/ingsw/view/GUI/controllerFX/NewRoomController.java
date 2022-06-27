@@ -22,13 +22,16 @@ public class NewRoomController extends InitialStage implements Controller {
     private TextField roomName;
     @FXML
     private Button cancelButton, createNewGameButton;
+
     /**
      * Method used to bind this scene to a GUI
+     *
      * @param gui the GUI to bind to
      */
     public NewRoomController(GUI gui) {
         super(gui);
     }
+
     /**
      * Initializes the New Room controller scene.
      */
@@ -54,7 +57,7 @@ public class NewRoomController extends InitialStage implements Controller {
             try {
                 GUI.client.roomListShow();
             } catch (RemoteException e) {
-                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                Controller.showErrorDialogBox(StringNames.REMOTE);
             }
         });
     }
@@ -64,18 +67,18 @@ public class NewRoomController extends InitialStage implements Controller {
      */
     private void initializeConfirmButton() {
         createNewGameButton.setOnAction((event) -> {
-                try {
-                    GUI.client.view = StringNames.ROOM;
-                    GUI.client.createRoom(roomName.getText());
-                } catch (RemoteException e) {
-                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
-                } catch (UserNotRegisteredException e) {
-                    Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
-                } catch (RoomAlreadyExistsException e) {
-                    Controller.showErrorDialogBox(StringNames.ROOM_ALREADY_EXISTS);
-                } catch (NameFieldException e) {
-                    Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
-                }
+            try {
+                GUI.client.view = StringNames.ROOM;
+                GUI.client.createRoom(roomName.getText());
+            } catch (RemoteException e) {
+                Controller.showErrorDialogBox(StringNames.REMOTE);
+            } catch (UserNotRegisteredException e) {
+                Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
+            } catch (RoomAlreadyExistsException e) {
+                Controller.showErrorDialogBox(StringNames.ROOM_ALREADY_EXISTS);
+            } catch (NameFieldException e) {
+                Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
+            }
         });
     }
 }
