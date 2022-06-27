@@ -1,6 +1,6 @@
 package it.polimi.ingsw.exceptions;
 
-public class AssistantCardAlreadyPlayed extends Throwable {
+public class AssistantCardAlreadyPlayed extends Exception {
     public AssistantCardAlreadyPlayed() {
         super("The given card name is incorrect");
     }
