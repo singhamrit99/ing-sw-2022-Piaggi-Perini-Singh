@@ -856,12 +856,13 @@ public class Game {
 
                         if (cardPlayed != null) {
                             if (cardPlayed.getAbility().getAction().equals(Actions.TOWER_INFLUENCE) && cardPlayed.getStatus() >= 1 && p.getNickname().equals(currentPlayer.getNickname())) {
-                                currentPlayer.getPlayedCharacterCard().setStatus(2);
                                 influenceScores.replace(teamColor, influenceScores.get(teamColor));
                                 currentPlayer.getPlayedCharacterCard().setStatus(2);
+                                increaseCharacterPrice(selectedCharacterIndex);
                             } else if (cardPlayed.getAbility().getAction().equals(Actions.ADD_POINTS) && cardPlayed.getStatus() >= 1 && p.getNickname().equals(currentPlayer.getNickname())) {
                                 currentPlayer.getPlayedCharacterCard().setStatus(2);
                                 influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers() + cardPlayed.getAbility().getValue());
+                                increaseCharacterPrice(selectedCharacterIndex);
                             } else {
                                 if (teamColor.equals(island.getTowersColor())) { //counting the towers if team owns the island
                                     influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers());
@@ -1221,7 +1222,6 @@ public class Game {
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      */
     public void returnStudentsEffect(int choiceIndex) throws NegativeValueException, ProfessorNotFoundException {
-        int oldCoins = currentPlayer.getCoins();
         EnumMap<Colors, Integer> enumMap = new EnumMap<>(Colors.class);
         for (Player player : players) {
             if (player.getSchoolBoard().getStudentsByColor(Colors.getStudent(choiceIndex)) < 3) {
@@ -1234,18 +1234,14 @@ public class Game {
 
         checkAndPlaceProfessor(); //check and eventually modifies and notifies
         //notify dining AND entrance AND COINS change
-        EnumMap<Colors, Integer> newDining = currentPlayer.getSchoolBoard().getDining();
-        PropertyChangeEvent event =
-                new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), currentPlayer.getSchoolBoard().getEntrance());
-        gameListener.propertyChange(event);
-        PropertyChangeEvent evt =
-                new PropertyChangeEvent(this, "dining", currentPlayer.getNickname(), newDining);
-        gameListener.propertyChange(evt); //TODO se non va metti qua increaseecc
-        int coins = currentPlayer.getCoins();
-        if (coins != oldCoins) {
-            PropertyChangeEvent coinsEvt =
-                    new PropertyChangeEvent(this, "coins", currentPlayer.getNickname(), coins);
-            gameListener.propertyChange(coinsEvt);
+        for (Player player : players) {
+            EnumMap<Colors, Integer> newDining = player.getSchoolBoard().getDining();
+            PropertyChangeEvent event =
+                    new PropertyChangeEvent(this, "entrance", player.getNickname(), player.getSchoolBoard().getEntrance());
+            gameListener.propertyChange(event);
+            PropertyChangeEvent evt =
+                    new PropertyChangeEvent(this, "dining", player.getNickname(), newDining);
+            gameListener.propertyChange(evt);
         }
     }
 
