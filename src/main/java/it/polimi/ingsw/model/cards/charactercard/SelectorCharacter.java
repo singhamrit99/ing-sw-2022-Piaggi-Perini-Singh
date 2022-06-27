@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.exceptions.NegativeValueException;
@@ -40,7 +41,7 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
      *                                    mismatch or other internal error.
      */
     @Override
-    public void activate(Game game) throws NegativeValueException, ProfessorNotFoundException {
+    public void activate(Game game) throws NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
         Actions action = this.getAbility().getAction();
         switch (action) {
             case CALCULATE_INFLUENCE:
