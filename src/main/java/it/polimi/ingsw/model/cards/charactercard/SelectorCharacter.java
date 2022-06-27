@@ -49,11 +49,7 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
                 setStatus(2);
                 break;
             case NO_ENTRY_TILE:
-                if (!game.getIsland(choiceIndex).hasNoEntryTile()) {
-                    game.getIsland(choiceIndex).setHasNoEntryTile(true);
-                    noTileNumber--;
-                    setStatus(2);
-                }
+                game.setNoEntryTile(choiceIndex);
                 break;
             case RETURN_STUDENT:
                 game.returnStudentsEffect(choiceIndex);
@@ -84,5 +80,9 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
 
     public void incrementNoTileNumber() {
         noTileNumber++;
+    }
+
+    public void decrementNoTileNumber() {
+        noTileNumber--;
     }
 }
