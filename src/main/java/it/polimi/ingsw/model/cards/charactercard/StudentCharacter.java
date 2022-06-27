@@ -132,7 +132,6 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                     setStatus(2);
                     game.notifyCharacterEvent(game.getCurrentPlayer().getPlayedCharacterCard());
                 }
-
                 break;
             case SWAP_ENTRANCE:
                 int count = 0;
@@ -182,7 +181,6 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                         new PropertyChangeEvent(this, "dining", game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getSchoolBoard().getDining());
                 game.getGameListener().propertyChange(event);
 
-                game.increaseCharacterPrice(game.getSelectedCharacterIndex());
                 break;
             case ADD_DINING:
                 EnumMap<Colors, Integer> studentsToAddDining = StudentManager.createEmptyStudentsEnum();
