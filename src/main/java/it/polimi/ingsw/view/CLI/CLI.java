@@ -149,6 +149,7 @@ public class CLI implements UI {
             //Main game loop
             //Initializing local professors board
             while (client.getLocalModel() == null) {
+                System.out.println("stuck here");
             }
             for (StrippedBoard s : client.getLocalModel().getBoards()) {
                 professorsTables.put(s.getOwner(), s.getProfessorsTable());
@@ -308,8 +309,8 @@ public class CLI implements UI {
         if (!client.isInGame()) {
             try {
                 client.view = StringNames.INGAME;
-                client.startGame();
                 client.setInGame(true);
+                client.startGame();
             } catch (NotEnoughPlayersException e) {
                 System.out.println(StringNames.NOT_ENOUGH_PLAYERS);
             } catch (UserNotInRoomException e) {
@@ -738,9 +739,11 @@ public class CLI implements UI {
                 System.out.println("Whoops! That's not right. Try again: \n");
         } while (!isValidInputYN);
         if (answer.equals("y")) {
-            client.setMyTurn(false);
+           /* client.setMyTurn(false);
             client.setInGame(false);
             client.view = StringNames.LOBBY;
+            */
+            clientRoom=null;
             client.leaveGame();
             Thread.sleep(500);
         } else {
