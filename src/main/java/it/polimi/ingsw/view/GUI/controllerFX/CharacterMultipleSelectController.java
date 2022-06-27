@@ -134,7 +134,7 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                 } catch (IncorrectPlayerException e) {
                     Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
                 } catch (RemoteException e) {
-                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                    Controller.showErrorDialogBox(StringNames.REMOTE);
                 } catch (IncorrectArgumentException e) {
                     Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
                 } catch (UserNotInRoomException e) {
@@ -145,6 +145,8 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                     Controller.showErrorDialogBox(StringNames.FULL_DINING);
                 } catch (CardPlayedInTurnException e) {
                     Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
+                } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
                 }
             } else {
                 PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), indexSelectedCharacter, index.get());
@@ -169,7 +171,7 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                 } catch (IncorrectArgumentException e) {
                     Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
                 } catch (RemoteException e) {
-                    Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                    Controller.showErrorDialogBox(StringNames.REMOTE);
                 } catch (UserNotInRoomException e) {
                     Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);
                 } catch (UserNotRegisteredException e) {
@@ -178,6 +180,8 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                     Controller.showErrorDialogBox(StringNames.FULL_DINING);
                 } catch (CardPlayedInTurnException e) {
                     Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
+                } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
                 }
             }
         });
