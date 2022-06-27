@@ -42,7 +42,7 @@ public interface ResourcesPath {
     String IMAGE_EXTENSION_ASS = ".png";
 
     //css
-    String TEST_CSS = "/css/MainMenuStyle.css";
+    String TEST_CSS = "/css/MainMenuStyle.css"; //todo used ?
 
     //Characters
     String CHARACTERS = "/img/characters/character";
