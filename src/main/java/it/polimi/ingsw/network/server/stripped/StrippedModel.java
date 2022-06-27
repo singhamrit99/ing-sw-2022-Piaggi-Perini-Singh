@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class StrippedModel implements Serializable {
-    //TODO TINO:  search all the BadFormattedLocalModelException and replace the argument with a string that tell better the problem?
     final private ArrayList<StrippedBoard> boards;
     final private ArrayList<StrippedCharacter> characters;
     final private ArrayList<StrippedCloud> clouds;

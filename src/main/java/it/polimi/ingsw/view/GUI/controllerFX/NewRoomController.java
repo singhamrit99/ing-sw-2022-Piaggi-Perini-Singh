@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.GUI.controllerFX;
 
-import com.sun.source.doctree.CommentTree;
 import it.polimi.ingsw.exceptions.NameFieldException;
 import it.polimi.ingsw.view.GUI.GUI;
 import it.polimi.ingsw.StringNames;
