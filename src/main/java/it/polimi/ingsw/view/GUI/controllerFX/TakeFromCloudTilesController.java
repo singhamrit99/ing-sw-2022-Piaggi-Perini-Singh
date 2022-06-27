@@ -26,13 +26,16 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
     private Button cancelButton, confirmButton;
     @FXML
     private Text totalYellow, totalBlue, totalGreen, totalRed, totalPink;
+
     /**
      * Method used to bind this scene to a GUI
+     *
      * @param gui the GUI to bind to
      */
     public TakeFromCloudTilesController(GUI gui) {
         super(gui);
     }
+
     /**
      * Initializes the Take Students from Clouds controller scene.
      */
@@ -100,7 +103,7 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
             } catch (IncorrectPlayerException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
             } catch (RemoteException e) {
-                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                Controller.showErrorDialogBox(StringNames.REMOTE);
             } catch (IncorrectArgumentException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
             } catch (UserNotRegisteredException e) {
@@ -111,6 +114,8 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
                 Controller.showErrorDialogBox(StringNames.FULL_DINING);
             } catch (CardPlayedInTurnException e) {
                 Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
+            } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+                Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
             }
         });
 
