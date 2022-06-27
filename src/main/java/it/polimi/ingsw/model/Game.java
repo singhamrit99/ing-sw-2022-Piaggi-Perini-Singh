@@ -995,8 +995,8 @@ public class Game {
         int islandToDestroy = -1;
 
         for (int i = 0; i < islands.size() && !listChanged && islands.size() > 1; i++) {
-            currentTile = islands.get((i + 1) % islands.size());
             prevTile = islands.get(i);
+            currentTile = islands.get((i + 1) % islands.size());
 
             if (prevTile.getNumOfTowers() != 0 && currentTile.getNumOfTowers() != 0
                     && (prevTile.getTowersColor().equals(currentTile.getTowersColor()))) {
@@ -1018,7 +1018,7 @@ public class Game {
         }
 
         if (listChanged) {
-            if (islandToDestroy > 0) {
+            if (islandToDestroy >= 0) {
                 islands.remove(islandToDestroy);
                 checkUnificationIslands();
             }
