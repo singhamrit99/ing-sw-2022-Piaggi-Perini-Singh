@@ -169,7 +169,7 @@ public class MoveStudentsController extends InitialStage implements Controller {
             } catch (IncorrectPlayerException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);
             } catch (RemoteException e) {
-                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                Controller.showErrorDialogBox(StringNames.REMOTE);
             } catch (IncorrectArgumentException e) {
                 Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
             } catch (UserNotInRoomException e) {
@@ -180,6 +180,8 @@ public class MoveStudentsController extends InitialStage implements Controller {
                 Controller.showErrorDialogBox(StringNames.FULL_DINING);
             } catch (CardPlayedInTurnException e) {
                 Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
+            } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+                Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
             }
         });
 
