@@ -26,7 +26,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallMoveMotherNature() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException, AssistantCardNotFoundException, MotherNatureLostException {
+    void testCallMoveMotherNature() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException, AssistantCardNotFoundException, MotherNatureLostException, AssistantCardAlreadyPlayed {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
@@ -64,7 +64,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallMoveStudent() throws IncorrectStateException, AssistantCardNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException, ProfessorNotFoundException {
+    void testCallMoveStudent() throws IncorrectStateException, AssistantCardNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException, ProfessorNotFoundException, AssistantCardAlreadyPlayed {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
@@ -100,7 +100,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallPickCloud() throws IncorrectStateException, AssistantCardNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException, MotherNatureLostException, ProfessorNotFoundException {
+    void testCallPickCloud() throws IncorrectStateException, AssistantCardNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NegativeValueException, MotherNatureLostException, ProfessorNotFoundException, AssistantCardAlreadyPlayed {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
@@ -139,7 +139,7 @@ class ControllerTest {
     }
 
     @Test
-    void testCallPlayAssistantCard() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException, AssistantCardNotFoundException, IncorrectStateException {
+    void testCallPlayAssistantCard() throws IncorrectArgumentException, IncorrectPlayerException, NegativeValueException, AssistantCardNotFoundException, IncorrectStateException, AssistantCardAlreadyPlayed {
         Controller controller = new Controller();
         ArrayList<String> nicknames = new ArrayList<>();
         nicknames.add("Michelangelo");
