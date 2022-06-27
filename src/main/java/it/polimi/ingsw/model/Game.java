@@ -410,7 +410,9 @@ public class Game {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {  //playerDrawnOut = player has drawn from bag
                 for (Player p : players) {
                     if (p.hasPlayedAssistantInThisTurn()) {
+                        System.out.println("INVVIIIIIII QUESTO33213?");
                         if (p.getPlayedAssistantCard().getImageName().equals(nameCard)) {
+                            System.out.println("INVVIIIIIII QUESTO?");
                             throw new AssistantCardAlreadyPlayed();
                         }
                     }
