@@ -151,7 +151,6 @@ public class Game {
         gameListener.propertyChange(coinsEvt);
         updatedCard.increasePrice();
         updatedCard.setStatus(0);
-        currentPlayer.setPlayedCharacterCard(null);
         notifyCharacterEvent(updatedCard);
     }
 
@@ -466,6 +465,7 @@ public class Game {
                 gameListener.propertyChange(phaseChange);
             } else {
                 state = State.ENDTURN;
+                currentPlayer.setPlayedCharacterCard(null);
                 nextRound();
                 PropertyChangeEvent phaseChange =
                         new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
@@ -1225,6 +1225,7 @@ public class Game {
                 enumMap.put(Colors.getStudent(choiceIndex), 3);
             }
             player.getSchoolBoard().removeDiningStudents(enumMap);
+            player.getPlayedCharacterCard().setStatus(2);
         }
 
         checkAndPlaceProfessor(); //check and eventually modifies and notifies
