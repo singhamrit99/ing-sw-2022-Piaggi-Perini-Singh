@@ -291,7 +291,7 @@ public class Client implements Runnable {
                 }
                 Thread.sleep(50);
             } catch (RemoteException c){
-                System.out.println(StringNames.CONNECTION_ERROR);
+                System.out.println(StringNames.REMOTE);
                 userRegistered = false;
             } catch (LocalModelNotLoadedException l){
                 System.out.println(StringNames.LOCAL_MODEL_ERROR);
@@ -316,7 +316,7 @@ public class Client implements Runnable {
             try {
                 server.ping(nickname);
             } catch (RemoteException e) {
-                System.out.println(StringNames.CONNECTION_ERROR);
+                System.out.println(StringNames.REMOTE);
                 userRegistered = false;
             } catch (UserNotRegisteredException e) {
                 System.out.println(StringNames.USER_NOT_REGISTERED);
@@ -362,7 +362,7 @@ public class Client implements Runnable {
                         view = StringNames.INGAME;
                         ui.startGame();
                     } catch (RemoteException e) {
-                        System.out.println(StringNames.CONNECTION_ERROR);
+                        System.out.println(StringNames.REMOTE);
                         userRegistered=false;
                     }
                     break;
@@ -384,7 +384,7 @@ public class Client implements Runnable {
                     try {
                         leaveRoom();
                     } catch (RemoteException e) {
-                        System.out.println(StringNames.CONNECTION_ERROR);
+                        System.out.println(StringNames.REMOTE);
                     } catch (UserNotInRoomException e) {
                         System.out.println(StringNames.USER_NOT_IN_ROOM);
                     } catch (UserNotRegisteredException e) {
@@ -425,7 +425,7 @@ public class Client implements Runnable {
      */
     public void performGameAction(Command command) throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException,
             IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException,
-            UserNotInRoomException, UserNotRegisteredException, FullDiningException, CardPlayedInTurnException {
+            UserNotInRoomException, UserNotRegisteredException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         server.performGameAction(nickname, command);
     }
 
