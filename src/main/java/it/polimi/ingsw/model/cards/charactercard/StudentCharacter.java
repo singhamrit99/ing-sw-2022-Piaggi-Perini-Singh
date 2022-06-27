@@ -129,6 +129,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                 if (hasEnoughStudents(studentsToAddIsland)) {
                     game.notifyIsland(game.getIsland(islandIndex), studentsToAddIsland);
                     removeStudents(studentsToAddIsland);
+                    addStudents(bag.drawStudents(1));
                     setStatus(2);
                     game.notifyCharacterEvent(game.getCurrentPlayer().getPlayedCharacterCard());
                 }
@@ -172,6 +173,7 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                 game.getCurrentPlayer().getSchoolBoard().moveStudents(students1);
                 game.getCurrentPlayer().getSchoolBoard().removeDiningStudents(students2);
                 game.getCurrentPlayer().getSchoolBoard().addStudents(students2);
+                setStatus(2);
 
                 event =
                         new PropertyChangeEvent(this, "entrance", game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getSchoolBoard().getEntrance());
@@ -180,7 +182,6 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                 event =
                         new PropertyChangeEvent(this, "dining", game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getSchoolBoard().getDining());
                 game.getGameListener().propertyChange(event);
-
                 break;
             case ADD_DINING:
                 EnumMap<Colors, Integer> studentsToAddDining = StudentManager.createEmptyStudentsEnum();
