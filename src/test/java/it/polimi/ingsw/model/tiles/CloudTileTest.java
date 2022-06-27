@@ -26,10 +26,8 @@ class CloudTileTest {
         }
     }
 
-    /*
-
     @Test
-    void testAddStudents() {
+    void testSetStudents() {
         Cloud tile = new Cloud("TestCloud");
         EnumMap<Colors, Integer> newStudents = new EnumMap<>(Colors.class);
         int i = 0;
@@ -46,7 +44,7 @@ class CloudTileTest {
     }
 
     @Test
-    void testAddStudentsException() {
+    void testSetStudentsException() {
         EnumMap<Colors, Integer> students = new EnumMap<>(Colors.class);
         int i = -1;
         for (Colors color : Colors.values()) {
@@ -56,10 +54,6 @@ class CloudTileTest {
         assertThrows(NegativeValueException.class, () -> tile.setStudents(students));
     }
 
-    */
-
-    //TODO
-    //tested unused method 'addstudents' and not 'setStudents'
 
     @Test
     public void testGetName() {

@@ -41,9 +41,6 @@ public interface ResourcesPath {
     String ASSISTANT_CARDS = "/img/assistants/";
     String IMAGE_EXTENSION_ASS = ".png";
 
-    //css
-    String TEST_CSS = "/css/MainMenuStyle.css"; //todo used ?
-
     //Characters
     String CHARACTERS = "/img/characters/character";
     String IMAGE_EXTENSION_CHAR = ".jpg";

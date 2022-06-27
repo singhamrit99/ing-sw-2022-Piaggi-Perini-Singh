@@ -41,11 +41,20 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
      */
     @Override
     public synchronized void registerUser(String name) throws RemoteException, UserAlreadyExistsException, NameFieldException {
+        controlName(name);
         ClientConnection c = new ClientConnection(name);
         if (!users.containsKey(name))
             users.put(name, c);
         else throw new UserAlreadyExistsException();
     }
+
+    //todo JavaDocs
+    private void controlName(String name) throws NameFieldException {
+        if (name == null || name.trim().isEmpty() || name.length()>14) { //todo maybe another exception
+            throw new NameFieldException();
+        }
+    }
+
 
     /**
      * Deregisters connection when too many pings are missed.
@@ -97,6 +106,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
      */
     @Override
     public synchronized void createRoom(String username, String roomName) throws RemoteException, RoomAlreadyExistsException, UserNotRegisteredException, NameFieldException {
+        controlName(roomName);
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         if (rooms.containsKey(roomName)) throw new RoomAlreadyExistsException();
         ArrayList<ClientConnection> members = new ArrayList<>();
