@@ -107,7 +107,7 @@ public class AssistantCardController extends InitialStage implements Controller 
                 Controller.showErrorDialogBox(StringNames.FULL_DINING);
             } catch (CardPlayedInTurnException e) {
                 Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
-            } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+            } catch (AssistantCardAlreadyPlayed e) {
                 Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
             }
         });
