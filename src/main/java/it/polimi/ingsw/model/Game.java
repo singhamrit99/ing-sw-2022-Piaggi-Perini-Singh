@@ -404,14 +404,14 @@ public class Game {
      * @throws IncorrectArgumentException     Thrown if any of the parameters used by the method are invalid.
      * @throws AssistantCardNotFoundException Thrown if the assistant card name provided doesn't correspond to any card.
      */
-    public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFoundException, NegativeValueException {
+    public void playAssistantCard(String nicknameCaller, String nameCard) throws IncorrectPlayerException, IncorrectStateException, IncorrectArgumentException, AssistantCardNotFoundException, NegativeValueException, AssistantCardAlreadyPlayed {
         if (!playerDrawnOut) throw new IncorrectStateException();
         if (state == State.PLANNINGPHASE) {
             if (nicknameCaller.equals(currentPlayer.getNickname())) {  //playerDrawnOut = player has drawn from bag
                 for (Player p : players) {
                     if (p.hasPlayedAssistantInThisTurn()) {
                         if (p.getPlayedAssistantCard().getImageName().equals(nameCard)) {
-                            throw new AssistantCardNotFoundException();
+                            throw new AssistantCardAlreadyPlayed();
                         }
                     }
                 }
