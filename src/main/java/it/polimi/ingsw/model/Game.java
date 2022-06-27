@@ -757,12 +757,13 @@ public class Game {
      * @param island The island to check.
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
-    public void resolveMotherNature(int island) throws NegativeValueException {
+    public void resolveMotherNature(int island) throws NegativeValueException, IncorrectArgumentException {
         if (islands.get(island).hasNoEntryTile()) {
             islands.get(island).setHasNoEntryTile(false);
             for (CharacterCard card : characterCards) {
                 if (card.getAbility().getAction().equals(Actions.NO_ENTRY_TILE)) {
                     card.incrementNoTileNumber();
+                    notifyCharacterEvent(card);
                 }
             }
         } else {
@@ -828,13 +829,12 @@ public class Game {
      *
      * @param island the island the tower needs to be placed on.
      */
-    private void checkAndPlaceTower(Island island) {
+    private void checkAndPlaceTower(Island island) throws IncorrectArgumentException, NegativeValueException {
         EnumMap<Colors, Integer> students = island.getStudents();
         HashMap<Towers, Integer> influenceScores = new HashMap<>();
         influenceScores.put(Towers.BLACK, 0);
         influenceScores.put(Towers.WHITE, 0);
         if (numOfPlayer % 2 == 1) influenceScores.put(Towers.GREY, 0);
-
 
         CharacterCard cardPlayed = currentPlayer.getPlayedCharacterCard();
         for (Colors studentColor : Colors.values()) {
@@ -842,6 +842,7 @@ public class Game {
                 if (cardPlayed.getAbility().getAction().equals(Actions.AVOID_COLOR_INFLUENCE) && cardPlayed.getStatus() >= 1) {
                     if (studentColor.getIndex() == cardPlayed.getAbility().getValue()) {
                         currentPlayer.getPlayedCharacterCard().setStatus(2);
+                        increaseCharacterPrice(selectedCharacterIndex);
                         continue;
                     }
                 }
@@ -1239,7 +1240,7 @@ public class Game {
         gameListener.propertyChange(event);
         PropertyChangeEvent evt =
                 new PropertyChangeEvent(this, "dining", currentPlayer.getNickname(), newDining);
-        gameListener.propertyChange(evt);
+        gameListener.propertyChange(evt); //TODO se non va metti qua increaseecc
         int coins = currentPlayer.getCoins();
         if (coins != oldCoins) {
             PropertyChangeEvent coinsEvt =
