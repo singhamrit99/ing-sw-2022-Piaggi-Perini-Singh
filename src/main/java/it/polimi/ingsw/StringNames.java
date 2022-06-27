@@ -19,28 +19,53 @@ public interface StringNames {
     String CREATE_NEW_ROOM = "CreateRoom";
 
     //used for alerts
-    String NICKNAME_ALREADY_EXISTS = "Nickname is already taken";
-    String CONNECTION_ERROR = "There is an issue with the connection";
-    String NAME_FIELD_NULL = "Name field is not filled or blank";
-    String NO_SUCH_ROOM = "No such room found";
-    String USER_NOT_REGISTERED = "User is not registered in the server";
-    String NO_LEADER = "You don't have permission to perform this action";
-    String NOT_IN_ROOM = "You are not in the room";
-    String ROOM_EXISTS = "Room name already taken";
-    String ERROR_LOCALMODEL = "Critical bug with local model";
-    String ALONE_IN_ROOM = "You are alone in this room. There must be at least 2 players to play Eryantis";
-    String NOT_ENOUGH_COINS = "You don't have enough coins";
-    String ASSISTANT_CARD_NOT_FOUND = "There is no such card";
-    String NEGATIVE_VALUE = "Negative value";
-    String INCORRECT_STATE = "You are not in the correct state in the game";
-    String MOTHER_NATURE_LOST = "Mother nature error";
-    String PROFESSOR_NOT_FOUND = "Professor not found";
-    String INCORRECT_PLAYER = "Incorrect player";
+
+    String ASSISTANT_CARD_NOT_FOUND = "Card not found";
+
+    String CARD_PLAYED_IN_TURN = "This card is already played by another player";
+
+
+    String FULL_DINING = "You are adding more than you can put";
     String INCORRECT_ARGUMENT = "Given parameters are not correct";
-    String USER_ALREADY_IN_ROOM = "User is already in a room";
-    String DINING_WILL_FULL = "You are adding more than you can put";
-    String NICKNAME_FIELD_NULL = "Invalid nickname";
-    String CARD_PLAYED_IN_TURN = "You have already played a character card in this turn";
+
+    String INCORRECT_PLAYER = "Incorrect player";
+
+    String INCORRECT_STATE = "You are not in the correct state in the game";
+
+    String LOCAL_MODEL_ERROR = "Critical bug with local model";
+
+    String MOTHER_NATURE_LOST = "Bug while placing Mother Nature";
+
+    String NAME_FIELD_NULL = "Name field is not filled or blank";
+
+    String NEGATIVE_VALUE = "Negative value";
+
+    String NOT_ENOUGH_COINS = "Not enough coins to play card";
+
+    String NOT_ENOUGH_PLAYERS = "You are alone in this room. There must be at least 2 players to play Eryantis";
+
+    String NOT_LEADER = "You don't have permission to perform this action";
+
+    String PROFESSOR_NOT_FOUND = "Professor not found";
+
+    String ROOM_ALREADY_EXISTS = "Room name already taken";
+
+    String ROOM_FULL = "The room is full 4/4";
+
+    String ROOM_IN_GAME = "This room is playing at the moment";
+
+    String ROOM_NOT_EXISTS = "There is no such room";
+
+    String USER_ALREADY_EXISTS = "Nickname is already chosen by someone else";
+
+    String USER_IN_ROOM = "You are already in the room";
+
+    String NOT_IN_ROOM = "You are not in the room";
+
+    String USER_NOT_REGISTERED = "User is not registered in the server";
+
+    String CONNECTION_ERROR = "There is an issue with the connection";
 
     String ERROR_IO = "Error while loading image assets";
+
 }
