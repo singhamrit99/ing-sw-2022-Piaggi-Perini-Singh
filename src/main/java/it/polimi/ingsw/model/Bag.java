@@ -21,6 +21,7 @@ public class Bag {
 
     /**
      * Getter method for bag instance
+     *
      * @return this bag instance.
      */
     public static Bag getInstance() {
@@ -29,6 +30,7 @@ public class Bag {
 
     /**
      * Add students to the bag, in the beginning of the game and following some Character Card calls.
+     *
      * @param studentsToAdd the students to add, in EnumMap form.
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
@@ -43,6 +45,7 @@ public class Bag {
 
     /**
      * Remove students from the bag following Character Card calls and Cloud refills.
+     *
      * @param studentsToRemove The students to remove, in EnumMap form.
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
@@ -57,6 +60,7 @@ public class Bag {
 
     /**
      * Method used to draw students from the bag, mainly for Cloud refills and some Character card calls.
+     *
      * @param numberOfStudents the number of students to draw from the bag, expressed as an integer.
      * @return an EnumMap of Colors, Integer with the randomly picked students.
      * @throws NegativeValueException
@@ -77,12 +81,12 @@ public class Bag {
             }
         }
         removeStudents(studentsDrawn);
-
         return studentsDrawn;
     }
 
     /**
      * Method used to check if the bag has enough students for a requested task.
+     *
      * @param numberOfStudents the number of students we're testing against.
      * @return true if we have enough students, false if we don't
      */
@@ -96,6 +100,7 @@ public class Bag {
 
     /**
      * Setter for students parameter
+     *
      * @param students the new value of students enumMap
      */
     public void setStudents(EnumMap<Colors, Integer> students) {
@@ -104,6 +109,7 @@ public class Bag {
 
     /**
      * Getter for students
+     *
      * @return students
      */
     public EnumMap<Colors, Integer> getStudents() {
