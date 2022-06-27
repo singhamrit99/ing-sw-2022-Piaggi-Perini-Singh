@@ -65,7 +65,7 @@ public class GameOverController extends InitialStage implements Controller {
             try {
                 GUI.client.refreshScreenLobby();
             } catch (RemoteException e) {
-                Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
+                Controller.showErrorDialogBox(StringNames.REMOTE);
             }
         });
     }
