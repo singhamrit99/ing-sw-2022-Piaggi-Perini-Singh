@@ -83,12 +83,10 @@ public class CLI implements UI {
                 break;
             } catch (UserAlreadyExistsException e) {
                 System.out.println("That username is already in the game! Try another.\n");
-            } catch (RemoteException e) {
-                System.out.println();
-            } catch (NotBoundException e) {
-                e.printStackTrace();
+            } catch (RemoteException | NotBoundExceptione) {
+                System.out.println(StringNames.CONNECTION_ERROR);
             } catch (NameFieldException e) {
-                System.out.println("Sorry, you really do need a name! Try again.");
+                System.out.println(StringNames.NAME_FIELD_NULL);
             }
         }
         while (true) {
@@ -271,11 +269,11 @@ public class CLI implements UI {
                 } catch (NotEnoughCoinsException e) {
                     System.out.println(StringNames.NOT_ENOUGH_COINS);
                 } catch (RoomNotExistsException e) {
-                    e.printStackTrace();
+                    System.out.println(StringNames.ROOM_NOT_EXISTS);
                 } catch (FullDiningException e) {
-                    e.printStackTrace();
+                    System.out.println(StringNames.FULL_DINING);
                 } catch (LocalModelNotLoadedException e) {
-                    System.out.println("Critical local model error");
+                    System.out.println(StringNames.LOCAL_MODEL_ERROR);
                 }
             }
 
@@ -540,11 +538,11 @@ public class CLI implements UI {
             } catch (RoomNotExistsException | UserNotInRoomException e) {
                 throw new RuntimeException(e);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.CONNECTION_ERROR);
             }
             sendArrayString(response);
         }
-        // System.out.println("You're not in a room, so there are no players to show\n");
+        // System.out.println("You're not in a room, so there are no players to show\n"); //TODO StringName.USER_NOT_..
     }
 
     /**
@@ -779,9 +777,9 @@ public class CLI implements UI {
         } catch (UserNotRegisteredException e) {
             System.out.println(StringNames.USER_NOT_REGISTERED);
         } catch (FullDiningException e) {
-            e.printStackTrace();
+            System.out.println(StringNames.FULL_DINING);
         } catch (CardPlayedInTurnException e) {
-            e.printStackTrace();
+            System.out.println(StringNames.CARD_PLAYED_IN_TURN);
         }
     }
 
@@ -831,7 +829,7 @@ public class CLI implements UI {
             System.out.println("Looks like someone has already played that card this turn! Try again.");
             playAssistantCard();
         } catch (FullDiningException e) {
-            e.printStackTrace();
+            System.out.println(StringNames.FULL_DINING);
         } catch (NegativeValueException e) {
             System.out.println(StringNames.NEGATIVE_VALUE);
         } catch (IncorrectStateException e) {
@@ -849,7 +847,7 @@ public class CLI implements UI {
         } catch (NotEnoughCoinsException e) {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
         } catch (CardPlayedInTurnException e) {
-            e.printStackTrace();
+            System.out.println(StringNames.CARD_PLAYED_IN_TURN);
         }
         client.setMyTurn(false);
     }
@@ -1035,9 +1033,9 @@ public class CLI implements UI {
         } catch (NotEnoughCoinsException e) {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
         } catch (FullDiningException e) {
-            e.printStackTrace();
+            System.out.println(StringNames.FULL_DINING);
         } catch (CardPlayedInTurnException e) {
-            e.printStackTrace();
+            System.out.println(StringNames.CARD_PLAYED_IN_TURN);
         }
         client.setMyTurn(false);
     }
@@ -1081,9 +1079,9 @@ public class CLI implements UI {
                 System.out.println("That's not right, try again!\n");
                 moveMN();
             } catch (FullDiningException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.FULL_DINING);
             } catch (CardPlayedInTurnException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.CARD_PLAYED_IN_TURN);
             }
             //After my turn is over I set the Mother Nature flag to false for the next turn
             client.getLocalModel().setCanPlayMN(false);
@@ -1115,7 +1113,7 @@ public class CLI implements UI {
                 else
                     printIslands();
             } catch (RemoteException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.CONNECTION_ERROR);
             } catch (RoomNotExistsException e) {
                 System.out.println(StringNames.ROOM_NOT_EXISTS);
             }
@@ -1290,7 +1288,7 @@ public class CLI implements UI {
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.FULL_DINING);
             } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
@@ -1312,7 +1310,7 @@ public class CLI implements UI {
             } catch (UserNotRegisteredException e) {
                 System.out.println(StringNames.USER_NOT_REGISTERED);
             } catch (CardPlayedInTurnException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.CARD_PLAYED_IN_TURN);
             }
             client.getLocalModel().setCanPlayMN(true);
         } else
@@ -1409,7 +1407,7 @@ public class CLI implements UI {
         } catch (NotEnoughCoinsException e) {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
         } catch (FullDiningException e) {
-            e.printStackTrace();
+            System.out.println(StringNames.FULL_DINING);
         } catch (AssistantCardNotFoundException e) {
             System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
         } catch (NegativeValueException e) {
@@ -1427,7 +1425,7 @@ public class CLI implements UI {
         } catch (IncorrectArgumentException e) {
             System.out.println(StringNames.INCORRECT_ARGUMENT);
         } catch (CardPlayedInTurnException e) {
-            e.printStackTrace();
+            System.out.println(StringNames.CARD_PLAYED_IN_TURN);
         }
 
     }
@@ -1482,7 +1480,7 @@ public class CLI implements UI {
         } catch (NotEnoughCoinsException e) {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
         } catch (FullDiningException e) {
-            e.printStackTrace();
+            System.out.println(StringNames.FULL_DINING);
         } catch (AssistantCardNotFoundException e) {
             System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
         } catch (NegativeValueException e) {
@@ -1500,7 +1498,7 @@ public class CLI implements UI {
         } catch (IncorrectArgumentException e) {
             System.out.println(StringNames.INCORRECT_ARGUMENT);
         } catch (CardPlayedInTurnException e) {
-            e.printStackTrace();
+            System.out.println(StringNames.CARD_PLAYED_IN_TURN);
         }
     }
 
@@ -1735,7 +1733,7 @@ public class CLI implements UI {
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.FULL_DINING);
             } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
@@ -1753,7 +1751,7 @@ public class CLI implements UI {
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
             } catch (CardPlayedInTurnException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.CARD_PLAYED_IN_TURN);
             }
         }
     }
@@ -1797,7 +1795,7 @@ public class CLI implements UI {
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.FULL_DINING);
             } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
@@ -1815,7 +1813,7 @@ public class CLI implements UI {
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
             } catch (CardPlayedInTurnException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.CARD_PLAYED_IN_TURN);
             }
         }
         //It's basically the same but I have to show the player the students on the card first
@@ -1850,7 +1848,7 @@ public class CLI implements UI {
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.FULL_DINING);
             } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
@@ -1868,7 +1866,7 @@ public class CLI implements UI {
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
             } catch (CardPlayedInTurnException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.CARD_PLAYED_IN_TURN);
             }
 
         } else if (client.getLocalModel().getCharacters().get(id).getDescription().equals("Calculate the influence on any Island and reap the rewards!")) {
@@ -1906,7 +1904,7 @@ public class CLI implements UI {
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.FULL_DINING);
             } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
@@ -1924,7 +1922,7 @@ public class CLI implements UI {
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
             } catch (CardPlayedInTurnException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.CARD_PLAYED_IN_TURN);
             }
         } else {
             //This is the entry Tile one so we have to do some more stuff
@@ -1962,7 +1960,7 @@ public class CLI implements UI {
             } catch (NotEnoughCoinsException e) {
                 System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (FullDiningException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.FULL_DINING);
             } catch (AssistantCardNotFoundException e) {
                 System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (NegativeValueException e) {
@@ -1980,7 +1978,7 @@ public class CLI implements UI {
             } catch (IncorrectArgumentException e) {
                 System.out.println(StringNames.INCORRECT_ARGUMENT);
             } catch (CardPlayedInTurnException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.CARD_PLAYED_IN_TURN);
             }
 
 
