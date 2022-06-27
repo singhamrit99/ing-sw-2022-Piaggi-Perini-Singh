@@ -119,15 +119,15 @@ public class RoomController extends InitialStage implements Controller {
                     } catch (RemoteException e) {
                         Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
                     } catch (NotLeaderRoomException e) {
-                        Controller.showErrorDialogBox(StringNames.NO_LEADER);
+                        Controller.showErrorDialogBox(StringNames.NOT_LEADER);
                     } catch (UserNotInRoomException e) {
                         Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
                     } catch (RoomNotExistsException e) {
-                        Controller.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
+                        Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
                     } catch (UserNotRegisteredException e) {
                         Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                     } catch (NotEnoughPlayersException e) {
-                        Controller.showErrorDialogBox(StringNames.ALONE_IN_ROOM);
+                        Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_PLAYERS);
                     }
                 });
 
@@ -138,7 +138,7 @@ public class RoomController extends InitialStage implements Controller {
                     } catch (RemoteException e) {
                         Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
                     } catch (NotLeaderRoomException e) {
-                        Controller.showErrorDialogBox(StringNames.NO_LEADER);
+                        Controller.showErrorDialogBox(StringNames.NOT_LEADER);
                     } catch (UserNotInRoomException e) {
                         Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
                     } catch (UserNotRegisteredException e) {
@@ -157,7 +157,7 @@ public class RoomController extends InitialStage implements Controller {
         } catch (RemoteException e) {
             Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
         } catch (RoomNotExistsException e) {
-            Controller.showErrorDialogBox(StringNames.NO_SUCH_ROOM);
+            Controller.showErrorDialogBox(StringNames.ROOM_NOT_EXISTS);
         } catch (UserNotInRoomException e) {
             Controller.showErrorDialogBox(StringNames.NOT_IN_ROOM);
         }

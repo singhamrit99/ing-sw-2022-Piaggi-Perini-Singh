@@ -113,7 +113,7 @@ public class GUILauncher extends Application implements Initializable {
                 } catch (NotBoundException | RemoteException e) {
                     Controller.showErrorDialogBox(StringNames.CONNECTION_ERROR);
                 } catch (UserAlreadyExistsException e) {
-                    Controller.showErrorDialogBox(StringNames.USER_ALREADY_IN_ROOM);
+                    Controller.showErrorDialogBox(StringNames.USER_ALREADY_EXISTS);
                 } catch (NameFieldException e) {
                     Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
                 }
@@ -130,7 +130,7 @@ public class GUILauncher extends Application implements Initializable {
         final String nickname = nicknameField.getText();
 
         if (nickname.length() == 0) {
-            Controller.showErrorDialogBox(StringNames.NICKNAME_FIELD_NULL);
+            Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
             return false;
         }
         return true;

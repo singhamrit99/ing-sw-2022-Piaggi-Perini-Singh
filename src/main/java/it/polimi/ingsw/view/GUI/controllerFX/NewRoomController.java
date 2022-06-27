@@ -68,7 +68,7 @@ public class NewRoomController extends InitialStage implements Controller {
                 } catch (UserNotRegisteredException e) {
                     Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                 } catch (RoomAlreadyExistsException e) {
-                    Controller.showErrorDialogBox(StringNames.ROOM_EXISTS);
+                    Controller.showErrorDialogBox(StringNames.ROOM_ALREADY_EXISTS);
                 } catch (NameFieldException e) {
                     Controller.showErrorDialogBox(StringNames.NAME_FIELD_NULL);
                 }
