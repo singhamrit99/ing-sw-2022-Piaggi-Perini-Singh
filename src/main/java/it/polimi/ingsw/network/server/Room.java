@@ -162,7 +162,7 @@ public class Room implements PropertyChangeListener {
      * @throws NotEnoughCoinsException Thrown if the player that tried to play the card doesn't have enough coins to buy it.
      * @throws IncorrectStateException Thrown if the method is called in an incorrect phase.
      */
-    public synchronized void commandInvoker(Command command) throws MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NotEnoughCoinsException, IncorrectStateException, FullDiningException, CardPlayedInTurnException {
+    public synchronized void commandInvoker(Command command) throws MotherNatureLostException, NegativeValueException, AssistantCardNotFoundException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, NotEnoughCoinsException, IncorrectStateException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         command.execute(controller);
     }
 
