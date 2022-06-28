@@ -5,6 +5,7 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.network.server.commands.PlayAssistantCard;
 import it.polimi.ingsw.view.GUI.GUI;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -27,8 +28,10 @@ public class AssistantCardController extends InitialStage implements Controller 
 
     @FXML
     private ImageView image;
+
     /**
      * Binds this stage to a user GUI.
+     *
      * @param gui the GUI to bind to.
      */
     public AssistantCardController(GUI gui) {
@@ -36,7 +39,7 @@ public class AssistantCardController extends InitialStage implements Controller 
     }
 
     /**
-     *Method used to initialize the Assistant Card Controller stage.
+     * Method used to initialize the Assistant Card Controller stage.
      */
     @Override
     public void initialize() {
@@ -64,13 +67,14 @@ public class AssistantCardController extends InitialStage implements Controller 
 
         image.setImage(new Image(ResourcesPath.ASSISTANT_CARDS + finalCards.get(firstIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS));
 
-        choiceBox.setOnAction((event) -> {
+        choiceBox.addEventFilter(ActionEvent.ANY, e -> {
             int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
+
             try {
                 image.setImage(new Image(ResourcesPath.ASSISTANT_CARDS + finalCards.get(selectedIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS));
                 chosenCard.set(finalCards.get(selectedIndex).getImageName());
                 GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(selectedIndex).getMove());
-            } catch (LocalModelNotLoadedException e) {
+            } catch (LocalModelNotLoadedException v) {
                 Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
             }
         });
