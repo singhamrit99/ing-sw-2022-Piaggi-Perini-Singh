@@ -91,9 +91,7 @@ public class StrippedCharacter implements Serializable {
     }
 
     public boolean sameCard(StrippedCharacter other) {
-        if (this.characterID == other.getCharacterID()) return true;
-        return description.equals(other.description) && type.getName().equals(other.type.getName())
-                && requirements.equals(other.getRequirements());
+        return this.characterID == other.getCharacterID();
     }
 
     /**
