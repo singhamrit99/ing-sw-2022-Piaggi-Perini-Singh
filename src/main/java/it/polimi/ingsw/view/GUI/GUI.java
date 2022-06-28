@@ -167,16 +167,6 @@ public class GUI implements UI {
     }
 
     /**
-     * Notifies the assistant card played
-     *
-     * @param e deck change event.
-     */
-    @Override
-    public void assistantCardPlayed(PropertyChangeEvent e) {
-
-    }
-
-    /**
      * Notifies island changed through an event.
      *
      * @param e island change event

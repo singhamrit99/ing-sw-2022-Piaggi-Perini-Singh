@@ -194,5 +194,9 @@ public class CharacterCard extends Card {
         return 0;
     }
 
-    public void incrementNoTileNumber(){}
+    public void incrementNoTileNumber() {
+    }
+
+    public void decrementNoTileNumber() {
+    }
 }

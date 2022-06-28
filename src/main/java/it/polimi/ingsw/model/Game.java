@@ -759,16 +759,37 @@ public class Game {
      */
     public void resolveMotherNature(int island) throws NegativeValueException, IncorrectArgumentException {
         if (islands.get(island).hasNoEntryTile()) {
+            StrippedIsland oldIsland = new StrippedIsland(islands.get(island));
             islands.get(island).setHasNoEntryTile(false);
             for (CharacterCard card : characterCards) {
                 if (card.getAbility().getAction().equals(Actions.NO_ENTRY_TILE)) {
                     card.incrementNoTileNumber();
+
                     notifyCharacterEvent(card);
+                    StrippedIsland changedIsland = new StrippedIsland(islands.get(island));
+                    PropertyChangeEvent evt =
+                            new PropertyChangeEvent(this, "island", oldIsland, changedIsland);
+                    gameListener.propertyChange(evt);
                 }
             }
         } else {
             checkAndPlaceTower(islands.get(island));
             checkUnificationIslands();
+        }
+    }
+
+    public void setNoEntryTile(int index) {
+        if (!islands.get(index).hasNoEntryTile()) {
+            StrippedIsland oldIsland = new StrippedIsland(islands.get(index));
+
+            islands.get(index).setHasNoEntryTile(true);
+            characterCards.get(selectedCharacterIndex).decrementNoTileNumber();
+            characterCards.get(selectedCharacterIndex).setStatus(2);
+
+            StrippedIsland changedIsland = new StrippedIsland(islands.get(index));
+            PropertyChangeEvent evt =
+                    new PropertyChangeEvent(this, "island", oldIsland, changedIsland);
+            gameListener.propertyChange(evt);
         }
     }
 

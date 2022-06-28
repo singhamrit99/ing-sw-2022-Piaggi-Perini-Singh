@@ -6,6 +6,7 @@ import it.polimi.ingsw.network.server.commands.PlayCharacterCardD;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import it.polimi.ingsw.view.GUI.GUI;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -56,7 +57,7 @@ public class CharacterTileController extends InitialStage implements Controller 
         AtomicInteger chosen = new AtomicInteger();
         chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
 
-        choiceBox.setOnAction((event) -> chosen.set(choiceBox.getSelectionModel().getSelectedIndex()));
+        choiceBox.addEventFilter(ActionEvent.ANY, e -> chosen.set(choiceBox.getSelectionModel().getSelectedIndex()));
 
         confirmButton.setOnAction((event) -> {
             PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), indexSelectedCharacter, chosen.get());

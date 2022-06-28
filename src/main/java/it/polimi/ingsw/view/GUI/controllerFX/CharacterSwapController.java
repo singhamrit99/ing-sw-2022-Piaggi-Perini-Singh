@@ -9,6 +9,7 @@ import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -31,8 +32,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
             totalSecond, selectSecond,
             description;
     @FXML
-    private ComboBox islandNumber,
-            totalFirstYellow, totalFirstBlue, totalFirstGreen, totalFirstRed, totalFirstPink,
+    private ComboBox totalFirstYellow, totalFirstBlue, totalFirstGreen, totalFirstRed, totalFirstPink,
             totalSecondYellow, totalSecondBlue, totalSecondGreen, totalSecondRed, totalSecondPink;
 
     /**
@@ -138,6 +138,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
         for (ComboBox cardBox : firstBoxes) {
             loadComboBox(cardBox, Integer.parseInt(text1.get(i).getText()));
             cardBox.getSelectionModel().selectFirst();
+            cardBox.addEventFilter(ActionEvent.ANY, e -> cardBox.getSelectionModel().getSelectedIndex());
             i++;
         }
 
@@ -145,6 +146,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
         for (ComboBox cardBox : secondBoxes) {
             loadComboBox(cardBox, Integer.parseInt(text2.get(i).getText()));
             cardBox.getSelectionModel().selectFirst();
+            cardBox.addEventFilter(ActionEvent.ANY, e -> cardBox.getSelectionModel().getSelectedIndex());
             i++;
         }
 

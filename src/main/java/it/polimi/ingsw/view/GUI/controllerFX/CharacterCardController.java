@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.view.GUI.GUI;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -10,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
@@ -26,8 +28,13 @@ public class CharacterCardController extends InitialStage implements Controller 
 
     @FXML
     private ImageView image;
+
+    @FXML
+    private Text coins;
+
     /**
      * Binds this stage to a user GUI.
+     *
      * @param gui the GUI to bind to.
      */
     public CharacterCardController(GUI gui) {
@@ -35,7 +42,7 @@ public class CharacterCardController extends InitialStage implements Controller 
     }
 
     /**
-     *Method used to initialize the Character Card Controller stage.
+     * Method used to initialize the Character Card Controller stage.
      */
     @Override
     public void initialize() {
@@ -50,10 +57,12 @@ public class CharacterCardController extends InitialStage implements Controller 
         int firstIndex = choiceBox.getSelectionModel().getSelectedIndex();
         chosenCard.set(String.valueOf(cards.get(firstIndex).getCharacterID()));
         GUI.client.getLocalModel().selectedCharacter = cards.get(firstIndex);
+        coins.setText("Card cost: " + cards.get(firstIndex).getPrice());
         image.setImage(new Image(ResourcesPath.CHARACTERS + cards.get(firstIndex).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
 
-        choiceBox.setOnAction((event) -> {
+        choiceBox.addEventFilter(ActionEvent.ANY, e -> {
             int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
+            coins.setText("Card cost: " + cards.get(selectedIndex).getPrice());
             image.setImage(new Image(ResourcesPath.CHARACTERS + cards.get(selectedIndex).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
             chosenCard.set(String.valueOf(cards.get(selectedIndex).getCharacterID()));
             GUI.client.getLocalModel().selectedCharacter = cards.get(selectedIndex);
