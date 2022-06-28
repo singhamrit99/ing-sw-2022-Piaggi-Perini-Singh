@@ -187,13 +187,12 @@ public class StrippedModel implements Serializable {
         }
 
         if (changedCard != null && cardToUpdate != null) {
-            if (cardToUpdate.getPrice() == changedCard.getPrice()) {
-                int newPriceCard = changedCard.getPrice();
-                cardToUpdate.setPrice(newPriceCard); //update
+            if (cardToUpdate.getPrice() != changedCard.getPrice()) {
+                cardToUpdate.setPrice(changedCard.getPrice()); //update
                 ui.characterChanged(evt);
             }
         } else {
-            throw new BadFormattedLocalModelException();  //exception not found card to update
+            throw new BadFormattedLocalModelException();
         }
     }
 
