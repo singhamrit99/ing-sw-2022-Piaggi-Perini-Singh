@@ -2129,7 +2129,7 @@ public class CLI implements UI {
 
         }
 
-        System.out.println("Mother Nature is on isle number " + (motherNature) + "!");
+        System.out.println("Mother Nature is on isle number " + (motherNature-1) + "!");
     }
 
     /**
