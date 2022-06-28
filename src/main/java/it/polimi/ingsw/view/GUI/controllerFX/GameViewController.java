@@ -75,6 +75,12 @@ public class GameViewController extends InitialStage implements Controller {
     @FXML
     private HBox characters;
 
+    @FXML
+    Label coinsText;
+
+    @FXML
+    StackPane coinsIndicator;
+
     /**
      * The constructor class for GameVieController, which imports all assets from resource folder.
      *
@@ -333,12 +339,6 @@ public class GameViewController extends InitialStage implements Controller {
             }
         });
     }
-
-    @FXML
-    Label coinsText;
-
-    @FXML
-    StackPane coinsIndicator;
 
     public void reloadCoins() {
         boolean expert = false;
