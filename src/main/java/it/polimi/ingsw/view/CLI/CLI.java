@@ -184,7 +184,7 @@ public class CLI implements UI {
 
                 System.out.println("Waiting for everyone to play an assistant card");
                 int i = 0;
-                while (numOfPlayers > 1&&!client.isInGame()) {
+                while (numOfPlayers > 1 && !client.isInGame()) {
                     if ((i < 50)) {
                         i++;
                     }
@@ -336,8 +336,7 @@ public class CLI implements UI {
         if (!s.equals(client.getNickname())) {
             System.out.println("It's now " + s + "'s turn!");
             client.setMyTurn(false);
-        }
-        else {
+        } else {
             client.setMyTurn(true);
             System.out.println("It's your turn! Press any key to continue.");
         }
@@ -368,16 +367,6 @@ public class CLI implements UI {
             playedThisTurn = new ArrayList<>();
         playedThisTurn.add(Integer.parseInt(tmp));
         numOfPlayers--;
-    }
-
-    /**
-     * Display method for events. Check UI file for details.
-     *
-     * @param e deck change event.
-     */
-    @Override
-    public void assistantCardPlayed(PropertyChangeEvent e) {
-
     }
 
     /**
@@ -742,7 +731,7 @@ public class CLI implements UI {
             client.setInGame(false);
             client.view = StringNames.LOBBY;
             */
-            clientRoom=null;
+            clientRoom = null;
             client.leaveGame();
             Thread.sleep(500);
         } else {
