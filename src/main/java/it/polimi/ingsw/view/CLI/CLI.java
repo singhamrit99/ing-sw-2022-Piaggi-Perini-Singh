@@ -380,7 +380,10 @@ public class CLI implements UI {
             StrippedIsland newIsland;
             newIsland = (StrippedIsland) e.getNewValue();
             System.out.println(newIsland.getName() + " changed to");
-            printIsland(newIsland);
+            if(!newIsland.hasNoEnterTile())
+            printIsland(newIsland, true);
+            else
+                printExpertIsland(newIsland, true);
         }
     }
 
@@ -404,7 +407,7 @@ public class CLI implements UI {
     @Override
     public void islandConquest(PropertyChangeEvent e) {
         StrippedIsland island = (StrippedIsland) e.getNewValue();
-        System.out.println(client.getLocalModel().getCurrentPlayer() + " conquered island " + island.getName() + "!\n");
+        System.out.println(client.getLocalModel().getCurrentPlayer() + " conquered " + island.getName() + "!\n");
     }
 
     /**
@@ -1095,7 +1098,11 @@ public class CLI implements UI {
             } catch (LocalModelNotLoadedException e) {
                 System.out.println(StringNames.LOCAL_MODEL_ERROR);
             }
-
+            int maxStudents;
+            if(client.getLocalModel().getBoards().size()==3)
+                maxStudents=4;
+            else
+                maxStudents=3;
             EnumMap<Colors, ArrayList<String>> studentsToGame = new EnumMap<>(Colors.class);
             for (Colors c : Colors.values()) {
                 studentsToGame.put(c, new ArrayList<>());
@@ -1155,7 +1162,7 @@ public class CLI implements UI {
                                 if (value <= 3)
                                     break;
                                 else
-                                    System.out.println("You can't move more than 3 students in a single turn! Try again.");
+                                    System.out.println("You can't move more than "+ maxStudents+ " students in a single turn! Try again.");
                             } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                                 System.out.println("Something went wrong with your input, try again!");
                             }
@@ -1171,13 +1178,14 @@ public class CLI implements UI {
                                 studentsToMove.put(stringToColor(color), studentsToMove.get(stringToColor(color)) + value);
                                 movedStudents += value;
                                 studentsToGame = strippedToGame(studentsToMove, studentsToGame, "dining");
-                                if (movedStudents < 3) {
+                                if (movedStudents < maxStudents) {
                                     System.out.println("Do you want to move other students to the dining room?\n");
                                     do {
                                         answer = in.nextLine();
                                         answer = answer.toLowerCase(Locale.ROOT);
                                         if (answer.equals("y") || answer.equals("n")) {
                                             isValidInputYN = true;
+                                        }else if (answer.equals("\n")) {System.out.print("");
                                         } else {
                                             System.out.println("Whoops! That's not right. Try again: \n");
                                         }
@@ -1194,13 +1202,13 @@ public class CLI implements UI {
                     } else {
                         System.out.println("There is no such color as " + color + "! Try again. \n");
                     }
-                } while (doItAgain && movedStudents < 3);
+                } while (doItAgain && movedStudents < maxStudents);
             }
 
             //End of dining room move segment
             //Move students to the islands if the player has moved less than 3 students already
             //Resetting destinations array for students to island part
-            if (movedStudents < 3) {
+            if (movedStudents < maxStudents) {
                 do {
                     while (true) {
                         System.out.println("Type the students you want to move to the island as \"color, number\", then input the island number!");
@@ -1214,7 +1222,7 @@ public class CLI implements UI {
                             try {
                                 value = Integer.parseInt(parts[1]);
                                 color = color.toUpperCase(Locale.ROOT);
-                                if (value <= 3)
+                                if (value <= maxStudents)
                                     break;
                                 else
                                     System.out.println("You can't move more than 3 students in a single turn! Try again.");
@@ -1245,24 +1253,25 @@ public class CLI implements UI {
 
                                     studentsToMove.put(stringToColor(color), value);
                                     movedStudents += value;
-                                    if (movedStudents > 3)
+                                    if (movedStudents > maxStudents)
                                         doItAgain = false;
-                                    studentsToGame = strippedToGame(studentsToMove, studentsToGame, "island" + island);
-                                    if (movedStudents < 3) {
+                                    studentsToGame = strippedToGame(studentsToMove, studentsToGame, client.getLocalModel().getIslands().get(island).getName());
+                                    if (movedStudents < maxStudents) {
                                         System.out.println("Do you want to move other students to the islands?\n");
                                         do {
                                             answer = in.nextLine();
                                             answer = answer.toLowerCase(Locale.ROOT);
                                             if (answer.equals("y") || answer.equals("n"))
                                                 isValidInputYN = true;
-                                            else
+                                            else if (answer.equals("\n")) { System.out.print("");
+                                            } else
                                                 System.out.println("Whoops! That's not right. Try again: \n");
                                         } while (!isValidInputYN);
                                     }
-                                    if (answer.equals("n") || movedStudents == 3) {
+                                    if (answer.equals("n") || movedStudents == maxStudents) {
                                         doItAgain = false;
                                     } else {
-                                        System.out.println("You still have " + (3 - movedStudents) + " students to move!\n");
+                                        System.out.println("You still have " + (maxStudents - movedStudents) + " students to move!\n");
                                     }
                                 } else {
                                     System.out.println("Invalid island number! Try again.\n");
@@ -2109,16 +2118,17 @@ public class CLI implements UI {
         int i = 0, motherNature = 0;
         for (StrippedIsland island : islands) {
             if (!island.getName().equals("EMPTY")) {
-                printIsland(island);
+                System.out.println("Island number "+ (i+1));
+                printIsland(island, false);
                 i++;
             }
             if (island.hasMotherNature()) {
-                motherNature = i - 1;
+                motherNature = i;
             }
 
         }
 
-        System.out.println("Mother Nature is on isle number " + (motherNature-1) + "!");
+        System.out.println("Mother Nature is on isle number " + motherNature + "!");
     }
 
     /**
@@ -2129,7 +2139,8 @@ public class CLI implements UI {
         int i = 1, motherNature = 0;
         for (StrippedIsland island : islands) {
             if (!island.getName().equals("EMPTY")) {
-                printExpertIsland(island);
+                System.out.println("Island number "+ i+1);
+                printExpertIsland(island, false);
                 i++;
             }
             if (island.hasMotherNature()) {
@@ -2211,10 +2222,11 @@ public class CLI implements UI {
      *
      * @param island the island to print.
      */
-    public void printIsland(StrippedIsland island) {
+    public void printIsland(StrippedIsland island, boolean print) {
         int i;
         Color color;
         int rows = 0;
+        if (print)
         System.out.println("Island: " + island.getName());
         System.out.println("Students on the island: ");
         if (island.hasMotherNature())
@@ -2259,7 +2271,7 @@ public class CLI implements UI {
         if (island.getNumOfTowers() == 0)
             System.out.println("There are no towers yet on this island!");
         else
-            System.out.println("Towers: " + island.getNumOfTowers() + " " + island.getTowersColor() + "towers \n");
+            System.out.println("Towers: " + island.getNumOfTowers() + " " + island.getTowersColor() + " towers \n");
 
     }
 
@@ -2268,10 +2280,11 @@ public class CLI implements UI {
      *
      * @param island the island to print.
      */
-    public void printExpertIsland(StrippedIsland island) {
+    public void printExpertIsland(StrippedIsland island, boolean print) {
         int i;
         Color color;
         int rows = 0;
+        if (print)
         System.out.println("Island: " + island.getName());
         System.out.println("Students on the island: ");
         if (island.hasMotherNature())
