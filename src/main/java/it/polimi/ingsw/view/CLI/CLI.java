@@ -388,7 +388,7 @@ public class CLI implements UI {
             newIsland = (StrippedIsland) e.getNewValue();
             System.out.println(newIsland.getName() + " changed to");
             if(!newIsland.hasNoEnterTile())
-            printIsland(newIsland, true);
+                printIsland(newIsland, true);
             else
                 printExpertIsland(newIsland, true);
         }
@@ -729,7 +729,7 @@ public class CLI implements UI {
     public void leaveGame() throws UserNotInRoomException, UserNotRegisteredException, RemoteException, InterruptedException {
         boolean isValidInputYN = false;
         String answer;
-        System.out.println("Are you sure you wanna do this? If you're rage quitting you'll make everyone sad!");
+        System.out.println("Are you sure you want to do this? Y/N");
         in.nextLine();
         do {
             answer = in.nextLine();
@@ -809,7 +809,7 @@ public class CLI implements UI {
                 System.out.println(StringNames.NUMBER_FORMAT);
             }
         }
-        while (i < 1 || i >= client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size() && playedThisTurn.contains(i)) {
+        while (i < 1 || i > client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size() && playedThisTurn.contains(i)) {
             System.out.println("Invalid number, try again\n");
             while (true) {
                 input = in.next();
@@ -825,6 +825,7 @@ public class CLI implements UI {
         //I now have a valid assistant card
         System.out.println("Card played: " + i);
         try {
+            input=client.getLocalModel().getBoardOf(client.getNickname()).getDeck().getDeck().get(i-1).getImageName();
             client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getDeck().get(input).getMove());
         } catch (LocalModelNotLoadedException e) {
             System.out.println("Critical local model error");
@@ -1260,13 +1261,30 @@ public class CLI implements UI {
                     if (isValidColor(color)) {
                         if (myBoard != null) {
                             if (value <= myBoard.getEntrance().get(stringToColor(color))) {
-                                if (island > 0 && island <= client.getLocalModel().getIslands().size()) {
+                                int count=0;
+                                for (StrippedIsland trueIsland: client.getLocalModel().getIslands())
+                                {
+                                    if (!trueIsland.getName().equals("EMPTY"))
+                                        count++;
+                                }
+                                if (island > 0 && island <= count) {
 
                                     studentsToMove.put(stringToColor(color), value);
                                     movedStudents += value;
                                     if (movedStudents > maxStudents)
                                         doItAgain = false;
-                                    studentsToGame = strippedToGame(studentsToMove, studentsToGame, client.getLocalModel().getIslands().get(island-1).getName());
+                                    int counter=0;
+                                    while(counter<client.getLocalModel().getIslands().size()&&counter<island)
+                                    {
+                                        if (client.getLocalModel().getIslands().get(counter).getName().equals("EMPTY"))
+                                        {
+                                            counter++;
+                                        }
+                                        counter++;
+                                    }
+                                    counter--;
+
+                                    studentsToGame = strippedToGame(studentsToMove, studentsToGame, client.getLocalModel().getIslands().get(counter).getName());
                                     if (movedStudents < maxStudents) {
                                         System.out.println("You still have " + (maxStudents - movedStudents) + " students to move!\n");
                                         in.nextLine();
@@ -1469,11 +1487,18 @@ public class CLI implements UI {
             }
         }
         printExpertIslands();
+        int count=0;
+        for (StrippedIsland trueIsland: client.getLocalModel().getIslands())
+        {
+            if (!trueIsland.getName().equals("EMPTY"))
+                count++;
+        }
+
         while (true) {
             input = in.next();
             try {
                 island = Integer.parseInt(input);
-                if (island > 0 && island < client.getLocalModel().getIslands().size())
+                if (island > 0 && island < count+1)
                     break;
                 else
                     System.out.println("Invalid island! Try again.");
@@ -1481,7 +1506,19 @@ public class CLI implements UI {
                 System.out.println(StringNames.NUMBER_FORMAT);
             }
         }
-        //Now I have a valid island and color choice.
+        int counter=0;
+        while(counter<client.getLocalModel().getIslands().size()&&counter<island)
+        {
+            if (client.getLocalModel().getIslands().get(counter).getName().equals("EMPTY"))
+            {
+                counter++;
+            }
+            counter++;
+        }
+        counter--;
+        String pass= client.getLocalModel().getIslands().get(counter).getName().replaceAll("[^\\d.]", "");
+        island= Integer.parseInt(pass);
+        //Now I have a valid non merged island and color choice.
         playCharacterCardBOrder = new PlayCharacterCardB(client.getNickname(), id, student, island);
         try {
             client.performGameAction(playCharacterCardBOrder);
@@ -1909,8 +1946,15 @@ public class CLI implements UI {
                         System.out.println(StringNames.NUMBER_FORMAT);
                     }
                 }
+                int count=0;
+                for (StrippedIsland trueIsland: client.getLocalModel().getIslands())
+                {
+                    if (!trueIsland.getName().equals("EMPTY"))
+                        count++;
+                }
+
                 island--;
-                while (island < 0 || island > client.getLocalModel().getIslands().size()) {
+                while (island < 0 || island > count) {
                     System.out.println("That number is not right! Try again.\n");
                     while (true) {
                         input = in.next();
@@ -1922,6 +1966,19 @@ public class CLI implements UI {
                         }
                     }
                 }
+
+                int counter=0;
+                while(counter<client.getLocalModel().getIslands().size()&&counter<island)
+                {
+                    if (client.getLocalModel().getIslands().get(counter).getName().equals("EMPTY"))
+                    {
+                        counter++;
+                    }
+                    counter++;
+                }
+                counter--;
+                String pass= client.getLocalModel().getIslands().get(counter).getName().replaceAll("[^\\d.]", "");
+                island= Integer.parseInt(pass);
                 playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, island);
                 try {
                     client.performGameAction(playCharacterCardDOrder);
@@ -1972,7 +2029,14 @@ public class CLI implements UI {
                     }
                 }
                 choice--;
-                while (choice < 0 || choice > client.getLocalModel().getIslands().size()) {
+                int count=0;
+                for (StrippedIsland trueIsland: client.getLocalModel().getIslands())
+                {
+                    if (!trueIsland.getName().equals("EMPTY"))
+                        count++;
+                }
+
+                while (choice < 0 || choice > count) {
                     System.out.println("That number is not right! Try again.\n");
                     while (true) {
                         input = in.next();
@@ -1984,7 +2048,19 @@ public class CLI implements UI {
                         }
                     }
                 }
-                playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, choice);
+                int counter=0;
+                while(counter<client.getLocalModel().getIslands().size()&&counter<choice)
+                {
+                    if (client.getLocalModel().getIslands().get(counter).getName().equals("EMPTY"))
+                    {
+                        counter++;
+                    }
+                    counter++;
+                }
+                counter--;
+                String pass= client.getLocalModel().getIslands().get(counter).getName().replaceAll("[^\\d.]", "");
+                int island= Integer.parseInt(pass);
+                playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, island);
                 try {
                     client.performGameAction(playCharacterCardDOrder);
                 } catch (UserNotInRoomException e) {
@@ -2064,7 +2140,7 @@ public class CLI implements UI {
      */
     public void printPlayerBoards() {
         ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
-      int i=client.getLocalModel().getBoards().size();
+        int i=client.getLocalModel().getBoards().size();
         System.out.println("Player boards:\n");
         for (StrippedBoard s : boards) {
             if (s.getOwner().equals(client.getNickname()))
@@ -2072,7 +2148,7 @@ public class CLI implements UI {
             printPlayerBoard(s);
             i--;
             if (i>0)
-            System.out.println(ansi().bg(WHITE).fg(BLACK).a("      Next player!      ").reset());
+                System.out.println(ansi().bg(WHITE).fg(BLACK).a("      Next player!      ").reset());
         }
     }
 
@@ -2087,33 +2163,33 @@ public class CLI implements UI {
         System.out.println(board.getOwner() + "'s board: ");
         System.out.println("Tower color: " + board.getColorsTowers());
         if (board.getColorsTowers().toString().equals("BLACK"))
-        while(rows< 8) {
-            if (rows%4==0) {
-                if ((rows)< board.getNumberOfTowers())
-                System.out.print(ansi().bg(WHITE).fg(BLACK).a("|* "));
-                else
-                    System.out.print(ansi().bg(WHITE).fg(BLACK).a("| "));
-                rows++;
-            }
-            else if (rows==3||rows==7) {
-                if ((rows)< board.getNumberOfTowers()) {
-                    System.out.print(ansi().bg(WHITE).fg(BLACK).a(" *|").reset());
-                    System.out.println();
+            while(rows< 8) {
+                if (rows%4==0) {
+                    if ((rows)< board.getNumberOfTowers())
+                        System.out.print(ansi().bg(WHITE).fg(BLACK).a("|* "));
+                    else
+                        System.out.print(ansi().bg(WHITE).fg(BLACK).a("| "));
+                    rows++;
+                }
+                else if (rows==3||rows==7) {
+                    if ((rows)< board.getNumberOfTowers()) {
+                        System.out.print(ansi().bg(WHITE).fg(BLACK).a(" *|").reset());
+                        System.out.println();
+                    }
+                    else {
+                        System.out.print(ansi().bg(WHITE).fg(BLACK).a("  |").reset());
+                        System.out.println();
+                    }
+                    rows++;
                 }
                 else {
-                    System.out.print(ansi().bg(WHITE).fg(BLACK).a("  |").reset());
-                    System.out.println();
+                    if ((rows+1)< board.getNumberOfTowers())
+                        System.out.print(ansi().bg(WHITE).fg(BLACK).a(" * "));
+                    else
+                        System.out.print(ansi().bg(WHITE).fg(BLACK).a("   "));
+                    rows++;
                 }
-                rows++;
             }
-            else {
-                if ((rows+1)< board.getNumberOfTowers())
-                System.out.print(ansi().bg(WHITE).fg(BLACK).a(" * "));
-                else
-                    System.out.print(ansi().bg(WHITE).fg(BLACK).a("   "));
-                rows++;
-            }
-        }
 
         else
             while(rows< 8) {
@@ -2198,10 +2274,10 @@ public class CLI implements UI {
      */
     public void printExpertIslands() {
         ArrayList<StrippedIsland> islands = client.getLocalModel().getIslands();
-        int i = 1, motherNature = 0;
+        int i = 0, motherNature = 0;
         for (StrippedIsland island : islands) {
             if (!island.getName().equals("EMPTY")) {
-                System.out.println("Island number "+ i+1);
+                System.out.println("Island number "+ (i+1));
                 printExpertIsland(island, false);
                 i++;
             }
@@ -2289,7 +2365,7 @@ public class CLI implements UI {
         Color color;
         int rows = 0;
         if (print)
-        System.out.println("Island: " + island.getName());
+            System.out.println("Island: " + island.getName());
         System.out.println("Students on the island: ");
         if (island.hasMotherNature())
             System.out.println(ansi().fg(CYAN).a("* Mother Nature's here!  *").reset());
@@ -2347,7 +2423,7 @@ public class CLI implements UI {
         Color color;
         int rows = 0;
         if (print)
-        System.out.println("Island: " + island.getName());
+            System.out.println("Island: " + island.getName());
         System.out.println("Students on the island: ");
         if (island.hasMotherNature())
             System.out.println(ansi().fg(CYAN).a("* Mother Nature's here!  *").reset());
@@ -2378,7 +2454,7 @@ public class CLI implements UI {
         System.out.println(" ____________________");
         int w = 0;
         for (Colors c : island.getStudents().keySet()) {
-            if (w % 3 == 0) {
+            if (w %3<2) {
                 System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
                 w++;
             } else
@@ -2393,8 +2469,7 @@ public class CLI implements UI {
 
         if (island.hasMotherNature())
             System.out.println("Mother Nature is on this island!");
-        else
-            System.out.println("Mother Nature is not on this island!");
+
     }
 
     /**
