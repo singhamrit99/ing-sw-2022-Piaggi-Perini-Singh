@@ -4,9 +4,7 @@ import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.network.server.commands.PlayCharacterCardD;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
-import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import it.polimi.ingsw.view.GUI.GUI;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -44,20 +42,39 @@ public class CharacterTileController extends InitialStage implements Controller 
     public void initialize() {
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
         int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
+        int motherNatureIndex = -1;
 
         description.setText(selectedCharacter.getDescription());
 
         availableTiles.setText("Tiles Available " + GUI.client.getLocalModel().getCharacters().get(indexSelectedCharacter).getNoEntryTiles());
 
-        for (StrippedIsland island : GUI.client.getLocalModel().getIslands()) {
-            choiceBox.getItems().add(island.getName());
+        for (int i = 1; i <= GUI.client.getLocalModel().getIslands().size(); i++) {
+            if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
+                if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
+                    choiceBox.getItems().add(i + ": MN present");
+                    motherNatureIndex = i;
+                } else {
+                    choiceBox.getItems().add(Integer.toString(i));
+                }
+            }
         }
         choiceBox.getSelectionModel().selectFirst();
 
         AtomicInteger chosen = new AtomicInteger();
         chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
 
-        choiceBox.addEventFilter(ActionEvent.ANY, e -> chosen.set(choiceBox.getSelectionModel().getSelectedIndex()));
+        final int finalMotherNatureIndex = motherNatureIndex;
+        choiceBox.setOnAction(actionEvent -> {
+            if (selectedCharacter.getCharacterID() == 3) {
+                if (choiceBox.getSelectionModel().getSelectedIndex() == finalMotherNatureIndex) {
+                    chosen.set(finalMotherNatureIndex);
+                } else {
+                    chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
+                }
+            } else {
+                chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
+            }
+        });
 
         confirmButton.setOnAction((event) -> {
             PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), indexSelectedCharacter, chosen.get());

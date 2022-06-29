@@ -27,7 +27,7 @@ public interface StringNames {
     String INCORRECT_STATE = "You are not in the correct state in the game";
     String LOCAL_MODEL_ERROR = "Critical bug with local model";
     String MOTHER_NATURE_LOST = "Bug while placing Mother Nature";
-    String NAME_FIELD_NULL = "Name field is not filled or blank";
+    String NAME_FIELD_NULL = "Name field is not filled, blank or too long";
     String NEGATIVE_VALUE = "Negative value";
     String NOT_ENOUGH_COINS = "Not enough coins to play card";
     String NOT_ENOUGH_PLAYERS = "You are alone in this room. There must be at least 2 players to play Eryantis";

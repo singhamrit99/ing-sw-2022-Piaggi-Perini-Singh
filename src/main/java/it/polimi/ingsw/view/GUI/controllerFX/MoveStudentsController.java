@@ -7,7 +7,6 @@ import it.polimi.ingsw.network.server.commands.MoveStudents;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -74,9 +73,7 @@ public class MoveStudentsController extends InitialStage implements Controller {
 
         for (ComboBox islandBox : islandsComboBoxes) {
             islandBox.getSelectionModel().selectFirst();
-            islandBox.addEventFilter(ActionEvent.ANY, e -> {
-                islandBox.getSelectionModel().getSelectedIndex();
-            });
+            islandBox.setOnAction(actionEvent -> islandBox.getSelectionModel().getSelectedIndex());
             islandBox.setDisable(true);
         }
 
@@ -96,9 +93,7 @@ public class MoveStudentsController extends InitialStage implements Controller {
         for (ComboBox diningBox : diningComboBoxes) {
             loadComboBox(diningBox, Integer.parseInt(text.get(k).getText()));
             diningBox.getSelectionModel().selectFirst();
-            diningBox.addEventFilter(ActionEvent.ANY, e -> {
-                diningBox.getSelectionModel().getSelectedIndex();
-            });
+            diningBox.setOnAction(actionEvent -> diningBox.getSelectionModel().getSelectedIndex());
             k++;
         }
 

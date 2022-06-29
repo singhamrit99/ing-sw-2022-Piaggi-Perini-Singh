@@ -55,20 +55,21 @@ public class ClientConnection{
         inGame = isPlaying;
     }
     /**
-     * Getter for the Up field
+     * Getter for the Up field, necessary to server-client 'ping-pong' to find disconnected user
      * @return boolean value of up
      */
     public synchronized boolean isUp(){
         return up;
     }
     /**
-     * Method used to mark the connection as up.
+     * Method used to mark the connection as up, necessary to server-client 'ping-pong' to find disconnected user
      */
     public synchronized void setUp(){
         up = true;
     }
     /**
-     * Used when connection is closed.
+     * Used by the server to mark the clientConnection, like as 'pong'. If clients doesn't ping, next time that server
+     * sees isDown, it marks the user as disconnected. (ping-pong style)
      */
     public synchronized void setDown(){
         up = false;
