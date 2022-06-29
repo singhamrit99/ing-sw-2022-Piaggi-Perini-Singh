@@ -105,26 +105,35 @@ public class CharacterMultipleSelectController extends InitialStage implements C
         } else {
             choiceBox.visibleProperty().set(true);
 
+            int j = 0;
             for (int i = 1; i <= GUI.client.getLocalModel().getIslands().size(); i++) {
                 if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
                     if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
-                        choiceBox.getItems().add(i + ": MN present");
-                        motherNatureIndex = i;
+                        choiceBox.getItems().add(j + 1 + ": MN present");
+                        motherNatureIndex = j;
                     } else {
-                        choiceBox.getItems().add(Integer.toString(i));
+                        choiceBox.getItems().add(Integer.toString(j + 1));
                     }
+                    j++;
                 }
             }
-
             choiceBox.getSelectionModel().selectFirst();
 
             chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
             int finalMotherNatureIndex = motherNatureIndex;
             choiceBox.setOnAction(actionEvent -> {
+                final int[] count = {0};
                 if (choiceBox.getSelectionModel().getSelectedIndex() == finalMotherNatureIndex) {
                     chosen.set(finalMotherNatureIndex);
                 } else {
-                    chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
+                    for (int island = 1; island <= GUI.client.getLocalModel().getIslands().size(); island++) {
+                        if (!GUI.client.getLocalModel().getIslands().get(island - 1).getName().equals("EMPTY")) {
+                            if (count[0] == choiceBox.getSelectionModel().getSelectedIndex() - 1) {
+                                chosen.set(island);
+                            }
+                            count[0]++;
+                        }
+                    }
                 }
             });
         }
