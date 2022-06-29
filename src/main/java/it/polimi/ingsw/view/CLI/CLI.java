@@ -2489,31 +2489,58 @@ public class CLI implements UI {
      */
     public void printStudentsOnCard(StrippedCharacter card) {
         Integer i;
+        int po=0;
         int rows = 0;
         Ansi.Color color;
         System.out.println("*-----*");
+        for (Colors c: card.getStudents().keySet())
+        {
+            i=card.getStudents().get(c);
+            po+=i;
+        }
         for (Colors c : card.getStudents().keySet()) {
             i = card.getStudents().get(c);
             color = colorsToColor(c);
+            while (rows<6&&i>0) {
+                if (rows%2==0) {
+                    if (rows<po) {
+                        System.out.print("|");
+                        System.out.print(ansi().fg(color).a("* ").reset());
+                    }
+                    else
+                        System.out.print(ansi().a("|  ").reset());
 
-            while (i > 0) {
-                if (rows == 0 || rows == 3) {
-                    System.out.print(ansi().fg(color).a("|* ").reset());
-                    rows++;
-                } else if (rows == 2 || rows == 5) {
-                    System.out.print(ansi().fg(color).a("  *|").reset());
-                    System.out.print("|");
+                } else if (rows%2==1) {
+                    if (rows<po) {
+                        System.out.print(ansi().fg(color).a("  *").reset());
+                        System.out.println("|");
+                    }
+                    else
+                        System.out.println(ansi().a("   |").reset());
+
                 } else {
-                    System.out.print(ansi().fg(color).a("*").reset());
-                    System.out.print("|");
-                    System.out.print("\n");
-                    System.out.print("|");
+                    if (rows<po) {
+                        System.out.print("|");
+                        System.out.print(ansi().fg(color).a("*").reset());
+                        System.out.print("|");
+                    }
                 }
                 rows++;
                 i--;
+
             }
+
+
         }
-        System.out.println();
+        while (rows<6)
+        {
+            if (rows%2==0)
+                System.out.print(ansi().a("|  ").reset());
+            else if (rows%2==1)
+                System.out.println(ansi().a("   |").reset());
+            rows++;
+        }
+
         System.out.println("*-----*");
     }
 

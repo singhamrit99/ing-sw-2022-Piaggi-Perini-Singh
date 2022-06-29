@@ -1,9 +1,11 @@
 package it.polimi.ingsw.view.CLI;
 
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.cards.charactercard.CharacterCard;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.model.enumerations.Towers;
 import it.polimi.ingsw.network.server.stripped.StrippedBoard;
+import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import org.fusesource.jansi.Ansi;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +22,12 @@ class CLITest {
     public EnumMap<Colors, Integer> enumMap= new EnumMap<>(Colors.class);
     @Test
     void printCharacterCards() {
+        EnumMap<Colors,Integer> cards= new EnumMap<Colors, Integer>(Colors.class);
+        setupCard4(cards);
+        printStudentsOnCard(cards);
+        setupCard5(cards);
+        printStudentsOnCard(cards);
+
     }
 
     @Test
@@ -38,6 +46,63 @@ class CLITest {
         board.setEntrance(entrance);
         printPlayerBoard(board);
 
+    }
+
+    public void printStudentsOnCard(EnumMap<Colors, Integer> students) {
+        Integer i;
+        int po=0;
+        int rows = 0;
+        Ansi.Color color;
+        System.out.println("*-----*");
+        for (Colors c: students.keySet())
+        {
+            i=students.get(c);
+            po+=i;
+        }
+        for (Colors c : students.keySet()) {
+            i = students.get(c);
+            color = colorsToColor(c);
+            while (rows<6&&i>0) {
+                if (rows%2==0) {
+                    if (rows<po) {
+                        System.out.print("|");
+                        System.out.print(ansi().fg(color).a("* ").reset());
+                    }
+                    else
+                        System.out.print(ansi().a("|  ").reset());
+
+                } else if (rows%2==1) {
+                    if (rows<po) {
+                        System.out.print(ansi().fg(color).a("  *").reset());
+                        System.out.println("|");
+                    }
+                    else
+                    System.out.println(ansi().a("   |").reset());
+
+                } else {
+                    if (rows<po) {
+                        System.out.print("|");
+                        System.out.print(ansi().fg(color).a("*").reset());
+                        System.out.print("|");
+                    }
+                    }
+                rows++;
+                i--;
+
+                }
+
+
+            }
+        while (rows<6)
+        {
+            if (rows%2==0)
+                System.out.print(ansi().a("|  ").reset());
+            else if (rows%2==1)
+                System.out.println(ansi().a("   |").reset());
+                rows++;
+        }
+
+        System.out.println("*-----*");
     }
     public void printPlayerBoard(StrippedBoard board) {
         Integer i;
@@ -121,6 +186,20 @@ class CLITest {
         enumMap.put(Colors.PINK, 3);
         enumMap.put(Colors.YELLOW, 2);
         enumMap.put(Colors.RED, 2);
+    }
+    void setupCard5(EnumMap<Colors,Integer> enumMap) {
+        enumMap.put(Colors.GREEN, 1);
+        enumMap.put(Colors.BLUE, 2);
+        enumMap.put(Colors.PINK, 2);
+        enumMap.put(Colors.YELLOW, 0);
+        enumMap.put(Colors.RED, 0);
+    }
+    void setupCard4(EnumMap<Colors,Integer> enumMap) {
+        enumMap.put(Colors.GREEN, 1);
+        enumMap.put(Colors.BLUE, 2);
+        enumMap.put(Colors.PINK, 1);
+        enumMap.put(Colors.YELLOW, 0);
+        enumMap.put(Colors.RED, 0);
     }
     void setupEntrance(EnumMap<Colors,Integer> enumMap) {
         enumMap.put(Colors.GREEN, 1);
