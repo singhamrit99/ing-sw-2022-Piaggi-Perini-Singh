@@ -46,6 +46,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         if (!users.containsKey(name))
             users.put(name, c);
         else throw new UserAlreadyExistsException();
+        System.out.println("User "+ name + " registered.");
     }
 
     /**
@@ -81,6 +82,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
             }
         }
         users.remove(username);
+        System.out.println("User "+ username + " de-registered because disconnection.");
     }
 
     /**
@@ -115,6 +117,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         ArrayList<ClientConnection> members = new ArrayList<>();
         Room newRoom = new Room(roomName, members);
         rooms.put(roomName, newRoom);
+        System.out.println("Room "+ roomName + " created by user "+username);
         try {
             joinRoom(username, roomName);
         } catch (RoomNotExistsException | UserInRoomException | RoomFullException | RoomInGameException ignored) {
@@ -148,6 +151,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         } else {
             throw new RoomInGameException();
         }
+        System.out.println("Room "+ roomName + " joined by user "+username);
     }
 
     /**
@@ -181,10 +185,11 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         String roomName = user.getRoom();
         rooms.get(roomName).removeUser(user);
         user.setRoom(null);
-        //complete deletion of the room in case is empty
-        if (rooms.get(roomName).getPlayers().size() == 0) {
+        if (rooms.get(roomName).getPlayers().size() == 0) { //complete deletion of the room in case is empty
             rooms.remove(roomName);
+            System.out.println("Room "+ roomName + " deleted after that "+ username + " leaved the room");
         }
+        else System.out.println("User "+ username + " leaved room "+roomName);
     }
 
     /**
@@ -199,8 +204,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         String roomName = users.get(username).getRoom();
         try {
             leaveRoom(username);
-        } catch (UserNotInRoomException ignored) {
-        }
+        } catch (UserNotInRoomException ignored) {}
 
         PropertyChangeEvent gameFinishedEvent = new PropertyChangeEvent(this, "game-finished", username, null);
         rooms.get(roomName).notifyPlayerInGameLeaves(gameFinishedEvent);
@@ -292,6 +296,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         if (targetRoom.getPlayers().get(0).getNickname().equals(username)) {
             try {
                 targetRoom.startGame();
+                System.out.println("Game in "+ targetRoom.getRoomName() + " started");
             } catch (NegativeValueException | IncorrectArgumentException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -394,7 +399,6 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
                     usersToRemove.add(client);
                 } else client.setDown();
             }
-
             for (ClientConnection clientToRemove : usersToRemove) {
                 try {
                     deregisterConnection(clientToRemove.getNickname());
