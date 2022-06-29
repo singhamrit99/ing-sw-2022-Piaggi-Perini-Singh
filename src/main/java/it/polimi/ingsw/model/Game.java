@@ -44,7 +44,7 @@ public class Game {
     private ArrayList<String> importingClouds;
     private ArrayList<CharacterCard> characterCards;
     private String JSONContent;
-    private PropertyChangeListener gameListener;
+    final private PropertyChangeListener gameListener;
     private String firstPlayer;
     private int selectedCharacterIndex;
 
@@ -52,8 +52,8 @@ public class Game {
      * Constructor of game
      * @param room necessary for the event notification
      * @param expertMode for toggle expert mode
-     * @param numOfPlayer
-     * @param nicknames
+     * @param numOfPlayer is the number of players
+     * @param nicknames is the nicknames of the clients in the room
      * @throws IncorrectArgumentException in case of bad arguments
      * @throws NegativeValueException in case of negative arguments
      */
