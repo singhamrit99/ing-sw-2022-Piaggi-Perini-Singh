@@ -312,9 +312,9 @@ public class CLI implements UI {
     public void startGame() {
         if (!client.isInGame()) {
             try {
+                client.startGame();
                 client.view = StringNames.INGAME;
                 client.setInGame(true);
-                client.startGame();
             } catch (NotEnoughPlayersException e) {
                 System.out.println(StringNames.NOT_ENOUGH_PLAYERS);
             } catch (UserNotInRoomException e) {
@@ -493,6 +493,7 @@ public class CLI implements UI {
         client.setInGame(false);
         clientRoom = null;
         client.view = StringNames.LOBBY;
+        in.nextLine();
     }
 
     /**
@@ -1063,7 +1064,7 @@ public class CLI implements UI {
                     System.out.println(StringNames.NUMBER_FORMAT);
                 }
             }
-            while (i < 0 || i > client.getLocalModel().getBoardOf(client.getNickname()).getMoves()) {
+            while (i <= 0 || i > client.getLocalModel().getBoardOf(client.getNickname()).getMoves()) {
                 System.out.println("That number is not right! Try again.\n");
                 while (true) {
                     input = in.next();
@@ -1265,27 +1266,13 @@ public class CLI implements UI {
                                     movedStudents += value;
                                     if (movedStudents > maxStudents)
                                         doItAgain = false;
-                                    studentsToGame = strippedToGame(studentsToMove, studentsToGame, client.getLocalModel().getIslands().get(island).getName());
+                                    studentsToGame = strippedToGame(studentsToMove, studentsToGame, client.getLocalModel().getIslands().get(island-1).getName());
                                     if (movedStudents < maxStudents) {
-                                        System.out.println("Do you want to move other students to the islands?\n");
-                                        do {
-                                            answer = in.nextLine();
-                                            answer = answer.toLowerCase(Locale.ROOT);
-                                            if (answer.equals("y") || answer.equals("n"))
-                                                isValidInputYN = true;
-                                            else if (answer.equals("\n")) { System.out.print("");
-                                            } else
-                                                System.out.println("Whoops! That's not right. Try again: \n");
-                                        } while (!isValidInputYN);
-                                    }
-                                    if (answer.equals("n")) {
-                                        if (movedStudents==maxStudents)
-                                        doItAgain = false;
-                                        else if (movedStudents==maxStudents)
-                                            doItAgain=false;
-                                    } else {
                                         System.out.println("You still have " + (maxStudents - movedStudents) + " students to move!\n");
+                                        in.nextLine();
                                     }
+                                    else
+                                        doItAgain=false;
                                 } else {
                                     System.out.println("Invalid island number! Try again.\n");
                                 }
@@ -2077,11 +2064,15 @@ public class CLI implements UI {
      */
     public void printPlayerBoards() {
         ArrayList<StrippedBoard> boards = client.getLocalModel().getBoards();
+      int i=client.getLocalModel().getBoards().size();
         System.out.println("Player boards:\n");
         for (StrippedBoard s : boards) {
             if (s.getOwner().equals(client.getNickname()))
                 System.out.println(ansi().fg(YELLOW).a("This is your board!").reset());
             printPlayerBoard(s);
+            i--;
+            if (i>0)
+            System.out.println(ansi().bg(WHITE).fg(BLACK).a("      Next player!      ").reset());
         }
     }
 
@@ -2091,10 +2082,68 @@ public class CLI implements UI {
      * @param board The StrippedBoard to print.
      */
     public void printPlayerBoard(StrippedBoard board) {
-
-        System.out.println("O----------------------O");
+        int rows=0;
+        System.out.println(("O----------------------O"));
         System.out.println(board.getOwner() + "'s board: ");
         System.out.println("Tower color: " + board.getColorsTowers());
+        if (board.getColorsTowers().toString().equals("BLACK"))
+        while(rows< 8) {
+            if (rows%4==0) {
+                if ((rows)< board.getNumberOfTowers())
+                System.out.print(ansi().bg(WHITE).fg(BLACK).a("|* "));
+                else
+                    System.out.print(ansi().bg(WHITE).fg(BLACK).a("| "));
+                rows++;
+            }
+            else if (rows==3||rows==7) {
+                if ((rows)< board.getNumberOfTowers()) {
+                    System.out.print(ansi().bg(WHITE).fg(BLACK).a(" *|").reset());
+                    System.out.println();
+                }
+                else {
+                    System.out.print(ansi().bg(WHITE).fg(BLACK).a("  |").reset());
+                    System.out.println();
+                }
+                rows++;
+            }
+            else {
+                if ((rows+1)< board.getNumberOfTowers())
+                System.out.print(ansi().bg(WHITE).fg(BLACK).a(" * "));
+                else
+                    System.out.print(ansi().bg(WHITE).fg(BLACK).a("   "));
+                rows++;
+            }
+        }
+
+        else
+            while(rows< 8) {
+                if (rows%4==0) {
+                    if ((rows)< board.getNumberOfTowers())
+                        System.out.print(ansi().bg(BLACK).fg(WHITE).a("|* "));
+                    else
+                        System.out.print(ansi().bg(BLACK).fg(WHITE).a("| "));
+                    rows++;
+                }
+                else if (rows==3||rows==7) {
+                    if ((rows)< board.getNumberOfTowers()) {
+                        System.out.print(ansi().bg(BLACK).fg(WHITE).a(" *|").reset());
+                        System.out.println();
+                    }
+                    else {
+                        System.out.print(ansi().bg(BLACK).fg(WHITE).a("  |").reset());
+                        System.out.println();
+                    }
+                    rows++;
+                }
+                else {
+                    if ((rows+1)< board.getNumberOfTowers())
+                        System.out.print(ansi().bg(BLACK).fg(WHITE).a(" * "));
+                    else
+                        System.out.print(ansi().bg(BLACK).fg(WHITE).a("   "));
+                    rows++;
+                }
+            }
+
         System.out.println("Coins: " + board.getCoins());
         System.out.println("\nDining room configuration: ");
         printDining(board);
@@ -2173,7 +2222,7 @@ public class CLI implements UI {
         Integer i;
         int printColumns;
         Ansi.Color color;
-        System.out.println("----------------------╗");
+        System.out.println("┌----------------------┐");
         for (Colors c : board.getDining().keySet()) {
             i = board.getDining().get(c);
             color = colorsToColor(c);
@@ -2188,7 +2237,7 @@ public class CLI implements UI {
             }
             System.out.println();
         }
-        System.out.println("O----------------------O");
+        System.out.println("┕----------------------┚");
     }
 
     /**
@@ -2424,9 +2473,11 @@ public class CLI implements UI {
         } catch (LocalModelNotLoadedException e) {
             System.out.println(StringNames.LOCAL_MODEL_ERROR);
         }
+        int i=1;
         if (myDeck != null) {
             for (AssistantCard a : myDeck.getDeck()) {
-                System.out.println("Card number " + a.getImageName() + " Moves: " + a.getMove());
+                System.out.println("Card number " + i + " Value " + a.getImageName() + " Moves: " + a.getMove());
+                i++;
             }
         }
     }
