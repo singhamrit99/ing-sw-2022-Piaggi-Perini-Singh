@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.network.server.commands.PlayCharacterCardB;
 import it.polimi.ingsw.network.server.commands.PlayCharacterCardD;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
-import it.polimi.ingsw.network.server.stripped.StrippedIsland;
 import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -68,6 +67,7 @@ public class CharacterMultipleSelectController extends InitialStage implements C
         checks.add(check5);
 
         AtomicInteger chosen = new AtomicInteger();
+        int motherNatureIndex = -1;
 
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
         int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
@@ -105,13 +105,28 @@ public class CharacterMultipleSelectController extends InitialStage implements C
         } else {
             choiceBox.visibleProperty().set(true);
 
-            for (StrippedIsland island : GUI.client.getLocalModel().getIslands()) {
-                choiceBox.getItems().add(island.getName());
+            for (int i = 1; i <= GUI.client.getLocalModel().getIslands().size(); i++) {
+                if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
+                    if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
+                        choiceBox.getItems().add(i + ": MN present");
+                        motherNatureIndex = i;
+                    } else {
+                        choiceBox.getItems().add(Integer.toString(i));
+                    }
+                }
             }
+
             choiceBox.getSelectionModel().selectFirst();
 
             chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
-            choiceBox.setOnAction((event) -> chosen.set(choiceBox.getSelectionModel().getSelectedIndex()));
+            int finalMotherNatureIndex = motherNatureIndex;
+            choiceBox.setOnAction(actionEvent -> {
+                if (choiceBox.getSelectionModel().getSelectedIndex() == finalMotherNatureIndex) {
+                    chosen.set(finalMotherNatureIndex);
+                } else {
+                    chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
+                }
+            });
         }
 
         confirmButton.setOnAction((event) -> {
@@ -147,7 +162,7 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                     Controller.showErrorDialogBox(StringNames.FULL_DINING);
                 } catch (CardPlayedInTurnException e) {
                     Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
-                } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+                } catch (AssistantCardAlreadyPlayed e) {
                     Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
                 }
             } else {
@@ -182,7 +197,7 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                     Controller.showErrorDialogBox(StringNames.FULL_DINING);
                 } catch (CardPlayedInTurnException e) {
                     Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);
-                } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+                } catch (AssistantCardAlreadyPlayed e) {
                     Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
                 }
             }
