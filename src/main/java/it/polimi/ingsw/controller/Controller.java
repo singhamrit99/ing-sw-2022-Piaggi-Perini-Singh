@@ -14,7 +14,6 @@ public class Controller {
     /**
      * Creates and initializes the Game instance the Room will be playing in with its Players.
      * As with every other remote method in the project it is called with RMI.
-     *
      * @param room         The Room that called this command.
      * @param expertMode   Tells the game if it has to start in Standard or Expert mode.
      * @param numOfPlayers Number of players.
@@ -73,7 +72,7 @@ public class Controller {
      *
      * @param playerCaller The player that called the method. Since we require all players to have different nicknames the nickname itself is
      *                     *                     sufficient for method invocation.
-     * @param students     The students that were moved in this action: the EnumMap's keyset is the custom Colors enum, and the values are ArrayLists of
+     * @param students     The students that were moved in this action: the EnumMap's key-set is the custom Colors enum, and the values are ArrayLists of
      *                     destinations, such as "dining" or "islandX" divided by color.
      *                     YELLOW           ["dining","islandX"]
      *                     BLUE             []
