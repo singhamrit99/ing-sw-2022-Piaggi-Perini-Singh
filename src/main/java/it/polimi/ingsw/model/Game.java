@@ -50,12 +50,13 @@ public class Game {
 
     /**
      * Constructor of game
-     * @param room necessary for the event notification
-     * @param expertMode for toggle expert mode
+     *
+     * @param room        necessary for the event notification
+     * @param expertMode  for toggle expert mode
      * @param numOfPlayer is the number of players
-     * @param nicknames is the nicknames of the clients in the room
+     * @param nicknames   is the nicknames of the clients in the room
      * @throws IncorrectArgumentException in case of bad arguments
-     * @throws NegativeValueException in case of negative arguments
+     * @throws NegativeValueException     in case of negative arguments
      */
     public Game(Room room, boolean expertMode, int numOfPlayer, ArrayList<String> nicknames) throws IncorrectArgumentException, NegativeValueException {
         gameListener = room;
@@ -75,6 +76,7 @@ public class Game {
 
     /**
      * Method used to load character cards from their JSON file
+     *
      * @throws IncorrectArgumentException thrown when fillDeck method can't find JSON file.
      * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      */
@@ -96,6 +98,7 @@ public class Game {
 
     /**
      * Method used to buy a character card.
+     *
      * @param index Index of the character card.
      * @return whether the card can be bought or not according to the player's coins.
      */
@@ -114,6 +117,7 @@ public class Game {
     /**
      * Method implemented locally through Factory method in each specific Character Card.
      * This is the simplest type of card as it requires no additional resources or information for activation.
+     *
      * @param index The index of the called card.
      * @throws NotEnoughCoinsException    Thrown when the player that tried to perform this character call doesn't have enough coins to complete it.
      * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
@@ -135,6 +139,7 @@ public class Game {
 
     /**
      * After a successful character activation the card's price is increased by 1 through this method.
+     *
      * @param index The index of the character card to increment the price of.
      * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws IncorrectArgumentException Thrown if the coins field is invalid.
@@ -155,6 +160,7 @@ public class Game {
 
     /**
      * Method used to notify the client of character card event.
+     *
      * @param updatedCard The card that was modified.
      */
     public void notifyCharacterEvent(CharacterCard updatedCard) {
@@ -166,6 +172,7 @@ public class Game {
     /**
      * Methods implemented locally through Strategy pattern in each specific Character Card.
      * This type of card requires an additional integer for activation (a color, a student or an island).
+     *
      * @param index  The index of the character card to be called.
      * @param choice The choice the card power acts upon.
      * @throws NotEnoughCoinsException    Thrown if the player that tried to play the card doesn't have enough coins to buy it.
@@ -190,6 +197,7 @@ public class Game {
     /**
      * Methods implemented locally through Strategy pattern in each specific Character Card.
      * This card requires two sets of students to operate.
+     *
      * @param index     Card number.
      * @param students1 Students EnumMap 1
      * @param students2 Students EnumMap 2
@@ -215,6 +223,7 @@ public class Game {
     /**
      * Method implemented locally through Factory method in each specific Character Card.
      * This one requires a student and an island to work, both coded as an integer for convenience.
+     *
      * @param index   Card Number.
      * @param student The color of student chosen by the player.
      * @param island  The island chosen by the player.z
@@ -239,6 +248,7 @@ public class Game {
 
     /**
      * Method used to initialize players at the beginning of the game.
+     *
      * @param nicknames The nicknames of every player in the game
      */
     private void initializationPlayers(ArrayList<String> nicknames) {
@@ -275,6 +285,7 @@ public class Game {
 
     /**
      * Method used to initialize tiles (islands and clouds), pulling from the JSON file.
+     *
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
     private void initializationTilesBag() throws NegativeValueException {
@@ -364,6 +375,7 @@ public class Game {
      * The number of students drawn varies depending on how many players are in the game.
      * PlayerDrawnOut is a boolean variable that is used to prevent the current player from playing Assistant Cards before
      * drawing from the bag.
+     *
      * @param nicknameCaller The player that needs to draw from the bag.
      * @throws IncorrectArgumentException Thrown if any of the parameters used in the methods are incorrect.
      * @throws IncorrectPlayerException   Thrown if the player that called the method isn't the current player.
@@ -390,6 +402,7 @@ public class Game {
      * Method used to play a card. Notice that it calls 'nextPlayer() at the end and creates
      * the correct order of player for the ActionPhase. It is based using a PriorityQueue and
      * taking advantage of the comparable interface of Player
+     *
      * @param nicknameCaller The player that plays the assistant card.
      * @param nameCard       the name of the assistant card that's being played.
      * @throws IncorrectPlayerException       Thrown if the player that called the method isn't the current player.
@@ -427,6 +440,7 @@ public class Game {
      * This is the function that correctly switch the player during the phases. It is called at the end
      * of the last action of each phase: so at the end of playAssistantCard for the Planning Phase and
      * at the end of takeStudentsFromCloud for the Action Phase. It also switches the state of the game.
+     *
      * @throws IncorrectStateException Thrown if the method is called in an illegal phase
      */
     public void nextPlayer() throws IncorrectStateException, IncorrectArgumentException, NegativeValueException {
@@ -459,8 +473,10 @@ public class Game {
                 gameListener.propertyChange(phaseChange);
             } else {
                 state = State.ENDTURN;
-                if (currentPlayer.getPlayedCharacterCard() != null) {
-                    currentPlayer.setPlayedCharacterCard(null);
+                for (Player player : players) {
+                    if (player.getPlayedCharacterCard() != null) {
+                        player.setPlayedCharacterCard(null);
+                    }
                 }
 
                 nextRound();
@@ -485,6 +501,7 @@ public class Game {
      * phase. It checks if there is a gameOver and a winner, otherwise it starts the planning phase assigning
      * the correct currentPlayer, initializing the counter for the PlanningPhase and increasing the num of rounds
      * counter (that is one of the gameOver conditions.
+     *
      * @throws IncorrectStateException Thrown if the method is called in an illegal phase
      */
     private void nextRound() throws IncorrectStateException {
@@ -520,6 +537,7 @@ public class Game {
      * It makes a split of the students, checking which of them go to islands or to the Player that controls the dining room
      * In case the destination is the islands, an array of islandDestination is used by the game to send
      * the students in the correct place (the array uses the unique name of each island).
+     *
      * @param playerCaller   the player that called the MoveStudents method
      * @param studentsToMove the EnumMap that contains the students that need to be moved and their destinations
      * @throws IncorrectArgumentException Thrown when either of the parameters are incorrect.
@@ -620,6 +638,7 @@ public class Game {
     /**
      * It takes the students from a cloud and throw them to the entrance using a method of the player. It checks
      * that is the correct moment and the correct player to perform the action.
+     *
      * @param nicknameCaller The player that called this method
      * @param name           The name of the cloud.
      * @throws IncorrectStateException    Thrown if the method is called in an illegal phase (in this case any state but ActionPhase_3)
@@ -660,6 +679,7 @@ public class Game {
     /**
      * It uses a method in player to check if the distance chosen by the player is legal. After the
      * control it moves the Mother Nature, and it eventually moves the towers and unify islands.
+     *
      * @param playerCaller   The player that called this method
      * @param distanceChosen Distance chosen for MN movement.
      * @throws IncorrectPlayerException   Thrown if the player that called the method isn't the current player.
@@ -739,8 +759,9 @@ public class Game {
 
     /**
      * Method called to check for influence calculations on the island MN ended up on.
+     *
      * @param island The island to check.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws IncorrectArgumentException in case of wrong island name
      */
     public void resolveMotherNature(int island) throws NegativeValueException, IncorrectArgumentException {
@@ -783,6 +804,7 @@ public class Game {
      * Method called if new students are added to the dining room and checks if new professor need to be placed.
      * It is only called in moveStudents method in the Action Phase and by the CharactersCard.
      * It returns a boolean to signal if it has been a change in the professor table.
+     *
      * @throws ProfessorNotFoundException If there's an issue in professor placement this exception is thrown.
      */
     public void checkAndPlaceProfessor() throws ProfessorNotFoundException {
@@ -832,9 +854,10 @@ public class Game {
      * It computes the influence of each team on a given island. If it finds a team with more influence
      * than another assign the ownership and a new tower only if the island hasn't any owner or has an owner
      * different from the new team. It works with 2 players, 3 players and 4 players.
+     *
      * @param island the island the tower needs to be placed on.
      * @throws IncorrectArgumentException if island name is wrong
-     * @throws NegativeValueException if selectedCharacterIndex is wrong
+     * @throws NegativeValueException     if selectedCharacterIndex is wrong
      */
     private void checkAndPlaceTower(Island island) throws IncorrectArgumentException, NegativeValueException {
         EnumMap<Colors, Integer> students = island.getStudents();
@@ -937,6 +960,7 @@ public class Game {
 
     /**
      * Finds player from the relative team. Supporting method.
+     *
      * @param teamColor the color of the team that is being checked.
      * @return the players in the team.
      */
@@ -961,6 +985,7 @@ public class Game {
      * It is used from checkAndPlaceTowers to add or remove towers from a team. The towers must be
      * removed from each player ONCE at time each. For example if playerA and playerB of same team have 3 and 4 towers
      * and 3 towers will be removed, it will leave this configuration: 2 and 2.
+     *
      * @param team   the team that the towers need to be moved from
      * @param amount the number of towers that need to be moved.
      */
@@ -996,6 +1021,7 @@ public class Game {
 
     /**
      * Method that checks if the condition for the unification of two or more islands are met.
+     *
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
     public void checkUnificationIslands() throws NegativeValueException {
@@ -1012,7 +1038,7 @@ public class Game {
                     && (prevTile.getTowersColor().equals(currentTile.getTowersColor()))) {
                 currentTile.addStudents(prevTile.getStudents());
                 currentTile.sumTowers(prevTile.getNumOfTowers());
-                if(prevTile.hasMotherNature()||currentTile.hasMotherNature())currentTile.moveMotherNature();
+                if (prevTile.hasMotherNature() || currentTile.hasMotherNature()) currentTile.moveMotherNature();
                 islandToDestroy = i;
                 listChanged = true;
                 StrippedIsland mergedTile = new StrippedIsland(currentTile); //notify currentTile
@@ -1213,6 +1239,7 @@ public class Game {
 
     /**
      * Notifies listener of this class about changes on an island.
+     *
      * @param islandToChange The island in which the change occurs.
      * @param studentsToAdd  The students that need to be added.
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
