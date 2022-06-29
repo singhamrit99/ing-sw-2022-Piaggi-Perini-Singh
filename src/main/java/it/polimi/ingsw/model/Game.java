@@ -1012,7 +1012,7 @@ public class Game {
                     && (prevTile.getTowersColor().equals(currentTile.getTowersColor()))) {
                 currentTile.addStudents(prevTile.getStudents());
                 currentTile.sumTowers(prevTile.getNumOfTowers());
-                currentTile.moveMotherNature();
+                if(prevTile.hasMotherNature()||currentTile.hasMotherNature())currentTile.moveMotherNature();
                 islandToDestroy = i;
                 listChanged = true;
                 StrippedIsland mergedTile = new StrippedIsland(currentTile); //notify currentTile
