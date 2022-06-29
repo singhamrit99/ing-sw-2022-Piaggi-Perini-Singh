@@ -5,7 +5,6 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.network.server.commands.PlayAssistantCard;
 import it.polimi.ingsw.view.GUI.GUI;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -67,7 +66,7 @@ public class AssistantCardController extends InitialStage implements Controller 
 
         image.setImage(new Image(ResourcesPath.ASSISTANT_CARDS + finalCards.get(firstIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS));
 
-        choiceBox.addEventFilter(ActionEvent.ANY, e -> {
+        choiceBox.setOnAction(actionEvent -> {
             int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
 
             try {
