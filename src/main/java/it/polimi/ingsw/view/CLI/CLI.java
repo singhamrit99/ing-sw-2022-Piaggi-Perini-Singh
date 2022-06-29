@@ -2067,10 +2067,7 @@ public class CLI implements UI {
                     }
                     counter++;
                 }
-                counter--;
-                String pass= client.getLocalModel().getIslands().get(counter).getName().replaceAll("[^\\d.]", "");
-                int island= Integer.parseInt(pass);
-                playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, island);
+                playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, counter);
                 try {
                     client.performGameAction(playCharacterCardDOrder);
                 } catch (UserNotInRoomException e) {
