@@ -29,7 +29,6 @@ public class Controller {
             throw new IncorrectArgumentException("Number of players and nicknames array list length mismatch\n");
         }
         game = new Game(room, expertMode, numOfPlayers, nicknames);
-
         return game;
     }
 
@@ -63,6 +62,7 @@ public class Controller {
      * @throws IncorrectArgumentException Thrown if the playerCaller string is invalid (null or not present in the game).
      */
     public void callDrawFromBag(String playerCaller) throws NegativeValueException, IncorrectPlayerException, IncorrectArgumentException {
+        if (playerCaller == null) throw new IncorrectArgumentException();
         game.drawFromBag(playerCaller);
     }
 
@@ -87,7 +87,11 @@ public class Controller {
      *                                    mismatch or other internal error.
      * @throws IncorrectStateException    Players can't perform actions when it's not their turn: this is thrown if such an occurrence happens.
      */
-    public void callMoveStudent(String playerCaller, EnumMap<Colors, ArrayList<String>> students) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, IncorrectStateException {
+    public void callMoveStudent(String playerCaller, EnumMap<Colors, ArrayList<String>> students) throws IncorrectPlayerException, NegativeValueException,
+            IncorrectArgumentException, ProfessorNotFoundException, IncorrectStateException {
+        if (playerCaller == null) throw new IncorrectArgumentException();
+        if(students==null)throw new IncorrectArgumentException();
+        if(students.isEmpty())throw new IncorrectArgumentException();
         game.moveStudents(playerCaller, students);
     }
 
@@ -105,6 +109,8 @@ public class Controller {
      *                                    trying to do so in any other phase of the turn will result in this exception.
      */
     public void callPickCloud(String playerCaller, String cloudTileID) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, IncorrectStateException {
+        if (playerCaller == null) throw new IncorrectArgumentException();
+        if(cloudTileID==null)throw new IncorrectArgumentException();
         game.takeStudentsFromCloud(playerCaller, cloudTileID);
     }
 
@@ -120,6 +126,8 @@ public class Controller {
      * @throws IncorrectStateException        Thrown if this method is called in any phase but Planning Phase.
      */
     public void callPlayAssistantCard(String playerCaller, String playedCardName) throws IncorrectPlayerException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, NegativeValueException, AssistantCardAlreadyPlayed {
+        if (playerCaller == null) throw new IncorrectArgumentException();
+        if(playedCardName==null)throw new IncorrectArgumentException();
         game.playAssistantCard(playerCaller, playedCardName);
     }
 
@@ -128,12 +136,13 @@ public class Controller {
      * All callPlayCharacterCard methods after this are overloaded due to specific card activation requirements.
      *
      * @param index The id of the played Character card.
-     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NegativeValueException     This game has no negative values, and any found are automatically incorrect.
      * @throws IncorrectArgumentException Thrown if the index field is invalid.
      * @throws ProfessorNotFoundException Thrown by one of the cards' power if there are no professors to steal.
      * @throws NotEnoughCoinsException    Thrown if the Player doesn't have enough coins to buy this Character card.
      */
     public void callPlayCharacterCard(int index) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
+        if(index<0)throw new NegativeValueException();
         game.activateCharacterCard(index);
     }
 
@@ -149,6 +158,7 @@ public class Controller {
      * @throws NotEnoughCoinsException    Thrown if the Player doesn't have enough coins to buy this Character card.
      */
     public void callPlayCharacterCard(int index, int student, int island) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
+        if(index<0||student<0||island<0)throw new NegativeValueException();
         game.activateCharacterCard(index, student, island);
     }
 
@@ -164,6 +174,9 @@ public class Controller {
      * @throws NotEnoughCoinsException    Thrown if the Player doesn't have enough coins to buy this Character card.
      */
     public void callPlayCharacterCard(int index, EnumMap<Colors, Integer> students1, EnumMap<Colors, Integer> students2) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
+        if(index<0)throw new NegativeValueException();
+        if(students1==null||students2==null)throw new IncorrectArgumentException();
+        if(students1.isEmpty()||students2.isEmpty())throw new IncorrectArgumentException();
         game.activateCharacterCard(index, students1, students2);
     }
 
@@ -178,6 +191,7 @@ public class Controller {
      * @throws NotEnoughCoinsException    Thrown if the Player doesn't have enough coins to buy this Character card.
      */
     public void callPlayCharacterCard(int index, int choice) throws NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException {
+        if(index<0||choice<0)throw new NegativeValueException();
         game.activateCharacterCard(index, choice);
     }
 }
