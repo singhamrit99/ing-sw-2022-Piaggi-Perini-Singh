@@ -135,11 +135,19 @@ public class MoveStudentsController extends InitialStage implements Controller {
                 }
 
                 if (islandNumber.getSelectionModel().getSelectedIndex() != 0 && islandsComboBoxes.get(i).getSelectionModel().getSelectedItem() != null) {
-                    String islandNum;
+                    String islandNum = "";
+                    final int[] count = {0};
                     if (islandNumber.getSelectionModel().getSelectedIndex() == motherNatureIndex) {
                         islandNum = String.valueOf(motherNatureIndex);
                     } else {
-                        islandNum = islandNumber.getSelectionModel().getSelectedItem().toString();
+                        for (int island = 1; island <= GUI.client.getLocalModel().getIslands().size(); island++) {
+                            if (!GUI.client.getLocalModel().getIslands().get(island - 1).getName().equals("EMPTY")) {
+                                if (count[0] == islandNumber.getSelectionModel().getSelectedIndex() - 1) {
+                                    islandNum = String.valueOf(island);
+                                }
+                                count[0]++;
+                            }
+                        }
                     }
                     value = Integer.parseInt(islandsComboBoxes.get(i).getSelectionModel().getSelectedItem().toString());
 
@@ -200,16 +208,17 @@ public class MoveStudentsController extends InitialStage implements Controller {
      */
     public void loadComboBox(ComboBox comboBox, int num) {
         ObservableList<String> choices = FXCollections.observableArrayList();
-
+        int j = 0;
         for (int i = 0; i <= num; i++) {
             if (i > 0 && comboBox.getId().equals(islandNumber.getId())) {
                 if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
                     if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
-                        choices.add(i + ": MN present");
-                        motherNatureIndex = i;
+                        choices.add(j + 1 + ": MN present");
+                        motherNatureIndex = j;
                     } else {
-                        choices.add(Integer.toString(i));
+                        choices.add(Integer.toString(j + 1));
                     }
+                    j++;
                 }
             } else {
                 choices.add(Integer.toString(i));
