@@ -50,14 +50,16 @@ public class CharacterOneSelectController extends InitialStage implements Contro
         description.setText(selectedCharacter.getDescription());
 
         if (selectedCharacter.getCharacterID() == 3) {
-            for (int i = 1; i <= GUI.client.getLocalModel().getIslands().size(); i++) {
+            final int[] j = {0};
+            for (int i = 0; i < GUI.client.getLocalModel().getIslands().size(); i++) {
                 if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
                     if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
-                        choiceBox.getItems().add(i + ": MN present");
-                        motherNatureIndex = i;
+                        choiceBox.getItems().add(j[0] + 1 + ": MN present");
+                        motherNatureIndex = j[0];
                     } else {
-                        choiceBox.getItems().add(Integer.toString(i));
+                        choiceBox.getItems().add(Integer.toString(j[0] + 1));
                     }
+                    j[0]++;
                 }
             }
         } else {
@@ -73,10 +75,18 @@ public class CharacterOneSelectController extends InitialStage implements Contro
         int finalMotherNatureIndex = motherNatureIndex;
         choiceBox.setOnAction(actionEvent -> {
             if (selectedCharacter.getCharacterID() == 3) {
+                final int[] count = {0};
                 if (choiceBox.getSelectionModel().getSelectedIndex() == finalMotherNatureIndex) {
                     chosen.set(finalMotherNatureIndex);
                 } else {
-                    chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
+                    for (int island = 0; island < GUI.client.getLocalModel().getIslands().size(); island++) {
+                        if (!GUI.client.getLocalModel().getIslands().get(island).getName().equals("EMPTY")) {
+                            if (count[0] == choiceBox.getSelectionModel().getSelectedIndex()) {
+                                chosen.set(island);
+                            }
+                            count[0]++;
+                        }
+                    }
                 }
             } else {
                 chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
