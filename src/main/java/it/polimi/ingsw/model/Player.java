@@ -27,8 +27,9 @@ public class Player implements Comparable<Player> {
 
     /**
      * Player class constructor
-     * @param nickname The player's nickname.
-     * @param towerColors The player's Tower colors. If it's a 4 player game 2 players will be on the same team with the same colors.
+     *
+     * @param nickname        The player's nickname.
+     * @param towerColors     The player's Tower colors. If it's a 4 player game 2 players will be on the same team with the same colors.
      * @param numberOfPlayers The number of players in the game. Used for method calls.
      */
     public Player(String nickname, Towers towerColors, int numberOfPlayers) {
@@ -37,12 +38,15 @@ public class Player implements Comparable<Player> {
         this.towerColor = towerColors;
         assistantCardPlayedInThisTurn = false;
         assistantCardDeck = new AssistantCardDeck(nickname);
+        playedCharacterCard = null;
+        playedAssistantCard = null;
         assistantCardDeck.fillDeck();
         coins = 1;
     }
 
     /**
      * Method used to play an Assistant Card from the Player's personal deck.
+     *
      * @param nameCard The Name of the assistant card to play.
      * @throws AssistantCardNotFoundException If the card associated with the string can't be found or the string is incorrect this exception is thrown.
      */
@@ -60,6 +64,7 @@ public class Player implements Comparable<Player> {
 
     /**
      * Returns whether this player has played an assistant card this turn.
+     *
      * @return true or false.
      */
     public boolean hasPlayedAssistantInThisTurn() {
@@ -68,6 +73,7 @@ public class Player implements Comparable<Player> {
 
     /**
      * Method used to add students to the Player's SchoolBoard.
+     *
      * @param students the students that need to be added.
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
@@ -78,9 +84,10 @@ public class Player implements Comparable<Player> {
     /**
      * Method that moves the students across the Dining Room and Entrance. Also checks if the player needs to be awarded coins based on the number
      * of the students in their dining room.
-     * @param move The students that are being moved.
+     *
+     * @param move   The students that are being moved.
      * @param remove The students that are being removed.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
      */
     public void moveStudents(EnumMap<Colors, Integer> move, EnumMap<Colors, Integer> remove) throws NegativeValueException, IncorrectArgumentException {
@@ -99,13 +106,16 @@ public class Player implements Comparable<Player> {
 
     /**
      * Adds the professor of the provided color to this player's board.
+     *
      * @param student The color of the professor that needs to be added.
      */
     public void addProfessor(Colors student) {
         schoolBoard.addProfessor(student);
     }
+
     /**
      * Removes the professor of the provided color from this player's board.
+     *
      * @param student The color of the professor that needs to be removed.
      */
     public void removeProfessor(Colors student) throws ProfessorNotFoundException {
@@ -114,8 +124,8 @@ public class Player implements Comparable<Player> {
 
     /**
      * Method used to compare players.
+     *
      * @param otherPlayer the player I'm comparing agains.
-     * @return whether we're the same player or not.
      * @return whether we're the same player or not.
      */
     @Override
@@ -124,28 +134,35 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     *Returns the player's schoolboard.
+     * Returns the player's schoolboard.
+     *
      * @return SchoolBoard
      */
     public SchoolBoard getSchoolBoard() {
         return schoolBoard;
     }
+
     /**
-     *Returns the player's Tower Color.
+     * Returns the player's Tower Color.
+     *
      * @return Tower Color
      */
     public Towers getTowerColor() {
         return towerColor;
     }
+
     /**
-     *Returns the player's played Assistant Card.
+     * Returns the player's played Assistant Card.
+     *
      * @return played Assistant Card
      */
     public AssistantCard getPlayedAssistantCard() {
         return playedAssistantCard;
     }
+
     /**
-     *Returns the player's Assistant Card Deck.
+     * Returns the player's Assistant Card Deck.
+     *
      * @return Assistant Card Deck
      */
     public AssistantCardDeck getAssistantCardDeck() {
@@ -153,7 +170,8 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     *Returns the player's towers.
+     * Returns the player's towers.
+     *
      * @return towers
      */
     public int getPlayerTowers() {
@@ -161,7 +179,8 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     *Returns the number of students of a certain color.
+     * Returns the number of students of a certain color.
+     *
      * @param student the color of the student I'm checking.
      * @return number of students of that color in my board (either dining or entrance depending on what the method is called on)
      */
@@ -170,7 +189,8 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     *Method used in towers movement.
+     * Method used in towers movement.
+     *
      * @param num number of towers to move.
      */
     public void moveTowers(int num) {
@@ -178,7 +198,8 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     *Checks if this player possesses the professor of a certain color (used in conquest logic)
+     * Checks if this player possesses the professor of a certain color (used in conquest logic)
+     *
      * @param student The color of the professor to check
      * @return true or false depending on the value.
      */
@@ -187,7 +208,8 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     *Returns the player's nickname.
+     * Returns the player's nickname.
+     *
      * @return nickname
      */
     public String getNickname() {
@@ -195,9 +217,10 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     *Removes coins from player after successful character card activation.
+     * Removes coins from player after successful character card activation.
+     *
      * @param value the number of coins to remove.
-     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws IncorrectArgumentException Thrown if any of the parameters used by the method are invalid.
      */
     public void removeCoins(int value) throws NegativeValueException, IncorrectArgumentException {
@@ -213,7 +236,8 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     *Returns the player's coins.
+     * Returns the player's coins.
+     *
      * @return coins
      */
     public int getCoins() {
@@ -221,7 +245,8 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     *Returns the player's played character card.
+     * Returns the player's played character card.
+     *
      * @return played character card
      */
     public CharacterCard getPlayedCharacterCard() {
@@ -229,7 +254,8 @@ public class Player implements Comparable<Player> {
     }
 
     /**
-     *Method used to set a specific character card as "played".
+     * Method used to set a specific character card as "played".
+     *
      * @param characterCard the character card that needs to be changed.
      */
     public void setPlayedCharacterCard(CharacterCard characterCard) {
