@@ -48,17 +48,20 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         else throw new UserAlreadyExistsException();
     }
 
-    //todo JavaDocs
+    /**
+     * to find wrong names of roomName and clientName
+     * @param name
+     * @throws NameFieldException
+     */
     private void controlName(String name) throws NameFieldException {
-        if (name == null || name.trim().isEmpty() || name.length()>14) { //todo maybe another exception
+        if (name == null || name.trim().isEmpty() || name.length()>14) {
             throw new NameFieldException();
         }
     }
 
 
     /**
-     * Deregisters connection when too many pings are missed.
-     *
+     * De-Registers connections.
      * @param username The username of the user to remover.
      * @throws RemoteException            Thrown in case of a network error.
      * @throws UserNotRegisteredException Thrown if the selected player can't be found on the server.
@@ -185,8 +188,9 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     }
 
     /**
-     * Method used to leave when the game is being played.
-     *
+     * Method used by the first player who leave the room while the game is being played.
+     * This method is only accessible from inside the room. It's similar to leaveRoom, but it
+     * also notifies all the other players that the game is finished because the leaving.
      * @param username The player that wants to leave the game.
      * @throws RemoteException            Thrown in case of a network error.
      * @throws UserNotRegisteredException Thrown if the provided username is not present on the server.
@@ -196,7 +200,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         try {
             leaveRoom(username);
         } catch (UserNotInRoomException ignored) {
-        } //this method is only accessible from inside the room
+        }
 
         PropertyChangeEvent gameFinishedEvent = new PropertyChangeEvent(this, "game-finished", username, null);
         rooms.get(roomName).notifyPlayerInGameLeaves(gameFinishedEvent);
@@ -298,7 +302,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     }
 
     /**
-     * Used to check if an username is in game.
+     * Used to check if a client is in game.
      *
      * @param username the user to check.
      * @return whether the user is in the room or not.
@@ -340,7 +344,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     }
 
     /**
-     * Method used to get updates
+     * Method used by the clients to get the updates of the game. Each client has his 'buffer of game events' .
      *
      * @param username The user that requested the update.
      * @return The event buffer.
@@ -359,20 +363,27 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     }
 
     /**
-     * Ping method used to make sure the client is still connected to the server.
-     *
-     * @param username The client name.
-     * @throws RemoteException            Thrown in case of a network error.
-     * @throws UserNotRegisteredException Thrown when the user is not in a room.
+     * Method used to find disconnected users. It is based on 'ping-pong system' . 
      */
     @Override
-    public synchronized void ping(String username) throws RemoteException, UserNotRegisteredException {
-        if (!users.containsKey(username)) throw new UserNotRegisteredException();
-        users.get(username).setUp();
+    public void run() {
+        while (serverActive) {
+            try {
+                findDisconnectedUsers();
+                sleep(500); //must be double client ping timeout
+            } catch (ConcurrentModificationException concurrentError) {
+                System.out.println("Server warning: concurrent modification while disconnecting managed.");
+            }catch (InterruptedException e) {
+                System.out.println("Server error: server run() interrupted.");
+            }
+        }
     }
 
     /**
-     * Method to check if any clients were disconnected
+     * Method to check if any clients are disconnected. It uses a 'ping-pong' system style to
+     * find the players who ping the server. If the client has correctly marked its ping value on 'up'
+     * the server set it down (pong). If the client has disconnected, the server found the ping value has 'down'
+     * and de-register the client.
      */
     private synchronized void findDisconnectedUsers() {
         ArrayList<ClientConnection> usersToRemove = new ArrayList<>();
@@ -395,22 +406,17 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     }
 
     /**
-     * Method used to find dead clients
+     * Ping method used by clients to set 'up' or to 'ping' their connection.
+     * The ping is registered in the specific client connection that represents the client.
+     *
+     * @param username The client name.
+     * @throws RemoteException            Thrown in case of a network error.
+     * @throws UserNotRegisteredException Thrown when the user is not in a room.
      */
     @Override
-    public void run() {
-        while (serverActive) {
-            try {
-                findDisconnectedUsers();
-            } catch (ConcurrentModificationException ignored) {
-                ignored.printStackTrace();
-            }
-            try {
-                sleep(500); //must be double client ping timeout
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    public synchronized void ping(String username) throws RemoteException, UserNotRegisteredException {
+        if (!users.containsKey(username)) throw new UserNotRegisteredException();
+        users.get(username).setUp();
     }
 
 }
