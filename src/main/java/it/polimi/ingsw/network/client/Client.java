@@ -191,6 +191,7 @@ public class Client implements Runnable {
             throw new UserNotInRoomException();
         } else {
             server.leaveRoom(nickname);
+            clientRoom=null;
         }
     }
 

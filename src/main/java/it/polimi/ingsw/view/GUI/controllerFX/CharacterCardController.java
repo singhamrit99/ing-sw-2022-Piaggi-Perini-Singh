@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.view.GUI.GUI;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -60,7 +59,7 @@ public class CharacterCardController extends InitialStage implements Controller 
         coins.setText("Card cost: " + cards.get(firstIndex).getPrice());
         image.setImage(new Image(ResourcesPath.CHARACTERS + cards.get(firstIndex).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
 
-        choiceBox.addEventFilter(ActionEvent.ANY, e -> {
+        choiceBox.setOnAction(actionEvent -> {
             int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
             coins.setText("Card cost: " + cards.get(selectedIndex).getPrice());
             image.setImage(new Image(ResourcesPath.CHARACTERS + cards.get(selectedIndex).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
@@ -68,7 +67,7 @@ public class CharacterCardController extends InitialStage implements Controller 
             GUI.client.getLocalModel().selectedCharacter = cards.get(selectedIndex);
         });
 
-        confirmButton.setOnAction((event) -> {
+        confirmButton.setOnAction(event -> {
             switch (GUI.client.getLocalModel().selectedCharacter.getCharacterID()) {
                 case 2:
                 case 4:

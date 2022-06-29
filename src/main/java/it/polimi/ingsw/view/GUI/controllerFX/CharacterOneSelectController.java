@@ -45,12 +45,20 @@ public class CharacterOneSelectController extends InitialStage implements Contro
     public void initialize() {
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
         int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
+        int motherNatureIndex = -1;
 
         description.setText(selectedCharacter.getDescription());
 
         if (selectedCharacter.getCharacterID() == 3) {
-            for (StrippedIsland island : GUI.client.getLocalModel().getIslands()) {
-                choiceBox.getItems().add(island.getName());
+            for (int i = 1; i <= GUI.client.getLocalModel().getIslands().size(); i++) {
+                if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
+                    if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
+                        choiceBox.getItems().add(i + ": MN present");
+                        motherNatureIndex = i;
+                    } else {
+                        choiceBox.getItems().add(Integer.toString(i));
+                    }
+                }
             }
         } else {
             for (Colors color : Colors.values()) {
@@ -62,7 +70,18 @@ public class CharacterOneSelectController extends InitialStage implements Contro
         AtomicInteger chosen = new AtomicInteger();
         chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
 
-        choiceBox.addEventFilter(ActionEvent.ANY, e-> chosen.set(choiceBox.getSelectionModel().getSelectedIndex()));
+        int finalMotherNatureIndex = motherNatureIndex;
+        choiceBox.setOnAction(actionEvent -> {
+            if (selectedCharacter.getCharacterID() == 3) {
+                if (choiceBox.getSelectionModel().getSelectedIndex() == finalMotherNatureIndex) {
+                    chosen.set(finalMotherNatureIndex);
+                } else {
+                    chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
+                }
+            } else {
+                chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
+            }
+        });
 
         confirmButton.setOnAction((event) -> {
             PlayCharacterCardD playCharacterCardD = new PlayCharacterCardD(GUI.client.getNickname(), indexSelectedCharacter, chosen.get());

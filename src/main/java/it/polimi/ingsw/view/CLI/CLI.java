@@ -148,7 +148,14 @@ public class CLI implements UI {
 
             //Main game loop
             //Initializing local professors board
+            boolean wait=true;
             while (client.getLocalModel() == null) {
+                if (wait) {
+                    System.out.println("Waiting for local model");
+                    wait=false;
+                }
+                if (client.getLocalModel()!=null)
+                    System.out.println("Local model loaded!");
             }
             for (StrippedBoard s : client.getLocalModel().getBoards()) {
                 professorsTables.put(s.getOwner(), s.getProfessorsTable());
@@ -562,6 +569,7 @@ public class CLI implements UI {
     private void leaveRoom() {
         try {
             client.leaveRoom();
+            clientRoom=null;
         } catch (UserNotInRoomException e) {
             System.out.println("You're not in a room yet\n");
         } catch (UserNotRegisteredException e) {
@@ -652,6 +660,8 @@ public class CLI implements UI {
         } catch (NameFieldException e) {
             System.out.println(StringNames.NAME_FIELD_NULL);
         }
+        if (clientRoom!=null)
+            leaveRoom();
         clientRoom = nameRoom;
     }
 
@@ -674,7 +684,7 @@ public class CLI implements UI {
                         return;
                     }
                 }
-                if (requestedRoom.equals(clientRoom)) {
+                if (requestedRoom.equals(client.getRoom())) {
                     System.out.println("You're already in that room!\n");
                 } else {
                     try {
@@ -688,12 +698,12 @@ public class CLI implements UI {
                         try {
                             sendArrayString(client.getNicknamesInRoom());
                         } catch (RoomNotExistsException e) {
-                            System.out.println(StringNames.ROOM_NOT_EXISTS);
+                            System.out.println(StringNames.ROOM_NOT_EXISTS + "1");
                         } catch (UserNotInRoomException e) {
                             System.out.println(StringNames.USER_NOT_IN_ROOM);
                         }
                     } catch (RoomNotExistsException e) {
-                        System.out.println(StringNames.ROOM_NOT_EXISTS);
+                        System.out.println(StringNames.ROOM_NOT_EXISTS + "2");
                     } catch (RoomFullException e) {
                         System.out.println(StringNames.ROOM_FULL);
                     } catch (UserInRoomException e) {
@@ -1268,8 +1278,11 @@ public class CLI implements UI {
                                                 System.out.println("Whoops! That's not right. Try again: \n");
                                         } while (!isValidInputYN);
                                     }
-                                    if (answer.equals("n") || movedStudents == maxStudents) {
+                                    if (answer.equals("n")) {
+                                        if (movedStudents==maxStudents)
                                         doItAgain = false;
+                                        else if (movedStudents==maxStudents)
+                                            doItAgain=false;
                                     } else {
                                         System.out.println("You still have " + (maxStudents - movedStudents) + " students to move!\n");
                                     }
