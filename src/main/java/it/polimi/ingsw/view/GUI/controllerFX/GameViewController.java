@@ -161,7 +161,6 @@ public class GameViewController extends InitialStage implements Controller {
         this.currentPlayer.setText("[ Current Player:" + panningString + currentPlayer + panningString + "]");
     }
 
-
     public void changeViewBoard(String viewOwnerTarget) {
         if (GUI.client.getLocalPlayerList().contains(viewOwnerTarget)) {
             currentBoardView = viewOwnerTarget;
@@ -179,7 +178,6 @@ public class GameViewController extends InitialStage implements Controller {
         else if (c.equals(Colors.GREEN)) return greenStudentImg;
         else return redStudentImg;
     }
-
 
     public boolean isOpened() {
         return opened.get();
@@ -417,11 +415,10 @@ public class GameViewController extends InitialStage implements Controller {
                     HBox islandHbox = new HBox();
                     initTowersPane(island, islandHbox, islandsBackEnd.get(indexIsland));
                     GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(indexIsland));
-                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()){
+                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()) {
                         spawnNoEntryTile(island);
                         if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(island);
-                    }
-                    else if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
+                    } else if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
                     Islands.addRow(0, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -444,11 +441,10 @@ public class GameViewController extends InitialStage implements Controller {
                     HBox islandHbox = new HBox();
                     initTowersPane(island, islandHbox, islandsBackEnd.get(realIndex));
                     GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(realIndex));
-                    if (islandsBackEnd.get(realIndex).hasNoEnterTile()){
+                    if (islandsBackEnd.get(realIndex).hasNoEnterTile()) {
                         spawnNoEntryTile(island);
                         if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(island);
-                    }
-                    else if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(studentsPane);
+                    } else if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(studentsPane);
                     Islands.addRow(1, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -470,11 +466,10 @@ public class GameViewController extends InitialStage implements Controller {
                     HBox islandHbox = new HBox();
                     initTowersPane(island, islandHbox, islandsBackEnd.get(realIndex));
                     GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(realIndex));
-                    if (islandsBackEnd.get(realIndex).hasNoEnterTile()){
+                    if (islandsBackEnd.get(realIndex).hasNoEnterTile()) {
                         spawnNoEntryTile(island);
                         if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(island);
-                    }
-                    else if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(studentsPane);
+                    } else if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(studentsPane);
                     Islands.addRow(2, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
@@ -495,11 +490,10 @@ public class GameViewController extends InitialStage implements Controller {
                     HBox islandHbox = new HBox();
                     initTowersPane(island, islandHbox, islandsBackEnd.get(indexIsland));
                     GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(indexIsland));
-                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()){
+                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()) {
                         spawnNoEntryTile(island);
                         if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(island);
-                    }
-                    else if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
+                    } else if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);
                     Islands.addRow(3, island);
                     Islands.getRowConstraints().add(row);
                     Islands.getColumnConstraints().add(column);
