@@ -19,14 +19,9 @@ import java.rmi.registry.Registry;
 public class Starter {
     /**
      * The class needed to start the generated jar file.
-     * @param args the jar file arguments, used to pick between server, and CLI/GUI clients.
-     * @throws InterruptedException Thrown when a thread's wait is interrupted.
-     * @throws AlreadyBoundException Thrown if the 23023 socket is already bound to another process.
-     * @throws IOException Thrown in case of an input error.
      */
-    public static void main(String[] args){
+    public static void main(String[] args) {
         if (args.length != 0) {
-            String serverClient = args[0];
             if (args.length < 3) {
                 if (args.length > 1) {
                     if (args[0].equals("-cli")) {
@@ -57,8 +52,7 @@ public class Starter {
                             new Thread(server).start();
                         } catch (AlreadyBoundException e) {
                             System.out.println("Chosen socket is already bound");
-                        }catch (IOException e)
-                        {
+                        } catch (IOException e) {
                             System.out.println("IO exception");
                         }
                     } else {
@@ -74,6 +68,5 @@ public class Starter {
             System.out.println("No parameters inserted");
             System.exit(0);
         }
-
     }
 }
