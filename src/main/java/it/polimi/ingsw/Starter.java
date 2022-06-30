@@ -55,8 +55,11 @@ public class Starter {
                             Registry registry = LocateRegistry.createRegistry(23023);
                             registry.bind("server", server);
                             new Thread(server).start();
-                        } catch (IOException | AlreadyBoundException e) {
-                            System.out.println("There has been some errors");
+                        } catch (AlreadyBoundException e) {
+                            System.out.println("Chosen socket is already bound");
+                        }catch (IOException e)
+                        {
+                            System.out.println("IO exception");
                         }
                     } else {
                         System.out.println("Incorrect parameters inserted");
