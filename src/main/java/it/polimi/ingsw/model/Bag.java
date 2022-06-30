@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.exceptions.NegativeValueException;
 
@@ -65,7 +66,7 @@ public class Bag {
      * @return an EnumMap of Colors, Integer with the randomly picked students.
      * @throws NegativeValueException
      */
-    public EnumMap<Colors, Integer> drawStudents(int numberOfStudents) throws NegativeValueException {
+    public EnumMap<Colors, Integer> drawStudents(int numberOfStudents) throws NegativeValueException, IncorrectArgumentException {
         int type;
         int studentType = 5;
 
