@@ -16,15 +16,6 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ControllerTest {
-    public Game initGame4players() throws IncorrectArgumentException, NegativeValueException {
-        ArrayList<String> nicknames = new ArrayList<>();
-        nicknames.add("Michelangelo");
-        nicknames.add("Raffaello");
-        nicknames.add("Donatello");
-        nicknames.add("Leonardo");
-        return new Game(null, true, 4, nicknames);
-    }
-
     @Test
     void testCallMoveMotherNature() throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException, AssistantCardNotFoundException, MotherNatureLostException, AssistantCardAlreadyPlayed {
         Controller controller = new Controller();
@@ -41,22 +32,15 @@ class ControllerTest {
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 1));
         }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
-        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
-            ArrayList<String> tmp = new ArrayList<>();
-            movingStudents.put(c, tmp);
             for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
-                tmp = movingStudents.get(c);
                 if (Math.random() > 0.5) {
-                    tmp.add("dining");
-                } else tmp.add("island4");
-                movingStudents.put(c, tmp);
+                    game.moveStudents(game.getCurrentPlayer().getNickname(), c, "dining");
+                } else game.moveStudents(game.getCurrentPlayer().getNickname(), c, "island4");
                 countNumStudents--;
             }
         }
-        //game.moveStudents(game.getCurrentPlayer().getNickname(), movingStudents);
-        //TODO fix test
         int oldPosMotherNature = game.getMotherNaturePosition();
         Random casual = new Random();
         int randomMovement = casual.nextInt(game.getCurrentPlayer().getPlayedAssistantCard().getMove()) + 1;
@@ -82,22 +66,15 @@ class ControllerTest {
         assertEquals(game.getCurrentState(), State.ACTIONPHASE_1);
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
         assertEquals(7, game.valueOfEnum(entrance));
-        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
-            ArrayList<String> tmp = new ArrayList<>();
-            movingStudents.put(c, tmp);
             for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
-                tmp = movingStudents.get(c);
                 if (Math.random() > 0.5) {
-                    tmp.add("dining");
-                } else tmp.add("island4");
-                movingStudents.put(c, tmp);
+                    controller.callMoveStudent(game.getCurrentPlayer().getNickname(), c, "dining");
+                } else controller.callMoveStudent(game.getCurrentPlayer().getNickname(), c, "island4");
                 countNumStudents--;
             }
         }
-        //controller.callMoveStudent(game.getCurrentPlayer().getNickname(), movingStudents);
-        //TODO fix test
         assertEquals(4, game.valueOfEnum(entrance));
     }
 
@@ -117,22 +94,15 @@ class ControllerTest {
             game.playAssistantCard(game.getCurrentPlayer().getNickname(), String.valueOf(i + 4));
         }
         EnumMap<Colors, Integer> entrance = game.getCurrentPlayer().getSchoolBoard().getEntrance();
-        EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
-            ArrayList<String> tmp = new ArrayList<>();
-            movingStudents.put(c, tmp);
             for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
-                tmp = movingStudents.get(c);
                 if (Math.random() > 0.5) {
-                    tmp.add("dining");
-                } else tmp.add("island4");
-                movingStudents.put(c, tmp);
+                    controller.callMoveStudent(game.getCurrentPlayer().getNickname(), c, "dining");
+                } else controller.callMoveStudent(game.getCurrentPlayer().getNickname(), c, "island4");
                 countNumStudents--;
             }
         }
-        //controller.callMoveStudent(game.getCurrentPlayer().getNickname(), movingStudents);
-        //TODO fix test
         controller.callMoveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         controller.callPickCloud(game.getCurrentPlayer().getNickname(), "cloud1");
         EnumMap<Colors, Integer> studentsoncloud = game.getCloudTile(0).getStudents();
