@@ -124,7 +124,7 @@ public class MoveStudentsController extends InitialStage implements Controller {
 
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                final int[] count = {1};
+                int count = 1;
                 if (choiceBox.getSelectionModel().isSelected(0)) {
                     chosen.set("dining");
                     try {
@@ -135,10 +135,10 @@ public class MoveStudentsController extends InitialStage implements Controller {
                 } else {
                     for (int island = 0; island < GUI.client.getLocalModel().getIslands().size(); island++) {
                         if (!GUI.client.getLocalModel().getIslands().get(island).getName().equals("EMPTY")) {
-                            if (count[0] == t1.intValue()) {
+                            if (count == t1.intValue()) {
                                 chosen.set(GUI.client.getLocalModel().getIslands().get(island).getName());
                             }
-                            count[0]++;
+                            count++;
                         }
                     }
                     students.set(GUI.client.getLocalModel().getIslands().get(t1.intValue() - 1).getStudents());
