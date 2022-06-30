@@ -124,11 +124,6 @@ public class CharacterMultipleSelectController extends InitialStage implements C
             }
             choiceBox.getSelectionModel().selectFirst();
 
-            chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
-            choiceBox.setOnAction(actionEvent -> {
-
-            });
-
             choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 
                 @Override
