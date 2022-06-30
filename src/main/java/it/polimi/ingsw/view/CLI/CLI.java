@@ -938,7 +938,6 @@ public class CLI implements UI {
      */
     public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException, InterruptedException {
         do {
-            in.nextLine();
             System.out.println("Select an action: ");
             String input;
             while (true) {
@@ -1670,7 +1669,7 @@ public class CLI implements UI {
                 if (isValidColor(color)) {
                     if (myBoard != null) {
                         if (value <= myBoard.getEntrance().get(stringToColor(color))) {
-                            students1 = initializeMove(students2);
+                            students1 = initializeMove(students1);
                             students1.put(stringToColor(color), students1.get(stringToColor(color)) + value);
                             movedStudents += value;
                             if (movedStudents < 3) {
@@ -1829,7 +1828,14 @@ public class CLI implements UI {
             //**************************** Students from dining room taken **************************************
 
         }
-
+            for (Colors c: students1.keySet())
+            {
+                System.out.println(c + " students 1: "+ students1.get(c));
+            }
+        for (Colors c: students2.keySet())
+        {
+            System.out.println(c + " students 2: "+ students2.get(c));
+        }
         if (validInput) {
             playCharacterCardCOrder = new PlayCharacterCardC(client.getNickname(), id, students1, students2);
             try {
@@ -1876,6 +1882,7 @@ public class CLI implements UI {
         //And the No Entry card that wants the island number so it ends up here
         System.out.println(client.getLocalModel().getCharacters().get(id).getDescription());
         switch (client.getLocalModel().getCharacters().get(id).getDescription()) {
+            case "Choose a student color to ignore when calculating Influence this turn!":
             case "Choose a color: EVERYONE must return 3 students of that color to the bag!": {
                 System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
                 int choice;
