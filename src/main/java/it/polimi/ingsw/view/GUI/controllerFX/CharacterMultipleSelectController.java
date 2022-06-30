@@ -74,7 +74,11 @@ public class CharacterMultipleSelectController extends InitialStage implements C
         description.setText(selectedCharacter.getDescription());
 
         for (int i = 0; i < selectedCharacter.getStudents().size(); i++) {
-            text.get(i).setText(String.valueOf(selectedCharacter.getStudents().get(Colors.getStudent(i))));
+            try {
+                text.get(i).setText(String.valueOf(selectedCharacter.getStudents().get(Colors.getStudent(i))));
+            } catch (IncorrectArgumentException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+            }
         }
 
         AtomicInteger index = new AtomicInteger();
