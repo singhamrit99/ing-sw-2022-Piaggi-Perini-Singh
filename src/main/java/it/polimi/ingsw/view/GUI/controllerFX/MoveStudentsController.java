@@ -5,6 +5,8 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.network.server.commands.MoveStudents;
 import it.polimi.ingsw.view.GUI.GUI;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -118,40 +120,43 @@ public class MoveStudentsController extends InitialStage implements Controller {
         }
 
         chosen.set("dining");
-        choiceBox.setOnAction(actionEvent -> {
-            final int[] count = {1};
-            if (choiceBox.getSelectionModel().isSelected(0)) {
-                chosen.set("dining");
-                try {
-                    students.set(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getDining());
-                } catch (LocalModelNotLoadedException e) {
-                    Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
-                }
-            } else {
-                for (int island = 0; island < GUI.client.getLocalModel().getIslands().size(); island++) {
-                    if (!GUI.client.getLocalModel().getIslands().get(island).getName().equals("EMPTY")) {
-                        if (count[0] == choiceBox.getSelectionModel().getSelectedIndex()) {
-                            chosen.set(GUI.client.getLocalModel().getIslands().get(island).getName());
-                        }
-                        count[0]++;
-                    }
-                }
-                students.set(GUI.client.getLocalModel().getIslands().get(choiceBox.getSelectionModel().getSelectedIndex() - 1).getStudents());
-            }
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 
-            if (students.get() != null) {
-                for (int i = 0; i < students.get().size(); i++) {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                final int[] count = {1};
+                if (choiceBox.getSelectionModel().isSelected(0)) {
+                    chosen.set("dining");
                     try {
-                        text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
-                    } catch (IncorrectArgumentException e) {
-                        Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                        students.set(GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).getDining());
+                    } catch (LocalModelNotLoadedException e) {
+                        Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
+                    }
+                } else {
+                    for (int island = 0; island < GUI.client.getLocalModel().getIslands().size(); island++) {
+                        if (!GUI.client.getLocalModel().getIslands().get(island).getName().equals("EMPTY")) {
+                            if (count[0] == t1.intValue()) {
+                                chosen.set(GUI.client.getLocalModel().getIslands().get(island).getName());
+                            }
+                            count[0]++;
+                        }
+                    }
+                    students.set(GUI.client.getLocalModel().getIslands().get(t1.intValue() - 1).getStudents());
+                }
+
+                if (students.get() != null) {
+                    for (int i = 0; i < students.get().size(); i++) {
+                        try {
+                            text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+                        } catch (IncorrectArgumentException e) {
+                            Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                        }
                     }
                 }
             }
         });
 
         confirmButton.setOnAction((event) -> {
-
             try {
                 MoveStudents moveStudents = new MoveStudents(GUI.client.getNickname(), Colors.getStudent(index.get()), chosen.get());
                 GUI.client.performGameAction(moveStudents);
