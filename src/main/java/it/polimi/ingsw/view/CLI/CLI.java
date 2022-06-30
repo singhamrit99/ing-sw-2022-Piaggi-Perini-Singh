@@ -493,7 +493,12 @@ public class CLI implements UI {
         client.setInGame(false);
         clientRoom = null;
         client.view = StringNames.LOBBY;
-        in.nextLine();
+        try {
+            in.nextLine();
+        }catch(IndexOutOfBoundsException e)
+        {
+            System.out.println();
+        }
     }
 
     /**
@@ -697,6 +702,7 @@ public class CLI implements UI {
                         System.out.println("You entered room " + clientRoom + " successfully \n");
                         System.out.println("Players in this room:");
                         try {
+                            if (!client.getExpertMode())
                             sendArrayString(client.getNicknamesInRoom());
                         } catch (RoomNotExistsException e) {
                             System.out.println(StringNames.ROOM_NOT_EXISTS + "1");
@@ -1468,12 +1474,15 @@ public class CLI implements UI {
      */
     public void playCharacterB(int id, StrippedCharacter character) {
         //System.out.println("You have chosen a student island card\n");
-        int student, island;
+        int student=0, island;
         System.out.println(character.getDescription());
         printStudentsOnCard(character);
         System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
         System.out.println();
         String input;
+        Colors colors;
+        boolean hasStudents=false;
+        do{
         while (true) {
             input = in.next();
             try {
@@ -1486,6 +1495,11 @@ public class CLI implements UI {
                 System.out.println(StringNames.NUMBER_FORMAT);
             }
         }
+            if (character.getStudents().get(Colors.values()[student])!=0)
+                hasStudents=true;
+            else
+                System.out.println("There are no students of that color on the card! Try again.");
+        }while(!hasStudents);
         printExpertIslands();
         int count=0;
         for (StrippedIsland trueIsland: client.getLocalModel().getIslands())
@@ -1516,10 +1530,8 @@ public class CLI implements UI {
             counter++;
         }
         counter--;
-        String pass= client.getLocalModel().getIslands().get(counter).getName().replaceAll("[^\\d.]", "");
-        island= Integer.parseInt(pass);
         //Now I have a valid non merged island and color choice.
-        playCharacterCardBOrder = new PlayCharacterCardB(client.getNickname(), id, student, island);
+        playCharacterCardBOrder = new PlayCharacterCardB(client.getNickname(), id, student, counter);
         try {
             client.performGameAction(playCharacterCardBOrder);
         } catch (UserNotInRoomException e) {
@@ -1976,10 +1988,8 @@ public class CLI implements UI {
                     }
                     counter++;
                 }
-                counter--;
-                String pass= client.getLocalModel().getIslands().get(counter).getName().replaceAll("[^\\d.]", "");
-                island= Integer.parseInt(pass);
-                playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, island);
+                System.out.println("Island chosen: "+ counter);
+                playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, counter);
                 try {
                     client.performGameAction(playCharacterCardDOrder);
                 } catch (UserNotInRoomException e) {
@@ -2057,10 +2067,7 @@ public class CLI implements UI {
                     }
                     counter++;
                 }
-                counter--;
-                String pass= client.getLocalModel().getIslands().get(counter).getName().replaceAll("[^\\d.]", "");
-                int island= Integer.parseInt(pass);
-                playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, island);
+                playCharacterCardDOrder = new PlayCharacterCardD(client.getNickname(), id, counter);
                 try {
                     client.performGameAction(playCharacterCardDOrder);
                 } catch (UserNotInRoomException e) {
@@ -2457,8 +2464,10 @@ public class CLI implements UI {
             if (w %3<2) {
                 System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
                 w++;
-            } else
+            } else {
+                w++;
                 System.out.print(c + " students: " + island.getStudents().get(c) + "\n");
+            }
         }
 
         if (island.getNumOfTowers() == 0)
