@@ -94,7 +94,7 @@ public class GUILauncher extends Application implements Initializable {
         floatingTitle.setNode(title);
         floatingTitle.setDuration(Duration.millis(9000));
         floatingTitle.setCycleCount(TranslateTransition.INDEFINITE);
-        floatingTitle.setByY(25);
+        floatingTitle.setByY(10);
         floatingTitle.setAutoReverse(true);
         floatingTitle.setInterpolator(Interpolator.EASE_BOTH);
         floatingTitle.play();
