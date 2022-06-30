@@ -290,7 +290,7 @@ public class Game {
      *
      * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
      */
-    private void initializationTilesBag() throws NegativeValueException {
+    private void initializationTilesBag() throws NegativeValueException, IncorrectArgumentException {
         importingTilesJson();
 
         //Initialization clouds
@@ -540,7 +540,7 @@ public class Game {
      * In case the destination is the islands, an array of islandDestination is used by the game to send
      * the students in the correct place (the array uses the unique name of each island).
      *
-     * @param playerCaller   the player that called the MoveStudents method
+     * @param playerCaller the player that called the MoveStudents method
      * @throws IncorrectArgumentException Thrown when either of the parameters are incorrect.
      * @throws IncorrectStateException    Thrown when this method is called in an invalid phase of the game.
      * @throws IncorrectPlayerException   Thrown when the playerCaller is not the CurrentPlayer.
@@ -1144,7 +1144,7 @@ public class Game {
      * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      */
-    public void returnStudentsEffect(int choiceIndex) throws NegativeValueException, ProfessorNotFoundException {
+    public void returnStudentsEffect(int choiceIndex) throws NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException {
         EnumMap<Colors, Integer> enumMap = new EnumMap<>(Colors.class);
         for (Player player : players) {
             if (player.getSchoolBoard().getStudentsByColor(Colors.getStudent(choiceIndex)) < 3) {
