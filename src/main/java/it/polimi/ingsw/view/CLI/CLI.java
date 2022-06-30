@@ -832,13 +832,13 @@ public class CLI implements UI {
         System.out.println("Card played: " + i);
         try {
             input=client.getLocalModel().getBoardOf(client.getNickname()).getDeck().getDeck().get(i-1).getImageName();
-            client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getDeck().get(input).getMove());
         } catch (LocalModelNotLoadedException e) {
             System.out.println("Critical local model error");
         }
         playAssistantCardOrder = new PlayAssistantCard(client.getNickname(), input);
         try {
             client.performGameAction(playAssistantCardOrder);
+            client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getDeck().get(input).getMove());
         } catch (UserNotInRoomException e) {
             throw new RuntimeException(e);
         } catch (AssistantCardNotFoundException e) {
@@ -868,6 +868,8 @@ public class CLI implements UI {
             playAssistantCard();
         } catch (UserNotRegisteredException e) {
             System.out.println(StringNames.USER_NOT_REGISTERED);
+        } catch (LocalModelNotLoadedException e) {
+            e.printStackTrace();
         }
         client.setMyTurn(false);
     }
@@ -1240,10 +1242,10 @@ public class CLI implements UI {
                             try {
                                 value = Integer.parseInt(parts[1]);
                                 color = color.toUpperCase(Locale.ROOT);
-                                if (value <= maxStudents)
+                                if (value == maxStudents)
                                     break;
                                 else
-                                    System.out.println("You can't move more than 3 students in a single turn! Try again.");
+                                    System.out.println("You have to move  students in a single turn! Try again.");
                             } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                                 System.out.println("Something went wrong with your input, try again!");
                             }
