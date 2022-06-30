@@ -128,14 +128,14 @@ public class CharacterMultipleSelectController extends InitialStage implements C
 
                 @Override
                 public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                    final int[] count = {0};
+                    int count = 0;
 
                     for (int island = 1; island <= GUI.client.getLocalModel().getIslands().size(); island++) {
                         if (!GUI.client.getLocalModel().getIslands().get(island - 1).getName().equals("EMPTY")) {
-                            if (count[0] == t1.intValue() - 1) {
+                            if (count == t1.intValue() - 1) {
                                 chosen.set(island);
                             }
-                            count[0]++;
+                            count++;
                         }
                     }
                 }
