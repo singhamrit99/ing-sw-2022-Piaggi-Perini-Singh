@@ -91,7 +91,6 @@ public class CharacterCardController extends InitialStage implements Controller 
                     filePath = ResourcesPath.FXML_FILE_PATH + "CharacterOneSelectView" + ResourcesPath.FILE_EXTENSION;
                     loader = new FXMLLoader(Controller.class.getResource(filePath));
                     loader.setController(new CharacterOneSelectController(gui));
-
                     try {
                         Controller.loadScene(loader);
                     } catch (IOException e) {
@@ -119,7 +118,6 @@ public class CharacterCardController extends InitialStage implements Controller 
                     filePath = ResourcesPath.FXML_FILE_PATH + "CharacterSwapView" + ResourcesPath.FILE_EXTENSION;
                     loader = new FXMLLoader(Controller.class.getResource(filePath));
                     loader.setController(new CharacterSwapController(gui));
-
                     try {
                         Controller.loadScene(loader);
                     } catch (IOException e) {
@@ -132,7 +130,6 @@ public class CharacterCardController extends InitialStage implements Controller 
                     filePath = ResourcesPath.FXML_FILE_PATH + "CharacterTileView" + ResourcesPath.FILE_EXTENSION;
                     loader = new FXMLLoader(Controller.class.getResource(filePath));
                     loader.setController(new CharacterTileController(gui));
-
                     try {
                         Controller.loadScene(loader);
                     } catch (IOException e) {

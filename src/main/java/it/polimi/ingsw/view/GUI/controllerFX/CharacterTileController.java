@@ -48,16 +48,16 @@ public class CharacterTileController extends InitialStage implements Controller 
 
         availableTiles.setText("Tiles Available " + GUI.client.getLocalModel().getCharacters().get(indexSelectedCharacter).getNoEntryTiles());
 
-        final int[] j = {0};
-        for (int i = 0; i < GUI.client.getLocalModel().getIslands().size(); i++) {
-            if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
-                if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
-                    choiceBox.getItems().add(j[0] + 1 + ": MN present");
-                    motherNatureIndex = j[0];
+        int j = 1;
+        for (int i = 1; i < GUI.client.getLocalModel().getIslands().size(); i++) {
+            if (!GUI.client.getLocalModel().getIslands().get(i-1).getName().equals("EMPTY")) {
+                if (GUI.client.getLocalModel().getIslands().get(i-1).hasMotherNature()) {
+                    choiceBox.getItems().add(j + ": MN present");
+                    motherNatureIndex = j;
                 } else {
-                    choiceBox.getItems().add(Integer.toString(j[0] + 1));
+                    choiceBox.getItems().add(Integer.toString(j));
                 }
-                j[0]++;
+                j++;
             }
         }
         choiceBox.getSelectionModel().selectFirst();
