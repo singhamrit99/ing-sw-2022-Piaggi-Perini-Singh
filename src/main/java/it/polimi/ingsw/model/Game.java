@@ -47,6 +47,7 @@ public class Game {
     final private PropertyChangeListener gameListener;
     private String firstPlayer;
     private int selectedCharacterIndex;
+    private int moveStudentCounter;
 
     /**
      * Constructor of game
@@ -63,6 +64,7 @@ public class Game {
         this.expertMode = expertMode;
         this.numOfPlayer = numOfPlayer;
         numRounds = 0;
+        moveStudentCounter = 0;
         characterCards = new ArrayList<>();
 
         players = new ArrayList<>();
@@ -539,82 +541,20 @@ public class Game {
      * the students in the correct place (the array uses the unique name of each island).
      *
      * @param playerCaller   the player that called the MoveStudents method
-     * @param studentsToMove the EnumMap that contains the students that need to be moved and their destinations
      * @throws IncorrectArgumentException Thrown when either of the parameters are incorrect.
      * @throws IncorrectStateException    Thrown when this method is called in an invalid phase of the game.
      * @throws IncorrectPlayerException   Thrown when the playerCaller is not the CurrentPlayer.
      * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
      * @throws ProfessorNotFoundException This is thrown if the move produces a professor change and that creates an error.
      */
-    public void moveStudents(String playerCaller, EnumMap<Colors, ArrayList<String>> studentsToMove) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException {
+    public void moveStudents(String playerCaller, Colors color, String dest) throws IncorrectArgumentException, IncorrectStateException, IncorrectPlayerException, NegativeValueException, ProfessorNotFoundException {
+        EnumMap<Colors, Integer> studentToMove = StudentManager.createEmptyStudentsEnum();
         if (currentPlayer.getNickname().equals(playerCaller)) {
             if (state == State.ACTIONPHASE_1) {
-                int oldCoins = currentPlayer.getCoins(), newCoins;
-                //First a check if the number of students moved is right
-                int numOfStudents;
-                if (numOfPlayer == 3) numOfStudents = 4;
-                else numOfStudents = 3;
-                for (Colors c : Colors.values()) {
-                    if (!studentsToMove.get(c).isEmpty()) {
-                        int i = 0;
-                        while (i < studentsToMove.get(c).size()) {
-                            numOfStudents--;
-                            i++;
-                        }
-                    }
-                }
-                if (numOfStudents != 0)
-                    throw new IncorrectArgumentException("Number of students is wrong: should be 0, instead is " + numOfStudents);
-
-                //initialization of the two EnumMap, one for a destination and previous Dining Room
-                EnumMap<Colors, Integer> studentsToDining = new EnumMap<>(Colors.class);
-                EnumMap<Colors, Integer> studentsToRemove = new EnumMap<>(Colors.class);
-                for (Colors c : Colors.values()) {
-                    studentsToDining.put(c, 0);
-                    studentsToRemove.put(c, 0);
-                }
-
-                boolean isDiningChanged = false; //necessary to know if the dining has changed at the end of this method
-
-                for (Colors c : Colors.values()) {
-                    if (!studentsToMove.get(c).isEmpty()) {
-                        int i = 0;
-                        while (i < studentsToMove.get(c).size()) {
-                            if (studentsToMove.get(c).get(i).equals("dining")) {
-                                studentsToDining.put(c, studentsToDining.get(c) + 1);
-                                isDiningChanged = true; //dining CHANGED
-                            } else {
-                                studentsToRemove.put(c, studentsToRemove.get(c) + 1);
-                                String dest = studentsToMove.get(c).get(i);
-                                for (Island islandToChange : islands) {
-                                    if (islandToChange.getName().equals(dest)) {
-                                        EnumMap<Colors, Integer> tmp = new EnumMap<>(Colors.class);
-                                        for (Colors color : Colors.values()) tmp.put(color, 0); //tmp initialization
-                                        tmp.put(c, 1);
-                                        //notify island change and modify
-                                        StrippedIsland oldIsland = new StrippedIsland(islandToChange);
-                                        islandToChange.addStudents(tmp); //adding students
-                                        StrippedIsland changedIsland = new StrippedIsland(islandToChange);
-                                        PropertyChangeEvent evt =
-                                                new PropertyChangeEvent(this, "island", oldIsland, changedIsland);
-                                        gameListener.propertyChange(evt);
-
-                                        PropertyChangeEvent event =
-                                                new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), currentPlayer.getSchoolBoard().getEntrance());
-                                        gameListener.propertyChange(event);
-                                    }
-                                }
-                            }
-                            i++;
-                        }
-                    }
-                }
-                currentPlayer.moveStudents(studentsToDining, studentsToRemove);
-                state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
-                PropertyChangeEvent phaseChange =
-                        new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
-                gameListener.propertyChange(phaseChange);
-                if (isDiningChanged) {
+                studentToMove.put(color, 1);
+                if (dest.equals("dining")) {
+                    int oldCoins = currentPlayer.getCoins(), newCoins;
+                    currentPlayer.moveStudents(studentToMove, StudentManager.createEmptyStudentsEnum());
                     checkAndPlaceProfessor(); //check and eventually modifies and notifies
                     //notify dining AND entrance AND possible coins change
                     newCoins = currentPlayer.getCoins();
@@ -630,6 +570,36 @@ public class Game {
                     PropertyChangeEvent evt =
                             new PropertyChangeEvent(this, "dining", currentPlayer.getNickname(), newDining);
                     gameListener.propertyChange(evt);
+                } else {
+                    for (Island islandToChange : islands) {
+                        if (islandToChange.getName().equals(dest)) {
+                            //notify island change and modify
+                            StrippedIsland oldIsland = new StrippedIsland(islandToChange);
+                            islandToChange.addStudents(studentToMove); //adding students
+                            StrippedIsland changedIsland = new StrippedIsland(islandToChange);
+                            currentPlayer.moveStudents(StudentManager.createEmptyStudentsEnum(), studentToMove);
+
+                            PropertyChangeEvent evt =
+                                    new PropertyChangeEvent(this, "island", oldIsland, changedIsland);
+                            gameListener.propertyChange(evt);
+
+                            PropertyChangeEvent event =
+                                    new PropertyChangeEvent(this, "entrance", currentPlayer.getNickname(), currentPlayer.getSchoolBoard().getEntrance());
+                            gameListener.propertyChange(event);
+                        }
+                    }
+                }
+                moveStudentCounter++;
+                int numOfStudents;
+                if (numOfPlayer == 3) numOfStudents = 4;
+                else numOfStudents = 3;
+
+                if (moveStudentCounter == numOfStudents) {
+                    state = State.ACTIONPHASE_2; //so that the Player can move MotherNature
+                    moveStudentCounter = 0;
+                    PropertyChangeEvent phaseChange =
+                            new PropertyChangeEvent(this, "change-phase", state, currentPlayer.getNickname());
+                    gameListener.propertyChange(phaseChange);
                 }
             } else throw new IncorrectStateException();
         } else throw new IncorrectPlayerException();
