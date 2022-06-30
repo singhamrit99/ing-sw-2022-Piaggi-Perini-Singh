@@ -157,20 +157,16 @@ class GameTest {
         assertEquals(7, g.valueOfEnum(entrance));
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
+
         for (Colors c : Colors.values()) {
-            ArrayList<String> tmp = new ArrayList<>();
-            movingStudents.put(c, tmp);
             for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
-                tmp = movingStudents.get(c);
                 if (Math.random() > 0.5) {
-                    tmp.add("dining");
-                } else tmp.add("island4");
-                movingStudents.put(c, tmp);
+                    g.moveStudents(g.getCurrentPlayer().getNickname(), c, "dining");
+                } else g.moveStudents(g.getCurrentPlayer().getNickname(), c, "island4");
                 countNumStudents--;
             }
         }
 
-        //TODO fix test g.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
         assertEquals(4, g.valueOfEnum(entrance));
     }
 
@@ -181,19 +177,13 @@ class GameTest {
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
-            ArrayList<String> tmp = new ArrayList<>();
-            movingStudents.put(c, tmp);
             for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
-                tmp = movingStudents.get(c);
                 if (Math.random() > 0.5) {
-                    tmp.add("dining");
-                } else tmp.add("island4");
-                movingStudents.put(c, tmp);
+                    g.moveStudents(g.getCurrentPlayer().getNickname(), c, "dining");
+                } else g.moveStudents(g.getCurrentPlayer().getNickname(), c, "island4");
                 countNumStudents--;
             }
         }
-        //TODO fix test
-        //g.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
         int oldPosMN = g.getMotherNaturePosition();
         g.moveMotherNature(g.getCurrentPlayer().getNickname(), 1);
         assertNotEquals(g.getMotherNaturePosition(), oldPosMN);
@@ -206,18 +196,13 @@ class GameTest {
         EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
         int countNumStudents = 3;
         for (Colors c : Colors.values()) {
-            ArrayList<String> tmp = new ArrayList<>();
-            movingStudents.put(c, tmp);
             for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
-                tmp = movingStudents.get(c);
                 if (Math.random() > 0.5) {
-                    tmp.add("dining");
-                } else tmp.add("island4");
-                movingStudents.put(c, tmp);
+                    g.moveStudents(g.getCurrentPlayer().getNickname(), c, "dining");
+                } else g.moveStudents(g.getCurrentPlayer().getNickname(), c, "island4");
                 countNumStudents--;
             }
         }
-        //TODO fix testg.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
         g.moveMotherNature(g.getCurrentPlayer().getNickname(), 1);
         EnumMap<Colors, Integer> s = g.getCloudTile(0).getStudents();
         g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(), "cloud1");
@@ -236,18 +221,13 @@ class GameTest {
             EnumMap<Colors, ArrayList<String>> movingStudents = new EnumMap<>(Colors.class);
             int countNumStudents = 3;
             for (Colors c : Colors.values()) {
-                ArrayList<String> tmp = new ArrayList<>();
-                movingStudents.put(c, tmp);
                 for (int x = entrance.get(c); countNumStudents > 0 && x > 0; x--) {
-                    tmp = movingStudents.get(c);
                     if (Math.random() > 0.5) {
-                        tmp.add("dining");
-                    } else tmp.add("island4");
-                    movingStudents.put(c, tmp);
+                        g.moveStudents(g.getCurrentPlayer().getNickname(), c, "dining");
+                    } else g.moveStudents(g.getCurrentPlayer().getNickname(), c, "island4");
                     countNumStudents--;
                 }
             }
-            //TODO fix testg.moveStudents(g.getCurrentPlayer().getNickname(), movingStudents);
             g.moveMotherNature(g.getCurrentPlayer().getNickname(), 1);
             EnumMap<Colors, Integer> s = g.getCloudTile(0).getStudents();
             g.takeStudentsFromCloud(g.getCurrentPlayer().getNickname(), "cloud1");
@@ -261,7 +241,6 @@ class GameTest {
         Game g = planningPhaseComplete();
         assertThrows(IncorrectStateException.class, () -> g.takeStudentsFromCloud("wrong player", "cloud1"));
     }
-
 
     @Test
     void testMoveTowersFromTeam() throws IncorrectArgumentException, NegativeValueException {
@@ -323,30 +302,22 @@ class GameTest {
         enumMap.put(Colors.RED, 6);
         enumMap.put(Colors.GREEN, 6);
         game.getCurrentPlayer().addStudents(enumMap);
-
-        enumToMove = new EnumMap<>(Colors.class);
-        ArrayList<java.lang.String> strings = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            strings.add("dining");
-        }
-
-        enumToMove.put(Colors.BLUE, strings);
-        enumToMove.put(Colors.YELLOW, new ArrayList<>());
-        enumToMove.put(Colors.PINK, new ArrayList<>());
-        enumToMove.put(Colors.GREEN, new ArrayList<>());
-        enumToMove.put(Colors.RED, new ArrayList<>());
     }
 
     @Test
     void testBuyCharacterCards1() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, AssistantCardAlreadyPlayed, CardPlayedInTurnException {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
@@ -355,7 +326,9 @@ class GameTest {
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
@@ -375,13 +348,17 @@ class GameTest {
     void testBuyCharacterCards2() throws NegativeValueException, IncorrectArgumentException, AssistantCardNotFoundException, IncorrectStateException, IncorrectPlayerException, NotEnoughCoinsException, ProfessorNotFoundException, MotherNatureLostException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
@@ -401,12 +378,16 @@ class GameTest {
     void testBuyCharacterCards3() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, NotEnoughCoinsException, MotherNatureLostException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
@@ -415,12 +396,16 @@ class GameTest {
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
         CharacterCardFactory factory = new CharacterCardFactory();
@@ -437,12 +422,16 @@ class GameTest {
     void testBuyCharacterCards4() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
@@ -462,12 +451,16 @@ class GameTest {
     void testBuyCharacterCards5() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
@@ -476,7 +469,9 @@ class GameTest {
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
@@ -496,12 +491,16 @@ class GameTest {
     void testBuyCharacterCards6() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
@@ -510,7 +509,9 @@ class GameTest {
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
@@ -529,12 +530,16 @@ class GameTest {
     void testBuyCharacterCards7() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
@@ -543,7 +548,9 @@ class GameTest {
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
@@ -582,12 +589,16 @@ class GameTest {
     void testBuyCharacterCards8() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
@@ -596,7 +607,9 @@ class GameTest {
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
@@ -616,12 +629,16 @@ class GameTest {
     void testBuyCharacterCards9() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
@@ -630,7 +647,9 @@ class GameTest {
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
@@ -649,12 +668,16 @@ class GameTest {
     void testBuyCharacterCards10() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud2");
 
@@ -663,7 +686,9 @@ class GameTest {
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
@@ -707,12 +732,16 @@ class GameTest {
     void testBuyCharacterCards11() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
@@ -721,7 +750,9 @@ class GameTest {
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
@@ -741,12 +772,16 @@ class GameTest {
     void testBuyCharacterCards12() throws AssistantCardNotFoundException, NegativeValueException, ProfessorNotFoundException, IncorrectPlayerException, IncorrectArgumentException, IncorrectStateException, MotherNatureLostException, NotEnoughCoinsException, FullDiningException, CardPlayedInTurnException, AssistantCardAlreadyPlayed {
         prepareForCards();
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud1");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
         game.moveMotherNature(game.getCurrentPlayer().getNickname(), 1);
         game.takeStudentsFromCloud(game.getCurrentPlayer().getNickname(), "cloud2");
 
@@ -755,7 +790,9 @@ class GameTest {
         game.playAssistantCard(game.getCurrentPlayer().getNickname(), "4");
 
         game.getCurrentPlayer().addStudents(enumMap);
-        //TODO fix test game.moveStudents(game.getCurrentPlayer().getNickname(), enumToMove)
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
+        game.moveStudents(game.getCurrentPlayer().getNickname(), Colors.BLUE, "dining");
 
         CharacterCardDeck characterCardDeck = new CharacterCardDeck();
         characterCardDeck.fillDeck();
