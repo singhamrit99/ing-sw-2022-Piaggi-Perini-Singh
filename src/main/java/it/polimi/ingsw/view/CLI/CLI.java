@@ -329,6 +329,12 @@ public class CLI implements UI {
                 System.out.println(StringNames.REMOTE);
             } catch (UserNotRegisteredException e) {
                 System.out.println(StringNames.USER_NOT_REGISTERED);
+            }catch (InterruptedException e)
+            {System.out.println(StringNames.INTERRUPTED);
+            } catch (NegativeValueException e) {
+                System.out.println(StringNames.NEGATIVE_VALUE);
+            } catch (IncorrectArgumentException e) {
+                System.out.println(StringNames.INCORRECT_ARGUMENT);
             }
         }
     }
@@ -2749,12 +2755,19 @@ public class CLI implements UI {
         if (!client.isMyTurn()) {
             System.out.println("Waiting ...");
             Thread.sleep(500);
+
             System.out.println("Waiting ..");
             Thread.sleep(500);
+
             System.out.println("Waiting . .");
             Thread.sleep(500);
+
             System.out.println("Waiting .. ");
             Thread.sleep(500);
+
+            System.out.println("Waiting .. ");
+            Thread.sleep(500);
+
         }
 
     }
