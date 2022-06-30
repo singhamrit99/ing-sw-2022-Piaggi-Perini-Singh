@@ -49,17 +49,18 @@ public class CharacterTileController extends InitialStage implements Controller 
 
         availableTiles.setText("Tiles Available " + GUI.client.getLocalModel().getCharacters().get(indexSelectedCharacter).getNoEntryTiles());
 
-        int j = 1;
-        for (int i = 1; i < GUI.client.getLocalModel().getIslands().size(); i++) {
+        int j = 0;
+        for (int i = 1; i <= GUI.client.getLocalModel().getIslands().size(); i++) {
             if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
                 if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
-                    choiceBox.getItems().add(j + ": MN present");
+                    choiceBox.getItems().add(j + 1 + ": MN present");
                 } else {
-                    choiceBox.getItems().add(Integer.toString(j));
+                    choiceBox.getItems().add(Integer.toString(j + 1));
                 }
                 j++;
             }
         }
+
         choiceBox.getSelectionModel().selectFirst();
 
         AtomicInteger chosen = new AtomicInteger();
@@ -69,15 +70,19 @@ public class CharacterTileController extends InitialStage implements Controller 
 
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                final int[] count = {0};
+                if (selectedCharacter.getCharacterID() == 3) {
+                    int count = 0;
 
-                for (int island = 0; island < GUI.client.getLocalModel().getIslands().size(); island++) {
-                    if (!GUI.client.getLocalModel().getIslands().get(island).getName().equals("EMPTY")) {
-                        if (count[0] == choiceBox.getSelectionModel().getSelectedIndex()) {
-                            chosen.set(island);
+                    for (int island = 1; island <= GUI.client.getLocalModel().getIslands().size(); island++) {
+                        if (!GUI.client.getLocalModel().getIslands().get(island - 1).getName().equals("EMPTY")) {
+                            if (count == t1.intValue() - 1) {
+                                chosen.set(island);
+                            }
+                            count++;
                         }
-                        count[0]++;
                     }
+                } else {
+                    chosen.set(t1.intValue());
                 }
             }
         });
