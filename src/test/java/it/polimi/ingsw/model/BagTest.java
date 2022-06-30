@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.exceptions.NegativeValueException;
 import org.junit.jupiter.api.Test;
@@ -114,6 +115,8 @@ class BagTest {
         try {
             bag.drawStudents(3);
         } catch (NegativeValueException e) {
+            e.printStackTrace();
+        } catch (IncorrectArgumentException e) {
             e.printStackTrace();
         }
 
