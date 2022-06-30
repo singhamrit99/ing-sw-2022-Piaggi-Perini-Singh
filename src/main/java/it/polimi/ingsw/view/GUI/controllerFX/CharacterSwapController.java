@@ -31,7 +31,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
             totalSecond, selectSecond,
             description;
     @FXML
-    private ComboBox totalFirstYellow, totalFirstBlue, totalFirstGreen, totalFirstRed, totalFirstPink,
+    private ComboBox<String> totalFirstYellow, totalFirstBlue, totalFirstGreen, totalFirstRed, totalFirstPink,
             totalSecondYellow, totalSecondBlue, totalSecondGreen, totalSecondRed, totalSecondPink;
 
     /**
@@ -62,14 +62,14 @@ public class CharacterSwapController extends InitialStage implements Controller 
         text2.add(totalRed2);
         text2.add(totalPink2);
 
-        ArrayList<ComboBox> firstBoxes = new ArrayList<>();
+        ArrayList<ComboBox<String>> firstBoxes = new ArrayList<>();
         firstBoxes.add(totalFirstYellow);
         firstBoxes.add(totalFirstBlue);
         firstBoxes.add(totalFirstGreen);
         firstBoxes.add(totalFirstRed);
         firstBoxes.add(totalFirstPink);
 
-        ArrayList<ComboBox> secondBoxes = new ArrayList<>();
+        ArrayList<ComboBox<String>> secondBoxes = new ArrayList<>();
         secondBoxes.add(totalSecondYellow);
         secondBoxes.add(totalSecondBlue);
         secondBoxes.add(totalSecondGreen);
@@ -88,7 +88,11 @@ public class CharacterSwapController extends InitialStage implements Controller 
             selectSecond.setText("Select Entrance");
             int i = 0;
             for (Text textEntrance : text1) {
-                textEntrance.setText(selectedCharacter.getStudents().get(Colors.getStudent(i)).toString());
+                try {
+                    textEntrance.setText(selectedCharacter.getStudents().get(Colors.getStudent(i)).toString());
+                } catch (IncorrectArgumentException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                }
                 i++;
             }
 
@@ -102,6 +106,8 @@ public class CharacterSwapController extends InitialStage implements Controller 
                 }
             } catch (LocalModelNotLoadedException e) {
                 Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
+            } catch (IncorrectArgumentException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
             }
         } else {
             totalFirst.setText("Entrance Total");
@@ -118,6 +124,8 @@ public class CharacterSwapController extends InitialStage implements Controller 
                 }
             } catch (LocalModelNotLoadedException e) {
                 Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
+            } catch (IncorrectArgumentException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
             }
 
             try {
@@ -130,11 +138,13 @@ public class CharacterSwapController extends InitialStage implements Controller 
                 }
             } catch (LocalModelNotLoadedException e) {
                 Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
+            } catch (IncorrectArgumentException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
             }
         }
 
         int i = 0;
-        for (ComboBox cardBox : firstBoxes) {
+        for (ComboBox<String> cardBox : firstBoxes) {
             loadComboBox(cardBox, Integer.parseInt(text1.get(i).getText()));
             cardBox.getSelectionModel().selectFirst();
             cardBox.setOnAction(actionEvent -> cardBox.getSelectionModel().getSelectedIndex());
@@ -142,7 +152,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
         }
 
         i = 0;
-        for (ComboBox cardBox : secondBoxes) {
+        for (ComboBox<String> cardBox : secondBoxes) {
             loadComboBox(cardBox, Integer.parseInt(text2.get(i).getText()));
             cardBox.getSelectionModel().selectFirst();
             cardBox.setOnAction(actionEvent -> cardBox.getSelectionModel().getSelectedIndex());
@@ -155,14 +165,22 @@ public class CharacterSwapController extends InitialStage implements Controller 
             swap2 = StudentManager.createEmptyStudentsEnum();
 
             int c = 0;
-            for (ComboBox cardBox : firstBoxes) {
-                swap1.put(Colors.getStudent(c), Integer.parseInt(cardBox.getSelectionModel().getSelectedItem().toString()));
+            for (ComboBox<String> cardBox : firstBoxes) {
+                try {
+                    swap1.put(Colors.getStudent(c), Integer.parseInt(cardBox.getSelectionModel().getSelectedItem()));
+                } catch (IncorrectArgumentException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                }
                 c++;
             }
 
             c = 0;
-            for (ComboBox cardBox : secondBoxes) {
-                swap2.put(Colors.getStudent(c), Integer.parseInt(cardBox.getSelectionModel().getSelectedItem().toString()));
+            for (ComboBox<String> cardBox : secondBoxes) {
+                try {
+                    swap2.put(Colors.getStudent(c), Integer.parseInt(cardBox.getSelectionModel().getSelectedItem()));
+                } catch (IncorrectArgumentException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                }
                 c++;
             }
 
@@ -215,7 +233,7 @@ public class CharacterSwapController extends InitialStage implements Controller 
      * @param comboBox The combo box loaded.
      * @param num      the number of available choices.
      */
-    public void loadComboBox(ComboBox comboBox, int num) {
+    public void loadComboBox(ComboBox<String> comboBox, int num) {
         ObservableList<String> choices = FXCollections.observableArrayList();
 
         for (int i = 0; i <= num; i++) choices.add(Integer.toString(i));
