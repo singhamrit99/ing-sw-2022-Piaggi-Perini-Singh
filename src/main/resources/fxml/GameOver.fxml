@@ -8,36 +8,47 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/">
-    <children>
-        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" styleClass="title">
-            <children>
-                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="Game Over !" textAlignment="JUSTIFY" underline="true" StackPane.alignment="CENTER">
-                    <font>
-                        <Font name="Rockwell Extra Bold" size="40.0" />
-                    </font>
-                </Text>
-            </children>
-            <VBox.margin>
-                <Insets />
-            </VBox.margin>
-        </StackPane>
-        <HBox fx:id="expertBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1920.0" spacing="20.0" styleClass="WhiteBackground">
-         <children>
-            <Text fx:id="winnerDeclare" fill="WHITE" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" text="sdasd" textAlignment="CENTER">
-               <font>
-                  <Font name="Rockwell Extra Bold" size="44.0" />
-               </font>
-            </Text>
-         </children></HBox>
-        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" spacing="20.0">
-            <children>
-                <Button fx:id="exitButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="cancel-button" text="Exit" textFill="WHITE">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Button>
-            </children>
-        </HBox>
-    </children>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0"
+      styleClass="background" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/"
+      xmlns:fx="http://javafx.com/fxml/">
+
+    <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0"
+               prefWidth="1920.0" styleClass="title">
+
+        <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0"
+              styleClass="title" text="Game Over !" textAlignment="JUSTIFY" underline="true"
+              StackPane.alignment="CENTER">
+            <font>
+                <Font name="Rockwell Extra Bold" size="40.0"/>
+            </font>
+        </Text>
+
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+    </StackPane>
+    <HBox fx:id="expertBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308"
+          minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1920.0" spacing="20.0"
+          styleClass="WhiteBackground">
+
+        <Text fx:id="winnerDeclare" fill="WHITE" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL"
+              strokeMiterLimit="0.0" strokeWidth="0.0" text="sdasd" textAlignment="CENTER">
+            <font>
+                <Font name="Rockwell Extra Bold" size="44.0"/>
+            </font>
+        </Text>
+    </HBox>
+    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+          minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" spacing="20.0">
+
+        <Button fx:id="exitButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="cancel-button" text="Exit"
+                textFill="WHITE">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Button>
+
+    </HBox>
+
 </VBox>
