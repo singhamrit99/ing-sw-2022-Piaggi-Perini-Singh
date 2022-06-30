@@ -151,6 +151,7 @@ public class CLI implements UI {
             //Initializing local professors board
             boolean wait=true;
             while (client.getLocalModel() == null) {
+                System.out.print("");
                 if (wait) {
                     System.out.println("Waiting for local model");
                     wait=false;
