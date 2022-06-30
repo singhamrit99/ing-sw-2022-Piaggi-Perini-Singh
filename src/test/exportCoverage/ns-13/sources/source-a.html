@@ -1,0 +1,1125 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > GameViewController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.view.GUI.controllerFX</a>
+</div>
+
+<h1>Coverage Summary for Class: GameViewController (it.polimi.ingsw.view.GUI.controllerFX)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameViewController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/41)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/618)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameViewController$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/42)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/620)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.view.GUI.controllerFX;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.StringNames;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.exceptions.*;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.model.enumerations.Colors;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.model.enumerations.State;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.network.server.commands.DrawFromBagCommand;
+<i class="no-highlight">8</i>&nbsp;import it.polimi.ingsw.network.server.stripped.StrippedBoard;
+<i class="no-highlight">9</i>&nbsp;import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
+<i class="no-highlight">10</i>&nbsp;import it.polimi.ingsw.network.server.stripped.StrippedCloud;
+<i class="no-highlight">11</i>&nbsp;import it.polimi.ingsw.network.server.stripped.StrippedIsland;
+<i class="no-highlight">12</i>&nbsp;import it.polimi.ingsw.view.GUI.GUI;
+<i class="no-highlight">13</i>&nbsp;import javafx.fxml.FXML;
+<i class="no-highlight">14</i>&nbsp;import javafx.fxml.FXMLLoader;
+<i class="no-highlight">15</i>&nbsp;import javafx.geometry.Pos;
+<i class="no-highlight">16</i>&nbsp;import javafx.scene.Node;
+<i class="no-highlight">17</i>&nbsp;import javafx.scene.control.Label;
+<i class="no-highlight">18</i>&nbsp;import javafx.scene.control.Menu;
+<i class="no-highlight">19</i>&nbsp;import javafx.scene.control.MenuItem;
+<i class="no-highlight">20</i>&nbsp;import javafx.scene.effect.BlurType;
+<i class="no-highlight">21</i>&nbsp;import javafx.scene.effect.DropShadow;
+<i class="no-highlight">22</i>&nbsp;import javafx.scene.image.Image;
+<i class="no-highlight">23</i>&nbsp;import javafx.scene.image.ImageView;
+<i class="no-highlight">24</i>&nbsp;import javafx.scene.layout.*;
+<i class="no-highlight">25</i>&nbsp;import javafx.scene.paint.Color;
+<i class="no-highlight">26</i>&nbsp;import javafx.scene.text.Text;
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;import java.io.IOException;
+<i class="no-highlight">29</i>&nbsp;import java.rmi.RemoteException;
+<i class="no-highlight">30</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">31</i>&nbsp;import java.util.EnumMap;
+<i class="no-highlight">32</i>&nbsp;import java.util.List;
+<i class="no-highlight">33</i>&nbsp;import java.util.concurrent.atomic.AtomicBoolean;
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;public class GameViewController extends InitialStage implements Controller {
+<b class="nc"><i class="no-highlight">36</i>&nbsp;    protected static AtomicBoolean opened = new AtomicBoolean(false);</b>
+<i class="no-highlight">37</i>&nbsp;    private String currentBoardView; //the owner of the board current visible on the screen
+<b class="nc"><i class="no-highlight">38</i>&nbsp;    ArrayList&lt;StackPane&gt; islandsPanes = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;    private final DropShadow dropShadowIslandStuff;
+<i class="no-highlight">41</i>&nbsp;    private List&lt;MenuItem&gt; itemBoardViewArray; //the menu items necessary to change the view
+<i class="no-highlight">42</i>&nbsp;
+<i class="no-highlight">43</i>&nbsp;    private ArrayList&lt;ImageView&gt; entranceStudentsImgs, towersImgs, charactersCards;
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;    //image assets import
+<i class="no-highlight">46</i>&nbsp;    private Image blackTowerImg, whiteTowerImg, greyTowerImg, blueStudentImg, greenStudentImg, pinkStudentImg, redStudentImg, yellowStudentImg;
+<i class="no-highlight">47</i>&nbsp;
+<i class="no-highlight">48</i>&nbsp;    private ArrayList&lt;ImageView&gt; blueDiningImgs, redDiningImgs, yellowDiningImgs, greenDiningImgs, pinkDiningImgs;
+<i class="no-highlight">49</i>&nbsp;
+<i class="no-highlight">50</i>&nbsp;    private ArrayList&lt;ImageView&gt; studentsCloud1v3, studentsCloud1v4, studentsCloud2v3, studentsCloud2v4, studentsCloud3v3, studentsCloud3v4, studentsCloud4v4;
+<i class="no-highlight">51</i>&nbsp;
+<i class="no-highlight">52</i>&nbsp;    private Image island0, island1, island2, motherNature, noEntry;
+<i class="no-highlight">53</i>&nbsp;
+<i class="no-highlight">54</i>&nbsp;    private ArrayList&lt;Image&gt; islandsImgs;
+<i class="no-highlight">55</i>&nbsp;
+<i class="no-highlight">56</i>&nbsp;    // assets on screen
+<i class="no-highlight">57</i>&nbsp;    @FXML
+<i class="no-highlight">58</i>&nbsp;    private Menu changeViewBoard, currentPlayer;
+<i class="no-highlight">59</i>&nbsp;
+<i class="no-highlight">60</i>&nbsp;    @FXML
+<i class="no-highlight">61</i>&nbsp;    private MenuItem leaveGame;
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;    @FXML
+<i class="no-highlight">64</i>&nbsp;    private ImageView redProf, yellowProf, greenProf, pinkProf, blueProf, cloud1, cloud2, cloud3, cloud4,
+<i class="no-highlight">65</i>&nbsp;            assistantDeck, character1, character2, character3;
+<i class="no-highlight">66</i>&nbsp;
+<i class="no-highlight">67</i>&nbsp;    @FXML
+<i class="no-highlight">68</i>&nbsp;    private StackPane cloud1v3, cloud1v4, cloud2v3, cloud2v4, cloud3v3, cloud3v4, cloud4v4,
+<i class="no-highlight">69</i>&nbsp;            yellowDining, redDining, greenDining, blueDining, pinkDining,
+<i class="no-highlight">70</i>&nbsp;            towers, islandsPane, bag, entrance, board;
+<i class="no-highlight">71</i>&nbsp;
+<i class="no-highlight">72</i>&nbsp;    @FXML
+<i class="no-highlight">73</i>&nbsp;    private VBox cloudv1, cloudv2, character1Vbox, character2Vbox, character3Vbox;
+<i class="no-highlight">74</i>&nbsp;
+<i class="no-highlight">75</i>&nbsp;    @FXML
+<i class="no-highlight">76</i>&nbsp;    private HBox characters;
+<i class="no-highlight">77</i>&nbsp;
+<i class="no-highlight">78</i>&nbsp;    @FXML
+<i class="no-highlight">79</i>&nbsp;    Label coinsText;
+<i class="no-highlight">80</i>&nbsp;
+<i class="no-highlight">81</i>&nbsp;    @FXML
+<i class="no-highlight">82</i>&nbsp;    StackPane coinsIndicator;
+<i class="no-highlight">83</i>&nbsp;
+<i class="no-highlight">84</i>&nbsp;    /**
+<i class="no-highlight">85</i>&nbsp;     * The constructor class for GameVieController, which imports all assets from resource folder.
+<i class="no-highlight">86</i>&nbsp;     *
+<i class="no-highlight">87</i>&nbsp;     * @param gui The GUI that needs to display all of this information.
+<i class="no-highlight">88</i>&nbsp;     */
+<i class="no-highlight">89</i>&nbsp;    public GameViewController(GUI gui) {
+<b class="nc"><i class="no-highlight">90</i>&nbsp;        super(gui);</b>
+<b class="nc"><i class="no-highlight">91</i>&nbsp;        opened.set(false);</b>
+<i class="no-highlight">92</i>&nbsp;
+<i class="no-highlight">93</i>&nbsp;        //DropShadow effect for islands students, MN, towers
+<b class="nc"><i class="no-highlight">94</i>&nbsp;        dropShadowIslandStuff = new DropShadow();</b>
+<b class="nc"><i class="no-highlight">95</i>&nbsp;        dropShadowIslandStuff.setBlurType(BlurType.ONE_PASS_BOX);</b>
+<b class="nc"><i class="no-highlight">96</i>&nbsp;        dropShadowIslandStuff.setHeight(40);</b>
+<b class="nc"><i class="no-highlight">97</i>&nbsp;        dropShadowIslandStuff.setWidth(40);</b>
+<b class="nc"><i class="no-highlight">98</i>&nbsp;        dropShadowIslandStuff.setSpread(0.3);</b>
+<b class="nc"><i class="no-highlight">99</i>&nbsp;        dropShadowIslandStuff.setColor(Color.rgb(0, 0, 0, 0.6f));</b>
+<i class="no-highlight">100</i>&nbsp;    }
+<i class="no-highlight">101</i>&nbsp;
+<i class="no-highlight">102</i>&nbsp;    /**
+<i class="no-highlight">103</i>&nbsp;     * Setter method to tell whether the view is open or not
+<i class="no-highlight">104</i>&nbsp;     *
+<i class="no-highlight">105</i>&nbsp;     * @param b boolean value
+<i class="no-highlight">106</i>&nbsp;     */
+<i class="no-highlight">107</i>&nbsp;    public static void setOpened(boolean b) {
+<b class="nc"><i class="no-highlight">108</i>&nbsp;        opened.set(b);</b>
+<i class="no-highlight">109</i>&nbsp;    }
+<i class="no-highlight">110</i>&nbsp;
+<i class="no-highlight">111</i>&nbsp;    @FXML
+<i class="no-highlight">112</i>&nbsp;    public void initialize() {
+<i class="no-highlight">113</i>&nbsp;        //importing all assets from resource folder
+<b class="nc"><i class="no-highlight">114</i>&nbsp;        blackTowerImg = new Image(ResourcesPath.BLACK_TOWER);</b>
+<b class="nc"><i class="no-highlight">115</i>&nbsp;        whiteTowerImg = new Image(ResourcesPath.WHITE_TOWER);</b>
+<b class="nc"><i class="no-highlight">116</i>&nbsp;        greyTowerImg = new Image(ResourcesPath.GREY_TOWER);</b>
+<b class="nc"><i class="no-highlight">117</i>&nbsp;        blueStudentImg = new Image(ResourcesPath.BLUE_STUDENT);</b>
+<b class="nc"><i class="no-highlight">118</i>&nbsp;        greenStudentImg = new Image(ResourcesPath.GREEN_STUDENT);</b>
+<b class="nc"><i class="no-highlight">119</i>&nbsp;        pinkStudentImg = new Image(ResourcesPath.PINK_STUDENT);</b>
+<b class="nc"><i class="no-highlight">120</i>&nbsp;        redStudentImg = new Image(ResourcesPath.RED_STUDENT);</b>
+<b class="nc"><i class="no-highlight">121</i>&nbsp;        yellowStudentImg = new Image(ResourcesPath.YELLOW_STUDENT);</b>
+<b class="nc"><i class="no-highlight">122</i>&nbsp;        island0 = new Image(ResourcesPath.ISLAND_0);</b>
+<b class="nc"><i class="no-highlight">123</i>&nbsp;        island1 = new Image(ResourcesPath.ISLAND_1);</b>
+<b class="nc"><i class="no-highlight">124</i>&nbsp;        island2 = new Image(ResourcesPath.ISLAND_2);</b>
+<b class="nc"><i class="no-highlight">125</i>&nbsp;        motherNature = new Image(ResourcesPath.MN);</b>
+<b class="nc"><i class="no-highlight">126</i>&nbsp;        noEntry = new Image(ResourcesPath.NOENTRYTILE);</b>
+<i class="no-highlight">127</i>&nbsp;
+<b class="nc"><i class="no-highlight">128</i>&nbsp;        if (!opened.get()) { //first opening</b>
+<b class="nc"><i class="no-highlight">129</i>&nbsp;            opened.set(true);</b>
+<b class="nc"><i class="no-highlight">130</i>&nbsp;            initializePlayersViewMenu(GUI.client.getLocalPlayerList());</b>
+<b class="nc"><i class="no-highlight">131</i>&nbsp;            firstRefreshBoard();</b>
+<i class="no-highlight">132</i>&nbsp;        }
+<i class="no-highlight">133</i>&nbsp;
+<b class="nc"><i class="no-highlight">134</i>&nbsp;        if (itemBoardViewArray.size() &gt; 0) {</b>
+<b class="nc"><i class="no-highlight">135</i>&nbsp;            for (MenuItem boardView : itemBoardViewArray) {</b>
+<b class="nc"><i class="no-highlight">136</i>&nbsp;                boardView.setOnAction((event) -&gt; changeViewBoard(boardView.getText()));</b>
+<b class="nc"><i class="no-highlight">137</i>&nbsp;            }</b>
+<i class="no-highlight">138</i>&nbsp;        }
+<i class="no-highlight">139</i>&nbsp;
+<b class="nc"><i class="no-highlight">140</i>&nbsp;        leaveGame.setOnAction((event) -&gt; { //leaving game</b>
+<i class="no-highlight">141</i>&nbsp;            try {
+<b class="nc"><i class="no-highlight">142</i>&nbsp;                GUI.client.leaveGame();</b>
+<b class="nc"><i class="no-highlight">143</i>&nbsp;                opened.set(false);</b>
+<b class="nc"><i class="no-highlight">144</i>&nbsp;            } catch (UserNotRegisteredException e) {</b>
+<b class="nc"><i class="no-highlight">145</i>&nbsp;                Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);</b>
+<b class="nc"><i class="no-highlight">146</i>&nbsp;            } catch (RemoteException e) {</b>
+<b class="nc"><i class="no-highlight">147</i>&nbsp;                Controller.showErrorDialogBox(StringNames.REMOTE);</b>
+<b class="nc"><i class="no-highlight">148</i>&nbsp;            } catch (UserNotInRoomException e) {</b>
+<b class="nc"><i class="no-highlight">149</i>&nbsp;                Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);</b>
+<b class="nc"><i class="no-highlight">150</i>&nbsp;            }</b>
+<i class="no-highlight">151</i>&nbsp;        });
+<i class="no-highlight">152</i>&nbsp;    }
+<i class="no-highlight">153</i>&nbsp;
+<i class="no-highlight">154</i>&nbsp;    public void setCurrentPlayer(String currentPlayer) {
+<b class="nc"><i class="no-highlight">155</i>&nbsp;        int maxLength = 28;</b>
+<b class="nc"><i class="no-highlight">156</i>&nbsp;        int panning = maxLength - currentPlayer.length();</b>
+<b class="nc"><i class="no-highlight">157</i>&nbsp;        String panningString = &quot;&quot;;</b>
+<b class="nc"><i class="no-highlight">158</i>&nbsp;        for (int i = 0; i &lt; panning / 2; i++) {</b>
+<b class="nc"><i class="no-highlight">159</i>&nbsp;            panningString += &#39; &#39;;</b>
+<i class="no-highlight">160</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">161</i>&nbsp;        this.currentPlayer.setText(&quot;[ Current Player:&quot; + panningString + currentPlayer + panningString + &quot;]&quot;);</b>
+<i class="no-highlight">162</i>&nbsp;    }
+<i class="no-highlight">163</i>&nbsp;
+<i class="no-highlight">164</i>&nbsp;
+<i class="no-highlight">165</i>&nbsp;    public void changeViewBoard(String viewOwnerTarget) {
+<b class="nc"><i class="no-highlight">166</i>&nbsp;        if (GUI.client.getLocalPlayerList().contains(viewOwnerTarget)) {</b>
+<b class="nc"><i class="no-highlight">167</i>&nbsp;            currentBoardView = viewOwnerTarget;</b>
+<b class="nc"><i class="no-highlight">168</i>&nbsp;            reloadEntrance();</b>
+<b class="nc"><i class="no-highlight">169</i>&nbsp;            reloadDining();</b>
+<b class="nc"><i class="no-highlight">170</i>&nbsp;            reloadProfs();</b>
+<b class="nc"><i class="no-highlight">171</i>&nbsp;            reloadTowers();</b>
+<i class="no-highlight">172</i>&nbsp;        }
+<i class="no-highlight">173</i>&nbsp;    }
+<i class="no-highlight">174</i>&nbsp;
+<i class="no-highlight">175</i>&nbsp;    private Image studentImgFromColor(Colors c) {
+<b class="nc"><i class="no-highlight">176</i>&nbsp;        if (c.equals(Colors.BLUE)) return blueStudentImg;</b>
+<b class="nc"><i class="no-highlight">177</i>&nbsp;        else if (c.equals(Colors.YELLOW)) return yellowStudentImg;</b>
+<b class="nc"><i class="no-highlight">178</i>&nbsp;        else if (c.equals(Colors.PINK)) return pinkStudentImg;</b>
+<b class="nc"><i class="no-highlight">179</i>&nbsp;        else if (c.equals(Colors.GREEN)) return greenStudentImg;</b>
+<b class="nc"><i class="no-highlight">180</i>&nbsp;        else return redStudentImg;</b>
+<i class="no-highlight">181</i>&nbsp;    }
+<i class="no-highlight">182</i>&nbsp;
+<i class="no-highlight">183</i>&nbsp;
+<i class="no-highlight">184</i>&nbsp;    public boolean isOpened() {
+<b class="nc"><i class="no-highlight">185</i>&nbsp;        return opened.get();</b>
+<i class="no-highlight">186</i>&nbsp;    }
+<i class="no-highlight">187</i>&nbsp;
+<i class="no-highlight">188</i>&nbsp;    private void initializePlayersViewMenu(ArrayList&lt;String&gt; players) {
+<b class="nc"><i class="no-highlight">189</i>&nbsp;        List&lt;MenuItem&gt; items = changeViewBoard.getItems();</b>
+<b class="nc"><i class="no-highlight">190</i>&nbsp;        int indexItem = 0;</b>
+<b class="nc"><i class="no-highlight">191</i>&nbsp;        while (indexItem &lt; 4) {</b>
+<b class="nc"><i class="no-highlight">192</i>&nbsp;            if (indexItem &gt; players.size() - 1) {</b>
+<b class="nc"><i class="no-highlight">193</i>&nbsp;                items.get(indexItem).setVisible(false);</b>
+<i class="no-highlight">194</i>&nbsp;            } else {
+<b class="nc"><i class="no-highlight">195</i>&nbsp;                items.get(indexItem).setText(players.get(indexItem));</b>
+<i class="no-highlight">196</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">197</i>&nbsp;            indexItem++;</b>
+<i class="no-highlight">198</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">199</i>&nbsp;        itemBoardViewArray = items;</b>
+<i class="no-highlight">200</i>&nbsp;
+<i class="no-highlight">201</i>&nbsp;        //initialize name current player
+<b class="nc"><i class="no-highlight">202</i>&nbsp;        setCurrentPlayer(GUI.client.getLocalPlayerList().get(0));</b>
+<i class="no-highlight">203</i>&nbsp;    }
+<i class="no-highlight">204</i>&nbsp;
+<i class="no-highlight">205</i>&nbsp;    private void firstRefreshBoard() {
+<b class="nc"><i class="no-highlight">206</i>&nbsp;        currentBoardView = GUI.client.getNickname();</b>
+<b class="nc"><i class="no-highlight">207</i>&nbsp;        initializeImagesEntrance();</b>
+<b class="nc"><i class="no-highlight">208</i>&nbsp;        initializeImagesTowers();</b>
+<b class="nc"><i class="no-highlight">209</i>&nbsp;        initializeImagesDining();</b>
+<b class="nc"><i class="no-highlight">210</i>&nbsp;        initializeClouds();</b>
+<b class="nc"><i class="no-highlight">211</i>&nbsp;        loadAssistantDeck();</b>
+<b class="nc"><i class="no-highlight">212</i>&nbsp;        reloadCoins();</b>
+<b class="nc"><i class="no-highlight">213</i>&nbsp;        reloadCharacters();</b>
+<b class="nc"><i class="no-highlight">214</i>&nbsp;        reloadEntrance();</b>
+<b class="nc"><i class="no-highlight">215</i>&nbsp;        reloadTowers();</b>
+<b class="nc"><i class="no-highlight">216</i>&nbsp;        reloadProfs();</b>
+<b class="nc"><i class="no-highlight">217</i>&nbsp;        reloadDining();</b>
+<b class="nc"><i class="no-highlight">218</i>&nbsp;        reloadClouds();</b>
+<b class="nc"><i class="no-highlight">219</i>&nbsp;        reloadIslands();</b>
+<b class="nc"><i class="no-highlight">220</i>&nbsp;        reloadBag();</b>
+<i class="no-highlight">221</i>&nbsp;    }
+<i class="no-highlight">222</i>&nbsp;
+<i class="no-highlight">223</i>&nbsp;    private void reloadBag() {
+<b class="nc"><i class="no-highlight">224</i>&nbsp;        bag.setOnMouseClicked(mouseEvent -&gt; {</b>
+<b class="nc"><i class="no-highlight">225</i>&nbsp;            if (GUI.client.getLocalModel().getState().equals(State.PLANNINGPHASE) &amp;&amp; GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {</b>
+<b class="nc"><i class="no-highlight">226</i>&nbsp;                DrawFromBagCommand drawFromBagOrder = new DrawFromBagCommand(GUI.client.getNickname());</b>
+<i class="no-highlight">227</i>&nbsp;                try {
+<b class="nc"><i class="no-highlight">228</i>&nbsp;                    GUI.client.performGameAction(drawFromBagOrder);</b>
+<b class="nc"><i class="no-highlight">229</i>&nbsp;                } catch (NotEnoughCoinsException e) {</b>
+<b class="nc"><i class="no-highlight">230</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_COINS);</b>
+<b class="nc"><i class="no-highlight">231</i>&nbsp;                } catch (AssistantCardNotFoundException e) {</b>
+<b class="nc"><i class="no-highlight">232</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_NOT_FOUND);</b>
+<b class="nc"><i class="no-highlight">233</i>&nbsp;                } catch (NegativeValueException e) {</b>
+<b class="nc"><i class="no-highlight">234</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.NEGATIVE_VALUE);</b>
+<b class="nc"><i class="no-highlight">235</i>&nbsp;                } catch (IncorrectStateException e) {</b>
+<b class="nc"><i class="no-highlight">236</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.INCORRECT_STATE);</b>
+<b class="nc"><i class="no-highlight">237</i>&nbsp;                } catch (MotherNatureLostException e) {</b>
+<b class="nc"><i class="no-highlight">238</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.MOTHER_NATURE_LOST);</b>
+<b class="nc"><i class="no-highlight">239</i>&nbsp;                } catch (ProfessorNotFoundException e) {</b>
+<b class="nc"><i class="no-highlight">240</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.PROFESSOR_NOT_FOUND);</b>
+<b class="nc"><i class="no-highlight">241</i>&nbsp;                } catch (IncorrectPlayerException e) {</b>
+<b class="nc"><i class="no-highlight">242</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.INCORRECT_PLAYER);</b>
+<b class="nc"><i class="no-highlight">243</i>&nbsp;                } catch (RemoteException e) {</b>
+<b class="nc"><i class="no-highlight">244</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.REMOTE);</b>
+<b class="nc"><i class="no-highlight">245</i>&nbsp;                } catch (UserNotInRoomException e) {</b>
+<b class="nc"><i class="no-highlight">246</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.USER_NOT_IN_ROOM);</b>
+<b class="nc"><i class="no-highlight">247</i>&nbsp;                } catch (IncorrectArgumentException e) {</b>
+<b class="nc"><i class="no-highlight">248</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);</b>
+<b class="nc"><i class="no-highlight">249</i>&nbsp;                } catch (UserNotRegisteredException e) {</b>
+<b class="nc"><i class="no-highlight">250</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);</b>
+<b class="nc"><i class="no-highlight">251</i>&nbsp;                } catch (FullDiningException e) {</b>
+<b class="nc"><i class="no-highlight">252</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.FULL_DINING);</b>
+<b class="nc"><i class="no-highlight">253</i>&nbsp;                } catch (CardPlayedInTurnException e) {</b>
+<b class="nc"><i class="no-highlight">254</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.CARD_PLAYED_IN_TURN);</b>
+<b class="nc"><i class="no-highlight">255</i>&nbsp;                } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {</b>
+<b class="nc"><i class="no-highlight">256</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);</b>
+<b class="nc"><i class="no-highlight">257</i>&nbsp;                }</b>
+<i class="no-highlight">258</i>&nbsp;            }
+<i class="no-highlight">259</i>&nbsp;        });
+<i class="no-highlight">260</i>&nbsp;    }
+<i class="no-highlight">261</i>&nbsp;
+<i class="no-highlight">262</i>&nbsp;    public void reloadCharacters() {
+<b class="nc"><i class="no-highlight">263</i>&nbsp;        charactersCards = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">264</i>&nbsp;        charactersCards.add(character1);</b>
+<b class="nc"><i class="no-highlight">265</i>&nbsp;        charactersCards.add(character2);</b>
+<b class="nc"><i class="no-highlight">266</i>&nbsp;        charactersCards.add(character3);</b>
+<i class="no-highlight">267</i>&nbsp;
+<b class="nc"><i class="no-highlight">268</i>&nbsp;        ArrayList&lt;StrippedCharacter&gt; characterCardsStripped = GUI.client.getLocalModel().getCharacters();</b>
+<i class="no-highlight">269</i>&nbsp;
+<b class="nc"><i class="no-highlight">270</i>&nbsp;        boolean expert = false;</b>
+<i class="no-highlight">271</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">272</i>&nbsp;            expert = GUI.client.getExpertMode();</b>
+<b class="nc"><i class="no-highlight">273</i>&nbsp;        } catch (RemoteException | RoomNotExistsException e) {</b>
+<b class="nc"><i class="no-highlight">274</i>&nbsp;            Controller.showErrorDialogBox(StringNames.REMOTE);</b>
+<b class="nc"><i class="no-highlight">275</i>&nbsp;        }</b>
+<i class="no-highlight">276</i>&nbsp;
+<i class="no-highlight">277</i>&nbsp;        //default state is with students hidden
+<b class="nc"><i class="no-highlight">278</i>&nbsp;        ArrayList&lt;VBox&gt; vBoxesCharacters = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">279</i>&nbsp;        vBoxesCharacters.add(character1Vbox);</b>
+<b class="nc"><i class="no-highlight">280</i>&nbsp;        vBoxesCharacters.add(character2Vbox);</b>
+<b class="nc"><i class="no-highlight">281</i>&nbsp;        vBoxesCharacters.add(character3Vbox);</b>
+<b class="nc"><i class="no-highlight">282</i>&nbsp;        for (VBox box : vBoxesCharacters) {</b>
+<b class="nc"><i class="no-highlight">283</i>&nbsp;            for (Node student : box.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">284</i>&nbsp;                student.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">285</i>&nbsp;            }</b>
+<b class="nc"><i class="no-highlight">286</i>&nbsp;        }</b>
+<i class="no-highlight">287</i>&nbsp;
+<i class="no-highlight">288</i>&nbsp;        //hide characters card in case of not expert mode
+<b class="nc"><i class="no-highlight">289</i>&nbsp;        if (!expert) for (int i = 0; i &lt; 3; i++) charactersCards.get(i).setVisible(false);</b>
+<i class="no-highlight">290</i>&nbsp;
+<b class="nc"><i class="no-highlight">291</i>&nbsp;        if (expert) {</b>
+<b class="nc"><i class="no-highlight">292</i>&nbsp;            int indexCharacter = 0;</b>
+<b class="nc"><i class="no-highlight">293</i>&nbsp;            for (StrippedCharacter c : characterCardsStripped) {</b>
+<b class="nc"><i class="no-highlight">294</i>&nbsp;                Image character = new Image(getClass().getResourceAsStream(ResourcesPath.CHARACTERS</b>
+<b class="nc"><i class="no-highlight">295</i>&nbsp;                        + c.getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));</b>
+<b class="nc"><i class="no-highlight">296</i>&nbsp;                charactersCards.get(indexCharacter).setImage(character);</b>
+<i class="no-highlight">297</i>&nbsp;
+<i class="no-highlight">298</i>&nbsp;                //if there are students ..
+<b class="nc"><i class="no-highlight">299</i>&nbsp;                if (c.getStudents() != null) {</b>
+<b class="nc"><i class="no-highlight">300</i>&nbsp;                    int i = 0;</b>
+<b class="nc"><i class="no-highlight">301</i>&nbsp;                    for (Colors color : c.getStudents().keySet()) {</b>
+<b class="nc"><i class="no-highlight">302</i>&nbsp;                        if (c.getStudents().get(color) &gt; 0) {</b>
+<b class="nc"><i class="no-highlight">303</i>&nbsp;                            int y = c.getStudents().get(color);</b>
+<b class="nc"><i class="no-highlight">304</i>&nbsp;                            while (y &gt; 0) {</b>
+<b class="nc"><i class="no-highlight">305</i>&nbsp;                                ImageView student = (ImageView) vBoxesCharacters.get(indexCharacter).getChildren().get(i);</b>
+<b class="nc"><i class="no-highlight">306</i>&nbsp;                                student.setImage(studentImgFromColor(color));</b>
+<b class="nc"><i class="no-highlight">307</i>&nbsp;                                student.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">308</i>&nbsp;                                i++;</b>
+<b class="nc"><i class="no-highlight">309</i>&nbsp;                                y--;</b>
+<b class="nc"><i class="no-highlight">310</i>&nbsp;                            }</b>
+<i class="no-highlight">311</i>&nbsp;                        }
+<b class="nc"><i class="no-highlight">312</i>&nbsp;                    }</b>
+<i class="no-highlight">313</i>&nbsp;                }
+<i class="no-highlight">314</i>&nbsp;
+<i class="no-highlight">315</i>&nbsp;                //if there are no entry tiles, I replace the students IMG with NoEntry tiles
+<b class="nc"><i class="no-highlight">316</i>&nbsp;                if (c.getNoEntryTiles() &gt; 0) {</b>
+<b class="nc"><i class="no-highlight">317</i>&nbsp;                    int i = 0;</b>
+<b class="nc"><i class="no-highlight">318</i>&nbsp;                    while (i &lt; c.getNoEntryTiles()) {</b>
+<b class="nc"><i class="no-highlight">319</i>&nbsp;                        ImageView NoEntryTile = (ImageView) vBoxesCharacters.get(indexCharacter).getChildren().get(i);</b>
+<b class="nc"><i class="no-highlight">320</i>&nbsp;                        NoEntryTile.setImage(noEntry);</b>
+<b class="nc"><i class="no-highlight">321</i>&nbsp;                        NoEntryTile.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">322</i>&nbsp;                        i++;</b>
+<b class="nc"><i class="no-highlight">323</i>&nbsp;                    }</b>
+<i class="no-highlight">324</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">325</i>&nbsp;                indexCharacter++;</b>
+<b class="nc"><i class="no-highlight">326</i>&nbsp;            }</b>
+<i class="no-highlight">327</i>&nbsp;        }
+<i class="no-highlight">328</i>&nbsp;
+<b class="nc"><i class="no-highlight">329</i>&nbsp;        characters.setOnMouseClicked(mouseEvent -&gt; {</b>
+<b class="nc"><i class="no-highlight">330</i>&nbsp;            if ((GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_1) || GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_2) || GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_3)) &amp;&amp; GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {</b>
+<b class="nc"><i class="no-highlight">331</i>&nbsp;                String filePath = ResourcesPath.FXML_FILE_PATH + &quot;SelectCharacterView&quot; + ResourcesPath.FILE_EXTENSION;</b>
+<b class="nc"><i class="no-highlight">332</i>&nbsp;                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));</b>
+<b class="nc"><i class="no-highlight">333</i>&nbsp;                loader.setController(new CharacterCardController(gui));</b>
+<i class="no-highlight">334</i>&nbsp;                try {
+<b class="nc"><i class="no-highlight">335</i>&nbsp;                    Controller.loadScene(loader);</b>
+<b class="nc"><i class="no-highlight">336</i>&nbsp;                } catch (IOException e) {</b>
+<b class="nc"><i class="no-highlight">337</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.ERROR_IO);</b>
+<b class="nc"><i class="no-highlight">338</i>&nbsp;                }</b>
+<i class="no-highlight">339</i>&nbsp;            }
+<i class="no-highlight">340</i>&nbsp;        });
+<i class="no-highlight">341</i>&nbsp;    }
+<i class="no-highlight">342</i>&nbsp;
+<i class="no-highlight">343</i>&nbsp;    public void reloadCoins() {
+<b class="nc"><i class="no-highlight">344</i>&nbsp;        boolean expert = false;</b>
+<i class="no-highlight">345</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">346</i>&nbsp;            expert = GUI.client.getExpertMode();</b>
+<b class="nc"><i class="no-highlight">347</i>&nbsp;        } catch (RoomNotExistsException ignored) {</b>
+<i class="no-highlight">348</i>&nbsp;        } //impossible in this case
+<b class="nc"><i class="no-highlight">349</i>&nbsp;        catch (RemoteException e) {</b>
+<b class="nc"><i class="no-highlight">350</i>&nbsp;            Controller.showErrorDialogBox(StringNames.REMOTE);</b>
+<b class="nc"><i class="no-highlight">351</i>&nbsp;        }</b>
+<i class="no-highlight">352</i>&nbsp;
+<b class="nc"><i class="no-highlight">353</i>&nbsp;        if (expert) {</b>
+<b class="nc"><i class="no-highlight">354</i>&nbsp;            coinsIndicator.setVisible(true);</b>
+<i class="no-highlight">355</i>&nbsp;            try {
+<b class="nc"><i class="no-highlight">356</i>&nbsp;                int coins = GUI.client.getLocalModel().getBoardOf(currentBoardView).getCoins();</b>
+<i class="no-highlight">357</i>&nbsp;
+<b class="nc"><i class="no-highlight">358</i>&nbsp;                coinsText.setText(Integer.toString(coins));</b>
+<b class="nc"><i class="no-highlight">359</i>&nbsp;            } catch (LocalModelNotLoadedException e) {</b>
+<b class="nc"><i class="no-highlight">360</i>&nbsp;                Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);</b>
+<b class="nc"><i class="no-highlight">361</i>&nbsp;            }</b>
+<i class="no-highlight">362</i>&nbsp;        } else {
+<b class="nc"><i class="no-highlight">363</i>&nbsp;            coinsIndicator.setVisible(false);</b>
+<i class="no-highlight">364</i>&nbsp;        }
+<i class="no-highlight">365</i>&nbsp;    }
+<i class="no-highlight">366</i>&nbsp;
+<i class="no-highlight">367</i>&nbsp;    public void reloadIslands() {
+<b class="nc"><i class="no-highlight">368</i>&nbsp;        islandsPanes = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">369</i>&nbsp;        islandsPane.getChildren().clear();</b>
+<b class="nc"><i class="no-highlight">370</i>&nbsp;        islandsPane.maxHeight(450);</b>
+<b class="nc"><i class="no-highlight">371</i>&nbsp;        islandsPane.maxWidth(1000);</b>
+<b class="nc"><i class="no-highlight">372</i>&nbsp;        islandsPane.setAlignment(Pos.TOP_CENTER);</b>
+<b class="nc"><i class="no-highlight">373</i>&nbsp;        GridPane Islands = new GridPane();</b>
+<b class="nc"><i class="no-highlight">374</i>&nbsp;        Islands.setGridLinesVisible(false);</b>
+<b class="nc"><i class="no-highlight">375</i>&nbsp;        islandsPane.getChildren().add(Islands);</b>
+<b class="nc"><i class="no-highlight">376</i>&nbsp;        RowConstraints row = new RowConstraints();</b>
+<b class="nc"><i class="no-highlight">377</i>&nbsp;        row.setPrefHeight(150);</b>
+<b class="nc"><i class="no-highlight">378</i>&nbsp;        row.setMaxHeight(150);</b>
+<b class="nc"><i class="no-highlight">379</i>&nbsp;        ColumnConstraints column = new ColumnConstraints();</b>
+<b class="nc"><i class="no-highlight">380</i>&nbsp;        column.setPrefWidth(200);</b>
+<b class="nc"><i class="no-highlight">381</i>&nbsp;        column.setMaxWidth(200);</b>
+<b class="nc"><i class="no-highlight">382</i>&nbsp;        Islands.getRowConstraints().add(row);</b>
+<b class="nc"><i class="no-highlight">383</i>&nbsp;        Islands.getColumnConstraints().add(column);</b>
+<b class="nc"><i class="no-highlight">384</i>&nbsp;        Islands.setAlignment(Pos.TOP_CENTER);</b>
+<i class="no-highlight">385</i>&nbsp;
+<b class="nc"><i class="no-highlight">386</i>&nbsp;        islandsImgs = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">387</i>&nbsp;        islandsImgs.add(island0);</b>
+<b class="nc"><i class="no-highlight">388</i>&nbsp;        islandsImgs.add(island1);</b>
+<b class="nc"><i class="no-highlight">389</i>&nbsp;        islandsImgs.add(island2);</b>
+<i class="no-highlight">390</i>&nbsp;
+<i class="no-highlight">391</i>&nbsp;        //clickEvent
+<b class="nc"><i class="no-highlight">392</i>&nbsp;        islandsPane.setOnMouseClicked((event) -&gt; {</b>
+<b class="nc"><i class="no-highlight">393</i>&nbsp;            if (GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_2) &amp;&amp; GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {</b>
+<i class="no-highlight">394</i>&nbsp;                try {
+<b class="nc"><i class="no-highlight">395</i>&nbsp;                    String filePath = ResourcesPath.FXML_FILE_PATH + &quot;MoveMotherNatureView&quot; + ResourcesPath.FILE_EXTENSION;</b>
+<b class="nc"><i class="no-highlight">396</i>&nbsp;                    FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));</b>
+<b class="nc"><i class="no-highlight">397</i>&nbsp;                    loader.setController(new MoveMotherNatureController(gui));</b>
+<b class="nc"><i class="no-highlight">398</i>&nbsp;                    Controller.loadScene(loader);</b>
+<b class="nc"><i class="no-highlight">399</i>&nbsp;                } catch (IOException e) {</b>
+<b class="nc"><i class="no-highlight">400</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.ERROR_IO);</b>
+<b class="nc"><i class="no-highlight">401</i>&nbsp;                }</b>
+<i class="no-highlight">402</i>&nbsp;            }
+<i class="no-highlight">403</i>&nbsp;        });
+<i class="no-highlight">404</i>&nbsp;
+<b class="nc"><i class="no-highlight">405</i>&nbsp;        ArrayList&lt;StrippedIsland&gt; islandsBackEnd = GUI.client.getLocalModel().getIslands();</b>
+<b class="nc"><i class="no-highlight">406</i>&nbsp;        int indexIsland = 0;</b>
+<i class="no-highlight">407</i>&nbsp;
+<i class="no-highlight">408</i>&nbsp;        //FIRST LINE OF ISLANDS
+<b class="nc"><i class="no-highlight">409</i>&nbsp;        for (int i = 0; i &lt; 6; i++) {</b>
+<b class="nc"><i class="no-highlight">410</i>&nbsp;            if (i == 0 || i == 5) {</b>
+<b class="nc"><i class="no-highlight">411</i>&nbsp;                Islands.addRow(0, new Text(&quot;&quot;)); //empty cell alignment</b>
+<i class="no-highlight">412</i>&nbsp;            } else {
+<b class="nc"><i class="no-highlight">413</i>&nbsp;                if (islandsBackEnd.get(indexIsland).getName().equals(&quot;EMPTY&quot;)) {</b>
+<b class="nc"><i class="no-highlight">414</i>&nbsp;                    Islands.addRow(0, new Text(&quot;&quot;)); //empty cell alignment</b>
+<i class="no-highlight">415</i>&nbsp;                } else {
+<b class="nc"><i class="no-highlight">416</i>&nbsp;                    StackPane island = initIsland(i % 3);</b>
+<b class="nc"><i class="no-highlight">417</i>&nbsp;                    HBox islandHbox = new HBox();</b>
+<b class="nc"><i class="no-highlight">418</i>&nbsp;                    initTowersPane(island, islandHbox, islandsBackEnd.get(indexIsland));</b>
+<b class="nc"><i class="no-highlight">419</i>&nbsp;                    GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(indexIsland));</b>
+<b class="nc"><i class="no-highlight">420</i>&nbsp;                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()){</b>
+<b class="nc"><i class="no-highlight">421</i>&nbsp;                        spawnNoEntryTile(island);</b>
+<b class="nc"><i class="no-highlight">422</i>&nbsp;                        if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(island);</b>
+<i class="no-highlight">423</i>&nbsp;                    }
+<b class="nc"><i class="no-highlight">424</i>&nbsp;                    else if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);</b>
+<b class="nc"><i class="no-highlight">425</i>&nbsp;                    Islands.addRow(0, island);</b>
+<b class="nc"><i class="no-highlight">426</i>&nbsp;                    Islands.getRowConstraints().add(row);</b>
+<b class="nc"><i class="no-highlight">427</i>&nbsp;                    Islands.getColumnConstraints().add(column);</b>
+<i class="no-highlight">428</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">429</i>&nbsp;                indexIsland++;</b>
+<i class="no-highlight">430</i>&nbsp;            }
+<i class="no-highlight">431</i>&nbsp;        }
+<i class="no-highlight">432</i>&nbsp;
+<i class="no-highlight">433</i>&nbsp;        //SECOND LINE
+<b class="nc"><i class="no-highlight">434</i>&nbsp;        for (int i = 0; i &lt; 6; i++) {</b>
+<b class="nc"><i class="no-highlight">435</i>&nbsp;            if (i != 0 &amp;&amp; i != 5) {</b>
+<b class="nc"><i class="no-highlight">436</i>&nbsp;                Islands.addRow(1, new Text(&quot;&quot;)); //empty cell</b>
+<i class="no-highlight">437</i>&nbsp;            } else { //for island 11 and 4
+<b class="nc"><i class="no-highlight">438</i>&nbsp;                int realIndex = 11;  //in case of i =0;</b>
+<b class="nc"><i class="no-highlight">439</i>&nbsp;                if (i != 0) realIndex = 4;</b>
+<b class="nc"><i class="no-highlight">440</i>&nbsp;                if (islandsBackEnd.get(realIndex).getName().equals(&quot;EMPTY&quot;)) {</b>
+<b class="nc"><i class="no-highlight">441</i>&nbsp;                    Islands.addRow(1, new Text(&quot;&quot;)); //empty cell alignment</b>
+<i class="no-highlight">442</i>&nbsp;                } else {
+<b class="nc"><i class="no-highlight">443</i>&nbsp;                    StackPane island = initIsland(1);</b>
+<b class="nc"><i class="no-highlight">444</i>&nbsp;                    HBox islandHbox = new HBox();</b>
+<b class="nc"><i class="no-highlight">445</i>&nbsp;                    initTowersPane(island, islandHbox, islandsBackEnd.get(realIndex));</b>
+<b class="nc"><i class="no-highlight">446</i>&nbsp;                    GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(realIndex));</b>
+<b class="nc"><i class="no-highlight">447</i>&nbsp;                    if (islandsBackEnd.get(realIndex).hasNoEnterTile()){</b>
+<b class="nc"><i class="no-highlight">448</i>&nbsp;                        spawnNoEntryTile(island);</b>
+<b class="nc"><i class="no-highlight">449</i>&nbsp;                        if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(island);</b>
+<i class="no-highlight">450</i>&nbsp;                    }
+<b class="nc"><i class="no-highlight">451</i>&nbsp;                    else if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(studentsPane);</b>
+<b class="nc"><i class="no-highlight">452</i>&nbsp;                    Islands.addRow(1, island);</b>
+<b class="nc"><i class="no-highlight">453</i>&nbsp;                    Islands.getRowConstraints().add(row);</b>
+<b class="nc"><i class="no-highlight">454</i>&nbsp;                    Islands.getColumnConstraints().add(column);</b>
+<i class="no-highlight">455</i>&nbsp;                }
+<i class="no-highlight">456</i>&nbsp;            }
+<i class="no-highlight">457</i>&nbsp;        }
+<i class="no-highlight">458</i>&nbsp;
+<i class="no-highlight">459</i>&nbsp;
+<b class="nc"><i class="no-highlight">460</i>&nbsp;        for (int i = 0; i &lt; 6; i++) {</b>
+<b class="nc"><i class="no-highlight">461</i>&nbsp;            if (i != 0 &amp;&amp; i != 5) {</b>
+<b class="nc"><i class="no-highlight">462</i>&nbsp;                Islands.addRow(2, new Text(&quot;&quot;)); //empty cell</b>
+<i class="no-highlight">463</i>&nbsp;            } else { //for island 10 and 5
+<b class="nc"><i class="no-highlight">464</i>&nbsp;                int realIndex = i;  //in case of i=5 -&gt; 5;</b>
+<b class="nc"><i class="no-highlight">465</i>&nbsp;                if (i != 5) realIndex = 10; //in case of i=0 -&gt; 10</b>
+<b class="nc"><i class="no-highlight">466</i>&nbsp;                if (islandsBackEnd.get(realIndex).getName().equals(&quot;EMPTY&quot;)) {</b>
+<b class="nc"><i class="no-highlight">467</i>&nbsp;                    Islands.addRow(2, new Text(&quot;&quot;)); //empty cell alignment</b>
+<i class="no-highlight">468</i>&nbsp;                } else {
+<b class="nc"><i class="no-highlight">469</i>&nbsp;                    StackPane island = initIsland(1);</b>
+<b class="nc"><i class="no-highlight">470</i>&nbsp;                    HBox islandHbox = new HBox();</b>
+<b class="nc"><i class="no-highlight">471</i>&nbsp;                    initTowersPane(island, islandHbox, islandsBackEnd.get(realIndex));</b>
+<b class="nc"><i class="no-highlight">472</i>&nbsp;                    GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(realIndex));</b>
+<b class="nc"><i class="no-highlight">473</i>&nbsp;                    if (islandsBackEnd.get(realIndex).hasNoEnterTile()){</b>
+<b class="nc"><i class="no-highlight">474</i>&nbsp;                        spawnNoEntryTile(island);</b>
+<b class="nc"><i class="no-highlight">475</i>&nbsp;                        if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(island);</b>
+<i class="no-highlight">476</i>&nbsp;                    }
+<b class="nc"><i class="no-highlight">477</i>&nbsp;                    else if (islandsBackEnd.get(realIndex).hasMotherNature()) spawnMNIsland(studentsPane);</b>
+<b class="nc"><i class="no-highlight">478</i>&nbsp;                    Islands.addRow(2, island);</b>
+<b class="nc"><i class="no-highlight">479</i>&nbsp;                    Islands.getRowConstraints().add(row);</b>
+<b class="nc"><i class="no-highlight">480</i>&nbsp;                    Islands.getColumnConstraints().add(column);</b>
+<i class="no-highlight">481</i>&nbsp;                }
+<i class="no-highlight">482</i>&nbsp;            }
+<i class="no-highlight">483</i>&nbsp;        }
+<i class="no-highlight">484</i>&nbsp;
+<i class="no-highlight">485</i>&nbsp;        //LAST LINE OF ISLANDS IN THE GRID
+<b class="nc"><i class="no-highlight">486</i>&nbsp;        indexIsland = 9;</b>
+<b class="nc"><i class="no-highlight">487</i>&nbsp;        for (int i = 0; i &lt; 6; i++) {</b>
+<b class="nc"><i class="no-highlight">488</i>&nbsp;            if (i == 0 || i == 5) {</b>
+<b class="nc"><i class="no-highlight">489</i>&nbsp;                Islands.addRow(3, new Text(&quot;&quot;)); //empty cell</b>
+<i class="no-highlight">490</i>&nbsp;            } else {
+<b class="nc"><i class="no-highlight">491</i>&nbsp;                if (islandsBackEnd.get(indexIsland).getName().equals(&quot;EMPTY&quot;)) {</b>
+<b class="nc"><i class="no-highlight">492</i>&nbsp;                    Islands.addRow(3, new Text(&quot;&quot;)); //empty cell alignment</b>
+<i class="no-highlight">493</i>&nbsp;                } else {
+<b class="nc"><i class="no-highlight">494</i>&nbsp;                    StackPane island = initIsland(i % 3);</b>
+<b class="nc"><i class="no-highlight">495</i>&nbsp;                    HBox islandHbox = new HBox();</b>
+<b class="nc"><i class="no-highlight">496</i>&nbsp;                    initTowersPane(island, islandHbox, islandsBackEnd.get(indexIsland));</b>
+<b class="nc"><i class="no-highlight">497</i>&nbsp;                    GridPane studentsPane = initStudentsPane(island, islandHbox, islandsBackEnd.get(indexIsland));</b>
+<b class="nc"><i class="no-highlight">498</i>&nbsp;                    if (islandsBackEnd.get(indexIsland).hasNoEnterTile()){</b>
+<b class="nc"><i class="no-highlight">499</i>&nbsp;                        spawnNoEntryTile(island);</b>
+<b class="nc"><i class="no-highlight">500</i>&nbsp;                        if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(island);</b>
+<i class="no-highlight">501</i>&nbsp;                    }
+<b class="nc"><i class="no-highlight">502</i>&nbsp;                    else if (islandsBackEnd.get(indexIsland).hasMotherNature()) spawnMNIsland(studentsPane);</b>
+<b class="nc"><i class="no-highlight">503</i>&nbsp;                    Islands.addRow(3, island);</b>
+<b class="nc"><i class="no-highlight">504</i>&nbsp;                    Islands.getRowConstraints().add(row);</b>
+<b class="nc"><i class="no-highlight">505</i>&nbsp;                    Islands.getColumnConstraints().add(column);</b>
+<i class="no-highlight">506</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">507</i>&nbsp;                indexIsland--; //out from the if !!</b>
+<i class="no-highlight">508</i>&nbsp;            }
+<i class="no-highlight">509</i>&nbsp;        }
+<i class="no-highlight">510</i>&nbsp;    }
+<i class="no-highlight">511</i>&nbsp;
+<i class="no-highlight">512</i>&nbsp;
+<i class="no-highlight">513</i>&nbsp;    private GridPane initStudentsPane(StackPane island, HBox islandHbox, StrippedIsland backendIsland) {
+<b class="nc"><i class="no-highlight">514</i>&nbsp;        GridPane studentsPane = initGridPaneIsland(island, islandHbox);</b>
+<b class="nc"><i class="no-highlight">515</i>&nbsp;        ArrayList&lt;ImageView&gt; imgStudents = spawnStudentsIsland(backendIsland);</b>
+<b class="nc"><i class="no-highlight">516</i>&nbsp;        for (int j = 0; j &lt; imgStudents.size(); j++) {</b>
+<b class="nc"><i class="no-highlight">517</i>&nbsp;            ImageView img = imgStudents.get(j);</b>
+<b class="nc"><i class="no-highlight">518</i>&nbsp;            img.setFitWidth(20);</b>
+<b class="nc"><i class="no-highlight">519</i>&nbsp;            img.setFitHeight(20);</b>
+<b class="nc"><i class="no-highlight">520</i>&nbsp;            studentsPane.addRow(j / 2, img);</b>
+<i class="no-highlight">521</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">522</i>&nbsp;        return studentsPane;</b>
+<i class="no-highlight">523</i>&nbsp;    }
+<i class="no-highlight">524</i>&nbsp;
+<i class="no-highlight">525</i>&nbsp;    private void initTowersPane(StackPane island, HBox islandHbox, StrippedIsland backendIsland) {
+<b class="nc"><i class="no-highlight">526</i>&nbsp;        GridPane towersPane = initGridPaneIsland(island, islandHbox);</b>
+<b class="nc"><i class="no-highlight">527</i>&nbsp;        ArrayList&lt;ImageView&gt; towers = spawnTowersIsland(backendIsland);</b>
+<b class="nc"><i class="no-highlight">528</i>&nbsp;        for (int x = 0; x &lt; towers.size(); x++) {</b>
+<b class="nc"><i class="no-highlight">529</i>&nbsp;            towers.get(x).setFitHeight(25);</b>
+<b class="nc"><i class="no-highlight">530</i>&nbsp;            towers.get(x).setFitWidth(25);</b>
+<b class="nc"><i class="no-highlight">531</i>&nbsp;            towersPane.addRow(x / 2, towers.get(x));</b>
+<i class="no-highlight">532</i>&nbsp;        }
+<i class="no-highlight">533</i>&nbsp;    }
+<i class="no-highlight">534</i>&nbsp;
+<i class="no-highlight">535</i>&nbsp;    private StackPane initIsland(int index) {
+<b class="nc"><i class="no-highlight">536</i>&nbsp;        StackPane island = new StackPane();</b>
+<b class="nc"><i class="no-highlight">537</i>&nbsp;        island.maxHeight(100);</b>
+<b class="nc"><i class="no-highlight">538</i>&nbsp;        island.maxWidth(100);</b>
+<b class="nc"><i class="no-highlight">539</i>&nbsp;        islandsPanes.add(island);</b>
+<b class="nc"><i class="no-highlight">540</i>&nbsp;        ImageView islandImg = new ImageView(islandsImgs.get(index));</b>
+<b class="nc"><i class="no-highlight">541</i>&nbsp;        islandImg.setFitWidth(200);</b>
+<b class="nc"><i class="no-highlight">542</i>&nbsp;        islandImg.setFitHeight(200);</b>
+<b class="nc"><i class="no-highlight">543</i>&nbsp;        island.getChildren().add(islandImg);</b>
+<b class="nc"><i class="no-highlight">544</i>&nbsp;        island.setAlignment(Pos.CENTER);</b>
+<b class="nc"><i class="no-highlight">545</i>&nbsp;        return island;</b>
+<i class="no-highlight">546</i>&nbsp;    }
+<i class="no-highlight">547</i>&nbsp;
+<i class="no-highlight">548</i>&nbsp;    private GridPane initGridPaneIsland(StackPane island, HBox islandHBox) {
+<b class="nc"><i class="no-highlight">549</i>&nbsp;        islandHBox.maxWidth(150);</b>
+<b class="nc"><i class="no-highlight">550</i>&nbsp;        islandHBox.maxHeight(150);</b>
+<b class="nc"><i class="no-highlight">551</i>&nbsp;        if (!island.getChildren().contains(islandHBox))</b>
+<b class="nc"><i class="no-highlight">552</i>&nbsp;            island.getChildren().add(islandHBox);</b>
+<b class="nc"><i class="no-highlight">553</i>&nbsp;        GridPane grid = new GridPane();</b>
+<b class="nc"><i class="no-highlight">554</i>&nbsp;        RowConstraints row = new RowConstraints();</b>
+<b class="nc"><i class="no-highlight">555</i>&nbsp;        row.setPrefHeight(55);</b>
+<b class="nc"><i class="no-highlight">556</i>&nbsp;        row.setMaxHeight(55);</b>
+<b class="nc"><i class="no-highlight">557</i>&nbsp;        ColumnConstraints column = new ColumnConstraints();</b>
+<b class="nc"><i class="no-highlight">558</i>&nbsp;        column.setPrefWidth(65);</b>
+<b class="nc"><i class="no-highlight">559</i>&nbsp;        column.setMaxWidth(65);</b>
+<b class="nc"><i class="no-highlight">560</i>&nbsp;        islandHBox.getChildren().add(grid);</b>
+<b class="nc"><i class="no-highlight">561</i>&nbsp;        island.setAlignment(Pos.CENTER);</b>
+<b class="nc"><i class="no-highlight">562</i>&nbsp;        islandHBox.setAlignment(Pos.CENTER);</b>
+<b class="nc"><i class="no-highlight">563</i>&nbsp;        grid.setAlignment(Pos.CENTER);</b>
+<b class="nc"><i class="no-highlight">564</i>&nbsp;        return grid;</b>
+<i class="no-highlight">565</i>&nbsp;    }
+<i class="no-highlight">566</i>&nbsp;
+<i class="no-highlight">567</i>&nbsp;    private void spawnMNIsland(GridPane pane) {
+<b class="nc"><i class="no-highlight">568</i>&nbsp;        ImageView mn = new ImageView(motherNature);</b>
+<b class="nc"><i class="no-highlight">569</i>&nbsp;        mn.setEffect(dropShadowIslandStuff);</b>
+<b class="nc"><i class="no-highlight">570</i>&nbsp;        mn.setFitHeight(40);</b>
+<b class="nc"><i class="no-highlight">571</i>&nbsp;        mn.setFitWidth(40);</b>
+<b class="nc"><i class="no-highlight">572</i>&nbsp;        mn.maxWidth(40);</b>
+<b class="nc"><i class="no-highlight">573</i>&nbsp;        mn.maxHeight(40);</b>
+<b class="nc"><i class="no-highlight">574</i>&nbsp;        pane.addRow(0, mn);</b>
+<i class="no-highlight">575</i>&nbsp;    }
+<i class="no-highlight">576</i>&nbsp;
+<i class="no-highlight">577</i>&nbsp;    private void spawnMNIsland(Pane pane) {
+<b class="nc"><i class="no-highlight">578</i>&nbsp;        ImageView mn = new ImageView(motherNature);</b>
+<b class="nc"><i class="no-highlight">579</i>&nbsp;        mn.setEffect(dropShadowIslandStuff);</b>
+<b class="nc"><i class="no-highlight">580</i>&nbsp;        mn.setFitHeight(40);</b>
+<b class="nc"><i class="no-highlight">581</i>&nbsp;        mn.setFitWidth(40);</b>
+<b class="nc"><i class="no-highlight">582</i>&nbsp;        mn.maxWidth(40);</b>
+<b class="nc"><i class="no-highlight">583</i>&nbsp;        mn.maxHeight(40);</b>
+<b class="nc"><i class="no-highlight">584</i>&nbsp;        pane.getChildren().add(mn);</b>
+<i class="no-highlight">585</i>&nbsp;    }
+<i class="no-highlight">586</i>&nbsp;
+<i class="no-highlight">587</i>&nbsp;    private void spawnNoEntryTile(StackPane pane) {
+<b class="nc"><i class="no-highlight">588</i>&nbsp;        ImageView noEntryView = new ImageView(noEntry);</b>
+<b class="nc"><i class="no-highlight">589</i>&nbsp;        noEntryView.setFitHeight(150);</b>
+<b class="nc"><i class="no-highlight">590</i>&nbsp;        noEntryView.setFitWidth(150);</b>
+<b class="nc"><i class="no-highlight">591</i>&nbsp;        noEntryView.maxWidth(150);</b>
+<b class="nc"><i class="no-highlight">592</i>&nbsp;        noEntryView.maxHeight(150);</b>
+<b class="nc"><i class="no-highlight">593</i>&nbsp;        noEntryView.setEffect(dropShadowIslandStuff);</b>
+<b class="nc"><i class="no-highlight">594</i>&nbsp;        pane.getChildren().add(noEntryView);</b>
+<i class="no-highlight">595</i>&nbsp;    }
+<i class="no-highlight">596</i>&nbsp;
+<i class="no-highlight">597</i>&nbsp;    private ArrayList&lt;ImageView&gt; spawnStudentsIsland(StrippedIsland island) {
+<b class="nc"><i class="no-highlight">598</i>&nbsp;        ArrayList&lt;ImageView&gt; imagesToReturn = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">599</i>&nbsp;        EnumMap&lt;Colors, Integer&gt; students = island.getStudents();</b>
+<b class="nc"><i class="no-highlight">600</i>&nbsp;        for (Colors c : students.keySet()) {</b>
+<b class="nc"><i class="no-highlight">601</i>&nbsp;            if (students.get(c) != 0) {</b>
+<b class="nc"><i class="no-highlight">602</i>&nbsp;                int i = 0;</b>
+<b class="nc"><i class="no-highlight">603</i>&nbsp;                Image rightColor = studentImgFromColor(c);</b>
+<b class="nc"><i class="no-highlight">604</i>&nbsp;                while (i &lt; students.get(c)) {</b>
+<b class="nc"><i class="no-highlight">605</i>&nbsp;                    ImageView student = new ImageView(rightColor);</b>
+<b class="nc"><i class="no-highlight">606</i>&nbsp;                    student.setEffect(dropShadowIslandStuff);</b>
+<b class="nc"><i class="no-highlight">607</i>&nbsp;                    imagesToReturn.add(student);</b>
+<b class="nc"><i class="no-highlight">608</i>&nbsp;                    i++;</b>
+<b class="nc"><i class="no-highlight">609</i>&nbsp;                }</b>
+<i class="no-highlight">610</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">611</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">612</i>&nbsp;        return imagesToReturn;</b>
+<i class="no-highlight">613</i>&nbsp;    }
+<i class="no-highlight">614</i>&nbsp;
+<i class="no-highlight">615</i>&nbsp;    private ArrayList&lt;ImageView&gt; spawnTowersIsland(StrippedIsland island) {
+<b class="nc"><i class="no-highlight">616</i>&nbsp;        ArrayList&lt;ImageView&gt; towersToReturn = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">617</i>&nbsp;        Image rightColor;
+<b class="nc"><i class="no-highlight">618</i>&nbsp;        switch (island.getTowersColor()) {</b>
+<i class="no-highlight">619</i>&nbsp;            case WHITE:
+<b class="nc"><i class="no-highlight">620</i>&nbsp;                rightColor = whiteTowerImg;</b>
+<b class="nc"><i class="no-highlight">621</i>&nbsp;                break;</b>
+<i class="no-highlight">622</i>&nbsp;            case GREY:
+<b class="nc"><i class="no-highlight">623</i>&nbsp;                rightColor = greyTowerImg;</b>
+<b class="nc"><i class="no-highlight">624</i>&nbsp;                break;</b>
+<i class="no-highlight">625</i>&nbsp;            default:
+<b class="nc"><i class="no-highlight">626</i>&nbsp;                rightColor = blackTowerImg;</b>
+<i class="no-highlight">627</i>&nbsp;                break;
+<i class="no-highlight">628</i>&nbsp;        }
+<i class="no-highlight">629</i>&nbsp;
+<i class="no-highlight">630</i>&nbsp;
+<b class="nc"><i class="no-highlight">631</i>&nbsp;        for (int i = 0; i &lt; island.getNumOfTowers(); i++) {</b>
+<b class="nc"><i class="no-highlight">632</i>&nbsp;            ImageView towerImage = new ImageView(rightColor);</b>
+<b class="nc"><i class="no-highlight">633</i>&nbsp;            towerImage.setEffect(dropShadowIslandStuff);</b>
+<b class="nc"><i class="no-highlight">634</i>&nbsp;            towersToReturn.add(towerImage);</b>
+<i class="no-highlight">635</i>&nbsp;        }
+<i class="no-highlight">636</i>&nbsp;
+<b class="nc"><i class="no-highlight">637</i>&nbsp;        return towersToReturn;</b>
+<i class="no-highlight">638</i>&nbsp;    }
+<i class="no-highlight">639</i>&nbsp;
+<i class="no-highlight">640</i>&nbsp;    public void reloadEntrance() {
+<b class="nc"><i class="no-highlight">641</i>&nbsp;        board.setOnMouseClicked((event) -&gt; {</b>
+<b class="nc"><i class="no-highlight">642</i>&nbsp;            if (GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_1) &amp;&amp; GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {</b>
+<i class="no-highlight">643</i>&nbsp;                try {
+<b class="nc"><i class="no-highlight">644</i>&nbsp;                    String filePath = ResourcesPath.FXML_FILE_PATH + &quot;MoveStudentsView&quot; + ResourcesPath.FILE_EXTENSION;</b>
+<b class="nc"><i class="no-highlight">645</i>&nbsp;                    FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));</b>
+<b class="nc"><i class="no-highlight">646</i>&nbsp;                    loader.setController(new MoveStudentsController(gui));</b>
+<b class="nc"><i class="no-highlight">647</i>&nbsp;                    Controller.loadScene(loader);</b>
+<b class="nc"><i class="no-highlight">648</i>&nbsp;                } catch (IOException e) {</b>
+<b class="nc"><i class="no-highlight">649</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.ERROR_IO);</b>
+<b class="nc"><i class="no-highlight">650</i>&nbsp;                }</b>
+<i class="no-highlight">651</i>&nbsp;            }
+<i class="no-highlight">652</i>&nbsp;        });
+<i class="no-highlight">653</i>&nbsp;
+<i class="no-highlight">654</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">655</i>&nbsp;            EnumMap&lt;Colors, Integer&gt; entrance = GUI.client.getLocalModel().getBoardOf(currentBoardView).getEntrance();</b>
+<b class="nc"><i class="no-highlight">656</i>&nbsp;            int indexEntranceAssets = 0;</b>
+<b class="nc"><i class="no-highlight">657</i>&nbsp;            for (Colors c : entrance.keySet()) {</b>
+<b class="nc"><i class="no-highlight">658</i>&nbsp;                if (entrance.get(c) != 0) {</b>
+<b class="nc"><i class="no-highlight">659</i>&nbsp;                    int i = 0;</b>
+<b class="nc"><i class="no-highlight">660</i>&nbsp;                    Image rightColor = studentImgFromColor(c);</b>
+<b class="nc"><i class="no-highlight">661</i>&nbsp;                    while (i &lt; entrance.get(c)) {</b>
+<b class="nc"><i class="no-highlight">662</i>&nbsp;                        entranceStudentsImgs.get(indexEntranceAssets).setVisible(true);</b>
+<b class="nc"><i class="no-highlight">663</i>&nbsp;                        entranceStudentsImgs.get(indexEntranceAssets).setImage(rightColor);</b>
+<b class="nc"><i class="no-highlight">664</i>&nbsp;                        i++;</b>
+<b class="nc"><i class="no-highlight">665</i>&nbsp;                        indexEntranceAssets++;</b>
+<i class="no-highlight">666</i>&nbsp;                    }
+<i class="no-highlight">667</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">668</i>&nbsp;            }</b>
+<i class="no-highlight">669</i>&nbsp;            //hiding others position if there aren&#39;t
+<b class="nc"><i class="no-highlight">670</i>&nbsp;            while (indexEntranceAssets &lt; entranceStudentsImgs.size()) {</b>
+<b class="nc"><i class="no-highlight">671</i>&nbsp;                entranceStudentsImgs.get(indexEntranceAssets).setVisible(false);</b>
+<b class="nc"><i class="no-highlight">672</i>&nbsp;                indexEntranceAssets++;</b>
+<i class="no-highlight">673</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">674</i>&nbsp;        } catch (LocalModelNotLoadedException e) {</b>
+<b class="nc"><i class="no-highlight">675</i>&nbsp;            Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);</b>
+<b class="nc"><i class="no-highlight">676</i>&nbsp;        }</b>
+<i class="no-highlight">677</i>&nbsp;    }
+<i class="no-highlight">678</i>&nbsp;
+<i class="no-highlight">679</i>&nbsp;    public void reloadClouds() {
+<b class="nc"><i class="no-highlight">680</i>&nbsp;        int numPlayers = GUI.client.getLocalPlayerList().size();</b>
+<b class="nc"><i class="no-highlight">681</i>&nbsp;        ArrayList&lt;StrippedCloud&gt; clouds = GUI.client.getLocalModel().getClouds();</b>
+<i class="no-highlight">682</i>&nbsp;
+<b class="nc"><i class="no-highlight">683</i>&nbsp;        for (int cloudIndex = 0; cloudIndex &lt; numPlayers; cloudIndex++) {</b>
+<b class="nc"><i class="no-highlight">684</i>&nbsp;            int indexStudentsAssets = 0;</b>
+<b class="nc"><i class="no-highlight">685</i>&nbsp;            EnumMap&lt;Colors, Integer&gt; students = clouds.get(cloudIndex).getStudents();</b>
+<b class="nc"><i class="no-highlight">686</i>&nbsp;            for (Colors c : students.keySet()) {</b>
+<b class="nc"><i class="no-highlight">687</i>&nbsp;                Image rightColor = studentImgFromColor(c);</b>
+<b class="nc"><i class="no-highlight">688</i>&nbsp;                if (students.get(c) != 0) {</b>
+<b class="nc"><i class="no-highlight">689</i>&nbsp;                    int numSameColor = 0;</b>
+<b class="nc"><i class="no-highlight">690</i>&nbsp;                    while (numSameColor &lt; students.get(c)) { //this in case of more students with same color</b>
+<b class="nc"><i class="no-highlight">691</i>&nbsp;                        switch (cloudIndex) {</b>
+<i class="no-highlight">692</i>&nbsp;                            case 0:
+<b class="nc"><i class="no-highlight">693</i>&nbsp;                                if (numPlayers == 3) {</b>
+<b class="nc"><i class="no-highlight">694</i>&nbsp;                                    studentsCloud1v3.get(indexStudentsAssets).setImage(rightColor);</b>
+<b class="nc"><i class="no-highlight">695</i>&nbsp;                                    studentsCloud1v3.get(indexStudentsAssets).setVisible(true);</b>
+<i class="no-highlight">696</i>&nbsp;                                } else {
+<b class="nc"><i class="no-highlight">697</i>&nbsp;                                    studentsCloud1v4.get(indexStudentsAssets).setImage(rightColor);</b>
+<b class="nc"><i class="no-highlight">698</i>&nbsp;                                    studentsCloud1v4.get(indexStudentsAssets).setVisible(true);</b>
+<i class="no-highlight">699</i>&nbsp;                                }
+<b class="nc"><i class="no-highlight">700</i>&nbsp;                                break;</b>
+<i class="no-highlight">701</i>&nbsp;                            case 1:
+<b class="nc"><i class="no-highlight">702</i>&nbsp;                                if (numPlayers == 3) {</b>
+<b class="nc"><i class="no-highlight">703</i>&nbsp;                                    studentsCloud2v3.get(indexStudentsAssets).setImage(rightColor);</b>
+<b class="nc"><i class="no-highlight">704</i>&nbsp;                                    studentsCloud2v3.get(indexStudentsAssets).setVisible(true);</b>
+<i class="no-highlight">705</i>&nbsp;                                } else {
+<b class="nc"><i class="no-highlight">706</i>&nbsp;                                    studentsCloud2v4.get(indexStudentsAssets).setImage(rightColor);</b>
+<b class="nc"><i class="no-highlight">707</i>&nbsp;                                    studentsCloud2v4.get(indexStudentsAssets).setVisible(true);</b>
+<i class="no-highlight">708</i>&nbsp;                                }
+<b class="nc"><i class="no-highlight">709</i>&nbsp;                                break;</b>
+<i class="no-highlight">710</i>&nbsp;                            case 2:
+<b class="nc"><i class="no-highlight">711</i>&nbsp;                                if (numPlayers == 3) {</b>
+<b class="nc"><i class="no-highlight">712</i>&nbsp;                                    studentsCloud3v3.get(indexStudentsAssets).setImage(rightColor);</b>
+<b class="nc"><i class="no-highlight">713</i>&nbsp;                                    studentsCloud3v3.get(indexStudentsAssets).setVisible(true);</b>
+<i class="no-highlight">714</i>&nbsp;                                } else {
+<b class="nc"><i class="no-highlight">715</i>&nbsp;                                    studentsCloud3v4.get(indexStudentsAssets).setImage(rightColor);</b>
+<b class="nc"><i class="no-highlight">716</i>&nbsp;                                    studentsCloud3v4.get(indexStudentsAssets).setVisible(true);</b>
+<i class="no-highlight">717</i>&nbsp;                                }
+<b class="nc"><i class="no-highlight">718</i>&nbsp;                                break;</b>
+<i class="no-highlight">719</i>&nbsp;                            case 3:
+<b class="nc"><i class="no-highlight">720</i>&nbsp;                                studentsCloud4v4.get(indexStudentsAssets).setImage(rightColor);</b>
+<b class="nc"><i class="no-highlight">721</i>&nbsp;                                studentsCloud4v4.get(indexStudentsAssets).setVisible(true);</b>
+<i class="no-highlight">722</i>&nbsp;                                break;
+<i class="no-highlight">723</i>&nbsp;                        }
+<b class="nc"><i class="no-highlight">724</i>&nbsp;                        numSameColor++;</b>
+<b class="nc"><i class="no-highlight">725</i>&nbsp;                        indexStudentsAssets++;</b>
+<i class="no-highlight">726</i>&nbsp;                    }
+<i class="no-highlight">727</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">728</i>&nbsp;            }</b>
+<i class="no-highlight">729</i>&nbsp;
+<i class="no-highlight">730</i>&nbsp;            //hides remaining students
+<b class="nc"><i class="no-highlight">731</i>&nbsp;            int studentsForEachCloud = 3;</b>
+<b class="nc"><i class="no-highlight">732</i>&nbsp;            if (numPlayers == 3) studentsForEachCloud = 4;</b>
+<b class="nc"><i class="no-highlight">733</i>&nbsp;            while (indexStudentsAssets &lt; studentsForEachCloud) {</b>
+<b class="nc"><i class="no-highlight">734</i>&nbsp;                switch (cloudIndex) {</b>
+<i class="no-highlight">735</i>&nbsp;                    case 0:
+<b class="nc"><i class="no-highlight">736</i>&nbsp;                        if (numPlayers == 3) studentsCloud1v3.get(indexStudentsAssets).setVisible(false);</b>
+<b class="nc"><i class="no-highlight">737</i>&nbsp;                        else studentsCloud1v4.get(indexStudentsAssets).setVisible(false);</b>
+<b class="nc"><i class="no-highlight">738</i>&nbsp;                        break;</b>
+<i class="no-highlight">739</i>&nbsp;                    case 1:
+<b class="nc"><i class="no-highlight">740</i>&nbsp;                        if (numPlayers == 3) studentsCloud2v3.get(indexStudentsAssets).setVisible(false);</b>
+<b class="nc"><i class="no-highlight">741</i>&nbsp;                        else studentsCloud2v4.get(indexStudentsAssets).setVisible(false);</b>
+<b class="nc"><i class="no-highlight">742</i>&nbsp;                        break;</b>
+<i class="no-highlight">743</i>&nbsp;                    case 2:
+<b class="nc"><i class="no-highlight">744</i>&nbsp;                        if (numPlayers == 3) studentsCloud3v3.get(indexStudentsAssets).setVisible(false);</b>
+<b class="nc"><i class="no-highlight">745</i>&nbsp;                        else studentsCloud3v4.get(indexStudentsAssets).setVisible(false);</b>
+<b class="nc"><i class="no-highlight">746</i>&nbsp;                        break;</b>
+<i class="no-highlight">747</i>&nbsp;                    case 3:
+<b class="nc"><i class="no-highlight">748</i>&nbsp;                        studentsCloud4v4.get(indexStudentsAssets).setVisible(false);</b>
+<i class="no-highlight">749</i>&nbsp;                        break;
+<i class="no-highlight">750</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">751</i>&nbsp;                indexStudentsAssets++;</b>
+<i class="no-highlight">752</i>&nbsp;            }
+<i class="no-highlight">753</i>&nbsp;        }
+<i class="no-highlight">754</i>&nbsp;
+<b class="nc"><i class="no-highlight">755</i>&nbsp;        if (GUI.client.getLocalPlayerList().size() &gt; 2) {</b>
+<b class="nc"><i class="no-highlight">756</i>&nbsp;            cloudv1.setOnMouseClicked(event -&gt; pickCloud());</b>
+<i class="no-highlight">757</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">758</i>&nbsp;        cloudv2.setOnMouseClicked(event -&gt; pickCloud());</b>
+<i class="no-highlight">759</i>&nbsp;    }
+<i class="no-highlight">760</i>&nbsp;
+<i class="no-highlight">761</i>&nbsp;    private void pickCloud() {
+<b class="nc"><i class="no-highlight">762</i>&nbsp;        if (GUI.client.getLocalModel().getState().equals(State.ACTIONPHASE_3) &amp;&amp; GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {</b>
+<i class="no-highlight">763</i>&nbsp;            try {
+<b class="nc"><i class="no-highlight">764</i>&nbsp;                String filePath = ResourcesPath.FXML_FILE_PATH + &quot;TakeStudentsFromCloudView&quot; + ResourcesPath.FILE_EXTENSION;</b>
+<b class="nc"><i class="no-highlight">765</i>&nbsp;                FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));</b>
+<b class="nc"><i class="no-highlight">766</i>&nbsp;                loader.setController(new TakeFromCloudTilesController(gui));</b>
+<i class="no-highlight">767</i>&nbsp;
+<b class="nc"><i class="no-highlight">768</i>&nbsp;                Controller.loadScene(loader);</b>
+<b class="nc"><i class="no-highlight">769</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i class="no-highlight">770</i>&nbsp;                Controller.showErrorDialogBox(StringNames.ERROR_IO);</b>
+<b class="nc"><i class="no-highlight">771</i>&nbsp;            }</b>
+<i class="no-highlight">772</i>&nbsp;        }
+<i class="no-highlight">773</i>&nbsp;    }
+<i class="no-highlight">774</i>&nbsp;
+<i class="no-highlight">775</i>&nbsp;    public void reloadTowers() {
+<i class="no-highlight">776</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">777</i>&nbsp;            StrippedBoard b = GUI.client.getLocalModel().getBoardOf(currentBoardView);</b>
+<b class="nc"><i class="no-highlight">778</i>&nbsp;            int numberOfTowers = b.getNumberOfTowers();</b>
+<b class="nc"><i class="no-highlight">779</i>&nbsp;            int i = 0;</b>
+<i class="no-highlight">780</i>&nbsp;            Image towerColor;
+<b class="nc"><i class="no-highlight">781</i>&nbsp;            switch (b.getColorsTowers()) {</b>
+<i class="no-highlight">782</i>&nbsp;                case WHITE:
+<b class="nc"><i class="no-highlight">783</i>&nbsp;                    towerColor = whiteTowerImg;</b>
+<b class="nc"><i class="no-highlight">784</i>&nbsp;                    break;</b>
+<i class="no-highlight">785</i>&nbsp;                case GREY:
+<b class="nc"><i class="no-highlight">786</i>&nbsp;                    towerColor = greyTowerImg;</b>
+<b class="nc"><i class="no-highlight">787</i>&nbsp;                    break;</b>
+<i class="no-highlight">788</i>&nbsp;                default:
+<b class="nc"><i class="no-highlight">789</i>&nbsp;                    towerColor = blackTowerImg;</b>
+<i class="no-highlight">790</i>&nbsp;                    break;
+<i class="no-highlight">791</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">792</i>&nbsp;            for (ImageView t : towersImgs) {</b>
+<b class="nc"><i class="no-highlight">793</i>&nbsp;                if (i &lt; numberOfTowers) {</b>
+<b class="nc"><i class="no-highlight">794</i>&nbsp;                    t.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">795</i>&nbsp;                    t.setImage(towerColor);</b>
+<i class="no-highlight">796</i>&nbsp;                } else {
+<b class="nc"><i class="no-highlight">797</i>&nbsp;                    t.setVisible(false);</b>
+<i class="no-highlight">798</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">799</i>&nbsp;                i++;</b>
+<b class="nc"><i class="no-highlight">800</i>&nbsp;            }</b>
+<b class="nc"><i class="no-highlight">801</i>&nbsp;        } catch (LocalModelNotLoadedException e) {</b>
+<b class="nc"><i class="no-highlight">802</i>&nbsp;            Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);</b>
+<b class="nc"><i class="no-highlight">803</i>&nbsp;        }</b>
+<i class="no-highlight">804</i>&nbsp;    }
+<i class="no-highlight">805</i>&nbsp;
+<i class="no-highlight">806</i>&nbsp;    public void reloadProfs() {
+<i class="no-highlight">807</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">808</i>&nbsp;            ArrayList&lt;Colors&gt; table = GUI.client.getLocalModel().getBoardOf(currentBoardView).getProfessorsTable();</b>
+<b class="nc"><i class="no-highlight">809</i>&nbsp;            blueProf.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">810</i>&nbsp;            redProf.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">811</i>&nbsp;            pinkProf.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">812</i>&nbsp;            yellowProf.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">813</i>&nbsp;            greenProf.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">814</i>&nbsp;            for (Colors c : table) {</b>
+<b class="nc"><i class="no-highlight">815</i>&nbsp;                if (c.equals(Colors.BLUE)) blueProf.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">816</i>&nbsp;                if (c.equals(Colors.RED)) redProf.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">817</i>&nbsp;                if (c.equals(Colors.PINK)) pinkProf.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">818</i>&nbsp;                if (c.equals(Colors.YELLOW)) yellowProf.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">819</i>&nbsp;                if (c.equals(Colors.GREEN)) greenProf.setVisible(true);</b>
+<b class="nc"><i class="no-highlight">820</i>&nbsp;            }</b>
+<b class="nc"><i class="no-highlight">821</i>&nbsp;        } catch (LocalModelNotLoadedException e) {</b>
+<b class="nc"><i class="no-highlight">822</i>&nbsp;            Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);</b>
+<b class="nc"><i class="no-highlight">823</i>&nbsp;        }</b>
+<i class="no-highlight">824</i>&nbsp;    }
+<i class="no-highlight">825</i>&nbsp;
+<i class="no-highlight">826</i>&nbsp;    public void reloadDining() {
+<i class="no-highlight">827</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">828</i>&nbsp;            EnumMap&lt;Colors, Integer&gt; dining = GUI.client.getLocalModel().getBoardOf(currentBoardView).getDining();</b>
+<b class="nc"><i class="no-highlight">829</i>&nbsp;            for (Colors c : dining.keySet()) {</b>
+<b class="nc"><i class="no-highlight">830</i>&nbsp;                int i = 0;</b>
+<b class="nc"><i class="no-highlight">831</i>&nbsp;                while (i &lt; 10) {</b>
+<b class="nc"><i class="no-highlight">832</i>&nbsp;                    boolean visible = i &lt; dining.get(c);</b>
+<b class="nc"><i class="no-highlight">833</i>&nbsp;                    switch (c) {</b>
+<i class="no-highlight">834</i>&nbsp;                        case BLUE:
+<b class="nc"><i class="no-highlight">835</i>&nbsp;                            blueDiningImgs.get(i).setVisible(visible);</b>
+<b class="nc"><i class="no-highlight">836</i>&nbsp;                            break;</b>
+<i class="no-highlight">837</i>&nbsp;                        case PINK:
+<b class="nc"><i class="no-highlight">838</i>&nbsp;                            pinkDiningImgs.get(i).setVisible(visible);</b>
+<b class="nc"><i class="no-highlight">839</i>&nbsp;                            break;</b>
+<i class="no-highlight">840</i>&nbsp;                        case YELLOW:
+<b class="nc"><i class="no-highlight">841</i>&nbsp;                            yellowDiningImgs.get(i).setVisible(visible);</b>
+<b class="nc"><i class="no-highlight">842</i>&nbsp;                            break;</b>
+<i class="no-highlight">843</i>&nbsp;                        case GREEN:
+<b class="nc"><i class="no-highlight">844</i>&nbsp;                            greenDiningImgs.get(i).setVisible(visible);</b>
+<b class="nc"><i class="no-highlight">845</i>&nbsp;                            break;</b>
+<i class="no-highlight">846</i>&nbsp;                        case RED:
+<b class="nc"><i class="no-highlight">847</i>&nbsp;                            redDiningImgs.get(i).setVisible(visible);</b>
+<i class="no-highlight">848</i>&nbsp;                            break;
+<i class="no-highlight">849</i>&nbsp;                    }
+<b class="nc"><i class="no-highlight">850</i>&nbsp;                    i++;</b>
+<b class="nc"><i class="no-highlight">851</i>&nbsp;                }</b>
+<b class="nc"><i class="no-highlight">852</i>&nbsp;            }</b>
+<b class="nc"><i class="no-highlight">853</i>&nbsp;        } catch (LocalModelNotLoadedException e) {</b>
+<b class="nc"><i class="no-highlight">854</i>&nbsp;            Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);</b>
+<b class="nc"><i class="no-highlight">855</i>&nbsp;        }</b>
+<i class="no-highlight">856</i>&nbsp;    }
+<i class="no-highlight">857</i>&nbsp;
+<i class="no-highlight">858</i>&nbsp;    private void initializeImagesEntrance() {
+<b class="nc"><i class="no-highlight">859</i>&nbsp;        entranceStudentsImgs = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">860</i>&nbsp;        for (Node student : entrance.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">861</i>&nbsp;            entranceStudentsImgs.add((ImageView) student);</b>
+<b class="nc"><i class="no-highlight">862</i>&nbsp;        }</b>
+<i class="no-highlight">863</i>&nbsp;    }
+<i class="no-highlight">864</i>&nbsp;
+<i class="no-highlight">865</i>&nbsp;    private void initializeClouds() {
+<b class="nc"><i class="no-highlight">866</i>&nbsp;        int numOfPlayers = GUI.client.getLocalPlayerList().size();</b>
+<b class="nc"><i class="no-highlight">867</i>&nbsp;        studentsCloud1v3 = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">868</i>&nbsp;        studentsCloud1v4 = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">869</i>&nbsp;        studentsCloud2v3 = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">870</i>&nbsp;        studentsCloud2v4 = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">871</i>&nbsp;        studentsCloud3v3 = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">872</i>&nbsp;        studentsCloud3v4 = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">873</i>&nbsp;
+<b class="nc"><i class="no-highlight">874</i>&nbsp;        if (numOfPlayers == 3) {</b>
+<b class="nc"><i class="no-highlight">875</i>&nbsp;            cloud1.setImage(new Image(ResourcesPath.CLOUD_1));</b>
+<b class="nc"><i class="no-highlight">876</i>&nbsp;            cloud2.setImage(new Image(ResourcesPath.CLOUD_2));</b>
+<b class="nc"><i class="no-highlight">877</i>&nbsp;            cloud3.setImage(new Image(ResourcesPath.CLOUD_3));</b>
+<b class="nc"><i class="no-highlight">878</i>&nbsp;            cloud4.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">879</i>&nbsp;        } else if (numOfPlayers == 2) {</b>
+<b class="nc"><i class="no-highlight">880</i>&nbsp;            cloud3.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">881</i>&nbsp;            cloud4.setVisible(false);</b>
+<i class="no-highlight">882</i>&nbsp;        }
+<i class="no-highlight">883</i>&nbsp;        //cloud 1 students
+<b class="nc"><i class="no-highlight">884</i>&nbsp;        for (Node s : cloud1v3.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">885</i>&nbsp;            studentsCloud1v3.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">886</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">887</i>&nbsp;        for (Node s : cloud1v4.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">888</i>&nbsp;            studentsCloud1v4.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">889</i>&nbsp;        }</b>
+<i class="no-highlight">890</i>&nbsp;
+<i class="no-highlight">891</i>&nbsp;        //cloud 2 students
+<b class="nc"><i class="no-highlight">892</i>&nbsp;        for (Node s : cloud2v3.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">893</i>&nbsp;            studentsCloud2v3.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">894</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">895</i>&nbsp;        for (Node s : cloud2v4.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">896</i>&nbsp;            studentsCloud2v4.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">897</i>&nbsp;        }</b>
+<i class="no-highlight">898</i>&nbsp;
+<i class="no-highlight">899</i>&nbsp;        //cloud 3 students
+<b class="nc"><i class="no-highlight">900</i>&nbsp;        for (Node s : cloud3v3.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">901</i>&nbsp;            studentsCloud3v3.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">902</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">903</i>&nbsp;        for (Node s : cloud3v4.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">904</i>&nbsp;            studentsCloud3v4.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">905</i>&nbsp;        }</b>
+<i class="no-highlight">906</i>&nbsp;
+<i class="no-highlight">907</i>&nbsp;        //cloud 4 students
+<b class="nc"><i class="no-highlight">908</i>&nbsp;        studentsCloud4v4 = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">909</i>&nbsp;        for (Node s : cloud4v4.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">910</i>&nbsp;            studentsCloud4v4.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">911</i>&nbsp;        }</b>
+<i class="no-highlight">912</i>&nbsp;
+<b class="nc"><i class="no-highlight">913</i>&nbsp;        hideStudentsClouds(numOfPlayers);</b>
+<i class="no-highlight">914</i>&nbsp;    }
+<i class="no-highlight">915</i>&nbsp;
+<i class="no-highlight">916</i>&nbsp;    private void hideStudentsClouds(int numOfPlayers) {
+<b class="nc"><i class="no-highlight">917</i>&nbsp;        ArrayList&lt;ArrayList&lt;ImageView&gt;&gt; studentsToHide = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">918</i>&nbsp;        switch (numOfPlayers) {</b>
+<i class="no-highlight">919</i>&nbsp;            case 3:
+<b class="nc"><i class="no-highlight">920</i>&nbsp;                studentsToHide.add(studentsCloud1v4);</b>
+<b class="nc"><i class="no-highlight">921</i>&nbsp;                studentsToHide.add(studentsCloud2v4);</b>
+<b class="nc"><i class="no-highlight">922</i>&nbsp;                studentsToHide.add(studentsCloud3v4);</b>
+<b class="nc"><i class="no-highlight">923</i>&nbsp;                studentsToHide.add(studentsCloud4v4);</b>
+<b class="nc"><i class="no-highlight">924</i>&nbsp;                break;</b>
+<i class="no-highlight">925</i>&nbsp;            case 4:
+<b class="nc"><i class="no-highlight">926</i>&nbsp;                studentsToHide.add(studentsCloud1v3);</b>
+<b class="nc"><i class="no-highlight">927</i>&nbsp;                studentsToHide.add(studentsCloud2v3);</b>
+<b class="nc"><i class="no-highlight">928</i>&nbsp;                studentsToHide.add(studentsCloud3v3);</b>
+<b class="nc"><i class="no-highlight">929</i>&nbsp;                break;</b>
+<i class="no-highlight">930</i>&nbsp;            case 2:
+<b class="nc"><i class="no-highlight">931</i>&nbsp;                studentsToHide.add(studentsCloud1v3);</b>
+<b class="nc"><i class="no-highlight">932</i>&nbsp;                studentsToHide.add(studentsCloud2v3);</b>
+<b class="nc"><i class="no-highlight">933</i>&nbsp;                studentsToHide.add(studentsCloud3v3);</b>
+<b class="nc"><i class="no-highlight">934</i>&nbsp;                studentsToHide.add(studentsCloud3v4);</b>
+<b class="nc"><i class="no-highlight">935</i>&nbsp;                studentsToHide.add(studentsCloud4v4);</b>
+<i class="no-highlight">936</i>&nbsp;                break;
+<i class="no-highlight">937</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">938</i>&nbsp;        for (ArrayList&lt;ImageView&gt; array : studentsToHide) {</b>
+<b class="nc"><i class="no-highlight">939</i>&nbsp;            for (ImageView student : array) {</b>
+<b class="nc"><i class="no-highlight">940</i>&nbsp;                student.setVisible(false);</b>
+<b class="nc"><i class="no-highlight">941</i>&nbsp;            }</b>
+<b class="nc"><i class="no-highlight">942</i>&nbsp;        }</b>
+<i class="no-highlight">943</i>&nbsp;    }
+<i class="no-highlight">944</i>&nbsp;
+<i class="no-highlight">945</i>&nbsp;    private void initializeImagesTowers() {
+<b class="nc"><i class="no-highlight">946</i>&nbsp;        towersImgs = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">947</i>&nbsp;        for (Node tower : towers.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">948</i>&nbsp;            towersImgs.add((ImageView) tower);</b>
+<b class="nc"><i class="no-highlight">949</i>&nbsp;        }</b>
+<i class="no-highlight">950</i>&nbsp;    }
+<i class="no-highlight">951</i>&nbsp;
+<i class="no-highlight">952</i>&nbsp;    private void initializeImagesDining() {
+<b class="nc"><i class="no-highlight">953</i>&nbsp;        blueDiningImgs = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">954</i>&nbsp;        for (Node s : blueDining.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">955</i>&nbsp;            blueDiningImgs.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">956</i>&nbsp;        }</b>
+<i class="no-highlight">957</i>&nbsp;
+<b class="nc"><i class="no-highlight">958</i>&nbsp;        pinkDiningImgs = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">959</i>&nbsp;        for (Node s : pinkDining.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">960</i>&nbsp;            pinkDiningImgs.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">961</i>&nbsp;        }</b>
+<i class="no-highlight">962</i>&nbsp;
+<b class="nc"><i class="no-highlight">963</i>&nbsp;        greenDiningImgs = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">964</i>&nbsp;        for (Node s : greenDining.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">965</i>&nbsp;            greenDiningImgs.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">966</i>&nbsp;        }</b>
+<i class="no-highlight">967</i>&nbsp;
+<b class="nc"><i class="no-highlight">968</i>&nbsp;        yellowDiningImgs = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">969</i>&nbsp;        for (Node s : yellowDining.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">970</i>&nbsp;            yellowDiningImgs.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">971</i>&nbsp;        }</b>
+<i class="no-highlight">972</i>&nbsp;
+<b class="nc"><i class="no-highlight">973</i>&nbsp;        redDiningImgs = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">974</i>&nbsp;        for (Node s : redDining.getChildren()) {</b>
+<b class="nc"><i class="no-highlight">975</i>&nbsp;            redDiningImgs.add((ImageView) s);</b>
+<b class="nc"><i class="no-highlight">976</i>&nbsp;        }</b>
+<i class="no-highlight">977</i>&nbsp;    }
+<i class="no-highlight">978</i>&nbsp;
+<i class="no-highlight">979</i>&nbsp;    private void loadAssistantDeck() {
+<b class="nc"><i class="no-highlight">980</i>&nbsp;        assistantDeck.setOnMouseClicked(mouseEvent -&gt; {</b>
+<b class="nc"><i class="no-highlight">981</i>&nbsp;            if (GUI.client.getLocalModel().getState().equals(State.PLANNINGPHASE) &amp;&amp; GUI.client.getLocalModel().getCurrentPlayer().equals(GUI.client.getNickname())) {</b>
+<i class="no-highlight">982</i>&nbsp;                try {
+<b class="nc"><i class="no-highlight">983</i>&nbsp;                    String filePath = ResourcesPath.FXML_FILE_PATH + &quot;SelectAssistantView&quot; + ResourcesPath.FILE_EXTENSION;</b>
+<b class="nc"><i class="no-highlight">984</i>&nbsp;                    FXMLLoader loader = new FXMLLoader(Controller.class.getResource(filePath));</b>
+<b class="nc"><i class="no-highlight">985</i>&nbsp;                    loader.setController(new AssistantCardController(gui));</b>
+<i class="no-highlight">986</i>&nbsp;
+<b class="nc"><i class="no-highlight">987</i>&nbsp;                    Controller.loadScene(loader);</b>
+<b class="nc"><i class="no-highlight">988</i>&nbsp;                } catch (IOException e) {</b>
+<b class="nc"><i class="no-highlight">989</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.ERROR_IO);</b>
+<b class="nc"><i class="no-highlight">990</i>&nbsp;                }</b>
+<i class="no-highlight">991</i>&nbsp;            }
+<i class="no-highlight">992</i>&nbsp;        });
+<i class="no-highlight">993</i>&nbsp;    }
+<i class="no-highlight">994</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-06-30 10:38</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > AssistantCardDeck</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.model.deck.assistantcard</a>
+</div>
+
+<h1>Coverage Summary for Class: AssistantCardDeck (it.polimi.ingsw.model.deck.assistantcard)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AssistantCardDeck</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (16/18)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AssistantCardDeck$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    89.5%
+  </span>
+  <span class="absValue">
+    (17/19)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.model.deck.assistantcard;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.google.gson.reflect.TypeToken;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.exceptions.AssistantCardNotFoundException;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.model.deck.Deck;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.model.deck.DeckGenerator;
+<i class="no-highlight">8</i>&nbsp;import it.polimi.ingsw.model.deck.FileJSONPath;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;import java.io.Serializable;
+<i class="no-highlight">11</i>&nbsp;import java.lang.reflect.Type;
+<i class="no-highlight">12</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;/**
+<i class="no-highlight">15</i>&nbsp; * @author Amrit
+<i class="no-highlight">16</i>&nbsp; */
+<i class="no-highlight">17</i>&nbsp;public class AssistantCardDeck implements Deck&lt;AssistantCard&gt;, Serializable {
+<i class="no-highlight">18</i>&nbsp;    private ArrayList&lt;AssistantCard&gt; assistantCards;
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;    private String owner;
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;    /**
+<i class="no-highlight">23</i>&nbsp;     * AssistantCardDeck constructor: the class is simply an ArrayList of Assistant cards with the player&#39;s name.
+<i class="no-highlight">24</i>&nbsp;     * @param owner The player that owns this deck.
+<i class="no-highlight">25</i>&nbsp;     */
+<b class="fc"><i class="no-highlight">26</i>&nbsp;    public AssistantCardDeck(String owner) {</b>
+<b class="fc"><i class="no-highlight">27</i>&nbsp;        this.owner = owner;</b>
+<b class="fc"><i class="no-highlight">28</i>&nbsp;        assistantCards = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">29</i>&nbsp;    }
+<i class="no-highlight">30</i>&nbsp;
+<i class="no-highlight">31</i>&nbsp;    /**
+<i class="no-highlight">32</i>&nbsp;     * Getter method for the deck of assistant cards.
+<i class="no-highlight">33</i>&nbsp;     * @return Assistant cards arrayList.
+<i class="no-highlight">34</i>&nbsp;     */
+<i class="no-highlight">35</i>&nbsp;    public ArrayList&lt;AssistantCard&gt; getDeck() {
+<b class="fc"><i class="no-highlight">36</i>&nbsp;        return assistantCards;</b>
+<i class="no-highlight">37</i>&nbsp;    }
+<i class="no-highlight">38</i>&nbsp;    /**
+<i class="no-highlight">39</i>&nbsp;     * Getter method for the player name.
+<i class="no-highlight">40</i>&nbsp;     * @return player name.
+<i class="no-highlight">41</i>&nbsp;     */
+<i class="no-highlight">42</i>&nbsp;    public String getOwner() {
+<b class="nc"><i class="no-highlight">43</i>&nbsp;        return owner;</b>
+<i class="no-highlight">44</i>&nbsp;    }
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Method that fills the deck with information coming from the AssistantCards JSON file.
+<i class="no-highlight">48</i>&nbsp;     */
+<i class="no-highlight">49</i>&nbsp;    @Override
+<i class="no-highlight">50</i>&nbsp;    public void fillDeck() {
+<b class="fc"><i class="no-highlight">51</i>&nbsp;        Type collectionType = new TypeToken&lt;ArrayList&lt;AssistantCard&gt;&gt;() {</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;        }.getType();</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;        DeckGenerator&lt;AssistantCard&gt; deckGenerator = new DeckGenerator&lt;&gt;(FileJSONPath.ASSISTANT_CARDS_JSON, collectionType);</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;        assistantCards = deckGenerator.getDeck();</b>
+<i class="no-highlight">55</i>&nbsp;    }
+<i class="no-highlight">56</i>&nbsp;
+<i class="no-highlight">57</i>&nbsp;    /**
+<i class="no-highlight">58</i>&nbsp;     * Getter method for single card in the deck. Essential for play.
+<i class="no-highlight">59</i>&nbsp;     * @param cardName requested card.
+<i class="no-highlight">60</i>&nbsp;     * @return requested card
+<i class="no-highlight">61</i>&nbsp;     * @throws AssistantCardNotFoundException Thrown when the requested Assistant Card is not found in the deck.
+<i class="no-highlight">62</i>&nbsp;     */
+<i class="no-highlight">63</i>&nbsp;    public AssistantCard get(String cardName) throws AssistantCardNotFoundException {
+<b class="fc"><i class="no-highlight">64</i>&nbsp;        for (AssistantCard card : assistantCards) {</b>
+<b class="fc"><i class="no-highlight">65</i>&nbsp;            if (card.getImageName().equals(cardName)) {</b>
+<b class="fc"><i class="no-highlight">66</i>&nbsp;                int indexToRemove = assistantCards.indexOf(card);</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;                AssistantCard returnedCard = new AssistantCard(card.getImageName(), card.getMove());</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;                assistantCards.remove(indexToRemove);</b>
+<b class="fc"><i class="no-highlight">69</i>&nbsp;                return returnedCard;</b>
+<i class="no-highlight">70</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">71</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">72</i>&nbsp;        throw new AssistantCardNotFoundException();</b>
+<i class="no-highlight">73</i>&nbsp;    }
+<i class="no-highlight">74</i>&nbsp;
+<i class="no-highlight">75</i>&nbsp;    /**
+<i class="no-highlight">76</i>&nbsp;     * Returns all cards in the deck.
+<i class="no-highlight">77</i>&nbsp;     * @return assistantcards.
+<i class="no-highlight">78</i>&nbsp;     */
+<i class="no-highlight">79</i>&nbsp;    public ArrayList&lt;AssistantCard&gt; getAllCards() {
+<b class="fc"><i class="no-highlight">80</i>&nbsp;        return assistantCards;</b>
+<i class="no-highlight">81</i>&nbsp;    }
+<i class="no-highlight">82</i>&nbsp;
+<i class="no-highlight">83</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-06-30 10:38</div>
+</div>
+</body>
+</html>

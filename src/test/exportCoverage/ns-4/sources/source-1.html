@@ -1,0 +1,223 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Bag</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.model</a>
+</div>
+
+<h1>Coverage Summary for Class: Bag (it.polimi.ingsw.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Bag</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (30/30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.model;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.model.enumerations.Colors;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.exceptions.NegativeValueException;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;import java.util.EnumMap;
+<i class="no-highlight">7</i>&nbsp;import java.util.Map;
+<i class="no-highlight">8</i>&nbsp;import java.util.Random;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;/**
+<i class="no-highlight">11</i>&nbsp; * @author Amrit
+<i class="no-highlight">12</i>&nbsp; */
+<i class="no-highlight">13</i>&nbsp;public class Bag {
+<i class="no-highlight">14</i>&nbsp;    private EnumMap&lt;Colors, Integer&gt; students;
+<b class="fc"><i class="no-highlight">15</i>&nbsp;    private static Bag instance = new Bag();</b>
+<i class="no-highlight">16</i>&nbsp;
+<b class="fc"><i class="no-highlight">17</i>&nbsp;    private Bag() {</b>
+<b class="fc"><i class="no-highlight">18</i>&nbsp;        students = new EnumMap&lt;&gt;(Colors.class);</b>
+<b class="fc"><i class="no-highlight">19</i>&nbsp;        students = StudentManager.createEmptyStudentsEnum();</b>
+<i class="no-highlight">20</i>&nbsp;    }
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;    /**
+<i class="no-highlight">23</i>&nbsp;     * Getter method for bag instance
+<i class="no-highlight">24</i>&nbsp;     *
+<i class="no-highlight">25</i>&nbsp;     * @return this bag instance.
+<i class="no-highlight">26</i>&nbsp;     */
+<i class="no-highlight">27</i>&nbsp;    public static Bag getInstance() {
+<b class="fc"><i class="no-highlight">28</i>&nbsp;        return instance;</b>
+<i class="no-highlight">29</i>&nbsp;    }
+<i class="no-highlight">30</i>&nbsp;
+<i class="no-highlight">31</i>&nbsp;    /**
+<i class="no-highlight">32</i>&nbsp;     * Add students to the bag, in the beginning of the game and following some Character Card calls.
+<i class="no-highlight">33</i>&nbsp;     *
+<i class="no-highlight">34</i>&nbsp;     * @param studentsToAdd the students to add, in EnumMap form.
+<i class="no-highlight">35</i>&nbsp;     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+<i class="no-highlight">36</i>&nbsp;     */
+<i class="no-highlight">37</i>&nbsp;    public void addStudents(EnumMap&lt;Colors, Integer&gt; studentsToAdd) throws NegativeValueException {
+<b class="fc"><i class="no-highlight">38</i>&nbsp;        EnumMap&lt;Colors, Integer&gt; newStudents = StudentManager.addStudent(getStudents(), studentsToAdd);</b>
+<b class="fc"><i class="no-highlight">39</i>&nbsp;        if (newStudents != null) {</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;            setStudents(newStudents);</b>
+<i class="no-highlight">41</i>&nbsp;        } else {
+<b class="fc"><i class="no-highlight">42</i>&nbsp;            throw new NegativeValueException();</b>
+<i class="no-highlight">43</i>&nbsp;        }
+<i class="no-highlight">44</i>&nbsp;    }
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    /**
+<i class="no-highlight">47</i>&nbsp;     * Remove students from the bag following Character Card calls and Cloud refills.
+<i class="no-highlight">48</i>&nbsp;     *
+<i class="no-highlight">49</i>&nbsp;     * @param studentsToRemove The students to remove, in EnumMap form.
+<i class="no-highlight">50</i>&nbsp;     * @throws NegativeValueException As always, this game has no negative values, and any found are automatically incorrect.
+<i class="no-highlight">51</i>&nbsp;     */
+<i class="no-highlight">52</i>&nbsp;    public void removeStudents(EnumMap&lt;Colors, Integer&gt; studentsToRemove) throws NegativeValueException {
+<b class="fc"><i class="no-highlight">53</i>&nbsp;        EnumMap&lt;Colors, Integer&gt; newStudents = StudentManager.removeStudent(getStudents(), studentsToRemove);</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;        if (newStudents != null) {</b>
+<b class="fc"><i class="no-highlight">55</i>&nbsp;            setStudents(newStudents);</b>
+<i class="no-highlight">56</i>&nbsp;        } else {
+<b class="fc"><i class="no-highlight">57</i>&nbsp;            throw new NegativeValueException();</b>
+<i class="no-highlight">58</i>&nbsp;        }
+<i class="no-highlight">59</i>&nbsp;    }
+<i class="no-highlight">60</i>&nbsp;
+<i class="no-highlight">61</i>&nbsp;    /**
+<i class="no-highlight">62</i>&nbsp;     * Method used to draw students from the bag, mainly for Cloud refills and some Character card calls.
+<i class="no-highlight">63</i>&nbsp;     *
+<i class="no-highlight">64</i>&nbsp;     * @param numberOfStudents the number of students to draw from the bag, expressed as an integer.
+<i class="no-highlight">65</i>&nbsp;     * @return an EnumMap of Colors, Integer with the randomly picked students.
+<i class="no-highlight">66</i>&nbsp;     * @throws NegativeValueException
+<i class="no-highlight">67</i>&nbsp;     */
+<i class="no-highlight">68</i>&nbsp;    public EnumMap&lt;Colors, Integer&gt; drawStudents(int numberOfStudents) throws NegativeValueException {
+<i class="no-highlight">69</i>&nbsp;        int type;
+<b class="fc"><i class="no-highlight">70</i>&nbsp;        int studentType = 5;</b>
+<i class="no-highlight">71</i>&nbsp;
+<b class="fc"><i class="no-highlight">72</i>&nbsp;        EnumMap&lt;Colors, Integer&gt; studentsDrawn = StudentManager.createEmptyStudentsEnum();</b>
+<b class="fc"><i class="no-highlight">73</i>&nbsp;        Random random = new Random();</b>
+<i class="no-highlight">74</i>&nbsp;
+<b class="fc"><i class="no-highlight">75</i>&nbsp;        for (int i = 0; i &lt; numberOfStudents; ) {</b>
+<b class="fc"><i class="no-highlight">76</i>&nbsp;            type = random.nextInt(studentType);</b>
+<i class="no-highlight">77</i>&nbsp;
+<b class="fc"><i class="no-highlight">78</i>&nbsp;            if (getStudents().containsKey(Colors.getStudent(type))) {</b>
+<b class="fc"><i class="no-highlight">79</i>&nbsp;                studentsDrawn.put(Colors.getStudent(type), studentsDrawn.get(Colors.getStudent(type)) + 1);</b>
+<b class="fc"><i class="no-highlight">80</i>&nbsp;                i++;</b>
+<i class="no-highlight">81</i>&nbsp;            }
+<i class="no-highlight">82</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">83</i>&nbsp;        removeStudents(studentsDrawn);</b>
+<b class="fc"><i class="no-highlight">84</i>&nbsp;        return studentsDrawn;</b>
+<i class="no-highlight">85</i>&nbsp;    }
+<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">87</i>&nbsp;    /**
+<i class="no-highlight">88</i>&nbsp;     * Method used to check if the bag has enough students for a requested task.
+<i class="no-highlight">89</i>&nbsp;     *
+<i class="no-highlight">90</i>&nbsp;     * @param numberOfStudents the number of students we&#39;re testing against.
+<i class="no-highlight">91</i>&nbsp;     * @return true if we have enough students, false if we don&#39;t
+<i class="no-highlight">92</i>&nbsp;     */
+<i class="no-highlight">93</i>&nbsp;    public boolean hasEnoughStudents(int numberOfStudents) {
+<b class="fc"><i class="no-highlight">94</i>&nbsp;        int count = 0;</b>
+<b class="fc"><i class="no-highlight">95</i>&nbsp;        for (Map.Entry&lt;Colors, Integer&gt; set : students.entrySet()) {</b>
+<b class="fc"><i class="no-highlight">96</i>&nbsp;            count += set.getValue();</b>
+<b class="fc"><i class="no-highlight">97</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">98</i>&nbsp;        return count &gt;= numberOfStudents;</b>
+<i class="no-highlight">99</i>&nbsp;    }
+<i class="no-highlight">100</i>&nbsp;
+<i class="no-highlight">101</i>&nbsp;    /**
+<i class="no-highlight">102</i>&nbsp;     * Setter for students parameter
+<i class="no-highlight">103</i>&nbsp;     *
+<i class="no-highlight">104</i>&nbsp;     * @param students the new value of students enumMap
+<i class="no-highlight">105</i>&nbsp;     */
+<i class="no-highlight">106</i>&nbsp;    public void setStudents(EnumMap&lt;Colors, Integer&gt; students) {
+<b class="fc"><i class="no-highlight">107</i>&nbsp;        this.students = students;</b>
+<i class="no-highlight">108</i>&nbsp;    }
+<i class="no-highlight">109</i>&nbsp;
+<i class="no-highlight">110</i>&nbsp;    /**
+<i class="no-highlight">111</i>&nbsp;     * Getter for students
+<i class="no-highlight">112</i>&nbsp;     *
+<i class="no-highlight">113</i>&nbsp;     * @return students
+<i class="no-highlight">114</i>&nbsp;     */
+<i class="no-highlight">115</i>&nbsp;    public EnumMap&lt;Colors, Integer&gt; getStudents() {
+<b class="fc"><i class="no-highlight">116</i>&nbsp;        return students;</b>
+<i class="no-highlight">117</i>&nbsp;    }
+<i class="no-highlight">118</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-06-30 10:38</div>
+</div>
+</body>
+</html>

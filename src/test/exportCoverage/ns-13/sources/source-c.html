@@ -1,0 +1,261 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > LobbyController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.view.GUI.controllerFX</a>
+</div>
+
+<h1>Coverage Summary for Class: LobbyController (it.polimi.ingsw.view.GUI.controllerFX)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LobbyController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/54)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.view.GUI.controllerFX;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.StringNames;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.exceptions.*;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.view.GUI.GUI;
+<i class="no-highlight">6</i>&nbsp;import javafx.application.Platform;
+<i class="no-highlight">7</i>&nbsp;import javafx.fxml.FXML;
+<i class="no-highlight">8</i>&nbsp;import javafx.geometry.HPos;
+<i class="no-highlight">9</i>&nbsp;import javafx.scene.control.Button;
+<i class="no-highlight">10</i>&nbsp;import javafx.scene.control.ScrollPane;
+<i class="no-highlight">11</i>&nbsp;import javafx.scene.layout.GridPane;
+<i class="no-highlight">12</i>&nbsp;import javafx.scene.layout.RowConstraints;
+<i class="no-highlight">13</i>&nbsp;import javafx.scene.layout.StackPane;
+<i class="no-highlight">14</i>&nbsp;import javafx.scene.text.Text;
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;import java.rmi.RemoteException;
+<i class="no-highlight">17</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">18</i>&nbsp;import java.util.concurrent.atomic.AtomicBoolean;
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;/**
+<i class="no-highlight">21</i>&nbsp; * @author Amrit
+<i class="no-highlight">22</i>&nbsp; */
+<i class="no-highlight">23</i>&nbsp;public class LobbyController extends InitialStage implements Controller {
+<b class="nc"><i class="no-highlight">24</i>&nbsp;    protected static AtomicBoolean opened = new AtomicBoolean(false);</b>
+<i class="no-highlight">25</i>&nbsp;    private ArrayList&lt;String&gt; rooms;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;    @FXML
+<i class="no-highlight">28</i>&nbsp;    StackPane titlePane;
+<i class="no-highlight">29</i>&nbsp;    @FXML
+<i class="no-highlight">30</i>&nbsp;    private GridPane roomsList;
+<i class="no-highlight">31</i>&nbsp;    @FXML
+<i class="no-highlight">32</i>&nbsp;    private Button createRoomButton, exitButton;
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;    /**
+<i class="no-highlight">35</i>&nbsp;     * Constructor for Lobby controller scene.
+<i class="no-highlight">36</i>&nbsp;     * @param gui The GUI this controller is bound to.
+<i class="no-highlight">37</i>&nbsp;     */
+<i class="no-highlight">38</i>&nbsp;    public LobbyController(GUI gui) {
+<b class="nc"><i class="no-highlight">39</i>&nbsp;        super(gui);</b>
+<b class="nc"><i class="no-highlight">40</i>&nbsp;        new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">41</i>&nbsp;        opened.set(false);</b>
+<i class="no-highlight">42</i>&nbsp;    }
+<i class="no-highlight">43</i>&nbsp;
+<i class="no-highlight">44</i>&nbsp;    /**
+<i class="no-highlight">45</i>&nbsp;     * Setter method to tell whether the view is open or not
+<i class="no-highlight">46</i>&nbsp;     * @param b boolean value
+<i class="no-highlight">47</i>&nbsp;     */
+<i class="no-highlight">48</i>&nbsp;    public static void setOpened(boolean b) {
+<b class="nc"><i class="no-highlight">49</i>&nbsp;        opened.set(b);</b>
+<i class="no-highlight">50</i>&nbsp;    }
+<i class="no-highlight">51</i>&nbsp;
+<i class="no-highlight">52</i>&nbsp;
+<i class="no-highlight">53</i>&nbsp;    @FXML
+<i class="no-highlight">54</i>&nbsp;    ScrollPane scrollLobby;
+<i class="no-highlight">55</i>&nbsp;
+<i class="no-highlight">56</i>&nbsp;    /**
+<i class="no-highlight">57</i>&nbsp;     * Initializer for lobby controller scene
+<i class="no-highlight">58</i>&nbsp;     */
+<i class="no-highlight">59</i>&nbsp;    @FXML
+<i class="no-highlight">60</i>&nbsp;    public void initialize() {
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        opened.set(true);</b>
+<i class="no-highlight">62</i>&nbsp;
+<b class="nc"><i class="no-highlight">63</i>&nbsp;        roomsList.setOnScroll((event) -&gt; {</b>
+<b class="nc"><i class="no-highlight">64</i>&nbsp;            final double y = event.getDeltaY();</b>
+<b class="nc"><i class="no-highlight">65</i>&nbsp;            if(y != 0){ //prevent from panning before values are initialized</b>
+<b class="nc"><i class="no-highlight">66</i>&nbsp;                roomsList.setTranslateY(y);</b>
+<i class="no-highlight">67</i>&nbsp;            }
+<i class="no-highlight">68</i>&nbsp;        });
+<i class="no-highlight">69</i>&nbsp;
+<b class="nc"><i class="no-highlight">70</i>&nbsp;        loadRoomsList();</b>
+<i class="no-highlight">71</i>&nbsp;
+<b class="nc"><i class="no-highlight">72</i>&nbsp;        createRoomButton.setOnAction((event) -&gt; {</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;            GUI.client.view = StringNames.CREATE_NEW_ROOM;</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;            opened.set(false);</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;            NewRoomController newRoomController = new NewRoomController(gui);</b>
+<b class="nc"><i class="no-highlight">76</i>&nbsp;            Controller.load(ResourcesPath.NEW_ROOM, newRoomController);</b>
+<i class="no-highlight">77</i>&nbsp;        });
+<i class="no-highlight">78</i>&nbsp;
+<b class="nc"><i class="no-highlight">79</i>&nbsp;        exitButton.setOnAction((event) -&gt; {</b>
+<b class="nc"><i class="no-highlight">80</i>&nbsp;            opened.set(false);</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;            GUI.client.view = &quot;&quot;;</b>
+<b class="nc"><i class="no-highlight">82</i>&nbsp;            Platform.exit();</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;            System.exit(0);</b>
+<i class="no-highlight">84</i>&nbsp;        });
+<i class="no-highlight">85</i>&nbsp;    }
+<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">87</i>&nbsp;    /**
+<i class="no-highlight">88</i>&nbsp;     * Setter for rooms parameter
+<i class="no-highlight">89</i>&nbsp;      * @param rooms the rooms available on the server.
+<i class="no-highlight">90</i>&nbsp;     */
+<i class="no-highlight">91</i>&nbsp;    public void setRoomsList(ArrayList&lt;String&gt; rooms) {
+<b class="nc"><i class="no-highlight">92</i>&nbsp;        this.rooms = rooms;</b>
+<i class="no-highlight">93</i>&nbsp;    }
+<i class="no-highlight">94</i>&nbsp;
+<i class="no-highlight">95</i>&nbsp;    /**
+<i class="no-highlight">96</i>&nbsp;     * Loads the rooms list with graphical output.
+<i class="no-highlight">97</i>&nbsp;     */
+<i class="no-highlight">98</i>&nbsp;    private void loadRoomsList() {
+<b class="nc"><i class="no-highlight">99</i>&nbsp;        for (int i = 0; i &lt; rooms.size(); i++) {</b>
+<b class="nc"><i class="no-highlight">100</i>&nbsp;            RowConstraints row = new RowConstraints();</b>
+<b class="nc"><i class="no-highlight">101</i>&nbsp;            row.setPrefHeight(50);</b>
+<b class="nc"><i class="no-highlight">102</i>&nbsp;            row.setMinHeight(50);</b>
+<b class="nc"><i class="no-highlight">103</i>&nbsp;            roomsList.getRowConstraints().add(row);</b>
+<i class="no-highlight">104</i>&nbsp;
+<b class="nc"><i class="no-highlight">105</i>&nbsp;            Text roomName = new Text();</b>
+<b class="nc"><i class="no-highlight">106</i>&nbsp;            roomName.setText(rooms.get(i));</b>
+<i class="no-highlight">107</i>&nbsp;
+<b class="nc"><i class="no-highlight">108</i>&nbsp;            Button joinRoom = new Button();</b>
+<b class="nc"><i class="no-highlight">109</i>&nbsp;            joinRoom.setText(StringNames.JOIN);</b>
+<b class="nc"><i class="no-highlight">110</i>&nbsp;            joinRoom.setStyle(&quot;-fx-border-color: #2c43ff;\n&quot; +</b>
+<i class="no-highlight">111</i>&nbsp;                    &quot;    -fx-background-color: #848abd; \n -fx-border-width: 1;\n&quot; +
+<i class="no-highlight">112</i>&nbsp;                    &quot;    -fx-border-radius: 30;\n&quot; +
+<i class="no-highlight">113</i>&nbsp;                    &quot;    -fx-background-radius: 30;&quot;);
+<i class="no-highlight">114</i>&nbsp;
+<b class="nc"><i class="no-highlight">115</i>&nbsp;            joinRoom.setOnAction((event) -&gt; {</b>
+<i class="no-highlight">116</i>&nbsp;                try {
+<b class="nc"><i class="no-highlight">117</i>&nbsp;                    GUI.client.view = StringNames.ROOM;</b>
+<b class="nc"><i class="no-highlight">118</i>&nbsp;                    opened.set(false);</b>
+<b class="nc"><i class="no-highlight">119</i>&nbsp;                    GUI.client.requestRoomJoin(roomName.getText());</b>
+<b class="nc"><i class="no-highlight">120</i>&nbsp;                } catch (RemoteException e) {</b>
+<b class="nc"><i class="no-highlight">121</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.REMOTE);</b>
+<b class="nc"><i class="no-highlight">122</i>&nbsp;                } catch (RoomNotExistsException e) {</b>
+<b class="nc"><i class="no-highlight">123</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.ROOM_NOT_EXISTS);</b>
+<b class="nc"><i class="no-highlight">124</i>&nbsp;                } catch (UserNotRegisteredException e) {</b>
+<b class="nc"><i class="no-highlight">125</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);</b>
+<b class="nc"><i class="no-highlight">126</i>&nbsp;                } catch (RoomFullException | RoomInGameException e) {</b>
+<b class="nc"><i class="no-highlight">127</i>&nbsp;                    Controller.showErrorDialogBox(e.getMessage());</b>
+<b class="nc"><i class="no-highlight">128</i>&nbsp;                } catch (UserInRoomException e) {</b>
+<b class="nc"><i class="no-highlight">129</i>&nbsp;                    Controller.showErrorDialogBox(StringNames.USER_IN_ROOM);</b>
+<b class="nc"><i class="no-highlight">130</i>&nbsp;                }</b>
+<i class="no-highlight">131</i>&nbsp;            });
+<i class="no-highlight">132</i>&nbsp;
+<b class="nc"><i class="no-highlight">133</i>&nbsp;            roomsList.addRow(i + 1, roomName, joinRoom);</b>
+<b class="nc"><i class="no-highlight">134</i>&nbsp;            GridPane.setHalignment(roomName, HPos.CENTER);</b>
+<b class="nc"><i class="no-highlight">135</i>&nbsp;            GridPane.setHalignment(joinRoom, HPos.CENTER);</b>
+<i class="no-highlight">136</i>&nbsp;        }
+<i class="no-highlight">137</i>&nbsp;    }
+<i class="no-highlight">138</i>&nbsp;
+<i class="no-highlight">139</i>&nbsp;    /**
+<i class="no-highlight">140</i>&nbsp;     * Getter method for the opened status.
+<i class="no-highlight">141</i>&nbsp;     * @return boolean value depending on the state.
+<i class="no-highlight">142</i>&nbsp;     */
+<i class="no-highlight">143</i>&nbsp;    public static boolean isOpened() {
+<b class="nc"><i class="no-highlight">144</i>&nbsp;        return opened.get();</b>
+<i class="no-highlight">145</i>&nbsp;    }
+<i class="no-highlight">146</i>&nbsp;
+<i class="no-highlight">147</i>&nbsp;    /**
+<i class="no-highlight">148</i>&nbsp;     * Updates the rooms list because of room deletion or creation.
+<i class="no-highlight">149</i>&nbsp;     * @param rooms New rooms name array.
+<i class="no-highlight">150</i>&nbsp;     */
+<i class="no-highlight">151</i>&nbsp;    public void update(ArrayList&lt;String&gt; rooms) {
+<b class="nc"><i class="no-highlight">152</i>&nbsp;        roomsList.getChildren().remove(3, roomsList.getChildren().size());</b>
+<b class="nc"><i class="no-highlight">153</i>&nbsp;        setRoomsList(rooms);</b>
+<b class="nc"><i class="no-highlight">154</i>&nbsp;        loadRoomsList();</b>
+<i class="no-highlight">155</i>&nbsp;    }
+<i class="no-highlight">156</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-06-30 10:38</div>
+</div>
+</body>
+</html>

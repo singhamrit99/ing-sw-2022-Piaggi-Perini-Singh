@@ -1,0 +1,306 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CharacterCard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.polimi.ingsw.model.cards.charactercard</a>
+</div>
+
+<h1>Coverage Summary for Class: CharacterCard (it.polimi.ingsw.model.cards.charactercard)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CharacterCard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65%
+  </span>
+  <span class="absValue">
+    (13/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73.1%
+  </span>
+  <span class="absValue">
+    (19/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.polimi.ingsw.model.cards.charactercard;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.polimi.ingsw.exceptions.FullDiningException;
+<i class="no-highlight">4</i>&nbsp;import it.polimi.ingsw.model.Game;
+<i class="no-highlight">5</i>&nbsp;import it.polimi.ingsw.model.cards.Card;
+<i class="no-highlight">6</i>&nbsp;import it.polimi.ingsw.model.enumerations.Colors;
+<i class="no-highlight">7</i>&nbsp;import it.polimi.ingsw.exceptions.IncorrectArgumentException;
+<i class="no-highlight">8</i>&nbsp;import it.polimi.ingsw.exceptions.NegativeValueException;
+<i class="no-highlight">9</i>&nbsp;import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;import java.util.EnumMap;
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;/**
+<i class="no-highlight">14</i>&nbsp; * Basic character card, which then gets implemented in the specific character card types.
+<i class="no-highlight">15</i>&nbsp; */
+<i class="no-highlight">16</i>&nbsp;public class CharacterCard extends Card {
+<i class="no-highlight">17</i>&nbsp;    private int status;
+<i class="no-highlight">18</i>&nbsp;    private int price;
+<i class="no-highlight">19</i>&nbsp;    private String description;
+<i class="no-highlight">20</i>&nbsp;    private Type type;
+<i class="no-highlight">21</i>&nbsp;    private Ability ability;
+<i class="no-highlight">22</i>&nbsp;    private Requirements requirements;
+<i class="no-highlight">23</i>&nbsp;
+<i class="no-highlight">24</i>&nbsp;    /**
+<i class="no-highlight">25</i>&nbsp;     * Character card builder.
+<i class="no-highlight">26</i>&nbsp;     *
+<i class="no-highlight">27</i>&nbsp;     * @param price       The price of the character card.
+<i class="no-highlight">28</i>&nbsp;     * @param description The description of the character.
+<i class="no-highlight">29</i>&nbsp;     */
+<i class="no-highlight">30</i>&nbsp;    public CharacterCard(int price, String description) {
+<b class="nc"><i class="no-highlight">31</i>&nbsp;        this(&quot;&quot;, price, description);</b>
+<i class="no-highlight">32</i>&nbsp;    }
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;    /**
+<i class="no-highlight">35</i>&nbsp;     * Character card constructor used for updates
+<i class="no-highlight">36</i>&nbsp;     *
+<i class="no-highlight">37</i>&nbsp;     * @param imageName   Pulled from super Card class, used for both display and identification purposes.
+<i class="no-highlight">38</i>&nbsp;     * @param price       The current character card price.
+<i class="no-highlight">39</i>&nbsp;     * @param description The card&#39;s description.
+<i class="no-highlight">40</i>&nbsp;     */
+<i class="no-highlight">41</i>&nbsp;    public CharacterCard(String imageName, int price, String description) {
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        super(imageName);</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;        this.price = price;</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;        this.description = description;</b>
+<b class="fc"><i class="no-highlight">45</i>&nbsp;        status = 0;</b>
+<i class="no-highlight">46</i>&nbsp;    }
+<i class="no-highlight">47</i>&nbsp;
+<i class="no-highlight">48</i>&nbsp;    /**
+<i class="no-highlight">49</i>&nbsp;     * Most complete character card constructor. All of these values are pulled from the JSON file.
+<i class="no-highlight">50</i>&nbsp;     *
+<i class="no-highlight">51</i>&nbsp;     * @param imageName     Used for both display and identification purposes.
+<i class="no-highlight">52</i>&nbsp;     * @param startingPrice The specific starting character price.
+<i class="no-highlight">53</i>&nbsp;     * @param description   The character&#39;s power description.
+<i class="no-highlight">54</i>&nbsp;     * @param type          The character type, utilized for power activation.
+<i class="no-highlight">55</i>&nbsp;     * @param ability       The ability of the specific character.
+<i class="no-highlight">56</i>&nbsp;     * @param requirements  The resources needed to activate the character card.
+<i class="no-highlight">57</i>&nbsp;     */
+<i class="no-highlight">58</i>&nbsp;    public CharacterCard(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) {
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        this(imageName, startingPrice, description);</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;        this.type = type;</b>
+<b class="fc"><i class="no-highlight">61</i>&nbsp;        this.ability = ability;</b>
+<b class="fc"><i class="no-highlight">62</i>&nbsp;        this.requirements = requirements;</b>
+<i class="no-highlight">63</i>&nbsp;    }
+<i class="no-highlight">64</i>&nbsp;
+<i class="no-highlight">65</i>&nbsp;    /**
+<i class="no-highlight">66</i>&nbsp;     * ImageName field getter method. Inherited from Card class.
+<i class="no-highlight">67</i>&nbsp;     *
+<i class="no-highlight">68</i>&nbsp;     * @return ImageName
+<i class="no-highlight">69</i>&nbsp;     */
+<i class="no-highlight">70</i>&nbsp;    public String getImageName() {
+<b class="fc"><i class="no-highlight">71</i>&nbsp;        return super.getImageName();</b>
+<i class="no-highlight">72</i>&nbsp;    }
+<i class="no-highlight">73</i>&nbsp;
+<i class="no-highlight">74</i>&nbsp;    /**
+<i class="no-highlight">75</i>&nbsp;     * Price field getter method
+<i class="no-highlight">76</i>&nbsp;     *
+<i class="no-highlight">77</i>&nbsp;     * @return price
+<i class="no-highlight">78</i>&nbsp;     */
+<i class="no-highlight">79</i>&nbsp;    public int getPrice() {
+<b class="fc"><i class="no-highlight">80</i>&nbsp;        return price;</b>
+<i class="no-highlight">81</i>&nbsp;    }
+<i class="no-highlight">82</i>&nbsp;
+<i class="no-highlight">83</i>&nbsp;    /**
+<i class="no-highlight">84</i>&nbsp;     * Description field getter method
+<i class="no-highlight">85</i>&nbsp;     *
+<i class="no-highlight">86</i>&nbsp;     * @return Description
+<i class="no-highlight">87</i>&nbsp;     */
+<i class="no-highlight">88</i>&nbsp;    public String getDescription() {
+<b class="fc"><i class="no-highlight">89</i>&nbsp;        return description;</b>
+<i class="no-highlight">90</i>&nbsp;    }
+<i class="no-highlight">91</i>&nbsp;
+<i class="no-highlight">92</i>&nbsp;    /**
+<i class="no-highlight">93</i>&nbsp;     * Type field getter method
+<i class="no-highlight">94</i>&nbsp;     *
+<i class="no-highlight">95</i>&nbsp;     * @return Type
+<i class="no-highlight">96</i>&nbsp;     */
+<i class="no-highlight">97</i>&nbsp;    public Type getType() {
+<b class="fc"><i class="no-highlight">98</i>&nbsp;        return type;</b>
+<i class="no-highlight">99</i>&nbsp;    }
+<i class="no-highlight">100</i>&nbsp;
+<i class="no-highlight">101</i>&nbsp;    /**
+<i class="no-highlight">102</i>&nbsp;     * Ability field getter method
+<i class="no-highlight">103</i>&nbsp;     *
+<i class="no-highlight">104</i>&nbsp;     * @return Ability
+<i class="no-highlight">105</i>&nbsp;     */
+<i class="no-highlight">106</i>&nbsp;    public Ability getAbility() {
+<b class="fc"><i class="no-highlight">107</i>&nbsp;        return ability;</b>
+<i class="no-highlight">108</i>&nbsp;    }
+<i class="no-highlight">109</i>&nbsp;
+<i class="no-highlight">110</i>&nbsp;    /**
+<i class="no-highlight">111</i>&nbsp;     * Requirements field getter method.
+<i class="no-highlight">112</i>&nbsp;     *
+<i class="no-highlight">113</i>&nbsp;     * @return Requirements
+<i class="no-highlight">114</i>&nbsp;     */
+<i class="no-highlight">115</i>&nbsp;    public Requirements getRequirements() {
+<b class="fc"><i class="no-highlight">116</i>&nbsp;        return requirements;</b>
+<i class="no-highlight">117</i>&nbsp;    }
+<i class="no-highlight">118</i>&nbsp;
+<i class="no-highlight">119</i>&nbsp;    /**
+<i class="no-highlight">120</i>&nbsp;     * Method to be overridden in each different character card.
+<i class="no-highlight">121</i>&nbsp;     *
+<i class="no-highlight">122</i>&nbsp;     * @param game The game in which the card is being activated
+<i class="no-highlight">123</i>&nbsp;     * @throws ProfessorNotFoundException If the character card can cause a professor change this is thrown in case of an error.
+<i class="no-highlight">124</i>&nbsp;     * @throws NegativeValueException     As always, this game has no negative values, and any found are automatically incorrect.
+<i class="no-highlight">125</i>&nbsp;     * @throws IncorrectArgumentException Thrown in case of invalid values in Character cards implementations.
+<i class="no-highlight">126</i>&nbsp;     */
+<i class="no-highlight">127</i>&nbsp;    public void activate(Game game) throws ProfessorNotFoundException, NegativeValueException, IncorrectArgumentException, FullDiningException {
+<b class="nc"><i class="no-highlight">128</i>&nbsp;        status = 1;</b>
+<i class="no-highlight">129</i>&nbsp;    }
+<i class="no-highlight">130</i>&nbsp;
+<i class="no-highlight">131</i>&nbsp;    /**
+<i class="no-highlight">132</i>&nbsp;     * Returns status.
+<i class="no-highlight">133</i>&nbsp;     *
+<i class="no-highlight">134</i>&nbsp;     * @return status, whether the card is in play or not
+<i class="no-highlight">135</i>&nbsp;     */
+<i class="no-highlight">136</i>&nbsp;    public int getStatus() {
+<b class="fc"><i class="no-highlight">137</i>&nbsp;        return status;</b>
+<i class="no-highlight">138</i>&nbsp;    }
+<i class="no-highlight">139</i>&nbsp;
+<i class="no-highlight">140</i>&nbsp;    /**
+<i class="no-highlight">141</i>&nbsp;     * Setter for the status parameter
+<i class="no-highlight">142</i>&nbsp;     *
+<i class="no-highlight">143</i>&nbsp;     * @param status sets card status (in play or not)
+<i class="no-highlight">144</i>&nbsp;     */
+<i class="no-highlight">145</i>&nbsp;    public void setStatus(int status) {
+<b class="fc"><i class="no-highlight">146</i>&nbsp;        this.status = status;</b>
+<i class="no-highlight">147</i>&nbsp;    }
+<i class="no-highlight">148</i>&nbsp;
+<i class="no-highlight">149</i>&nbsp;    /**
+<i class="no-highlight">150</i>&nbsp;     * Setter for choiceIndex parameter
+<i class="no-highlight">151</i>&nbsp;     *
+<i class="no-highlight">152</i>&nbsp;     * @param choiceIndex parameter used in selector characters.
+<i class="no-highlight">153</i>&nbsp;     */
+<i class="no-highlight">154</i>&nbsp;    public void setChoiceIndex(int choiceIndex) {
+<b class="nc"><i class="no-highlight">155</i>&nbsp;    }</b>
+<i class="no-highlight">156</i>&nbsp;
+<i class="no-highlight">157</i>&nbsp;    /**
+<i class="no-highlight">158</i>&nbsp;     * Increases character price after activation.
+<i class="no-highlight">159</i>&nbsp;     */
+<i class="no-highlight">160</i>&nbsp;    public void increasePrice() {
+<b class="fc"><i class="no-highlight">161</i>&nbsp;        price++;</b>
+<i class="no-highlight">162</i>&nbsp;    }
+<i class="no-highlight">163</i>&nbsp;
+<i class="no-highlight">164</i>&nbsp;    /**
+<i class="no-highlight">165</i>&nbsp;     * Method used to set enums for StudentCharacters cards.
+<i class="no-highlight">166</i>&nbsp;     *
+<i class="no-highlight">167</i>&nbsp;     * @param students1 first student enum.
+<i class="no-highlight">168</i>&nbsp;     * @param students2 second student enum.
+<i class="no-highlight">169</i>&nbsp;     */
+<i class="no-highlight">170</i>&nbsp;    public void setEnums(EnumMap&lt;Colors, Integer&gt; students1, EnumMap&lt;Colors, Integer&gt; students2) {
+<b class="nc"><i class="no-highlight">171</i>&nbsp;    }</b>
+<i class="no-highlight">172</i>&nbsp;
+<i class="no-highlight">173</i>&nbsp;    /**
+<i class="no-highlight">174</i>&nbsp;     * Method to be overridden in specific Character Cards.
+<i class="no-highlight">175</i>&nbsp;     *
+<i class="no-highlight">176</i>&nbsp;     * @param student The student, passed as an int (Color)
+<i class="no-highlight">177</i>&nbsp;     * @param island  The island, passed as an int (number)
+<i class="no-highlight">178</i>&nbsp;     */
+<i class="no-highlight">179</i>&nbsp;    public void setChoices(int student, int island) {
+<b class="nc"><i class="no-highlight">180</i>&nbsp;    }</b>
+<i class="no-highlight">181</i>&nbsp;
+<i class="no-highlight">182</i>&nbsp;    /**
+<i class="no-highlight">183</i>&nbsp;     * Method to be overridden in specific Character Cards
+<i class="no-highlight">184</i>&nbsp;     *
+<i class="no-highlight">185</i>&nbsp;     * @return students in overridden cards.
+<i class="no-highlight">186</i>&nbsp;     */
+<i class="no-highlight">187</i>&nbsp;    public EnumMap&lt;Colors, Integer&gt; getStudents() {
+<b class="fc"><i class="no-highlight">188</i>&nbsp;        return null;</b>
+<i class="no-highlight">189</i>&nbsp;    }
+<i class="no-highlight">190</i>&nbsp;
+<i class="no-highlight">191</i>&nbsp;    public int getNoTileNumber() {
+<b class="fc"><i class="no-highlight">192</i>&nbsp;        return 0;</b>
+<i class="no-highlight">193</i>&nbsp;    }
+<i class="no-highlight">194</i>&nbsp;
+<i class="no-highlight">195</i>&nbsp;    public void incrementNoTileNumber() {
+<b class="nc"><i class="no-highlight">196</i>&nbsp;    }</b>
+<i class="no-highlight">197</i>&nbsp;
+<i class="no-highlight">198</i>&nbsp;    public void decrementNoTileNumber() {
+<b class="nc"><i class="no-highlight">199</i>&nbsp;    }</b>
+<i class="no-highlight">200</i>&nbsp;
+<i class="no-highlight">201</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-06-30 10:38</div>
+</div>
+</body>
+</html>
