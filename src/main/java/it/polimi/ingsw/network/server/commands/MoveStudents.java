@@ -5,24 +5,25 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.enumerations.Colors;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.EnumMap;
 
 public class MoveStudents implements Command, Serializable {
     String playerCaller;
-    EnumMap<Colors, ArrayList<String>> students;
+    Colors color;
+    String dest;
 
-    public MoveStudents(String playerCaller, EnumMap<Colors, ArrayList<String>> students) {
-        this.playerCaller= playerCaller;
-        this.students = students;
+    public MoveStudents(String playerCaller, Colors color, String dest) {
+        this.playerCaller = playerCaller;
+        this.color = color;
+        this.dest = dest;
     }
 
     @Override
     public String getCaller() {
         return playerCaller;
     }
+
     @Override
     public void execute(Controller controller) throws IncorrectPlayerException, NegativeValueException, IncorrectArgumentException, ProfessorNotFoundException, IncorrectStateException {
-        controller.callMoveStudent(playerCaller, students);
+        controller.callMoveStudent(playerCaller, color, dest);
     }
 }
