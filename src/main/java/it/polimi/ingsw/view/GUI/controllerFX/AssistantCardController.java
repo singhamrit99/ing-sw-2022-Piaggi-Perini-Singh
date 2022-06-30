@@ -5,6 +5,9 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.cards.assistantcard.AssistantCard;
 import it.polimi.ingsw.network.server.commands.PlayAssistantCard;
 import it.polimi.ingsw.view.GUI.GUI;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -14,9 +17,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
+
+import java.rmi.RemoteException;
 
 public class AssistantCardController extends InitialStage implements Controller {
     @FXML
@@ -65,16 +69,17 @@ public class AssistantCardController extends InitialStage implements Controller 
         }
 
         image.setImage(new Image(ResourcesPath.ASSISTANT_CARDS + finalCards.get(firstIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS));
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 
-        choiceBox.setOnAction(actionEvent -> {
-            int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
-
-            try {
-                image.setImage(new Image(ResourcesPath.ASSISTANT_CARDS + finalCards.get(selectedIndex).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS));
-                chosenCard.set(finalCards.get(selectedIndex).getImageName());
-                GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(selectedIndex).getMove());
-            } catch (LocalModelNotLoadedException v) {
-                Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                try {
+                    image.setImage(new Image(ResourcesPath.ASSISTANT_CARDS + finalCards.get(t1.intValue()).getImageName() + ResourcesPath.IMAGE_EXTENSION_ASS));
+                    chosenCard.set(finalCards.get(t1.intValue()).getImageName());
+                    GUI.client.getLocalModel().getBoardOf(GUI.client.getNickname()).setMoves(finalCards.get(t1.intValue()).getMove());
+                } catch (LocalModelNotLoadedException v) {
+                    Controller.showErrorDialogBox(StringNames.LOCAL_MODEL_ERROR);
+                }
             }
         });
 

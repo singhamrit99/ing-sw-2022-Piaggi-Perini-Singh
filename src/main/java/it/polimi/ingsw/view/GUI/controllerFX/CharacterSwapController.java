@@ -147,7 +147,6 @@ public class CharacterSwapController extends InitialStage implements Controller 
         for (ComboBox<String> cardBox : firstBoxes) {
             loadComboBox(cardBox, Integer.parseInt(text1.get(i).getText()));
             cardBox.getSelectionModel().selectFirst();
-            cardBox.setOnAction(actionEvent -> cardBox.getSelectionModel().getSelectedIndex());
             i++;
         }
 
@@ -155,7 +154,6 @@ public class CharacterSwapController extends InitialStage implements Controller 
         for (ComboBox<String> cardBox : secondBoxes) {
             loadComboBox(cardBox, Integer.parseInt(text2.get(i).getText()));
             cardBox.getSelectionModel().selectFirst();
-            cardBox.setOnAction(actionEvent -> cardBox.getSelectionModel().getSelectedIndex());
             i++;
         }
 

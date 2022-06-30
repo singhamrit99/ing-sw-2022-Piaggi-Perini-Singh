@@ -3,6 +3,8 @@ package it.polimi.ingsw.view.GUI.controllerFX;
 import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.view.GUI.GUI;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -59,12 +61,15 @@ public class CharacterCardController extends InitialStage implements Controller 
         coins.setText("Card cost: " + cards.get(firstIndex).getPrice());
         image.setImage(new Image(ResourcesPath.CHARACTERS + cards.get(firstIndex).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
 
-        choiceBox.setOnAction(actionEvent -> {
-            int selectedIndex = choiceBox.getSelectionModel().getSelectedIndex();
-            coins.setText("Card cost: " + cards.get(selectedIndex).getPrice());
-            image.setImage(new Image(ResourcesPath.CHARACTERS + cards.get(selectedIndex).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
-            chosenCard.set(String.valueOf(cards.get(selectedIndex).getCharacterID()));
-            GUI.client.getLocalModel().selectedCharacter = cards.get(selectedIndex);
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                coins.setText("Card cost: " + cards.get(t1.intValue()).getPrice());
+                image.setImage(new Image(ResourcesPath.CHARACTERS + cards.get(t1.intValue()).getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
+                chosenCard.set(String.valueOf(cards.get(t1.intValue()).getCharacterID()));
+                GUI.client.getLocalModel().selectedCharacter = cards.get(t1.intValue());
+            }
         });
 
         confirmButton.setOnAction(event -> {

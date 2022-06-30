@@ -46,6 +46,7 @@ public class SwitchButton extends StackPane {
 
     /**
      * Switch button state setter method
+     *
      * @param state the state to set to (boolean)
      */
     public void setState(boolean state) {
@@ -54,6 +55,7 @@ public class SwitchButton extends StackPane {
 
     /**
      * Returns the current state
+     *
      * @return the state to return
      */
     public boolean getState() {
@@ -62,6 +64,7 @@ public class SwitchButton extends StackPane {
 
     /**
      * Changes the state to the parameter and the style accordingly.
+     *
      * @param state The state to change to (boolean)
      */
     public void changeState(boolean state) {

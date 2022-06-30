@@ -16,1154 +16,1382 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane  xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/">
-   <center>
-      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/">
-         <children>
-            <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="1920.0">
-               <children>
-                  <VBox fx:id="cloudv1" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0" HBox.hgrow="NEVER">
-                     <children>
-                        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="NEVER">
-                           <children>
-                              <ImageView fx:id="cloud3" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/clouds/2_4players/cloud_2_4p_v3.png" />
-                                 </image>
-                              </ImageView>
-                              <StackPane fx:id="cloud3v3" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="100.0">
-                                 <children>
-                                    <ImageView fx:id="student1Cloud3v3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="25.0" left="-75.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student2Cloud3v3" fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets right="40.0" top="70.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student3Cloud3v3" fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="60.0" left="45.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student4Cloud3v3" fitHeight="150.0" fitWidth="200.0" layoutX="60.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets left="55.0" top="40.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                 </children>
-                              </StackPane>
-                              <StackPane fx:id="cloud3v4" prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
-                                 <children>
-                                    <ImageView fx:id="student1Cloud3v4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="10.0" left="-75.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student2Cloud3v4" fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets right="-20.0" top="70.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student3Cloud3v4" fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="50.0" left="50.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                 </children>
-                                 <StackPane.margin>
-                                    <Insets />
-                                 </StackPane.margin>
-                              </StackPane>
-                           </children>
-                        </StackPane>
-                        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fx:id="cloud4" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/clouds/2_4players/cloud_2_4p_v4.png" />
-                                 </image>
-                              </ImageView>
-                              <StackPane fx:id="cloud4v4" prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
-                                 <children>
-                                    <ImageView fx:id="student1Cloud4v4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="10.0" left="-75.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student2Cloud4v4" fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets right="-20.0" top="70.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student3Cloud4v4" fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="50.0" left="50.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                 </children>
-                                 <StackPane.margin>
-                                    <Insets />
-                                 </StackPane.margin>
-                              </StackPane>
-                           </children>
-                        </StackPane>
-                     </children>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </VBox>
-                  <StackPane fx:id="islandsPane" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </StackPane>
-                  <VBox alignment="CENTER_LEFT" layoutX="270.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0" />
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </HBox>
-            <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="1920.0">
-               <children>
-                  <VBox fx:id="cloudv2" alignment="BASELINE_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="200.0">
-                     <children>
-                        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
-                           <children>
-                              <ImageView fx:id="cloud1" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/clouds/2_4players/cloud_2_4p_v1.png" />
-                                 </image>
-                              </ImageView>
-                              <StackPane fx:id="cloud1v3" prefHeight="100.0" prefWidth="100.0">
-                                 <children>
-                                    <ImageView fx:id="student1Cloud1v3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="25.0" left="-75.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student2Cloud1v3" fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets right="40.0" top="70.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student3Cloud1v3" fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="60.0" left="45.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student4Cloud1v3" fitHeight="150.0" fitWidth="200.0" layoutX="60.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets left="55.0" top="40.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                 </children>
-                              </StackPane>
-                              <StackPane fx:id="cloud1v4" prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
-                                 <children>
-                                    <ImageView fx:id="student1Cloud1v4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="10.0" left="-70.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student2Cloud1v4" fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets right="-20.0" top="70.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student3Cloud1v4" fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="50.0" left="50.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                 </children>
-                                 <StackPane.margin>
-                                    <Insets />
-                                 </StackPane.margin>
-                              </StackPane>
-                           </children>
-                        </StackPane>
-                        <StackPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fx:id="cloud2" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/clouds/2_4players/cloud_2_4p_v2.png" />
-                                 </image>
-                              </ImageView>
-                              <StackPane fx:id="cloud2v3" prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
-                                 <children>
-                                    <ImageView fx:id="student1Cloud2v3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="25.0" left="-75.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student2Cloud2v3" fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets right="40.0" top="70.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student3Cloud2v3" fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="60.0" left="45.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student4Cloud2v3" fitHeight="150.0" fitWidth="200.0" layoutX="60.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets left="55.0" top="40.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                 </children>
-                                 <StackPane.margin>
-                                    <Insets />
-                                 </StackPane.margin>
-                              </StackPane>
-                              <StackPane fx:id="cloud2v4" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="100.0">
-                                 <children>
-                                    <ImageView fx:id="student1Cloud2v4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="10.0" left="-70.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student2Cloud2v4" fitHeight="150.0" fitWidth="200.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets right="-20.0" top="70.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="student3Cloud2v4" fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3" StackPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@../img/students/student_blue.png" />
-                                       </image>
-                                       <StackPane.margin>
-                                          <Insets bottom="50.0" left="50.0" />
-                                       </StackPane.margin>
-                                    </ImageView>
-                                 </children>
-                              </StackPane>
-                           </children>
-                        </StackPane>
-                     </children>
-                  </VBox>
-                  <StackPane fx:id="bag" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="200.0">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <children>
-                        <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/custom/bag.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </StackPane>
-                  <StackPane fx:id="board" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="1000.0">
-                     <children>
-                        <ImageView fitHeight="555.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
-                           <image>
-                              <Image url="@../img/board/Plancia_DEF2.png" />
-                           </image>
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                        </ImageView>
-                        <StackPane fx:id="towers" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fx:id="tower1" fitHeight="75.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/towers/white_tower.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="295.0" right="50.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="tower2" fitHeight="75.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/towers/white_tower.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="225.0" right="50.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="tower3" fitHeight="75.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/towers/white_tower.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="153.0" right="50.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="tower4" fitHeight="75.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/towers/white_tower.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="79.0" right="50.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="tower8" fitHeight="75.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/towers/white_tower.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="79.0" right="125.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="tower7" fitHeight="75.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/towers/white_tower.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="153.0" right="125.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="tower6" fitHeight="75.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/towers/white_tower.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="225.0" right="125.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="tower5" fitHeight="75.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/towers/white_tower.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="295.0" right="125.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                           </children>
-                        </StackPane>
-                        <StackPane alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fx:id="blueProf" fitHeight="52.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/professors/teacher_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="49.0" right="245.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="greenProf" fitHeight="52.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/professors/teacher_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="335.0" right="245.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="pinkProf" fitHeight="52.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/professors/teacher_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="122.0" right="245.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="yellowProf" fitHeight="52.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/professors/teacher_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="190.0" right="245.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="redProf" fitHeight="52.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" StackPane.alignment="BOTTOM_RIGHT">
-                                 <image>
-                                    <Image url="@../img/professors/teacher_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="260.0" right="245.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                           </children>
-                        </StackPane>
-                        <StackPane fx:id="entrance" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fx:id="studentEntrance1" fitHeight="52.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="260.0" left="28.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="studentEntrance2" fitHeight="52.0" layoutX="484.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="190.0" left="28.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="studentEntrance3" fitHeight="52.0" layoutX="38.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="118.0" left="28.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="studentEntrance4" fitHeight="52.0" layoutX="38.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="118.0" left="85.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="studentEntrance5" fitHeight="52.0" layoutX="95.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="190.0" left="85.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="studentEntrance6" fitHeight="52.0" layoutX="38.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="260.0" left="85.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="studentEntrance7" fitHeight="52.0" layoutX="38.0" layoutY="202.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="333.0" left="86.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="studentEntrance8" fitHeight="52.0" layoutX="484.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="28.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="studentEntrance9" fitHeight="52.0" layoutX="38.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="85.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                           </children>
-                           <StackPane.margin>
-                              <Insets />
-                           </StackPane.margin>
-                        </StackPane>
-                        <StackPane fx:id="blueDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fx:id="blueDining0" fitHeight="52.0" layoutX="95.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="180.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="blueDining1" fitHeight="52.0" layoutX="190.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="230.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="blueDining2" fitHeight="52.0" layoutX="240.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="278.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="blueDining3" fitHeight="52.0" layoutX="290.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="324.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="blueDining4" fitHeight="52.0" layoutX="334.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="372.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="blueDining5" fitHeight="52.0" layoutX="382.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="419.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="blueDining6" fitHeight="52.0" layoutX="429.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="465.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="blueDining7" fitHeight="52.0" layoutX="475.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="513.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="blueDining8" fitHeight="52.0" layoutX="523.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="560.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="blueDining9" fitHeight="52.0" layoutX="570.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_blue.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="610.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                           </children>
-                        </StackPane>
-                        <StackPane fx:id="pinkDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
-                           <children>
-                              <ImageView fx:id="pinkDining0" fitHeight="52.0" layoutX="95.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="180.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="pinkDining1" fitHeight="52.0" layoutX="190.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="230.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="pinkDining2" fitHeight="52.0" layoutX="240.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="278.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="pinkDining3" fitHeight="52.0" layoutX="290.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="324.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="pinkDining4" fitHeight="52.0" layoutX="334.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="372.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="pinkDining5" fitHeight="52.0" layoutX="382.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="419.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="pinkDining6" fitHeight="52.0" layoutX="429.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="465.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="pinkDining7" fitHeight="52.0" layoutX="475.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="513.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="pinkDining8" fitHeight="52.0" layoutX="523.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="560.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="pinkDining9" fitHeight="52.0" layoutX="570.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_pink.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="610.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                           </children>
-                           <StackPane.margin>
-                              <Insets bottom="70.0" />
-                           </StackPane.margin>
-                        </StackPane>
-                        <StackPane fx:id="yellowDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
-                           <children>
-                              <ImageView fx:id="yellowDining0" fitHeight="52.0" layoutX="95.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="180.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="yellowDining1" fitHeight="52.0" layoutX="190.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="230.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="yellowDining2" fitHeight="52.0" layoutX="240.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="278.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="yellowDining3" fitHeight="52.0" layoutX="290.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="324.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="yellowDining4" fitHeight="52.0" layoutX="334.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="372.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="yellowDining5" fitHeight="52.0" layoutX="382.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="419.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="yellowDining6" fitHeight="52.0" layoutX="429.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="465.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="yellowDining7" fitHeight="52.0" layoutX="475.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="513.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="yellowDining8" fitHeight="52.0" layoutX="523.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="560.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="yellowDining9" fitHeight="52.0" layoutX="570.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_yellow.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="610.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                           </children>
-                           <StackPane.margin>
-                              <Insets bottom="140.0" />
-                           </StackPane.margin>
-                        </StackPane>
-                        <StackPane fx:id="redDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
-                           <children>
-                              <ImageView fx:id="redDining0" fitHeight="52.0" layoutX="95.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="180.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="redDining1" fitHeight="52.0" layoutX="190.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="230.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="redDining2" fitHeight="52.0" layoutX="240.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="278.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="redDining3" fitHeight="52.0" layoutX="290.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="324.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="redDining4" fitHeight="52.0" layoutX="334.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="372.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="redDining5" fitHeight="52.0" layoutX="382.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="419.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="redDining6" fitHeight="52.0" layoutX="429.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="465.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="redDining7" fitHeight="52.0" layoutX="475.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="513.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="redDining8" fitHeight="52.0" layoutX="523.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="560.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="redDining9" fitHeight="52.0" layoutX="570.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_red.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="610.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                           </children>
-                           <StackPane.margin>
-                              <Insets bottom="210.0" />
-                           </StackPane.margin>
-                        </StackPane>
-                        <StackPane fx:id="greenDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
-                           <children>
-                              <ImageView fx:id="greenDining0" fitHeight="52.0" layoutX="95.0" layoutY="274.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="180.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="greenDining1" fitHeight="52.0" layoutX="190.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="230.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="greenDining2" fitHeight="52.0" layoutX="240.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="278.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="greenDining3" fitHeight="52.0" layoutX="290.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="324.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="greenDining4" fitHeight="52.0" layoutX="334.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="372.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="greenDining5" fitHeight="52.0" layoutX="382.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="419.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="greenDining6" fitHeight="52.0" layoutX="429.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="465.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="greenDining7" fitHeight="52.0" layoutX="475.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="513.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="greenDining8" fitHeight="52.0" layoutX="523.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="560.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <ImageView fx:id="greenDining9" fitHeight="52.0" layoutX="570.0" layoutY="342.0" pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
-                                 <image>
-                                    <Image url="@../img/students/student_green.png" />
-                                 </image>
-                                 <StackPane.margin>
-                                    <Insets bottom="50.0" left="610.0" />
-                                 </StackPane.margin>
-                              </ImageView>
-                           </children>
-                           <StackPane.margin>
-                              <Insets bottom="283.0" />
-                           </StackPane.margin>
-                        </StackPane>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <effect>
-                        <InnerShadow blurType="GAUSSIAN" height="25.0" radius="12.0" width="25.0">
-                           <color>
-                              <Color red="0.40784314274787903" green="0.843137264251709" blue="1.0" />
-                           </color>
-                        </InnerShadow>
-                     </effect>
-                  </StackPane>
-                  <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0">
-                     <children>
-                        <StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <children>
-                              <ImageView fx:id="assistantDeck" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/custom/assistantDeck.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </StackPane>
-                        <HBox fx:id="characters" alignment="CENTER" prefHeight="100.0" prefWidth="400.0">
-                           <children>
-                              <StackPane maxHeight="-Infinity" prefHeight="140.0" prefWidth="200.0">
-                                 <children>
-                                    <ImageView fx:id="character1" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../img/characters/character1.jpg" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox fx:id="character1Vbox" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <ImageView fitHeight="30.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true" scaleZ="0.4">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </StackPane>
-                              <StackPane maxHeight="-Infinity" prefHeight="140.0" prefWidth="200.0">
-                                 <children>
-                                    <ImageView fx:id="character2" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../img/characters/character2.jpg" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox fx:id="character2Vbox" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <ImageView fitHeight="30.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="91.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </StackPane>
-                              <StackPane maxHeight="-Infinity" prefHeight="140.0" prefWidth="200.0">
-                                 <children>
-                                    <ImageView fx:id="character3" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../img/characters/character4.jpg" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox fx:id="character3Vbox" alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <ImageView fitHeight="30.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="92.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="92.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="30.0" layoutX="92.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/students/student_pink.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </StackPane>
-                           </children>
-                        </HBox>
-                        <StackPane fx:id="coinsIndicator" prefHeight="150.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/characters/coin.png" />
-                                 </image>
-                              </ImageView>
-                              <Label fx:id="coinsText" alignment="TOP_CENTER" contentDisplay="CENTER" text="99" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="35.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </StackPane>
-                     </children>
-                  </VBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </HBox>
-         </children>
-      </VBox>
+<BorderPane xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/">
+    <center>
+        <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+              minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background"
+              stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/">
 
-   </center>
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-         <menus>
-            <Menu fx:id="currentPlayer" mnemonicParsing="false" />
-            <Menu fx:id="changeViewBoard" mnemonicParsing="false" text="Change View Board">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Player1" />
-                  <MenuItem mnemonicParsing="false" text="Player2" />
-                  <MenuItem mnemonicParsing="false" text="Player3" />
-                  <MenuItem mnemonicParsing="false" text="Player4" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Options">
-               <items>
-                  <MenuItem fx:id="leaveGame" mnemonicParsing="false" text="Leave Game" />
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
-   </top>
+            <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                  minWidth="-Infinity" prefHeight="580.0" prefWidth="1920.0">
+
+                <VBox fx:id="cloudv1" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity"
+                      minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0"
+                      HBox.hgrow="NEVER">
+
+                    <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                               prefHeight="150.0" prefWidth="200.0" VBox.vgrow="NEVER">
+
+                        <ImageView fx:id="cloud3" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@../img/clouds/2_4players/cloud_2_4p_v3.png"/>
+                            </image>
+                        </ImageView>
+                        <StackPane fx:id="cloud3v3" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="100.0">
+
+                            <ImageView fx:id="student1Cloud3v3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
+                                       preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3"
+                                       StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="25.0" left="-75.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student2Cloud3v3" fitHeight="150.0" fitWidth="200.0" layoutX="35.0"
+                                       layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets right="40.0" top="70.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student3Cloud3v3" fitHeight="150.0" fitWidth="200.0" layoutX="61.0"
+                                       layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="60.0" left="45.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student4Cloud3v3" fitHeight="150.0" fitWidth="200.0" layoutX="60.0"
+                                       layoutY="20.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets left="55.0" top="40.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+
+                        </StackPane>
+                        <StackPane fx:id="cloud3v4" prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
+
+                            <ImageView fx:id="student1Cloud3v4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
+                                       preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3"
+                                       StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="10.0" left="-75.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student2Cloud3v4" fitHeight="150.0" fitWidth="200.0" layoutX="35.0"
+                                       layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets right="-20.0" top="70.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student3Cloud3v4" fitHeight="150.0" fitWidth="200.0" layoutX="61.0"
+                                       layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="50.0" left="50.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+
+                            <StackPane.margin>
+                                <Insets/>
+                            </StackPane.margin>
+                        </StackPane>
+
+                    </StackPane>
+                    <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                               prefHeight="150.0" prefWidth="200.0">
+
+                        <ImageView fx:id="cloud4" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@../img/clouds/2_4players/cloud_2_4p_v4.png"/>
+                            </image>
+                        </ImageView>
+                        <StackPane fx:id="cloud4v4" prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
+
+                            <ImageView fx:id="student1Cloud4v4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
+                                       preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3"
+                                       StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="10.0" left="-75.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student2Cloud4v4" fitHeight="150.0" fitWidth="200.0" layoutX="35.0"
+                                       layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets right="-20.0" top="70.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student3Cloud4v4" fitHeight="150.0" fitWidth="200.0" layoutX="61.0"
+                                       layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="50.0" left="50.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+
+                            <StackPane.margin>
+                                <Insets/>
+                            </StackPane.margin>
+                        </StackPane>
+
+                    </StackPane>
+
+                    <HBox.margin>
+                        <Insets/>
+                    </HBox.margin>
+                </VBox>
+                <StackPane fx:id="islandsPane" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
+                           minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0">
+                    <HBox.margin>
+                        <Insets/>
+                    </HBox.margin>
+                </StackPane>
+                <VBox alignment="CENTER_LEFT" layoutX="270.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                      minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0"/>
+
+                <opaqueInsets>
+                    <Insets/>
+                </opaqueInsets>
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+            </HBox>
+            <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                  minWidth="-Infinity" prefHeight="480.0" prefWidth="1920.0">
+
+                <VBox fx:id="cloudv2" alignment="BASELINE_LEFT" maxHeight="-Infinity" maxWidth="-Infinity"
+                      minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="200.0">
+
+                    <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="200.0"
+                               VBox.vgrow="NEVER">
+
+                        <ImageView fx:id="cloud1" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@../img/clouds/2_4players/cloud_2_4p_v1.png"/>
+                            </image>
+                        </ImageView>
+                        <StackPane fx:id="cloud1v3" prefHeight="100.0" prefWidth="100.0">
+
+                            <ImageView fx:id="student1Cloud1v3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
+                                       preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3"
+                                       StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="25.0" left="-75.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student2Cloud1v3" fitHeight="150.0" fitWidth="200.0" layoutX="35.0"
+                                       layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets right="40.0" top="70.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student3Cloud1v3" fitHeight="150.0" fitWidth="200.0" layoutX="61.0"
+                                       layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="60.0" left="45.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student4Cloud1v3" fitHeight="150.0" fitWidth="200.0" layoutX="60.0"
+                                       layoutY="20.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets left="55.0" top="40.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+
+                        </StackPane>
+                        <StackPane fx:id="cloud1v4" prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
+
+                            <ImageView fx:id="student1Cloud1v4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
+                                       preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3"
+                                       StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="10.0" left="-70.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student2Cloud1v4" fitHeight="150.0" fitWidth="200.0" layoutX="35.0"
+                                       layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets right="-20.0" top="70.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student3Cloud1v4" fitHeight="150.0" fitWidth="200.0" layoutX="61.0"
+                                       layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="50.0" left="50.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+
+                            <StackPane.margin>
+                                <Insets/>
+                            </StackPane.margin>
+                        </StackPane>
+
+                    </StackPane>
+                    <StackPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0"
+                               prefWidth="200.0">
+
+                        <ImageView fx:id="cloud2" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@../img/clouds/2_4players/cloud_2_4p_v2.png"/>
+                            </image>
+                        </ImageView>
+                        <StackPane fx:id="cloud2v3" prefHeight="100.0" prefWidth="100.0" StackPane.alignment="CENTER">
+
+                            <ImageView fx:id="student1Cloud2v3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
+                                       preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3"
+                                       StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="25.0" left="-75.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student2Cloud2v3" fitHeight="150.0" fitWidth="200.0" layoutX="35.0"
+                                       layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets right="40.0" top="70.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student3Cloud2v3" fitHeight="150.0" fitWidth="200.0" layoutX="61.0"
+                                       layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="60.0" left="45.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student4Cloud2v3" fitHeight="150.0" fitWidth="200.0" layoutX="60.0"
+                                       layoutY="20.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets left="55.0" top="40.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+
+                            <StackPane.margin>
+                                <Insets/>
+                            </StackPane.margin>
+                        </StackPane>
+                        <StackPane fx:id="cloud2v4" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="100.0">
+
+                            <ImageView fx:id="student1Cloud2v4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
+                                       preserveRatio="true" scaleX="0.3" scaleY="0.3" scaleZ="0.3"
+                                       StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="10.0" left="-70.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student2Cloud2v4" fitHeight="150.0" fitWidth="200.0" layoutX="35.0"
+                                       layoutY="10.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets right="-20.0" top="70.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+                            <ImageView fx:id="student3Cloud2v4" fitHeight="150.0" fitWidth="200.0" layoutX="61.0"
+                                       layoutY="65.0" pickOnBounds="true" preserveRatio="true" scaleX="0.3" scaleY="0.3"
+                                       scaleZ="0.3" StackPane.alignment="CENTER">
+                                <image>
+                                    <Image url="@../img/students/student_blue.png"/>
+                                </image>
+                                <StackPane.margin>
+                                    <Insets bottom="50.0" left="50.0"/>
+                                </StackPane.margin>
+                            </ImageView>
+
+                        </StackPane>
+
+                    </StackPane>
+
+                </VBox>
+                <StackPane fx:id="bag" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                           minWidth="-Infinity" prefHeight="400.0" prefWidth="200.0">
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+
+                    <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../img/custom/bag.png"/>
+                        </image>
+                    </ImageView>
+
+                </StackPane>
+                <StackPane fx:id="board" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
+                           minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="1000.0">
+
+                    <ImageView fitHeight="555.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true"
+                               StackPane.alignment="BOTTOM_CENTER">
+                        <image>
+                            <Image url="@../img/board/Plancia_DEF2.png"/>
+                        </image>
+                        <viewport>
+                            <Rectangle2D/>
+                        </viewport>
+                    </ImageView>
+                    <StackPane fx:id="towers" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0">
+
+                        <ImageView fx:id="tower1" fitHeight="75.0" pickOnBounds="true" preserveRatio="true"
+                                   StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/towers/white_tower.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="295.0" right="50.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="tower2" fitHeight="75.0" pickOnBounds="true" preserveRatio="true"
+                                   StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/towers/white_tower.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="225.0" right="50.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="tower3" fitHeight="75.0" pickOnBounds="true" preserveRatio="true"
+                                   StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/towers/white_tower.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="153.0" right="50.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="tower4" fitHeight="75.0" pickOnBounds="true" preserveRatio="true"
+                                   StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/towers/white_tower.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="79.0" right="50.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="tower8" fitHeight="75.0" pickOnBounds="true" preserveRatio="true"
+                                   StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/towers/white_tower.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="79.0" right="125.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="tower7" fitHeight="75.0" pickOnBounds="true" preserveRatio="true"
+                                   StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/towers/white_tower.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="153.0" right="125.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="tower6" fitHeight="75.0" pickOnBounds="true" preserveRatio="true"
+                                   StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/towers/white_tower.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="225.0" right="125.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="tower5" fitHeight="75.0" pickOnBounds="true" preserveRatio="true"
+                                   StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/towers/white_tower.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="295.0" right="125.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+
+                    </StackPane>
+                    <StackPane alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0">
+
+                        <ImageView fx:id="blueProf" fitHeight="52.0" pickOnBounds="true" preserveRatio="true"
+                                   rotate="90.0" StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/professors/teacher_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="49.0" right="245.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="greenProf" fitHeight="52.0" pickOnBounds="true" preserveRatio="true"
+                                   rotate="90.0" StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/professors/teacher_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="335.0" right="245.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pinkProf" fitHeight="52.0" pickOnBounds="true" preserveRatio="true"
+                                   rotate="90.0" StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/professors/teacher_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="122.0" right="245.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="yellowProf" fitHeight="52.0" pickOnBounds="true" preserveRatio="true"
+                                   rotate="90.0" StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/professors/teacher_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="190.0" right="245.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="redProf" fitHeight="52.0" pickOnBounds="true" preserveRatio="true"
+                                   rotate="90.0" StackPane.alignment="BOTTOM_RIGHT">
+                            <image>
+                                <Image url="@../img/professors/teacher_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="260.0" right="245.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+
+                    </StackPane>
+                    <StackPane fx:id="entrance" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="200.0">
+
+                        <ImageView fx:id="studentEntrance1" fitHeight="52.0" pickOnBounds="true" preserveRatio="true"
+                                   scaleX="0.9" scaleY="0.9" scaleZ="0.9" StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="260.0" left="28.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="studentEntrance2" fitHeight="52.0" layoutX="484.0" layoutY="201.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="190.0" left="28.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="studentEntrance3" fitHeight="52.0" layoutX="38.0" layoutY="201.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="118.0" left="28.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="studentEntrance4" fitHeight="52.0" layoutX="38.0" layoutY="274.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="118.0" left="85.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="studentEntrance5" fitHeight="52.0" layoutX="95.0" layoutY="274.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="190.0" left="85.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="studentEntrance6" fitHeight="52.0" layoutX="38.0" layoutY="132.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="260.0" left="85.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="studentEntrance7" fitHeight="52.0" layoutX="38.0" layoutY="202.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="333.0" left="86.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="studentEntrance8" fitHeight="52.0" layoutX="484.0" layoutY="201.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="28.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="studentEntrance9" fitHeight="52.0" layoutX="38.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="85.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+
+                        <StackPane.margin>
+                            <Insets/>
+                        </StackPane.margin>
+                    </StackPane>
+                    <StackPane fx:id="blueDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0"
+                               prefHeight="150.0" prefWidth="200.0">
+
+                        <ImageView fx:id="blueDining0" fitHeight="52.0" layoutX="95.0" layoutY="274.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="180.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="blueDining1" fitHeight="52.0" layoutX="190.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="230.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="blueDining2" fitHeight="52.0" layoutX="240.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="278.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="blueDining3" fitHeight="52.0" layoutX="290.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="324.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="blueDining4" fitHeight="52.0" layoutX="334.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="372.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="blueDining5" fitHeight="52.0" layoutX="382.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="419.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="blueDining6" fitHeight="52.0" layoutX="429.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="465.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="blueDining7" fitHeight="52.0" layoutX="475.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="513.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="blueDining8" fitHeight="52.0" layoutX="523.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="560.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="blueDining9" fitHeight="52.0" layoutX="570.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_blue.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="610.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+
+                    </StackPane>
+                    <StackPane fx:id="pinkDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0"
+                               prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
+
+                        <ImageView fx:id="pinkDining0" fitHeight="52.0" layoutX="95.0" layoutY="274.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="180.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pinkDining1" fitHeight="52.0" layoutX="190.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="230.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pinkDining2" fitHeight="52.0" layoutX="240.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="278.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pinkDining3" fitHeight="52.0" layoutX="290.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="324.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pinkDining4" fitHeight="52.0" layoutX="334.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="372.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pinkDining5" fitHeight="52.0" layoutX="382.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="419.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pinkDining6" fitHeight="52.0" layoutX="429.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="465.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pinkDining7" fitHeight="52.0" layoutX="475.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="513.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pinkDining8" fitHeight="52.0" layoutX="523.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="560.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pinkDining9" fitHeight="52.0" layoutX="570.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_pink.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="610.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+
+                        <StackPane.margin>
+                            <Insets bottom="70.0"/>
+                        </StackPane.margin>
+                    </StackPane>
+                    <StackPane fx:id="yellowDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0"
+                               prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
+
+                        <ImageView fx:id="yellowDining0" fitHeight="52.0" layoutX="95.0" layoutY="274.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="180.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="yellowDining1" fitHeight="52.0" layoutX="190.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="230.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="yellowDining2" fitHeight="52.0" layoutX="240.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="278.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="yellowDining3" fitHeight="52.0" layoutX="290.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="324.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="yellowDining4" fitHeight="52.0" layoutX="334.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="372.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="yellowDining5" fitHeight="52.0" layoutX="382.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="419.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="yellowDining6" fitHeight="52.0" layoutX="429.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="465.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="yellowDining7" fitHeight="52.0" layoutX="475.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="513.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="yellowDining8" fitHeight="52.0" layoutX="523.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="560.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="yellowDining9" fitHeight="52.0" layoutX="570.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_yellow.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="610.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+
+                        <StackPane.margin>
+                            <Insets bottom="140.0"/>
+                        </StackPane.margin>
+                    </StackPane>
+                    <StackPane fx:id="redDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0" prefHeight="150.0"
+                               prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
+
+                        <ImageView fx:id="redDining0" fitHeight="52.0" layoutX="95.0" layoutY="274.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="180.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="redDining1" fitHeight="52.0" layoutX="190.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="230.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="redDining2" fitHeight="52.0" layoutX="240.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="278.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="redDining3" fitHeight="52.0" layoutX="290.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="324.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="redDining4" fitHeight="52.0" layoutX="334.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="372.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="redDining5" fitHeight="52.0" layoutX="382.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="419.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="redDining6" fitHeight="52.0" layoutX="429.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="465.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="redDining7" fitHeight="52.0" layoutX="475.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="513.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="redDining8" fitHeight="52.0" layoutX="523.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="560.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="redDining9" fitHeight="52.0" layoutX="570.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_red.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="610.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+
+                        <StackPane.margin>
+                            <Insets bottom="210.0"/>
+                        </StackPane.margin>
+                    </StackPane>
+                    <StackPane fx:id="greenDining" alignment="TOP_CENTER" layoutX="21.0" layoutY="17.0"
+                               prefHeight="150.0" prefWidth="200.0" StackPane.alignment="BOTTOM_CENTER">
+
+                        <ImageView fx:id="greenDining0" fitHeight="52.0" layoutX="95.0" layoutY="274.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="180.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="greenDining1" fitHeight="52.0" layoutX="190.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="230.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="greenDining2" fitHeight="52.0" layoutX="240.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="278.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="greenDining3" fitHeight="52.0" layoutX="290.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="324.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="greenDining4" fitHeight="52.0" layoutX="334.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="372.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="greenDining5" fitHeight="52.0" layoutX="382.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="419.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="greenDining6" fitHeight="52.0" layoutX="429.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="465.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="greenDining7" fitHeight="52.0" layoutX="475.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="513.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="greenDining8" fitHeight="52.0" layoutX="523.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="560.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="greenDining9" fitHeight="52.0" layoutX="570.0" layoutY="342.0"
+                                   pickOnBounds="true" preserveRatio="true" scaleX="0.9" scaleY="0.9" scaleZ="0.9"
+                                   StackPane.alignment="BOTTOM_LEFT">
+                            <image>
+                                <Image url="@../img/students/student_green.png"/>
+                            </image>
+                            <StackPane.margin>
+                                <Insets bottom="50.0" left="610.0"/>
+                            </StackPane.margin>
+                        </ImageView>
+
+                        <StackPane.margin>
+                            <Insets bottom="283.0"/>
+                        </StackPane.margin>
+                    </StackPane>
+
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                    <effect>
+                        <InnerShadow blurType="GAUSSIAN" height="25.0" radius="12.0" width="25.0">
+                            <color>
+                                <Color red="0.40784314274787903" green="0.843137264251709" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                </StackPane>
+                <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                      minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0">
+
+                    <StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                               minWidth="-Infinity" prefHeight="150.0" prefWidth="400.0">
+                        <opaqueInsets>
+                            <Insets/>
+                        </opaqueInsets>
+
+                        <ImageView fx:id="assistantDeck" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@../img/custom/assistantDeck.png"/>
+                            </image>
+                        </ImageView>
+
+                    </StackPane>
+                    <HBox fx:id="characters" alignment="CENTER" prefHeight="100.0" prefWidth="400.0">
+
+                        <StackPane maxHeight="-Infinity" prefHeight="140.0" prefWidth="200.0">
+
+                            <ImageView fx:id="character1" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true"
+                                       preserveRatio="true">
+                                <image>
+                                    <Image url="@../img/characters/character1.jpg"/>
+                                </image>
+                            </ImageView>
+                            <VBox fx:id="character1Vbox" alignment="CENTER_RIGHT" maxHeight="-Infinity"
+                                  maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0"
+                                  prefWidth="100.0">
+
+                                <ImageView fitHeight="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true"
+                                           preserveRatio="true" scaleZ="0.4">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="91.0" layoutY="10.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="91.0" layoutY="62.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="91.0" layoutY="114.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+
+                            </VBox>
+
+                        </StackPane>
+                        <StackPane maxHeight="-Infinity" prefHeight="140.0" prefWidth="200.0">
+
+                            <ImageView fx:id="character2" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true"
+                                       preserveRatio="true">
+                                <image>
+                                    <Image url="@../img/characters/character2.jpg"/>
+                                </image>
+                            </ImageView>
+                            <VBox fx:id="character2Vbox" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0"
+                                  prefHeight="200.0" prefWidth="100.0">
+
+                                <ImageView fitHeight="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="91.0" layoutY="32.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="91.0" layoutY="84.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="91.0" layoutY="136.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+
+                            </VBox>
+
+                        </StackPane>
+                        <StackPane maxHeight="-Infinity" prefHeight="140.0" prefWidth="200.0">
+
+                            <ImageView fx:id="character3" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true"
+                                       preserveRatio="true">
+                                <image>
+                                    <Image url="@../img/characters/character4.jpg"/>
+                                </image>
+                            </ImageView>
+                            <VBox fx:id="character3Vbox" alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
+
+                                <ImageView fitHeight="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="10.0" layoutY="62.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="92.0" layoutY="32.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="92.0" layoutY="84.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="30.0" layoutX="92.0" layoutY="136.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/students/student_pink.png"/>
+                                    </image>
+                                </ImageView>
+
+                            </VBox>
+
+                        </StackPane>
+
+                    </HBox>
+                    <StackPane fx:id="coinsIndicator" prefHeight="150.0" prefWidth="200.0">
+
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../img/characters/coin.png"/>
+                            </image>
+                        </ImageView>
+                        <Label fx:id="coinsText" alignment="TOP_CENTER" contentDisplay="CENTER" text="99"
+                               textAlignment="CENTER">
+                            <font>
+                                <Font size="35.0"/>
+                            </font>
+                        </Label>
+
+                    </StackPane>
+
+                </VBox>
+
+                <opaqueInsets>
+                    <Insets/>
+                </opaqueInsets>
+            </HBox>
+
+        </VBox>
+
+    </center>
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu fx:id="currentPlayer" mnemonicParsing="false"/>
+                <Menu fx:id="changeViewBoard" mnemonicParsing="false" text="Change View Board">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Player1"/>
+                        <MenuItem mnemonicParsing="false" text="Player2"/>
+                        <MenuItem mnemonicParsing="false" text="Player3"/>
+                        <MenuItem mnemonicParsing="false" text="Player4"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Options">
+                    <items>
+                        <MenuItem fx:id="leaveGame" mnemonicParsing="false" text="Leave Game"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
 </BorderPane>

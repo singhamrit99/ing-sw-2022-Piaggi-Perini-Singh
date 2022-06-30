@@ -4,41 +4,52 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="450.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
+            prefWidth="450.0" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/"
+            xmlns:fx="http://javafx.com/fxml/">
     <top>
         <StackPane maxWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" BorderPane.alignment="CENTER">
-            <children>
-                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" text="Character Effect" textAlignment="JUSTIFY" StackPane.alignment="CENTER">
-                    <font>
-                        <Font name="Rockwell Extra Bold" size="25.0" />
-                    </font>
-                </Text>
-            </children>
+
+            <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0"
+                  text="Character Effect" textAlignment="JUSTIFY" StackPane.alignment="CENTER">
+                <font>
+                    <Font name="Rockwell Extra Bold" size="25.0"/>
+                </font>
+            </Text>
+
         </StackPane>
     </top>
 
     <center>
-        <Text fx:id="description" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" textAlignment="CENTER" wrappingWidth="400.0" StackPane.alignment="CENTER">
+        <Text fx:id="description" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0"
+              strokeWidth="0.0"
+              text="description"
+              textAlignment="CENTER" wrappingWidth="400.0" StackPane.alignment="CENTER">
             <font>
-                <Font name="Cambria" size="12.0" />
+                <Font name="Cambria" size="12.0"/>
             </font>
         </Text>
     </center>
 
     <bottom>
-        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" spacing="20.0">
-            <children>
-                <Button fx:id="confirmButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="confirm-button" text="Confirm" textFill="WHITE">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Button>
-                <Button fx:id="cancelButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="cancel-button" text="Leave" textFill="WHITE">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Button>
-            </children>
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+              minWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" spacing="20.0">
+
+            <Button fx:id="confirmButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                    minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
+                    styleClass="confirm-button" text="Confirm" textFill="WHITE">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+            </Button>
+            <Button fx:id="cancelButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                    minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
+                    styleClass="cancel-button" text="Leave" textFill="WHITE">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+            </Button>
+
         </HBox>
     </bottom>
 </BorderPane>

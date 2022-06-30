@@ -11,53 +11,69 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/">
-    <children>
-        <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" styleClass="title">
-            <children>
-                <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0" styleClass="title" text="Lobby" textAlignment="JUSTIFY" underline="true" StackPane.alignment="CENTER">
-                    <font>
-                        <Font name="Rockwell Extra Bold" size="40.0" />
-                    </font>
-                </Text>
-            </children>
-            <VBox.margin>
-                <Insets />
-            </VBox.margin>
-        </StackPane>
-      <StackPane layoutX="10.0" layoutY="120.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1920.0" styleClass="WhiteBackground" stylesheets="@../css/Style.css">
-         <children>
-                <GridPane fx:id="roomsList" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="115.0" stylesheets="@../css/Style.css">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                  <RowConstraints minHeight="40.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ROOM NAME" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Text layoutX="36.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                    </children>
-                </GridPane>
-         </children>
-      </StackPane>
-        <HBox fx:id="expertBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" spacing="20.0">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0"
+      styleClass="background" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/"
+      xmlns:fx="http://javafx.com/fxml/">
 
-        </HBox>
-        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" spacing="20.0">
-            <children>
-                <Button fx:id="createRoomButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="confirm-button" text="Create Room" textFill="WHITE">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Button>
-                <Button fx:id="exitButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="cancel-button" text="Exit" textFill="WHITE">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Button>
-            </children>
-        </HBox>
-    </children>
+    <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0"
+               prefWidth="1920.0" styleClass="title">
+
+        <Text smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeMiterLimit="0.0" strokeWidth="0.0"
+              styleClass="title" text="Lobby" textAlignment="JUSTIFY" underline="true" StackPane.alignment="CENTER">
+            <font>
+                <Font name="Rockwell Extra Bold" size="40.0"/>
+            </font>
+        </Text>
+
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+    </StackPane>
+    <StackPane layoutX="10.0" layoutY="120.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+               minWidth="-Infinity" prefHeight="500.0" prefWidth="1920.0" styleClass="WhiteBackground"
+               stylesheets="@../css/Style.css">
+
+        <GridPane fx:id="roomsList" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity"
+                  maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="115.0"
+                  stylesheets="@../css/Style.css">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="120.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="40.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES"/>
+            </rowConstraints>
+
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ROOM NAME" GridPane.halignment="CENTER"
+                  GridPane.valignment="CENTER"/>
+            <Text layoutX="36.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER"
+                  GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
+
+        </GridPane>
+
+    </StackPane>
+    <HBox fx:id="expertBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308"
+          minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" spacing="20.0">
+
+    </HBox>
+    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+          minWidth="-Infinity" prefHeight="120.0" prefWidth="1920.0" spacing="20.0">
+
+        <Button fx:id="createRoomButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0"
+                styleClass="confirm-button" text="Create Room" textFill="WHITE">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Button>
+        <Button fx:id="exitButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="cancel-button" text="Exit"
+                textFill="WHITE">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Button>
+
+    </HBox>
+
 </VBox>

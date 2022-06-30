@@ -5,6 +5,8 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.network.server.commands.PlayCharacterCardD;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.view.GUI.GUI;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -42,42 +44,45 @@ public class CharacterTileController extends InitialStage implements Controller 
     public void initialize() {
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
         int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
-        int motherNatureIndex = -1;
 
         description.setText(selectedCharacter.getDescription());
 
         availableTiles.setText("Tiles Available " + GUI.client.getLocalModel().getCharacters().get(indexSelectedCharacter).getNoEntryTiles());
 
-        int j = 1;
-        for (int i = 1; i < GUI.client.getLocalModel().getIslands().size(); i++) {
-            if (!GUI.client.getLocalModel().getIslands().get(i-1).getName().equals("EMPTY")) {
-                if (GUI.client.getLocalModel().getIslands().get(i-1).hasMotherNature()) {
-                    choiceBox.getItems().add(j + ": MN present");
-                    motherNatureIndex = j;
+        int j = 0;
+        for (int i = 1; i <= GUI.client.getLocalModel().getIslands().size(); i++) {
+            if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
+                if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
+                    choiceBox.getItems().add(j + 1 + ": MN present");
                 } else {
-                    choiceBox.getItems().add(Integer.toString(j));
+                    choiceBox.getItems().add(Integer.toString(j + 1));
                 }
                 j++;
             }
         }
+
         choiceBox.getSelectionModel().selectFirst();
 
         AtomicInteger chosen = new AtomicInteger();
         chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
 
-        final int finalMotherNatureIndex = motherNatureIndex;
-        choiceBox.setOnAction(actionEvent -> {
-            final int[] count = {0};
-            if (choiceBox.getSelectionModel().getSelectedIndex() == finalMotherNatureIndex) {
-                chosen.set(finalMotherNatureIndex);
-            } else {
-                for (int island = 0; island < GUI.client.getLocalModel().getIslands().size(); island++) {
-                    if (!GUI.client.getLocalModel().getIslands().get(island).getName().equals("EMPTY")) {
-                        if (count[0] == choiceBox.getSelectionModel().getSelectedIndex()) {
-                            chosen.set(island);
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if (selectedCharacter.getCharacterID() == 3) {
+                    int count = 0;
+
+                    for (int island = 1; island <= GUI.client.getLocalModel().getIslands().size(); island++) {
+                        if (!GUI.client.getLocalModel().getIslands().get(island - 1).getName().equals("EMPTY")) {
+                            if (count == t1.intValue() - 1) {
+                                chosen.set(island);
+                            }
+                            count++;
                         }
-                        count[0]++;
                     }
+                } else {
+                    chosen.set(t1.intValue());
                 }
             }
         });
