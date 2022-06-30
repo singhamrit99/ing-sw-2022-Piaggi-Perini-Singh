@@ -6,6 +6,8 @@ import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.network.server.commands.PickCloud;
 import it.polimi.ingsw.network.server.stripped.StrippedCloud;
 import it.polimi.ingsw.view.GUI.GUI;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -76,15 +78,19 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
             }
         }
 
-        cloudChoice.setOnAction(actionEvent -> {
-            selectedItem.set(cloudChoice.getSelectionModel().getSelectedItem());
-            students.set(GUI.client.getLocalModel().getCloudByName(selectedItem).getStudents());
+        cloudChoice.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 
-            for (int i = 0; i < students.get().size(); i++) {
-                try {
-                    text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
-                } catch (IncorrectArgumentException e) {
-                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                selectedItem.set(cloudChoice.getSelectionModel().getSelectedItem());
+                students.set(GUI.client.getLocalModel().getCloudByName(selectedItem).getStudents());
+
+                for (int i = 0; i < students.get().size(); i++) {
+                    try {
+                        text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+                    } catch (IncorrectArgumentException e) {
+                        Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                    }
                 }
             }
         });
