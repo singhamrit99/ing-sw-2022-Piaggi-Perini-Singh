@@ -128,6 +128,10 @@ public class RoomController extends InitialStage implements Controller {
                         Controller.showErrorDialogBox(StringNames.USER_NOT_REGISTERED);
                     } catch (NotEnoughPlayersException e) {
                         Controller.showErrorDialogBox(StringNames.NOT_ENOUGH_PLAYERS);
+                    } catch (NegativeValueException | IncorrectArgumentException e) {
+                        Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                    } catch (InterruptedException e) {
+                        Controller.showErrorDialogBox(StringNames.INTERRUPTED);
                     }
                 });
 

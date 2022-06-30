@@ -46,16 +46,17 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         if (!users.containsKey(name))
             users.put(name, c);
         else throw new UserAlreadyExistsException();
-        System.out.println("User "+ name + " registered.");
+        System.out.println("User " + name + " registered.");
     }
 
     /**
      * to find wrong names of roomName and clientName
+     *
      * @param name
      * @throws NameFieldException
      */
     private void controlName(String name) throws NameFieldException {
-        if (name == null || name.trim().isEmpty() || name.length()>14) {
+        if (name == null || name.trim().isEmpty() || name.length() > 14) {
             throw new NameFieldException();
         }
     }
@@ -63,6 +64,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
 
     /**
      * De-Registers connections.
+     *
      * @param username The username of the user to remover.
      * @throws RemoteException            Thrown in case of a network error.
      * @throws UserNotRegisteredException Thrown if the selected player can't be found on the server.
@@ -82,7 +84,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
             }
         }
         users.remove(username);
-        System.out.println("User "+ username + " de-registered because disconnection.");
+        System.out.println("User " + username + " de-registered because disconnection.");
     }
 
     /**
@@ -117,7 +119,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         ArrayList<ClientConnection> members = new ArrayList<>();
         Room newRoom = new Room(roomName, members);
         rooms.put(roomName, newRoom);
-        System.out.println("Room "+ roomName + " created by user "+username);
+        System.out.println("Room " + roomName + " created by user " + username);
         try {
             joinRoom(username, roomName);
         } catch (RoomNotExistsException | UserInRoomException | RoomFullException | RoomInGameException ignored) {
@@ -151,7 +153,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         } else {
             throw new RoomInGameException();
         }
-        System.out.println("Room "+ roomName + " joined by user "+username);
+        System.out.println("Room " + roomName + " joined by user " + username);
     }
 
     /**
@@ -187,15 +189,15 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         user.setRoom(null);
         if (rooms.get(roomName).getPlayers().size() == 0) { //complete deletion of the room in case is empty
             rooms.remove(roomName);
-            System.out.println("Room "+ roomName + " deleted after that "+ username + " leaved the room");
-        }
-        else System.out.println("User "+ username + " leaved room "+roomName);
+            System.out.println("Room " + roomName + " deleted after that " + username + " leaved the room");
+        } else System.out.println("User " + username + " leaved room " + roomName);
     }
 
     /**
      * Method used by the first player who leave the room while the game is being played.
      * This method is only accessible from inside the room. It's similar to leaveRoom, but it
      * also notifies all the other players that the game is finished because the leaving.
+     *
      * @param username The player that wants to leave the game.
      * @throws RemoteException            Thrown in case of a network error.
      * @throws UserNotRegisteredException Thrown if the provided username is not present on the server.
@@ -204,7 +206,8 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         String roomName = users.get(username).getRoom();
         try {
             leaveRoom(username);
-        } catch (UserNotInRoomException ignored) {}
+        } catch (UserNotInRoomException ignored) {
+        }
 
         PropertyChangeEvent gameFinishedEvent = new PropertyChangeEvent(this, "game-finished", username, null);
         rooms.get(roomName).notifyPlayerInGameLeaves(gameFinishedEvent);
@@ -285,7 +288,8 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
      */
     @Override
     public synchronized void startGame(String username) throws RemoteException, NotLeaderRoomException,
-            UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException, NotEnoughPlayersException {
+            UserNotInRoomException, UserNotRegisteredException, RoomNotExistsException, NotEnoughPlayersException,
+            NegativeValueException, IncorrectArgumentException, InterruptedException {
         if (!users.containsKey(username)) throw new UserNotRegisteredException();
         ClientConnection user = users.get(username);
         if (user.getRoom() == null) throw new UserNotInRoomException();
@@ -294,12 +298,8 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
         if (targetRoom.getPlayers().size() < 2) throw new NotEnoughPlayersException();
         //only leader of the Room (players.get(0) can start the game)
         if (targetRoom.getPlayers().get(0).getNickname().equals(username)) {
-            try {
-                targetRoom.startGame();
-                System.out.println("Game in "+ targetRoom.getRoomName() + " started");
-            } catch (NegativeValueException | IncorrectArgumentException | InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            targetRoom.startGame();
+            System.out.println("Game in " + targetRoom.getRoomName() + " started");
             for (ClientConnection player : targetRoom.getPlayers()) player.setInGame(true);
         } else {
             throw new NotLeaderRoomException();
@@ -368,7 +368,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
     }
 
     /**
-     * Method used to find disconnected users. It is based on 'ping-pong system' . 
+     * Method used to find disconnected users. It is based on 'ping-pong system' .
      */
     @Override
     public void run() {
@@ -378,7 +378,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
                 sleep(500); //must be double client ping timeout
             } catch (ConcurrentModificationException concurrentError) {
                 System.out.println("Server warning: concurrent modification while disconnecting managed.");
-            }catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 System.out.println("Server error: server run() interrupted.");
             }
         }
@@ -402,9 +402,7 @@ public class Server extends UnicastRemoteObject implements serverStub, Runnable 
             for (ClientConnection clientToRemove : usersToRemove) {
                 try {
                     deregisterConnection(clientToRemove.getNickname());
-                    //inside the server can't be 'remoteException' and UserNotRegistered is not harmful in this case
-                } catch (RemoteException | UserNotRegisteredException ignored) {
-                }
+                } catch (RemoteException | UserNotRegisteredException ignored) {} //inside the server can't be 'remoteException' and UserNotRegistered is not harmful in this case
             }
         }
     }

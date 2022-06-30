@@ -42,7 +42,6 @@ public class CharacterCard extends Card {
         super(imageName);
         this.price = price;
         this.description = description;
-
         status = 0;
     }
 
@@ -58,7 +57,6 @@ public class CharacterCard extends Card {
      */
     public CharacterCard(String imageName, int startingPrice, String description, Type type, Ability ability, Requirements requirements) {
         this(imageName, startingPrice, description);
-
         this.type = type;
         this.ability = ability;
         this.requirements = requirements;
@@ -199,4 +197,5 @@ public class CharacterCard extends Card {
 
     public void decrementNoTileNumber() {
     }
+
 }

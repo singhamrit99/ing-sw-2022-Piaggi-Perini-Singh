@@ -242,7 +242,8 @@ public class Client implements Runnable {
      * @throws UserNotRegisteredException Thrown if the method is called by an invalid user.
      */
     public void startGame() throws RemoteException, NotLeaderRoomException, UserNotInRoomException,
-            RoomNotExistsException, NotEnoughPlayersException, UserNotRegisteredException {
+            RoomNotExistsException, NotEnoughPlayersException, UserNotRegisteredException,
+            NegativeValueException, IncorrectArgumentException, InterruptedException {
         server.startGame(nickname);
     }
 
