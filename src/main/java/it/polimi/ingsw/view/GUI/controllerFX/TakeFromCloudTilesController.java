@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class TakeFromCloudTilesController extends InitialStage implements Controller {
     @FXML
-    private ChoiceBox cloudChoice;
+    private ChoiceBox<String> cloudChoice;
     @FXML
     private Button cancelButton, confirmButton;
     @FXML
@@ -65,19 +65,27 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
 
         AtomicReference<String> selectedItem = new AtomicReference<>("");
         cloudChoice.getSelectionModel().selectFirst();
-        selectedItem.set(cloudChoice.getSelectionModel().getSelectedItem().toString());
+        selectedItem.set(cloudChoice.getSelectionModel().getSelectedItem());
         AtomicReference<EnumMap<Colors, Integer>> students = new AtomicReference<>(GUI.client.getLocalModel().getCloudByName(selectedItem).getStudents());
 
         for (int i = 0; i < students.get().size(); i++) {
-            text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+            try {
+                text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+            } catch (IncorrectArgumentException e) {
+                Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+            }
         }
 
         cloudChoice.setOnAction(actionEvent -> {
-            selectedItem.set(cloudChoice.getSelectionModel().getSelectedItem().toString());
+            selectedItem.set(cloudChoice.getSelectionModel().getSelectedItem());
             students.set(GUI.client.getLocalModel().getCloudByName(selectedItem).getStudents());
 
             for (int i = 0; i < students.get().size(); i++) {
-                text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+                try {
+                    text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+                } catch (IncorrectArgumentException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                }
             }
         });
 
@@ -124,5 +132,4 @@ public class TakeFromCloudTilesController extends InitialStage implements Contro
             window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
     }
-
 }
