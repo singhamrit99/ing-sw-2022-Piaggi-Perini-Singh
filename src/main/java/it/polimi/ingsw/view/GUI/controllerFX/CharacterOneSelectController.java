@@ -49,15 +49,15 @@ public class CharacterOneSelectController extends InitialStage implements Contro
         description.setText(selectedCharacter.getDescription());
 
         if (selectedCharacter.getCharacterID() == 3) {
-            final int[] j = {0};
-            for (int i = 0; i < GUI.client.getLocalModel().getIslands().size(); i++) {
+            int j = 0;
+            for (int i = 1; i <= GUI.client.getLocalModel().getIslands().size(); i++) {
                 if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
                     if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
-                        choiceBox.getItems().add(j[0] + 1 + ": MN present");
+                        choiceBox.getItems().add(j + 1 + ": MN present");
                     } else {
-                        choiceBox.getItems().add(Integer.toString(j[0] + 1));
+                        choiceBox.getItems().add(Integer.toString(j + 1));
                     }
-                    j[0]++;
+                    j++;
                 }
             }
         } else {
@@ -75,14 +75,14 @@ public class CharacterOneSelectController extends InitialStage implements Contro
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 if (selectedCharacter.getCharacterID() == 3) {
-                    final int[] count = {0};
+                    int count = 0;
 
-                    for (int island = 0; island < GUI.client.getLocalModel().getIslands().size(); island++) {
-                        if (!GUI.client.getLocalModel().getIslands().get(island).getName().equals("EMPTY")) {
-                            if (count[0] == t1.intValue()) {
+                    for (int island = 1; island <= GUI.client.getLocalModel().getIslands().size(); island++) {
+                        if (!GUI.client.getLocalModel().getIslands().get(island - 1).getName().equals("EMPTY")) {
+                            if (count == t1.intValue() - 1) {
                                 chosen.set(island);
                             }
-                            count[0]++;
+                            count++;
                         }
                     }
                 } else {
