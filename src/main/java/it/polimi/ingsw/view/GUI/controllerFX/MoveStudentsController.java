@@ -86,7 +86,11 @@ public class MoveStudentsController extends InitialStage implements Controller {
         }
         if (students.get() != null) {
             for (int i = 0; i < students.get().size(); i++) {
-                text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+                try {
+                    text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+                } catch (IncorrectArgumentException e) {
+                    Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                }
             }
         }
 
@@ -137,15 +141,21 @@ public class MoveStudentsController extends InitialStage implements Controller {
 
             if (students.get() != null) {
                 for (int i = 0; i < students.get().size(); i++) {
-                    text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+                    try {
+                        text.get(i).setText(String.valueOf(students.get().get(Colors.getStudent(i))));
+                    } catch (IncorrectArgumentException e) {
+                        Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
+                    }
                 }
             }
         });
 
         confirmButton.setOnAction((event) -> {
-            MoveStudents moveStudents = new MoveStudents(GUI.client.getNickname(), Colors.getStudent(index.get()), chosen.get());
+
             try {
+                MoveStudents moveStudents = new MoveStudents(GUI.client.getNickname(), Colors.getStudent(index.get()), chosen.get());
                 GUI.client.performGameAction(moveStudents);
+
                 Window window = ((Node) (event.getSource())).getScene().getWindow();
                 window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
             } catch (AssistantCardNotFoundException e) {
