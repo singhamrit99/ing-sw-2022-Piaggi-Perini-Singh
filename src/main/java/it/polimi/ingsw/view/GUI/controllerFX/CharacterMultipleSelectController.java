@@ -7,11 +7,14 @@ import it.polimi.ingsw.network.server.commands.PlayCharacterCardB;
 import it.polimi.ingsw.network.server.commands.PlayCharacterCardD;
 import it.polimi.ingsw.network.server.stripped.StrippedCharacter;
 import it.polimi.ingsw.view.GUI.GUI;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
@@ -67,7 +70,6 @@ public class CharacterMultipleSelectController extends InitialStage implements C
         checks.add(check5);
 
         AtomicInteger chosen = new AtomicInteger();
-        int motherNatureIndex = -1;
 
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
         int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
@@ -114,7 +116,6 @@ public class CharacterMultipleSelectController extends InitialStage implements C
                 if (!GUI.client.getLocalModel().getIslands().get(i - 1).getName().equals("EMPTY")) {
                     if (GUI.client.getLocalModel().getIslands().get(i - 1).hasMotherNature()) {
                         choiceBox.getItems().add(j + 1 + ": MN present");
-                        motherNatureIndex = j;
                     } else {
                         choiceBox.getItems().add(Integer.toString(j + 1));
                     }
@@ -124,15 +125,19 @@ public class CharacterMultipleSelectController extends InitialStage implements C
             choiceBox.getSelectionModel().selectFirst();
 
             chosen.set(choiceBox.getSelectionModel().getSelectedIndex());
-            int finalMotherNatureIndex = motherNatureIndex;
             choiceBox.setOnAction(actionEvent -> {
-                final int[] count = {0};
-                if (choiceBox.getSelectionModel().getSelectedIndex() == finalMotherNatureIndex) {
-                    chosen.set(finalMotherNatureIndex);
-                } else {
+
+            });
+
+            choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                    final int[] count = {0};
+
                     for (int island = 1; island <= GUI.client.getLocalModel().getIslands().size(); island++) {
                         if (!GUI.client.getLocalModel().getIslands().get(island - 1).getName().equals("EMPTY")) {
-                            if (count[0] == choiceBox.getSelectionModel().getSelectedIndex() - 1) {
+                            if (count[0] == t1.intValue() - 1) {
                                 chosen.set(island);
                             }
                             count[0]++;
