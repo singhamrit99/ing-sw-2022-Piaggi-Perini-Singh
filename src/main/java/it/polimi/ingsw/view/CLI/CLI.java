@@ -821,12 +821,13 @@ public class CLI implements UI {
                 System.out.println(StringNames.NUMBER_FORMAT);
             }
         }
-        while (i < 1 || i > client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size() && playedThisTurn.contains(i)) {
+        while (i < 1 || i > client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size()) {
             System.out.println("Invalid number, try again\n");
             while (true) {
                 input = in.next();
                 try {
                     i = Integer.parseInt(input);
+                    if(i>0||i<client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size())
                     break;
                 } catch (NumberFormatException e) {
                     System.out.println(StringNames.NUMBER_FORMAT);
