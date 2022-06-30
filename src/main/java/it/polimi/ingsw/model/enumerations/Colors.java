@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.enumerations;
 
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import java.io.Serializable;
 
 /**
@@ -28,10 +29,10 @@ public enum Colors implements Serializable {
      * @return The student to return, implemented as a Colors instance.
      * @throws IllegalArgumentException if the index is not associated with any of the Enum values this exception is thrown.
      */
-    public static Colors getStudent(int index) throws IllegalArgumentException {
+    public static Colors getStudent(int index) throws IncorrectArgumentException {
         for (Colors student : values()) {
             if (student.getIndex() == index) return student;
         }
-        throw new IllegalArgumentException("Index not associated with any color");
+        throw new IncorrectArgumentException("Index not associated with any color");
     }
 }

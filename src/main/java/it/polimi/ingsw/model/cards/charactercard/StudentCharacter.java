@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards.charactercard;
 
+import it.polimi.ingsw.StringNames;
 import it.polimi.ingsw.exceptions.FullDiningException;
 import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.Game;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
+import it.polimi.ingsw.view.GUI.controllerFX.Controller;
 
 import java.beans.PropertyChangeEvent;
 import java.io.Serializable;
@@ -48,6 +50,8 @@ public class StudentCharacter extends CharacterCard implements Serializable {
             students = bag.drawStudents(this.getType().getValue());
         } catch (NegativeValueException e) {
             throw new NegativeValueException();
+        } catch (IncorrectArgumentException e) {
+            Controller.showErrorDialogBox(StringNames.INCORRECT_ARGUMENT);
         }
     }
 
