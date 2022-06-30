@@ -1,4 +1,4 @@
-![](Pasted%20image%2020220630111420.png)
+![](imgReadme.png)
 ## Team GC23
 
 - 10686518 Martino Piaggi martino.piaggi@mail.polimi.it

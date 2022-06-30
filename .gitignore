@@ -6,6 +6,7 @@
 !src/
 !javadoc/
 !deliverables
+!imgReadme.png
 .idea/
 project.iml 
 target/
