@@ -2393,69 +2393,126 @@ public class CLI implements UI {
         else
             maxstudents=7;
         Ansi.Color color = null;
-        System.out.println("\nEntrance configuration: ");
-        System.out.println("O-----O");
-        for (Colors c : board.getEntrance().keySet())
-            numofstudents += board.getEntrance().get(c);
-        for (Colors c : board.getEntrance().keySet()) {
-            i = board.getEntrance().get(c);
-            color = colorsToColor(c);
+        if (maxstudents==7) {
+            System.out.println("\nEntrance configuration: ");
+            System.out.println("O-----O");
+            for (Colors c : board.getEntrance().keySet())
+                numofstudents += board.getEntrance().get(c);
+            for (Colors c : board.getEntrance().keySet()) {
+                i = board.getEntrance().get(c);
+                color = colorsToColor(c);
 
-            while (rows < maxstudents && i > 0) {
-                if (rows % 3 == 0&&rows!=6) {
-                    if (rows < numofstudents) {
-                        System.out.print("|");
-                        System.out.print(ansi().fg(color).a("*").reset());
-                    } else
-                        System.out.print(ansi().a("|  ").reset());
+                while (rows < maxstudents && i > 0) {
+                    if (rows % 3 == 0 && rows != 6) {
+                        if (rows < numofstudents) {
+                            System.out.print("|");
+                            System.out.print(ansi().fg(color).a("*").reset());
+                        } else
+                            System.out.print(ansi().a("|  ").reset());
 
-                } else if (rows % 3 == 1) {
-                    if (rows < numofstudents) {
-                        System.out.print(ansi().fg(color).a(" *").reset());
-                    } else
-                        System.out.print(ansi().fg(color).a("  ").reset());
-                } else if (rows % 3 == 2) {
-                    if (rows < numofstudents) {
-                        System.out.print(ansi().fg(color).a(" *").reset());
-                        System.out.println("|");
-                    } else
-                        System.out.println(ansi().a("   |").reset());
+                    } else if (rows % 3 == 1) {
+                        if (rows < numofstudents) {
+                            System.out.print(ansi().fg(color).a(" *").reset());
+                        } else
+                            System.out.print(ansi().fg(color).a("  ").reset());
+                    } else if (rows % 3 == 2) {
+                        if (rows < numofstudents) {
+                            System.out.print(ansi().fg(color).a(" *").reset());
+                            System.out.println("|");
+                        } else
+                            System.out.println(ansi().a("   |").reset());
 
-                } else {
-                    if (rows < numofstudents) {
-                        System.out.print("|");
-                        System.out.print(ansi().fg(color).a("  *  ").reset());
-                        System.out.print("|");
+                    } else {
+                        if (rows < numofstudents) {
+                            System.out.print("|");
+                            System.out.print(ansi().fg(color).a("  *  ").reset());
+                            System.out.print("|");
+                        } else {
+                            System.out.print("|");
+                            System.out.print(ansi().fg(color).a("     ").reset());
+                            System.out.print("|");
+                        }
+
                     }
-                    else {
-                        System.out.print("|");
-                        System.out.print(ansi().fg(color).a("     ").reset());
-                        System.out.print("|");
-                    }
+                    rows++;
+                    i--;
 
                 }
-                rows++;
-                i--;
+
 
             }
+            while (rows < maxstudents) {
+                if (rows % 3 == 0 && rows != 6)
+                    System.out.print(ansi().a("|  ").reset());
+                else if (rows % 3 == 1)
+                    System.out.print(ansi().fg(color).a("  ").reset());
+                else if (rows % 3 == 2)
+                    System.out.print(ansi().a("  |").reset());
+                else {
+                    System.out.print("|");
+                    System.out.print(ansi().fg(color).a("     ").reset());
+                    System.out.print("|");
+                }
 
-
+                rows++;
+            }
         }
-        while (rows < maxstudents) {
-        if (rows % 3 == 0&&rows!=6)
-            System.out.print(ansi().a("|  ").reset());
-        else if (rows % 3 == 1)
-            System.out.print(ansi().fg(color).a("  ").reset());
-        else if (rows%3==2)
-            System.out.println(ansi().a("  |").reset());
-        else{
-            System.out.print("|");
-            System.out.print(ansi().fg(color).a("     ").reset());
-            System.out.print("|");
+
+
+
+        else {
+            System.out.println("\nEntrance configuration: ");
+            System.out.println("O-----O");
+            for (Colors c : board.getEntrance().keySet())
+                numofstudents += board.getEntrance().get(c);
+            for (Colors c : board.getEntrance().keySet()) {
+                i = board.getEntrance().get(c);
+                color = colorsToColor(c);
+
+                while (rows < maxstudents && i > 0) {
+                    if (rows % 3 == 0) {
+                        if (rows < numofstudents) {
+                            System.out.print("|");
+                            System.out.print(ansi().fg(color).a("*").reset());
+                        } else
+                            System.out.print(ansi().a("|  ").reset());
+
+                    } else if (rows % 3 == 1) {
+                        if (rows < numofstudents) {
+                            System.out.print(ansi().fg(color).a(" *").reset());
+                        } else
+                            System.out.print(ansi().fg(color).a("  ").reset());
+                    } else {
+                        if (rows < numofstudents) {
+                            System.out.print(ansi().fg(color).a(" *").reset());
+                            if (rows != 8)
+                                System.out.println("|");
+                            else
+                                System.out.print("|");
+                        } else
+                            System.out.print(ansi().a("   |").reset());
+
+
+                    }
+                    rows++;
+                    i--;
+
+                }
+
+
+            }
+            while (rows < maxstudents) {
+                if (rows % 3 == 0)
+                    System.out.print(ansi().a("|  ").reset());
+                else if (rows % 3 == 1)
+                    System.out.print(ansi().fg(color).a("  ").reset());
+                else
+                    System.out.print(ansi().a("  |").reset());
+
+                rows++;
+            }
         }
 
-        rows++;
-    }
         System.out.println();
         System.out.println("O-----O");
 }
