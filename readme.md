@@ -2,10 +2,7 @@
 
 # Prova Finale di Ingegneria del Software - AA 2021-2022
 
-The project's objective is to implement [Eriantys](https://www.craniocreations.it/prodotto/eriantys/) a board game,
-using the MVC pattern. The project covers all rules of the game, including 4 player game and expert mode, and enables to
-play in two ways: command line interface(CLI) or graphical user interface(GUI), the network is made by using the RMI
-method.
+The project's goal is to implement [Eriantys](https://www.craniocreations.it/prodotto/eriantys/) board game. The project covers all rules of the game, including 4 player game and expert mode, and enables to play in two ways: command line interface(CLI) or graphical user interface(GUI).
 
 ### [UML](https://github.com/martinopiaggi/ing-sw-2022-Piaggi-Perini-Singh/tree/master/deliverables/UML)
 
@@ -39,14 +36,14 @@ facilmente leggibile e comprensibile il codice implementato
 |model.tiles|100% (37/37)|
 
 ### LIB & Plugins
-Plugins|Description
+Plugin/Library|Description
 ----------------|------------
 Maven | Managing tool of project based on Java and built automation
 GSON  | Open source Java library used for serializing and deserializing java objects on JSON
 JUnit | JUnit is a unit testing framework for the Java programming language
 JavaFX| JavaFX is a software platform for creating and delivering desktop applications
 
-### Jars
+### Jar
 The project's jar can be downloaded from here: [eriantys.jar](https://github.com/martinopiaggi/ing-sw-2022-Piaggi-Perini-Singh/blob/master/deliverables/Jar/eriantys.jar)
 
 ## Features
