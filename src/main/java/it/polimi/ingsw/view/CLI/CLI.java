@@ -1221,24 +1221,28 @@ public class CLI implements UI {
                     } else {
                         System.out.println("You don't have enough students of that color in your entrance.");
                     }
-                    System.out.println("Do you want to move other students in the dining room?");
-                    do {
-                        answer = in.nextLine();
-                        answer = answer.toLowerCase(Locale.ROOT);
-                        if (answer.equals("y") || answer.equals("n"))
-                            isValidInputYN = true;
-                        else if (answer.equals("\n")) {
+                    if (movedStudents<maxStudents) {
+                        System.out.println("Do you want to move other students in the dining room?");
+                        do {
+                            answer = in.nextLine();
+                            answer = answer.toLowerCase(Locale.ROOT);
+                            if (answer.equals("y") || answer.equals("n"))
+                                isValidInputYN = true;
+                            else if (answer.equals("\n")) {
+                            } else
+                                System.out.println("Whoops! That's not right. Try again: \n");
+                        } while (!isValidInputYN);
+                        if (answer.equals("y") && movedStudents < maxStudents) {
+                            System.out.println("Alright, ready to move another student!");
+                            printEntrance(myBoard);
+                        } else if (movedStudents == maxStudents) {
+                            System.out.println("You can't move any more students this turn!");
+                            doItAgain = false;
                         } else
-                            System.out.println("Whoops! That's not right. Try again: \n");
-                    } while (!isValidInputYN);
-                    if (answer.equals("y") && movedStudents < maxStudents) {
-                        System.out.println("Alright, ready to move another student!");
-                        printEntrance(myBoard);
-                    } else if (movedStudents == maxStudents) {
-                        System.out.println("You can't move any more students this turn!");
-                        doItAgain = false;
-                    } else
-                        doItAgain = false;
+                            doItAgain = false;
+                    }
+                    else
+                        doItAgain=false;
                 } while (doItAgain);
 
                 //End of dining room move segment
@@ -2556,18 +2560,18 @@ public class CLI implements UI {
         {
             if(k%4<3) {
                 if ((island.getTowersColor().toString().equals("BLACK")))
-                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset());
+                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset()+" ");
                 else
-                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset());
+                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset()+" ");
             }
             else
             {
                 if ((island.getTowersColor().toString().equals("BLACK"))) {
-                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset());
+                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset()+" ");
                     System.out.println();
                 }
                 else {
-                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset());
+                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset()+" ");
                     System.out.println();
                 }
             }
@@ -2664,18 +2668,18 @@ System.out.println();
         {
             if(k%4<3) {
                 if ((island.getTowersColor().toString().equals("BLACK")))
-                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset());
+                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset()+" ");
                 else
-                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset());
+                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset()+" ");
             }
             else
             {
                 if ((island.getTowersColor().toString().equals("BLACK"))) {
-                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset());
+                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset()+" ");
                     System.out.println();
                 }
                 else {
-                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset());
+                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset()+" ");
                     System.out.println();
                 }
             }
@@ -2851,7 +2855,7 @@ System.out.println();
                 }
                 else if (a.getImageName().equals("10"))
                 {
-                    System.out.println("    |");
+                    System.out.println("     |");
                 }
                 else
                     System.out.println("   |");
@@ -3040,23 +3044,23 @@ System.out.println();
      */
     public synchronized void waitForTurn() throws InterruptedException {
         if (!client.isMyTurn()) {
-            System.out.print("Waiting ...");
+            System.out.print("Waiting.  ");
             Thread.sleep(2000);
             System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
             Thread.sleep(500);
 
-            System.out.print("Waiting  ..");
-            Thread.sleep(500);
-            System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
-            Thread.sleep(500);
-
-            System.out.print("Waiting . .");
-            Thread.sleep(500);
-            System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
-
             System.out.print("Waiting .. ");
             Thread.sleep(500);
             System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
+            Thread.sleep(500);
+
+            System.out.print("Waiting... ");
+            Thread.sleep(500);
+            System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
+
+            System.out.print("Waiting   ");
+            Thread.sleep(500);
+            System.out.print("\b\b\b\b\b\b\b\b\b\b");
 
         }
 
