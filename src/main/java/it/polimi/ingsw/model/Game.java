@@ -819,6 +819,18 @@ public class Game {
                                     gameListener.propertyChange(evt);
                                 }
                             }
+                        } else if (cardPlayed.getAbility().getAction().equals(Actions.SWAP_ENTRANCE_DINING) && cardPlayed.getStatus() >= 1 && player.getNickname().equals(currentPlayer.getNickname())) {
+                            maxPlayer = null;
+                            for (Player p : players) { //eventually remove the player who had that professor
+                                if (p.hasProfessorOfColor(color)) {
+                                    p.removeProfessor(color);
+                                    //notify the removed professors
+                                    ArrayList<Colors> professors = p.getSchoolBoard().getProfessorsTable();
+                                    PropertyChangeEvent evt =
+                                            new PropertyChangeEvent(this, "professorTable", p.getNickname(), professors);
+                                    gameListener.propertyChange(evt);
+                                }
+                            }
                         } else {
                             maxPlayer = null;
                         }

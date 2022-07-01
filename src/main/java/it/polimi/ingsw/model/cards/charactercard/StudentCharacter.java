@@ -188,10 +188,19 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                     throw new IncorrectArgumentException("The given students number do not match");
                 }
 
+                int oldCoins = game.getCurrentPlayer().getCoins(), newCoins;
                 game.getCurrentPlayer().getSchoolBoard().moveStudents(students1);
                 game.getCurrentPlayer().getSchoolBoard().removeDiningStudents(students2);
                 game.getCurrentPlayer().getSchoolBoard().addStudents(students2);
+                game.checkAndPlaceProfessor();
                 setStatus(2);
+
+                newCoins = game.getCurrentPlayer().getCoins();
+                if (newCoins != oldCoins) {
+                    PropertyChangeEvent coinsAddedEvent =
+                            new PropertyChangeEvent(this, "coins", game.getCurrentPlayer().getNickname(), newCoins);
+                    game.getGameListener().propertyChange(coinsAddedEvent);
+                }
 
                 event =
                         new PropertyChangeEvent(this, "entrance", game.getCurrentPlayer().getNickname(), game.getCurrentPlayer().getSchoolBoard().getEntrance());
