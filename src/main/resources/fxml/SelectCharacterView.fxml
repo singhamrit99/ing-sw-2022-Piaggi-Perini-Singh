@@ -7,8 +7,8 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0"
-            prefWidth="450.0" styleClass="WhiteBackground" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1">
+            prefWidth="450.0" styleClass="WhiteBackground" stylesheets="@../css/Style.css" xmlns="http://javafx.com/javafx/"
+            xmlns:fx="http://javafx.com/fxml/">
     <bottom>
         <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
               minWidth="-Infinity" prefHeight="100.0" prefWidth="450.0" spacing="20.0">
