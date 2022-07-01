@@ -2387,6 +2387,11 @@ public class CLI implements UI {
         Integer i;
         int numofstudents = 0;
         int rows = 0;
+        int maxstudents;
+        if (client.getLocalModel().getBoards().size()==3)
+            maxstudents=9;
+        else
+            maxstudents=7;
         Ansi.Color color = null;
         System.out.println("\nEntrance configuration: ");
         System.out.println("O-----O");
@@ -2396,7 +2401,7 @@ public class CLI implements UI {
             i = board.getEntrance().get(c);
             color = colorsToColor(c);
 
-            while (rows < 7 && i > 0) {
+            while (rows < maxstudents && i > 0) {
                 if (rows % 3 == 0&&rows!=6) {
                     if (rows < numofstudents) {
                         System.out.print("|");
@@ -2436,7 +2441,7 @@ public class CLI implements UI {
 
 
         }
-        while (rows < 7) {
+        while (rows < maxstudents) {
         if (rows % 3 == 0&&rows!=6)
             System.out.print(ansi().a("|  ").reset());
         else if (rows % 3 == 1)
