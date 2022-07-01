@@ -126,13 +126,16 @@ public class Game {
      * @throws ProfessorNotFoundException If the character power causes a professor gain or loss and that generates an error this exception is thrown.
      * @throws IncorrectArgumentException Thrown if the index or any of the parameters used for card activation are invalid.
      */
-    public void activateCharacterCard(int index) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, IncorrectArgumentException, FullDiningException, CardPlayedInTurnException {
+    public void activateCharacterCard(int index) throws NotEnoughCoinsException, NegativeValueException, ProfessorNotFoundException, FullDiningException, CardPlayedInTurnException, IncorrectArgumentException {
         if (currentPlayer.getPlayedCharacterCard() != null) {
             throw new CardPlayedInTurnException();
         } else {
             if (buyCharacterCard(index) && expertMode) {
                 currentPlayer.getPlayedCharacterCard().activate(this);
             } else {
+                characterCards.get(index).setStatus(0);
+                currentPlayer.setPlayedCharacterCard(null);
+                selectedCharacterIndex = -1;
                 throw new NotEnoughCoinsException();
             }
             if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
@@ -190,6 +193,9 @@ public class Game {
                 currentPlayer.getPlayedCharacterCard().setChoiceIndex(choice);
                 currentPlayer.getPlayedCharacterCard().activate(this);
             } else {
+                characterCards.get(index).setStatus(0);
+                currentPlayer.setPlayedCharacterCard(null);
+                selectedCharacterIndex = -1;
                 throw new NotEnoughCoinsException();
             }
             if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
@@ -216,6 +222,9 @@ public class Game {
                 currentPlayer.getPlayedCharacterCard().setEnums(students1, students2);
                 currentPlayer.getPlayedCharacterCard().activate(this);
             } else {
+                characterCards.get(index).setStatus(0);
+                currentPlayer.setPlayedCharacterCard(null);
+                selectedCharacterIndex = -1;
                 throw new NotEnoughCoinsException();
             }
             if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
@@ -242,6 +251,9 @@ public class Game {
                 currentPlayer.getPlayedCharacterCard().setChoices(student, island);
                 currentPlayer.getPlayedCharacterCard().activate(this);
             } else {
+                characterCards.get(index).setStatus(0);
+                currentPlayer.setPlayedCharacterCard(null);
+                selectedCharacterIndex = -1;
                 throw new NotEnoughCoinsException();
             }
             if (currentPlayer.getPlayedCharacterCard().getStatus() == 2) increaseCharacterPrice(index);
