@@ -63,8 +63,8 @@ The project's jar can be downloaded from here: [eriantys.jar](https://github.com
 | Command |Role |
 |:-----------------------|:------------------|
 | ``java -jar Eriantys.jar -server`` | Server listening on port 23023  |
-| ``java -jar Eriantys.jar -cli [ip]`` | CLI interface |
-| ``java -jar Eriantys.jar -gui [ip]`` | GUI interface |
+| ``java -jar Eriantys.jar -cli ip_adress`` | CLI interface |
+| ``java -jar Eriantys.jar -gui ip_adress`` | GUI interface |
 
 ## Team GC23
 - [__Amrit Singh__](https://github.com/10610426) 10610426 amrit.singh@mail.polimi.it

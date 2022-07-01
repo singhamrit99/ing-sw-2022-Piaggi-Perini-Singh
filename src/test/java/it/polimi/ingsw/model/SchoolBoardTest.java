@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.FullDiningException;
+import it.polimi.ingsw.exceptions.IncorrectArgumentException;
 import it.polimi.ingsw.model.enumerations.Colors;
 import it.polimi.ingsw.exceptions.NegativeValueException;
 import it.polimi.ingsw.exceptions.ProfessorNotFoundException;
@@ -207,7 +208,7 @@ class SchoolBoardTest {
             e.printStackTrace();
         }
 
-        assertThrows(IllegalArgumentException.class, () -> schoolBoard2.getStudentsByColor(Colors.getStudent(6)));
+        assertThrows(IncorrectArgumentException.class, () -> schoolBoard2.getStudentsByColor(Colors.getStudent(6)));
     }
 
     @Test
