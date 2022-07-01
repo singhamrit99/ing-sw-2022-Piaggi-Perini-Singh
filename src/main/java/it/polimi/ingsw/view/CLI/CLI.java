@@ -870,7 +870,7 @@ public class CLI implements UI {
         } catch (UserNotRegisteredException e) {
             System.out.println(StringNames.USER_NOT_REGISTERED);
         } catch (LocalModelNotLoadedException e) {
-            e.printStackTrace();
+           System.out.println(StringNames.LOCAL_MODEL_ERROR);
         }
         client.setMyTurn(false);
     }
@@ -1109,7 +1109,7 @@ public class CLI implements UI {
             } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
                 System.out.println(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
             } catch (NotEnoughCoinsException e) {
-                e.printStackTrace();
+                System.out.println(StringNames.NOT_ENOUGH_COINS);
             } catch (AssistantCardNotFoundException e) {
                System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
             } catch (UserNotInRoomException e) {
@@ -2883,7 +2883,7 @@ System.out.println();
                     System.out.println("    |");
                 }
                 else
-                    System.out.println("    |");
+                    System.out.println("     |");
                 i++;
             }
             System.out.println("0--------------------------------------0");
