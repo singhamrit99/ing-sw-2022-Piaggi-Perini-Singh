@@ -1294,7 +1294,6 @@ public class CLI implements UI {
                                 }
                             }
                             //Now I should have a number and a color
-
                             doItAgain = true;
                             if (isValidColor(tmp)) {
                                 if (myBoard.getEntrance().get(stringToColor(tmp))>=1) {
@@ -1354,7 +1353,7 @@ public class CLI implements UI {
                                             System.out.println("Do you want to move them now?");
                                             isValidInputYN=false;
                                             do {
-                                                answer = in.nextLine();
+                                                answer = in.next();
                                                 answer = answer.toLowerCase(Locale.ROOT);
                                                 if (answer.equals("y") || answer.equals("n"))
                                                     isValidInputYN = true;
