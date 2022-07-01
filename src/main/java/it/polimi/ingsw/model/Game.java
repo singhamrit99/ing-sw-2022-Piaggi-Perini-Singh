@@ -869,7 +869,7 @@ public class Game {
         for (Colors studentColor : Colors.values()) {
             if (cardPlayed != null) {
                 if (cardPlayed.getAbility().getAction().equals(Actions.AVOID_COLOR_INFLUENCE) && cardPlayed.getStatus() >= 1) {
-                    if (studentColor.getIndex() == cardPlayed.getAbility().getValue()) {
+                    if (studentColor.getIndex() == Colors.getStudent(cardPlayed.getChoiceIndex()).getIndex()) {
                         currentPlayer.getPlayedCharacterCard().setStatus(2);
                         increaseCharacterPrice(selectedCharacterIndex);
                         continue;
