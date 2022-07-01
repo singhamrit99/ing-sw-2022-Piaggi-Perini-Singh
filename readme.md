@@ -42,6 +42,7 @@ Maven | Managing tool of project based on Java and built automation
 GSON  | Open source Java library used for serializing and deserializing java objects on JSON
 JUnit | JUnit is a unit testing framework for the Java programming language
 JavaFX| JavaFX is a software platform for creating and delivering desktop applications
+JAnsi |JAnsi is a library that allows for ANSI sequences coloring in the Windows terminal
 
 ### Jar
 The project's jar can be downloaded from here: [eriantys.jar](https://github.com/martinopiaggi/ing-sw-2022-Piaggi-Perini-Singh/blob/master/deliverables/Jar/eriantys.jar)
