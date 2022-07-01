@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
@@ -813,16 +814,24 @@ public class CLI implements UI {
                 System.out.println(StringNames.NUMBER_FORMAT);
             }
         }
-        while (i < 1 || i > client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size()) {
+        while (true) {
+            try {
+                if (!(i < 1 || i > client.getLocalModel().getBoardOf(client.getNickname()).getDeck().getDeck().size()))
+                    break;
+            } catch (LocalModelNotLoadedException e) {
+                System.out.println(StringNames.LOCAL_MODEL_ERROR);
+            }
             System.out.println("Invalid number, try again\n");
             while (true) {
                 input = in.next();
                 try {
                     i = Integer.parseInt(input);
-                    if(i>0||i<client.getLocalModel().getAssistantDecks().get(playerNumber).getDeck().size())
+                    if(i>0||i<client.getLocalModel().getBoardOf(client.getNickname()).getDeck().getDeck().size())
                     break;
                 } catch (NumberFormatException e) {
                     System.out.println(StringNames.NUMBER_FORMAT);
+                } catch (LocalModelNotLoadedException e) {
+                    System.out.println(StringNames.LOCAL_MODEL_ERROR);
                 }
             }
         }
@@ -1318,24 +1327,13 @@ public class CLI implements UI {
                         if (myBoard.getEntrance().get(stringToColor(tmp)) >= 1) {
                             color = stringToColor(tmp);
                             movedStudents++;
-                            int count = 0;
-                            for (StrippedIsland trueIsland : client.getLocalModel().getIslands()) {
-                                if (!trueIsland.getName().equals("EMPTY"))
-                                    count++;
-                            }
-                            if (islandChosen > 0 && islandChosen <= count) {
-                                if (movedStudents > maxStudents)
-                                    doItAgain = false;
-                                int counter = 0;
-                                while (counter < client.getLocalModel().getIslands().size() && counter < islandChosen) {
-                                    if (client.getLocalModel().getIslands().get(counter).getName().equals("EMPTY")) {
-                                        counter++;
-                                    }
-                                    counter++;
-                                }
-                                counter--;
+                            List<StrippedIsland> islandsViewed =
+                                    client.getLocalModel().getIslands().stream()
+                                            .filter(x -> !x.getName().equals("EMPTY")).collect(Collectors.toList());
 
-                                moveStudentsOrder = new MoveStudents(client.getNickname(), color, client.getLocalModel().getIslands().get(counter).getName());
+                            if (islandChosen > 0 && islandChosen <= islandsViewed.size()) {
+                                if (movedStudents > maxStudents) doItAgain = false;
+                                moveStudentsOrder = new MoveStudents(client.getNickname(), color, client.getLocalModel().getIslands().get(islandChosen-1).getName());
                                 try {
                                     client.performGameAction(moveStudentsOrder);
                                 } catch (NotEnoughCoinsException e) {
@@ -2313,14 +2311,82 @@ public class CLI implements UI {
         System.out.println("Coins: " + board.getCoins());
         System.out.println("\nDining room configuration: ");
         printDining(board);
+        int len;
+        int maxlen="YELLOW".length()+3;
+        int oldlen;
+        int counter=0;
+        Color color;
+        String coloration;
+        boolean isTheFirst=true;
         for (Colors c : board.getDining().keySet()) {
-            System.out.println(c + " students: " + board.getDining().get(c));
+            if (board.getDining().get(c)!=0) {
+                color = colorsToColor(c);
+                coloration = c.toString();
+                len=coloration.length()+3;
+                if (isTheFirst)
+                {
+                    System.out.print("0");
+                    while (counter<maxlen) {
+                        System.out.print("-");
+                        counter++;
+                    }
+                    System.out.print("0");
+                    isTheFirst=false;}
+                System.out.println();
+                System.out.print("|"+ansi().fg(color).a(coloration).reset() + " | " + board.getDining().get(c));
+                oldlen=maxlen-len;
+                while(oldlen>0)
+                {
+                    System.out.print(" ");
+                    oldlen--;
+                }
+                System.out.println("|");
+                counter=0;
+                System.out.print("0");
+                while (counter<maxlen) {
+                    System.out.print("-");
+                    counter++;
+                }
+                System.out.print("0");
+            }
         }
         System.out.println("O----------------------O");
         printEntrance(board);
-        for (Colors c : board.getEntrance().keySet()) {
-            System.out.println(c + " students: " + board.getEntrance().get(c));
+        counter=0;
+        isTheFirst=true;
+        for (Colors c : board.getDining().keySet()) {
+            if (board.getDining().get(c)!=0) {
+                color = colorsToColor(c);
+                coloration = c.toString();
+                len=coloration.length()+3;
+                if (isTheFirst)
+                {
+                    System.out.print("0");
+                    while (counter<maxlen) {
+                        System.out.print("-");
+                        counter++;
+                    }
+                    System.out.print("0");
+                    isTheFirst=false;}
+                System.out.println();
+                System.out.print("|"+ansi().fg(color).a(coloration).reset() + " | " + board.getDining().get(c));
+                oldlen=maxlen-len;
+                while(oldlen>0)
+                {
+                    System.out.print(" ");
+                    oldlen--;
+                }
+                System.out.println("|");
+                counter=0;
+                System.out.print("0");
+                while (counter<maxlen) {
+                    System.out.print("-");
+                    counter++;
+                }
+                System.out.print("0");
+            }
         }
+        System.out.println("O----------------------O");
         System.out.println("\nNumber of towers: " + board.getNumberOfTowers());
         System.out.println("\nProfessors table: ");
         for (Colors c : board.getProfessorsTable()) {
@@ -2757,7 +2823,7 @@ System.out.println();
         if (island.getNumOfTowers() == 0)
             System.out.println("There are no towers yet on this island!\n");
         else
-            System.out.println("Towers: " + island.getNumOfTowers() + " " + island.getTowersColor() + "towers \n");
+            System.out.println("Towers: " + island.getNumOfTowers() + " " + island.getTowersColor() + " towers \n");
 
 
         if (island.hasMotherNature())
