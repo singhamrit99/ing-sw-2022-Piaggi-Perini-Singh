@@ -377,7 +377,7 @@ public class CLI implements UI {
     public void deckChange(String assistantCard) {
         String tmp;
         if (!client.getLocalModel().getCurrentPlayer().equals(client.getNickname()))
-            System.out.println(client.getLocalModel().getCurrentPlayer() + " has played Assistant card " + assistantCard + ".  Remember, you can't play the same card!");
+            System.out.println(client.getLocalModel().getCurrentPlayer() + " has played Assistant card " + assistantCard + "");
         tmp = assistantCard.replaceAll("[^\\d.]", "");
         if (playedThisTurn == null)
             playedThisTurn = new ArrayList<>();
@@ -458,6 +458,7 @@ public class CLI implements UI {
         player = (String) e.getOldValue();
         if (!player.equals(client.getNickname())) {
             newBoard = (EnumMap<Colors, Integer>) e.getNewValue();
+            System.out.println();
             System.out.println("O----------------------------------O");
             System.out.println(player + "'s entrance changed to \n");
             System.out.println("to:");
@@ -2489,6 +2490,29 @@ public class CLI implements UI {
                 i--;
             }
         }
+        int k=0;
+        while(k<island.getNumOfTowers())
+        {
+            if(k%4<3) {
+                if ((island.getTowersColor().toString().equals("BLACK")))
+                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset());
+                else
+                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset());
+            }
+            else
+            {
+                if ((island.getTowersColor().toString().equals("BLACK"))) {
+                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset());
+                    System.out.println();
+                }
+                else {
+                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset());
+                    System.out.println();
+                }
+            }
+
+            k++;
+        }
         System.out.println();
         System.out.println("\\                    /");
         System.out.println(" ____________________");
@@ -2650,11 +2674,24 @@ public class CLI implements UI {
             System.out.println(StringNames.LOCAL_MODEL_ERROR);
         }
         int i=1;
+        System.out.println("0------------------------------------0");
         if (myDeck != null) {
             for (AssistantCard a : myDeck.getDeck()) {
-                System.out.println("Card number " + i + " Value " + a.getImageName() + " Moves: " + a.getMove());
+                System.out.print("|");
+                System.out.print("Card number " + i + "| Value " + a.getImageName() + "| Moves: " + a.getMove());
+                if(i!=10&&!a.getImageName().equals("10"))
+                {
+                    System.out.println("    |");
+                }
+                else if (a.getImageName().equals("10"))
+                {
+                    System.out.println("   |");
+                }
+                else
+                    System.out.println("|");
                 i++;
             }
+            System.out.println("0------------------------------------0");
         }
     }
 
@@ -2837,20 +2874,23 @@ public class CLI implements UI {
      */
     public synchronized void waitForTurn() throws InterruptedException {
         if (!client.isMyTurn()) {
-            System.out.println("Waiting ...");
+            System.out.print("Waiting ...");
+            Thread.sleep(2000);
+            System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
             Thread.sleep(500);
 
-            System.out.println("Waiting ..");
+            System.out.print("Waiting  ..");
+            Thread.sleep(500);
+            System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
             Thread.sleep(500);
 
-            System.out.println("Waiting . .");
+            System.out.print("Waiting . .");
             Thread.sleep(500);
+            System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
 
-            System.out.println("Waiting .. ");
+            System.out.print("Waiting .. ");
             Thread.sleep(500);
-
-            System.out.println("Waiting .. ");
-            Thread.sleep(500);
+            System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
 
         }
 
