@@ -891,8 +891,8 @@ public class Game {
 
             if (students.get(studentColor) != 0) {
                 for (Player p : players) {
+                    Towers teamColor = p.getTowerColor();
                     if (p.hasProfessorOfColor(studentColor)) { //find the player with that professor
-                        Towers teamColor = p.getTowerColor();
                         influenceScores.replace(teamColor, influenceScores.get(teamColor) + students.get(studentColor));
 
                         if (cardPlayed != null) {
@@ -900,12 +900,8 @@ public class Game {
                                 influenceScores.replace(teamColor, influenceScores.get(teamColor));
                                 currentPlayer.getPlayedCharacterCard().setStatus(2);
                                 increaseCharacterPrice(selectedCharacterIndex);
-                            } else if (cardPlayed.getAbility().getAction().equals(Actions.ADD_POINTS) && cardPlayed.getStatus() >= 1 && p.getNickname().equals(currentPlayer.getNickname())) {
-                                currentPlayer.getPlayedCharacterCard().setStatus(2);
-                                influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers() + cardPlayed.getAbility().getValue());
-                                increaseCharacterPrice(selectedCharacterIndex);
                             } else {
-                                if (teamColor.equals(island.getTowersColor())) { //counting the towers if team owns the island
+                                if (!cardPlayed.getAbility().getAction().equals(Actions.ADD_POINTS) && teamColor.equals(island.getTowersColor())) { //counting the towers if team owns the island
                                     influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers());
                                 }
                             }
@@ -914,6 +910,15 @@ public class Game {
                                 influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers());
                             }
                         }
+                    }
+
+                    if (cardPlayed != null && cardPlayed.getAbility().getAction().equals(Actions.ADD_POINTS) && cardPlayed.getStatus() >= 1 && p.getNickname().equals(currentPlayer.getNickname())) {
+                        influenceScores.replace(teamColor, influenceScores.get(teamColor) + cardPlayed.getAbility().getValue());
+                        if (teamColor.equals(island.getTowersColor())) { //counting the towers if team owns the island
+                            influenceScores.replace(teamColor, influenceScores.get(teamColor) + island.getNumOfTowers());
+                        }
+                        currentPlayer.getPlayedCharacterCard().setStatus(2);
+                        increaseCharacterPrice(selectedCharacterIndex);
                     }
                 }
             }
