@@ -2578,10 +2578,9 @@ public class CLI implements UI {
         System.out.println();
         System.out.println("\\                    /");
         System.out.println(" ____________________");
-        int w = 0;
-        int len=0;
-        int maxlen="YELLOW".length()+12;
-        int oldlen=0;
+        int len;
+        int maxlen="YELLOW".length()+3;
+        int oldlen;
         int counter=0;
         String coloration;
         boolean isTheFirst=true;
@@ -2589,7 +2588,7 @@ public class CLI implements UI {
             if (island.getStudents().get(c)!=0) {
                 color = colorsToColor(c);
                 coloration = c.toString();
-                len=coloration.length()+12;
+                len=coloration.length()+3;
                 if (isTheFirst)
                 {
                 System.out.print("0");
@@ -2600,7 +2599,7 @@ public class CLI implements UI {
                     System.out.print("0");
                 isTheFirst=false;}
                     System.out.println();
-                    System.out.print("|"+ansi().fg(color).a(coloration).reset() + " students: " + island.getStudents().get(c));
+                    System.out.print("|"+ansi().fg(color).a(coloration).reset() + " | " + island.getStudents().get(c));
                     oldlen=maxlen-len;
                     while(oldlen>0)
                     {
@@ -2687,31 +2686,45 @@ System.out.println();
         System.out.println();
         System.out.println("\\                    /");
         System.out.println(" ____________________");
-        int w = 0;
+        int len;
+        int maxlen="YELLOW".length()+3;
+        int oldlen;
+        int counter=0;
         String coloration;
-        int len, counter = 0;
+        boolean isTheFirst=true;
         for (Colors c : island.getStudents().keySet()) {
             if (island.getStudents().get(c)!=0) {
                 color = colorsToColor(c);
                 coloration = c.toString();
-                len=coloration.length()+12;
-                System.out.print("0");
-                while (counter<len) {
-                    System.out.print("-");
-                    counter++;
-                }
-                System.out.print("0");
+                len=coloration.length()+3;
+                if (isTheFirst)
+                {
+                    System.out.print("0");
+                    while (counter<maxlen) {
+                        System.out.print("-");
+                        counter++;
+                    }
+                    System.out.print("0");
+                    isTheFirst=false;}
                 System.out.println();
-                System.out.println("|"+ansi().fg(color).a(coloration).reset() + " students: " + island.getStudents().get(c) + "|");
+                System.out.print("|"+ansi().fg(color).a(coloration).reset() + " | " + island.getStudents().get(c));
+                oldlen=maxlen-len;
+                while(oldlen>0)
+                {
+                    System.out.print(" ");
+                    oldlen--;
+                }
+                System.out.println("|");
                 counter=0;
                 System.out.print("0");
-                while (counter<len) {
+                while (counter<maxlen) {
                     System.out.print("-");
                     counter++;
                 }
                 System.out.print("0");
             }
         }
+        System.out.println();
 
         if (island.getNumOfTowers() == 0)
             System.out.println("There are no towers yet on this island!\n");
