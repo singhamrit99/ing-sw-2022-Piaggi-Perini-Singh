@@ -439,9 +439,7 @@ public class CLI implements UI {
             newDining = (EnumMap<Colors, Integer>) e.getNewValue();
             System.out.println("O----------------------------------O");
             System.out.println(e.getOldValue() + " modified their dining room! Here's the new configuration...");
-            for (Colors c : newDining.keySet()) {
-                System.out.println(c + " students: " + newDining.get(c));
-            }
+            printDining(newDining);
             System.out.println("O----------------------------------O");
         }
     }
@@ -460,11 +458,8 @@ public class CLI implements UI {
             newBoard = (EnumMap<Colors, Integer>) e.getNewValue();
             System.out.println();
             System.out.println("O----------------------------------O");
-            System.out.println(player + "'s entrance changed to \n");
-            System.out.println("to:");
-            for (Colors c : newBoard.keySet()) {
-                System.out.println(c + " students: " + newBoard.get(c));
-            }
+            System.out.println(player + "'s entrance changed to");
+            printEntrance(newBoard);
             System.out.println("O----------------------------------O");
         }
     }
@@ -549,10 +544,12 @@ public class CLI implements UI {
             ArrayList<String> response = new ArrayList<>();
             try {
                 response = client.getNicknamesInRoom();
-            } catch (RoomNotExistsException | UserNotInRoomException e) {
-                throw new RuntimeException(e);
+            } catch (RoomNotExistsException e) {
+                System.out.println(StringNames.ROOM_NOT_EXISTS);
             } catch (RemoteException e) {
                 System.out.println(StringNames.REMOTE);
+            }catch(UserNotInRoomException e)
+            {System.out.println(StringNames.USER_NOT_IN_ROOM);
             }
             sendArrayString(response);
         }
@@ -568,7 +565,7 @@ public class CLI implements UI {
             try {
                 result = client.requestLobbyInfo(clientRoom);
             } catch (RoomNotExistsException e) {
-                throw new RuntimeException(e);
+               System.out.println(StringNames.ROOM_NOT_EXISTS);
             } catch (RemoteException e) {
                 System.out.println(StringNames.REMOTE);
             }
@@ -589,7 +586,7 @@ public class CLI implements UI {
         } catch (UserNotInRoomException e) {
             System.out.println("You're not in a room yet\n");
         } catch (UserNotRegisteredException e) {
-            throw new RuntimeException(e);
+            System.out.println(StringNames.USER_NOT_REGISTERED);
         } catch (RemoteException e) {
             System.out.println(StringNames.REMOTE);
         }
@@ -645,7 +642,7 @@ public class CLI implements UI {
         } catch (NotLeaderRoomException e) {
             System.out.println(StringNames.NOT_LEADER);
         } catch (UserNotRegisteredException e) {
-            throw new RuntimeException(e);
+            System.out.println(StringNames.USER_NOT_REGISTERED);
         } catch (RemoteException e) {
             System.out.println(StringNames.REMOTE);
         }
@@ -669,12 +666,15 @@ public class CLI implements UI {
         }
         try {
             client.createRoom(nameRoom);
-        } catch (UserNotRegisteredException | RoomAlreadyExistsException e) {
-            throw new RuntimeException(e);
+        } catch (UserNotRegisteredException e) {
+            System.out.println(StringNames.USER_NOT_REGISTERED);
         } catch (RemoteException e) {
             System.out.println(StringNames.REMOTE);
         } catch (NameFieldException e) {
             System.out.println(StringNames.NAME_FIELD_NULL);
+        }catch (RoomAlreadyExistsException e)
+        {
+            System.out.println(StringNames.ROOM_ALREADY_EXISTS);
         }
         if (clientRoom!=null)
             leaveRoom();
@@ -853,7 +853,7 @@ public class CLI implements UI {
             movedStudents=0;
             //Resets number of students moved at the beginning of the turn
         } catch (UserNotInRoomException e) {
-            throw new RuntimeException(e);
+            System.out.println(StringNames.ROOM_ALREADY_EXISTS);
         } catch (AssistantCardNotFoundException e) {
             System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
         } catch (FullDiningException e) {
@@ -1171,8 +1171,8 @@ public class CLI implements UI {
             //Move students to the dining room
             doItAgain = true;
             isValidInputYN = false;
-            
-            if (answer.equals("y")) {
+
+            if (answer.equals("y") && client.isInGame()) {
                 do {
                     while (true) {
                         System.out.println("Choose the color of the student you want to move to the dining room! ");
@@ -1185,7 +1185,7 @@ public class CLI implements UI {
                         } else
                             System.out.println("Invalid color! Try again.");
                     }
-                    if (myBoard.getEntrance().get(color) >= 1) {
+                    if (myBoard.getEntrance().get(color) >= 1 && client.isInGame()) {
                         moveStudentsOrder = new MoveStudents(client.getNickname(), color, "dining");
                         try {
                             client.performGameAction(moveStudentsOrder);
@@ -1221,7 +1221,7 @@ public class CLI implements UI {
                     } else {
                         System.out.println("You don't have enough students of that color in your entrance.");
                     }
-                    if (movedStudents<maxStudents) {
+                    if (movedStudents < maxStudents && client.isInGame()) {
                         System.out.println("Do you want to move other students in the dining room?");
                         do {
                             answer = in.nextLine();
@@ -1232,7 +1232,7 @@ public class CLI implements UI {
                             } else
                                 System.out.println("Whoops! That's not right. Try again: \n");
                         } while (!isValidInputYN);
-                        if (answer.equals("y") && movedStudents < maxStudents) {
+                        if (answer.equals("y") && movedStudents < maxStudents && client.isInGame()) {
                             System.out.println("Alright, ready to move another student!");
                             printEntrance(myBoard);
                         } else if (movedStudents == maxStudents) {
@@ -1240,9 +1240,8 @@ public class CLI implements UI {
                             doItAgain = false;
                         } else
                             doItAgain = false;
-                    }
-                    else
-                        doItAgain=false;
+                    } else
+                        doItAgain = false;
                 } while (doItAgain);
 
                 //End of dining room move segment
@@ -1250,152 +1249,153 @@ public class CLI implements UI {
                 if (movedStudents == maxStudents)
                     client.getLocalModel().setCanPlayMN(true);
             }
-                isValidInputYN=false;
+            isValidInputYN = false;
+            if (movedStudents < maxStudents && client.isInGame())
+            {
                 System.out.println("Do you want to move students to the islands?");
+            do {
+                answer = in.nextLine();
+                answer = answer.toLowerCase(Locale.ROOT);
+                if (answer.equals("y") || answer.equals("n"))
+                    isValidInputYN = true;
+                else if (answer.equals("\n")) {
+                } else
+                    System.out.println("Whoops! That's not right. Try again: \n");
+            } while (!isValidInputYN);
+
+            //Move students to the islands if the player has moved less than 3 students already
+            //Resetting destinations array for students to island part
+            if (answer.equals("y") && (movedStudents < maxStudents) && client.isInGame()) {
                 do {
-                    answer = in.nextLine();
-                    answer = answer.toLowerCase(Locale.ROOT);
-                    if (answer.equals("y") || answer.equals("n"))
-                        isValidInputYN = true;
-                    else if (answer.equals("\n")) {
-                    } else
-                        System.out.println("Whoops! That's not right. Try again: \n");
-                } while (!isValidInputYN);
-                
-                    //Move students to the islands if the player has moved less than 3 students already
-                    //Resetting destinations array for students to island part
-                    if (answer.equals("y")&&(movedStudents < maxStudents)) {
-                        do {
-                            while (true) {
+                    while (true) {
+                        try {
+                            if (client.getExpertMode())
+                                printExpertIslands();
+                            else
+                                printIslands();
+                            printEntrance(myBoard);
+                            System.out.println("Type the students you want to move to the island as \"color, island number\"!");
+                        } catch (RemoteException e) {
+                            System.out.println(StringNames.REMOTE);
+                        } catch (RoomNotExistsException e) {
+                            System.out.println(StringNames.ROOM_NOT_EXISTS);
+                        }
+                        answer = in.nextLine();
+                        // System.out.println("answer "+ answer);
+                        parts = answer.split(",|, | ,");
+                        tmp = parts[0];
+                        tmp = tmp.replaceAll("[^a-zA Z0-9]", "");
+                        try {
+                            parts[1] = parts[1].trim();
+                            try {
+                                islandChosen = Integer.parseInt(parts[1]);
+                                tmp = tmp.toUpperCase(Locale.ROOT);
+                                break;
+                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                                System.out.println("Something went wrong with your input, try again!");
+                            }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Something went wrong with your input, try again!");
+                        }
+                    }
+                    //Now I should have a number and a color
+                    doItAgain = true;
+                    if (isValidColor(tmp)) {
+                        if (myBoard.getEntrance().get(stringToColor(tmp)) >= 1) {
+                            color = stringToColor(tmp);
+                            movedStudents++;
+                            int count = 0;
+                            for (StrippedIsland trueIsland : client.getLocalModel().getIslands()) {
+                                if (!trueIsland.getName().equals("EMPTY"))
+                                    count++;
+                            }
+                            if (islandChosen > 0 && islandChosen <= count) {
+                                if (movedStudents > maxStudents)
+                                    doItAgain = false;
+                                int counter = 0;
+                                while (counter < client.getLocalModel().getIslands().size() && counter < islandChosen) {
+                                    if (client.getLocalModel().getIslands().get(counter).getName().equals("EMPTY")) {
+                                        counter++;
+                                    }
+                                    counter++;
+                                }
+                                counter--;
+
+                                moveStudentsOrder = new MoveStudents(client.getNickname(), color, client.getLocalModel().getIslands().get(counter).getName());
                                 try {
-                                    if(client.getExpertMode())
-                                        printExpertIslands();
-                                    else
-                                        printIslands();
-                                    printEntrance(myBoard);
-                                    System.out.println("Type the students you want to move to the island as \"color, island number\"!");
+                                    client.performGameAction(moveStudentsOrder);
+                                } catch (NotEnoughCoinsException e) {
+                                    System.out.println(StringNames.NOT_ENOUGH_COINS);
+                                } catch (FullDiningException e) {
+                                    System.out.println(StringNames.FULL_DINING);
+                                } catch (AssistantCardNotFoundException e) {
+                                    System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
+                                } catch (NegativeValueException e) {
+                                    System.out.println(StringNames.NEGATIVE_VALUE);
+                                } catch (IncorrectStateException e) {
+                                    System.out.println(StringNames.INCORRECT_STATE);
+                                } catch (MotherNatureLostException e) {
+                                    System.out.println(StringNames.MOTHER_NATURE_LOST);
+                                } catch (ProfessorNotFoundException e) {
+                                    System.out.println(StringNames.PROFESSOR_NOT_FOUND);
+                                } catch (IncorrectPlayerException e) {
+                                    System.out.println(StringNames.INCORRECT_PLAYER);
                                 } catch (RemoteException e) {
                                     System.out.println(StringNames.REMOTE);
-                                } catch (RoomNotExistsException e) {
-                                   System.out.println(StringNames.ROOM_NOT_EXISTS);
+                                } catch (IncorrectArgumentException e) {
+                                    System.out.println(StringNames.INCORRECT_ARGUMENT);
+                                } catch (UserNotInRoomException e) {
+                                    System.out.println(StringNames.USER_NOT_IN_ROOM);
+                                } catch (UserNotRegisteredException e) {
+                                    System.out.println(StringNames.USER_NOT_REGISTERED);
+                                } catch (CardPlayedInTurnException e) {
+                                    System.out.println(StringNames.CARD_PLAYED_IN_TURN);
+                                } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
+                                    System.out.println(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
                                 }
-                                answer = in.nextLine();
-                                // System.out.println("answer "+ answer);
-                                parts = answer.split(",|, | ,");
-                                tmp = parts[0];
-                                tmp = tmp.replaceAll("[^a-zA Z0-9]", "");
-                                try {
-                                    parts[1] = parts[1].trim();
-                                    try {
-                                        islandChosen = Integer.parseInt(parts[1]);
-                                        tmp = tmp.toUpperCase(Locale.ROOT);
+                                if (movedStudents < maxStudents) {
+                                    System.out.println("You still have " + (maxStudents - movedStudents) + " students to move!\n");
+                                    System.out.println("Do you want to move them now?");
+                                    isValidInputYN = false;
+                                    do {
+                                        answer = in.next();
+                                        answer = answer.toLowerCase(Locale.ROOT);
+                                        if (answer.equals("y") || answer.equals("n"))
+                                            isValidInputYN = true;
+                                        else if (answer.equals("\n")) {
+                                        } else
+                                            System.out.println("Whoops! That's not right. Try again: \n");
+                                    } while (!isValidInputYN);
+                                    if (answer.equals("y"))
+                                        in.nextLine();
+                                    else {
+                                        System.out.println("Ok, returning to the menu!");
                                         break;
-                                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                                        System.out.println("Something went wrong with your input, try again!");
-                                    }
-                                } catch (ArrayIndexOutOfBoundsException e) {
-                                    System.out.println("Something went wrong with your input, try again!");
-                                }
-                            }
-                            //Now I should have a number and a color
-                            doItAgain = true;
-                            if (isValidColor(tmp)) {
-                                if (myBoard.getEntrance().get(stringToColor(tmp))>=1) {
-                                    color=stringToColor(tmp);
-                                    movedStudents++;
-                                    int count = 0;
-                                    for (StrippedIsland trueIsland : client.getLocalModel().getIslands()) {
-                                        if (!trueIsland.getName().equals("EMPTY"))
-                                            count++;
-                                    }
-                                    if (islandChosen > 0 && islandChosen <= count) {
-                                        if (movedStudents > maxStudents)
-                                            doItAgain = false;
-                                        int counter = 0;
-                                        while (counter < client.getLocalModel().getIslands().size() && counter < islandChosen) {
-                                            if (client.getLocalModel().getIslands().get(counter).getName().equals("EMPTY")) {
-                                                counter++;
-                                            }
-                                            counter++;
-                                        }
-                                        counter--;
-
-                                        moveStudentsOrder=new MoveStudents(client.getNickname(),color,client.getLocalModel().getIslands().get(counter).getName());
-                                        try {
-                                            client.performGameAction(moveStudentsOrder);
-                                        } catch (NotEnoughCoinsException e) {
-                                            System.out.println(StringNames.NOT_ENOUGH_COINS);
-                                        } catch (FullDiningException e) {
-                                            System.out.println(StringNames.FULL_DINING);
-                                        } catch (AssistantCardNotFoundException e) {
-                                            System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
-                                        } catch (NegativeValueException e) {
-                                            System.out.println(StringNames.NEGATIVE_VALUE);
-                                        } catch (IncorrectStateException e) {
-                                            System.out.println(StringNames.INCORRECT_STATE);
-                                        } catch (MotherNatureLostException e) {
-                                            System.out.println(StringNames.MOTHER_NATURE_LOST);
-                                        } catch (ProfessorNotFoundException e) {
-                                            System.out.println(StringNames.PROFESSOR_NOT_FOUND);
-                                        } catch (IncorrectPlayerException e) {
-                                            System.out.println(StringNames.INCORRECT_PLAYER);
-                                        } catch (RemoteException e) {
-                                            System.out.println(StringNames.REMOTE);
-                                        } catch (IncorrectArgumentException e) {
-                                            System.out.println(StringNames.INCORRECT_ARGUMENT);
-                                        } catch (UserNotInRoomException e) {
-                                            System.out.println(StringNames.USER_NOT_IN_ROOM);
-                                        } catch (UserNotRegisteredException e) {
-                                            System.out.println(StringNames.USER_NOT_REGISTERED);
-                                        } catch (CardPlayedInTurnException e) {
-                                            System.out.println(StringNames.CARD_PLAYED_IN_TURN);
-                                        } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
-                                            System.out.println(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
-                                        }
-                                        if (movedStudents < maxStudents) {
-                                            System.out.println("You still have " + (maxStudents - movedStudents) + " students to move!\n");
-                                            System.out.println("Do you want to move them now?");
-                                            isValidInputYN=false;
-                                            do {
-                                                answer = in.next();
-                                                answer = answer.toLowerCase(Locale.ROOT);
-                                                if (answer.equals("y") || answer.equals("n"))
-                                                    isValidInputYN = true;
-                                                else if (answer.equals("\n")) {
-                                                } else
-                                                    System.out.println("Whoops! That's not right. Try again: \n");
-                                            } while (!isValidInputYN);
-                                            if(answer.equals("y"))
-                                            in.nextLine();
-                                            else {
-                                                System.out.println("Ok, returning to the menu!");
-                                                break;
-                                            }
-                                        } else {
-                                            client.getLocalModel().setCanPlayMN(true);
-                                            doItAgain = false;
-                                        }
-                                    } else {
-                                        System.out.println("Invalid island number! Try again.\n");
                                     }
                                 } else {
-                                    System.out.println("You don't have enough students of that color! Try again.\n");
+                                    client.getLocalModel().setCanPlayMN(true);
+                                    doItAgain = false;
                                 }
                             } else {
-                                System.out.println("There is no such color as " + color + "! Try again. \n");
+                                System.out.println("Invalid island number! Try again.\n");
                             }
-                        } while (doItAgain);
-
+                        } else {
+                            System.out.println("You don't have enough students of that color! Try again.\n");
+                        }
                     } else {
-                        if(maxStudents==movedStudents)
-                        System.out.println("You already moved enough students this turn\n");
-                        else
-                            System.out.println("Remember you have to move " + maxStudents +  " before you can move Mother Nature!");
+                        System.out.println("There is no such color as " + color + "! Try again. \n");
                     }
-                }
-             else
-                System.out.println("You already moved enough students this turn, you can't do that anymore!\n");
+                } while (doItAgain);
 
+            } else {
+                if (maxStudents == movedStudents)
+                    System.out.println("You already moved enough students this turn\n");
+                else
+                    System.out.println("Remember you have to move " + maxStudents + " before you can move Mother Nature!");
+            }
+        } else
+            System.out.println("You already moved enough students this turn, you can't do that anymore!\n");
+    }
         }
         
 
@@ -1437,41 +1437,50 @@ public class CLI implements UI {
         }
         tmp = client.getLocalModel().getCharacters().get(i);
         // System.out.println(tmp.getRequirements().getRequirements().toLowerCase(Locale.ROOT));
-        switch (tmp.getDescription()) {
-            //Automatic action card
-            case "If somebody tries to Conquer an island, ignore the towers for this turn!":
-            case "Add 2 to your Influence this turn!":
-            case "Snag an opponent's professor if you have the same number of their students!":
-                playCharacterA(i);
-                break;
-            //MN movement
-            case "You may move Mother Nature up to 2 additional spaces!":
-                //Updating localmodel for +2 moves
-                try {
-                    client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getMoves() + 2);
-                } catch (LocalModelNotLoadedException e) {
-                    System.out.println(StringNames.LOCAL_MODEL_ERROR);
-                }
-                playCharacterA(i);
-                break;
-            //Island and student card
-            case "Move students on the character card to any isle you wish!":
-                playCharacterB(i, tmp);
-                break;
-            //Students on card card
-            case "Swap 3 of the students on this card with 3 from your Entrance!":
-            case "Switch up to two students between your Entrance and your Dining Room!":
-                playCharacterC(i, tmp);
-                break;
-            //No STUDENTS used but input needed card (no entry tiles are also here since you have to pick the island)
-            case "Calculate the influence on any Island and reap the rewards!":
-            case "Place a No Entry card on an isle and block Mother Nature's power once!":
-            case "Choose a student color to ignore when calculating Influence this turn!":
-            case "Choose a color: EVERYONE must return 3 students of that color to the bag!":
-            case "Take one student from this card and put them in the dining room, then draw another from the bag and replace them!":
-                playCharacterD(i);
+        try {
+            if (client.getLocalModel().getBoardOf(client.getNickname()).getCoins()>=tmp.getPrice())
+            switch (tmp.getDescription()) {
+                //Automatic action card
+                case "If somebody tries to Conquer an island, ignore the towers for this turn!":
+                case "Add 2 to your Influence this turn!":
+                case "Snag an opponent's professor if you have the same number of their students!":
+                    playCharacterA(i);
+                    break;
+                //MN movement
+                case "You may move Mother Nature up to 2 additional spaces!":
+                    //Updating localmodel for +2 moves
+                    try {
+                        client.getLocalModel().getBoardOf(client.getNickname()).setMoves(client.getLocalModel().getBoardOf(client.getNickname()).getMoves() + 2);
+                    } catch (LocalModelNotLoadedException e) {
+                        System.out.println(StringNames.LOCAL_MODEL_ERROR);
+                    }
+                    playCharacterA(i);
+                    break;
+                //Island and student card
+                case "Move students on the character card to any isle you wish!":
+                    playCharacterB(i, tmp);
+                    break;
+                //Students on card card
+                case "Swap 3 of the students on this card with 3 from your Entrance!":
+                case "Switch up to two students between your Entrance and your Dining Room!":
+                    playCharacterC(i, tmp);
+                    break;
+                //No STUDENTS used but input needed card (no entry tiles are also here since you have to pick the island)
+                case "Calculate the influence on any Island and reap the rewards!":
+                case "Place a No Entry card on an isle and block Mother Nature's power once!":
+                case "Choose a student color to ignore when calculating Influence this turn!":
+                case "Choose a color: EVERYONE must return 3 students of that color to the bag!":
+                case "Take one student from this card and put them in the dining room, then draw another from the bag and replace them!":
+                    playCharacterD(i);
 
+            }
+            else
+                System.out.println(StringNames.NOT_ENOUGH_COINS);
+        } catch (LocalModelNotLoadedException e) {
+            System.out.println(StringNames.LOCAL_MODEL_ERROR);
         }
+
+
     }
 
     /**
@@ -1484,8 +1493,8 @@ public class CLI implements UI {
         playCharacterCardAOrder = new PlayCharacterCardA(client.getNickname(), id);
         try {
             client.performGameAction(playCharacterCardAOrder);
-        } catch (UserNotInRoomException | UserNotRegisteredException e) {
-            throw new RuntimeException(e);
+        } catch (UserNotInRoomException e) {
+            System.out.println(StringNames.USER_NOT_IN_ROOM);
         } catch (NotEnoughCoinsException e) {
             System.out.println(StringNames.NOT_ENOUGH_COINS);
         } catch (FullDiningException e) {
@@ -1510,6 +1519,9 @@ public class CLI implements UI {
             System.out.println(StringNames.CARD_PLAYED_IN_TURN);
         } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
             System.out.println(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
+        }catch (UserNotRegisteredException e)
+        {
+            System.out.println(StringNames.USER_NOT_REGISTERED);
         }
 
     }
@@ -1530,7 +1542,6 @@ public class CLI implements UI {
         System.out.println("Choose a color! 0=Yellow, 1=Blue, 2=Green, 3=Red, 4=Pink");
         System.out.println();
         String input;
-        Colors colors;
         boolean hasStudents=false;
         do{
         while (true) {
@@ -1625,8 +1636,8 @@ public class CLI implements UI {
         System.out.println("You have chosen a card that requires two sets of students\n");
         String answer;
         String[] parts;
-        String color;
-        int value;
+        String color = null;
+        int value = 0;
         int movedStudents = 0;
         boolean validInput = false;
         System.out.println("These are the students on the card: \n");
@@ -1746,7 +1757,7 @@ public class CLI implements UI {
             }
             if (diningStudents >= 2) {
                 do {
-                    while (true) {
+                    while ( client.isInGame()) {
                         printEntrance(myBoard);
                         printDining(myBoard);
                         System.out.println("Type the students you want to move from your entrance as \"color, number\"");
@@ -1788,7 +1799,7 @@ public class CLI implements UI {
                 //**************************** Students from entrance taken **************************************
                 movedStudents = 0;
                 do {
-                    while (true) {
+                    while (client.isInGame()) {
                         printDining(myBoard);
                         System.out.println("Type the students you want to move from your dining room as \"color, number\"");
                         answer = in.nextLine();
@@ -2853,7 +2864,7 @@ System.out.println();
                 {
                     System.out.println("     |");
                 }
-                else if (a.getImageName().equals("10"))
+                else if (a.getImageName().equals("10")&&i==10)
                 {
                     System.out.println("     |");
                 }
@@ -2927,6 +2938,33 @@ System.out.println();
         System.out.println("*-----*");
     }
 
+    public void printDining (EnumMap<Colors, Integer> dining)
+    {
+        Integer i;
+        int printColumns;
+        Ansi.Color color;
+        System.out.println("O----------------------O");
+        for (Colors c : dining.keySet()) {
+            i = dining.get(c);
+            //  System.out.println("I: "+i);
+            color = colorsToColor(c);
+            printColumns = 0;
+            while (i > 0) {
+                if (printColumns == 0) {
+                    System.out.print("|");
+                    System.out.print(ansi().fg(color).a("*\t").reset());
+                    printColumns++;
+                } else {
+                    System.out.print(ansi().fg(color).a("*\t").reset());
+                    printColumns++;
+                }
+                i--;
+
+            }
+            System.out.println();
+        }
+        System.out.println("O----------------------O");
+    }
 
     // **********************************   Utility Methods    ***************************************************************
 
@@ -2995,6 +3033,78 @@ System.out.println();
         }
         return colorToReturn;
     }
+    public void printEntrance(EnumMap<Colors, Integer> entrance) {
+        Integer i;
+        int numofstudents = 0;
+        int rows = 0;
+        Ansi.Color color = null;
+        System.out.println("\nEntrance configuration: ");
+        System.out.println("O-----O");
+        for (Colors c : entrance.keySet())
+            numofstudents += entrance.get(c);
+        for (Colors c : entrance.keySet()) {
+            i = entrance.get(c);
+            color = colorsToColor(c);
+
+            while (rows < 7 && i > 0) {
+                if (rows % 3 == 0&&rows!=6) {
+                    if (rows < numofstudents) {
+                        System.out.print("|");
+                        System.out.print(ansi().fg(color).a("*").reset());
+                    } else
+                        System.out.print(ansi().a("|  ").reset());
+
+                } else if (rows % 3 == 1) {
+                    if (rows < numofstudents) {
+                        System.out.print(ansi().fg(color).a(" *").reset());
+                    } else
+                        System.out.print(ansi().fg(color).a("  ").reset());
+                } else if (rows % 3 == 2) {
+                    if (rows < numofstudents) {
+                        System.out.print(ansi().fg(color).a(" *").reset());
+                        System.out.println("|");
+                    } else
+                        System.out.println(ansi().a("   |").reset());
+
+                } else {
+                    if (rows < numofstudents) {
+                        System.out.print("|");
+                        System.out.print(ansi().fg(color).a("  *  ").reset());
+                        System.out.print("|");
+                    }
+                    else {
+                        System.out.print("|");
+                        System.out.print(ansi().fg(color).a("     ").reset());
+                        System.out.print("|");
+                    }
+
+                }
+                rows++;
+                i--;
+
+            }
+
+
+        }
+        while (rows < 7) {
+            if (rows % 3 == 0&&rows!=6)
+                System.out.print(ansi().a("|  ").reset());
+            else if (rows % 3 == 1)
+                System.out.print(ansi().fg(color).a("  ").reset());
+            else if (rows%3==2)
+                System.out.println(ansi().a("  |").reset());
+            else{
+                System.out.print("|");
+                System.out.print(ansi().fg(color).a("     ").reset());
+                System.out.print("|");
+            }
+
+            rows++;
+        }
+        System.out.println();
+        System.out.println("O-----O");
+    }
+
 
     /**
      * Method that converts stripped students EnumMaps built in client in input appropriate for the moveStudents method in Game.
