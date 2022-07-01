@@ -336,9 +336,13 @@ public class Game {
         }
         bag.setStudents(students);
 
-        //Insertion in each SchoolBoard 7 students drawn from Bag
+        //Insertion in each SchoolBoard 7 or 9 students drawn from Bag
         for (Player p : players) {
-            p.addStudents(bag.drawStudents(7));
+            if (numOfPlayer == 3) {
+                p.addStudents(bag.drawStudents(9));
+            } else {
+                p.addStudents(bag.drawStudents(7));
+            }
         }
     }
 
