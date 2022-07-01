@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
@@ -28,6 +30,9 @@ public class CharacterOneSelectController extends InitialStage implements Contro
 
     @FXML
     private ChoiceBox<String> choiceBox;
+
+    @FXML
+    private ImageView image;
 
     /**
      * Binds this stage to a user GUI.
@@ -47,6 +52,7 @@ public class CharacterOneSelectController extends InitialStage implements Contro
         int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
 
         description.setText(selectedCharacter.getDescription());
+        image.setImage(new Image(ResourcesPath.CHARACTERS + selectedCharacter.getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
 
         if (selectedCharacter.getCharacterID() == 3) {
             int j = 0;

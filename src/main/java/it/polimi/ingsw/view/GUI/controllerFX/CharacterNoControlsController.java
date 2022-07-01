@@ -8,6 +8,8 @@ import it.polimi.ingsw.view.GUI.GUI;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
@@ -19,6 +21,8 @@ public class CharacterNoControlsController extends InitialStage implements Contr
     private Button cancelButton, confirmButton;
     @FXML
     private Text description;
+    @FXML
+    private ImageView image;
 
     /**
      * Binds this stage to a user GUI.
@@ -37,6 +41,7 @@ public class CharacterNoControlsController extends InitialStage implements Contr
         StrippedCharacter selectedCharacter = GUI.client.getLocalModel().selectedCharacter;
         int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
         description.setText(selectedCharacter.getDescription());
+        image.setImage(new Image(ResourcesPath.CHARACTERS + selectedCharacter.getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
 
         confirmButton.setOnAction((event) -> {
             PlayCharacterCardA playCharacterCardA = new PlayCharacterCardA(GUI.client.getNickname(), indexSelectedCharacter);

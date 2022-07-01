@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
@@ -27,6 +29,9 @@ public class CharacterTileController extends InitialStage implements Controller 
 
     @FXML
     private ChoiceBox<String> choiceBox;
+
+    @FXML
+    private ImageView image;
 
     /**
      * Binds this stage to a user GUI.
@@ -46,6 +51,7 @@ public class CharacterTileController extends InitialStage implements Controller 
         int indexSelectedCharacter = GUI.client.getLocalModel().getCharacters().indexOf(selectedCharacter);
 
         description.setText(selectedCharacter.getDescription());
+        image.setImage(new Image(ResourcesPath.CHARACTERS + selectedCharacter.getCharacterID() + ResourcesPath.IMAGE_EXTENSION_CHAR));
 
         availableTiles.setText("Tiles Available " + GUI.client.getLocalModel().getCharacters().get(indexSelectedCharacter).getNoEntryTiles());
 
