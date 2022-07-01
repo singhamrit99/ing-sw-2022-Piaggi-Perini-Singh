@@ -2572,6 +2572,29 @@ public class CLI implements UI {
             }
 
         }
+        int k=0;
+        while(k<island.getNumOfTowers())
+        {
+            if(k%4<3) {
+                if ((island.getTowersColor().toString().equals("BLACK")))
+                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset());
+                else
+                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset());
+            }
+            else
+            {
+                if ((island.getTowersColor().toString().equals("BLACK"))) {
+                    System.out.print(ansi().fg(BLACK).bg(WHITE).a("||").reset());
+                    System.out.println();
+                }
+                else {
+                    System.out.print(ansi().fg(WHITE).bg(BLACK).a("||").reset());
+                    System.out.println();
+                }
+            }
+
+            k++;
+        }
         System.out.println();
         System.out.println("\\                    /");
         System.out.println(" ____________________");
