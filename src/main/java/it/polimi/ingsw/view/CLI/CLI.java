@@ -2193,7 +2193,7 @@ public class CLI implements UI {
                 "|\"Press 7 to see the character cards in the game                       |\n" +
                 "|\"Press 8 to play a character card                                     |\n" +
                 "|\"Press 9 to view this message again                                   |\n" +
-                "|\"Press 10 to leave the game                                            |\n" +
+                "|\"Press 10 to leave the game                                           |\n" +
                 "O-----------------------------------------------------------------------O");
     }
 
@@ -2674,8 +2674,32 @@ public class CLI implements UI {
         int i = 0;
         ArrayList<StrippedCharacter> temp = client.getLocalModel().getCharacters();
         for (StrippedCharacter c : temp) {
-            System.out.println("Character " + (i + 1));
-            System.out.println("Price: " + c.getPrice() + ", description:  " + c.getDescription());
+            System.out.println();
+            int w=c.getDescription().length()+23;
+            System.out.print("~");
+            while(w>0)
+            {
+                System.out.print("-");
+                w--;
+            }
+            System.out.println("~");
+            System.out.print("Character " + (i + 1));
+            w=11;
+            while(w<(c.getDescription().length()+23))
+            {
+                System.out.print(" ");
+                w++;
+            }
+            System.out.println(" |");
+            System.out.println("Price: " + c.getPrice() + ", description:  " + c.getDescription()+ "|");
+            w=c.getDescription().length()+23;
+           System.out.print("~");
+           while(w>0)
+           {
+               System.out.print("-");
+               w--;
+           }
+            System.out.print("~");
             i++;
         }
         System.out.println();
@@ -2704,7 +2728,7 @@ public class CLI implements UI {
                 System.out.print("Card number " + i + "| Value " + a.getImageName() + "| Moves: " + a.getMove());
                 if(i!=10&&!a.getImageName().equals("10"))
                 {
-                    System.out.println("    |");
+                    System.out.println("     |");
                 }
                 else if (a.getImageName().equals("10"))
                 {
