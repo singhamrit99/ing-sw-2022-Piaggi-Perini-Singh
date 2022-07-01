@@ -28,12 +28,7 @@ public class Starter {
                         Client client = new Client(args[1], 23023);
                         client.run();
                         CLI cli = new CLI(client);
-                        try {
-                            cli.Start();
-                        } catch (InterruptedException e) {
-                            System.out.println("There has been an error");
-                            System.exit(0);
-                        }
+                        cli.Start();
                     } else if (args[0].equals("-gui")) {
                         Client client = new Client(args[1], 23023);
                         client.run();

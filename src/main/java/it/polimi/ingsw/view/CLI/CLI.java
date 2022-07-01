@@ -62,7 +62,7 @@ public class CLI implements UI {
     /**
      * The main view method, in which the game loop remains for all the uptime of the program.
      */
-    public void Start() throws InterruptedException {
+    public void Start() {
 
         AnsiConsole.systemInstall();
 
@@ -185,11 +185,9 @@ public class CLI implements UI {
                     drawFromBag();
                 }
                 if (client.isMyTurn() && client.getLocalModel().getState().equals(State.PLANNINGPHASE))
-                    while (true) try {
+                    while (true) {
                         playAssistantCard();
                         break;
-                    } catch (AssistantCardNotFoundException e) {
-                        System.out.println("Invalid assistant card! Try again.");
                     }
 
                 System.out.println("Waiting for everyone to play an assistant card");
@@ -199,7 +197,11 @@ public class CLI implements UI {
                         i++;
                     }
                 }
-                Thread.sleep(500);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    System.out.println(StringNames.INTERRUPTED);
+                }
                 //Turn phase
                 try {
                     if (client.getExpertMode() && client.isInGame()) {
@@ -252,34 +254,10 @@ public class CLI implements UI {
                             break;
                         pickCloud();
                     }
-                } catch (AssistantCardNotFoundException e) {
-                    System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
-                } catch (NegativeValueException e) {
-                    System.out.println(StringNames.NEGATIVE_VALUE);
-                } catch (IncorrectStateException e) {
-                    System.out.println(StringNames.INCORRECT_STATE);
-                } catch (MotherNatureLostException e) {
-                    System.out.println(StringNames.MOTHER_NATURE_LOST);
-                } catch (ProfessorNotFoundException e) {
-                    System.out.println(StringNames.PROFESSOR_NOT_FOUND);
-                } catch (IncorrectPlayerException e) {
-                    System.out.println(StringNames.INCORRECT_PLAYER);
                 } catch (RemoteException e) {
                     System.out.println(StringNames.REMOTE);
-                } catch (IncorrectArgumentException e) {
-                    System.out.println(StringNames.INCORRECT_ARGUMENT);
-                } catch (UserNotInRoomException e) {
-                    System.out.println(StringNames.USER_NOT_IN_ROOM);
-                } catch (UserNotRegisteredException e) {
-                    System.out.println(StringNames.USER_NOT_REGISTERED);
-                } catch (NotEnoughCoinsException e) {
-                    System.out.println(StringNames.NOT_ENOUGH_COINS);
                 } catch (RoomNotExistsException e) {
                     System.out.println(StringNames.ROOM_NOT_EXISTS);
-                } catch (FullDiningException e) {
-                    System.out.println(StringNames.FULL_DINING);
-                } catch (LocalModelNotLoadedException e) {
-                    System.out.println(StringNames.LOCAL_MODEL_ERROR);
                 }
             }
 
@@ -742,7 +720,7 @@ public class CLI implements UI {
     /**
      * Method used to leave the game.
      */
-    public void leaveGame() throws UserNotInRoomException, UserNotRegisteredException, RemoteException, InterruptedException {
+    public void leaveGame() {
         boolean isValidInputYN = false;
         String answer;
         System.out.println("Are you sure you want to do this? Y/N");
@@ -762,8 +740,18 @@ public class CLI implements UI {
             client.view = StringNames.LOBBY;
             */
             clientRoom = null;
-            client.leaveGame();
-            Thread.sleep(500);
+            try {
+                client.leaveGame();
+                Thread.sleep(500);
+            } catch (UserNotInRoomException e) {
+                System.out.println(StringNames.USER_NOT_IN_ROOM);
+            } catch (UserNotRegisteredException e) {
+                System.out.println(StringNames.USER_NOT_REGISTERED);
+            } catch (RemoteException e) {
+                System.out.println(StringNames.REMOTE);
+            } catch (InterruptedException e) {
+                System.out.println(StringNames.INTERRUPTED);
+            }
         } else {
             System.out.println("Gotcha! Returning to the game.");
         }
@@ -811,7 +799,7 @@ public class CLI implements UI {
     /**
      * Method used to play assistant cards.
      */
-    public synchronized void playAssistantCard() throws AssistantCardNotFoundException {
+    public synchronized void playAssistantCard()  {
         System.out.println("It's your turn! Pick an assistant card to play. \n");
         printAssistantCards();
         int i;
@@ -890,7 +878,7 @@ public class CLI implements UI {
     /**
      * Method used to choose the actions the player wants to perform in their turn and also print game info such as clouds, islands and player boards.
      */
-    public void performActionInTurn() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException, InterruptedException {
+    public void performActionInTurn(){
         do {
             System.out.println("Select an action: ");
             String input;
@@ -927,7 +915,7 @@ public class CLI implements UI {
                 printCommandHelp();
                 break;
             case 8:
-                leaveGame();
+                    leaveGame();
                 break;
             default:
                 System.out.println("Invalid input, try again\n");
@@ -937,7 +925,7 @@ public class CLI implements UI {
     /**
      * Basically the same method as performActionInTurn, but also contains character cards related methods.
      */
-    public void performActionInTurnExpert() throws NotEnoughCoinsException, AssistantCardNotFoundException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, UserNotInRoomException, UserNotRegisteredException, LocalModelNotLoadedException, RoomNotExistsException, FullDiningException, InterruptedException {
+    public void performActionInTurnExpert() {
         do {
             System.out.println("Select an action: ");
             String input;
@@ -980,10 +968,9 @@ public class CLI implements UI {
                 expertPrintCommandHelp();
                 break;
             case 10:
-                leaveGame();
+                    leaveGame();
                 break;
             default:
-                //TODO: add exception
         }
 
     }
@@ -1071,9 +1058,13 @@ public class CLI implements UI {
     /**
      * Method used to move Mother Nature after moving the students.
      */
-    public void moveMN() throws NotEnoughCoinsException, AssistantCardNotFoundException, UserNotInRoomException, NegativeValueException, IncorrectStateException, MotherNatureLostException, ProfessorNotFoundException, UserNotRegisteredException, IncorrectPlayerException, RemoteException, IncorrectArgumentException, LocalModelNotLoadedException {
+    public void moveMN()  {
         if (client.getLocalModel().isCanPlayMN()) {
-            System.out.println("Input the number of steps you want Mother Nature to move! The maximum steps according to the card you played are \n " + client.getLocalModel().getBoardOf(client.getNickname()).getMoves());
+            try {
+                System.out.println("Input the number of steps you want Mother Nature to move! The maximum steps according to the card you played are \n " + client.getLocalModel().getBoardOf(client.getNickname()).getMoves());
+            } catch (LocalModelNotLoadedException e) {
+               System.out.println(StringNames.LOCAL_MODEL_ERROR);
+            }
             String input;
             int i;
             while (true) {
@@ -1085,7 +1076,12 @@ public class CLI implements UI {
                     System.out.println(StringNames.NUMBER_FORMAT);
                 }
             }
-            while (i <= 0 || i > client.getLocalModel().getBoardOf(client.getNickname()).getMoves()) {
+            while (true) {
+                try {
+                    if (!(i <= 0 || i > client.getLocalModel().getBoardOf(client.getNickname()).getMoves())) break;
+                } catch (LocalModelNotLoadedException e) {
+                    System.out.println(StringNames.LOCAL_MODEL_ERROR);
+                }
                 System.out.println("That number is not right! Try again.\n");
                 while (true) {
                     input = in.next();
@@ -1112,6 +1108,24 @@ public class CLI implements UI {
                 System.out.println(StringNames.CARD_PLAYED_IN_TURN);
             } catch (AssistantCardAlreadyPlayed assistantCardAlreadyPlayed) {
                 System.out.println(StringNames.ASSISTANT_CARD_ALREADY_PLAYED);
+            } catch (NotEnoughCoinsException e) {
+                e.printStackTrace();
+            } catch (AssistantCardNotFoundException e) {
+               System.out.println(StringNames.ASSISTANT_CARD_NOT_FOUND);
+            } catch (UserNotInRoomException e) {
+                System.out.println(StringNames.USER_NOT_IN_ROOM);
+            } catch (NegativeValueException e) {
+                System.out.println(StringNames.NEGATIVE_VALUE);
+            } catch (MotherNatureLostException e) {
+                System.out.println(StringNames.MOTHER_NATURE_LOST);
+            } catch (ProfessorNotFoundException e) {
+                System.out.println(StringNames.PROFESSOR_NOT_FOUND);
+            } catch (UserNotRegisteredException e) {
+                System.out.println(StringNames.USER_NOT_REGISTERED);
+            } catch (IncorrectPlayerException e) {
+                System.out.println(StringNames.INCORRECT_PLAYER);
+            } catch (RemoteException e) {
+                System.out.println(StringNames.REMOTE);
             }
             //After my turn is over I set the Mother Nature flag to false for the next turn
             client.getLocalModel().setCanPlayMN(false);
@@ -2866,10 +2880,10 @@ System.out.println();
                 }
                 else if (a.getImageName().equals("10")&&i==10)
                 {
-                    System.out.println("     |");
+                    System.out.println("    |");
                 }
                 else
-                    System.out.println("   |");
+                    System.out.println("    |");
                 i++;
             }
             System.out.println("0--------------------------------------0");
@@ -3150,26 +3164,48 @@ System.out.println();
     /**
      * Method that waits for turn.
      *
-     * @throws InterruptedException Thrown when this method is interrupted incorrectly. (Wait)
      */
-    public synchronized void waitForTurn() throws InterruptedException {
+    public synchronized void waitForTurn(){
         if (!client.isMyTurn()) {
             System.out.print("Waiting.  ");
-            Thread.sleep(2000);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println(StringNames.INTERRUPTED);
+            }
             System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
-            Thread.sleep(500);
-
-            System.out.print("Waiting .. ");
-            Thread.sleep(500);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println(StringNames.INTERRUPTED);
+            }
+            System.out.print("Waiting.. ");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println(StringNames.INTERRUPTED);
+            }
             System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
-            Thread.sleep(500);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println(StringNames.INTERRUPTED);
+            }
 
             System.out.print("Waiting... ");
-            Thread.sleep(500);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println(StringNames.INTERRUPTED);
+            }
             System.out.print("\b\b\b\b\b\b\b\b\b\b\b");
 
             System.out.print("Waiting   ");
-            Thread.sleep(500);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println(StringNames.INTERRUPTED);
+            }
             System.out.print("\b\b\b\b\b\b\b\b\b\b");
 
         }
