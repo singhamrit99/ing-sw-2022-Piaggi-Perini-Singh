@@ -2518,17 +2518,18 @@ public class CLI implements UI {
         System.out.println(" ____________________");
         int w = 0;
         for (Colors c : island.getStudents().keySet()) {
-            if (w < 2) {
-                System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
-                w++;
-            } else if (w == 2) {
-                System.out.print(c + " students: " + island.getStudents().get(c) + "\n");
-                w++;
-            } else
-                System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
-
+            if (island.getStudents().get(c)!=0) {
+                if (w < 2) {
+                    System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
+                    w++;
+                } else if (w == 2) {
+                    System.out.print(c + " students: " + island.getStudents().get(c) + "\n");
+                    w++;
+                } else
+                    System.out.print(c + " students: " + island.getStudents().get(c) + "\t");
+            }
         }
-
+System.out.println();
         if (island.getNumOfTowers() == 0)
             System.out.println("There are no towers yet on this island!");
         else
@@ -2721,11 +2722,14 @@ public class CLI implements UI {
             System.out.println(StringNames.LOCAL_MODEL_ERROR);
         }
         int i=1;
-        System.out.println("0------------------------------------0");
+        System.out.println("0--------------------------------------0");
         if (myDeck != null) {
             for (AssistantCard a : myDeck.getDeck()) {
                 System.out.print("|");
+                if (a.getImageName().equals("10"))
                 System.out.print("Card number " + i + "| Value " + a.getImageName() + "| Moves: " + a.getMove());
+                else
+                    System.out.print("Card number " + i + " | Value " + a.getImageName() + "| Moves: " + a.getMove());
                 if(i!=10&&!a.getImageName().equals("10"))
                 {
                     System.out.println("     |");
@@ -2735,10 +2739,10 @@ public class CLI implements UI {
                     System.out.println("   |");
                 }
                 else
-                    System.out.println("|");
+                    System.out.println("  |");
                 i++;
             }
-            System.out.println("0------------------------------------0");
+            System.out.println("0--------------------------------------0");
         }
     }
 
