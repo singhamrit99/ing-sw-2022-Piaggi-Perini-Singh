@@ -154,6 +154,10 @@ public class CharacterCard extends Card {
     public void setChoiceIndex(int choiceIndex) {
     }
 
+    public int getChoiceIndex() {
+        return -1;
+    }
+
     /**
      * Increases character price after activation.
      */
