@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
@@ -1326,23 +1327,13 @@ public class CLI implements UI {
                         if (myBoard.getEntrance().get(stringToColor(tmp)) >= 1) {
                             color = stringToColor(tmp);
                             movedStudents++;
-                            int count = 0;
-                            for (StrippedIsland trueIsland : client.getLocalModel().getIslands()) {
-                                if (!trueIsland.getName().equals("EMPTY"))
-                                    count++;
-                            }
-                            if (islandChosen > 0 && islandChosen <= count) {
-                                if (movedStudents > maxStudents)
-                                    doItAgain = false;
-                                int counter = 0;
-                                for (StrippedIsland island : client.getLocalModel().getIslands()) {
-                                    if (!island.getName().equals("EMPTY")) {
-                                        if (counter+1>=islandChosen)
-                                            break;
-                                        counter++;
-                                    }
-                                }
-                                moveStudentsOrder = new MoveStudents(client.getNickname(), color, client.getLocalModel().getIslands().get(counter).getName());
+                            List<StrippedIsland> islandsViewed =
+                                    client.getLocalModel().getIslands().stream()
+                                            .filter(x -> !x.getName().equals("EMPTY")).collect(Collectors.toList());
+
+                            if (islandChosen > 0 && islandChosen <= islandsViewed.size()) {
+                                if (movedStudents > maxStudents) doItAgain = false;
+                                moveStudentsOrder = new MoveStudents(client.getNickname(), color, client.getLocalModel().getIslands().get(islandChosen-1).getName());
                                 try {
                                     client.performGameAction(moveStudentsOrder);
                                 } catch (NotEnoughCoinsException e) {
