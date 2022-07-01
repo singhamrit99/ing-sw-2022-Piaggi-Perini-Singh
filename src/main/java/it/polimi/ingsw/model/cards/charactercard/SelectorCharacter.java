@@ -85,4 +85,8 @@ public class SelectorCharacter extends CharacterCard implements Serializable {
     public void decrementNoTileNumber() {
         noTileNumber--;
     }
+
+    public int getChoiceIndex() {
+        return choiceIndex;
+    }
 }
