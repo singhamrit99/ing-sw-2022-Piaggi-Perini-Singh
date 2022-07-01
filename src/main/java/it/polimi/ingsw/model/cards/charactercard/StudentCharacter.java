@@ -144,12 +144,19 @@ public class StudentCharacter extends CharacterCard implements Serializable {
 
                 for (Map.Entry<Colors, Integer> set : students1.entrySet()) count += set.getValue();
 
-                if (getAbility().getValue() < count)
+                if (getAbility().getValue() < count) {
+                    game.getCharacterCards().get(game.getSelectedCharacterIndex()).setStatus(0);
+                    game.getCurrentPlayer().setPlayedCharacterCard(null);
                     throw new IncorrectArgumentException("Too many students are given");
+                }
 
                 for (Map.Entry<Colors, Integer> set : students2.entrySet()) count1 += set.getValue();
 
-                if (count != count1) throw new IncorrectArgumentException("The given students number do not match");
+                if (count != count1) {
+                    game.getCharacterCards().get(game.getSelectedCharacterIndex()).setStatus(0);
+                    game.getCurrentPlayer().setPlayedCharacterCard(null);
+                    throw new IncorrectArgumentException("The given students number do not match");
+                }
 
                 game.getCurrentPlayer().getSchoolBoard().removeStudents(students2);
                 game.getCurrentPlayer().getSchoolBoard().addStudents(students1);
@@ -168,11 +175,18 @@ public class StudentCharacter extends CharacterCard implements Serializable {
                 count1 = 0;
 
                 for (Map.Entry<Colors, Integer> set : students1.entrySet()) count += set.getValue();
-                if (getAbility().getValue() < count)
+                if (getAbility().getValue() < count) {
+                    game.getCharacterCards().get(game.getSelectedCharacterIndex()).setStatus(0);
+                    game.getCurrentPlayer().setPlayedCharacterCard(null);
                     throw new IncorrectArgumentException("Too many students are given");
+                }
 
                 for (Map.Entry<Colors, Integer> set : students2.entrySet()) count1 += set.getValue();
-                if (count != count1) throw new IncorrectArgumentException("The given students number do not match");
+                if (count != count1) {
+                    game.getCharacterCards().get(game.getSelectedCharacterIndex()).setStatus(0);
+                    game.getCurrentPlayer().setPlayedCharacterCard(null);
+                    throw new IncorrectArgumentException("The given students number do not match");
+                }
 
                 game.getCurrentPlayer().getSchoolBoard().moveStudents(students1);
                 game.getCurrentPlayer().getSchoolBoard().removeDiningStudents(students2);
