@@ -50,6 +50,7 @@ public class Starter {
                             Registry registry = LocateRegistry.createRegistry(23023);
                             registry.bind("server", server);
                             new Thread(server).start();
+                            System.out.println("Server is up, waiting for connections");
                         } catch (AlreadyBoundException e) {
                             System.out.println("Chosen socket is already bound");
                         } catch (IOException e) {
